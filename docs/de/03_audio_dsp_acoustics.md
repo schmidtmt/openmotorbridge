@@ -1,43 +1,46 @@
 # 03 - Audio-DSP, Akustik & I2S MEMS Fahrtwind-Kompensation (MSM261S4030 / SPH0645)
 
-Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v8.5 / v9.0 Clean Architecture: die Zero-Ground-Loop Funkarchitektur via All-UWB, den dualen Bluetooth-Helm-Hub (Fahrer & Sozius) direkt am ESP32-S3 DSP, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen I2S MEMS Fahrtwind-Akustiksensors am Front-Knoten (Sipeed/Zilltek MSM261S4030H0R mit Knowles SPH0645 als Legacy-Referenz).
+Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v10.0 Standardized Node Architecture: die Zero-Ground-Loop Digitalarchitektur via 4-Ader Automotive-USB-Bus, den dedizierten Bluetooth 5.4 Helm-Hub (Qualcomm QCC3084 Audio SoC auf PCBA 01), den ESP32-S31 AI RISC-V DSP mit 128-bit SIMD AI-Beschleuniger, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen I2S MEMS Fahrtwind-Akustiksensors am Front-Knoten (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
 
 ---
 
-## 1. Zero-Ground-Loop Funk-Topologie & Dual-Helm Bluetooth Hub
+## 1. Zero-Ground-Loop Digital-Topologie & Dual-Helm Bluetooth Hub
 
 In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über lange Kabelbäume ein permanentes Problem. OpenMotorBridge löst dies in v8.5 / v9.0 fundamental durch **physikalische Entkopplung**:
 
 1. **Vollständiger Entfall analoger Fahrzeugleitungen:**
    * Es verlaufen **keinerlei analoge Audioleitungen** durch den Fahrzeugkabelbaum.
-   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Kassetten-Buchten (Bucht 1 Links & Bucht 2 Rechts) laufen zu **100 % drahtlos über Ultra-Wideband (Qorvo DW3110 / 6.5 GHz)**.
-   * Durch den Funk-Airgap existiert galvanisch **keine Masseschleife** zwischen Zentralbox und Gateway-Headsets.
-2. **Dual-Helm Bluetooth Audio Hub:**
-   * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth an die Zentralbox (`PCBA 01`).
-   * Bucht 1 und Bucht 2 sind rein modulare Docking-Schächte für externe Gruppen-Gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz oder Midland PMR446). Sie haben **keine feste Zuordnung zu Fahrer oder Sozius**.
-3. **Lokale Signalwandlung auf der Kassette (PCBA 03):**
-   * Jede aktive Kassette (`PCBA 03`) besitzt einen eigenen **ES8388 24-Bit / 48 kHz Stereo-Audio-Codec** direkt am Intercom-Anschluss (`J_AUDIO_PWR`).
-   * Analoge Signale (Mikrofon-Einspeisung und Lautsprecher-Abgriff bei Sena, Cardo oder Midland PMR446) werden unmittelbar auf dem Kassetten-PCB digitalisiert bzw. gewandelt. Die analogen Leiterbahnen sind auf $< 15\,\text{mm}$ beschränkt.
-   * Der Transport zur Zentralbox (`PCBA 01`) erfolgt volldigital über den Qorvo DW3110 UWB-Transceiver (IEEE 802.15.4z, Latenz $< 0{,}4\,\text{ms}$).
-   * Durch diesen Funk-Airgap und die 2-Draht-DC-Speisung sind Masseschleifen, Lichtmaschinenpfeifen und Zündstörungen physikalisch unmöglich. Veraltete Audio-Übertrager (Bourns-Trafos) und Optokoppler entfallen ersatzlos.
+   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Koffer-Pods (Pod 1 Links & Pod 2 Rechts) laufen volldigital über den **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit nativer USB Audio Class 2.0 (UAC2) Übertragung ($< 0{,}2\,\text{ms}$ Latenz).
+   * Durch die rein digitale, differenzielle USB-Signalübertragung existiert galvanisch **keine analoge Masseschleife** zwischen Zentralbox und Pod-Headsets.
+2. **Dual-Helm Bluetooth Audio Hub (Qualcomm QCC3084):**
+   * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth 5.4 an den dedizierten Qualcomm QCC3084 Audio SoC auf der Zentralbox (`PCBA 01`).
+   * Pod 1 und Pod 2 sind universelle Koffer-Dockingbuchten für externe Gruppen-Gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz oder Midland PMR446). Sie haben **keine feste Zuordnung zu Fahrer oder Sozius**.
+3. **Lokale Signalwandlung im Koffer-Pod (PCBA 03):**
+   * Jede Pod-Platine (`PCBA 03`) besitzt einen eigenen **ES8388 24-Bit / 48 kHz Stereo-Audio-Codec** direkt am Intercom-Anschluss (`J_AUDIO_PWR`).
+   * Analoge Signale (Mikrofon-Einspeisung und Lautsprecher-Abgriff bei Sena, Cardo oder Midland PMR446) werden unmittelbar auf `PCBA 03` digitalisiert bzw. gewandelt. Die analogen Leiterbahnen sind auf $< 15\,\text{mm}$ beschränkt.
+   * Der Transport zur Zentralbox (`PCBA 01`) erfolgt volldigital über den geschirmten 4-Draht Automotive-Bus (USB UAC2 / CDC-ACM, Latenz $< 0{,}2\,\text{ms}$).
+   * Durch die strikte Trennung von Sternmasse (`PGND` vs. `AGND`) und Volldigital-Übertragung sind Masseschleifen, Lichtmaschinenpfeifen und Zündstörungen physikalisch ausgeschlossen. Veraltete Audio-Übertrager (Bourns-Trafos) und Optokoppler entfallen ersatzlos.
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (V8.5 / V9.0)                     |
+|                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (v10.0 ARCHITECTURE)               |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ FAHRER-HELM ] <-------- Bluetooth A2DP / HFP --------> [ ZENTRALBOX PCBA 01 ]        |
-|  [ SOZIUS-HELM ] <-------- Bluetooth A2DP / HFP --------> [ ESP32-S3 Core 1 DSP ]       |
+|  [ FAHRER-HELM ] <-------- Bluetooth 5.4 Dual-A2DP ------> [ ZENTRALBOX PCBA 01 ]        |
+|  [ SOZIUS-HELM ] <-------- aptX HD / Auracast / HFP 1.8 -> [ Qualcomm QCC3084 SoC ]     |
 |                                                                 ^        ^              |
-|                                           UWB Audio-Stream      |        |              |
-|                             (Qorvo DW3110 / 6.5 GHz / < 0.4 ms) |        |              |
-|                                                                 |        |              |
+|                                  I2S / PCM Digital Audio        |        |              |
+|                                                                 v        v              |
+|                                                     [ ESP32-S31 AI RISC-V DSP ]         |
+|                                                                 ^        ^              |
+|                           4-Ader USB-PD Bus (USB Audio UAC2)    |        |              |
+|                               (< 0.2 ms / bis zu 60W Laden)     |        |              |
 |                      +------------------------------------------+        |              |
 |                      v                                                   v              |
 |           +----------------------+                           +----------------------+   |
-|           | BUCHT 1 (GATEWAY A)  |                           | BUCHT 2 (GATEWAY B)  |   |
+|           | POD 1 (GATEWAY A)    |                           | POD 2 (GATEWAY B)    |   |
 |           | Sena SPIDER X Slim   |                           | Cardo DMC / OMM 2.4G |   |
-|           | PCBA 03 Smart Inlay  |                           | PCBA 03 Smart Inlay  |   |
+|           | PCBA 03 Interface    |                           | PCBA 03 Interface    |   |
 |           +----------------------+                           +----------------------+   |
 +-----------------------------------------------------------------------------------------+
 ```
@@ -46,30 +49,30 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 
 | Parameter | Spezifikationswert | Standard / Messbedingung | Bedeutung im Fahrbetrieb |
 | :--- | :---: | :--- | :--- |
-| **Brumm- & Zündfunkschutz** | **$\infty$ (Perfekt)** | Physikalische HF-Entkopplung (UWB) | Absolut kein Lichtmaschinenpfeifen im Helm |
+| **Brumm- & Zündfunkschutz** | **$\infty$ (Perfekt)** | Differentieller USB-Bus & Sternmasse | Absolut kein Lichtmaschinenpfeifen im Helm |
 | **Abtastrate DSP & Codec** | **$48\,\text{kHz} / 24\,\text{Bit}$** | Hi-Res Audioverarbeitung | Studio-Klangqualität im Intercom-Mix |
 | **Klirrfaktor (THD+N)** | **$< 0{,}015\,\%$** | $1\,\text{kHz}, 1{,}0\,\text{V}_{\text{RMS}}$ | Glasklare, unverzerrte Sprach- und Musikwiedergabe |
 | **Frequenzgang** | **$20\,\text{Hz} - 20\,\text{kHz} \pm 0{,}2\,\text{dB}$** | HiFi-Audiowiedergabe | Verlustfreies Musik-Sharing & Navi-Audio |
 | **Signal-Rausch-Abstand (SNR)**| **$> 96\,\text{dB}$** | A-gewichtet | Rauschfreier Standby ohne Zischen im Helm |
 | **Kanaltrennung (Stereo)** | **$> 95\,\text{dB}$** | $1\,\text{kHz}$ L/R | Perfektes 3D-Klangbild für Warnungen & Musik |
 
-### 1.2 UWB Mehrkanal-Audio-Routing & Sub-Channel Streaming (Central DSP Single Source of Truth)
+### 1.2 USB-Bus Mehrkanal-Audio-Routing & Streaming (Central DSP Single Source of Truth)
 
-Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth** für sämtliche Audioströme im Gesamtsystem. Um Latenzen und Protokollbrüche zwischen Bordnetz, Helm und externen Mesh-Gateways zu eliminieren, ist der drahtlose UWB-Verbund in getrennte Subkanäle unterteilt:
+Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth** für sämtliche Audioströme im Gesamtsystem. Um Latenzen und Protokollbrüche zwischen Bordnetz, Helm und externen Mesh-Gateways zu eliminieren, ist die digitale 4-Draht-USB-Busverbindung in getrennte logische Audio-Endpunkte (USB Audio Class 2.0) unterteilt:
 
 1. **Upstream-Kanal (Gateway-Pod $\rightarrow$ Zentralbox):**
-   * **Stereo-Summensignal vom Headphone-Abgriff:** Da das Audiosignal am 3,5-mm-Klinkenausgang des Fremd-Intercoms (Sena, Cardo, Midland) abgegriffen wird, erhält die Kassette das fertige, vom Headset gemixte Gruppensignal. Der lokale **ES8388 Stereo-ADC** tastet dieses Signal zweikanalig (Stereo L/R) mit $48\,\text{kHz} / 24\,\text{Bit}$ ab.
-   * **Kanalbelegung im UWB-Stream:** Der UWB-Upstream überträgt **exakt die beiden Audiokanäle (Stereo L und R)** an den ESP32-S3 Core 1 DSP der Zentralbox (Latenz $< 0{,}4\,\text{ms}$).
+   * **Stereo-Summensignal vom Headphone-Abgriff:** Da das Audiosignal am 3,5-mm-Klinkenausgang des Fremd-Intercoms (Sena, Cardo, Midland) abgegriffen wird, erhält das Pod-Interface (`PCBA 03`) das fertige, vom Headset gemixte Gruppensignal. Der lokale **ES8388 Stereo-ADC** tastet dieses Signal zweikanalig (Stereo L/R) mit $48\,\text{kHz} / 24\,\text{Bit}$ ab.
+   * **Kanalbelegung im USB-Stream:** Der USB-Upstream überträgt **exakt die beiden Audiokanäle (Stereo L und R)** an den ESP32-S31 AI Core 1 DSP der Zentralbox (Latenz $< 0{,}2\,\text{ms}$).
      * Bei Stereo-Quellen (Cardo DMC / Sena Mesh mit Music-Sharing oder 3D-Voice) bleibt die volle Stereotrennung bis in die Helme erhalten.
      * Bei Mono-Quellen (PMR446 Funk) sorgt die Brückung im Adapterkabel für sauberes Dual-Mono ohne Phasenauslöschungen.
    * Der Zentralbox-DSP übernimmt das Stereosignal als separate Quelle, unterzieht es der Prioritäts- und Raised-Cosine-Ducking-Matrix und verteilt es an die per Bluetooth (A2DP / LE Audio LC3) angebundenen Helme von Fahrer und Sozius.
 2. **Downstream-Kanal (Zentralbox $\rightarrow$ Gateway-Pod):**
    * **Voice Sub-Channel (Mono, Ultra-Low-Latency $< 1\,\text{ms}$):**
-     * Das vom Fahrer-Helm (oder Kabelmikrofon) erfasste Sprachsignal wird im Zentral-DSP entrauscht, mit höchster Priorität in ein UWB-Echtzeitpaket verpackt und an den jeweiligen Kassetten-Schlitten gesendet.
+     * Das vom Fahrer-Helm erfasste Sprachsignal wird im Zentral-DSP (ESP32-S31 AI mit Vektor-Rauschunterdrückung) entrauscht, mit höchster Priorität in einen USB-Echtzeitframe verpackt und an den jeweiligen Pod gesendet.
      * Auf `PCBA 03` wandelt der ES8388 DAC das Signal unmittelbar in ein analoges Differenzsignal und speist es direkt in den Mikrofoneingang des Sena/Cardo-Geräts ein.
      * **Vorteil:** Die Gesamtlatenz vom Helm-Mikrofon bis in das externe Mesh-Gateway beträgt $< 1{,}0\,\text{ms}$. Dadurch entstehen keinerlei Sprechverzögerungen, Echo-Effekte oder Phasenkammfilterungen im Gruppen-Intercom.
    * **Music Sub-Channel (Stereo L/R A2DP / LE Audio):**
-     * Soll Musik vom Smartphone oder Navigationssystem in das externe Mesh-Netzwerk übertragen werden (natives Mesh Music Sharing bei Sena/Cardo), wird dieser Stream separat über A2DP-Quellprofile oder hochauflösende UWB-Stereo-Frames übertragen.
+     * Soll Musik vom Smartphone oder Navigationssystem in das externe Mesh-Netzwerk übertragen werden (natives Mesh Music Sharing bei Sena/Cardo), wird dieser Stream separat über A2DP-Quellprofile oder hochauflösende USB-UAC2-Stereo-Frames übertragen.
      * Der Sprachkanal behält dabei stets absolute Priorität und verdrängt die Musikübertragung unterbrechungsfrei über den Raised-Cosine-Ducking-Algorithmus.
 
 ---
@@ -190,10 +193,10 @@ Zur automatischen Anpassung der Helm-Lautstärke an turbulente Windgeräusche be
 | * 65.4 dB SNR, 120 dBA AOP |              | * 50 Hz RMS-Schallpegel dBA|
 | * Integrierter 24-Bit ADC  |              |                            |
 +----------------------------+              +-------------+--------------+
-                                                          | UWB 6.5 GHz (< 0.4 ms)
+                                                          | 4-Draht USB-Bus (< 0.2 ms)
                                                           v
 +----------------------------+              +----------------------------+
-| Helm-Lautsprecher          | I2S TX DMA   | ESP32-S3 Hauptcontroller   |
+| Helm-Lautsprecher          | I2S TX DMA   | ESP32-S31 AI Hauptcontroller|
 | * Gehörschutz-begrenzt     |<-------------+ * Raised-Cosine AGC-Gain   |
 | * Automatisch laut/leise   |              | * Schwellwert: 70 dBA      |
 +----------------------------+              +----------------------------+
@@ -254,7 +257,7 @@ Im Fahrbetrieb steuert der Lenker-PTT-Taster normalerweise die Funk-PTT, Spracha
 3. **Zustand `IDLE`:** Normale PTT- und Tastenbelegung gemäß Fahrzeugprofil.
 
 #### Akustische Privatsphäre & Konferenzschaltung
-* **Standardmodus (Private Isolation):** Das Telefonat wird ausschließlich auf den Fahrer-Helm geroutet. Das Mikrofon des Fahrers wird während des Telefonats von den Intercom-Kassetten (Sena/Cardo/LoRa) getrennt. Gruppenfunk-Durchsagen werden im Helm des Fahrers auf $-24\,\text{dB}$ abgesenkt, bleiben jedoch leise im Hintergrund wahrnehmbar.
+* **Standardmodus (Private Isolation):** Das Telefonat wird ausschließlich auf den Fahrer-Helm geroutet. Das Mikrofon des Fahrers wird während des Telefonats von den Intercom-Pods (Sena/Cardo/LoRa) getrennt. Gruppenfunk-Durchsagen werden im Helm des Fahrers auf $-24\,\text{dB}$ abgesenkt, bleiben jedoch leise im Hintergrund wahrnehmbar.
 * **Gruppen-Konferenzbrücke (PWA-Option "Anruf in Gruppe einspeisen"):**
   * Wird diese Funktion in der WebApp aktiviert, mischt die DSP-Pipeline die Stimme des Anrufers in die Link-State Intercom-Matrix ein.
   * Sozius und gekoppelte Gruppen-Bikes können das Telefonat mithören und über ihre Mikrofone mitsprechen.
@@ -302,7 +305,7 @@ python3 tools/audio_testbench/server.py
 | * Reales Mikrofon/Headset     | * Raised-Cosine Ducking Kurve | * Stereo FFT Spektrum  |
 | * Lenker-PTT Taste ([SPACE])  | * 15ms Attack / 800ms Release | * Triple VU-Meter      |
 | * Virtueller Tacho (0-160km/h)| * AGC Windgeräusch-Gate       | * Helm-Master-Pegel    |
-| * Synthwave & MP3 Drag&Drop   | * UWB Kassetten-Hot-Swap      | * Latenzzähler (<10ms) |
+| * Synthwave & MP3 Drag&Drop   | * USB Pod-Hot-Swap            | * Latenzzähler (<10ms) |
 +-------------------------------+-------------------------------+------------------------+
 ```
 
@@ -314,4 +317,4 @@ python3 tools/audio_testbench/server.py
    * $0\dots 15\,\text{km/h}$ (Ampel/Rangieren): $100\,\%$ Transparenzmodus aktiv.
    * $15\dots 30\,\text{km/h}$: Stetiges Ausblenden über Raised-Cosine Flanke.
    * $> 30\,\text{km/h}$: Windgeräusch-Gate aktiv mit dynamischer Pink-Noise-Beimischung proportional zu $v^2$.
-5. **UWB Kassetten-Hot-Swap & Profil-Handshake:** Simuliert die hardware-spezifischen Klangprofile (Sena SPIDER X Slim Preamp/EQ, Cardo Packtalk Pro Kompression, OMM LoRa Telemetrie-Bandpass $300\dots 3400\,\text{Hz}$, Blindkassette $-96\,\text{dB}$).
+5. **USB Pod-Hot-Swap & Profil-Handshake:** Simuliert die hardware-spezifischen Klangprofile (Sena SPIDER X Slim Preamp/EQ, Cardo Packtalk Pro Kompression, OMM LoRa Telemetrie-Bandpass $300\dots 3400\,\text{Hz}$, Dry Box $-96\,\text{dB}$).

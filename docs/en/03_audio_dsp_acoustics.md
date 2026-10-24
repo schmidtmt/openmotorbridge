@@ -1,26 +1,47 @@
 # 03 - Audio DSP, Acoustics & I2S MEMS Wind Tracking (MSM261S4030 / SPH0645)
 
-This document specifies the audio architecture of OpenMotorBridge v8.5 / v9.0 Clean Architecture: the 1500 V RMS galvanically isolated transformer frontend, the Everest Semi ES8388 24-Bit / 48 kHz DSP audio engine, the **Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645 digital MEMS wind noise tracking**, IEC 61672-1 Class 1 Biquad A-weighting, and the click-free Raised-Cosine Ducking algorithm.
+This document specifies the system-wide audio architecture of OpenMotorBridge v10.0 Standardized Node Architecture: the zero-ground-loop digital architecture via 4-wire automotive USB bus, the dedicated Bluetooth 5.4 helmet hub (Qualcomm QCC3084 Audio SoC on PCBA 01), the ESP32-S31 AI RISC-V DSP with 128-bit SIMD AI acceleration, the FreeRTOS Core 1 DSP pipeline with continuously differentiable Raised-Cosine Ducking, and dynamic **helmet volume tracking (AGC)** driven by the digital I2S MEMS cockpit wind noise sensor on the Front Node (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
 
 ---
 
-## 1. Galvanically Isolated Audio Frontend (Bourns LM-NP-1001)
+## 1. Zero-Ground-Loop Digital Topology & Dual-Helmet Bluetooth Hub
 
-To eliminate ground loops, alternator hum (1.2 kHz stator whine), and ignition interference:
+In traditional motorcycle audio installations, ground loops, ignition interference, and alternator whine ($1.0\dots 2.5\,\text{kHz}$) over long wiring harnesses are a persistent issue. OpenMotorBridge v10.0 solves this fundamentally through **all-digital differential domain isolation**:
 
 ```
-MOTORCYCLE CHASSIS / VEHICLE GROUND                 ISOLATED AUDIO SUBSYSTEM
-+--------------------------------------+          +---------------------------+
-| Alternator Whine & Spikes            |          | Pure, Ground-Free Audio   |
-| * Ground offset differences up to 3V |  1500V   | * True Differential In/Out|
-| * Ignition pulses on battery line    +--- XFMR -+ * 85 dB CMRR Common-Mode  |
-| * High-frequency inverter noise      |  BARRIER |   Rejection Ratio         |
-+--------------------------------------+          +---------------------------+
++-----------------------------------------------------------------------------------------+
+|                      ZERO-GROUND-LOOP AUDIO TOPOLOGY (v10.0 ARCHITECTURE)               |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ RIDER HELMET ] <-------- Bluetooth 5.4 Dual-A2DP ------> [ CENTRAL BOX PCBA 01 ]      |
+|  [ PILLION HELMET ] <------ aptX HD / Auracast / HFP 1.8 -> [ Qualcomm QCC3084 SoC ]     |
+|                                                                 ^        ^              |
+|                                  I2S / PCM Digital Audio        |        |              |
+|                                                                 v        v              |
+|                                                     [ ESP32-S31 AI RISC-V DSP ]         |
+|                                                                 ^        ^              |
+|                           4-Wire USB-PD Bus (USB Audio UAC2)    |        |              |
+|                               (< 0.2 ms / up to 60W charge)     |        |              |
+|                      +------------------------------------------+        |              |
+|                      v                                                   v              |
+|           +----------------------+                           +----------------------+   |
+|           | POD 1 (GATEWAY A)    |                           | POD 2 (GATEWAY B)    |   |
+|           | Sena SPIDER X Slim   |                           | Cardo DMC / OMM 2.4G |   |
+|           | PCBA 03 Interface    |                           | PCBA 03 Interface    |   |
+|           +----------------------+                           +----------------------+   |
++-----------------------------------------------------------------------------------------+
 ```
 
-* **Audio Isolation Transformers:** Two Bourns LM-NP-1001 transformers provide $1500\,\text{V}_{\text{RMS}}$ dielectric isolation between vehicle ground and sensitive headset audio lines.
-* **Common-Mode Rejection Ratio (CMRR):** Achieves $85{,}0\,\text{dB}$ CMRR at $1{,}2\,\text{kHz}$, reducing residual alternator ripple to $< 141\,\mu\text{V}$ ($> 67{,}9\,\text{dB}$ Speech SNR).
-* **Flat Frequency Response:** $\pm 0{,}2\,\text{dB}$ across $20\,\text{Hz} \dots 20\,\text{kHz}$ for high-fidelity music streaming.
+1. **Complete Elimination of Analogue Bike Harness Lines:**
+   * **Zero analogue audio lines** run through the chassis wiring.
+   * All audio and control interconnects between Central Box (`PCBA 01`) and the saddlebag pods (Pod 1 Left & Pod 2 Right) run over the rugged **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) with native USB Audio Class 2.0 (UAC2) streaming ($< 0.2\,\text{ms}$ latency).
+   * Due to digital differential USB signaling and star grounding (`PGND` vs. `AGND`) on `PCBA 03`, ground loops and alternator whine are physically eliminated.
+2. **Dual-Helmet Bluetooth Audio Hub (Qualcomm QCC3084):**
+   * Rider and pillion pair their helmets directly via Bluetooth 5.4 to the dedicated Qualcomm QCC3084 Audio SoC on the Central Box (`PCBA 01`).
+   * Pod 1 and Pod 2 are universal docking bays for external mesh gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz, or Midland PMR446) with no fixed rider/pillion assignment.
+3. **Local Conversion at Saddlebag Pod (PCBA 03):**
+   * Each pod board (`PCBA 03`) features an **ES8388 24-bit / 48 kHz stereo audio codec** directly at `J_AUDIO_PWR`.
+   * Analogue signals (mic injection and speaker taps) are converted immediately on `PCBA 03` with traces $< 15\,\text{mm}$.
 
 ---
 
@@ -47,7 +68,7 @@ The Universal Front Node (`PCBA 05`) houses a Sipeed / Zilltek MSM261S4030H0R di
 | 4. Direct Form II Biquad A-Weighting Filter (IEC 61672-1 Class 1)     |
 |    * Low-frequency wind rumble (100 Hz) attenuated by -19.1 dB        |
 | 5. RMS Power Block Calculation (20 ms sliding window)                 |
-| 6. Fast UWB Telemetry Broadcast to Central Box at 50 Hz (< 0.4 ms)    |
+| 6. Fast 4-Wire USB Bus Telemetry to Central Box at 50 Hz (< 0.2 ms)   |
 | 7. Dynamic AGC Helmet Boost: Automatically scales volume +0 to +6 dB   |
 +------------------------------------------------------------------------+
 ```
@@ -93,7 +114,7 @@ $$g(t) = g_{\min} + \frac{1 - g_{\min}}{2} \left[1 - \cos\left(\frac{\pi \cdot t
 
 ## 5. FreeRTOS Core 1 Audio-DMA Real-Time Pipeline & Codec Setup
 
-The audio DSP engine runs on dedicated **Core 1** of the ESP32-S3 host MCU with maximum real-time priority:
+The audio DSP engine runs on dedicated **Core 1** of the ESP32-S31 AI host MCU (320 MHz RISC-V, 128-bit SIMD AI accelerator) with maximum real-time priority:
 
 ```
                   FREERTOS CORE 1 REAL-TIME AUDIO PIPELINE
@@ -177,7 +198,7 @@ python3 tools/audio_testbench/server.py
 | * Physical Mic/Headset In     | * Raised-Cosine Ducking Curve | * Stereo FFT Spectrum  |
 | * Handlebar PTT ([SPACEBAR])  | * 15ms Attack / 800ms Release | * Triple VU-Meters     |
 | * Virtual Speedo (0-160 km/h) | * Dynamic Wind Noise Gate     | * Helmet Master Gain   |
-| * Synthwave & MP3 Drag & Drop | * 1-Wire Hot-Swap Profiles    | * Latency (< 10 ms)    |
+| * Synthwave & MP3 Drag & Drop | * USB Pod Hot-Swap Profiles   | * Latency (< 10 ms)    |
 +-------------------------------+-------------------------------+------------------------+
 ```
 
@@ -189,4 +210,4 @@ python3 tools/audio_testbench/server.py
    * $0\dots 15\,\text{km/h}$ (Traffic stop): $100\%$ ambient transparency mode.
    * $15\dots 30\,\text{km/h}$: Raised-cosine fade-out of ambient microphone.
    * $> 30\,\text{km/h}$: Noise gate engaged with dynamic aerodynamic noise generation proportional to $v^2$.
-5. **1-Wire Cartridge Hot-Swap:** Simulates OEM acoustic profiles (Sena 60S EQ presence, Cardo Packtalk Pro vocal compression, OMM LoRa $300\dots 3400\,\text{Hz}$ radio bandpass, Blind plug $-96\,\text{dB}$).
+5. **USB Pod Hot-Swap & Handshake:** Simulates OEM acoustic profiles (Sena SPIDER X Slim EQ presence, Cardo Packtalk Pro vocal compression, OMM LoRa $300\dots 3400\,\text{Hz}$ radio bandpass, Dry Box $-96\,\text{dB}$).
