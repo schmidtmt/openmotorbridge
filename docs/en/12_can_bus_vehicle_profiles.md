@@ -280,6 +280,13 @@ Firmware releases bundle pre-configured profiles for the most prevalent vehicle 
 * **Platforms:** All motorcycles with standardized red 6-pin Euro-5 OBD diagnostic ports (KTM, Yamaha, Kawasaki, Honda, Triumph, Suzuki).
 * **Function:** Queries standardized PIDs cyclically (Engine RPM `0x0C`, Speed `0x0D`, Coolant Temperature `0x05`, Fuel Level `0x2F`).
 
+### 3.4 Support Van, Rally & Chase Car Profile (`support_van_car_obd2.json`)
+* **Target Applications:** Chase vans, tour support vehicles, mobile workshop trucks, tour guides, or rally organizers (Reference Kit 5).
+* **Interface & Protocol:** Standardized 16-pin passenger car OBD2 port (ISO 15765-4 CAN 500 kbps / 250 kbps with 11-bit or 29-bit identifiers), or wireless Bluetooth OBD2 adapter (ELM327 / OBDLink LX) paired directly to the Central Box ESP32.
+* **Captured Telemetry Values:** Vehicle speed (`0x0D`), coolant temperature (`0x05`), battery/alternator voltage (`0x42`), fuel level (`0x2F`), and throttle pedal position.
+* **Power Supply:** 12V cigarette lighter plug or ignition switched power (KL15) in footwell to prevent vehicle battery drain.
+* **Role in Swarm:** Functions as a high-gain LoRa/Mesh mobile gateway and "sweep node". Receives real-time positions and split reports from all convoy bikes and provides an emergency rescue comms link.
+
 ---
 
 ## 4. Safety & Isolation Architecture (Automotive Safety)

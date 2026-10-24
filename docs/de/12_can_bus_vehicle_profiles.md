@@ -286,7 +286,7 @@ Die Firmware liefert ab Werk vorkonfigurierte Profile für die gängigsten Fahrz
 * **Anbindung & Protokoll:** Standardisierter 16-Pin Pkw-OBD2-Port (ISO 15765-4 CAN 500 kbps / 250 kbps mit 11-Bit oder 29-Bit Identifiern). Alternativ drahtlose Bluetooth-OBD2-Kopplung (ELM327 / OBDLink LX) direkt an den ESP32-S3 der Zentralbox.
 * **Erfasste Telemetriewerte:** Fahrzeuggeschwindigkeit (`0x0D`), Kühlmitteltemperatur (`0x05`), Lichtmaschinen-/Bordnetzspannung (`0x42`), Kraftstoffvorrat (`0x2F`) und Gaspedalstellung.
 * **Energieversorgung:** Speisung über standardisierten 12V-Zigarettenanzünderstecker oder Zündungsplus-Abgriff (KL15) im Fahrerfußraum (verhindert Entladen der Autobatterie).
-* **Funktion im Gruppenverbund:** Der Support-Van fungiert als starker LoRa/UWB-Mobilrouter und "Besenwagen" (Sweep Node). Er empfängt alle Positions- und Split-Meldungen des Motorrad-Konvois in Echtzeit und stellt eine mobile Rettungs- und Funkbrücke bereit.
+* **Funktion im Gruppenverbund:** Der Support-Van fungiert als starker LoRa/Mesh-Mobilrouter und "Besenwagen" (Sweep Node). Er empfängt alle Positions- und Split-Meldungen des Motorrad-Konvois in Echtzeit und stellt eine mobile Rettungs- und Funkbrücke bereit.
 
 ---
 
