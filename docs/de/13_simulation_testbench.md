@@ -3,8 +3,8 @@
 Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-Physik und Netzwerkprotokollen vor dem ersten Fertigungslauf auf Automotive-Niveau lückenlos zu verifizieren, verfügt OpenMotorBridge über eine modulare Python-Simulations-Suite.
 
 > [!NOTE]
-> **v9.6 Clean-Architecture Testbench-Update:**  
-> Durch den Entfall von `PCBA 02` (Pod-Basis) und `PCBA 04` (Lenker-Interface) zugunsten des **drahtlosen All-UWB-Backbones (6.5 GHz / DW3110)** entfallen anfällige Signal-Steckverbinder im Außenbereich vollständig. Die Testbench simuliert das modulare 7-Platinen-System (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 07`, `PCBA 08`, `PCBA 09`, `PCBA 10`), das deterministische UWB-Timing ($< 0{,}4\,\text{ms}$), den unterbrechungsfreien automatischen Handover zwischen Nahbereichs-Intercom (Sena Mesh / Cardo DMC / OMM 2.4 GHz) und 868-MHz-Fernbereich-LoRa sowie die NVS-Persistierung des Gruppen-States bei 30-minütigen Kaffeepausen.
+> **v10.0 Standardized Node Architecture Testbench-Update:**  
+> OpenMotorBridge v10.0 ersetzt das frühere UWB-Backbone durch einen hochrobusten, geschirmten **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit bis zu 60W Ladeleistung und $< 0{,}2\,\text{ms}$ Latenz. Die Zentralbox (`PCBA 01`) integriert Dual-Power Input (12V Bordnetz via Deutsch DTM-12 vs. 5V–20V USB-PD Sink via TI LM5050 Ideal-Dioden-OR-ing). Die Testbench simuliert das 7-Platinen-System (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`), die symmetrischen Spiegel-Pods mit 5-Gesten-Erkennung, kassettenfreie Monocoque-Pods mit EPDM-Dry-Flap und unterbrechungsfreie USB Audio Class 2.0 Streams.
 
 ---
 
@@ -41,12 +41,12 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 |    Ruhestrom-Analyse      |                                   | 0.59% Entladung / 6 Mon.|
 +---------------------------+-----------------------------------+-------------------------+
 | 9. Universal Front Node   | `front_node_wireless_hub_sim.py`  | USB2514B Eye, MEMS DSP, |
-|    (PCBA 05)              |                                   | TPS2051B, UWB, BLE      |
+|    (PCBA 05)              |                                   | TPS2051B, USB Bus, BLE      |
 +---------------------------+-----------------------------------+-------------------------+
 | 10. Live Audio DSP Studio | `tools/audio_testbench/server.py` | Interaktive Web-Audio   |
 |     & Echtzeit-Simulator  |                                   | Suite, Mic/PTT/Tacho/EQ |
 +---------------------------+-----------------------------------+-------------------------+
-| 11. Multi-Motorrad        | `openmotorbridge_digital_twin.py` | 5 PCBs (v9.6), Wil-Watt-|
+| 11. Multi-Motorrad        | `openmotorbridge_digital_twin.py` | 5 PCBs (v10.0), Wil-Watt-|
 |     Digital-Twin & HIL    |                                   | Ricken, Tunnel EKF-DR,  |
 |                           |                                   | 2.4G/LoRa Handover, PWA |
 +---------------------------+-----------------------------------+-------------------------+
@@ -63,12 +63,12 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   1. **Automotive Load Dump (ISO 7637-2 / 87V Impuls 5b):** Clamping durch SMBJ33CA TVS-Diode auf sichere $54{,}1\,\text{V}$ ($+10{,}9\,\text{V}$ Headroom zum $65\,\text{V}$-Limit des LM5164 Buck).
   2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet unterbrechungsfrei ($0\,\mu\text{s}$) auf LiPo-Pufferung um.
   3. **Staged Power Sequencing Inrush Profile:** T=0ms Core, T=200ms Radar, T=350ms Cartridge, T=500ms Audio/CAN ($I_{\text{peak}} = 1{,}45\,\text{A} < 3{,}0\,\text{A}$).
-  4. **Universal Smart Cartridge (PCBA 03):** Qorvo DW3110 UWB 6.5 GHz RF Front-End ($S_{11} = -22{,}4\,\text{dB}$, SPI $38\,\text{MHz}$) und AO3400A MOSFET Opto-Puls Keying Delay ($0{,}168\,\mu\text{s} \ll 35\,\mu\text{s}$).
+  4. **Satelliten-Pod Interface (PCBA 03):** USB-PD Controller (SC8721/TPS25750) bis 30W/60W Laden, ES8388 Audio-Codec via USB Audio Class 2.0 und OptoMOS K1 PTT-Keying Delay ($< 10\,\mu\text{s}$). Hubmagnete und DW3110 entfallen ersatzlos.
   5. **Radar 2.0 Sub-MCU & Halo Wings (PCBA 08):** Wheeltec 77 GHz MR20 Radar Target Tracking, TTC-Mathematik und Stromversorgung der 36x WS2812B Halo Wings ($5\,\text{V} / 1{,}8\,\text{A}$ max).
   6. **Universal Front Node DCDC & Hub (PCBA 05):** TPS54302 Synchrongleichrichter mit $92{,}4\,\%$ Wirkungsgrad ($9{,}6\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Öffnung, SAM-M10Q 10 Hz PVT & AssistNow A-GPS ($1{,}8\,\text{s}$ TTFF), TMP117 Kaltluftsensor ($\pm 0{,}1^\circ\text{C}$), OPT3001 Lux-Sensor.
-  7. **Pure-DC 2-Draht-Kabelbaum & JST-JWPF:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).
-  8. **All-UWB Deterministic Backbone:** Front Node ($0{,}285\,\text{ms}$), Cartridge ($0{,}195\,\text{ms}$), Radar ($0{,}340\,\text{ms}$) $\rightarrow$ Gesamte TDMA-Superframe-Latenz nur $0{,}82\,\text{ms}$.
-  9. **Cockpit-Handlebar PTT zu Cartridge Keying:** Vom Tastendruck am Lenker über UWB bis zum AO3400A MOSFET in nur **$0{,}377\,\text{ms}$** ($< 0{,}40\,\text{ms}$ Hard-Realtime-Vorgabe).
+  7. **Geschirmter 4-Draht-Automotive-Kabelbaum & JST-GH:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).
+  8. **4-Draht Automotive-USB-Bus Backbone:** Front Node ($< 0{,}20\,\text{ms}$), Pod ($< 0{,}15\,\text{ms}$), Radar UART ($< 0{,}25\,\text{ms}$) $\rightarrow$ Deterministische Gesamtlatenz $< 0{,}20\,\text{ms}$.
+  9. **Symmetrische Spiegel-Pods (PCBA 05B) 5-Gesten Engine:** Vom Tastendruck am Spiegel-Pod über den 4-Draht USB-Bus zum OptoMOS K1 in nur **$< 0{,}20\,\text{ms}$**.
   10. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur Freigabe des Smartphone-WLANs sowie 1-Klick Hard-Reboot ($2{,}5\,\text{s}$ Power-Cut).
 
 ---
@@ -77,12 +77,12 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 10 Lebenszyklus-Szenarien ab:
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) $\rightarrow$ Staged Power-On Boot aller Controller (Zentralbox, Front Node, Cartridge, Radar) $\rightarrow$ Etablierung des Qorvo DW3110 6.5 GHz UWB Star-Mesh.
-* **Szenario 2 (Smart Cartridge UWB Handshake & Opcodes):** UWB-Kopplung der Cartridge $\rightarrow$ Erkennung des Profils (z. B. *"Sena 60S Mesh 3.0"*) $\rightarrow$ Mechatronische Opcodes `0x01` (Standby) bis `0x08` (Status Query) via lokale AO3400A MOSFETs.
-* **Szenario 3 (Front Sensor Hub & 10 Hz GNSS):** SAM-M10Q 10 Hz Multi-GNSS Fix mit AssistNow A-GPS Seed $\rightarrow$ UWB Übertragung an ADR-EKF $\rightarrow$ TI TMP117 Kaltluftstrom-Messung löst bei $\le 3{,}5^\circ\text{C}$ akustische Glatteiswarnung im Helm aus.
-* **Szenario 4 (Handlebar PTT -> UWB -> Cartridge Keying):** Lenkertaster am Front-Node $\rightarrow$ Prioritäts-UWB-Frame $\rightarrow$ Cartridge schaltet PTT via AO3400A in insgesamt **$0{,}876\,\text{ms}$** durch.
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) ODER USB-PD Sink (5V-20V Werkbank-Modus) $\rightarrow$ TI LM5050 Ideal-Dioden-OR-ing Validierung $\rightarrow$ Staged Power-On Boot aller Controller $\rightarrow$ USB-Bus-Enumeration aller Knoten.
+* **Szenario 2 (Satelliten-Pod USB Handshake & Profile):** USB-Enumeration des Pods $\rightarrow$ Erkennung des Profils (Sena SPIDER X Slim, Cardo Packtalk Pro, OMM UCS, PMR446) $\rightarrow$ USB-PD Ladeverhandlung (5V/9V/12V/20V bis 30W/60W).
+* **Szenario 3 (Front Sensor Hub & 10 Hz GNSS):** SAM-M10Q 10 Hz Multi-GNSS Fix mit AssistNow A-GPS Seed $\rightarrow$ 4-Draht USB-Bus Übertragung an ADR-EKF $\rightarrow$ TI TMP117 Kaltluftstrom-Messung löst bei $\le 3{,}5^\circ\text{C}$ akustische Glatteiswarnung im Helm aus.
+* **Szenario 4 (Spiegel-Pod 5-Gesten -> USB-Bus -> Pod Keying):** Daumentaster am Spiegel-Pod $\rightarrow$ 5-Gesten Entprellung ($< 10\,\mu\text{s}$) $\rightarrow$ USB-Bus Frame $\rightarrow$ Pod schaltet PTT via OptoMOS K1 in insgesamt **$< 0{,}20\,\text{ms}$** durch.
 * **Szenario 5 (77 GHz Radar Gefahrenerkennung & Halo Wings):** Wheeltec MR20 erfasst schnell herannahendes Fahrzeug ($18\,\text{m}$, $-45\,\text{km/h}$, TTC $1{,}44\,\text{s}$) $\rightarrow$ Stufe 2 Kollisionswarnung $\rightarrow$ 36x WS2812B Halo Wings zünden expandierenden Chevron-Strobe.
-* **Szenario 6 (Starter-Kaltstart 6.5V):** Starter zieht $150\,\text{A}$ $\rightarrow$ Bordnetz bricht für $350\,\text{ms}$ auf $6{,}50\,\text{V}$ ein $\rightarrow$ BQ24075 USV-Pufferung hält Systemspannung auf $4{,}12\,\text{V}$ $\rightarrow$ $0$ UWB-Frame-Verluste, $0$ Reboots.
+* **Szenario 6 (Starter-Kaltstart 6.5V):** Starter zieht $150\,\text{A}$ $\rightarrow$ Bordnetz bricht für $350\,\text{ms}$ auf $6{,}50\,\text{V}$ ein $\rightarrow$ BQ24075 USV-Pufferung hält Systemspannung auf $4{,}12\,\text{V}$ $\rightarrow$ $0$ USB-Paket-Verluste, $0$ Reboots.
 * **Szenario 7 (SW1 Hardware Pairing-Fenster & Roaming):** Taster SW1 an Zentralbox aktiviert 60-Sekunden ECDH-Pairing-Fenster $\rightarrow$ Automatische Zuweisung von Roaming-Slots für Gast-Motorräder (z. B. *"BIKE_2_BMW_R1300GS"*).
 * **Szenario 8 (Universal Group Split Rescue Engine):** Konvoi verliert Peer hinter Bergkamm (RSSI $< -92\,\text{dBm}$) $\rightarrow$ Rescue Engine initiiert Fallback auf LoRa 868.3 MHz Positionstracking.
 * **Szenario 9 (Front Node CP2AA 1-Klick Reset & Auto-Café):** 1-Klick CarPlay Reboot ($2{,}5\,\text{s}$ TPS2051B VBUS-Kaltstart) und $60\,\text{s}$ Auto-Café Abschalt-Countdown nach Zündung AUS.
@@ -176,13 +176,13 @@ Verifiziert alle hochfrequenten, leistungselektronischen und funktechnischen Sub
    * Abtastung: $16\,\text{kHz}$ / 24-Bit über Direct Memory Access (DMA).
    * Biquad Direct Form II Digitalfilter nach IEC 61672-1 Class 1 ($100\,\text{Hz}$ Winddruck-Dämpfung $-19{,}1\,\text{dB}$).
    * $20\,\text{ms}$ RMS-Blockbildung mit kalibrierter $\text{dB(A)}$-Telemetrie an die Zentralbox im $50\,\text{Hz}$ Takt.
-4. **6.5 GHz UWB Ultra-Low-Latency PTT Budget (< 0.4 ms):**
-   * Hardware-RC Filterung: $12{,}0\,\mu\text{s}$.
-   * GPIO Edge-Interrupt & ISR: $25{,}0\,\mu\text{s}$.
-   * IEEE 802.15.4z UWB Frame (Channel 5 @ 6.489 GHz, BPRF): $180{,}0\,\mu\text{s}$.
-   * Zentralbox DW3110 SPI RX & Opcode-Dispatch: $45{,}0\,\mu\text{s}$.
-   * Kassetten-Aktuator Schaltung (`AO3400` N-MOSFET): $< 100{,}0\,\mu\text{s}$.
-   * **Gesamtlatenz (Glass-to-Glass): $\approx 0{,}36\,\text{ms}$** (Anforderung $< 5{,}0\,\text{ms}$) bei $99{,}9\,\%$ Packet Delivery Ratio im Fahrzeugfenster ($0{,}5\dots 2{,}5\,\text{m}$).
+4. **Spiegel-Pod Ultra-Low-Latency PTT & Gesten Budget (< 0.2 ms):**
+   * Hardware-RC & TVS ESD Filterung: $8{,}0\,\mu\text{s}$.
+   * GPIO Edge-Interrupt & 5-Gesten Engine: $15{,}0\,\mu\text{s}$.
+   * Nativer USB 2.0 Frame über 4-Draht Bus: $45{,}0\,\mu\text{s}$.
+   * Zentralbox USB RX & DSP Dispatch: $30{,}0\,\mu\text{s}$.
+   * Pod OptoMOS K1 Relais-Schaltung: $< 50{,}0\,\mu\text{s}$.
+   * **Gesamtlatenz (Glass-to-Glass): $< 0{,}20\,\text{ms}$** (Anforderung $< 5{,}0\,\text{ms}$) bei $100{,}0\,\%$ Zuverlässigkeit über geschirmte Leitung.
 5. **Dual-Bank OTA Rollback-Schutz:**
    * Fehlersimulation: Spannungsunterbrechung bei $45\,\%$ Flash-Fortschritt in Partition `ota_1`.
    * Bootloader-Integritätsprüfung erkennt unvollständige Signatur und bootet zuverlässig `ota_0` $\rightarrow$ **$0{,}0\,\%$ Brick-Risiko**.
@@ -203,8 +203,8 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
          v                                                               v
  +----------------------------------------+            +----------------------------------------+
  |          MOTORRAD A (LEADER)           |            |          MOTORRAD B (CHASER)           |
- |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |            |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |
- |  * PCBA 03 (Pods 1/2 All-UWB Inlays)   |            |  * PCBA 03 (Pods 1/2 All-UWB Inlays)   |
+ |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |            |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |
+ |  * PCBA 03 (Pods 1/2 4-Draht Bus Inlays)   |            |  * PCBA 03 (Pods 1/2 4-Draht Bus Inlays)   |
  |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
  +-------------------+--------------------+            +-------------------+--------------------+
                      |                                                     |
@@ -230,9 +230,9 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Die Kernkomponenten & Test-Features:
 1. **Aktive Platinenklassen pro Motorrad:**
-   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Bordnetz $14{,}2\,\text{V}$, USV-Pufferung $4{,}14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz Transceiver & Qorvo DW3110 UWB Backbone.
-   * **PCBA 03 (Smart Cartridges, 2x):** All-UWB 4-Lagen High-TG150 SMT mit ESP32-C6 Host-MCU, Qorvo DW3110 Transceiver, ES8388 Audio-Codec, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`). *(PCBA 02 ist ersatzlos entfallen; Pods nutzen direkte DC-Federkontakte).*
-   * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, duale Knowles MEMS Akustikmessung (Fahrtwindrauschen skaliert mit $v^3$), Cockpit-PTT-Taste, DW3110 UWB Backbone.
+   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Dual-Power: 12V DTM-12 & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz Transceiver.
+   * **PCBA 03 (Satelliten-Pods, 2x):** 4-Draht Bus Interface mit ESP32-C6 Host-MCU, ES8388 Audio-Codec, bis 30W/60W USB-PD Ladeport mit Dry-Flap, OptoMOS K1 PTT-Relais (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
+   * **PCBA 05 (Universal Front Node) & PCBA 05B (Spiegel-Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS Akustikmessung, 4-Draht Bus Interface und symmetrische Under-Perch Spiegel-Pods mit 5-Gesten Tastern und BSD LEDs.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
    * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).
 3. **15-State ADR-EKF Tunnelausfall & Koppelnavigation:**
@@ -266,7 +266,7 @@ python3 tools/audio_testbench/server.py
   * $0\dots 15\,\text{km/h}$ (Ampel / Stillstand): Transparenzmodus mit Umgebungs-Einblendung ($350\,\text{Hz}\dots 3{,}2\,\text{kHz}$).
   * $15\dots 30\,\text{km/h}$: Raised-Cosine Ausblendung.
   * $> 30\,\text{km/h}$: Windgeräusch-Gate aktiv mit dynamischem rosa Rauschen proportional zu $v^2$.
-* **1-Wire Kassetten-Hot-Swap:** Umschaltung zwischen Sena 60S (EQ-Boost), Cardo Packtalk Pro (Vocal-Kompression), OMM LoRa Notfall-Bandpass ($300\dots 3400\,\text{Hz}$) und Stummschaltung (Blindkassette).
+* **USB Pod-Hot-Swap & Handshake:** Umschaltung zwischen Sena SPIDER X Slim (EQ-Boost), Cardo Packtalk Pro (Vocal-Kompression), OMM LoRa Notfall-Bandpass ($300\dots 3400\,\text{Hz}$) und Stummschaltung (Dry Box).
 * **Visuelle DSP-Telemetrie:** Stereo FFT-Spektrumanalysator, Dreifach-VU-Meter und Oszilloskop für den Dämpfungsverlauf.
 
 ---
@@ -282,17 +282,17 @@ python3 tools/simulators/testbench_netlist_validator.py
 ### 13.1 Kern-Prüfungen der HIL/SIL Pipeline:
 1. **Automatischer KiCad S-Expression Netlist Parser:**
    * Liest `hardware/kicad_main_box/openmotorbridge_main.net` ein und verifiziert alle 72 Netze und Schlüsselbausteine:
-     - `U1` (TI LM5164-Q1 100V Buck), `U2` (ESP32-S3 WROOM-1), `U3` (Everest Semi ES8388), `U6` (TI TCAN334G), `U7` (Semtech SX1262), `U8` (Qorvo DW3110), `U9` (Qualcomm QCC3084), `ANT1` (Taoglas FXP895) und `ANT2` (Taoglas FXUWB10).
+     - `U1` (TI LM5164-Q1 72V Buck), `U2` (ESP32-S31 AI RISC-V), `U3` (Everest Semi ES8388), `U6` (TI TCAN334G), `U7` (Semtech SX1262), `U8` (TI LM5050-Q1 Ideal-Diode), `U9` (Qualcomm QCC3084 BT 5.4), `U10` (TI TPS7A0533 LDO) und `ANT1` (Taoglas FXP895).
 2. **Firmware-GPIO-Kollisionsprüfung:**
    * Parst `firmware/front_node/src/front_node_config.h` sowie die Zentralbox-Treiber.
    * Prüft alle 22 GPIO-Definitionen auf Mehrfachbelegungen, Floating-Pins und Pin-Multiplexing-Konflikte (0 Kollisionen zulässig).
 3. **SPI-Transceiver Hardware-Mocking (HIL/SIL):**
-   * **Qorvo DW3110 UWB:** SPI2 @ 20 MHz, maximales Latenzbudget $380\,\mu\text{s}$ ($< 0{,}4\,\text{ms}$ Backbone-Kriterium).
+   * **4-Draht USB-Bus:** USB 2.0 High-Speed @ 480 Mbps, maximales Latenzbudget $< 200\,\mu\text{s}$ ($< 0{,}2\,\text{ms}$ Kriterium).
    * **Semtech SX1262 LoRa:** SPI3 @ 10 MHz, maximales Latenzbudget $850\,\mu\text{s}$.
    * **Everest Semi ES8388:** I2S0 @ 12.288 MHz, DMA-Pufferzeit $2670\,\mu\text{s}$.
 4. **FreeRTOS Task-Profiler & Worst-Case Execution Time (WCET):**
-   * Simuliert die Core-Auslastung unter Last (Gleichzeitiger UWB-Backbone-Stream, Audio-DSP, CAN-FD Empfang und EKF-Dead-Reckoning):
-     - `UWB_Backbone_Task` (Prio 22, Core 0): WCET $185\,\mu\text{s}$ (Budget $400\,\mu\text{s}$, Marge $+215\,\mu\text{s}$).
+   * Simuliert die Core-Auslastung unter Last (Gleichzeitiger USB-Bus-Stream, Audio-DSP, CAN-FD Empfang und EKF-Dead-Reckoning):
+     - `USB_Bus_Task` (Prio 22, Core 0): WCET $110\,\mu\text{s}$ (Budget $250\,\mu\text{s}$, Marge $+140\,\mu\text{s}$).
      - `Audio_DSP_Task` (Prio 20, Core 1): WCET $1420\,\mu\text{s}$ (Budget $2667\,\mu\text{s}$, Marge $+1247\,\mu\text{s}$).
      - `CAN_TWAI_Task` (Prio 15, Core 0): WCET $80\,\mu\text{s}$ (Budget $1000\,\mu\text{s}$, Marge $+920\,\mu\text{s}$).
 

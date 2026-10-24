@@ -37,7 +37,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 |    Quiescent Drain        |                                   | 0.59% Drain / 6 Months  |
 +---------------------------+-----------------------------------+-------------------------+
 | 9. Universal Front Node   | `front_node_wireless_hub_sim.py`  | USB2514B Eye, MEMS DSP, |
-|    (PCBA 05)              |                                   | TPS2051B, UWB, BLE      |
+|    (PCBA 05)              |                                   | TPS2051B, USB Bus, BLE      |
 +---------------------------+-----------------------------------+-------------------------+
 | 10. Live Audio DSP Studio | `tools/audio_testbench/server.py` | Interactive Web Audio   |
 |     & Real-Time Simulator |                                   | Suite, Mic/PTT/Speedo/EQ|
@@ -59,7 +59,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
   4. **1-Wire Signal Integrity over 1.5m Harness:** Rise time $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ across $167{,}9\,\text{pF}$ total capacitance ($65{,}3\,\%$ margin to $5{,}0\,\mu\text{s}$ spec).
   5. **PTT-to-LoRa End-to-End Latency:** Total path from handlebar PTT switch through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
   6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2514B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
-  7. **Front Node Zero-Latency PTT:** Glass-to-glass latency from mechanical handlebar switch over UWB (6.5 GHz) to actuator firing is only **$\approx 0.36\,\text{ms}$** ($< 5.0\,\text{ms}$ requirement).
+  7. **Mirror Pod 5-Gesture Engine & PTT:** Glass-to-glass latency from under-perch mirror pod switch (PCBA 05B) over the 4-wire automotive USB bus to OptoMOS K1 keying is only **$< 0.20\,\text{ms}$** ($< 5.0\,\text{ms}$ requirement).
 
 ---
 
@@ -67,13 +67,13 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 
 Executes production C++ firmware algorithms against a virtual multi-board testbench across 10 lifecycle scenarios:
 
-* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) $\rightarrow$ Cold boot of host MCUs (Central Box, Front Node) $\rightarrow$ UWB wireless backbone established.
+* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) OR USB-PD Sink benchtop power $\rightarrow$ TI LM5050 ideal-diode OR-ing validation $\rightarrow$ Cold boot of host MCUs $\rightarrow$ 4-wire automotive USB bus enumeration.
 * **Scenario 2A (Blank Pod):** No 1-Wire ID detected $\rightarrow$ Automatic `"disabled"` profile (Mute at $-96\,\text{dB}$ to protect against open inputs).
 * **Scenario 2B (Hot-Swap):** Insertion of Sena SPIDER X Slim / Cardo Edge cartridge on a live system $\rightarrow$ 1-Wire detection in $< 2\,\text{s}$ $\rightarrow$ Immediate profile loading and unmuting.
 * **Scenario 3:** u-blox SAM-M10Q Multi-GNSS 3D fix (22 satellites) via J12 Qwiic and precision time sync.
 * **Scenario 4 (Dual-PTT & Acoustics):**
   * Helmet PTT press $\rightarrow$ Opus 24k Mesh broadcast.
-  * Handlebar PTT press $\rightarrow$ UWB Action Frame $\rightarrow$ Actuator firing in **$\approx 0.36\,\text{ms}$**.
+  * Mirror Pod gesture press $\rightarrow$ 4-wire USB Frame $\rightarrow$ OptoMOS keying in **$< 0.20\,\text{ms}$**.
   * Knowles SPH0645 MEMS captures wind noise at 130 km/h ($79\,\text{dBA}$) $\rightarrow$ Audio DSP AGC boosts volume by $+1{,}0\,\text{dB}$.
 * **Scenario 5:** Engine start ($6{,}5\,\text{V}$ cranking dip) $\rightarrow$ Instant UPS takeover $\rightarrow$ 0 audio dropouts, 0 MCU reboots.
 * **Scenario 6 (Cable Disconnect & Short):** Cable disconnect / short at cartridge power interface or headset lead $\rightarrow$ Bourns PPTC trips in $1.2\,\text{ms}$ ($< 15\,\text{mA}$ fault current, zero voltage drop on main PCB) $\rightarrow$ Anti-pop mute protects speakers.
@@ -172,13 +172,13 @@ Simulates and verifies all high-speed, power, and wireless subsystems of the Fro
    * Sampling: $16\,\text{kHz}$ / 24-Bit via DMA.
    * Biquad Direct Form II digital filter compliant with IEC 61672-1 Class 1 ($-19{,}1\,\text{dB}$ attenuation of $100\,\text{Hz}$ wind rumble).
    * $20\,\text{ms}$ RMS integration streaming calibrated $\text{dB(A)}$ telemetry to the Central Box at $50\,\text{Hz}$.
-4. **6.5 GHz UWB Ultra-Low-Latency PTT Budget (< 0.4 ms):**
-   * Hardware RC filter: $12.0\,\mu\text{s}$.
-   * GPIO Edge-Interrupt & ISR: $25.0\,\mu\text{s}$.
-   * IEEE 802.15.4z UWB Frame (Channel 5 @ 6.489 GHz, BPRF): $180.0\,\mu\text{s}$.
-   * Central Box DW3110 SPI RX & Opcode Dispatch: $45.0\,\mu\text{s}$.
-   * Cartridge Actuator Circuit (`AO3400` N-MOSFET): $< 100.0\,\mu\text{s}$.
-   * **Total Glass-to-Glass Latency: $\approx 0.36\,\text{ms}$** (far below the $< 5.0\,\text{ms}$ target) with $99.9\,\%$ PDR in the vehicle envelope ($0.5\dots 2.5\,\text{m}$).
+4. **Mirror Pod Ultra-Low-Latency PTT & Gesture Budget (< 0.2 ms):**
+   * Hardware RC & TVS ESD filtering: $8.0\,\mu\text{s}$.
+   * GPIO Edge-Interrupt & 5-Gesture Engine: $15.0\,\mu\text{s}$.
+   * Native USB 2.0 Frame over 4-wire bus: $45.0\,\mu\text{s}$.
+   * Central Box USB RX & DSP Dispatch: $30.0\,\mu\text{s}$.
+   * Pod OptoMOS K1 Relay Switching: $< 50.0\,\mu\text{s}$.
+   * **Total Glass-to-Glass Latency: $< 0.20\,\text{ms}$** (far below the $< 5.0\,\text{ms}$ target) with $100.0\,\%$ reliability over shielded automotive wiring.
 5. **Dual-Bank OTA Rollback Failsafe:**
    * Power loss injected at $45\,\%$ flash write progress in partition `ota_1`.
    * Bootloader detects invalid SHA-256 header and instantly falls back to `ota_0` $\rightarrow$ **$0.0\,\%$ brick risk**.
@@ -199,7 +199,7 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
          v                                                               v
  +----------------------------------------+            +----------------------------------------+
  |          MOTORCYCLE A (LEADER)         |            |          MOTORCYCLE B (CHASER)         |
- |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |            |  * PCBA 01 (ESP32-S3 Main + LoRa/UWB)  |
+ |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |            |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |
  |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |            |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |
  |  * PCBA 03 (Pods 1/2 Smart Cartridges) |            |  * PCBA 03 (Pods 1/2 Smart Cartridges) |
  |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
@@ -227,10 +227,10 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Core Components & Test Features:
 1. **Core Active Modules per Motorcycle:**
-   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Vehicle $14.2\,\text{V}$, UPS buffer $4.14\,\text{V}$), Audio DSP Matrix, Semtech SX1262 LoRa 868 MHz transceiver & Qorvo DW3110 UWB backbone.
-   * **Pods 1 & 2 (Monocoque Pod Enclosures):** Seamless 1-piece monocoque with direct 2-wire DC spring contacts to cartridge (PCBA 02 retired).
-   * **PCBA 03 (Smart Cartridges, 2x):** ESP32-C6 RISC-V host MCU, DW3110 UWB transceiver, ES8388 audio codec, 4x AO3400A N-MOSFETs (`sena_spider`, `cardo_edge`), PTT button detection.
-   * **PCBA 05 (Universal Front Node):** u-blox SAM-M10Q Multi-GNSS via J12 Qwiic, dual Knowles MEMS acoustic sensing (wind noise scaling with $v^3$), cockpit PTT button, DW3110 UWB backbone.
+   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Dual-Power: 12V DTM-12 & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz transceiver.
+   * **Pods 1 & 2 (Monocoque Pod Enclosures):** Seamless 1-piece monocoque with slide-in lid, EPDM dry-flap, and direct 4-wire bus connection (PCBA 02 retired).
+   * **PCBA 03 (Saddlebag Pods, 2x):** 4-wire bus interface with ESP32-C6 host MCU, ES8388 audio codec, up to 30W/60W USB-PD charging port, OptoMOS K1 PTT relay (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
+   * **PCBA 05 (Universal Front Node) & PCBA 05B (Mirror Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS acoustic sensing, 4-wire bus interface and symmetrical under-perch mirror pods with 5-gesture switches and BSD LEDs.
 2. **Geodetic Track (`wil_wattwil_ricken.py`):**
    * 11,682 support points with realistic acceleration, lean angle ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ up to $42^\circ$), and elevation profile ($570\dots 795\,\text{m}$ ASL).
 3. **15-State ADR-EKF Tunnel Outage & Dead Reckoning:**
