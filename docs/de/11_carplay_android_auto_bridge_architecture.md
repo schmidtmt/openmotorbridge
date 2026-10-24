@@ -33,14 +33,16 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
   * Zentraler Audio-DSP: Raised-Cosine Ducking (-12 dB Navi, -18 dB Radar), Windfilter, Sidetone
   * Volle Intercom-Matrix (Sena/Cardo Koffer-Pods), eCall-Notruf & Heck-Radar
 
-                               | Optional erweiterbar via
-                               | UWB Funk-Backbone (6.5 GHz Ch. 5, < 0.4 ms Latenz)
+                               | Verbunden über geschirmten 4-Ader Automotive-Bus
+                               | (VCC_BUS 12V/PD, GND, USB_D-, USB_D+, < 0.2 ms Latenz)
+                               | Verlegung im Harley-Kabelkanal (ZERO Tank-Heben!)
                                v
 
   [STUFE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IM FRONTBEREICH / COCKPIT)]
   * UNIVERSAL-FUNKTIONEN FÜR JEDES MOTORRAD (Naked Bike, Enduro, Tourer, Cruiser):
-    - Drahtgebundener Lenker-PTT (Optokoppler GPIO 0, < 0.4 ms via UWB): Nur 30-50 cm Leitung am Lenker!
-      Vollständige Eliminierung von fehleranfälligen Signalkabeln über den schwenkenden Lenkkopf.
+    - Symmetrische Under-Perch Spiegel-Pods (2x PCBA 05B): Bilaterale Blind Spot Detection (BSD)
+      und 100% softwaredefinierte Daumentaster (5 Gesten: Short, Double, Triple, Long, Hold Gate)
+      für PTT, Voice Assistant, Waze Hazard Pin Drop und Cam-Marker.
     - Knowles I2S MEMS-Fahrtwindmikrofon: Misst Staudruck und Windpegel direkt an der Frontscheibe
       (unter der Sitzbank physikalisch unmöglich) für automatische Helmlautstärke-Nachführung (AGC).
     - Cockpit USB-Ladehub: 20W USB-PD Fast Charging am Lenker & dedizierter Zubehör-Port.
@@ -246,7 +248,7 @@ Ein zentrales Missverständnis betrifft die Koexistenz von drahtlosem Apple CarP
    * Das interne Werks-Navi des Motorrads wird nicht benötigt und benötigt keine Internetverbindung von OMB.
    * **V2X- & Schwarm-Uplink für OpenMotorBridge:** Über die Companion-App (`bar.f0o.omb`) erhält OMB via BLE/USB einen Mobilfunk-Uplink für V2X-Datenaustausch (OpenTrafficMap) und Waze-Schwarmmeldungen ("Auto-Klick").
 4. **100 % Offline-First Garantie:**
-   * OpenMotorBridge arbeitet für alle Fahr- und Sicherheitsfunktionen (Radar 2.0, UWB-Backbone, Intercom-Mesh Sena/Cardo/OMM, IMU-Crash-Erkennung) **zu 100 % autark und offline**.
+   * OpenMotorBridge arbeitet für alle Fahr- und Sicherheitsfunktionen (Radar 2.0, 4-Ader Automotive-Bus, Intercom-Mesh Sena/Cardo/OMM, IMU-Crash-Erkennung) **zu 100 % autark und offline**.
 
 ## 5. WHIM Headset-Bypass & Helmmikrofon-Routing
 
@@ -267,7 +269,7 @@ Niemand wird gezwungen, Apple CarPlay oder Android Auto zu nutzen. Wer das origi
 1. **Funktionsweise:**
    * Der Front-Node meldet sich an der USB-Buchse im Handschuhfach (`J4`) als zertifiziertes Apple MFi- bzw. USB Audio Class Gerät an.
    * Das Smartphone streamt Musik (z. B. Spotify, Apple Music) via Bluetooth direkt an die OpenMotorBridge Zentralbox.
-   * OpenMotorBridge extrahiert die ID3-Metadaten (Titel, Interpret, Album, Spieldauer) und sendet sie per UWB an den Front-Node, der sie über USB an Skyline OS weiterreicht.
+   * OpenMotorBridge extrahiert die ID3-Metadaten (Titel, Interpret, Album, Spieldauer) und sendet sie über den 4-Draht Automotive-Bus an den Front-Node, der sie über USB an Skyline OS weiterreicht.
 2. **Was sieht der Fahrer auf dem Harley-Display?**
    * Das 12.3" Skyline OS (oder 6.5" Boom! Box) Display öffnet seine native Medienansicht: Vollständiger Track-Titel, Interpret, Albumname und Playback-Fortschrittsbalken im originalen Harley-Look.
 3. **Hybrides Audio-Routing (Zwei wählbare Profile):**
@@ -423,7 +425,7 @@ Die native OpenMotorBridge Companion-App (reservierte Android Application ID `ba
      - **SPaT (Signal Phase and Timing):** Countdown und Umschaltzeiten intelligenter Lichtsignalanlagen (Ampeln).
      - **DENM (Decentralized Environmental Notification Message):** Akute Gefahrenmeldungen (Geisterfahrer, Stauende hinter Kurve, Glatteis, Einsatzfahrzeug nähert sich).
      - **CAM (Cooperative Awareness Message):** Position und Geschwindigkeit vernetzter Fahrzeuge.
-   * OpenMotorBridge leitet diese V2X-Pakete über den UWB-Backbone und BLE an die Android Companion-App weiter.
+   * OpenMotorBridge leitet diese V2X-Pakete über den 4-Draht USB-Bus und BLE an die Android Companion-App weiter.
    * Die App streamt die V2X-Erkenntnisse über Mobilfunk (4G/5G) an das **OpenTrafficMap-Projekt** und lädt umgekehrt lokale Gefahren-Tiles (GeoJSON) nach.
 4. **Waze "Auto-Klick" & Schwarmintelligenz-Automatisierung:**
    * Waze bietet eine der weltweit stärksten Community-Verkehrsdatenbanken, erfordert für Meldungen (Gefahr auf Fahrbahn, Unfall, Stau) normalerweise jedoch manuelle Touchscreen-Klicks.
@@ -504,3 +506,36 @@ Das Problem herkömmlicher Headset-Simulatoren besteht darin, dass bei angeschlo
    * Der Front-Node aktiviert auch das A2DP-Sink-Profil. SkylineOS sendet die Musik per Bluetooth an OMB, das sie in die Helm-Matrix (Sena/Cardo) einspeist.
 3. **Ergebnis:** 100% Automation, kein manuelles Umschalten auf dem Touchscreen, kein Eingriff in den CAN-Bus!
 
+
+---
+
+## 8. Begleitfahrzeug & Support-Car Kit 5 (Chase Van / Rallye-Integration)
+
+Das **Referenz-Kit 5** adaptiert die OpenMotorBridge-Architektur nahtlos für Begleitfahrzeuge (Kastenwagen, Transporter, Wohnmobile oder Pkw), die als Orga-, Tour-Guide- oder Besenfahrzeug bei Motorradreisen und Rallyes mitfahren:
+
+```
++----------------------------------------------------------------------------------------+
+|           BEGLEITFAHRZEUG / SUPPORT-VAN ARCHITEKTUR (KIT 5 CARPLAY & AA INTEGRATION)   |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+|  [ FAHRZEUG-12V (Bordnetz) ] ---> [ OMB CENTRAL UNIT (PCBA 01 + PCBA 05 ALL-IN-ONE) ]  |
+|                                         |                                              |
+|             +---------------------------+---------------------------+                  |
+|             | 15W High-Current 5V 3A    | Reine USB-Datenleitung    | Dual Pods        |
+|             | Geregelte Speisung        | (D+ / D- galvanisch entk.)| (Sena & Cardo)   |
+|             v                           v                           v                  |
+|     [ AAWIRELESS / CARLINKIT DONGLE ] ------> [ PKW WERKS-USB-BUCHSE (Headunit) ]      |
+|             |                                                       |                  |
+|             v (Kabelloses CarPlay / Android Auto)                   v                  |
+|     [ FAHRER-SMARTPHONE ]                                 [ FAHRZEUG-TOUCHSCREEN ]     |
+|                                                                                        |
++----------------------------------------------------------------------------------------+
+```
+
+1. **Lösung des 500-mA-USB-Spannungseinbruchs (Power-Bypass):**
+   * Pkw-Werks-USB-Buchsen liefern oft nur normgemäße $500\,	ext{mA}$, was bei drahtlosen CarPlay/AA-Adaptern (CarlinKit, AAWireless) unter Last zu Brownouts, Überhitzung und Verbindungsabbrüchen führt.
+   * Das Kit 5 speist den COTS-Dongle direkt aus dem extrem laststabilen $5\,	ext{V} / 3{,}0\,	ext{A}$ ($15\,	ext{W}$) Schaltregler des OMB Front-Nodes.
+   * Zur Kfz-Headunit wird ausschließlich die differentielle Datenverbindung ($D+ / D-$) geführt – absolut frei von Spannungsabfällen und Erdschleifen.
+2. **Volle Infotainment-Integration im Begleitfahrzeug:**
+   * Der Fahrer des Support-Vans sieht Navigation, Gruppen-Telemetrie und Live-Warnungen direkt auf dem großen Pkw-Touchscreen.
+   * Funkrufe aus dem Sena- und Cardo-Schwarm werden über die fahrzeugeigenen Autolautsprecher wiedergegeben.

@@ -33,14 +33,16 @@ OpenMotorBridge resolves these issues through a strictly modular **two-stage arc
   * Central Audio DSP: Raised-Cosine Ducking (-12 dB Navi, -18 dB Radar), wind filter, sidetone
   * Full Intercom Matrix (Sena/Cardo pannier pods), eCall crash emergency & rear radar
 
-                                | Optionally expandable via
-                                | UWB wireless backbone (6.5 GHz Ch. 5, < 0.4 ms latency)
+                                | Interconnected via shielded 4-wire automotive bus
+                                | (VCC_BUS 12V/PD, GND, USB_D-, USB_D+, < 0.2 ms latency)
+                                | Pulled through Harley frame wire caddy (ZERO fuel tank lifting!)
                                 v
 
   [STAGE 2: UNIVERSAL COCKPIT & FRONT HUB (PCBA 05 IN FAIRING / COCKPIT AREA)]
   * UNIVERSAL FUNCTIONS FOR ANY MOTORCYCLE (Naked, Enduro, Tourer, Cruiser):
-    - Hardwired Handlebar PTT (Optocoupler GPIO 0, < 0.4 ms via UWB): Only 30-50 cm harness along handlebars!
-      Completely eliminates fragile, fatigue-prone signal wiring across the steering head bearing.
+    - Symmetrical Under-Perch Mirror Pods (2x PCBA 05B): Bilateral Blind Spot Detection (BSD)
+      and 100% software-defined thumb buttons (5 gestures: Short, Double, Triple, Long, Hold Gate)
+      for PTT, Voice Assistant, Waze Hazard Pin Drop, and Actioncam markers.
     - Knowles I2S MEMS Wind Noise Microphone: Measures dynamic ram-air pressure directly at the windscreen
       (physically impossible under the seat) for automatic helmet volume tracking (AGC).
     - Cockpit USB Charging Hub: 20W USB-PD Fast Charging on handlebars & dedicated accessory port.
@@ -238,7 +240,7 @@ No rider is forced to run Apple CarPlay or Android Auto. Those who prefer the cl
 1. **How It Works:**
    * The Front Node enumerates on the glove box USB port (`J4`) as a certified Apple MFi / USB Audio Class peripheral.
    * The smartphone streams audio (Spotify, Apple Music) via Bluetooth directly to the OpenMotorBridge Central Box.
-   * OpenMotorBridge extracts ID3 metadata (title, artist, album, track duration) and forwards it via UWB to the Front Node, which passes it over USB to Skyline OS.
+   * OpenMotorBridge extracts ID3 metadata (title, artist, album, track duration) and forwards it via the 4-wire automotive bus to the Front Node, which passes it over USB to Skyline OS.
 2. **What the Rider Sees on the Display:**
    * The 12.3" Skyline OS (or 6.5" Boom! Box) screen opens its native media player: full track title, artist name, album art tags, and progress bar rendered in Harley's factory aesthetic.
 3. **Hybrid Audio Routing (Two Selectable Profiles):**
@@ -385,11 +387,11 @@ The native OpenMotorBridge companion app (reserved Android Application ID `bar.f
 * **BLE/USB Physical Link (Zero Wi-Fi Conflict):** Because the phone's 5 GHz Wi-Fi transceiver is exclusively locked to the wireless Android Auto video stream, OMB communicates with the smartphone strictly via **Bluetooth Low Energy (WebBLE / RFCOMM) or USB cable**.
 * **Layer 5 Instead of Layer 3:** Rather than handling raw IP packets (L3, which requires root privileges or VPN adapters), the Front Node terminates TCP connections locally and streams opaque TLS byte streams over unprivileged standard sockets (`connect()`) bound explicitly to the cellular interface (`TRANSPORT_CELLULAR`).
 * **Zero VPN Slots Consumed:** Because the app opens standard POSIX sockets over the cellular network, Tailscale or WireGuard remains 100% active and undisturbed.
-* **V2X (ITS-G5 5.9 GHz) & OpenTrafficMap:** The 5.9 GHz ITS-G5 receiver on PCBA 08 captures SPaT (traffic light signal timing), DENM (hazard warnings), and CAM frames. OMB relays these over UWB and BLE to the Android app, which streams them to the **OpenTrafficMap** project and fetches localized hazard GeoJSON tiles.
+* **V2X (ITS-G5 5.9 GHz) & OpenTrafficMap:** The 5.9 GHz ITS-G5 receiver on PCBA 08 captures SPaT (traffic light signal timing), DENM (hazard warnings), and CAM frames. OMB relays these over the 4-wire USB bus and BLE to the Android app, which streams them to the **OpenTrafficMap** project and fetches localized hazard GeoJSON tiles.
 * **Waze "Auto-Click" Automation:** When OMB detects a traffic light phase change (via V2X) or an emergency braking incident (> 0.6 g via 6-axis IMU), it signals the Android Companion App. Using Android's **AccessibilityService API or Intents**, the app automatically injects hazard reports into Waze ("Auto-Click") without taking the rider's hands off the handlebars.
 * **A-GPS Fast Cold-Start (u-blox AssistNow Online):** At ignition ON (KL15), the app fetches a lightweight (~3 to 8 kB) u-blox AssistNow Online packet over cellular and injects binary UBX-MGA assistance messages into the SAM-M10Q over BLE/USB and Qwiic I2C (`J12`). Cold start TTFF plunges from ~30 s to **< 1.5 s** with a +15 dB sensitivity boost (down to -158 dBm).
 * **Platform Boundary (Android vs. iOS):** While iOS sandbox rules strictly forbid background cross-app UI automation and socket routing without Personal Hotspot, Android permits background socket binding and accessibility automation with zero hacks.
-* **100% Offline-First Safety:** Core safety systems (77 GHz radar, UWB backbone, intercom mesh, crash detection) remain 100% self-contained on the bike hardware, requiring zero internet in alpine dead zones.
+* **100% Offline-First Safety:** Core safety systems (77 GHz radar, 4-wire automotive bus, intercom mesh, crash detection) remain 100% self-contained on the bike hardware, requiring zero internet in alpine dead zones.
 
 ---
 
@@ -450,3 +452,36 @@ Unlike crude setups where connecting a headset silences fairing speakers, OpenMo
    * The Front Node additionally accepts the A2DP Sink profile. SkylineOS streams stereo audio to OMB, which injects it directly into the helmet intercom matrix.
 3. **Summary:** 100% automation, zero touchscreen taps while riding, and zero CAN-bus modification!
 
+
+---
+
+## 8. Support-Car Kit 5 (Chase Van / Rallye Escort Integration)
+
+The **Reference Kit 5** adapts the OpenMotorBridge architecture for chase vans, support cars, rally sweep vehicles, and camper vans:
+
+```
++----------------------------------------------------------------------------------------+
+|           SUPPORT-CAR / CHASE VAN ARCHITECTURE (KIT 5 CARPLAY & AA INTEGRATION)        |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+|  [ VEHICLE 12V (Bordnetz) ] ---> [ OMB CENTRAL UNIT (PCBA 01 + PCBA 05 ALL-IN-ONE) ]   |
+|                                         |                                              |
+|             +---------------------------+---------------------------+                  |
+|             | 15W High-Current 5V 3A    | Pure USB Data Lines       | Dual Pods        |
+|             | Regulated Power Feed      | (D+ / D- isolated)        | (Sena & Cardo)   |
+|             v                           v                           v                  |
+|     [ AAWIRELESS / CARLINKIT DONGLE ] ------> [ CAR OEM USB SOCKET (Headunit) ]        |
+|             |                                                       |                  |
+|             v (Wireless CarPlay / Android Auto)                     v                  |
+|     [ DRIVER SMARTPHONE ]                                 [ VEHICLE TOUCHSCREEN ]      |
+|                                                                                        |
++----------------------------------------------------------------------------------------+
+```
+
+1. **Resolution of the 500 mA Vehicle USB Sag (Power-Bypass):**
+   * Factory car media ports often deliver only the nominal $500\,	ext{mA}$, which causes thermal throttling, brownouts, and reboot loops in aftermarket wireless dongles (CarlinKit, AAWireless).
+   * Kit 5 powers the dongle directly from the OMB Front Node's robust $5\,	ext{V} / 3.0\,	ext{A}$ ($15\,	ext{W}$) automotive synchronous buck regulator.
+   * Only the differential USB data lines ($D+ / D-$) are routed to the car's headunit, ensuring rock-solid connectivity with zero voltage droop.
+2. **Full Infotainment Integration in Support Vehicle:**
+   * The chase van driver observes convoy navigation, swarm telemetry, and real-time hazard alerts directly on the factory car touchscreen.
+   * Intercom audio from Sena and Cardo pods is routed seamlessly into the vehicle sound system and vehicle microphone.
