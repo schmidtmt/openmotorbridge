@@ -2853,8 +2853,8 @@
         9.0
       ],
       "desc": {
-        "de": "Plug-and-play Zündungsplus (KL15) Speisung für R1200/R1250/R1300 GS/GSA & F-Serie ohne Kabelbaum-Eingriff",
-        "en": "Plug-and-play switched ignition (KL15) feed for R1200/R1250/R1300 GS/GSA & F-Series without tapping OEM harness"
+        "de": "Optionales Plug-and-play Zündungsplus (KL15) Adapterkabel am Lenkkopf (nur für Standalone-Cockpitbetrieb ohne Zentralbox)",
+        "en": "Optional plug-and-play switched ignition (KL15) adapter at headstock (standalone cockpit mode only without central box)"
       },
       "pkg_qty": 1,
       "pkg_name": "Konfektioniertes Adapterkabel"

@@ -720,7 +720,7 @@ For high-displacement dual-sport and overland adventure bikes featuring open tub
 | 3. CENTER (Under Rider Seat / Tool Bay):                                    |
 |    * Central Box splash-proof on 4x M4 vibration bobbins                    |
 |    * ESP32-S31 AI Host, QCC3084 Audio, SX1262 LoRa 868 MHz & USB-PD Engine  |
-|    * 12V power tapped directly from 3-pin BMW Cartool plug at steering neck |
+|    * 12V power tapped directly from battery & OBD-2 diagnostic under seat   |
 +-----------------------------------------------------------------------------+
 | 4. FORWARD SUBFRAME / FLANKS (Saddlebag Pods 1 & 2):                        |
 |    * Option A (GSA & Heavy Duty): Inside tubular pannier racks (Ø 18 mm)    |

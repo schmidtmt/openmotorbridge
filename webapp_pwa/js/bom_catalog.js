@@ -2851,8 +2851,8 @@ const BOM_PARTS = {
       9.0
     ],
     "desc": {
-      "de": "Plug-and-play Zündungsplus (KL15) Speisung für R1200/R1250/R1300 GS/GSA & F-Serie ohne Kabelbaum-Eingriff",
-      "en": "Plug-and-play switched ignition (KL15) feed for R1200/R1250/R1300 GS/GSA & F-Series without tapping OEM harness"
+      "de": "Optionales Plug-and-play Zündungsplus (KL15) Adapterkabel am Lenkkopf (nur für Standalone-Cockpitbetrieb ohne Zentralbox)",
+      "en": "Optional plug-and-play switched ignition (KL15) adapter at headstock (standalone cockpit mode only without central box)"
     },
     "pkg_qty": 1,
     "pkg_name": "Konfektioniertes Adapterkabel"
@@ -3870,8 +3870,8 @@ const BOM_ASSEMBLIES = {
       "en": "Mount Kit: BMW GS Family"
     },
     "desc": {
-      "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), BMW Cartool 12V Zündungsplus-Adapter & CAN-Bus Y-Splitter",
-      "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), BMW Cartool 12V ignition adapter & CAN bus Y-splitter"
+      "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), Bordnetz- & CAN-Bus Anbindung unter der Sitzbank",
+      "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), under-seat power & CAN bus integration"
     },
     "parts": [
       {
@@ -3926,8 +3926,8 @@ const BOM_ASSEMBLIES = {
       "en": "Mount Kit: BMW GSA Adventure"
     },
     "desc": {
-      "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, BMW Cartool 12V-Adapter, CAN Y-Splitter & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
-      "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, BMW Cartool 12V adapter, CAN Y-splitter & Deutsch DT-2 aux light cable"
+      "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, Bordnetz- & CAN-Anbindung unter der Sitzbank & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
+      "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, under-seat power & CAN integration & Deutsch DT-2 aux light cable"
     },
     "parts": [
       {

@@ -340,10 +340,16 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 >   3. **The Telelever Steering Neck Arc:** At the steering head, the cable must **strictly follow the natural curvature of the OEM brake lines and factory harness**! Ensure a generous flex loop of approx. 50 mm. Before tightening zip-ties, cycle the handlebars lock-to-lock and compress the front suspension deeply: ensure zero binding, zero tension, and zero chafing against sharp casting edges in any position.  
 >   4. Guide the forward cable end to the Ø 12 mm nav crossbar above the TFT and plug into the Front Node.
 
-* **Central Box:** Mount on 4x M4 vibration bobbins in the frame triangle or tool well under the rider seat.
-* **Front Node:** Clamp directly to the Ø 12 mm GPS bar above the 6.5" TFT display with the 2-piece bar clamp. Provides cold-air sensing, unobstructed GNSS reception, and power for phone/navigation docks (QuadLock / SP Connect).
+* **Central Box & 12V Vehicle Power (100% Under the Rider Seat!):**
+  * Mount on 4x M4 vibration bobbins in the frame triangle or tool well under the rider seat.
+  * **Cable 1 (Deutsch DTM-6 `J1`):** Connects directly inside the under-seat battery compartment:
+    * **Constant Battery Power (KL30) & Ground (GND):** Short $< 15\,\text{cm}$ lead with included 7.5A COTS blade fuse directly to battery positive terminal (or jump-start post) and chassis ground stud.
+    * **Switched Ignition (KL15) & K-CAN Bus:** Tapped right next to the battery via the factory BMW 16-pin OBD-2 diagnostic connector (Pin 1/16 switched power, Pin 6/14 K-CAN High/Low) or the OEM under-seat 12V auxiliary DIN socket (DIN ISO 4165, ZFE/BCO 60s shutdown).
+  > [!CAUTION]
+  > **Never Route a Power Cable from the Steering Head Back to the Seat!**  
+  > The factory 3-pin Cartool accessory plug at the steering head remains **completely untouched** for the OMB system installation (retained as factory spare for third-party accessories)! No power cable is ever routed backwards from the front handlebar down under the seat. The Central Box powers the entire system directly from the under-seat battery/vehicle net and feeds the Front Node forward via the shielded 4-wire automotive harness (Cable 2, Branch 1) with up to 60W USB-PD.
+* **Front Node:** Clamp directly to the Ø 12 mm GPS bar above the 6.5" TFT display with the 2-piece bar clamp. Powered entirely over Branch 1 of the 4-wire bus from the Central Box; delivers cold-air sensing, uncompromised GNSS reception, and 60W USB-PD charging power for smartphones and motorcycle navigation devices (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride).
 * **All-in-One Under-Perch Mirror Pod:** Mount under the left mirror perch bracket (thumb PTT + directed amber BSD radar alert LED).
-* **12V Power Connection:** Plug the pre-crimped **BMW Cartool adapter cable** directly into the factory 3-pin Cartool accessory plug over the steering neck (clean KL15 with automatic CAN-bus shutdown after 60 seconds).
 * **Pods:** Mount **strictly vehicle-fixed** on the motorcycle – either on the tubular pannier rack via the rugged [GSA Cage Dock](../../hardware/cad/scad/02_pod_base/adventure_gsa_cage_dock.scad) in the 45 mm dead space between pannier and rear wheel well, or along the seat crease via the [Transition Dock](../../hardware/cad/scad/02_pod_base/adventure_transition_dock.scad). *(Important: Never mount pods inside aluminum cases, as aluminum blocks 2.4 GHz RF like a Faraday cage!).*
 * **Rear Radar:** Clamp via the minimal [Adventure Rack Radar Mount](../../hardware/cad/scad/02_pod_base/adventure_rack_radar_mount.scad) directly to the rear Ø 18 mm tube of the luggage rack. The $45^\circ$ roost deflector shields against gravel from knobby tires; topcases remain 100% accessible and quick-detachable.
 

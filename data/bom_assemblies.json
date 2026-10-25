@@ -454,8 +454,8 @@
         "en": "Mount Kit: BMW GS Family"
       },
       "desc": {
-        "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), BMW Cartool 12V Zündungsplus-Adapter & CAN-Bus Y-Splitter",
-        "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), BMW Cartool 12V ignition adapter & CAN bus Y-splitter"
+        "de": "Sitzbank-Bügelfalte Transition-Docks (Ø 28 mm, Vario-kompatibel), Bordnetz- & CAN-Bus Anbindung unter der Sitzbank",
+        "en": "Seat crease transition docks (Ø 28 mm, Vario-case compatible), under-seat power & CAN bus integration"
       },
       "parts": [
         { "part_id": "part3d_gs_transition_dock", "qty": 2 },
@@ -489,8 +489,8 @@
         "en": "Mount Kit: BMW GSA Adventure"
       },
       "desc": {
-        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, BMW Cartool 12V-Adapter, CAN Y-Splitter & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
-        "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, BMW Cartool 12V adapter, CAN Y-splitter & Deutsch DT-2 aux light cable"
+        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen (4 Paar) mit M5 Schrauben, Bordnetz- & CAN-Anbindung unter der Sitzbank & Deutsch DT-2 Zusatzscheinwerfer-Kabel",
+        "en": "Ø 18 mm stainless pannier rack clamps (4 pairs) with M5 bolts, under-seat power & CAN integration & Deutsch DT-2 aux light cable"
       },
       "parts": [
         { "part_id": "part3d_gsa_pannier_clamp_base", "qty": 4 },

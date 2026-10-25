@@ -765,7 +765,7 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 | 3. MITTE (Unter Fahrersitz / Werkzeugfach):                                 |
 |    * Zentralbox spritzwassergeschützt auf 4x M4 Silentblöcken               |
 |    * ESP32-S31 AI-Host, QCC3084 Audio, SX1262 LoRa 868 MHz & USB-PD Engine  |
-|    * 12V Speisung direkt vom 3-Pin BMW Cartool-Stecker über dem Steuerkopf  |
+|    * 12V Speisung direkt von Batterie & OBD-2 Diagnosestecker unter Sitzbank|
 +-----------------------------------------------------------------------------+
 | 4. VORDERER HECKRAHMEN / SEITENBEREICH (Koffer-Pods 1 & 2):                 |
 |    * Variante A (GSA & Heavy Duty): An der Innenseite der Rundrohr-         |
