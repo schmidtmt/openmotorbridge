@@ -44,11 +44,11 @@ The v10.0 generation of OpenMotorBridge completely eliminates brittle short-rang
 |  Lid-Dock)        |   |  Lid-Dock)        |                           +---------------+               v
 | * 2x Cold-Start   |   | * 2x Cold-Start   |                           | 2x UNDER-PERCH|   +---------------+
 |   Pushers JF-0530B|   |   Pushers JF-0530B|                           | MIRROR PODS   |   | 1x GLOVE BOX  |
-|   (15-85mm Slide  |   |   (15-85mm Slide  |                           | (Left & Right)|   | 5-PORT HUB    |
+|   (15-85mm Slide  |   |   (15-85mm Slide  |                           | (Left & Right)|   | 4-PORT HUB    |
 |    Bracket)       |   |    Bracket)       |                           | * Left: PTT   |   | (Touring)     |
 | * 30W Saddlebag   |   | * 30W Saddlebag   |                           | * Right: Cam  |   | * 30W Phone PD|
 |   USB Charging    |   |   USB Charging    |                           | * Bilateral   |   | * 10W Dongle  |
-| * PCBA 03 Smart   |   | * PCBA 03 Smart   |                           |   BSD LEDs    |   | * 10W Cam-Lead|
+| * PCBA 03 Smart   |   | * PCBA 03 Smart   |                           |   BSD LEDs    |   | * Free Media  |
 |   Gateway (Sena/  |   |   Gateway (Sena/  |                           +---------------+   | * USB Headset-|
 |   Cardo/OMM/Midl) |   |   Cardo/OMM/Midl) |                                               |   Emulation   |
 +-------------------+   +-------------------+                                           +---------------+
@@ -72,7 +72,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * **1x Front Node Riser Enclosure:** Compact tub with riser / triple-tree bar clamp, enclosure lid with O-ring sealing channel.
   * **1x Modular Snap-On Sensor Puck:** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) for SAM-M10Q GNSS, TMP117, OPT3001, and Knowles MEMS.
   * **2x Symmetrical Under-Perch Mirror Pods (Left & Right):** Form-fitted brackets for mounting under both mirror perch nuts ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) with button guides (Left: PTT; Right: Cam-Tag) and integrated amber LED light tunnels for bilateral blind-spot detection.
-  * **1x Glove Box 5-Port Hub Enclosure:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for right glove compartment of Harley Touring (30W phone, 10W dongle, free port, 10W camera lead).
+  * **1x Glove Box 4-Port Hub Enclosure:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for right glove compartment of Harley Touring (30W phone, 10W dongle, free port, OEM upstream).
   * **1x Rear Radar Mount:** MR20 radar housing with Hirth-joint swivel/tilt cradle, license plate bracket, and integrated roost deflector.
 * [ ] **Fully Assembled PCBs (SMT Production):**
   * **1x PCBA 01 (Central Box):** Host board with **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Two-Cable Architecture headers (6-Pin Deutsch DTM `J1` & 16-Pin Automotive Header `J_PERIPH`), Dual-Power Input (12V & USB-C PD Sink with ideal-diode OR-ing), and USB-C DFU port. *(DW3110 UWB completely eliminated!)*
@@ -278,6 +278,12 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * Slip both identical pods over the mirror stems and retorque each nut to $15\,\text{Nm}$.
    * Route the two slim 3-wire leads along the handlebar wiring down to the Front Node and plug into `J_POD_L` and `J_POD_R`.
    * **Result:** Symmetrical cockpit aesthetics, left thumb operates PTT, right thumb bookmarks action-cam highlights, bilateral amber radar alerts reflected directly on both mirrors!
+3. **Direct Cockpit Peripherals (Navi & Action-Cam Power Supply):**
+   * **Dedicated Motorcycle GPS (15W at `J10`):** Connect Garmin Zūmo XT2 / Tread / Chigee AIO-5 using the 2-pin DC lead from `J10`.
+   * **Action-Cam (10W at `J8`):** Route the weather-sealed USB-C lead directly from `J8` on the Front Node to the camera at handlebars or windshield mount.
+   > [!IMPORTANT]
+   > **USB DATA LINE ISOLATION FOR NAVI & ACTION-CAM (POWER-ONLY / BC 1.2 DCP):**  
+   > Both cockpit feeds are **strictly Power-Only**! They have zero data connection to the `USB2514B` host hub. On the action-cam connector, data pins `D+` and `D-` are shorted per **USB BC 1.2 DCP** ($R < 200\,\Omega$). This ensures the GPS and action-cam recognize a dedicated vehicle charger, boot up immediately into active navigation or loop recording upon ignition ON, and **never** stall in a PC mass storage or webcam dialog! Direct Front Node connection also eliminates running camera cables through the glove compartment.
 
 #### Step 5.1.3b: Symmetrical Cockpit Displays (Dual Speaker Corner-Pods)
 1. **Ergonomic Principle (Bagger & Touring):**
@@ -291,17 +297,16 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * **0 cm visible cable, 0 screws removed from the outer fairing!**
 4. **Functionality:** Driven locally by the ESP32-S3 on `PCBA 05` via SPI/QSPI (left: rear radar proximity bar & blind spot warnings; right: turn-by-turn navigation arrows, TPMS pressures, intercom channel/talking state, and smartphone charge status).
 
-#### Step 5.1.4: Glove Box 5-Port Media & Power-Injection Hub (Harley Touring)
+#### Step 5.1.4: Glove Box 4-Port Media & Power-Injection Hub (Harley Touring)
 1. Open the right glove box.
 2. Locate the OEM rubber grommet on the underside of the compartment floor for accessory wiring.
 3. Pass the link cable from the Front Node (combined 60W power injection & High-Speed USB 2.0 data cable for Harley headset emulation) from *below* through the grommet into the compartment.
-4. Place the form-fit 5-Port Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) into the compartment:
-   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultra-fast charging of rider smartphone while navigating.
-   * **Port 2 (10W Switched Dongle Port):** Supplies the wireless CarPlay / Android Auto dongle (Ottocast U2-Air / Carlinkit 5.0) with stable, filtered power (prevents reboot loops of the 12.3" Skyline OS / Boom! Box displays!).
-   * **Port 3 (Free Media Port):** USB-C socket for USB flash drives or DFU firmware updates.
-   * **Port 4 (Direct 10W Camera Lead):** Hardwired weatherproof 10W USB-C lead for handlebar or windshield action cams (GoPro / Insta360).
-   * **Port 5 (OEM Head Unit Upstream & Harley Headset Emulation via USB):** Connects data lines directly to factory USB input of infotainment system (Boom! Box GTS / Skyline OS). Routes MFi digital headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
-5. The glove box door seals airtight with zero cable interference across weatherstripping!
+4. Place the form-fit 4-Port Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) into the compartment:
+   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultra-fast charging of rider smartphone while navigating (stays 100% inside pocket).
+   * **Port 2 (10W Switched Dongle Port):** Supplies the wireless CarPlay / Android Auto dongle (Ottocast U2-Air / Carlinkit 5.0) with stable, filtered power (prevents reboot loops of the 12.3" Skyline OS / Boom! Box displays, stays inside pocket).
+   * **Port 3 (Free Media Port):** USB-A socket for USB flash drives (FLAC/MP3) or DFU firmware updates (stays inside pocket).
+   * **Port 4 (OEM Head Unit Upstream & Harley Headset Emulation via USB):** Connects data lines directly to factory USB input of infotainment system (Boom! Box GTS / Skyline OS). Routes MFi digital headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
+5. All connected devices and cabling remain 100% inside the compartment. Zero external cable egress! The glove box door seals airtight with zero cable interference across weatherstripping!
 
 #### Step 5.1.5: Saddlebag Pods & 100% Zero-Drill Feedthrough (OEM Ø 19 mm)
 1. **Magnetic Breakaway Coupling at Frame Spar:**

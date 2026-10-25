@@ -104,14 +104,17 @@ All peripheral connections from Central Box (`PCBA 01`) route through the **Two-
   * Each saddlebag pod incorporates dual mechatronic pushers (mini-solenoids on `012_universal_actuator_slide_bracket.scad`), switched via dual AO3400A MOSFETs on `PCBA 03`.
   * Upon ignition ON (KL15), both solenoids fire simultaneously for exactly 2.0 seconds (~4 N actuation force with Shore A50 silicone tips on OEM buttons like Intercom + Media).
   * **Benefit:** Headsets remain 100% unpowered when parked (no marketing standby battery drain after 1-2 weeks!). Upon turning on the bike, they boot up reliably and connect immediately without needing to open or disassemble the pod.
-* **5-Port Glovebox Hub (`glovebox_power_injection_hub.scad`) & Harley Headset Emulation via USB:**
+* **4-Port Glovebox Hub (`glovebox_power_injection_hub.scad`) & Harley Headset Emulation via USB:**
   * Powered from Front Node (`PCBA 05`) via a combined High-Power & USB 2.0 High-Speed cable.
-  * Taps the OEM USB-C port inside the right fairing compartment of Harley Touring baggers and loops through to Port 5.
-  * Injects regulated **30W USB-PD** (thermally safe in closed space against phone overheating) and **10W switched dongle power** with thermal shutdown protection.
-  * **Harley Headset Emulation via USB:** The integrated USB 2.0 data pair connects the Front Node directly to the head unit at Port 5; OpenMotorBridge emulates a digital MFi / USB Audio Class headset, unlocks Apple CarPlay natively, and transmits intercom/voice microphones digitally without ground loops.
+  * Taps the OEM USB-C port inside the right fairing compartment of Harley Touring baggers and connects to Port 4.
+  * Injects regulated **30W USB-PD** (thermally safe in closed space against phone overheating), **10W switched dongle power** with thermal shutdown protection, and 1x free media expansion port.
+  * **Harley Headset Emulation via USB:** The integrated USB 2.0 data pair connects the Front Node directly to the head unit at Port 4; OpenMotorBridge emulates a digital MFi / USB Audio Class headset, unlocks Apple CarPlay natively, and transmits intercom/voice microphones digitally without ground loops.
   * Adjustable current limit with ultra-fast overcurrent trip in $< 1\,\mu\text{s}$ during short circuits (e.g. from harness chafing or moisture ingress).
   * Automatic thermal shutdown ($150\,^\circ\text{C}$ junction clamp) and controlled soft-start ramp to eliminate inrush current spikes.
   * Fault status reporting (`FLT`) to the ESP32-S31 for proactive diagnostic alerts in the PWA dashboard.
+* **Cockpit Power-Only Outputs (Directly on Front Node PCBA 05):**
+  * **15W Motorcycle GPS (`J10`):** 12V/1.25A or 5V/3A DC power feed for Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Strictly Power-Only:** Completely devoid of USB host data lines (`D+`, `D-`) so the navigation unit immediately boots into active route guidance on ignition ON rather than entering computer mass storage mode.
+  * **10W Action-Cam (`J8`):** Weather-sealed 5V/2A DC USB-C lead for GoPro Hero / Insta360 directly at the cockpit. **USB BC 1.2 DCP Specification:** `D+` and `D-` are shorted with $R < 200\,\Omega$ inside the plug with zero connection to the `USB2514B` host controller. The camera detects a dedicated wall/bike charger and never halts in a PC connection / webcam / MTP dialog. Direct cockpit connection avoids any cumbersome routing through the glove compartment.
 
 ---
 

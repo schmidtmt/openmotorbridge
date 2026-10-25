@@ -278,8 +278,8 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 * **60W USB-PD Power-Engine (`U8`, Southchip SC8721 / SC8102 Synchronous Buck-Boost):**
   * Versorgt das Gesamtsystem an der Front verlässlich ohne Brownouts:
     * Driver Smartphone Fast-Charging: bis 27W USB-PD (9V/3A) am Lenker oder über den Handschuhfach-Hub.
-    * Dediziertes Motorrad-Navi (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A bzw. 5V/3A).
-    * Action-Cam Dauerstrom: 10W (5V/2A) über wetterfestes USB-C Ladekabel für GoPro / Insta360.
+    * Dediziertes Motorrad-Navi (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A bzw. 5V/3A) direkt an `J10`. **Power-Only:** Reine Stromversorgung ohne USB-Host Datenleitungen (`D+`, `D-`), damit das Navi sofort in den Routenbetrieb startet und nicht in den PC-Massenspeicher-Modus schaltet.
+    * Action-Cam Dauerstrom: 10W (5V/2A) wetterfeste USB-C Zuleitung direkt am Front-Node (`J8`) für GoPro / Insta360. **Power-Only / BC 1.2 DCP:** D+/D- kurzgeschlossen ($R < 200\,\Omega$), null USB2514B Host-Verbindung, verhindert PC-/Webcam-Modus und vermeidet Kabelumwege ins Handschuhfach.
     * Dual Cockpit OLED Displays: 2W für die beiden Speaker Corner Pods in den Lautsprechergittern.
     * ESP32-S3 Host-MCU, Sensorik & Audio-AGC: 3,5W.
     * Gesamt-Peaklast ca. 57,5W – perfekt, verlustarm und thermisch dauerlauffest aus dem 60W-Standardbudget bedient (20V / 3A).
@@ -290,8 +290,9 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 * **Peripherie-Ausgänge:**
   * 2x 4-polige JST-GH Buchsen (`J_POD_L` und `J_POD_R`) zu den symmetrischen Under-Perch Spiegel-Pods (`PCBA 05B`).
   * 2x 4-polige JST-SH Buchsen (`J_DISP_L` und `J_DISP_R`) zu den beiden Cockpit Speaker Corner Pod Displays (`cockpit_speaker_corner_pod.scad`).
-  * SP Connect / QuadLock Ladeanschluss am Lenker (bis 27W) & Garmin Zūmo XT2 Navi-Abgriff (15W).
-  * 5-Port Handschuhfach Media & Power-Injection Hub Anbindung ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Kombiniertes Power- & High-Speed-USB-Kabel. Liefert saubere Power-Injection (30W Phone, 10W Dongle, freier Port, 10W Cam) und verbindet den USB-Controller mit Port 5 zur OEM-Headunit für die **Harley Headset-Emulation via USB** (MFi-Headset / USB Audio Class composite accessory, native Apple CarPlay Freischaltung und verlustfreies Helmmikrofon-Audio).
+  * SP Connect / QuadLock Ladeanschluss am Lenker (bis 27W) & Garmin Zūmo XT2 Power-Only Navi-Abgriff (`J10`, 15W).
+  * Direkter 10W Action-Cam Power-Only Port (`J8`, 2-Pin JST-PH / BC 1.2 DCP pigtail lead für GoPro/Insta360 am Cockpit).
+  * 4-Port Handschuhfach Media & Power-Injection Hub Anbindung ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Kombiniertes Power- & High-Speed-USB-Kabel. Liefert saubere Power-Injection (30W Phone, 10W Dongle, freier Media-Port) und verbindet den USB-Controller mit Port 4 zur OEM-Headunit für die **Harley Headset-Emulation via USB** (MFi-Headset / USB Audio Class composite accessory, native Apple CarPlay Freischaltung und verlustfreies Helmmikrofon-Audio).
 
 ---
 

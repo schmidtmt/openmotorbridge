@@ -104,14 +104,17 @@ Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **
   * Jeder Koffer-Pod besitzt zwei mechatronische Drücker (Mini-Hubmagnete auf `012_universal_actuator_slide_bracket.scad`), die auf `PCBA 03` über duale AO3400A MOSFETs geschaltet werden.
   * Bei Zündung-AN (KL15) feuern beide Magnete für exakt 2,0 Sekunden simultan ($\sim 4\,\text{N}$ Betätigungskraft mit Shore A50 Silikon-Stößeln auf OEM-Tasten wie Intercom + Media).
   * **Vorteil:** Headsets bleiben nach Touren vollständig spannungsfrei (kein Marketing-Standby-Batteriefraß nach 1-2 Wochen Standzeit!). Beim Einschalten der Zündung booten sie verlässlich und sofort, ohne dass der Kofferpod ausgebaut oder zerlegt werden muss.
-* **5-Port Handschuhfach Hub (`glovebox_power_injection_hub.scad`) & Harley Headset-Emulation via USB:**
+* **4-Port Handschuhfach Hub (`glovebox_power_injection_hub.scad`) & Harley Headset-Emulation via USB:**
   * Wird vom Front-Node (`PCBA 05`) über ein kombiniertes High-Power & USB 2.0 High-Speed Kabel gespeist.
-  * Tappt den OEM-USB-C Port im rechten Medienfach von Harley Touring-Baggern und schleift ihn an Port 5 durch.
-  * Speist geregelte **30W USB-PD** (thermisch sicher im geschlossenen Fach gegen Smartphone-Überhitzung) und **10W geschaltete Dongle-Power** mit Überhitzungs-Notabschaltung ein.
-  * **Harley Headset-Emulation via USB:** Das integrierte USB 2.0 Datenpaar verbindet den Front-Node direkt mit der Headunit an Port 5; OpenMotorBridge emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay frei und überträgt Intercom-/Sprachmikrofone verlustfrei ohne analoge Einstreuungen.
+  * Tappt den OEM-USB-C Port im rechten Medienfach von Harley Touring-Baggern und bindet ihn an Port 4 an.
+  * Speist geregelte **30W USB-PD** (thermisch sicher im geschlossenen Fach gegen Smartphone-Überhitzung), **10W geschaltete Dongle-Power** mit Überhitzungs-Notabschaltung sowie einen freien Media-Port ein.
+  * **Harley Headset-Emulation via USB:** Das integrierte USB 2.0 Datenpaar verbindet den Front-Node direkt mit der Headunit an Port 4; OpenMotorBridge emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay frei und überträgt Intercom-/Sprachmikrofone verlustfrei ohne analoge Einstreuungen.
   * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss (z. B. durch Scheuerstellen am Rahmen oder Wassereintritt in offenen Steckern).
   * Automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und kontrollierter Sanftanlauf (Soft-Start zur Vermeidung kapazitiver Einschaltstromspitzen).
   * Status-Rückmeldung jedes Zweigs (`FLT`) an den ESP32-S31 für proaktive Fehlermeldungen in der WebApp.
+* **Cockpit Power-Only Ausgänge (Direkt am Front-Node PCBA 05):**
+  * **15W Motorrad-Navi (`J10`):** 12V/1.25A bzw. 5V/3A DC-Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Reine Stromversorgung (Power-Only):** Vollständig ohne USB-Host Datenleitungen (`D+`, `D-`), damit das Navigationssystem bei Zündung-AN sofort in die Routenführung startet und nicht in den PC-Massenspeicher-Modus schaltet.
+  * **10W Action-Cam (`J8`):** Wetterfeste 5V/2A DC USB-C Zuleitung für GoPro Hero / Insta360 direkt am Cockpit. **USB BC 1.2 DCP Spezifikation:** `D+` und `D-` sind im Stecker mit $R < 200\,\Omega$ gebrückt und besitzen null Verbindung zum `USB2514B` Host-Controller. Die Action-Cam erkennt sofort ein dediziertes Bordnetz-Ladegerät und verharrt niemals in einem blockierenden PC-Verbindungs- oder Webcam-Modus. Die direkte Front-Node-Anbindung vermeidet unnötige Kabelführung durch das Handschuhfach.
 
 ---
 

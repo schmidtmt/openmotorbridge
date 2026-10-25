@@ -44,11 +44,11 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit der Generation v10.0 verzichtet v
 |  Lid-Dock)        |   |  Lid-Dock)        |                           +---------------+               v
 | * 2x Kaltstart-   |   | * 2x Kaltstart-   |                           | 2x UNDER-PERCH|   +---------------+
 |   Hubmagnete JF-  |   |   Hubmagnete JF-  |                           | SPIEGEL-PODS  |   | 1x HANDSCHUH- |
-|   0530B (15-85mm  |   |   0530B (15-85mm  |                           | (Li & Re)     |   | FACH 5-PORT   |
+|   0530B (15-85mm  |   |   0530B (15-85mm  |                           | (Li & Re)     |   | FACH 4-PORT   |
 |   Universalschl.) |   |   Universalschl.) |                           | * L: PTT      |   | HUB (Touring) |
 | * 30W Koffer-USB- |   | * 30W Koffer-USB- |                           | * R: Cam-Tag  |   | * 30W Phone PD|
 |   Ladedose PD     |   |   Ladedose PD     |                           | * Bilaterale  |   | * 10W Dongle  |
-| * PCBA 03 Smart-  |   | * PCBA 03 Smart-  |                           |   BSD-LEDs    |   | * 10W Cam-Lead|
+| * PCBA 03 Smart-  |   | * PCBA 03 Smart-  |                           |   BSD-LEDs    |   | * Freier Media|
 |   Gateway (Sena/  |   |   Gateway (Sena/  |                           +---------------+   | * USB Headset-|
 |   Cardo/OMM/Midl) |   |   Cardo/OMM/Midl) |                                               |   Emulation   |
 +-------------------+   +-------------------+                                           +---------------+
@@ -72,7 +72,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **1x Front-Knoten Riser-Gehäuse:** Kompakte Unterwanne mit Riser- / Triple-Tree Klemmschelle, Gehäusedeckel mit O-Ring-Nut.
   * **1x Modulares Schnapp-Sensor-Puck:** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) für SAM-M10Q GNSS, TMP117, OPT3001 und Knowles MEMS.
   * **2x Symmetrische Under-Perch Spiegel-Pods (Links & Rechts):** Formschöne Halterungen zur Montage unter beiden Spiegelschrauben ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) mit Führung für taktilen Taster (Links: PTT; Rechts: Cam-Highlight) und LED-Linsentrichter für bilaterale Totwinkel-Warnanzeige (BSD).
-  * **1x Handschuhfach 5-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für rechtes Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, 10W Cam-Lead).
+  * **1x Handschuhfach 4-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für rechtes Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, OEM Upstream).
   * **1x Heck-Radar Halterung:** MR20 Radar-Gehäuse mit Hirth-Neigungsverstellung, Kennzeichenträger und integriertem Schmutzfänger (Roost-Deflector).
 * [ ] **Vollautomatisch bestückte Platinen (SMT-gefertigt):**
   * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Zwei-Kabel-Anschlüssen (6-Pin Deutsch DTM `J1` & 16-Pin Automotive Header `J_PERIPH`), Dual-Power Input (12V & USB-C PD Sink mit Ideal-Diode OR-ing) und USB-C DFU-Port. *(DW3110 UWB entfällt komplett!)*
@@ -278,6 +278,12 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * Die beiden baugleichen Pods aufstecken und Spiegelschrauben mit je $15\,\text{Nm}$ vorschriftsmäßig festziehen.
    * Die dünnen 3-Draht-Kabel entlang der Armaturenkabelbäume zum Front-Knoten führen und an `J_POD_L` bzw. `J_POD_R` einstecken.
    * **Ergebnis:** Symmetrische Optik am Lenker, linker Daumen bedient PTT, rechter Daumen markiert Action-Cam Highlights, beidseitige bernsteinfarbene Totwinkelwarnung direkt in beiden Rückspiegeln!
+3. **Direkte Cockpit-Peripherie (Navi & Action-Cam Stromversorgung):**
+   * **Dediziertes Motorrad-Navi (15W an `J10`):** Garmin Zūmo XT2 / Tread / Chigee AIO-5 mit der 2-poligen Zuleitung von `J10` verbinden.
+   * **Action-Cam (10W an `J8`):** Wetterfeste USB-C Zuleitung direkt von `J8` am Front-Node zur Kamera am Lenker oder Scheibenhalter führen.
+   > [!IMPORTANT]
+   > **USB-DATENLEITUNGS-ISOLATION FÜR NAVI & ACTION-CAM (POWER-ONLY / BC 1.2 DCP):**  
+   > Beide Cockpit-Leitungen sind **strikt Power-Only**! Sie besitzen keinerlei Datenverbindung zum `USB2514B` Host-Hub. Am Stecker der Action-Cam sind die Datenleitungen nach **USB BC 1.2 DCP** ($R < 200\,\Omega$) gebrückt. Dadurch erkennen Navi und Action-Cam ein reines Bordnetz-Ladegerät, starten bei Zündung-AN sofort in die Routenführung bzw. Loop-Aufnahme und schalten **niemals** in den PC-Verbindungs- oder Webcam-Modus! Die direkte Anbindung am Front-Node erspart zudem das Verlegen von Kamerakabeln durch das Handschuhfach.
 
 #### Schritt 5.1.3b: Symmetrische Cockpit-Displays (Dual Speaker Corner-Pods)
 1. **Ergonomisches Grundprinzip (Bagger & Touring):**
@@ -291,17 +297,16 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * **0 cm sichtbares Kabel, 0 Schrauben an der Außenverkleidung lösen!**
 4. **Funktion:** Der ESP32-S3 auf `PCBA 05` treibt die Displays per SPI/QSPI (links: Heckradar-Abstandsbalken & Totwinkel; rechts: Turn-by-Turn Pfeile, TPMS-Drücke, Intercom-Sprechstatus und Smartphone-Akkustand).
 
-#### Schritt 5.1.4: Handschuhfach 5-Port Media- & Power-Injection Hub (Harley Touring)
+#### Schritt 5.1.4: Handschuhfach 4-Port Media- & Power-Injection Hub (Harley Touring)
 1. Das rechte Handschuhfach öffnen.
 2. An der Unterseite des Handschuhfachs befindet sich die originale Harley-Gummitülle für Zubehörverkabelung.
 3. Das Verbindungskabel vom Front-Knoten (kombinierte 60W Power-Injection & High-Speed USB 2.0 Datenleitung für Harley Headset-Emulation) von *unten* durch die Tülle nach oben in das Fach führen.
-4. Den formschlüssigen 5-Port Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) im Fach platzieren:
-   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultraschnelles Laden des Fahrer-Smartphones bei gleichzeitiger Navigation.
-   * **Port 2 (10W Switched Dongle Port):** Versorgt den Wireless CarPlay / Android Auto Dongle (Ottocast U2-Air / Carlinkit 5.0) mit stabiler, gefilterter Spannung (verhindert Bootloops des 12.3" Skyline OS / Boom! Box Displays!).
-   * **Port 3 (Free Media Port):** USB-C Buchse für USB-Musiksticks oder DFU-Firmware-Updates.
-   * **Port 4 (Direct 10W Camera Lead):** Fest verkabelte, wetterfeste 10W USB-C Zuleitung für Lenker- oder Scheiben-Action-Cams (GoPro / Insta360).
-   * **Port 5 (OEM Headunit Upstream & Harley Headset-Emulation via USB):** Verbindet die Datenleitungen direkt mit dem werkseitigen USB-Eingang des Infotainmentsystems (Boom! Box GTS / Skyline OS). Überträgt die MFi-Headset-Emulation für native Apple CarPlay Freischaltung und digitales Helmmikrofon-Audio ohne analoge Brummschleifen.
-5. Die Handschuhfachtür schließt hermetisch dicht – kein Kabel wird über die weiche Dichtlippe gequetscht!
+4. Den formschlüssigen 4-Port Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) im Fach platzieren:
+   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultraschnelles Laden des Fahrer-Smartphones bei gleichzeitiger Navigation (bleibt im Fach).
+   * **Port 2 (10W Switched Dongle Port):** Versorgt den Wireless CarPlay / Android Auto Dongle (Ottocast U2-Air / Carlinkit 5.0) mit stabiler, gefilterter Spannung (verhindert Bootloops des 12.3" Skyline OS / Boom! Box Displays, bleibt im Fach).
+   * **Port 3 (Free Media Port):** USB-A Buchse für USB-Musiksticks (FLAC/MP3) oder DFU-Firmware-Updates (bleibt im Fach).
+   * **Port 4 (OEM Headunit Upstream & Harley Headset-Emulation via USB):** Verbindet die Datenleitungen direkt mit dem werkseitigen USB-Eingang des Infotainmentsystems (Boom! Box GTS / Skyline OS). Überträgt die MFi-Headset-Emulation für native Apple CarPlay Freischaltung und digitales Helmmikrofon-Audio ohne analoge Brummschleifen.
+5. Alle angeschlossenen Geräte und Kabel verbleiben vollständig im Handschuhfach. Null externe Kabeldurchzüge! Die Handschuhfachtür schließt hermetisch dicht – kein Kabel wird über die weiche Dichtlippe gequetscht!
 
 #### Schritt 5.1.5: Koffer-Pods & 100 % Zero-Drill Kofferwand-Durchführung (OEM Ø 19 mm)
 1. **Magnet-Abreißkupplung am Rahmenrohr:**

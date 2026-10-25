@@ -1,5 +1,5 @@
 // =============================================================================
-// OpenMotorBridge - 5-Port Glovebox Media & Power-Injection Hub
+// OpenMotorBridge - 4-Port Glovebox Media & Power-Injection Hub
 // =============================================================================
 // File: hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad
 // Description: Compact power-injection and USB data hub tailored for the right
@@ -10,6 +10,7 @@
 //              3. Port 1 (Smartphone Fast Charge): 30W USB-PD (thermal-safe for closed glovebox).
 //              4. Port 2 (CarPlay Dongle): 10W geschalteter VBUS für Wireless CP/AA Adapter.
 //              5. Port 3 (Media Pass-Through): High-Speed USB 2.0 for OEM USB Flash Drives/Updates.
+//              Note: Action-Cam & Navi connect DIRECTLY to Front Node PCBA 05 (Power-Only / BC 1.2 DCP).
 // =============================================================================
 
 $fn = 32;

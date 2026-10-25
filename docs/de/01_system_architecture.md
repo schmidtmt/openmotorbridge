@@ -19,7 +19,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 | 1. COCKPIT / LENKER & KEYFOB:                                                               |
 |    * Front-Node (PCBA 05): 60W USB-PD Engine, modularer Sensor-Puck ("Körbchen")             |
 |    * Symmetrische Dual Under-Perch Spiegel-Pods (Links: PTT & BSD | Rechts: Cam-Tag & BSD)  |
-|    * 5-Port Handschuhfach Hub: 30W PD + 10W Dongle + Harley Headset-Emulation via USB        |
+|    * 4-Port Handschuhfach Hub: 30W PD + 10W Dongle + Harley Headset-Emulation via USB        |
 |    * Smart-Keyfob (PCBA 07): 868 MHz LoRa Pager (24/7 Diebstahlalarm & Notfall-Beacon)      |
 |    * PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)                          |
 +---------------------------------------------------------------------------------------------+
@@ -56,13 +56,13 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 | * Modularer Sensor-Puck ("Körbchen"): SAM-M10Q GNSS, TMP117, OPT3001, Knowles MEMS       |
 | * 60W USB-PD Speisung: 27W Phone + 15W Navi + 10W Action-Cam + Displays + Sensoren      |
 | * Speist Dual Cockpit Speaker Corner Pods (2x OLED-Displays in Lautsprechergittern)     |
-| * Speist 5-Port Handschuhfach-Hub & stellt Harley Headset-Emulation via USB bereit      |
+| * Speist 4-Port Handschuhfach-Hub & stellt Harley Headset-Emulation via USB bereit      |
 | * Direkte Anbindung an symmetrische Dual Under-Perch Spiegel-Pods (Links PTT, Rechts Cam)|
 +-----------------------------------------------------------------------------------------+
 | 8. BEGLEITFAHRZEUG- & KOLONNEN-TOPOLOGIE (Pkw / Support-Van / Rallye / Wohnmobil):      |
 | * All-in-One Car Support Core Unit: Zentralbox & Front-Node kompakt vereint             |
 | * Absetzbarer Sensor-Puck ("Körbchen") an Dashboard/Windschutzscheibe via 1,5m Kabel    |
-| * 5-Port Media Hub & CarPlay Clean Power-Injection mit OEM Media-USB Passthrough        |
+| * 4-Port Media Hub & CarPlay Clean Power-Injection mit OEM Media-USB Passthrough        |
 | * 2 Pods an 2 Sonnenblenden: Fahrer Pod 1, Beifahrer Pod 2 (Sena/Cardo oder OMM/Midland)|
 | * Externe 868-MHz-Magnetfuß-Dachantenne als Standard (15-25 km LoRa-Reichweite)         |
 +-----------------------------------------------------------------------------------------+
@@ -100,7 +100,7 @@ OpenMotorBridge v10.0 definiert die Plattform über **standardisierte Funktionsk
      * **Rechter Spiegel-Pod:** Taktiler Daumen-Taster für Action-Cam (Kurzdruck: Highlight-Tag / Bookmark für Insta360/GoPro/DJI via BLE; Langdruck: Video Start/Stopp / SOS) + rechte bernsteinfarbene Totwinkel-Warn-LED (BSD) gerichtet auf das rechte Spiegelglas.
    * **100 % Software-Defined Button Mapping (Freie Tastenbelegung via PWA):** Physische Taster frei konfigurierbar (Kurzdruck, Doppelklick, Halten für PTT, Gefahren-Marker, Cam-Tags, Garagentor via BLE).
    * **Sicherheitsgewinn:** Echte bilaterale Totwinkelüberwachung direkt im peripheren Sichtfeld beider Spiegel. 100 % symmetrische Ergonomie, baugleiche innere Platine (`PCBA 05B`).
-6. **5-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Im rechten Medienfach der Touring-Verkleidung (Road Glide, Street Glide, CVO, CVO ST). Wird vom Front-Node (`PCBA 05`) über eine kombinierte High-Power & USB 2.0 Zuleitung versorgt. Tappt den werksseitigen Harley USB-C Port zur Head Unit (Skyline OS / Boom! Box) und speist geregelte **30W USB-PD** (thermisch optimiert für geschlossene Handschuhfächer) für das Smartphone sowie **10W geschaltete Dongle-Power** (Wireless CarPlay / Android Auto mit Überhitzungs-Notabschaltung) ein. 1x freier Media USB 2.0 Port für USB-Sticks/Updates. **Harley Headset-Emulation via USB:** Das High-Speed Datenpaar verbindet den Front-Node direkt mit Port 5 zur OEM-Headunit; OMB emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay nativ frei und leitet Helm-Mikrofonaudio digital ohne Massebrummen ein.
+6. **4-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Im rechten Medienfach der Touring-Verkleidung (Road Glide, Street Glide, CVO, CVO ST). Wird vom Front-Node (`PCBA 05`) über eine kombinierte High-Power & USB 2.0 Zuleitung versorgt. Tappt den werksseitigen Harley USB-C Port zur Head Unit (Skyline OS / Boom! Box) und speist geregelte **30W USB-PD** (thermisch optimiert für geschlossene Handschuhfächer) für das Smartphone sowie **10W geschaltete Dongle-Power** (Wireless CarPlay / Android Auto mit Überhitzungs-Notabschaltung) ein. 1x freier Media USB 2.0 Port für USB-Sticks/Updates. **Harley Headset-Emulation via USB:** Das High-Speed Datenpaar verbindet den Front-Node direkt mit Port 4 zur OEM-Headunit; OMB emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay nativ frei und leitet Helm-Mikrofonaudio digital ohne Massebrummen ein. Alle im Handschuhfach angeschlossenen Geräte verbleiben zu 100 % im Fach (Action-Cam & Navi werden direkt am Front-Node versorgt – kein Kabeldurchzug durch das Fach!).
 7. **Radar 2.0 Sub-MCU & Heck-Wings (PCBA 08 am Heck):** Autonomes 77-GHz Heck-Radar (Wheeltec MR20), versorgt über Strang 4 des 16-Pin Peripherie-Kabelbaums mit 4-Draht Power & High-Speed Bus; 36 Strobe-Warn-LEDs, Abtropfschlaufe (Drip-Loop) und integrierter Schmutzfänger (Roost-Deflector). Optionaler Under-Fender Mount für Cruiser/Bobber.
 
 ```
@@ -241,10 +241,10 @@ Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und
 * **Modularer Sensor-Puck ("Körbchen"):** Integriert u-blox SAM-M10Q Multi-GNSS (Zenitsicht), TI TMP117 NIST-Thermometer, OPT3001 Lichtsensor und Knowles I2S MEMS. Rastet werkzeuglos direkt oben auf den Front-Node ein; kann im Pkw/Van per 1,5m Verlängerungskabel an die Windschutzscheibe geclipst werden (`car_dashboard_wedge_dock.scad`).
 * **Cockpit-Displays & Anzeigen:** Speist die beiden Cockpit Speaker Corner Pods (`cockpit_speaker_corner_pod.scad`) mit Dual-OLED-Displays in den Rockford Fosgate Lautsprechergittern (2W für Radar-Balken, TPMS, Turn-by-Turn).
 * **Bedienelemente & Totwinkel-LEDs:** Direkte Anbindung an symmetrische Dual Under-Perch Spiegel-Pods (JST-GH).
-* **Dediziertes Motorrad-Navi (15W):** Speist Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride über 12V/1.25A bzw. 5V/3A DC-Leitung.
-* **Smartphone-Schnellladung (bis 27W):** USB-PD Speisung für SP Connect / QuadLock Ladehalterung am Lenker oder über den 5-Port Handschuhfach-Hub.
-* **Action-Cam Dauerstrom (10W):** Wetterfeste USB-C Zuleitung für GoPro Hero oder Insta360 X3/X4 am Lenker oder an der Verkleidung.
-* **5-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Wird über ein kombiniertes High-Power & USB 2.0 Kabel gespeist; liefert saubere 30W Schnellladeleistung sowie 10W geschaltete Dongle-Power und führt die **Harley Headset-Emulation via USB** an Port 5 zur Headunit.
+* **Dediziertes Motorrad-Navi (15W - Power-Only):** Speist Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride direkt am Front-Node über eine 12V/1.25A bzw. 5V/3A DC-Leitung. **Hardware-Regel:** Reine Stromversorgung ohne USB-Host-Datenleitungen, damit Garmin/Chigee sofort in den normalen Navigationsbetrieb starten und nicht in den PC-Massenspeicher-Modus verfallen!
+* **Smartphone-Schnellladung (bis 27W):** USB-PD Speisung für SP Connect / QuadLock Ladehalterung am Lenker oder über den 4-Port Handschuhfach-Hub.
+* **Action-Cam Dauerstrom (10W - Power-Only / BC 1.2 DCP):** Wetterfeste USB-C Zuleitung direkt am Front-Node (`PCBA 05`, `J8`) für GoPro Hero oder Insta360 X3/X4 am Lenker oder an der Verkleidung. **Hardware-Regel:** D+/D- sind physikalisch vom `USB2514B` USB-Host isoliert und im Kamerastecker nach USB BC 1.2 DCP ($R < 200\,\Omega$) gebrückt. Die Kamera erkennt ein reines Hochstrom-Ladegerät, startet bei Zündung-AN sofort die Schleifenaufnahme und blockiert niemals in einem "PC verbunden / Webcam / MTP"-Dialog! Die direkte Front-Node-Anbindung am Cockpit spart zudem den unlogischen Umweg über das Handschuhfach.
+* **4-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Wird über ein kombiniertes High-Power & USB 2.0 Kabel gespeist; liefert saubere 30W Schnellladeleistung sowie 10W geschaltete Dongle-Power, 1x freien Media-Port und führt die **Harley Headset-Emulation via USB** an Port 4 zur Headunit. Alle im Handschuhfach angeschlossenen Geräte verbleiben vollständig im Fach.
 
 ---
 
@@ -254,7 +254,7 @@ Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und
 
 #### 5.1.1 Harley Headset-Emulation via USB & Apple CarPlay / Android Auto Freischaltung
 * **Hintergrund & USB-Emulation:** Apple CarPlay setzt im Fahrzeug ein betriebsbereites Sprachmikrofon voraus. Harley-Davidson verriegelt CarPlay in der Boom! Box GTS und Skyline OS Firmware standardmäßig und verlangt entweder das kabelgebundene 7-Pin DIN-Headset oder das proprietäre Bluetooth-Funkmodul **HD-WHIM** (*Wireless Headset Interface Module*, $> 350\,\text{€}$).
-* **Digitale Headset-Emulation via USB:** OpenMotorBridge wickelt die Headset- und Mikrofonanbindung **vollständig digital über USB** ab! Über die USB 2.0 High-Speed Verbindung vom Front-Node (`PCBA 05`) über Port 5 des Handschuhfach-Hubs (`glovebox_power_injection_hub.scad`) an die OEM-Headunit meldet sich OpenMotorBridge als konformes Apple MFi-Headset bzw. USB Audio Class Device an.
+* **Digitale Headset-Emulation via USB:** OpenMotorBridge wickelt die Headset- und Mikrofonanbindung **vollständig digital über USB** ab! Über die USB 2.0 High-Speed Verbindung vom Front-Node (`PCBA 05`) über Port 4 des Handschuhfach-Hubs (`glovebox_power_injection_hub.scad`) an die OEM-Headunit meldet sich OpenMotorBridge als konformes Apple MFi-Headset bzw. USB Audio Class Device an.
 * **Ergebnis:** Die Boom! Box GTS / Skyline OS erkennt sofort ein aktives digitales Headset und schaltet Apple CarPlay sowie Android Auto im 6,5"- bzw. 12,3"-Touchscreen frei – **ohne teures WHIM-Modul**, ohne fehleranfällige analoge Brückenstecker und ohne teure Händler-Freischaltung (Digital Tech).
 * **Bidirektionale Audio-Integration:** Fahrer- und Beifahrer-Helmmikrofone werden digital direkt in den Freisprech- und Sprachsteuerungs-Kanal der Headunit geroutet (Siri, Anrufe, Adresssuche), während Navi-Ansagen und Medien verlustfrei und mit sanftem Ducking ($-12\,\text{dB}$) in die Intercom-Audiomatrix zurückgespeist werden – absolut immun gegen analoge Masseschleifen und Lichtmaschinen-Pfeifen.
 
@@ -263,13 +263,14 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Nativer 4-Draht USB-Backbone zur Zentralbox:** Der Front-Node kommuniziert über den geschirmten **4-Draht Automotive USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit $< 0{,}2\,\text{ms}$ Latenz mit der Zentralbox (Strang 1 des 16-Pin Peripheriebusses). Zero Funk-Jitter, unempfindlich gegen EMV-Einstrahlung von Zündkerzen oder LED-Scheinwerfern.
 * **Drahtgebundener Lenker-PTT (Optokoppler an `J3` / GPIO 0, $< 1{,}8\,\text{ms}$ Latenz):** Nur $30\dots 50\,\text{cm}$ kurzes, geschütztes Kabel am Lenker - kein bruchgefährdetes Signalkabel über den schwenkenden Lenkkopf nach hinten zur Zentralbox!
 * **Digitales I2S-MEMS Ambient-Mikrofon (Sipeed / Zilltek MSM261S4030H0R / Knowles SPH0645):** Berechnet Umgebungs- und Fahrtwindgeräusche (dB-A/RMS) direkt an der Front für automatische Helmlautstärke-Nachführung (AGC) via Xtensa Vektor-DSP. Standard-I2S mit hoher Bauteilverfügbarkeit.
-* **Automotive USB 2.0 Subsystem (Microchip USB2514B & TI TPS2051B):**
-  * **Upstream Host Port (`J4`):** Führt über das kombinierte Power- und High-Speed-USB-Kabel zum 5-Port Handschuhfach-Hub (`glovebox_power_injection_hub.scad`) und dort an Port 5 zur Harley Boom! Box GTS / Skyline OS für Headset-Emulation und CarPlay.
-  * **Downstream Port 1 (`J5` / Lenker-Smartphone & Navi):** High-Speed Daten + 27W Automotive USB-PD Fast Charging (Southchip SC8721/SC8102, 9V/3A) für Smartphone / Garmin Zūmo XT2 am Lenker.
-  * **Downstream Port 2 (`J6` / CP2AA-Dongle):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit softwaregesteuertem **2,5s-Kaltstart**, automatischem **Not-Power-Gating bei Verkleidungshitze** und 0.0 µA Deep-Sleep. Führt über ein $25\dots 30\,\text{cm}$ geschirmtes Kabel zum CP2AA-Dongle (3M Dual-Lock im Verkleidungshohlraum).
-  * **Downstream Port 3 (Handschuhfach Media-Port):** Durchgeschliffenes USB-Kabel ins Handschuhfach - bleibt zu **$100\,\%$ frei für MP3/FLAC USB-Sticks und offizielle OEM-Software-Updates** (inkl. hardwareseitiger Port-Sense Überwachung).
-  * **Downstream Port 4 (Cockpit-Zubehör / Action-Cam):** 10W wetterfeste Zuleitung für Action-Cam (GoPro Hero / Insta360) oder Chigee-Display.
-  * **USB-C Service Port (`J7`):** Nativer Diagnose-, Kalibrier- und Flash-Port.
+* **Automotive USB 2.0 Subsystem (Microchip USB2514B 4-Port Hub & Power-Architektur):**
+  * **Upstream Host Port (`J4`):** Führt über das kombinierte Power- und High-Speed-USB-Kabel zum 4-Port Handschuhfach-Hub (`glovebox_power_injection_hub.scad`) und dort an Port 4 zur Harley Boom! Box GTS / Skyline OS für Headset-Emulation und CarPlay.
+  * **Downstream Port 1 (Smartphone-Datenlink):** High-Speed Datenverbindung zum Smartphone am Handschuhfach-Port 1 (oder Lenkerhalterung `J5`) für kabelgebundenes CarPlay / Android Auto.
+  * **Downstream Port 2 (`J6` / CP2AA-Dongle):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit softwaregesteuertem **2,5s-Kaltstart**, automatischem **Not-Power-Gating bei Verkleidungshitze** und 0.0 µA Deep-Sleep für den Wireless CarPlay / Android Auto Dongle (3M Dual-Lock im Verkleidungshohlraum).
+  * **Downstream Port 3 (Handschuhfach Media-Port):** Durchgeschliffener USB-Port an Handschuhfach-Port 3 - bleibt zu **$100\,\%$ frei für MP3/FLAC USB-Sticks und offizielle OEM-Software-Updates** (inkl. hardwareseitiger Port-Sense Überwachung).
+  * **Downstream Port 4 (ESP32-S3 Interner OTG-Port):** Dedizierter nativer USB-Port des ESP32-S3 für digitale Headset-Emulation (MFi / USB Audio Class) und CDC-NCM Ethernet Tethering zur OEM-Headunit.
+  * **USB-C Service Port (`J7`):** Nativer Diagnose-, Kalibrier- und Flash-Port direkt am ESP32-S3.
+  * **Strikte Trennung von Navi (`J10`) & Action-Cam (`J8`):** Beide Geräte erhalten **ausschließlich reine Stromversorgungs-Leitungen (Power-Only / BC 1.2 DCP)** von den Schaltreglern und besitzen **keinerlei Datenverbindung zum USB2514B Hub**, wodurch PC-Verbindungs- und Webcam-Blockaden ausgeschlossen sind.
 * **USB-Media Proxy & Source-Aware CAN Gating:**
   * Emuliert gegenüber Skyline OS ein MFi-iPod / USB Audio Class Gerät: Track-Titel, Interpret, Album und Spieldauer erscheinen nativ auf dem 12.3" Harley-Bildschirm, während das Audiosignal per LDAC/aptX direkt im Helm bleibt (kein WHIM-Zwang).
   * **Kollisionsschutz:** Wertet `infotainment_source_active` (CAN `0x388`) und Hub-Port 3 aus, damit Wippen-Befehle nur an das Smartphone geleitet werden, wenn OMB/CarPlay/BT aktiv ist (kein versehentliches Streaming bei MP3-Stick oder Radio!).

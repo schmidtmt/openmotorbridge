@@ -624,15 +624,16 @@ For all Harley-Davidson cockpit concepts, robust, vibration-isolated solutions a
 
 1. **Smartphone & Navigation Mount (COTS SP Connect / QuadLock & Garmin Zūmo):**
    * **Mounting:** Clamped via 1-inch / 1.25-inch handlebar clamp or AMPS 4-hole flange on risers or inner fairing stay.
-   * **Power:** Direct feed from the 60W USB-PD branch of Front Node (`PCBA 05`). Supplies up to **27W USB-PD Fast Charging** to phone on handlebars and **15W continuous power** to dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride).
-   * **Glove Box Charging (Faired Baggers):** Alternatively, phone charges vibration- and weather-protected in right glove box via the **5-Port Glovebox Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) with thermally clamped **30W USB-PD**.
+   * **Power:** Direct feed from the 60W USB-PD branch of Front Node (`PCBA 05`). Supplies up to **27W USB-PD Fast Charging** to phone on handlebars and **15W continuous power (Power-Only)** to dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride). Devoid of USB host data lines, the GPS starts navigation immediately on ignition ON without prompt dialogs.
+   * **Glove Box Charging (Faired Baggers):** Alternatively, phone charges vibration- and weather-protected in right glove box via the **4-Port Glovebox Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) with thermally clamped **30W USB-PD**.
 
-2. **Action-Cam Continuous Power Feed (10W via Weather-Sealed USB-C):**
+2. **Action-Cam Continuous Power Feed (10W Power-Only via Weather-Sealed USB-C):**
    * **Real Vehicle Power vs. Inductive Losses:** Avoids through-fairing inductive Qi docks (which suffer heavy heat build-up through thick ABS panels and poor efficiency).
-   * **Rugged Cabling:** A weather-sealed, form-fitting USB-C lead routes directly from Front Node Port `J8` to action cam (GoPro Hero 12/13, Insta360 X3/X4, DJI Osmo) on handlebar or fairing beak.
+   * **Direct Front Node Cabling:** A weather-sealed, form-fitting USB-C lead routes directly from Front Node Port `J8` to action cam (GoPro Hero 12/13, Insta360 X3/X4, DJI Osmo) on handlebar or fairing beak. Avoids cumbersome routing in and out of the glovebox.
+   * **Power-Only / BC 1.2 DCP Wiring:** Data lines `D+` and `D-` are shorted ($R < 200\,\Omega$) inside the camera connector with zero connection to the `USB2514B` host hub. The camera detects a dedicated high-current bike charger and never halts in PC connection, MTP, or webcam mode!
    * **Automated BLE Shutter:** Starts and stops recording automatically on ignition ON/OFF and marks video highlight tags on double-clicking the right under-perch switch.
 
-3. **5-Port Glovebox Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
+3. **4-Port Glovebox Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
    * Compact enclosure ($72 \times 46 \times 22\,\text{mm}$) tailored for right media compartment of Touring baggers.
    * Powered from Front Node (`PCBA 05`) via a combined High-Power & USB 2.0 High-Speed cable.
    * Taps the OEM Harley USB-C port to head unit (Skyline OS / Boom! Box GTS).
@@ -640,8 +641,8 @@ For all Harley-Davidson cockpit concepts, robust, vibration-isolated solutions a
      - Port 1: **30W USB-PD fast-charging port** for phone (thermally optimized against heat trap).
      - Port 2: **10W switched dongle port** for Wireless CarPlay / Android Auto (Ottocast / CarlinKit) with emergency thermal cut-off.
      - Port 3: **Free USB 2.0 media port** for FLAC/MP3 USB sticks and dealer software updates.
-     - Port 4: **10W weather-sealed action-cam power lead** (Direct Lead).
-     - Port 5: **Harley Headset Emulation via USB** directly to head unit for native Apple CarPlay activation and digital helmet mic streaming.
+     - Port 4: **Harley Headset Emulation via USB** directly to head unit for native Apple CarPlay activation and digital helmet mic streaming.
+   * **Result:** All connected devices stay 100% inside the compartment. Zero external cable egress!
 
 4. **Modular Snap-On Environmental Sensor-Puck ("Basket" / `sensor_puck_environmental.scad`):**
    * Compact aerodynamic cradle ($44 \times 44 \times 15\,\text{mm}$) housing u-blox SAM-M10Q Multi-GNSS, TI TMP117 thermometer, OPT3001 light sensor, and Knowles MEMS wind microphone.
@@ -1230,7 +1231,7 @@ The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad
 
 ### 8.4 Harley Touring: Glove Box Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`) & Cockpit Periphery
 
-The **5-Port Glove Box Media & Power-Injection Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) solves power delivery and infotainment stability issues inside the right glove compartment (media compartment) of Harley-Davidson Touring Baggers (Street Glide, Road Glide, CVO, CVO ST) **with 100% zero drilled holes and zero paint damage**:
+The **4-Port Glove Box Media & Power-Injection Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) solves power delivery and infotainment stability issues inside the right glove compartment (media compartment) of Harley-Davidson Touring Baggers (Street Glide, Road Glide, CVO, CVO ST) **with 100% zero drilled holes and zero paint damage**:
 
 #### 8.4.1 System Architecture & Clean Power-Injection
 
@@ -1239,31 +1240,33 @@ The **5-Port Glove Box Media & Power-Injection Hub** ([`glovebox_power_injection
  | HARLEY TOURING RIGHT GLOVE COMPARTMENT (CVO / ST / RG / SG)             |
  |                                                                         |
  |  +-------------------------------------------------------------------+  |
- |  | GLOVE BOX MEDIA & POWER-INJECTION HUB(glovebox_power_injection_hub)|  |
- |  | * Port 1 (30W USB-PD): Smartphone Fast-Charging inside pocket     |  |
- |  | * Port 2 (Switched 10W): Wireless CarPlay / Android Auto Dongle   |  |
- |  | * Port 3 (Service/USB Flash): Free media expansion port           |  |
- |  | * Port 4 (10W Direct Cam Lead): Weather-sealed action-cam power   |  |
- |  | * Port 5 (USB Headset Emulation): Direct uplink Head Unit (GTS)   |  |
+ |  | 4-PORT COMPARTMENT HUB (glovebox_power_injection_hub.scad)        |  |
+ |  | * Port 1 (30W USB-PD): Smartphone Fast-Charging (stays inside)   |  |
+ |  | * Port 2 (Switched 10W): Wireless CarPlay / AA Dongle (in pocket) |  |
+ |  | * Port 3 (Service/Flash): Free USB-A media stick port (in pocket) |  |
+ |  | * Port 4 (Upstream USB-C): Uplink to OEM Head Unit (Boom! Box)   |  |
+ |  |   --> Enables Harley Headset Emulation via USB & Apple CarPlay     |  |
  |  +-----------------------------------+-------------------------------+  |
  |                                      ^                                  |
  |                                      | Factory Bottom Rubber Grommet    |
  =======================================|===================================
    Glove Compartment Floor (100% Zero-Drill! Door perimeter seal unpinched)
                                         |
-       Feed line from Front Node PCBA 05 (60W USB-PD Engine & Headset Emulation via USB)
+       Single Combined Feed Line from Front Node PCBA 05 (Power & USB 2.0)
+       [Action-Cam & Navi connect DIRECTLY at Front Node - zero compartment pass-through!]
 ```
 
 1. **Mechanical Design & Zero-Drill Installation:**
    * **Form-Fitted Base Cradle:** The compact enclosure ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) rests vibration-isolated at the floor of the right glove box.
    * **Bottom OEM Grommet Entry:** Wiring feeds strictly from *below* through the factory Harley rubber grommet. The door perimeter gasket remains completely unpinched, ensuring 100% watertight door closure.
 2. **Infotainment Clean-Power Injection & Harley Headset Emulation via USB:**
-   * **Harley Headset Emulation via USB (Port 5):** Over the integrated High-Speed data pair of the feed line, OpenMotorBridge connects to the head unit (Skyline OS / Boom! Box GTS) as a fully compliant MFi / USB Audio Class headset. Apple CarPlay is unlocked immediately; voice commands and helmet microphone streams route digitally without analog hum or engine noise.
+   * **Harley Headset Emulation via USB (Port 4):** Over the integrated High-Speed data pair of the feed line, OpenMotorBridge connects to the head unit (Skyline OS / Boom! Box GTS) as a fully compliant MFi / USB Audio Class headset. Apple CarPlay is unlocked immediately; voice commands and helmet microphone streams route digitally without analog hum or engine noise.
    * **Eliminates Head Unit Bootloops:** Commercial Wireless CarPlay / Android Auto dongles (Ottocast U2-Air, Carlinkit 5.0, AAWireless) routinely overload the weak 500 mA factory USB port on the head unit (Skyline OS / Boom! Box GTS), causing random reboot loops. The OMB Hub isolates the power pin and supplies a clean, regulated 5V/2A (10W) rail while passing high-speed USB data (`D+`, `D-`) transparently to the head unit.
    * **30W Smartphone Fast-Charging:** A secondary internal USB-C port charges the stored smartphone at up to 30W USB-PD.
-3. **Direct Weather-Sealed Action-Cam Lead (Replacing Obsolete Inductive Qi Dock):**
-   * Rather than suffering high thermal losses through 2.8 mm ABS fairing shells with inductive Qi coils, the system delivers a **direct, weather-sealed 10W USB-C cable** from the Front Node's 60W engine directly to the camera (Insta360 X3/X4, GoPro Hero, DJI Osmo Action).
-   * Cameras mount via standardized, vibration-damped COTS action-cam or handlebar mounts; wiring remains tucked cleanly out of sight.
+3. **Direct Action-Cam Lead at Front Node (Power-Only / BC 1.2 DCP):**
+   * Rather than suffering high thermal losses through 2.8 mm ABS fairing shells with inductive Qi coils, the system delivers a **direct, weather-sealed 10W USB-C cable (Power-Only / BC 1.2 DCP)** from the Front Node's 60W engine directly to the camera (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) at the handlebar or fairing.
+   * **Zero Glovebox Detour:** The action cam lead connects directly at the cockpit, eliminating redundant cabling into and out of the glovebox floor grommet.
+   * **PC Mode Prevention:** Data lines `D+` and `D-` are shorted ($R < 200\,\Omega$) inside the camera connector with zero host connection, ensuring the camera starts loop recording upon ignition ON and never freezes in a PC connection / webcam dialog!
    * On-handlebar smartphone Qi charging is handled via proven COTS brackets (SP Connect / QuadLock Wireless Charging Head).
 4. **Modular Snap-On Environmental Sensor Puck ("Körbchen", `sensor_puck_environmental.scad`):**
    * High-accuracy environmental sensing (u-blox SAM-M10Q GNSS, TI TMP117 temperature sensor, OPT3001 ambient light sensor, and Knowles I2S MEMS wind microphone) is housed in a **modular snap-on puck** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)).
@@ -1316,7 +1319,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Front Node** | EPDM/TPU cable glands (pair with sprue runner) | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front Node** | TPU USB-C protective sealing plug | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 | **Front Node** | Modular Snap-On Sensor Puck ("Körbchen" for GNSS/Temp/MEMS) | `04_front_node/sensor_puck_environmental.stl` | `04_front_node/parts/sensor_puck_environmental.scad` |
-| **Front Node** | 5-Port Glove Box Media & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
+| **Front Node** | 4-Port Glove Box Media & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
 | **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Upper Shell with Diffuser Bore | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Shock Bumper Rim (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |

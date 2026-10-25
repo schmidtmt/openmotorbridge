@@ -1228,8 +1228,8 @@ const BOM_PARTS = {
   "part3d_glovebox_hub": {
     "type": "part_3d",
     "name": {
-      "de": "5-Port Handschuhfach Media & Power-Injection Hub",
-      "en": "5-Port Glovebox Media & Power-Injection Hub"
+      "de": "4-Port Handschuhfach Media & Power-Injection Hub",
+      "en": "4-Port Glovebox Media & Power-Injection Hub"
     },
     "spec": "PA12-SLS (Harley Touring Handschuhfach)",
     "source": "3D-Druck (PA12-SLS)",
@@ -1239,8 +1239,8 @@ const BOM_PARTS = {
       4.5
     ],
     "desc": {
-      "de": "Kompaktes Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle) für rechtes Medienfach",
-      "en": "Compact power-injection hub enclosure (30W USB-PD + 10W dongle) for right media compartment"
+      "de": "Kompaktes 4-Port Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle + Media + Upstream) für rechtes Medienfach",
+      "en": "Compact 4-port power-injection hub enclosure (30W USB-PD + 10W dongle + media + upstream) for right media compartment"
     },
     "file": "glovebox_power_injection_hub.stl",
     "group": "Cockpit-Hub",
@@ -3746,12 +3746,12 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_actioncam_dock",
     "category": "addon",
     "name": {
-      "de": "Handschuhfach 5-Port Hub & Cam-Lead",
-      "en": "Glove Box 5-Port Hub & Cam Lead"
+      "de": "Handschuhfach 4-Port Hub & Front-Node Cam-Lead",
+      "en": "Glove Box 4-Port Hub & Front Node Cam Lead"
     },
     "desc": {
-      "de": "5-Port Media- & Power-Injection Hub mit direktem 10W Actioncam-Kabel für Lenker/Verkleidung",
-      "en": "5-Port media & power-injection hub with direct 10W action cam lead for handlebars/fairing"
+      "de": "4-Port Media- & Power-Injection Hub für Handschuhfach sowie wetterfeste 10W Power-Only Actioncam-Zuleitung direkt am Front-Node",
+      "en": "4-Port media & power-injection hub for glovebox plus weatherproof 10W power-only action cam lead directly at Front Node"
     },
     "parts": [
       {

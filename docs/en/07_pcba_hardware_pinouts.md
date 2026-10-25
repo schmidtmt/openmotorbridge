@@ -281,8 +281,8 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 * **60W USB-PD Power Engine (`U8`, Southchip SC8721 / SC8102 Synchronous Buck-Boost):**
   * Reliably feeds the complete cockpit payload without brownouts:
     * Driver smartphone fast-charging: up to 27W USB-PD (9V/3A) at handlebar or via glove box hub.
-    * Dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A or 5V/3A).
-    * Action-cam continuous power: 10W (5V/2A) via weather-sealed USB-C lead for GoPro / Insta360.
+    * Dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A or 5V/3A) directly at `J10`. **Power-Only:** Pure DC power without USB host data lines (`D+`, `D-`) so the navigation unit immediately starts active route guidance instead of entering PC mass storage mode.
+    * Action-cam continuous power: 10W (5V/2A) weather-sealed USB-C lead directly on Front Node (`J8`) for GoPro / Insta360. **Power-Only / BC 1.2 DCP:** D+/D- shorted ($R < 200\,\Omega$) with zero USB2514B host connection, preventing PC connection / webcam lockups and avoiding cable detours through the glovebox.
     * Dual Cockpit OLED Displays: 2W for both speaker corner pods inside the speaker grilles.
     * ESP32-S3 host MCU, sensor processing & audio AGC: 3.5W.
     * Total peak load approx 57.5W – perfectly balanced, high efficiency, thermally sustained within the standard 60W power tier (20V / 3A).
@@ -293,8 +293,9 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 * **Peripheral Ports:**
   * 2x 4-pin JST-GH receptacles (`J_POD_L` and `J_POD_R`) to both symmetrical under-perch mirror pods (`PCBA 05B`).
   * 2x 4-pin JST-SH receptacles (`J_DISP_L` and `J_DISP_R`) to both Cockpit Speaker Corner Pod displays (`cockpit_speaker_corner_pod.scad`).
-  * SP Connect / QuadLock handlebar charging lead (up to 27W) & Garmin Zūmo XT2 GPS tap (15W).
-  * 5-Port Glovebox Media & Power-Injection Hub interface ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Combined Power & High-Speed USB 2.0 cable. Supplies regulated power injection (30W phone fast charge, 10W switched dongle, free port, 10W camera lead) and routes the USB host data lines to Port 5 for **Harley Headset Emulation via USB** (MFi / USB Audio Class composite accessory, native Apple CarPlay enablement, and lossless digital helmet microphone audio).
+  * SP Connect / QuadLock handlebar charging lead (up to 27W) & Garmin Zūmo XT2 Power-Only GPS tap (`J10`, 15W).
+  * Direct 10W Action-Cam Power-Only Port (`J8`, 2-Pin JST-PH / BC 1.2 DCP pigtail lead for GoPro/Insta360 at the cockpit).
+  * 4-Port Glovebox Media & Power-Injection Hub interface ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Combined Power & High-Speed USB 2.0 cable. Supplies regulated power injection (30W phone fast charge, 10W switched dongle, free media port) and routes the USB host data lines to Port 4 for **Harley Headset Emulation via USB** (MFi / USB Audio Class composite accessory, native Apple CarPlay enablement, and lossless digital helmet microphone audio).
 
 ---
 

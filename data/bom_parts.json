@@ -1230,8 +1230,8 @@
     "part3d_glovebox_hub": {
       "type": "part_3d",
       "name": {
-        "de": "5-Port Handschuhfach Media & Power-Injection Hub",
-        "en": "5-Port Glovebox Media & Power-Injection Hub"
+        "de": "4-Port Handschuhfach Media & Power-Injection Hub",
+        "en": "4-Port Glovebox Media & Power-Injection Hub"
       },
       "spec": "PA12-SLS (Harley Touring Handschuhfach)",
       "source": "3D-Druck (PA12-SLS)",
@@ -1241,8 +1241,8 @@
         4.5
       ],
       "desc": {
-        "de": "Kompaktes Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle) für rechtes Medienfach",
-        "en": "Compact power-injection hub enclosure (30W USB-PD + 10W dongle) for right media compartment"
+        "de": "Kompaktes 4-Port Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle + Media + Upstream) für rechtes Medienfach",
+        "en": "Compact 4-port power-injection hub enclosure (30W USB-PD + 10W dongle + media + upstream) for right media compartment"
       },
       "file": "glovebox_power_injection_hub.stl",
       "group": "Cockpit-Hub",

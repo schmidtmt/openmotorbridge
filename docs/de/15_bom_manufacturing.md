@@ -244,7 +244,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 | **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar**| TPU 95A / 85A | Elastische Dichtkämme für Front-USB & Signale |
 | **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastische Staubschutzkappe mit Haltekollier für Service-Port |
 | **Modulares Schnapp-Sensor-Puck**| [`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) | **1** | MJF PA12 / ASA | Schnapp-Körbchen für GNSS SAM-M10Q, TMP117, OPT3001 & Knowles MEMS (Bike & Car) |
-| **Handschuhfach 5-Port Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiger 5-Port Media- & Power-Injection Hub für rechtes Harley Touring Handschuhfach |
+| **Handschuhfach 4-Port Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiger 4-Port Media- & Power-Injection Hub für rechtes Harley Touring Handschuhfach |
 | **Verkleidungs-Rohrschelle**| [`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl) | *Opt. (1)* | MJF PA12 / ASA | 2-teilige Rohrschelle (Ø 12–22 mm) für Verkleidungsgeweih & Streben unterm Fairing |
 
 ### 10.2 Gateway-Pod-Inlays (Passend zur gewünschten Intercom-Ausstattung)
@@ -278,7 +278,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
   * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 4-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse).
-  * `glovebox_power_injection_hub.stl` (1 Stk.): 5-Port Handschuhfach Media- & Power-Injection Hub für rechtes Handschuhfach (Zero-Drill Durchstich, Abgriff OEM USB-C zu Skyline OS / Boom! Box, 30W Phone Fast Charge, 10W geschalteter Dongle-Port, wetterfeste 10W USB-C Kamerazuleitung).
+  * `glovebox_power_injection_hub.stl` (1 Stk.): 4-Port Handschuhfach Media- & Power-Injection Hub für rechtes Handschuhfach (Zero-Drill Durchstich, Abgriff OEM USB-C zu Skyline OS / Boom! Box, 30W Phone Fast Charge, 10W geschalteter Dongle-Port, freier Media-Port; Action-Cam wird direkt am Front-Node versorgt).
   * `cockpit_speaker_corner_pod.stl` (2 Stk.): Symmetrische Cockpit-Display-Pods für die unteren inneren Ecken der Rockford Fosgate Lautsprechergitter (Bagger / CVO ST).
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
