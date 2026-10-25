@@ -19,9 +19,9 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | Dual-Power: 12V DTM & USB-PD  |               |         | LM5164, BQ24075 USV, |
 |       | Sink (5-20V Ideal-Dioden-OR)  |               |         | SX1262 LoRa, 2-Kabel |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 03**| **Satelliten-Pod Interface**  | 35 x 25 mm    | 4 Lagen | ESP32-C6, ES8388,    |
-|       | (Koffer-Pod 1 & 2 im Schacht) | (29x19 mm M2) | (ENIG)  | 4-Draht Bus, USB-C   |
-|       | In-Bag 30W/60W USB-PD Ladeport| 2-seitig SMT  |         | Fast-Charge, Headset |
+| **PCBA 03**| **Satelliten-Pod Interface**  | 42 x 48 mm    | 4 Lagen | ESP32-C6, ES8388,    |
+|       | (Koffer-Pod 1 & 2 Bodenwanne) | (36x42 mm M2.5| (ENIG)  | 4-Draht Bus, SW3516  |
+|       | In-Bag 30W USB-PD Ladebuchse  | 2-seitig SMT  |         | 30W PD, J_AUDIO_PWR  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05**| **Universal Front-Knoten**    | 82 x 50 mm    | 4 Lagen | ESP32-S3, SAM-M10Q,  |
 |       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Knowles MEMS Mic,    |
@@ -219,21 +219,58 @@ In OpenMotorBridge v10.0 ist das Kassetten-Schachtsystem vollständig abgelöst:
 ## 5. PCBA 03: Satelliten-Pod Interface Board (`openmotorbridge_pod_interface`)
 
 ![PCBA 03 Satelliten-Pod Platine Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
-*Abbildung 7.3a: KiCad 3D-Render der Satelliten-Pod Platine### 5.1 Technische Platinen-Kenndaten & Architektur
-* **Abmessungen:** $35{,}0 \times 25{,}0\,\text{mm}$ (4x M2 Befestigungsbohrungen mit Schwingungsdämpfern direkt am Pod-Boden).
-* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}2\,\text{mm}$ Dicke, durchgehende GND-Plane L2, Power-Plane L3, ENIG-Goldfinish).
-* **Integrierte Koffer-USB-Ladebuchse (`J_USB_CHARGE`):** Auf `PCBA 03` sitzt ein nach oben/innen geführter USB-C Port, der bis zu **30W USB-PD Ladeleistung** direkt im Seitenkoffer bereitstellt (für Helm, Smartphone, Powerbank).
-* **Kommunikations- & Audio-Anbindung:**
-  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU zur Verwaltung der Ladeelektronik, I2S-Codec-Steuerung, Aktorik und USB-Audio-Brücke.
+*Abbildung 7.3a: KiCad 3D-Render der Satelliten-Pod Platine (PCBA 03, 42 x 48 mm) mit ESP32-C6 Host MCU, SW3516 30W USB-PD Ladecontroller, ES8388 Audio-Codec, getrenntem Stirnseiten-Bus & USB-C Abgang sowie rückwärtigen Intercom- und Mechatronik-Headern.*
+
+### 5.1 Technische Platinen-Kenndaten & Architektur
+* **Abmessungen:** $42{,}0 \times 48{,}0\,\text{mm}$ (4x M2.5 Befestigungsbohrungen auf $36{,}0 \times 42{,}0\,\text{mm}$ mit Schwingungsdämpfern direkt am Boden der Koffer-Pod Wanne).
+  * **Länge in X ($42{,}0\,\text{mm}$):** Strikt nach vorne begrenzt (nur der Raumgewinn durch den Entfall der Kassetten-Frontblende). Der gesamte Raum hinter der Platine bleibt zu 100 % für die OEM-Cradles (Cardo Air-Mount, Sena SPIDER-Schale, OMM) und die 15–85 mm Aktuatorschiene reserviert.
+  * **Breite in Y ($48{,}0\,\text{mm}$):** Nutzt die lichte Weite der Pod-Wanne ($63\,\text{mm}$) und der Aktuatorschiene ($54\,\text{mm}$) voll aus. Verdoppelt die Platinenfläche ($2016\,\text{mm}^2$ statt bisher $875\,\text{mm}^2$), schafft massive durchgehende GND-Planes und entzerrt das 4-Lagen-Routing.
+* **Lagenaufbau:** 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$ Dicke, L2 durchgehende GND-Plane, L3 Power-Plane, ENIG-Goldfinish).
+* **Entfallene Altlasten (Flächenbereinigung):**
+  * **DW3110 UWB Subsystem:** IC `U2`, 38.4 MHz Quarz `Y1`, U.FL Buchse `ANT_UWB` und HF-Keepouts ersatzlos gestrichen.
+  * **4-Pin SWD Header (`J_PROG`):** Entfällt vollständig, da der ESP32-C6 über integrierte USB-Serial/JTAG Peripherie verfügt (Flashen & DFU direkt über USB).
+  * **Blade-Slot Kontakte (`J_DC_IN` / `PAD1`, `PAD2`):** Die alten 10mm Kassetten-Messerkontakte entfallen.
+* **4-Pin Bus-Eingang (`J_BUS` / 4-Pin JST-GH 1.25mm SMD):**
+  * Sitzt an der **linken Stirnkante unten** (exakt an der Position des früheren Blade-Slots).
+  * Direkter, geradliniger Leitungsweg (< 15 mm) zur Kofferwandtülle ohne Biegeschleifen.
+  * Führt die 4 Adern des Strangs von der Zentralbox: `VCC_BUS` (+12V...+20V Bordnetz/PD, abgesichert 30W), `GND`, `USB_D+`, `USB_D-`.
+* **Integrierte 30W USB-PD Ladezone & Gehäusebuchsen-Abgang (`J_USB_OUT` / 4-Pin JST-GH 1.25mm SMD):**
+  * **Controller:** Ismartware `SW3516` oder Injoinic `IP6538` (QFN-32, $5 \times 5\,\text{mm}$) synchroner Step-Down Konverter mit integriertem USB-PD 3.0 / PPS / QC4+ Protokollcontroller und $7 \times 7\,\text{mm}$ geschirmter Speicherinduktivität ($10\,\mu\text{H}$).
+  * **Header `J_USB_OUT`:** Sitzt an der **linken Stirnkante oben**.
+  * **Internes Silikonkabel zur Gehäusewand (Port B):** Ein 4-adriges hochflexibles Silikon-Flachbandkabel führt vom Header direkt zur **chassis-montierten USB-C Ladedose in der Stirnwand des Pod-Gehäuses**.
+  * **100 % Symmetriegarantie (Links = Rechts):** Da beide Koffer-Pods an der Stirnseite identisch orientiert sind, bleibt die USB-C Ladedose an beiden Fahrzeugseiten ergonomisch gleich zugänglich (kein Verkehrt-Herum-Spiegeln wie bei Längsseitenports!).
+  * **Mechanische Entkopplung:** Sämtliche Zug-, Biege- und Hebelkräfte beim Einstecken von Ladekabeln oder durch Gepäckstücke werden zu 100 % vom stabilen PA12-Gehäuse abgefangen – die Platine bleibt vollkommen spannungs- und rüttelfrei!
+* **Rückwärtige Schnittstellen (Geräteseite, nach rechts in die Gerätekammer):**
+  * **`J_AUDIO_PWR` (8-Pin JST-SH 1.0mm, oben rechts):** Direkte Verbindung zur OEM-Kabelpeitsche des Intercoms (Sena, Cardo, OMM, Midland).
+  * **`J_ACT` (4-Pin JST-SH 1.0mm, unten rechts):** Direkte Verbindung zu den beiden 5V Mini-Hubmagneten auf der universellen Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`).
+  * **Vorteil:** Durch den $20\,\text{mm}$ Abstand zwischen Audio (oben) und Aktorik (unten) streuen Schaltimpulse der Magnete nicht in die analogen Mikrofon-/Lautsprecherleitungen ein. Beide Kabelstränge laufen parallel nach hinten ab – null Kabelkreuzungen über der Platine!
+* **Kommunikations- & Audio-ICs:**
+  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU zur Ladeüberwachung, Codec-Steuerung, Aktorik und USB-Audio-Brücke.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec.
   * `U4`: TI `TS5A3159DBVR` Analog/Digital-Audio-Umschalter für automatische Erkennung analoger OEM-Headsets vs. digitaler OMM-Module via Pin 6 (`OMM_DETECT`).
-* **Mechatronischer Kaltstart-Treiber (Header `J_ACT` / 4-Pin JST-SH 1.0mm):**
-  * **Hintergrund:** OEM-Headsets (Cardo Packtalk Edge, Sena 50S/Spider, Midland) schalten sich bei USB-Spannung nicht automatisch ein und schlafen im Ruhezustand nicht wochenlang ohne Akku-Entleerung. Ein Kaltstart erfordert das gleichzeitige Drücken von **zwei separaten Tasten** (z. B. Intercom + Media bei Cardo, ~50 mm Distanz).
-  * **Schaltung:** Duale N-Kanal Power-MOSFETs (`Q_ACT1`, `Q_ACT2`, Diodes Inc. AO3400A / DMN2075U, 30V/4A) mit Freilauf-Schottky-Dioden (`D_FLY1`, `D_FLY2`, SS14) treiben zwei 5V Mini-Hubmagnete.
-  * **Software-Ablauf:** Bei Zündung-AN (KL15) schaltet der ESP32-C6 beide Aktuatoren über `GPIO4` und `GPIO5` simultan für exakt **2,0 Sekunden** ein ($\sim 4\,\text{N}$ Betätigungskraft mit weichen Shore A50 Silikon-Stößeln auf die OEM-Tasten).
-  * **Mechanik:** Die beiden Mini-Hubmagnete klemmen auf der universellen Doppel-Schiebeschlitten-Schiene ([`012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad)). **"One Size Fits All"** – stufenlos justierbar von 15 mm bis 85 mm Tastenabstand ohne modellspezifische 3D-Drucke, ohne Garantieverlust durch Platinenlöten und ohne Kofferpod-Demontage vor Touren!
+  * `Q1`, `Q2`: Duale N-Kanal Power-MOSFETs (`AO3400A`, 30V/4A) mit Freilaufdioden für 2,0 s Kaltstart-Impuls.
 
-### 5.2 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
+### 5.2 Pinbelegung des 4-Pin Bus-Eingangs (`J_BUS` / 4-Pin JST-GH 1.25mm)
+
+| Pin | Signalname | Signalart | Funktion & Spezifikation |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VCC_BUS`** | Power In (+12V...+20V) | Bordnetz- / PD-Speisung von Zentralbox (AWG20, abgesichert 30W) |
+| **2** | **`GND`** | Power Return | Leistungs- und Signalmasse |
+| **3** | **`USB_D+`** | High-Speed Data | USB 2.0 Datenleitung D+ zur Zentralbox (ESP32-S31 Host) |
+| **4** | **`USB_D-`** | High-Speed Data | USB 2.0 Datenleitung D- zur Zentralbox (ESP32-S31 Host) |
+| **MP** | **`SHIELD_GND`** | Schirmung | Rastlaschen des JST-GH Steckers auf GND-Plane gelegt |
+
+### 5.3 Pinbelegung des internen 30W USB-C Gehäuseabgangs (`J_USB_OUT` / 4-Pin JST-GH 1.25mm)
+
+| Pin | Signalname | Signalart | Funktion: Internes Silikonkabel zur Gehäusewand (Port B) |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VBUS_30W`** | Power Out | Geregelte 5V/9V/12V/15V/20V USB-PD Ladespannung (bis 30W) |
+| **2** | **`GND`** | Power Return | Rückstrom Ladeleistung (AWG20 Silikonader) |
+| **3** | **`CC1`** | PD Config In/Out | Configuration Channel 1 für USB-PD 3.0 / PPS Aushandlung |
+| **4** | **`CC2`** | PD Config In/Out | Configuration Channel 2 für USB-PD 3.0 / PPS Aushandlung |
+| **MP** | **`SHIELD_GND`** | Schirmung | Gehäuseschirmung der USB-C Wandbuchse |
+
+### 5.4 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
 
 | Pin | Signalname | Richtung | Funktion: Analog-Intercom (Sena / Cardo / Midland) | Funktion: Digital-OMM (PCBA 09 / PCBA 10) |
 | :---: | :--- | :---: | :--- | :--- |
@@ -247,7 +284,7 @@ In OpenMotorBridge v10.0 ist das Kassetten-Schachtsystem vollständig abgelöst:
 | **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk Tastung gegen Masse (Midland PMR446 / N/C) | **Digital `USB_DN`:** Nativer digitaler USB-Audio-Datenstrom D- |
 | **MP** | **`GND`** | Schirmung | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane |
 
-#### 5.3 Pinbelegung des Mechatronik-Aktuator-Headers (`J_ACT` / 4-Pin JST-SH 1.0mm)
+### 5.5 Pinbelegung des Mechatronik-Aktuator-Headers (`J_ACT` / 4-Pin JST-SH 1.0mm)
 
 | Pin | Signalname | Signalart | Funktion & Schutz |
 | :---: | :--- | :---: | :--- |

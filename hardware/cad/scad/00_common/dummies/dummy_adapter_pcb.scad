@@ -1,83 +1,180 @@
 // =============================================================================
-// OpenMotorBridge - Dummy 3D Model: Smart Pod Cartridge PCBA 03
+// OpenMotorBridge - Dummy 3D Model: Satellite Pod Interface Board PCBA 03
 // =============================================================================
 // File: hardware/cad/scad/00_common/dummies/dummy_adapter_pcb.scad
-// Description: Accurate 1:1 3D model of the Smart Modular Cartridge PCB (PCBA 03)
-//              matching hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb.
-//              Dimensions: 35.0 x 25.0 x 1.6 mm with 2.0 mm chamfered corners.
+// Description: Accurate 1:1 3D model of the Satellite Pod Interface Board (PCBA 03)
+//              Dimensions: 42.0 x 48.0 x 1.6 mm with 2.0 mm chamfered corners.
 //              Features:
-//              - Bottom (B.Cu): J_DC_IN 2-Pin SMT horizontal dual-beam slot socket for CON_POD_DC blade plug,
-//                U.FL coaxial socket ANT_UWB, DW3110 UWB Transceiver (QFN-16),
-//                ES8388 Audio Codec (QFN-28), 4x MOSFETs (SOT-23), Fuse 1812.
-//              - Top (F.Cu): ESP32-S2-MINI-1U MCU Module (with RF shield),
-//                J_AUDIO_PWR 8-pin vertical JST-SH top-entry header (BM08B-SRSS-TB),
-//                J_ACT 8-pin vertical JST-SH top-entry header (BM08B-SRSS-TB),
-//                J_PROG 4-pin 1.27mm SMD pin header at bottom-left.
-//              - 4x M2 mounting holes (29.0 x 19.0 mm pitch).
+//              - Left Bulkhead Edge (Facing saddlebag grommet & chassis USB-C port):
+//                * J_BUS (4-Pin JST-GH 1.25mm SMD, bottom-left at Y = 12.0 mm)
+//                * J_USB_OUT (4-Pin JST-GH 1.25mm SMD, top-left at Y = 38.0 mm)
+//                  leading via internal flexible silicone harness to Port B
+//                * 30W USB-PD Buck-Boost converter zone (SW3516 QFN-32 + 7x7 mm Inductor)
+//              - Center Zone:
+//                * U1: ESP32-C6-MINI-1U RISC-V MCU Module (with RF shield & U.FL)
+//                * U3: ES8388 24-Bit Audio Codec (QFN-28)
+//                * U4: TS5A3159 Analog/Digital Switch (SOT-23-6)
+//              - Right Edge (Facing rear equipment chamber / OEM adapters):
+//                * J_AUDIO_PWR: 8-Pin JST-SH 1.0mm SMD header (top-right at Y = 36.0 mm)
+//                * J_ACT: 4-Pin JST-SH 1.0mm SMD header (bottom-right at Y = 12.0 mm)
+//                * Dual AO3400A MOSFETs & flyback diodes for 5V cold-start solenoids
+//              - 4x M2.5 mounting holes (36.0 x 42.0 mm pitch).
+//              - Completely removed: DW3110 UWB, 38.4 MHz crystal, J_PROG SWD, blade slot.
 // =============================================================================
 
 include <../parameters.scad>;
 
 module dummy_adapter_pcb() {
     difference() {
-        // 1. PCB Substrate (FR4 Matt Black / Dark Green, 35.0 x 25.0 x 1.6 mm)
-        color([0.12, 0.16, 0.14]) {
+        // 1. PCB Substrate (FR4 Matt Black, 42.0 x 48.0 x 1.6 mm with 2.0 mm corner chamfers)
+        color([0.12, 0.14, 0.13]) {
             linear_extrude(height=1.6) {
                 polygon(points=[
                     [2.0, 0.0],
-                    [33.0, 0.0],
-                    [35.0, 2.0],
-                    [35.0, 23.0],
-                    [33.0, 25.0],
-                    [2.0, 25.0],
-                    [0.0, 23.0],
+                    [40.0, 0.0],
+                    [42.0, 2.0],
+                    [42.0, 46.0],
+                    [40.0, 48.0],
+                    [2.0, 48.0],
+                    [0.0, 46.0],
                     [0.0, 2.0]
                 ]);
             }
         }
 
-        // 4x M2 Mounting Holes (H1..H4 at 29.0 x 19.0 mm pitch, Ø 2.2 mm)
-        translate([3.0, 3.0, -0.2])   cylinder(r=1.1, h=2.0, $fn=24);
-        translate([3.0, 22.0, -0.2])  cylinder(r=1.1, h=2.0, $fn=24);
-        translate([32.0, 3.0, -0.2])  cylinder(r=1.1, h=2.0, $fn=24);
-        translate([32.0, 22.0, -0.2]) cylinder(r=1.1, h=2.0, $fn=24);
+        // 4x M2.5 Mounting Holes (36.0 x 42.0 mm pitch, Ø 2.7 mm)
+        // Centers at X = 3.0, 39.0; Y = 3.0, 45.0
+        translate([3.0, 3.0, -0.2])   cylinder(r=1.35, h=2.0, $fn=24);
+        translate([3.0, 45.0, -0.2])  cylinder(r=1.35, h=2.0, $fn=24);
+        translate([39.0, 3.0, -0.2])  cylinder(r=1.35, h=2.0, $fn=24);
+        translate([39.0, 45.0, -0.2]) cylinder(r=1.35, h=2.0, $fn=24);
     }
 
-    // Gold ENIG Annular Rings for M2 Mounting Holes
+    // Gold ENIG Annular Rings for M2.5 Mounting Holes
     color("gold") {
-        for (pos = [[3.0, 3.0], [3.0, 22.0], [32.0, 3.0], [32.0, 22.0]]) {
+        for (pos = [[3.0, 3.0], [3.0, 45.0], [39.0, 3.0], [39.0, 45.0]]) {
             translate([pos[0], pos[1], 1.605])
                 difference() {
-                    cylinder(r=1.75, h=0.02, center=true, $fn=24);
-                    cylinder(r=1.1, h=0.03, center=true, $fn=24);
+                    cylinder(r=2.1, h=0.02, center=true, $fn=24);
+                    cylinder(r=1.35, h=0.03, center=true, $fn=24);
                 }
             translate([pos[0], pos[1], -0.005])
                 difference() {
-                    cylinder(r=1.75, h=0.02, center=true, $fn=24);
-                    cylinder(r=1.1, h=0.03, center=true, $fn=24);
+                    cylinder(r=2.1, h=0.02, center=true, $fn=24);
+                    cylinder(r=1.35, h=0.03, center=true, $fn=24);
                 }
         }
     }
 
     // =========================================================================
-    // 2. TOP LAYER (F.Cu) - ESP32-S2 Module, JST-SH Headers & J_PROG
+    // 2. LEFT BULKHEAD EDGE: J_BUS (Bottom-Left) & J_USB_OUT (Top-Left)
     // =========================================================================
 
-    // U1: ESP32-S2-MINI-1U Module (15.4 x 18.0 x 3.2 mm, centered at 18.9, 12.0)
-    // Metal RF Shield Casing
-    color([0.82, 0.84, 0.86]) {
-        translate([18.90 - 7.7, 12.00 - 9.0, 1.6])
-            cube([15.4, 14.0, 2.8], center=false);
+    // J_BUS: 4-Pin JST-GH 1.25mm SMD Horizontal Shrouded Header (at X = 0.5, Y = 12.0)
+    // Mates with cable from saddlebag wall grommet (< 15 mm direct run)
+    color([0.92, 0.92, 0.90]) {
+        translate([0.5, 12.0 - 3.75, 1.6]) {
+            difference() {
+                // Outer shrouded body (4.5 x 7.5 x 4.0 mm)
+                cube([4.5, 7.5, 4.0], center=false);
+                // Entry slot for GHR-04V-S plug (facing -X)
+                translate([-0.1, 0.8, 0.8])
+                    cube([3.5, 5.9, 2.6], center=false);
+            }
+        }
     }
-    // PCB Antenna / Header section of module
-    color([0.10, 0.12, 0.10]) {
-        translate([18.90 - 7.7, 12.00 + 5.0, 1.6])
-            cube([15.4, 4.0, 1.0], center=false);
+    // 4 Gold Contact Pins inside J_BUS
+    color("gold") {
+        for (i = [0:3]) {
+            translate([2.2, 12.0 - 1.875 + i * 1.25, 1.6 + 1.8])
+                cube([2.0, 0.35, 0.35], center=true);
+        }
     }
 
-    // J_AUDIO_PWR: 8-Pin JST-SH 1.0mm Vertical Header (at X = 4.05, Y = 12.30, Top-Entry +Z)
+    // J_USB_OUT: 4-Pin JST-GH 1.25mm SMD Horizontal Shrouded Header (at X = 0.5, Y = 38.0)
+    // Connects via 4-wire silicone ribbon cable to chassis-mounted USB-C socket (Port B)
+    color([0.92, 0.92, 0.90]) {
+        translate([0.5, 38.0 - 3.75, 1.6]) {
+            difference() {
+                cube([4.5, 7.5, 4.0], center=false);
+                translate([-0.1, 0.8, 0.8])
+                    cube([3.5, 5.9, 2.6], center=false);
+            }
+        }
+    }
+    // 4 Gold Contact Pins inside J_USB_OUT
+    color("gold") {
+        for (i = [0:3]) {
+            translate([2.2, 38.0 - 1.875 + i * 1.25, 1.6 + 1.8])
+                cube([2.0, 0.35, 0.35], center=true);
+        }
+    }
+
+    // =========================================================================
+    // 3. 30W USB-PD CHARGING POWER STAGE (Top-Left Zone)
+    // =========================================================================
+
+    // U_PD: SW3516 / IP6538 USB-PD Controller & Sync Buck Converter (QFN-32, 5.0 x 5.0 x 0.85 mm at X = 9.0, Y = 38.0)
+    color([0.15, 0.15, 0.15]) {
+        translate([9.0 - 2.5, 38.0 - 2.5, 1.6])
+            cube([5.0, 5.0, 0.85], center=false);
+    }
+
+    // L_PD: 10 uH High-Current Shielded Power Inductor (7.0 x 7.0 x 4.5 mm at X = 16.5, Y = 38.0)
+    color([0.25, 0.25, 0.28]) {
+        translate([16.5 - 3.5, 38.0 - 3.5, 1.6])
+            cube([7.0, 7.0, 4.5], center=false);
+    }
+
+    // C_IN / C_OUT: 4x Solid Polymer Filter Capacitors (SMD 1210, 3.2 x 2.5 x 2.0 mm)
+    color("peru") {
+        translate([8.5, 43.5, 1.6]) cube([3.2, 2.5, 2.0], center=false);
+        translate([13.0, 43.5, 1.6]) cube([3.2, 2.5, 2.0], center=false);
+        translate([8.5, 31.5, 1.6]) cube([3.2, 2.5, 2.0], center=false);
+        translate([13.0, 31.5, 1.6]) cube([3.2, 2.5, 2.0], center=false);
+    }
+
+    // =========================================================================
+    // 4. CENTER ZONE: ESP32-C6 MCU & AUDIO CODEC
+    // =========================================================================
+
+    // U1: ESP32-C6-MINI-1U RISC-V Module (13.2 x 16.6 x 2.4 mm at X = 26.0, Y = 24.0)
+    // Metal RF Shield Casing
+    color([0.82, 0.84, 0.86]) {
+        translate([26.0 - 6.6, 24.0 - 8.3, 1.6])
+            cube([13.2, 13.0, 2.4], center=false);
+    }
+    // Module PCB & U.FL Antenna Section
+    color([0.10, 0.12, 0.10]) {
+        translate([26.0 - 6.6, 24.0 + 4.7, 1.6])
+            cube([13.2, 3.6, 1.0], center=false);
+    }
+    // U.FL Antenna Socket on ESP32-C6
+    color("gold") {
+        translate([26.0 + 3.5, 24.0 + 6.5, 1.6 + 1.0])
+            cylinder(r=1.0, h=1.0, center=false, $fn=16);
+    }
+
+    // U3: ES8388 24-Bit Stereo Audio Codec (QFN-28, 4.0 x 4.0 x 0.85 mm at X = 13.5, Y = 20.0)
+    color([0.15, 0.15, 0.15]) {
+        translate([13.5 - 2.0, 20.0 - 2.0, 1.6])
+            cube([4.0, 4.0, 0.85], center=false);
+    }
+
+    // U4: TS5A3159 High-Speed Audio Switch (SOT-23-6 at X = 13.5, Y = 13.0)
+    color([0.18, 0.18, 0.18]) {
+        translate([13.5 - 1.45, 13.0 - 0.8, 1.6])
+            cube([2.9, 1.6, 1.1], center=false);
+    }
+
+    // =========================================================================
+    // 5. RIGHT EDGE (FACING REAR EQUIPMENT CHAMBER): J_AUDIO_PWR & J_ACT
+    // =========================================================================
+
+    // J_AUDIO_PWR: 8-Pin JST-SH 1.0mm Vertical Header (at X = 39.5, Y = 36.0, Top-Entry +Z)
+    // Direct link to OEM Intercom harness (Sena, Cardo, OMM, Midland)
     color("whitesmoke") {
-        translate([4.05 - 1.45, 12.30 - 5.0, 1.6]) {
+        translate([39.5 - 1.45, 36.0 - 5.0, 1.6]) {
             difference() {
                 // Outer Shrouded Body (2.9 x 10.0 x 4.3 mm)
                 cube([2.9, 10.0, 4.3], center=false);
@@ -90,141 +187,45 @@ module dummy_adapter_pcb() {
     // 8 Gold Contact Pins inside J_AUDIO_PWR
     color("gold") {
         for (i = [0:7]) {
-            translate([5.375, 12.30 - 3.5 + i * 1.0, 1.6 + 1.2])
+            translate([39.5, 36.0 - 3.5 + i * 1.0, 1.6 + 1.2])
                 cube([0.3, 0.3, 2.0], center=true);
         }
     }
 
-    // J_ACT: 8-Pin JST-SH 1.0mm Vertical Header (at X = 31.325, Y = 12.75, Top-Entry +Z)
+    // J_ACT: 4-Pin JST-SH 1.0mm Vertical Header (at X = 39.5, Y = 12.0, Top-Entry +Z)
+    // Direct link to 5V Solenoids on universal actuator slide bracket
+    // Vertical separation = 36.0 - 12.0 = 24.0 mm (> 20 mm isolation against inductive spikes!)
     color("whitesmoke") {
-        translate([31.325 - 1.45, 12.75 - 5.0, 1.6]) {
+        translate([39.5 - 1.45, 12.0 - 3.0, 1.6]) {
             difference() {
-                // Outer Shrouded Body (2.9 x 10.0 x 4.3 mm)
-                cube([2.9, 10.0, 4.3], center=false);
-                // Top-Entry Mating Slot for SHR-08V-S (from +Z)
+                // Outer Shrouded Body (2.9 x 6.0 x 4.3 mm)
+                cube([2.9, 6.0, 4.3], center=false);
+                // Top-Entry Mating Slot for SHR-04V-S (from +Z)
                 translate([0.45, 0.9, 0.8])
-                    cube([2.0, 8.2, 3.6], center=false);
+                    cube([2.0, 4.2, 3.6], center=false);
             }
         }
     }
-    // 8 Gold Contact Pins inside J_ACT
-    color("gold") {
-        for (i = [0:7]) {
-            translate([30.00, 12.75 + 3.5 - i * 1.0, 1.6 + 1.2])
-                cube([0.3, 0.3, 2.0], center=true);
-        }
-    }
-
-    // J_PROG: 4-Pin 1.27mm Vertical Pin Header (at X = 8.00, Y = 22.11)
-    // Black plastic base
-    color([0.15, 0.15, 0.15]) {
-        translate([8.00 - 2.54, 22.11 - 1.0, 1.6])
-            cube([5.08, 2.0, 1.5], center=false);
-    }
-    // 4 Gold Square Pins
+    // 4 Gold Contact Pins inside J_ACT
     color("gold") {
         for (i = [0:3]) {
-            translate([8.00 - 1.905 + i * 1.27, 22.11, 1.6 + 1.5])
-                cube([0.4, 0.4, 2.0], center=true);
+            translate([39.5, 12.0 - 1.5 + i * 1.0, 1.6 + 1.2])
+                cube([0.3, 0.3, 2.0], center=true);
         }
     }
 
-    // =========================================================================
-    // 3. BOTTOM LAYER (B.Cu) - Contact Pads, Codec, UWB, Fuse & MOSFETs
-    // =========================================================================
-
-    // J_DC_IN: 2-Pin Automotive Horizontal Dual-Beam Blade Slot Socket (10.0 mm pitch)
-    // SMT mounted on B.Cu, mates with CON_POD_DC blades projecting from pod bulkhead
-    // Pin 1 (+5V/12V Power In) at Y = 7.50, Pin 2 (GND Return) at Y = 17.50
-    // Ultra-Low-Profile Design: Height = 2.1 mm (Clearance to 2.5 mm sled standoffs = 0.4 mm)
-    color([0.15, 0.15, 0.15]) {
-        // Socket Low-Profile Body (3.6 x 13.6 x 2.1 mm)
-        translate([0.5, 12.5 - 6.8, -2.1])
-            difference() {
-                cube([3.6, 13.6, 2.1], center=false);
-                // Slot 1 (for Pin 1 Blade: 2.8 x 0.8 mm at Y = 7.50)
-                translate([-0.1, 7.50 - (12.5 - 6.8) - 1.6, 1.05 - 0.5])
-                    cube([4.0, 3.2, 1.0], center=false);
-                // Slot 2 (for Pin 2 Blade: 2.8 x 0.8 mm at Y = 17.50)
-                translate([-0.1, 17.50 - (12.5 - 6.8) - 1.6, 1.05 - 0.5])
-                    cube([4.0, 3.2, 1.0], center=false);
-            }
-    }
-    // Gold Dual-Beam Spring Contacts inside the slots
-    color("gold") {
-        translate([2.0, 7.50, -1.05])
-            cube([1.8, 2.8, 0.5], center=true);
-        translate([2.0, 17.50, -1.05])
-            cube([1.8, 2.8, 0.5], center=true);
-    }
-
-    // ANT_UWB: Hirose U.FL SMT Socket (Silver / Gold center, facing -Z at 22.50, 2.20)
-    color("silver") {
-        translate([22.50, 2.20, -0.6])
-            cube([3.0, 3.0, 1.2], center=true);
-    }
-    color("gold") {
-        translate([22.50, 2.20, -1.22])
-            cylinder(r=0.6, h=0.1, center=true, $fn=16);
-    }
-
-    // U_UWB: Qorvo DW3110 UWB Transceiver (QFN-16, 3.0 x 3.0 x 0.85 mm at 14.00, 2.25)
-    color([0.12, 0.12, 0.12]) {
-        translate([14.00 - 1.5, 2.25 - 1.5, -0.85])
-            cube([3.0, 3.0, 0.85], center=false);
-    }
-
-    // Y_UWB: 38.4 MHz Crystal (2.0 x 1.6 x 0.65 mm at 15.00, 12.00)
-    color([0.75, 0.75, 0.78]) {
-        translate([15.00 - 1.0, 12.00 - 0.8, -0.65])
-            cube([2.0, 1.6, 0.65], center=false);
-    }
-
-    // U3: Everest Semi ES8388 Stereo Audio Codec (QFN-28, 4.0 x 4.0 x 0.85 mm at 15.75, 22.75)
-    color([0.15, 0.15, 0.15]) {
-        translate([15.75 - 2.0, 22.75 - 2.0, -0.85])
-            cube([4.0, 4.0, 0.85], center=false);
-    }
-
-    // F1: 1812 SMD Resettable PPTC Fuse (4.5 x 3.2 x 0.8 mm at 7.75, 2.00)
-    color("darkgoldenrod") {
-        translate([7.75 - 2.25, 2.00 - 1.6, -0.8])
-            cube([4.5, 3.2, 0.8], center=false);
-    }
-
-    // Q1..Q4: 4x AO3400A SOT-23 MOSFETs (PTT / Power Switches at X = 27.70)
+    // Q1, Q2: Dual N-Channel Power MOSFETs (AO3400A / SOT-23, 30V/4A at X = 34.0, Y = 10.0 & 14.0)
     color([0.18, 0.18, 0.18]) {
-        for (y_pos = [7.15, 10.75, 14.35, 17.95]) {
-            translate([27.70 - 1.45, y_pos - 0.65, -1.0])
-                cube([2.9, 1.3, 1.0], center=false);
-        }
+        translate([34.0 - 1.45, 10.0 - 0.65, 1.6]) cube([2.9, 1.3, 1.0], center=false);
+        translate([34.0 - 1.45, 14.0 - 0.65, 1.6]) cube([2.9, 1.3, 1.0], center=false);
     }
 
-    // D1..D4: 4x SOD-323 Protection Diodes (at X = 30.80)
+    // D_FLY1, D_FLY2: Dual Flyback Schottky Diodes (SOD-123 at X = 30.5, Y = 10.0 & 14.0)
     color([0.22, 0.22, 0.22]) {
-        for (y_pos = [6.50, 10.10, 13.70, 17.30]) {
-            translate([30.80 - 1.25, y_pos - 0.62, -0.9])
-                cube([2.5, 1.25, 0.9], center=false);
-        }
-    }
-
-    // R1..R8: 0603 SMD Resistors (at X = 24.78)
-    color([0.25, 0.25, 0.25]) {
-        for (y_pos = [5.70, 7.30, 9.30, 10.90, 12.90, 14.50, 16.50, 18.10]) {
-            translate([24.78 - 0.8, y_pos - 0.4, -0.55])
-                cube([1.6, 0.8, 0.55], center=false);
-        }
-    }
-
-    // C1, C2: SMD Capacitors (0603 & 0805 at X ~ 8.9)
-    color("peru") {
-        translate([8.97 - 0.8, 13.50 - 0.4, -0.55])
-            cube([1.6, 0.8, 0.55], center=false);
-        translate([8.80 - 1.0, 16.25 - 0.6, -0.8])
-            cube([2.0, 1.2, 0.8], center=false);
+        translate([30.5 - 1.3, 10.0 - 0.75, 1.6]) cube([2.6, 1.5, 1.1], center=false);
+        translate([30.5 - 1.3, 14.0 - 0.75, 1.6]) cube([2.6, 1.5, 1.1], center=false);
     }
 }
 
 // Preview standalone
 dummy_adapter_pcb();
-

@@ -30,8 +30,8 @@ module cartridge_cardo_assembly(exploded = false) {
             show_latch = true
         );
 
-    // 2. PCBA 03 Smart Cartridge Controller (Front Section: X = 1.5 .. 36.5 mm)
-    translate([1.5, (CARTRIDGE_BASE_W - 25.0)/2.0, z_pcb])
+    // 2. PCBA 03 Satellite Pod Interface Controller (Front Section: X = 1.5 .. 43.5 mm)
+    translate([1.5, (CARTRIDGE_BASE_W - 48.0)/2.0, z_pcb])
         dummy_adapter_pcb();
 
     // 3. Original OEM Cardo Air-Mount Cradle (Rear Section: X = 40.0 .. 124.0 mm)

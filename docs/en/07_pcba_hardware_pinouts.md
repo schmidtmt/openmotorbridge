@@ -19,9 +19,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | Dual-Power: 12V DTM & USB-PD  |               |         | LM5164, BQ24075 UPS, |
 |       | Sink (5-20V Ideal-Diode OR)   |               |         | SX1262 LoRa, 2-Cable |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 03**| **Satellite Pod Interface**   | 35 x 25 mm    | 4 Layer | ESP32-C6, ES8388,    |
-|       | (Saddlebag Pod 1 & 2 in Bay)  | (29x19 mm M2) | (ENIG)  | 4-Wire Bus, USB-C    |
-|       | In-Bag 30W/60W USB-PD Fast-Chg| 2-Sided SMT   |         | Fast-Charge, Headset |
+| **PCBA 03**| **Satellite Pod Interface**   | 42 x 48 mm    | 4 Layer | ESP32-C6, ES8388,    |
+|       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
+|       | In-Bag 30W USB-PD Charge Port | 2-Sided SMT   |         | 30W PD, J_AUDIO_PWR  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05**| **Universal Front Node**      | 82 x 50 mm    | 4 Layer | ESP32-S3, SAM-M10Q,  |
 |       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Knowles MEMS Mic,    |
@@ -216,23 +216,72 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 ## 5. PCBA 03: Satellite Pod Interface Board (`openmotorbridge_pod_interface`)
 
 ![PCBA 03 Satellite Pod Board Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
-*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board Top (PCBA 03, 35 x 25 mm) with ESP32-C6 Host MCU, USB-PD Charging Controller, ES8388 Audio Codec, and J_AUDIO_PWR Header.*
+*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board (PCBA 03, 42 x 48 mm) with ESP32-C6 Host MCU, SW3516 30W USB-PD charging controller, ES8388 audio codec, segregated bulkhead bus input & USB-C harness header, and rearward intercom and mechatronic headers.*
 
 ### 5.1 Board Specifications & Architecture
-* **Dimensions:** $35.0 \times 25.0\,\text{mm}$ (4x M2 mounting holes with vibration dampers directly at the pod floor).
-* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.2\,\text{mm}$ thickness, continuous GND plane L2, Power plane L3, ENIG gold finish).
-* **Integrated In-Bag USB-C Fast-Charging Port (`J_USB_CHARGE`):** An upward/inward facing USB-C receptacle on `PCBA 03` delivers up to **30W USB-PD charging power** directly inside the saddlebag (for helmets, phones, and power banks).
-* **Intercom & Audio Interfacing:**
-  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU managing the charging stage, I2S codec control, actuators, and USB audio bridge.
+* **Dimensions:** $42.0 \times 48.0\,\text{mm}$ (4x M2.5 mounting holes on $36.0 \times 42.0\,\text{mm}$ pattern with vibration dampeners directly on the saddlebag pod floor).
+  * **Length in X ($42.0\,\text{mm}$):** Strictly constrained towards the front (utilizing only the space gained by eliminating the legacy cassette faceplate). The entire volume behind the board remains 100% reserved for OEM cradles (Cardo Air-Mount, Sena SPIDER cradle, OMM) and the 15–85 mm actuator slide bracket.
+  * **Width in Y ($48.0\,\text{mm}$):** Fully utilizes the clear width of the pod cavity ($63\,\text{mm}$) and actuator bracket ($54\,\text{mm}$). More than doubles the PCB area ($2016\,\text{mm}^2$ vs. legacy $875\,\text{mm}^2$), providing massive unbroken GND planes and relaxing the 4-layer routing.
+* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,\text{mm}$ thickness, continuous GND plane L2, Power plane L3, ENIG gold finish).
+* **Eliminated Legacy Overhead (Area Cleanup):**
+  * **DW3110 UWB Subsystem:** IC `U2`, 38.4 MHz crystal `Y1`, U.FL socket `ANT_UWB`, and RF keepouts eliminated without replacement.
+  * **4-Pin SWD Header (`J_PROG`):** Eliminated completely; ESP32-C6 features integrated USB-Serial/JTAG peripheral for flashing and DFU directly over USB.
+  * **Blade-Slot Contacts (`J_DC_IN` / `PAD1`, `PAD2`):** Legacy 10 mm drawer contacts removed.
+* **4-Pin Bus Input (`J_BUS` / 4-Pin JST-GH 1.25mm SMD):**
+  * Located at the **lower left bulkhead edge** (exact position of former blade slot).
+  * Direct, straight cable route (< 15 mm) to the saddlebag wall grommet without bend loops.
+  * Carries the 4 conductors from the Central Box: `VCC_BUS` (+12V...+20V vehicle power / PD, fused 30W), `GND`, `USB_D+`, `USB_D-`.
+* **Integrated 30W USB-PD Charging Zone & Chassis Socket Header (`J_USB_OUT` / 4-Pin JST-GH 1.25mm SMD):**
+  * **Controller:** Ismartware `SW3516` or Injoinic `IP6538` (QFN-32, $5 \times 5\,\text{mm}$) synchronous step-down converter with integrated USB-PD 3.0 / PPS / QC4+ protocol controller and $7 \times 7\,\text{mm}$ shielded power inductor ($10\,\mu\text{H}$).
+  * **Header `J_USB_OUT`:** Located at the **upper left bulkhead edge**.
+  * **Internal Silicone Harness to Chassis Wall (Port B):** A 4-conductor ultra-flexible silicone ribbon cable leads from the header directly to the **chassis-mounted USB-C charging receptacle in the bulkhead of the pod enclosure**.
+  * **100% Bilateral Symmetry Guarantee (Left = Right):** Because both saddlebag pods are oriented identically at their bulkhead end-walls, the USB-C charging port remains ergonomically identical on both vehicle sides (no upside-down mirroring as occurs with longitudinal side ports!).
+  * **Mechanical Decoupling:** All insertion, pull, and lever forces from plugging charging cables or shifting luggage are absorbed 100% by the rigid PA12 chassis wall – the PCB remains completely free of mechanical strain and vibration!
+* **Rearward Interfaces (Facing right into the equipment chamber):**
+  * **`J_AUDIO_PWR` (8-Pin JST-SH 1.0mm, top-right):** Direct connection to the OEM intercom harness (Sena, Cardo, OMM, Midland).
+  * **`J_ACT` (4-Pin JST-SH 1.0mm, bottom-right):** Direct connection to both 5V mini push-pull solenoids on the universal actuator bracket (`012_universal_actuator_slide_bracket.scad`).
+  * **Advantage:** With $20\,\text{mm}$ vertical separation between Audio (top) and Actuators (bottom), inductive switching spikes from the solenoids cannot couple into sensitive analog microphone/speaker lines. Both harnesses route backwards in parallel – zero cable crossings over the PCB!
+* **Communication & Audio ICs:**
+  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU for charge monitoring, codec control, actuators, and USB audio bridge.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz low-noise audio codec.
   * `U4`: TI `TS5A3159DBVR` analog/digital audio switch for automatic detection of analog OEM headsets vs. digital OMM modules via Pin 6 (`OMM_DETECT`).
-* **Mechatronic Cold-Start Driver (Header `J_ACT` / 4-Pin JST-SH 1.0mm):**
-  * **Rationale:** OEM Bluetooth/Mesh headsets (Cardo Packtalk Edge, Sena 50S/Spider, Midland) do not power on automatically upon USB power and cannot survive weeks in standby without draining their batteries. A cold boot requires pressing **two separate buttons simultaneously** (e.g. Intercom + Media on Cardo, ~50 mm distance).
-  * **Circuitry:** Dual N-channel power MOSFETs (`Q_ACT1`, `Q_ACT2`, Diodes Inc. AO3400A / DMN2075U, 30V/4A) with flyback Schottky diodes (`D_FLY1`, `D_FLY2`, SS14) drive two miniature 5V push-pull solenoids.
-  * **Firmware Timing:** Upon ignition ON (KL15), the ESP32-C6 pulses both actuators simultaneously via `GPIO4` and `GPIO5` for exactly **2.0 seconds** (~4 N actuation force with soft Shore A50 silicone plunger tips on the OEM buttons).
-  * **Mechanics:** The two mini-solenoids clamp onto the universal dual-carriage slide bracket ([`012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad)). **"One Size Fits All"** – continuously adjustable from 15 mm to 85 mm button span without custom CAD prints, without voiding 300 € headset warranties, and without removing pods before rides!
+  * `Q1`, `Q2`: Dual N-channel power MOSFETs (`AO3400A`, 30V/4A) with flyback diodes for 2.0 s cold-start pulse.
 
-#### 5.3 Pinout of Mechatronic Actuator Header (`J_ACT` / 4-Pin JST-SH 1.0mm)
+### 5.2 Pinout of 4-Pin Bus Input (`J_BUS` / 4-Pin JST-GH 1.25mm)
+
+| Pin | Signal Name | Signal Type | Function & Specification |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VCC_BUS`** | Power In (+12V...+20V) | Vehicle power / PD supply from Central Box (AWG20, fused 30W) |
+| **2** | **`GND`** | Power Return | Power and signal ground |
+| **3** | **`USB_D+`** | High-Speed Data | USB 2.0 data line D+ to Central Box (ESP32-S3 host) |
+| **4** | **`USB_D-`** | High-Speed Data | USB 2.0 data line D- to Central Box (ESP32-S3 host) |
+| **MP** | **`SHIELD_GND`** | Shield | JST-GH connector shield retention tabs tied to GND plane |
+
+### 5.3 Pinout of Internal 30W USB-C Chassis Header (`J_USB_OUT` / 4-Pin JST-GH 1.25mm)
+
+| Pin | Signal Name | Signal Type | Function: Internal Silicone Harness to Chassis Bulkhead (Port B) |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VBUS_30W`** | Power Out | Regulated 5V/9V/12V/15V/20V USB-PD charging voltage (up to 30W) |
+| **2** | **`GND`** | Power Return | Power ground return (AWG20 silicone wire) |
+| **3** | **`CC1`** | PD Config In/Out | Configuration Channel 1 for USB-PD 3.0 / PPS negotiation |
+| **4** | **`CC2`** | PD Config In/Out | Configuration Channel 2 for USB-PD 3.0 / PPS negotiation |
+| **MP** | **`SHIELD_GND`** | Shield | Chassis shield ground of USB-C bulkhead receptacle |
+
+### 5.4 Pinout of Audio-Power Header (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
+
+| Pin | Signal Name | Direction | Function: Analog Intercom (Sena / Cardo / Midland) | Function: Digital OMM (PCBA 09 / PCBA 10) |
+| :---: | :--- | :---: | :--- | :--- |
+| **1** | **`PGND` / `GND`** | Power Return | **High-Current Power Ground:** Carries charging & DC-DC return ($0.2\dots 0.6\,\text{A}$) | **High-Current Power Ground:** Power return for charger & RF PA ($0.2\dots 0.6\,\text{A}$) |
+| **2** | **`VCC_5V_PROT`** | Power Out | Regulated, protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
+| **3** | **`AGND_AUDIO_IN`**| Audio GND Ref| **Clean Headphone Ground:** 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,\text{mA}$)!** | Unused (N/C) or coax shield reference (zero DC current!) |
+| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
+| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
+| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,\text{V}$) $\rightarrow$ switches `U4` to Digital USB (NO) |
+| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
+| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk keying to ground (Midland PMR446 / N/C) | **Digital `USB_DN`:** Native digital USB audio data stream D- |
+| **MP** | **`GND`** | Shield | SMT connector side mounting tabs tied to solid GND plane | SMT connector side mounting tabs tied to solid GND plane |
+
+### 5.5 Pinout of Mechatronic Actuator Header (`J_ACT` / 4-Pin JST-SH 1.0mm)
 
 | Pin | Signal Name | Signal Type | Function & Protection |
 | :---: | :--- | :---: | :--- |
@@ -240,24 +289,6 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 | **2** | **`ACT1_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 1 (via AO3400A / flyback diode) |
 | **3** | **`ACT2_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 2 (via AO3400A / flyback diode) |
 | **4** | **`GND`** | Power Ground | Power ground for driver stage |
-
-### 5.2 Pinout of Audio-Power Header (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
-
-| Pin | Signal Name | Direction | Function: Analog Intercom (Sena / Cardo / Midland) | Function: Digital OMM (PCBA 09 / PCBA 10) |
-| :---: | :--- | :---: | :--- | :--- |
-| **1** | **`PGND` / `GND`** | Power Return | **High-Current Power Ground:** Carries charging & DC-DC return ($0.2\dots 0.6\,	ext{A}$) | **High-Current Power Ground:** Power return for charger & RF PA ($0.2\dots 0.6\,	ext{A}$) |
-| **2** | **`VCC_5V_PROT`** | Power Out | Regulated, protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
-| **3** | **`AGND_AUDIO_IN`**| Audio GND Ref| **Clean Headphone Ground:** 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,	ext{mA}$)!** | Unused (N/C) or coax shield reference (zero DC current!) |
-| **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $
-ightarrow$ to ES8388 ADC | Unused (N/C) |
-| **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $
-ightarrow$ to ES8388 ADC | Unused (N/C) |
-| **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,	ext{V}$) $
-ightarrow$ switches `U4` to Digital USB (NO) |
-| **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $
-ightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
-| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk keying to ground (Midland PMR446 / N/C) | **Digital `USB_DN`:** Native digital USB audio data stream D- |
-| **MP** | **`GND`** | Shield | SMT connector side mounting tabs tied to solid GND plane | SMT connector side mounting tabs tied to solid GND plane |
 
 ---
 

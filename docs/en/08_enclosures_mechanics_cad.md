@@ -159,10 +159,11 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 2. **Slide-in Lid with Push-to-Close Automatic Latching:** A sliding lid guided in perimeter sealing channels that positively latches at the end-stop with an audible mechanical click, compressing the perimeter silicone gasket (IP67).
 3. **Invisible FOB Magnetic Latch:** Locking is handled by an internal spring-loaded magnetic latch. To open, the rider approaches the Smart Keyfob (`PCBA 07` with N52 neodymium core) to the marked housing target. The magnetic field draws the locking pawl back contact-free, allowing the lid to spring outward by $10\,\text{mm}$ -- 100% tool-free, without external locks or pushbuttons, fully tamper- and theft-proof.
 4. **Two-Zone Architecture with Intermediate Dry-Flap:**
-   * **Lower Electronics Zone:** Houses the `PCBA 03` interface board with native USB-PD power supply and 4-wire automotive backbone.
-   * **Integrated In-Bag USB Charging Port (5V/12V PD up to 30W/60W):** Directly on `PCBA 03`, an upward/inward facing USB-C port provides true fast-charging in the saddlebag (for smartphones, power banks, helmets, or cameras).
+   * **Lower Electronics Zone:** Houses the `PCBA 03` interface board ($42.0 \times 48.0\,\text{mm}$) with native USB-PD power supply and 4-wire automotive backbone.
+   * **Chassis-Mounted Bulkhead USB Charging Port (30W USB-PD):** A weatherproof USB-C receptacle in the left bulkhead end-wall (Port B) connects via an ultra-flexible 4-conductor internal silicone harness to header `J_USB_OUT` on `PCBA 03`. This guarantees 100% bilateral symmetry (left and right saddlebag pods are ergonomically identical) and absorbs all plug and pull stresses directly in the PA12 chassis wall.
+   * **4-Pin Bus Bulkhead Input (Port A):** Located at the lower left bulkhead edge (`J_BUS`), providing the shortest, straightest cable path (< 15 mm) to the saddlebag wall grommet.
    * **Intermediate Splash-Guard Cover (Dry-Flap):** A hinged or slide-in silicone/EPDM intermediate barrier hermetically shields the PCB and cable headers from dirt and water.
-   * **Upper Equipment Chamber / Dry Box:** Directly accommodates the respective OEM communicator (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446). When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
+   * **Upper Equipment Chamber / Dry Box:** Directly accommodates the respective OEM communicator (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446) as well as the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
 
 ---
 
@@ -230,17 +231,23 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 | INTERMEDIATE DRY-FLAP (Hinged EPDM/silicone protective shield)              |
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 | LOWER ZONE: ELECTRONICS & POWER SUPPLY                                      |
-| * PCBA 03 Interface Board (MCU, ES8388 Audio Codec, 4-Wire Automotive Bus) |
-| * Integrated USB-PD Port (5V/12V up to 30W/60W fast charging inside bag)   |
-| * Slotted TPU cable pass-through to 4-pin magnetic breakaway dock           |
+| * PCBA 03 Interface Board (42x48 mm, MCU, ES8388, SW3516 30W PD, 4-Wire)    |
+| * Chassis USB-PD Charging Port at Bulkhead (30W PD, internal silicone cable) |
+| * 4-Pin Bus Bulkhead Input (J_BUS, <15 mm to saddlebag wall grommet)        |
 +-----------------------------------------------------------------------------+
 ```
 
 1. **Lower Electronics Zone (`PCBA 03`):**
-   * The [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-universal-smart-cartridge-openmotorbridge_universal_cartridge) board mounts on 4x M2.5 elastomer dampers directly to the floor.
-   * Integrates the audio codec (ES8388), supervisory MCU, and transient filtering.
-   * **Integrated In-Bag USB Charging Port:** A vertically / $45^\circ$ angled USB-C receptacle on `PCBA 03` delivers up to **30W/60W USB-PD charging power** directly inside the saddlebag.
-   * **U-Slot Cable Pass-Through:** The 4-wire backbone enters through a split TPU strain-relief grommet (identical to the Front Node), achieving IP68 submersible sealing.
+   * The [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-satellite-pod-interface-board-openmotorbridge_pod_interface) ($42.0 \times 48.0\,\text{mm}$) board mounts on 4x M2.5 elastomer dampers directly to the floor ($36.0 \times 42.0\,\text{mm}$ hole pitch).
+   * **Front-Constrained Length in X ($42.0\,\text{mm}$):** Strictly limited to the space freed forward by eliminating the legacy cassette faceplate. The entire rear chamber ($88\,\text{mm}$ clear length) remains fully reserved for OEM cradles (Cardo Air-Mount, Sena SPIDER cradle, OMM) and the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`).
+   * **Width in Y ($48.0\,\text{mm}$):** Optimally uses the clear pod tub width ($63\,\text{mm}$), more than doubling PCB area and enabling spacious 4-layer routing with solid thermal GND planes for the 30W step-down converter.
+   * **Left Bulkhead End-Wall (Vehicle Interfaces):**
+     * **Port A (bottom):** 4-pin Bus input (`J_BUS` 4-Pin JST-GH), direct, straight cable route (< 15 mm) to the saddlebag wall grommet without bends.
+     * **Port B (top):** Chassis-mounted USB-C charging port, connected via a 4-conductor flexible silicone ribbon cable to PCB header `J_USB_OUT`. Guarantees 100% bilateral symmetry for left and right saddlebag pods and insulates the PCB from all mechanical insertion and lever forces.
+   * **Rearward Interfaces (Facing Equipment Chamber):**
+     * **`J_AUDIO_PWR` (8-Pin JST-SH, top-right):** Intercom OEM harness interface.
+     * **`J_ACT` (4-Pin JST-SH, bottom-right):** Actuator drive for 5V cold-start solenoids on the slide bracket.
+     * $24\,\text{mm}$ vertical separation prevents solenoid inductive switching spikes from coupling into audio lines; both cable runs exit parallel to the rear.
 
 2. **Intermediate Dry-Flap Splash Guard:**
    * Above `PCBA 03`, a hinged or slide-in Shore 50A silicone/EPDM flap hermetically seals the lower bay.

@@ -1736,7 +1736,7 @@ const BOM_PARTS = {
       "de": "PCBA 03: Universal Koffer-Pod Gateway",
       "en": "PCBA 03: Universal Saddlebag Pod Gateway"
     },
-    "spec": "ESP32-C6, 30W USB-PD Sink, Intercom-Audio-Routing, Dual-AO3400A Kaltstart-Treiber",
+    "spec": "42x48mm 4-Layer, ESP32-C6, ES8388, SW3516 30W USB-PD, J_BUS, J_USB_OUT, Dual-AO3400A Kaltstart-Treiber",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1744,8 +1744,8 @@ const BOM_PARTS = {
       10.5
     ],
     "desc": {
-      "de": "Universelle Koffer-Pod Schnittstellenplatine mit 30W USB-PD Ladedose, Intercom-Audio (Sena/Cardo/OMM) & Kaltstart-Mechatronik",
-      "en": "Universal saddlebag pod interface board with 30W USB-PD charging socket, intercom audio (Sena/Cardo/OMM) & cold-start mechatronics"
+      "de": "Universelle 42x48mm Koffer-Pod Schnittstellenplatine mit SW3516 30W USB-PD Abgang zur Gehäusebuchse, 4-Pin Bus-Eingang J_BUS, Intercom-Audio (Sena/Cardo/OMM) & Kaltstart-Mechatronik",
+      "en": "Universal 42x48mm saddlebag pod interface board with SW3516 30W USB-PD chassis harness header, 4-pin bus input J_BUS, intercom audio (Sena/Cardo/OMM) & cold-start mechatronics"
     },
     "id_kicad": "kicad_cartridge",
     "pkg_qty": 5,
