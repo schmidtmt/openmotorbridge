@@ -458,7 +458,7 @@ Jede Satelliten-Pod Trägerplatine (`PCBA 03`) ist über den geschirmten 4-Draht
 +-------------------------------------------------------------+
 |        4-DRAHT USB-PD PLUG-AND-PLAY & SEQUENCING ABLAUF     |
 +-------------------------------------------------------------+
-| 1. GESTAFFELTE BESTROMUNG (Power-Sequencer via DTM-12):     |
+| 1. GESTAFFELTE BESTROMUNG (Power-Sequencer via eFuse):      |
 |    * T=0ms: Zentralbox & Front-Node booten synchron auf KL15|
 |    * T=200ms: Pod 1 (VCC_BUS via TPS25982 eFuse Soft-Start) |
 |    * T=350ms: Pod 2 (VCC_BUS via TPS25982 eFuse Soft-Start) |

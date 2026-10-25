@@ -468,9 +468,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
-        "05_accessories/road_glide_inductive_cam_dock.scad",
-        os.path.join(CAD_IMG_DIR, "road_glide_inductive_cam_dock_cad.png"),
-        "0,0,5,55,0,320,190",
+        "04_front_node/glovebox_power_injection_hub.scad",
+        os.path.join(CAD_IMG_DIR, "glovebox_power_injection_hub_cad.png"),
+        "0,0,10,55,0,320,240",
         "Tomorrow"
     ),
 ]

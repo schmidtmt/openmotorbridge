@@ -366,7 +366,6 @@ def package_3d_print_stls():
     with zipfile.ZipFile(acc_zip, 'w', zipfile.ZIP_DEFLATED) as z:
         for f in [
             "radar_mr20_housing.stl",
-            "road_glide_inductive_cam_dock.stl",
             "car_sun_visor_pod_clip.stl",
             "adventure_rack_radar_mount.stl"
         ]:

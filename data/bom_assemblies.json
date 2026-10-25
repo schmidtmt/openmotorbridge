@@ -378,15 +378,15 @@
       "id": "assembly_actioncam_dock",
       "category": "addon",
       "name": {
-        "de": "Actioncam Induktivdock",
-        "en": "Actioncam Inductive Dock"
+        "de": "Handschuhfach 5-Port Hub & Cam-Lead",
+        "en": "Glove Box 5-Port Hub & Cam Lead"
       },
       "desc": {
-        "de": "Induktives Schnellwechsel-Kameradock für Verkleidungsmontage",
-        "en": "Inductive quick-release camera dock for fairing mounting"
+        "de": "5-Port Media- & Power-Injection Hub mit direktem 10W Actioncam-Kabel für Lenker/Verkleidung",
+        "en": "5-Port media & power-injection hub with direct 10W action cam lead for handlebars/fairing"
       },
       "parts": [
-        { "part_id": "part3d_actioncam_dock", "qty": 1 }
+        { "part_id": "part3d_glovebox_hub", "qty": 1 }
       ]
     },
     "assembly_handlebar_controls": {

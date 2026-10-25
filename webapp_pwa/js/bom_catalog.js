@@ -1225,25 +1225,25 @@ const BOM_PARTS = {
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
   },
-  "part3d_actioncam_dock": {
+  "part3d_glovebox_hub": {
     "type": "part_3d",
     "name": {
-      "de": "Actioncam Induktiv-Schnellwechseldock",
-      "en": "Actioncam Inductive Quick-Dock"
+      "de": "5-Port Handschuhfach Media & Power-Injection Hub",
+      "en": "5-Port Glovebox Media & Power-Injection Hub"
     },
-    "spec": "PA12-SLS (Qi-Spulenbett & Verriegelung)",
+    "spec": "PA12-SLS (Harley Touring Handschuhfach)",
     "source": "3D-Druck (PA12-SLS)",
     "unit": "Stk.",
     "cost_eur": [
-      1.8,
-      3.2
+      2.2,
+      4.5
     ],
     "desc": {
-      "de": "Induktives Schnellwechsel-Kameradock für Road Glide / GS Verkleidung",
-      "en": "Inductive quick-release camera dock for fairing mounting"
+      "de": "Kompaktes Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle) für rechtes Medienfach",
+      "en": "Compact power-injection hub enclosure (30W USB-PD + 10W dongle) for right media compartment"
     },
-    "file": "road_glide_inductive_cam_dock.stl",
-    "group": "Actioncam-Dock",
+    "file": "glovebox_power_injection_hub.stl",
+    "group": "Cockpit-Hub",
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
   },
@@ -1715,7 +1715,7 @@ const BOM_PARTS = {
       "de": "PCBA 01: Zentralbox Controller",
       "en": "PCBA 01: Central Box Controller"
     },
-    "spec": "ESP32-S3, QCC3084 BT, ES8388, DW3110 UWB, SX1262 LoRa, USV, DTM-12",
+    "spec": "ESP32-S31, QCC3084 BT, SX1262 LoRa, USV, Zwei-Kabel-Architektur (DTM-6 & 16-Pin)",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1723,8 +1723,8 @@ const BOM_PARTS = {
       19.5
     ],
     "desc": {
-      "de": "Zentralbox Hauptplatine unter der Sitzbank mit 24-Bit Audio, 6.5 GHz UWB & LoRa Mesh",
-      "en": "Central box main controller under seat with 24-bit audio, 6.5 GHz UWB & LoRa mesh"
+      "de": "Zentralbox Hauptplatine unter der Sitzbank mit 24-Bit Audio, LoRa Notfunk & Zwei-Kabel Automotive Bus",
+      "en": "Central box main controller under seat with 24-bit audio, LoRa emergency radio & two-cable automotive bus"
     },
     "id_kicad": "kicad_main_box",
     "pkg_qty": 5,
@@ -1733,10 +1733,10 @@ const BOM_PARTS = {
   "pcba_03": {
     "type": "pcba",
     "name": {
-      "de": "PCBA 03: Universal Smart Cartridge",
-      "en": "PCBA 03: Universal Smart Cartridge"
+      "de": "PCBA 03: Universal Koffer-Pod Gateway",
+      "en": "PCBA 03: Universal Saddlebag Pod Gateway"
     },
-    "spec": "ESP32-C6, Qorvo DW3110 UWB, ES8388 Codec, 2x BM08B-SRSS Top-Entry, J_DC_IN, 4x AO3400A",
+    "spec": "ESP32-C6, 30W USB-PD Sink, Intercom-Audio-Routing, Dual-AO3400A Kaltstart-Treiber",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1744,8 +1744,8 @@ const BOM_PARTS = {
       10.5
     ],
     "desc": {
-      "de": "Universelle Kassetten-Trägerplatine mit 6.5 GHz UWB, ESP32-C6, vertikalen Top-Entry JST-SH Headern & Kelvin-Grounding Audio",
-      "en": "Universal cartridge carrier board with 6.5 GHz UWB, ESP32-C6, vertical top-entry JST-SH headers & Kelvin-grounded audio"
+      "de": "Universelle Koffer-Pod Schnittstellenplatine mit 30W USB-PD Ladedose, Intercom-Audio (Sena/Cardo/OMM) & Kaltstart-Mechatronik",
+      "en": "Universal saddlebag pod interface board with 30W USB-PD charging socket, intercom audio (Sena/Cardo/OMM) & cold-start mechatronics"
     },
     "id_kicad": "kicad_cartridge",
     "pkg_qty": 5,
@@ -1757,7 +1757,7 @@ const BOM_PARTS = {
       "de": "PCBA 05: Universal Front-Knoten",
       "en": "PCBA 05: Universal Front Node"
     },
-    "spec": "ESP32-S3, DW3110 UWB, SAM-M10Q GNSS, USB2514B Hub, SC8102 PD20W",
+    "spec": "ESP32-S3, SAM-M10Q GNSS, USB2514B Hub, SC8721/SC8102 PD60W",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1765,8 +1765,8 @@ const BOM_PARTS = {
       15.5
     ],
     "desc": {
-      "de": "Cockpit-Knoten für Telefon-Fast-Charge, CarPlay, GNSS, UWB-Backbone & Display",
-      "en": "Cockpit node for phone fast-charge, CarPlay, GNSS, UWB backbone & display"
+      "de": "Cockpit-Knoten für 60W USB-PD (Phone Fast-Charge 27W, GPS Nav 15W, Action-Cam 10W), Harley USB-Headset-Emulation & Cockpit-Displays",
+      "en": "Cockpit node for 60W USB-PD (phone fast-charge 27W, GPS nav 15W, action-cam 10W), Harley USB headset emulation & cockpit displays"
     },
     "id_kicad": "kicad_front_node",
     "pkg_qty": 5,
@@ -2351,8 +2351,8 @@ const BOM_PARTS = {
       2.2
     ],
     "desc": {
-      "de": "Reine DC-Stromversorgung zu Pod 1 & 2 (Audio/Daten 100% via UWB)",
-      "en": "Pure DC power feed to Pod 1 & 2 (audio/data 100% via UWB)"
+      "de": "4-Draht Automotive-Zuleitung zu Pod 1 & 2 (30W USB-PD & USB 2.0 Daten)",
+      "en": "4-wire automotive cable to Pod 1 & 2 (30W USB-PD & USB 2.0 data)"
     },
     "pkg_qty": 5,
     "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
@@ -2371,8 +2371,8 @@ const BOM_PARTS = {
       2.2
     ],
     "desc": {
-      "de": "12V DC Bordnetzspeisung für Heck-Radar (Funkbrücke 100% via UWB)",
-      "en": "12V DC power feed for rear radar (data link 100% wireless via UWB)"
+      "de": "12V DC Bordnetzspeisung & Trigger für Heck-Radar (Strang 4)",
+      "en": "12V DC power feed & trigger for rear radar (Branch 4)"
     },
     "pkg_qty": 5,
     "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
@@ -3746,16 +3746,16 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_actioncam_dock",
     "category": "addon",
     "name": {
-      "de": "Actioncam Induktivdock",
-      "en": "Actioncam Inductive Dock"
+      "de": "Handschuhfach 5-Port Hub & Cam-Lead",
+      "en": "Glove Box 5-Port Hub & Cam Lead"
     },
     "desc": {
-      "de": "Induktives Schnellwechsel-Kameradock für Verkleidungsmontage",
-      "en": "Inductive quick-release camera dock for fairing mounting"
+      "de": "5-Port Media- & Power-Injection Hub mit direktem 10W Actioncam-Kabel für Lenker/Verkleidung",
+      "en": "5-Port media & power-injection hub with direct 10W action cam lead for handlebars/fairing"
     },
     "parts": [
       {
-        "part_id": "part3d_actioncam_dock",
+        "part_id": "part3d_glovebox_hub",
         "qty": 1
       }
     ]

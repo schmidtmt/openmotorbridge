@@ -21,7 +21,7 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 
 ![OpenMotorBridge Central Box 3D Cutaway CAD](../images/cad/main_box_cutaway_3d.png)
 
-*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with open front 70x10mm cabling bay and convection cooling slots, upper LiPo UPS battery cradle with 2,200 mAh cell clamped under the hinged battery & dual-antenna bridge with cable strain reliefs, Deutsch DTM-12 automotive flange, SW1 button, USB-C service port, and 100% cable-free solid lid with Gore ePTFE vent.*
+*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with open front 70x10mm cabling bay and convection cooling slots, upper LiPo UPS battery cradle with 2,200 mAh cell clamped under the hinged battery & dual-antenna bridge with cable strain reliefs, automotive Deutsch DTM flange, SW1 button, USB-C service port, and 100% cable-free solid lid with Gore ePTFE vent.*
 
 ### 1.1 3D CAD Model & 3-Piece Sandwich Architecture
 
@@ -39,7 +39,7 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 |    * Homogeneous PA12 structure (>2.5 mm wall to exterior) |  |
 +------------------------------------------------------------+  |
 | 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      |  |
-|    * Front Panel: Deutsch DTM-12 flange (12-pin harness),  |  |
+|    * Front Panel: Automotive flange (J1 & J_PERIPH),       |  |
 |      SW1 button (silicone boot), USB-C service port,       |  |
 |      diffuse PMMA light pipe (Ø 3.2 mm) for WS2812B RGB    |  |
 |    * Rear Panel: SMA antenna port with 0.4 mm knockout     |  |
@@ -104,7 +104,7 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
   * Pin 2: `GND` (LiPo ground with embedded Murata 10k NTC thermistor for JEITA charging guard)
 * **Pass-Through Slot & Cable Routing:**
   * Generous front cable aperture ($25{,}0 \times 4{,}0\,\text{mm}$ at $Y = 4\dots 8\,\text{mm}$) with radiused edges ($R = 1{,}5\,\text{mm}$) positioned $5{,}0\,\text{mm}$ ahead of the battery cradle.
-  * Routes battery silicone wiring cleanly down to the `J_BAT` header on PCBA 01 alongside the wiring connecting to the front-panel Deutsch DTM-12 header `J1`.
+  * Routes battery silicone wiring cleanly down to the `J_BAT` header on PCBA 01 alongside the wiring connecting to the front-panel automotive header `J1`.
 
 ---
 
@@ -115,13 +115,13 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 +-------------------------------------------------------------+
 | +------------+  +--------+  +----------+  +---------------+ |
 | | 1. USB-C   |  | 2. RGB |  | 3. SW1   |  | 4. Deutsch    | |
-| |    Service |  |    LED |  |    Pair/ |  |    DTM-12     | |
+| |    Service |  |    LED |  |    Pair/ |  |    Automotive | |
 | |    Alu Cap |  |  Ø3.2mm|  |    Reset |  |    Flange     | |
 | +------------+  +--------+  +----------+  +---------------+ |
 +-------------------------------------------------------------+
 ```
 
-1. **Deutsch DTM-12 Flange (Main Wiring Harness):** Automotive-grade 12-pin flange receptacle (Deutsch DTM13-12PA) with silicone perimeter seal and 2x M3 mounting screws ($28.0\,\text{mm}$ pitch). Connects internally to header `J1` (2x06 Box Header, 2.54 mm pitch) for the 12 primary vehicle conductors (Switched 12V, GND, CAN-H, CAN-L, Pod 1 DC, Pod 2 DC, and Radar Whip 5: 12V_RADAR, GND, UART_RX, UART_TX).
+1. **Automotive Flange (Two-Cable Architecture J1 & J_PERIPH):** Automotive-grade flange with silicone perimeter seal and 2x M3 mounting screws ($28.0\,\text{mm}$ pitch). Routes the Central Box Two-Cable Architecture to the outside: Cable 1 (6-Pin Deutsch DTM06-6S `J1`: KL30, KL15, GND, CAN-H, CAN-L, Shield) and Cable 2 (16-Pin Automotive Header `J_PERIPH`: 4 branches of 4 conductors each for Front Node 60W, Pod 1 30W, Pod 2 30W, and Rear Radar MR20 12V/Telemetry).
 2. **SW1 Push-Button (`SW_PAIR_RESET`):** IP67 waterproof momentary tactile switch with sealed silicone boot and M7 threaded bushing. Used for 3-second Bluetooth/audio pairing and 10-second factory reset / NVS key purge.
 3. **USB-C Service Port:** Circular panel-mount waterproof receptacle sealed by a blue anodized aluminum screw cap with captive EPDM O-ring for firmware flashing, ESP-IDF live telemetry, and emergency diagnostics.
 4. **RGB Status LED Viewing Window:** Diffuse PMMA light pipe ($\varnothing\,3.2\,\text{mm}$) with perimeter O-ring channeling light from the onboard WS2812B RGB LED directly to the front face (Green = normal / mesh OK, Blue = BT audio streaming, Orange = radar warning active, Red = theft tamper alert).
@@ -588,34 +588,71 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 
 ---
 
-### 6.2 Reference Kit 2: Harley-Davidson Touring, Bagger & Cruiser (Road King Special, Street Glide, Electra Glide)
+### 6.2 Reference Kit 2: Harley-Davidson Bagger (FL Touring) vs. Cruiser (Softail Platform)
 
-For classic touring and bagger models with 2-Up comfort seats or exposed rear fenders, OpenMotorBridge provides a clean, fender-free integration:
+OpenMotorBridge v10.0 strictly differentiates between the **FL Touring Platform (Bagger)** and the **Softail Platform (Cruiser)**:
 
 ```
-        HARLEY-DAVIDSON TOURING & BAGGER COMPLETE SYSTEM INTEGRATION
+    HARLEY-DAVIDSON TOURING-BAGGER VS. SOFTAIL-CRUISER ARCHITECTURE
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 |
-|    * Front Node (PCBA 05) inside headlight nacelle or fairing cavity        |
-|    * Powers Garmin navigator / smartphone dock & action cam on handlebars   |
-|    * SAM-M10Q GNSS + TMP117 thermometer on Vehicle Satellite in air scoop   |
-|    * 4-Wire Bus to Central Box (inside frame wire caddy -> 0 tank lifting)   |
+| A. TOURING BAGGERS (Road Glide, Street Glide, CVO, CVO ST, Road King Special):|
+|    * SADDLEBAGS: 100% IDENTICAL factory hard cases across all models.       |
+|      Zero-Drill OEM Ø 19 mm egress (010_saddlebag_hole_grommet_split.scad), |
+|      U-tunnel spacer (360° lever clearance) & magnetic breakaway coupling.  |
+|      2x Saddlebag Pods (30W PD) with universal actuation ("One Size Fits All")|
+|    * CENTER: Central Box on battery bridge, backbone inside frame tunnel caddy|
+|    * THE 2 ARCHITECTURAL DIFFERENCES:                                       |
+|      1. Faired Baggers (RG/SG/CVO): Front Node in fairing, Dual Speaker      |
+|         Corner Pods (Displays), 5-Port Glovebox Hub (30W PD + Dongle).      |
+|      2. Road King Special (RKS): Unfaired bagger. Smartphone/Garmin mounted |
+|         on handlebar, Front Node in "Front-to-Back Flip" at nacelle/riser   |
+|         (no glovebox hub required).                                         |
 +-----------------------------------------------------------------------------+
-| 2. CENTER (Under Rider Seat):                                               |
-|    * Central Box centered in battery well (SX1262 LoRa, QCC3084 BT & USB Hub)|
-+-----------------------------------------------------------------------------+
-| 3. REAR (Fender & License Plate):                                           |
-|    * Rear fender remains 100% clean and unobstructed (Console deleted)      |
-|    * Radar centered below license plate on whip 5 (Pins 23-26)              |
-+-----------------------------------------------------------------------------+
-| 4. SADDLEBAGS:                                                              |
-|    * Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in saddlebag lids      |
+| B. SOFTAIL CRUISERS (Low Rider ST, Fat Bob, Breakout, Heritage Classic):     |
+|    * FRAME DOCKS: Models without bags mount Pods 1 & 2 externally on frame  |
+|      tubes or fender struts (analogous to BMW GS cage dock). Weatherproof   |
+|      outdoor USB port with IP68 cap and rain charging gasket collar.        |
+|    * BAGGED CRUISERS: Heritage Classic / Sport Glide utilize saddlebag pods. |
+|    * REAR RADAR: Optional under-fender radar mount with roost deflector     |
+|      (radar_center_underfender_mount.scad) for clean custom/bobber tails.   |
 +-----------------------------------------------------------------------------+
 ```
 
-> [!NOTE]
-> **Fender Console Retirement (Deletion of `pod3_touring_fender_console`):**  
-> With the retirement of Pod 3, the rear fender on cruisers and baggers is no longer obstructed by an add-on console. The classic custom lines of the bare sheet metal fender remain 100% intact. The rear radar mounts discreetly below the license plate.
+#### 6.2.1 Cockpit Mounts: Smartphone, Navigation & Action-Cam Power Supply (60W Front Engine)
+
+For all Harley-Davidson cockpit concepts, robust, vibration-isolated solutions are provided:
+
+1. **Smartphone & Navigation Mount (COTS SP Connect / QuadLock & Garmin Zūmo):**
+   * **Mounting:** Clamped via 1-inch / 1.25-inch handlebar clamp or AMPS 4-hole flange on risers or inner fairing stay.
+   * **Power:** Direct feed from the 60W USB-PD branch of Front Node (`PCBA 05`). Supplies up to **27W USB-PD Fast Charging** to phone on handlebars and **15W continuous power** to dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride).
+   * **Glove Box Charging (Faired Baggers):** Alternatively, phone charges vibration- and weather-protected in right glove box via the **5-Port Glovebox Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) with thermally clamped **30W USB-PD**.
+
+2. **Action-Cam Continuous Power Feed (10W via Weather-Sealed USB-C):**
+   * **Real Vehicle Power vs. Inductive Losses:** Avoids through-fairing inductive Qi docks (which suffer heavy heat build-up through thick ABS panels and poor efficiency).
+   * **Rugged Cabling:** A weather-sealed, form-fitting USB-C lead routes directly from Front Node Port `J8` to action cam (GoPro Hero 12/13, Insta360 X3/X4, DJI Osmo) on handlebar or fairing beak.
+   * **Automated BLE Shutter:** Starts and stops recording automatically on ignition ON/OFF and marks video highlight tags on double-clicking the right under-perch switch.
+
+3. **5-Port Glovebox Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
+   * Compact enclosure ($72 \times 46 \times 22\,\text{mm}$) tailored for right media compartment of Touring baggers.
+   * Powered from Front Node (`PCBA 05`) via a combined High-Power & USB 2.0 High-Speed cable.
+   * Taps the OEM Harley USB-C port to head unit (Skyline OS / Boom! Box GTS).
+   * Provides:
+     - Port 1: **30W USB-PD fast-charging port** for phone (thermally optimized against heat trap).
+     - Port 2: **10W switched dongle port** for Wireless CarPlay / Android Auto (Ottocast / CarlinKit) with emergency thermal cut-off.
+     - Port 3: **Free USB 2.0 media port** for FLAC/MP3 USB sticks and dealer software updates.
+     - Port 4: **10W weather-sealed action-cam power lead** (Direct Lead).
+     - Port 5: **Harley Headset Emulation via USB** directly to head unit for native Apple CarPlay activation and digital helmet mic streaming.
+
+4. **Modular Snap-On Environmental Sensor-Puck ("Basket" / `sensor_puck_environmental.scad`):**
+   * Compact aerodynamic cradle ($44 \times 44 \times 15\,\text{mm}$) housing u-blox SAM-M10Q Multi-GNSS, TI TMP117 thermometer, OPT3001 light sensor, and Knowles MEMS wind microphone.
+   * **On Motorcycle:** Snaps securely onto upper lid of Front Node monocoque.
+   * **In Car / Support Van:** Unclips with one thumb gesture and docks onto windshield/dashboard wedge dock ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) via 1.5m extension lead.
+
+5. **Universal Dual-Carriage Slide Bracket ("One Size Fits All" / `012_universal_actuator_slide_bracket.scad`):**
+   * Universal internal chassis mounted at bottom of saddlebag pods (Pod 1 & Pod 2).
+   * Two independent sliding carriages on longitudinal slotted rails allow continuous X-adjustment from **15 mm to 85 mm** button span.
+   * Clamps two 5V miniature push-pull solenoids with soft Shore A50 silicone plunger tips directly over OEM power buttons of any headset (e.g. Cardo Packtalk Edge Intercom + Media with 50 mm distance, Sena 50S/Spider, Midland).
+   * **Advantage:** Eliminates individual 3D printed cassettes for each intercom model. Resolves cold boot upon ignition ON via 2.0s simultaneous impulse – **zero marketing standby battery drain, zero warranty-voiding soldering, zero pod disassembly before rides!**
 
 #### 6.2.1 Front Node Mounting on Road King Special ("Front-to-Back Flip" & GNSS-Puck Dock)
 
@@ -777,7 +814,7 @@ Because rear Pod 3 and its large balcony tray have been completely eliminated, a
    * Dual 36-tooth radial Hirth rosettes ($10^\circ$ steps) provide 100% positive anti-vibration locking over washboard gravel tracks.
    * The Radar 2.0 housing is clamped with 2x M4 screws directly into its internal DIN 934 M4 captive nuts.
 6. **Concealed Cable Routing in Tube Shadow:**
-   * The M8 sensor cable routes upward through an integrated $\varnothing 6.0\,\text{mm}$ conduit directly behind the rack tube, hidden in the tube shadow along the subframe to the central controller box. Direct power from Deutsch DTM-12 harness; radar cluster telemetry via isolated high-speed bus/UART.
+   * The M8 sensor cable routes upward through an integrated $\varnothing 6.0\,\text{mm}$ conduit directly behind the rack tube, hidden in the tube shadow along the subframe to the central controller box. Direct power from Branch 4 of the 16-Pin Automotive harness; radar cluster telemetry via isolated high-speed bus/UART.
 
 ---
 
@@ -831,7 +868,7 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
    * The **4-pin IP67 magnetic coupling with N52 neodymium magnets and gold-plated pogo pins** releases cleanly at approx. $10\dots 15\,\text{N}$ axial tension with **zero mechanical damage**.
    * Re-installing the saddlebag pulls the coupling self-centering back together with a magnetic snap (*"Klack"*), instantly restoring power and USB.
 3. **Two-Zone Cable Architecture (Automotive Bus):**
-   * **Zone 1 (External Bike Chassis):** Heavy-duty 4-wire automotive cable ($4 \times 0.34\,\text{mm}^2$ FLRY-B) from Central Box (Deutsch DTM-12 Whips 1 & 2) to the frame dock.
+   * **Zone 1 (External Bike Chassis):** Heavy-duty 4-wire automotive cable ($4 \times 0.34\,\text{mm}^2$ FLRY-B) from Central Box (16-Pin Automotive Header Branches 2 & 3) to the frame dock.
    * **Zone 2 (Inside Saddlebag):** Flexible 4-wire ribbon harness running in the dry interior, taking zero luggage space.
 4. **Direct Connection to Pod Headers:**
    * The internal saddlebag cable routes along the textile check strap straight into the pod base, connecting directly to `PCBA 03`--zero redundant adapter boards or intermediate solder joints inside the bag.
@@ -1191,55 +1228,47 @@ The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad
   * **Generous Cavity for Cable Adapter & Harness Loops ($112 \times 62 \times 17\,\text{mm}$):** Seamlessly encloses the original MR20 in-line breakout board and harness loops with zero wire pinching.
   * **Optical Polycarbonate Radome & IP67 Sealing:** Flat, untextured PC radome ($116 \times 66 \times 1.6\,\text{mm}$) with perimeter EPDM cord groove provides zero RF insertion loss at 77 GHz and IK08 impact resistance.
 
-### 8.4 Road Glide ST Sharknose: Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock.scad`)
+### 8.4 Harley Touring: Glove Box Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`) & Cockpit Periphery
 
-The **Through-Fairing Inductive Cam Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) solves the problem of continuous power delivery to action cams (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) mounted on Harley Sharknose fairings **with zero drilled holes and zero visible external wiring**:
+The **5-Port Glove Box Media & Power-Injection Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) solves power delivery and infotainment stability issues inside the right glove compartment (media compartment) of Harley-Davidson Touring Baggers (Street Glide, Road Glide, CVO, CVO ST) **with 100% zero drilled holes and zero paint damage**:
 
-![Road Glide Inductive Cam Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
-
-*Figure 8.39: 3D CAD system view of the Through-Fairing Inductive Cam Dock (`road_glide_inductive_cam_dock_cad.png`). Visible: 15W Qi transmitter tray (underside, concealed inside inner fairing), dielectric ABS fairing deck (center amber shell), aerodynamic teardrop outer dock with 3M Dual Lock base, integrated TI BQ51013B Qi receiver, and universal 3-prong camera mounting clevis.*
-
-#### 8.4.1 Two-Piece Architecture & Action Cam Interfaces
+#### 8.4.1 System Architecture & Clean Power-Injection
 
 ```text
- +--------------------------------------------------------+
- | Action Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  |
- | [USB-C Charge Port] <------------------------------+   |
- +--------+-------------------------------------------|---+
-          | Standard 2-Prong Action Cam Base          |
-          v                                           | 30 mm USB-C
- +----------------------------------------------------|---+
- | ROAD GLIDE INDUCTIVE CAM DOCK (EXTERIOR)           |   |
- | * Monolithic 3-prong clevis (M5 clamping bolt)     |   |
- | * TI BQ51013B step-down converter (5V / 2A) -------+   |
- | * Qi receiver coil (RX) with ferrite shield            |
- +------------------------+-------------------------------+
-                          | 3M Dual-Lock SJ3550 interlocking tape
-                          v (instant tool-free release)
- ==========================================================
-  Harley-Davidson ABS Fairing Deck (2.8 mm, zero drill holes!)
-   ~ ~ ~ Alternating Magnetic Flux (15W Qi Inductive IPT) ~ ~ ~
- ==========================================================
-                          ^ (3M VHB 5952 interior bonding)
- +------------------------+-------------------------------+
- | INNER CRADLE (Concealed inside fairing behind headlamp)|
- | * 15W Qi transmitter coil (TX)                         |
- | * Power lead to Front Node Port 1 (12V PD)             |
- +--------------------------------------------------------+
+ +-------------------------------------------------------------------------+
+ | HARLEY TOURING RIGHT GLOVE COMPARTMENT (CVO / ST / RG / SG)             |
+ |                                                                         |
+ |  +-------------------------------------------------------------------+  |
+ |  | GLOVE BOX MEDIA & POWER-INJECTION HUB(glovebox_power_injection_hub)|  |
+ |  | * Port 1 (30W USB-PD): Smartphone Fast-Charging inside pocket     |  |
+ |  | * Port 2 (Switched 10W): Wireless CarPlay / Android Auto Dongle   |  |
+ |  | * Port 3 (Service/USB Flash): Free media expansion port           |  |
+ |  | * Port 4 (10W Direct Cam Lead): Weather-sealed action-cam power   |  |
+ |  | * Port 5 (USB Headset Emulation): Direct uplink Head Unit (GTS)   |  |
+ |  +-----------------------------------+-------------------------------+  |
+ |                                      ^                                  |
+ |                                      | Factory Bottom Rubber Grommet    |
+ =======================================|===================================
+   Glove Compartment Floor (100% Zero-Drill! Door perimeter seal unpinched)
+                                        |
+       Feed line from Front Node PCBA 05 (60W USB-PD Engine & Headset Emulation via USB)
 ```
 
-1. **Mechanical Camera Attachment:**
-   * **Monolithic 3-Prong Clevis (Universal Action Cam / GoPro Standard):** Directly molded atop the teardrop dock tower is the standard 3-prong action-cam hinge. Any common camera (GoPro Hero 10-13, DJI Osmo) or 360° cage (e.g. Insta360 X3/X4 utility frame) locks into place with a standard M5 thumbscrew.
-   * **Captive M5 Acorn Nut Pocket:** A hexagonal recess on the left flank holds an M5 nut firmly in place, allowing one-handed tilt adjustment and locking.
-   * **Optional 1/4"-20 Tripod Bushing:** The center core includes a pilot hole for an optional 1/4"-20 threaded brass insert, allowing cameras or ball heads to screw directly into the base.
-2. **Electrical Continuous Power Interface:**
-   * **Inductive Energy Conversion:** The embedded Qi receiver coil couples magnetically through the $2.8\,\text{mm}$ factory ABS fairing. The internal TI BQ51013B controller rectifies and steps down the power to clean, stable $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ DC.
-   * **Ultra-Short USB-C Pigtail ($30\dots 50\,\text{mm}$):** An upward-angled exit port routes a thin, flexible USB-C ribbon cable with a 90° right-angle connector directly into the camera's weather door.
-   * **Zero Wind Flutter:** Because the cable spans only $\approx 3\,\text{cm}$ directly beneath the camera port, it hugs the housing snugly--preventing buffeting, slapping against paint, or wind noise in the microphone.
-3. **Field Experience & Benefits on Tour:**
-   * **100% Factory Paint Preserved:** Completely drill-free, zero paint damage, 100% weatherproof (IP67).
-   * **Infinite Recording Time:** Keeps the internal camera battery at 100% even during continuous high-bitrate 5.7K/60fps 360° recording (e.g., functioning as an always-on dashcam).
-   * **Quick Tool-Free Detachment:** Unplug the USB-C right-angle jack, pull the dock firmly upward off the 3M Dual-Lock mushrooms, and pocket the camera and dock in seconds when parked.
+1. **Mechanical Design & Zero-Drill Installation:**
+   * **Form-Fitted Base Cradle:** The compact enclosure ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) rests vibration-isolated at the floor of the right glove box.
+   * **Bottom OEM Grommet Entry:** Wiring feeds strictly from *below* through the factory Harley rubber grommet. The door perimeter gasket remains completely unpinched, ensuring 100% watertight door closure.
+2. **Infotainment Clean-Power Injection & Harley Headset Emulation via USB:**
+   * **Harley Headset Emulation via USB (Port 5):** Over the integrated High-Speed data pair of the feed line, OpenMotorBridge connects to the head unit (Skyline OS / Boom! Box GTS) as a fully compliant MFi / USB Audio Class headset. Apple CarPlay is unlocked immediately; voice commands and helmet microphone streams route digitally without analog hum or engine noise.
+   * **Eliminates Head Unit Bootloops:** Commercial Wireless CarPlay / Android Auto dongles (Ottocast U2-Air, Carlinkit 5.0, AAWireless) routinely overload the weak 500 mA factory USB port on the head unit (Skyline OS / Boom! Box GTS), causing random reboot loops. The OMB Hub isolates the power pin and supplies a clean, regulated 5V/2A (10W) rail while passing high-speed USB data (`D+`, `D-`) transparently to the head unit.
+   * **30W Smartphone Fast-Charging:** A secondary internal USB-C port charges the stored smartphone at up to 30W USB-PD.
+3. **Direct Weather-Sealed Action-Cam Lead (Replacing Obsolete Inductive Qi Dock):**
+   * Rather than suffering high thermal losses through 2.8 mm ABS fairing shells with inductive Qi coils, the system delivers a **direct, weather-sealed 10W USB-C cable** from the Front Node's 60W engine directly to the camera (Insta360 X3/X4, GoPro Hero, DJI Osmo Action).
+   * Cameras mount via standardized, vibration-damped COTS action-cam or handlebar mounts; wiring remains tucked cleanly out of sight.
+   * On-handlebar smartphone Qi charging is handled via proven COTS brackets (SP Connect / QuadLock Wireless Charging Head).
+4. **Modular Snap-On Environmental Sensor Puck ("Körbchen", `sensor_puck_environmental.scad`):**
+   * High-accuracy environmental sensing (u-blox SAM-M10Q GNSS, TI TMP117 temperature sensor, OPT3001 ambient light sensor, and Knowles I2S MEMS wind microphone) is housed in a **modular snap-on puck** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)).
+   * On motorcycles, it clicks securely onto the Front Node tub.
+   * In support vehicles (Car-Kit) or custom builds, it unclips in one second and connects via a 1.5 m 6-pin lead to an ideal windshield location ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)).
 
 ---
 
@@ -1257,6 +1286,7 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Central Box** | Upper case with mid-tray partition | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
 | **Central Box** | Enclosure lid with Gore vent recess | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
 | **Satellite Pod**| 5-sided monocoque housing (tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
+| **Satellite Pod**| Universal Dual-Carriage Actuator Slide Bracket (15–85 mm continuous span) | `02_pod_base/012_universal_actuator_slide_bracket.stl` | `02_pod_base/parts/012_universal_actuator_slide_bracket.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
 | **Adventure Radar**| Luggage bridge radar mount base (Ø 18 mm tube) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Radar**| Luggage bridge radar clamp cap | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
@@ -1285,16 +1315,18 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Front Node** | Upper lid with LED tunnel & FPC antenna pocket | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
 | **Front Node** | EPDM/TPU cable glands (pair with sprue runner) | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front Node** | TPU USB-C protective sealing plug | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
+| **Front Node** | Modular Snap-On Sensor Puck ("Körbchen" for GNSS/Temp/MEMS) | `04_front_node/sensor_puck_environmental.stl` | `04_front_node/parts/sensor_puck_environmental.scad` |
+| **Front Node** | 5-Port Glove Box Media & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
 | **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Upper Shell with Diffuser Bore | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Shock Bumper Rim (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Smart-Keyfob** | Silicone Keypad (Dual-Keypad, Orange) | `05_accessories/smart_keyfob_silicone_keypad.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Switch Bracket**| Under-Perch Switch Bracket for M4 Harley Switchgear | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
 | **Switch Bracket**| Mirror Stem Adapter Plate (M8/M10) | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
 | **Mirror Radar** | BSD Mirror Indicator Pod Upper Cowl (38° Tunnel) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Mirror Radar** | BSD Mirror Clamp Strap Lower Halfshell (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Mirror Radar** | BSD Diffuser Lens Disc (Amber / Translucent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Radar 2.0** | Wheeltec MR20 77GHz Housing with Binder M5 Flange & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
-| **Camera Dock** | Road Glide ST Sharknose 15W Qi Inductive Cam Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
 | **Car Support** | Support Vehicle / Car Universal Sun Visor Clip for Pods 1 & 2 | `05_accessories/car_sun_visor_pod_clip.stl` | `05_accessories/car_sun_visor_pod_clip.scad` |
 | **Cartridge** | Universal 2D Slot-Grid Plate & Lateral Actuator Outriggers | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 

@@ -16,8 +16,8 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 01**| **Central Box Main Controller**| 85 x 55 mm    | 4 Layer | ESP32-S31 AI RISC-V, |
 |       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M3) | (ENIG)  | QCC3084 BT 5.4 SoC,  |
-|       | Dual-Power: 12V DTM-12 & USB-PD|              |         | LM5164, BQ24075 UPS, |
-|       | Sink (5-20V Ideal-Diode OR)   |               |         | SX1262 LoRa, DTM-12  |
+|       | Dual-Power: 12V DTM & USB-PD  |               |         | LM5164, BQ24075 UPS, |
+|       | Sink (5-20V Ideal-Diode OR)   |               |         | SX1262 LoRa, 2-Cable |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satellite Pod Interface**   | 35 x 25 mm    | 4 Layer | ESP32-C6, ES8388,    |
 |       | (Saddlebag Pod 1 & 2 in Bay)  | (29x19 mm M2) | (ENIG)  | 4-Wire Bus, USB-C    |
@@ -51,7 +51,7 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 
 ### 1.1 Breakdown by System Component
 1. **Core Assemblies (Standard on Every Motorcycle):**
-   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP mixing, dual Bluetooth headsets, LoRa mesh, and USB-PD coordination. Equipped with **Dual-Power Input** (12V vehicle power via Deutsch DTM-12 or 5V–20V USB-PD Sink via ideal-diode OR-ing for benchtop flashing without a 12V lab power supply).
+   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP mixing, dual Bluetooth headsets, LoRa mesh, and USB-PD coordination. Equipped with **Dual-Power Input** (12V vehicle power via Deutsch DTM-6 or 5V–20V USB-PD Sink via ideal-diode OR-ing for benchtop flashing without a 12V lab power supply) and **Two-Cable Architecture** (Cable 1: 6-Pin Deutsch DTM `J1`; Cable 2: 16-Pin Automotive `J_PERIPH`).
    * **`PCBA 03` (Satellite Pod Interface Board):** Universal interface board mounted on the floor of both saddlebag pods (Pod 1 & Pod 2). Provides an integrated USB-C fast-charging port (up to 30W/60W) directly inside the bag and connects Sena, Cardo, or OMM losslessly to the 4-wire bus.
    * **`PCBA 05` (Universal Front Node):** Cockpit module at the handlebar riser for Multi-GNSS (SAM-M10Q), ram-air environmental sensing, ambient microphone, and Qi accessory power. Connected via the 4-wire backbone routed through the Harley wire caddy (**ZERO tank lifting required!**).
    * **`PCBA 05B` (Symmetrical Under-Perch Mirror Pods):** Two identical boards clamped under the mirror perch studs (Left & Right) for bilateral Blind Spot Detection (BSD amber LEDs) and software-defined thumb switches (PTT, Voice Assistant, 1-Click Hazard Pin Drop for Waze, Cam-Tags, SOS).
@@ -101,7 +101,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Central Box Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Figure 7.1a: PCBA 01 Top 3D -- ESP32-S31 AI RISC-V Main MCU, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 UPS, ES8388 DSP Codec, Semtech SX1262 LoRa, Multi-Port USB-PD Engine, and Deutsch DTM-12 Header.*
+*Figure 7.1a: PCBA 01 Top 3D -- ESP32-S31 AI RISC-V Main MCU, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 UPS, ES8388 DSP Codec, Semtech SX1262 LoRa, Multi-Port USB-PD Engine, Deutsch DTM-6 Flange J1, and 16-Pin Automotive Header J_PERIPH.*
 
 ![PCBA 01 Central Box Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Figure 7.1b: PCBA 01 Bottom 3D -- Hirose DM3D MicroSD Push-Pull Slot, TI LM5050 Ideal-Diode OR-ing Circuit for Dual-Power (12V vehicle power vs. USB-PD Sink), Bosch BMI270 6-Axis IMU, and TCAN334G CAN-FD Transceiver.*
@@ -110,7 +110,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 * **Dimensions:** $85.0 	imes 55.0\,	ext{mm}$ (Outer contour with 4x M2.5 mounting holes, $77.0 	imes 47.0\,	ext{mm}$ grid spacing).
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,	ext{mm}$ thickness, $35\,\mu	ext{m}$ Cu on all 4 layers).
 * **Dual-Power Input Circuitry:**
-  * **12V Vehicle Power (Primary):** Deutsch DTM-12 flange `J1`, protected by automotive eFuses.
+  * **12V Vehicle Power (Primary):** Deutsch DTM-6 flange `J1`, protected by automotive eFuses.
   * **USB-PD Sink (Service & Benchtop):** USB-C port on enclosure face with TI LM5050 / P-FET ideal-diode OR-ing. Enables complete operation, firmware flashing, and sensor calibration on a desk using any standard USB-C charger (5V–20V) without a laboratory power supply.
 * **Top-Layer Components (F.Cu):**
   * **Main Compute Hub (`U2`):** Espressif `ESP32-S31` (Dual-Core RISC-V @ 320 MHz with 128-bit SIMD AI accelerator for on-device audio/voice recognition, 16 MB Flash, 8 MB Octal-PSRAM) for system control, CAN-FD bus, FreeRTOS DSP audio mixing, and PWA web server.
@@ -118,7 +118,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
   * **Long-Range Telemetry (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) with U.FL connector `ANT1` to Taoglas FXP895 antenna embedded in the housing lid.
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 72V buck converter and TI `BQ24075` power-path controller with charging circuit for the internal 2,200 mAh UPS pouch cell.
   * **Status Smart-LED (`D1`):** WS2812B RGB Smart-LED for optical status and pairing indication.
-  * **Controls & Interfaces:** Hardware switch `SW1` (Bluetooth/Audio pairing / factory reset) and automotive Deutsch DTM-12 shrouded header `J1` plus IDC header `J3`.
+  * **Controls & Interfaces:** Hardware switch `SW1` (Bluetooth/Audio pairing / factory reset), automotive Deutsch DTM-6 shrouded header `J1`, 16-Pin Automotive header `J_PERIPH`, plus IDC header `J3`.
 * **Bottom-Layer Components (B.Cu):**
   * **MicroSD Socket (`J2`):** Hirose `DM3D-SF` push-pull MicroSD card holder mounted flush to the housing edge for tool-free accessibility.
   * **Audio Codec (`U3`):** Everest Semi `ES8388` 24-Bit / 48 kHz low-power stereo audio codec.
@@ -126,26 +126,56 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
   * **CAN-FD Transceiver (`U6`):** Texas Instruments `TCAN334G` / `TCAN1042V` 5 Mbps CAN-FD transceiver.
   * **Low-Noise LDO (`U11`):** Texas Instruments `TPS7A0533` 3.3V ultra-low-noise LDO for analog and sensor rails.
 
-### 3.2 Pinout of Automotive Deutsch DTM-12 Connector (`J1`)
+### 3.2 Central Box Two-Cable Architecture: Pinout of Header J1 (6-Pin DTM) & Header J_PERIPH (16-Pin Automotive)
+
+To prevent wiring bottlenecks, pin count limitations, and thermal stress, OpenMotorBridge v10.0 strictly segregates vehicle power/CAN from the 4-channel OMB periphery bus across two dedicated, sealed automotive connectors:
+
+#### 3.2.1 Header J1: Vehicle Power & CAN Bus (6-Pin Deutsch DTM04-6P Flange)
+Direct interface to vehicle harness (battery, ignition switch, and OEM CAN network):
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| DEUTSCH DTM-12 PINOUT (CENTRAL BOX POWER, CAN & DC PIGTAILS 1 TO 4)                                           |
+| HEADER J1: DEUTSCH DTM-6 PINOUT (VEHICLE POWER & CAN-FD)                                                      |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Harness Branch      | Function & Protection   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | KL30_IN        | +9V...+72V DC Constant+  | AWG20 0.50² | Branch 4 (Vehicle)  | Constant 12V Main Feed  |
-|  2  | KL15_IGN       | +9V...+72V DC Ignition+  | AWG22 0.34² | Branch 4 (Vehicle)  | Ignition Sense (KL15)   |
-|  3  | VEHICLE_GND    | Power Ground (0V)        | AWG20 0.50² | Branch 4 (Vehicle)  | Central Vehicle Ground  |
-|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Branch 4 (Vehicle)  | Vehicle CAN-FD Bus High |
-|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Branch 4 (Vehicle)  | Vehicle CAN-FD Bus Low  |
-|  6  | POD1_VCC       | +12V switched (0.5A)     | AWG22 0.34² | Branch 1 (Pod 1)    | DC Power Bay 1 (eFuse)  |
-|  7  | POD1_GND       | Power Ground (0V)        | AWG22 0.34² | Branch 1 (Pod 1)    | Ground Bay 1 (Left)     |
-|  8  | POD2_VCC       | +12V switched (0.5A)     | AWG22 0.34² | Branch 2 (Pod 2)    | DC Power Bay 2 (eFuse)  |
-|  9  | POD2_GND       | Power Ground (0V)        | AWG22 0.34² | Branch 2 (Pod 2)    | Ground Bay 2 (Right)    |
-| 10  | RADAR_PWR_12V  | +12V switched (1.0A)     | AWG22 0.34² | Branch 3 (Radar)    | DC Power Rear Radar     |
-| 11  | RADAR_GND      | Power Ground (0V)        | AWG22 0.34² | Branch 3 (Radar)    | Ground Rear Radar       |
-| 12  | CHASSIS_EARTH  | Shield Ground            | AWG20 0.50² | Branch 4 (Vehicle)  | Chassis & Shield Return |
+|  1  | KL30_IN        | +9V...+72V DC Constant+  | AWG20 0.50² | Cable 1 (Battery)   | Constant 12V Main (eFuse)|
+|  2  | KL15_IGN       | +9V...+72V DC Ignition+  | AWG22 0.34² | Cable 1 (Ignition)  | Ignition Sense & Wake-Up|
+|  3  | VEHICLE_GND    | Power Ground (0V)        | AWG20 0.50² | Cable 1 (Battery)   | Central Vehicle Ground  |
+|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Cable 1 (Vehicle)   | Vehicle CAN-FD Bus High |
+|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Cable 1 (Vehicle)   | Vehicle CAN-FD Bus Low  |
+|  6  | CHASSIS_SHIELD | Shield Ground / Chassis  | AWG20 0.50² | Cable 1 (Chassis)   | Enclosure & Shield Drain|
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+```
+
+#### 3.2.2 Header J_PERIPH: OMB Periphery Bus (16-Pin Automotive Header, TE Superseal / DTM 16-Pin)
+Supplies 4 independent system branches with 4 conductors each (`VCC`, `GND`, `D+`, `D-`). Each branch is protected on PCBA 01 via a dedicated **TI TPS25921 eFuse**:
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| HEADER J_PERIPH: 16-PIN AUTOMOTIVE PERIPHERY BUS (4 INDEPENDENT 4-WIRE SYSTEM BRANCHES)                       |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Target Component    | Function & Protection   |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  1  | VBUS_FRONT_60W | +12V...+20V DC (60W Max) | AWG18 0.75² | Branch 1 (Front)    | Front Node 60W Power    |
+|  2  | GND_FRONT      | Power Ground (0V)        | AWG18 0.75² | Branch 1 (Front)    | Power Return Lead       |
+|  3  | FRONT_USB_DP   | USB 2.0 High-Speed D+    | AWG26 0.14² | Branch 1 (Front)    | Data Uplink 480 Mbps    |
+|  4  | FRONT_USB_DN   | USB 2.0 High-Speed D-    | AWG26 0.14² | Branch 1 (Front)    | Data Uplink 480 Mbps    |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  5  | POD1_VBUS_30W  | +12V DC (30W USB-PD)     | AWG20 0.50² | Branch 2 (Pod 1 L)  | Pod 1 Power & Charger   |
+|  6  | POD1_GND       | Power Ground (0V)        | AWG20 0.50² | Branch 2 (Pod 1 L)  | Power Return Lead       |
+|  7  | POD1_USB_DP    | USB 2.0 Audio/Data D+    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Digital Audio & Control |
+|  8  | POD1_USB_DN    | USB 2.0 Audio/Data D-    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Digital Audio & Control |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  9  | POD2_VBUS_30W  | +12V DC (30W USB-PD)     | AWG20 0.50² | Branch 3 (Pod 2 R)  | Pod 2 Power & Charger   |
+| 10  | POD2_GND       | Power Ground (0V)        | AWG20 0.50² | Branch 3 (Pod 2 R)  | Power Return Lead       |
+| 11  | POD2_USB_DP    | USB 2.0 Audio/Data D+    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Digital Audio & Control |
+| 12  | POD2_USB_DN    | USB 2.0 Audio/Data D-    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Digital Audio & Control |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| 13  | RADAR_PWR_12V  | +12V switched (1.0A)     | AWG22 0.34² | Branch 4 (Radar)    | Power Rear Radar        |
+| 14  | RADAR_GND      | Power Ground (0V)        | AWG22 0.34² | Branch 4 (Radar)    | Ground Rear Radar       |
+| 15  | RADAR_CAN_H_TX | CAN_H / UART TX (3.3V)   | AWG24 0.22² | Branch 4 (Radar)    | Target Telemetry (20 Hz)|
+| 16  | RADAR_CAN_L_RX | CAN_L / UART RX (3.3V)   | AWG24 0.22² | Branch 4 (Radar)    | Commands & Config       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
@@ -186,17 +216,30 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 ## 5. PCBA 03: Satellite Pod Interface Board (`openmotorbridge_pod_interface`)
 
 ![PCBA 03 Satellite Pod Board Top 3D](../images/pcba/pcba03_pod_cartridge_3d.png)
-*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board Top (PCBA 03, 35 x 25 mm) with ESP32-C6 Host MCU, USB-PD Charging Controller, ES8388 Audio Codec, and J_AUDIO_PWR Header.*ƒ
+*Figure 7.3a: KiCad 3D view of the Satellite Pod Interface Board Top (PCBA 03, 35 x 25 mm) with ESP32-C6 Host MCU, USB-PD Charging Controller, ES8388 Audio Codec, and J_AUDIO_PWR Header.*
 
 ### 5.1 Board Specifications & Architecture
-* **Dimensions:** $35.0 	imes 25.0\,	ext{mm}$ (4x M2 mounting holes with vibration dampers directly at the pod floor).
-* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.2\,	ext{mm}$ thickness, continuous GND plane L2, Power plane L3, ENIG gold finish).
-* **Integrated In-Bag USB-C Fast-Charging Port (`J_USB_CHARGE`):** An upward/inward facing USB-C receptacle on `PCBA 03` delivers up to **30W/60W USB-PD charging power** directly inside the saddlebag (for helmets, phones, and power banks).
+* **Dimensions:** $35.0 \times 25.0\,\text{mm}$ (4x M2 mounting holes with vibration dampers directly at the pod floor).
+* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.2\,\text{mm}$ thickness, continuous GND plane L2, Power plane L3, ENIG gold finish).
+* **Integrated In-Bag USB-C Fast-Charging Port (`J_USB_CHARGE`):** An upward/inward facing USB-C receptacle on `PCBA 03` delivers up to **30W USB-PD charging power** directly inside the saddlebag (for helmets, phones, and power banks).
 * **Intercom & Audio Interfacing:**
-  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU managing the charging stage, I2S codec control, and USB audio bridge.
+  * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU managing the charging stage, I2S codec control, actuators, and USB audio bridge.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz low-noise audio codec.
   * `U4`: TI `TS5A3159DBVR` analog/digital audio switch for automatic detection of analog OEM headsets vs. digital OMM modules via Pin 6 (`OMM_DETECT`).
-  * **Zero Mechatronic Wear:** All former solenoids (`J_ACT`, AO3400A) are eliminated. Device control is 100% digital via Bluetooth LE Audio or handlebar thumb switches.
+* **Mechatronic Cold-Start Driver (Header `J_ACT` / 4-Pin JST-SH 1.0mm):**
+  * **Rationale:** OEM Bluetooth/Mesh headsets (Cardo Packtalk Edge, Sena 50S/Spider, Midland) do not power on automatically upon USB power and cannot survive weeks in standby without draining their batteries. A cold boot requires pressing **two separate buttons simultaneously** (e.g. Intercom + Media on Cardo, ~50 mm distance).
+  * **Circuitry:** Dual N-channel power MOSFETs (`Q_ACT1`, `Q_ACT2`, Diodes Inc. AO3400A / DMN2075U, 30V/4A) with flyback Schottky diodes (`D_FLY1`, `D_FLY2`, SS14) drive two miniature 5V push-pull solenoids.
+  * **Firmware Timing:** Upon ignition ON (KL15), the ESP32-C6 pulses both actuators simultaneously via `GPIO4` and `GPIO5` for exactly **2.0 seconds** (~4 N actuation force with soft Shore A50 silicone plunger tips on the OEM buttons).
+  * **Mechanics:** The two mini-solenoids clamp onto the universal dual-carriage slide bracket ([`012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad)). **"One Size Fits All"** – continuously adjustable from 15 mm to 85 mm button span without custom CAD prints, without voiding 300 € headset warranties, and without removing pods before rides!
+
+#### 5.3 Pinout of Mechatronic Actuator Header (`J_ACT` / 4-Pin JST-SH 1.0mm)
+
+| Pin | Signal Name | Signal Type | Function & Protection |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VCC_5V_ACT`** | Power Out (+5V) | Supply rail for Solenoid 1 & 2 coils (fused via eFuse) |
+| **2** | **`ACT1_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 1 (via AO3400A / flyback diode) |
+| **3** | **`ACT2_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 2 (via AO3400A / flyback diode) |
+| **4** | **`GND`** | Power Ground | Power ground for driver stage |
 
 ### 5.2 Pinout of Audio-Power Header (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
 
@@ -231,17 +274,27 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 ![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
 *Figure 7.5a: KiCad 3D view of the Universal Front Node Top (PCBA 05, 82 x 50 mm) with ESP32-S3-WROOM-1U, u-blox SAM-M10Q GNSS, Knowles MEMS acoustic sensor, Southchip SC8102 USB-PD, and connectors for symmetrical mirror pods.*
 
-### 7.1 Board Specifications & Features
+### 7.1 Board Specifications & 60W Power Engine
 * **Dimensions:** $82.0 	imes 50.0\,	ext{mm}$ (enclosure footprint $98 	imes 68 	imes 25\,	ext{mm}$ in sealed IP68 monocoque housing at handlebar riser).
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,	ext{mm}$, ENIG gold finish).
-* **Automotive Backbone Connection:** Shielded 4-wire cable from Central Box (12V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
-* **Sensors & Audio:**
-  * **u-blox SAM-M10Q Multi-GNSS:** Integrated patch antenna module with unobstructed upward sky view.
-  * **Knowles SPH0645LM4H I2S MEMS:** Acoustic sensor for speed-dependent intercom automatic gain control (AGC).
-  * **TI TMP117 / OPT3001:** High-precision ambient temperature and light sensors in laminar airflow.
+* **Automotive Backbone Connection (Branch 1):** Shielded 4-wire cable from Central Box (12V-20V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
+* **60W USB-PD Power Engine (`U8`, Southchip SC8721 / SC8102 Synchronous Buck-Boost):**
+  * Reliably feeds the complete cockpit payload without brownouts:
+    * Driver smartphone fast-charging: up to 27W USB-PD (9V/3A) at handlebar or via glove box hub.
+    * Dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A or 5V/3A).
+    * Action-cam continuous power: 10W (5V/2A) via weather-sealed USB-C lead for GoPro / Insta360.
+    * Dual Cockpit OLED Displays: 2W for both speaker corner pods inside the speaker grilles.
+    * ESP32-S3 host MCU, sensor processing & audio AGC: 3.5W.
+    * Total peak load approx 57.5W – perfectly balanced, high efficiency, thermally sustained within the standard 60W power tier (20V / 3A).
+* **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**
+  * Routes I2C (`SCL`, `SDA`, `3V3`, `GND`) and I2S (`I2S_SD`, `I2S_WS`) to the snap-on sensor cradle ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
+  * Integrates u-blox SAM-M10Q Multi-GNSS, TI TMP117 precision thermometer, OPT3001 light sensor, and Knowles I2S MEMS.
+  * Snaps directly onto the Front Node on bikes; unclips for remote mounting on car/van windshields via 1.5m extension lead.
 * **Peripheral Ports:**
   * 2x 4-pin JST-GH receptacles (`J_POD_L` and `J_POD_R`) to both symmetrical under-perch mirror pods (`PCBA 05B`).
-  * SP Connect Qi wireless charging / smartphone power at handlebars.
+  * 2x 4-pin JST-SH receptacles (`J_DISP_L` and `J_DISP_R`) to both Cockpit Speaker Corner Pod displays (`cockpit_speaker_corner_pod.scad`).
+  * SP Connect / QuadLock handlebar charging lead (up to 27W) & Garmin Zūmo XT2 GPS tap (15W).
+  * 5-Port Glovebox Media & Power-Injection Hub interface ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Combined Power & High-Speed USB 2.0 cable. Supplies regulated power injection (30W phone fast charge, 10W switched dongle, free port, 10W camera lead) and routes the USB host data lines to Port 5 for **Harley Headset Emulation via USB** (MFi / USB Audio Class composite accessory, native Apple CarPlay enablement, and lossless digital helmet microphone audio).
 
 ---
 
@@ -387,7 +440,7 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 ### 10.1 Technical Board Specifications & Cable Link
 * **Dimensions:** $115.0 	imes 65.0 	imes 1.6\,	ext{mm}$ (2-layer FR-4 High-TG150, ENIG gold finish).
 * **Central Radar Aperture:** $61.0 	imes 51.0\,	ext{mm}$ for the Wheeltec MR20 77-GHz sensor module.
-* **Hardwired Interconnect:** Connected to Central Box via Whip 3 of the Deutsch DTM-12 harness (12V vehicle power) and a shielded 2-wire UART link for real-time target cluster streaming (115,200 baud).
+* **Hardwired Interconnect:** Connected to Central Box via Branch 4 of the 16-Pin Automotive harness (12V switched vehicle power) and a shielded 2-wire UART link for real-time target cluster streaming (115,200 baud).
 * **5.9 GHz V2X Ceramic Patch Antenna:** Dedicated antenna chamber on the left housing flank for direct C-V2X / ITS-G5 communication.
 
 ---

@@ -2,7 +2,7 @@
 
 *Note: All CAD, electronic, and block diagrams reflect the standardized v10.0 node architecture (PCBA 01 through 10).*
 
-This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **ESP32-S31 AI RISC-V** host MCU on the Central Box (`PCBA 01`) featuring a 128-bit SIMD AI vector accelerator, the ESP32-S3 Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB-PD & USB 2.0 Backbone (`VBUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** to all satellite nodes, the **Dual-Power Input Engine** (12V DTM-12 & USB-PD Sink 5V–20V via LM5050 ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05B`), the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
+This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **ESP32-S31 AI RISC-V** host MCU on the Central Box (`PCBA 01`) featuring a 128-bit SIMD AI vector accelerator, the ESP32-S3 Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB-PD & USB 2.0 Backbone (`VBUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** to all satellite nodes, the **Dual-Power Input Engine** (12V DTM & USB-PD Sink 5V–20V via LM5050 ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05B`), the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
 
 ---
 
@@ -33,7 +33,7 @@ In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wir
 
 #### CORE 0 (Communication, Telemetry, 4-Wire USB Backbone & Power Management):
 - **Automotive USB Backbone Host Engine (`usb_vehicle_backbone.cpp`):** Manages the USB 2.0 High-Speed connection across the onboard USB2514B hub to Front Node and saddlebag pods. Receives handlebar PTT and gesture events ($< 0.15\,	ext{ms}$), Knowles MEMS acoustic noise readings, 10 Hz Multi-GNSS packets, and pod telemetry.
-- **Dual-Power Input Manager (`dual_power_mgr.cpp`):** Overviews the TI LM5050-Q1 ideal-diode OR-ing between 12V vehicle power (Deutsch DTM-12) and USB-PD Sink (5V–20V USB-C). Enables seamless switching and zero-disassembly flashing, benchtop calibration, and testing without a 12V laboratory power supply.
+- **Dual-Power Input Manager (`dual_power_mgr.cpp`):** Overviews the TI LM5050-Q1 ideal-diode OR-ing between 12V vehicle power (Deutsch DTM-6 / Cable 1) and USB-PD Sink (5V–20V USB-C). Enables seamless switching and zero-disassembly flashing, benchtop calibration, and testing without a 12V laboratory power supply.
 - **Staggered Power Sequencing (`power_sequencer.cpp`):** Controls the automotive eFuses `TI TPS25982` on PCBA 01 to eliminate inrush current spikes:
   - $T = 0\,	ext{ms}$: Central Box (PCBA 01) and Front Node (PCBA 05) boot synchronously upon ignition ON (KL15).
   - $T = 200\,	ext{ms}$: Pod 1 (VBUS via eFuse with soft-start ramp).
@@ -108,7 +108,7 @@ enum UsbBackbonePktType : uint8_t {
 * **Total Glass-to-Glass Latency:** **$pprox 0.12\,	ext{ms}$** (over 80 times faster than the human perceptual threshold of $10\,	ext{ms}$).
 
 ### 2.2 Dual-Power Input Management & Benchtop Testing
-- **TI LM5050-Q1 Ideal-Diode OR-ing:** Decouples the 12V vehicle power (Deutsch DTM-12) and the USB-PD Sink input (5V–20V via the native USB-C port) with zero forward voltage drop compared to conventional Schottky diodes.
+- **TI LM5050-Q1 Ideal-Diode OR-ing:** Decouples the 12V vehicle power (Deutsch DTM-6) and the USB-PD Sink input (5V–20V via the native USB-C port) with zero forward voltage drop compared to conventional Schottky diodes.
 - **Seamless Switching:** If the motorcycle is started with a USB-C charger connected, the 12V rail takes over the load without interruption.
 - **Zero-Disassembly Benchtop Flashing:** On the workbench, the entire system can be operated, flashed, and calibrated with any standard USB-C PD phone or laptop charger—eliminating the need for a heavy 12V lab bench supply!
 
@@ -252,9 +252,9 @@ OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building bl
 
 | Configuration | Installed Components | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
-| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency via 4-wire bus.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via DTM-12 pins 4/5 under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **USB Host:** Passively monitors ports for hotplug events. |
+| **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency via 4-wire bus.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via Cable 1 (DTM-6 pins 4/5) under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **USB Host:** Passively monitors ports for hotplug events. |
 | **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic 4-wire USB backbone (< 0.2 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ	ext{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Symmetrical Under-Perch Mirror Pods (< 0.15 ms) with 5-gesture engine and Knowles dynamic acoustic wind AGC. |
-| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz (PCBA 08).<br>* 4-wire power & high-speed data from DTM-12 Whip 3.<br>* Acoustic alert pings in helmet, optical alert wings & mirror BSD LEDs.<br>* Automatic action-cam bookmarks upon critical radar TTC (< 2.5 s). |
+| **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz (PCBA 08).<br>* 4-wire power & high-speed data from 16-Pin Periphery Header (Branch 4).<br>* Acoustic alert pings in helmet, optical alert wings & mirror BSD LEDs.<br>* Automatic action-cam bookmarks upon critical radar TTC (< 2.5 s). |
 
 ### 8.1 Protection Mechanisms Against Missing Data (Zero-Crash Policy)
 1. **Asynchronous Non-Blocking Interfaces:** Communications via USB, LoRa (SPI), and Radar use FreeRTOS timeouts (`pdMS_TO_TICKS(50)`). There are **zero blocking `while(1)` polling loops**.

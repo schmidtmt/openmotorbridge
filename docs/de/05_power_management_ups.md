@@ -44,7 +44,7 @@ Ein häufiges Hindernis bei der Inbetriebnahme, Firmware-Entwicklung und Diagnos
 ```
                   DUAL-INPUT POWER-ORING ARCHITEKTUR (ZENTRALBOX)
 +----------------------------+
-| 12V BORDNETZ (DTM-12)      |---+
+| 12V BORDNETZ (6-PIN DTM)   |---+
 | KL30 (Dauer) / KL15 (Zünd.)|   |   +-----------------------+
 +----------------------------+   +-->| TI LM5050 / P-FET     |
                                      | Ideal-Diode OR-ing 1  |---+
@@ -58,7 +58,7 @@ Ein häufiges Hindernis bei der Inbetriebnahme, Firmware-Entwicklung und Diagnos
 ```
 
 * **Prioritäts- & Schutzlogik:**
-  * **Fahrzeugbetrieb (On-Bike):** Liegt 12V-Bordnetzspannung über den Deutsch DTM-12 Stecker an, versorgt das Bordnetz das Gesamtsystem und lädt den USV-Akku.
+  * **Fahrzeugbetrieb (On-Bike):** Liegt 12V-Bordnetzspannung über den 6-Pin Deutsch DTM Stecker an, versorgt das Bordnetz das Gesamtsystem und lädt den USV-Akku.
   * **Werkbank- & Diagnosebetrieb (Bench/Desk):** Für Firmware-Updates (USB-DFU), PWA-Tests, Funk-Messungen und Kalibrierung wird die Zentralbox einfach über ein handelsübliches USB-C Smartphone- oder Laptop-Netzteil (oder Powerbank) versorgt.
   * **Vollständige galvanische Entkopplung (Zero Back-Feed):** Der Ideal-Dioden-Controller (TI LM5050-1 oder duale P-FETs mit $< 15\,\text{m}\Omega$) garantiert, dass 12V niemals in den USB-C Port / Host-PC rückspeisen können, und umgekehrt keine USB-Spannung in den Fahrzeugkabelbaum dringt.
   * **Satelliten-Speisung am Schreibtisch:** Der USB-PD Sink liefert genügend Leistung ($15\dots 60\,\text{W}$ je nach Netzteil), um auch angeschlossene Front-Nodes und Koffer-Pods am Labortisch vollständig mitzubetreiben!
@@ -94,10 +94,21 @@ Wird das Motorrad abgestellt oder trennen Diebe die 12V-Starterbatterie ab, scha
 - **Verpolschutz:** Diodes Inc. DMP6023L P-Kanal MOSFET mit extrem niedrigem Durchlasswiderstand ($R_{\text{DS(on)}} < 25\,\text{m}\Omega$).
 - **Filterung:** Zweistufiger LC-PI-Filter ($10\,\mu\text{H}$ Shielded Automotive Inductor + 2x $10\,\mu\text{F}$ X7R 100V Keramikkondensatoren) am KL30/KL15-Eingang.
 
-### 3.1 DTM-12 & 4-Ader-Bus Leistungsverteilung mit TI TPS25921 eFuse-Schutz
-Sämtliche fahrzeugseitigen Bordnetz- und Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über den robusten, vibrationsfesten **Deutsch DTM-12 Industrie-Steckverbinder** sowie die geschirmten 4-Ader Automotive-Busse geführt. Jeder Abgang ist hardware-gesichert:
-* **Individuelle eFuse-Absicherung (Texas Instruments TPS25921):**
-  * Jeder externe Versorgungszweig (Koffer-Pod Links `PCBA 03`, Koffer-Pod Rechts `PCBA 03`, Front-Knoten `PCBA 05`, Radar-Zusatzabgang) ist auf `PCBA 01` durch eine eigene **TI TPS25921 eFuse** (elektronische Sicherung) hardware-geschützt.
+### 3.1 Zwei-Kabel-Architektur & Leistungsverteilung mit TI TPS25921 eFuse-Schutz
+Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **Zwei-Kabel-Architektur** (Kabel 1: 6-Pin Deutsch DTM für Bordnetz/CAN; Kabel 2: 16-Pin Automotive Connector für den Peripheriebus) geführt. Jeder externe Zweig ist auf `PCBA 01` hardwareseitig durch eine eigene **TI TPS25921 eFuse** (elektronische Sicherung) geschützt:
+* **Strang 1 (Front-Node & Cockpit):** **60W USB-PD Budget** (Southchip SC8721/SC8102 Synchronous Buck-Boost, 20V/3A). Versorgt Driver Smartphone Fast-Charging (27W USB-PD/QC), dediziertes Motorrad-Navi (15W für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), Action-Cam Dauerstrom (10W wetterfest USB-C), Dual OLED Cockpit-Displays (2W in Speaker Corner Pods) sowie Host-MCU, Sensor-Puck & USB-Hub-Logik (3,5W) – Peak-Gesamtlast 57,5W.
+* **Strang 2 (Koffer-Pod Links):** **30W USB-PD Budget** für interne Koffer-Ladedose (`J_USB_CHARGE`), ESP32-C6 Host, Audio-Codec und mechatronischen Kaltstart-Impuls.
+* **Strang 3 (Koffer-Pod Rechts):** **30W USB-PD Budget** für Bucht 2, identisch zu Strang 2.
+* **Strang 4 (Heck-Radar MR20):** **12V geschaltet** (1,0A Max) für 77-GHz Radarsensor und Strobe-Warn-LEDs.
+* **Mechatronischer Kaltstart-Impuls:**
+  * Jeder Koffer-Pod besitzt zwei mechatronische Drücker (Mini-Hubmagnete auf `012_universal_actuator_slide_bracket.scad`), die auf `PCBA 03` über duale AO3400A MOSFETs geschaltet werden.
+  * Bei Zündung-AN (KL15) feuern beide Magnete für exakt 2,0 Sekunden simultan ($\sim 4\,\text{N}$ Betätigungskraft mit Shore A50 Silikon-Stößeln auf OEM-Tasten wie Intercom + Media).
+  * **Vorteil:** Headsets bleiben nach Touren vollständig spannungsfrei (kein Marketing-Standby-Batteriefraß nach 1-2 Wochen Standzeit!). Beim Einschalten der Zündung booten sie verlässlich und sofort, ohne dass der Kofferpod ausgebaut oder zerlegt werden muss.
+* **5-Port Handschuhfach Hub (`glovebox_power_injection_hub.scad`) & Harley Headset-Emulation via USB:**
+  * Wird vom Front-Node (`PCBA 05`) über ein kombiniertes High-Power & USB 2.0 High-Speed Kabel gespeist.
+  * Tappt den OEM-USB-C Port im rechten Medienfach von Harley Touring-Baggern und schleift ihn an Port 5 durch.
+  * Speist geregelte **30W USB-PD** (thermisch sicher im geschlossenen Fach gegen Smartphone-Überhitzung) und **10W geschaltete Dongle-Power** mit Überhitzungs-Notabschaltung ein.
+  * **Harley Headset-Emulation via USB:** Das integrierte USB 2.0 Datenpaar verbindet den Front-Node direkt mit der Headunit an Port 5; OpenMotorBridge emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay frei und überträgt Intercom-/Sprachmikrofone verlustfrei ohne analoge Einstreuungen.
   * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss (z. B. durch Scheuerstellen am Rahmen oder Wassereintritt in offenen Steckern).
   * Automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und kontrollierter Sanftanlauf (Soft-Start zur Vermeidung kapazitiver Einschaltstromspitzen).
   * Status-Rückmeldung jedes Zweigs (`FLT`) an den ESP32-S31 für proaktive Fehlermeldungen in der WebApp.

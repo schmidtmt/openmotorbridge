@@ -6,7 +6,7 @@ Dieses Dokument ist die vollständige, praxisorientierte Schritt-für-Schritt-Ba
 
 ## 1. Übersicht des Gesamtkits (Was wird gebaut?)
 
-Ein vollständiges OpenMotorBridge-Fahrzeugkit der Generation v10.0 verzichtet vollständig auf fehleranfällige UWB-Nahbereichsfunkstrecken, Motorschlitten und Kassetten-Servos. Stattdessen setzt es auf einen **robusten 4-Draht Automotive USB-PD & USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit bis zu 60 W Leistung je Strang, kombiniert mit dem **ESP32-S31** (Dual-Core 320 MHz RISC-V mit 128-bit SIMD AI-Beschleuniger für On-Device Sprach-/Audioerkennung) und dem dedizierten **Qualcomm QCC3084** Bluetooth-Audio-SoC.
+Ein vollständiges OpenMotorBridge-Fahrzeugkit der Generation v10.0 verzichtet vollständig auf fehleranfällige UWB-Nahbereichsfunkstrecken, Motorschlitten und Kassetten-Servos. Stattdessen setzt es auf die **Zwei-Kabel-Architektur der Zentralbox**, einen **robusten 4-Draht Automotive USB-PD & USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit bis zu 60 W am Front-Knoten und 30 W je Koffer-Pod, kombiniert mit dem **ESP32-S31** (Dual-Core 320 MHz RISC-V mit 128-bit SIMD AI-Beschleuniger für On-Device Sprach-/Audioerkennung), dem dedizierten **Qualcomm QCC3084** Bluetooth-Audio-SoC und **2 mechatronischen Kaltstart-Drückern** je Pod:
 
 ```text
                       +-------------------------------------------------------------+
@@ -16,63 +16,42 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit der Generation v10.0 verzichtet v
                       |      128-bit SIMD AI-Audio-Engine, Native USB 2.0 480 Mbps) |
                       |    * Audio-SoC: Qualcomm QCC3084 (Dual-A2DP, aptX HD, HFP)  |
                       |    * Notfunk/SOS: SX1262 LoRa 868 MHz (Taoglas FXP895)      |
-                      |    * Power Delivery: Multi-Port USB-PD Engine (bis 60 W)    |
                       |    * USV-Puffer: 2.200 mAh LiPo mit Molex Micro-Fit 3.0     |
-                      +------------------------------+------------------------------+
-                                                     |
-                         1x ZENTRALER KABELBAUM (DEUTSCH DTM-12 IP67/IP69K)
-                                                     |
-        +----------------------------+---------------+----------------------------+
-        |                            |                                            |
-        v Strang 1                   v Strang 2                                   v Strang 3
-  (4-Draht USB-PD)             (4-Draht USB-PD)                             (4-Draht USB-PD / CAN)
-+-------------------+        +-------------------+                        +-------------------+
-| 4-Pin Magnet-     |        | 4-Pin Magnet-     |                        | 1x HECK-RADAR 2.0 |
-| Abreißkupplung    |        | Abreißkupplung    |                        | (Kennzeichen/Heck)|
-| (HytePro M411)    |        | (HytePro M411)    |                        | * Wheeltec MR20   |
-+---------+---------+        +---------+---------+                        |   77 GHz (PCBA 08)|
-          |                            |                                  | * 36x Warn-LEDs   |
-          v Kofferwand-Tülle           v Kofferwand-Tülle                 | * Drip-Loop &     |
-+-------------------+        +-------------------+                        |   Roost-Deflector |
-| 1x POD 1 LINKS    |        | 1x POD 2 RECHTS   |                        +-------------------+
-| (Im Hartschalen-  |        | (Im Hartschalen-  |
-|  koffer)          |        |  koffer)          |
-| * Slide-in Deckel |        | * Slide-in Deckel |
-|   mit Dichtung &  |        |   mit Dichtung &  |
-|   FOB-Magnetverschl|       |   FOB-Magnetverschl|
-| * Zwischendeckel  |        | * Zwischendeckel  |
-|   (Dry-Flap)      |        |   (Dry-Flap)      |
-| * Koffer-USB-Lade-|        | * Koffer-USB-Lade-|
-|   dose (5V/12V PD)|        |   dose (5V/12V PD)|
-| * PCBA 03 Smart-  |        | * PCBA 03 Smart-  |
-|   Gateway-Modul   |        |   Gateway-Modul   |
-|   (Sena / Cardo / |        |   (Sena / Cardo / |
-|    OMM / Midland) |        |    OMM / Midland) |
-+-------------------+        +-------------------+
-                                       |
-                                       | Strang 4: 4-Draht Automotive Bus (USB-PD / USB 2.0)
-                                       | Verlegt durch den offenen Harley-Backbone-Kabelkanal
-                                       | (100 % lötfrei, ZERO Tank-Demontage via Nylon-Fish-Tape)
-                                       v
-                     +------------------------------------+
-                     |  1x FRONT-KNOTEN & COCKPIT-HUB     |
-                     |  (Am Lenker-Riser / Gabelbrücke)   |
-                     |  * u-blox SAM-M10Q Multi-GNSS      |
-                     |  * TI TMP117 & OPT3001 Sensoren    |
-                     |  * Knowles MEMS Fahrtwind-Sensor   |
-                     |  * Qi-Wireless / USB-PD Phone-Port |
-                     +-----------------+------------------+
-                                       |
-                                       +-----------------------------------+
-                                       |                                   |
-                                       v                                   v
-                       +-------------------------------+   +-------------------------------+
-                       | 2x SYMMETRISCHE SPIEGEL-PODS  |   | 1x HANDSCHUHEFACH 2-PORT HUB  |
-                       | (Links & Rechts Spiegelfüße)  |   | (Rechtes Fach, CVO ST)        |
-                       | * Links:  PTT-Taste & BSD-LED |   | * Unterseiten-OEM-Tülle       |
-                       | * Rechts: Cam-Tag & BSD-LED   |   | * 1x Wireless CarPlay Dongle  |
-                       | * Bilaterale Totwinkel-Warnung|   | * 1x Freier USB-Ladeport      |
-                       +-------------------------------+   +-------------------------------+
+                      +--+---------------------------------------+------------------+
+                         |                                       |
+                         | [J1]                                  | [J_PERIPH]
+                         v                                       v
+                KABEL 1 (Bordnetz & CAN)                KABEL 2 (OMB Peripherie-Bus)
+                Deutsch DTM06-6S (IP68)                 16-Pin Automotive Header (IP68)
+                * Pin 1: KL30 (+12V Dauerplus)          * Strang 1 (1.5 m): Front-Node (60W PD + USB 2.0)
+                * Pin 2: KL15 (Zündungsplus)            * Strang 2 (1.0 m): Pod 1 Links (30W PD + USB 2.0)
+                * Pin 3: GND (Masse)                    * Strang 3 (1.0 m): Pod 2 Rechts (30W PD + USB 2.0)
+                * Pin 4..5: CAN_H / CAN_L               * Strang 4 (0.5 m): Heck-Radar MR20 (12V geschaltet)
+                * Pin 6: SHIELD                         |
+        +-----------------------+-----------------------+-----------------------+
+        |                       |                       |                       |
+        v Strang 2 (30W PD)     v Strang 3 (30W PD)     v Strang 4 (12V)        v Strang 1 (60W PD)
++-------------------+   +-------------------+   +-------------------+   +-------------------------------+
+| 4-Pin Magnet-     |   | 4-Pin Magnet-     |   | 1x HECK-RADAR 2.0 |   | 1x FRONT-KNOTEN & COCKPIT-HUB |
+| Abreißkupplung    |   | Abreißkupplung    |   | (Kennzeichenträger|   | (Handlebar Riser / Nacelle)   |
+| (HytePro M411)    |   | (HytePro M411)    |   |  Wheeltec MR20    |   | * 60W USB-PD Engine (SC8721/  |
++---------+---------+   +---------+---------+   |  77 GHz Radar     |   |   SC8102, Phone, GPS, Cams)   |
+          |                       |             |  PCBA 08 Sub-MCU  |   | * Schnapp-Sensor-Puck (SAM-   |
+          v Koffer-Durchführung   v Koffer-Durchf.|  36x Warn-LEDs)   |   |   M10Q, TMP117, OPT3001,      |
++-------------------+   +-------------------+   +-------------------+   |   Knowles MEMS Wind-Mic)      |
+| 1x POD 1 LINKS    |   | 1x POD 2 RECHTS   |                           +---------------+---------------+
+| (Hartschalenkoffer|   | (Hartschalenkoffer|                                           |               |
+|  Lid-Dock)        |   |  Lid-Dock)        |                           +---------------+               v
+| * 2x Kaltstart-   |   | * 2x Kaltstart-   |                           | 2x UNDER-PERCH|   +---------------+
+|   Hubmagnete JF-  |   |   Hubmagnete JF-  |                           | SPIEGEL-PODS  |   | 1x HANDSCHUH- |
+|   0530B (15-85mm  |   |   0530B (15-85mm  |                           | (Li & Re)     |   | FACH 5-PORT   |
+|   Universalschl.) |   |   Universalschl.) |                           | * L: PTT      |   | HUB (Touring) |
+| * 30W Koffer-USB- |   | * 30W Koffer-USB- |                           | * R: Cam-Tag  |   | * 30W Phone PD|
+|   Ladedose PD     |   |   Ladedose PD     |                           | * Bilaterale  |   | * 10W Dongle  |
+| * PCBA 03 Smart-  |   | * PCBA 03 Smart-  |                           |   BSD-LEDs    |   | * 10W Cam-Lead|
+|   Gateway (Sena/  |   |   Gateway (Sena/  |                           +---------------+   | * USB Headset-|
+|   Cardo/OMM/Midl) |   |   Cardo/OMM/Midl) |                                               |   Emulation   |
++-------------------+   +-------------------+                                           +---------------+
 ```
 
 ---
@@ -89,17 +68,21 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
   * **1x Main Box:** Unterwanne mit Dämpferdomen, Zwischenboden mit $70 \times 10\,\text{mm}$ Kabelbucht, schwenkbare Akkubrücke mit Rastfeder ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)), Gehäusedeckel ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)).
   * **2x Koffer-Pods v10.0:** Pod-Wannen für Koffer-Innenmontage, 2x Slide-in Deckel mit integrierter Neodym-Riegelaufnahme, 2x Spritzschutz-Zwischendeckel (Dry-Flap mit Dichtlippe), 2x USB-Ladeport-Aufnahmerahmen.
-  * **1x Front-Knoten Riser-Gehäuse:** Kompakte Unterwanne mit Riser- / Triple-Tree Klemmschelle, Gehäusedeckel mit Gore-Membranaufnahme für MEMS-Fahrtwind-Sensor.
+  * **2x Universelle Aktuator-Schlittenschiene:** ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) mit stufenloser 15–85 mm Schlittenführung für je 2x Mini-Hubmagnete im Pod-Boden.
+  * **1x Front-Knoten Riser-Gehäuse:** Kompakte Unterwanne mit Riser- / Triple-Tree Klemmschelle, Gehäusedeckel mit O-Ring-Nut.
+  * **1x Modulares Schnapp-Sensor-Puck:** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) für SAM-M10Q GNSS, TMP117, OPT3001 und Knowles MEMS.
   * **2x Symmetrische Under-Perch Spiegel-Pods (Links & Rechts):** Formschöne Halterungen zur Montage unter beiden Spiegelschrauben ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) mit Führung für taktilen Taster (Links: PTT; Rechts: Cam-Highlight) und LED-Linsentrichter für bilaterale Totwinkel-Warnanzeige (BSD).
-  * **1x Handschuhfach-Hub-Gehäuse:** Kompakter 2-Port USB-Verteiler für das rechte Handschuhfach der 2024+ CVO Road Glide ST.
+  * **1x Handschuhfach 5-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für rechtes Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, 10W Cam-Lead).
   * **1x Heck-Radar Halterung:** MR20 Radar-Gehäuse mit Hirth-Neigungsverstellung, Kennzeichenträger und integriertem Schmutzfänger (Roost-Deflector).
 * [ ] **Vollautomatisch bestückte Platinen (SMT-gefertigt):**
-  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Automotive USB-PD Hub-Engine (z.B. SW3526 / TI TPS25750), Dual-Power Input (12V DTM-12 & USB-C PD Sink mit Ideal-Diode OR-ing), DTM-12 Buchsenheader und USB-C DFU-Port. *(DW3110 UWB entfällt komplett!)*
-  * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit USB-PD Sink/Buck-Regler, Koffer-USB-A/C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland) und PTT-Tastung. *(Servos und Hubmagnete entfallen komplett!)*
-  * **1x PCBA 05 (Front-Knoten Riser-Hub):** Kompakt-Platine mit SAM-M10Q GNSS, TMP117 / OPT3001, Knowles MEMS Fahrtwind-Mikrofon und 12V/USB-PD Zubehörspeisung.
+  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Zwei-Kabel-Anschlüssen (6-Pin Deutsch DTM `J1` & 16-Pin Automotive Header `J_PERIPH`), Dual-Power Input (12V & USB-C PD Sink mit Ideal-Diode OR-ing) und USB-C DFU-Port. *(DW3110 UWB entfällt komplett!)*
+  * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit 30W USB-PD Sink/Buck-Regler, Koffer-USB-C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland), PTT-Tastung und `J_ACT` 4-Pin Header mit Dual-AO3400A MOSFETs für 2,0 s Kaltstart-Tastendruck.
+  * **1x PCBA 05 (Front-Knoten Riser-Hub):** Kompakt-Platine mit 60W USB-PD Engine (Southchip SC8721/SC8102), `J_SENSOR_EXT` 6-Pin Port für das Schnapp-Sensor-Puck und Zubehörspeisung (27W Phone Fast Charge, 15W dediziertes Motorrad-GPS Nav, 10W Cam-Lead).
   * **2x PCBA 05B (All-in-One Under-Perch Platine):** Baugleiche Mini-Platinen für linken und rechten Spiegelfuß mit hochpräzisem Mikrotaster (Links: PTT; Rechts: Cam-Highlight) und ultraheller Amber-LED (BSD).
   * **1x PCBA 08 (Heck-Radar Sub-MCU):** 77 GHz Radar-Controller mit 36x Strobe-Warn-LEDs.
-* [ ] **V4A Edelstahl-Normteile & Magnete (100 % lötfrei):**
+* [ ] **V4A Edelstahl-Normteile, Magnete & Aktuatoren (100 % lötfrei):**
+  * **4x Mini-Hubmagnete:** JF-0530B (12V DC, 300 mA, 10 mm Hub) mit aufgesteckten weichen Shore A50 Silikonkappen (2x pro Pod).
+  * 4x DIN 912 V4A M2.5 x 8 mm Schrauben für die Aktuator-Schlittenklemmung.
   * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (Gehäuse-Mutterntaschen)
   * 6x DIN 934 M4 Muttern (Radar- & Riser-Klemmung)
   * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Knoten)
@@ -114,11 +97,12 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **1x Taoglas FXP895 LoRa 868 MHz Flex-Antenne** mit U.FL Kabel
   * **1x Taoglas FXP73 2.4/5 GHz Wi-Fi/BLE Flex-Antenne** mit U.FL Kabel
   * 2x Gore ePTFE Druckausgleichs- und Akustik-Membranpads
-* [ ] **Vorkonfektionierte Automotive-Kabelbäume:**
-  * **1x Deutsch DTM-12 Zentral-Kabelbaum** (12-polig auf 4 Stränge: Pod 1, Pod 2, Front-Node, Heck-Radar sowie 12V Bordnetz-Speisung)
-  * **2x HytePro 4-Pin Magnet-Abreißkupplungen (IP67)** mit 4-adrigem Silikon-Flachbandkabel ($V_{\text{BUS}}$, `GND`, `D+`, `D-`)
-  * **1x 4-adriges hochflexibles geschirmtes Automotive-Kabel (AWG22/28)** für den Backbone-Zug (Länge ca. $1{,}5\,\text{m}$)
-  * **1x Nylon-Einziehfeder (Fish-Tape, Ø 3 mm, Länge 2 m)** zum Durchziehen des Kabels durch den Rahmentunnel
+* [ ] **Vorkonfektionierte Automotive-Kabelbäume (Zwei-Kabel-Architektur):**
+  * **1x Kabel 1 (Bordnetz & CAN):** 6-Pin Deutsch DTM06-6S COTS Fertigkabelbaum mit Raychem DR-25 (KL30, KL15, GND, CAN_H, CAN_L, Schirm).
+  * **1x Kabel 2 (OMB Peripherie-Bus):** 16-Pin Automotive COTS Kabelbaum auf 4 Stränge: Front-Node (60W), Pod 1 (30W), Pod 2 (30W), Heck-Radar (12V geschaltet).
+  * **2x HytePro 4-Pin Magnet-Abreißkupplungen (IP67)** mit 4-adrigem Silikon-Flachbandkabel ($V_{\text{BUS}}$, `GND`, `D+`, `D-`).
+  * **1x 4-adriges hochflexibles geschirmtes Automotive-Kabel (AWG22/28)** für den Backbone-Zug (Länge ca. $1{,}5\,\text{m}$).
+  * **1x Nylon-Einziehfeder (Fish-Tape, Ø 3 mm, Länge 2 m)** zum Durchziehen des Kabels durch den Rahmentunnel.
 * [ ] **Werkzeuge:**
   * Innensechskantschlüsselsatz (1.5 / 2.0 / 2.5 / 3.0 / 4.0 mm), Torx TX10 / TX25, Gabelschlüssel SW 7 / 8 / 10 mm, Cuttermesser, dielektrisches Silikonfett.
 
@@ -132,7 +116,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * Fertig bestückte `PCBA 01` (mit ESP32-S31, Qualcomm QCC3084 und USB-PD Engine) auf die Dämpferdome setzen.
    * Platine mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
 3. **Kabelstränge vorverlegen & Zwischenboden aufsetzen:**
-   * Deutsch DTM-12 Hauptstecker an `PCBA 01` anstecken.
+   * Deutsch DTM-6 Bordnetzstecker an `J1` und 16-Pin Automotive Stecker an `J_PERIPH` auf `PCBA 01` anstecken.
    * U.FL-Koaxialkabel der LoRa-Antenne (`ANT1`, FXP895) und der Wi-Fi-Antenne anstecken.
    * Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Alle Leitungen gleiten quetschfrei durch die $70 \times 10\,\text{mm}$ Kabelbucht in die obere Kammer.
 4. **2.200 mAh LiPo-Akku & schwenkbare Akkubrücke montieren:**
@@ -145,19 +129,25 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 2: Koffer-Pods v10.0 montieren (Slide-in Deckel & Koffer-USB-Lader)
-1. **Das v10.0 Pod-Konzept verstehen (100 % servicefreundlich & motorfrei):**
-   * Es gibt keine störanfälligen Motorschlitten oder Auswerfer-Servos mehr.
+### Schritt 2: Koffer-Pods v10.0 montieren (Mechatronischer Kaltstart & 30W Koffer-Lader)
+1. **Das v10.0 Pod-Konzept verstehen (100 % servicefreundlich & mechatronisch automatisiert):**
    * Der Pod sitzt dauerhaft geschützt im vorderen Innenbereich des Hartschalenkoffers.
    * Ein **Slide-in Deckel** mit umlaufender Dichtlippe verschließt die Einschuböffnung. Im geschlossenen Zustand verriegelt ein federbelasteter Neodym-Riegelbolzen den Deckel formschlüssig.
    * **Öffnen per FOB:** Zur Entnahme des Kommunikationsmoduls wird der magnetische OMB Smart Keyfob einfach an die Gehäuse-Markierung gehalten. Das Magnetfeld zieht den Riegelbolzen zurück, und der Deckel kann leicht herausgezogen werden.
    * **Zwischendeckel (Dry-Flap):** Direkt hinter dem Außendeckel sitzt eine federbelastete Spritzschutzklappe. Selbst wenn der Kofferdeckel bei Regen geöffnet wird, bleibt die Elektronik absolut trocken.
-   * **Integrierter Koffer-USB-Ladeport:** Auf der Innenseite des Pods stellt `PCBA 03` eine spritzwassergeschützte USB-C Buchse (5V/12V PD bis 30W) bereit. Damit können Action-Cams, Helmpolster-Trockner, Powerbanks oder Smartphones während der Fahrt direkt im Koffer geladen werden!
-2. **Platinen- & Stecker-Montage:**
+   * **Integrierter 30W Koffer-USB-Ladeport:** Auf der Innenseite des Pods stellt `PCBA 03` eine spritzwassergeschützte USB-C Buchse (bis 30W USB-PD) bereit. Damit können Action-Cams, Helmpolster-Trockner, Powerbanks oder Smartphones während der Fahrt direkt im Koffer geladen werden!
+2. **Universelle Aktuator-Schlittenschiene & Kaltstart-Drücker kalibrieren:**
+   * Die beiden Mini-Hubmagnete JF-0530B (12V DC, 300 mA, 10 mm Hub) in die Schlittenaufnahmen der universellen Schlittenschiene ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) einsetzen.
+   * Auf beide Stößelspitzen die weichen Shore A50 Silikonkappen aufstecken.
+   * Die beiden Schlitten stufenlos auf das Tastenraster des eingesetzten OEM-Intercoms einstellen (15–85 mm kontinuierlicher Einstellbereich, z. B. exakt 50 mm Abstand zwischen Intercom- und Medientaste beim Cardo Packtalk Edge bzw. Sena Tastenzentren).
+   * Die Schlitten über die unverlierbaren DIN 912 M2.5 x 8 mm Schrauben formschlüssig festklemmen.
+   * Die Schlittenbaugruppe im Pod-Boden verschrauben und das 4-polige Aktuatorkabel an `J_ACT` auf `PCBA 03` anstecken.
+   * **Funktion des Mechatronik-Kaltstarts:** Beim Einschalten der Zündung (KL15) schalten die Dual-AO3400A-MOSFETs auf `PCBA 03` (angesteuert über ESP32-C6 GPIO0 und GPIO1) beide Hubmagnete für exakt 2,0 s vollautomatisch ein. Die Silikonstößel drücken präzise und schonend auf die gummierte Tastatur des Headsets und booten dieses zuverlässig aus dem stromlosen Zustand (Zero-Standby-Entladung, kein Löten an der OEM-Platine nötig, kein manuelles Öffnen vor/nach der Fahrt!).
+3. **Platinen- & Stecker-Montage:**
    * Platine `PCBA 03` mit 4x M2.5 Schrauben in das Pod-Gehäuse einsetzen.
    * 4-Draht-Zuleitung vom Koffer-Durchführungspunkt an die Klemmleiste / Buchse von `PCBA 03` anstecken (`VBUS`, `GND`, `D+`, `D-`).
    * Intercom-Kabelpeitsche (für Sena SPIDER X Slim, Cardo Packtalk Edge, OMM UCS oder Midland Funk) an den Buchsenleisten von `PCBA 03` anstecken.
-3. **Slide-in Deckel & Magnetverriegelung komplettieren:**
+4. **Slide-in Deckel & Magnetverriegelung komplettieren:**
    * Den kleinen N52 Neodym-Magneten mit Führungsstift in die Riegeltasche des Deckels einlegen und mit der Rückstellfeder vorspannen.
    * Dichtprofil in die umlaufende Nut des Slide-in Deckels einpassen und mit Silikonfett schmieren. Deckel probehalber einschieben: Er rastet mit einem deutlichen "Klick" ein. Bei Annäherung des Smart Keyfobs federt der Riegel zurück und gibt den Deckel frei.
 
@@ -178,10 +168,10 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ---
 
-### Schritt 4: Front-Knoten am Riser & Symmetrische Dual Under-Perch Spiegel-Pods montieren
-1. **Front-Knoten Riser-Montage:**
-   * Der Front-Knoten (`PCBA 05`) wird im kompakten Gehäuse direkt am Lenker-Riser oder der oberen Gabelbrücke montiert (mittels beiliegender Riser-Klemmschelle).
-   * **Vorteil:** Volle Umströmung mit kühlem Fahrtwind ($< 35^\circ\text{C}$), ungestörter Empfang für den u-blox SAM-M10Q GNSS-Empfänger und direkter Zugriff auf das Knowles MEMS Fahrtwind-Mikrofon zur dynamischen Lautstärkenachführung.
+### Schritt 4: Front-Knoten am Riser, Modulares Sensor-Puck & Symmetrische Dual Under-Perch Spiegel-Pods montieren
+1. **Front-Knoten Riser-Montage & Modulares Sensor-Puck:**
+   * Der Front-Knoten (`PCBA 05`) mit integrierter **60W USB-PD Engine** (Southchip SC8721/SC8102) wird im kompakten Gehäuse direkt am Lenker-Riser oder der oberen Gabelbrücke montiert (mittels beiliegender Riser-Klemmschelle).
+   * **Modulares Schnapp-Sensor-Puck ("Körbchen"):** Das hermetische Sensor-Puck ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) wird formschlüssig von oben auf den Front-Knoten aufgeklickt. Es kontaktiert über `J_SENSOR_EXT` (6-Pin JST-SH) und beherbergt u-blox SAM-M10Q GNSS, TI TMP117 Präzisionsthermometer, TI OPT3001 Umgebungslichtsensor und das Knowles MEMS Fahrtwind-Mikrofon. (Im Pkw/Van lässt sich das Körbchen mit einem Klick lösen und über ein 1,5 m Kabel im Scheibenkeil platzieren!).
 2. **Symmetrische Dual Under-Perch Spiegel-Pods montieren (Links & Rechts):**
    * Die linke und rechte Spiegelschraube unter den beiden Lenkerarmaturen kurz lösen.
    * Die beiden ergonomischen Spiegel-Pods ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) formschlüssig unter die Spiegelfüße stecken und die Schrauben mit $15\,\text{Nm}$ vorschriftsmäßig festziehen.
@@ -209,27 +199,26 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 |                                                                                                 |
 |   [ USB-C NETZTEIL (5V-20V PD) ODER 12V DC LABORNETZTEIL ]                                      |
 |        |                                                                                        |
-|        | USB-C PD Sink (5V-20V bis 60W) ODER 12V DTM-12 (Dual Ideal-Diode OR-ing)               |
+|        | USB-C PD Sink (5V-20V bis 60W) ODER 12V DTM-6 Kabel 1 (Dual Ideal-Diode OR-ing)        |
 |        v                                                                                        |
-|   +---------------+     4-Draht Bus (USB-PD / USB 2.0)     +---------------+                    |
-|   |  ZENTRALBOX   |=======================================>|  FRONT-KNOTEN | (Am Riser)         |
-|   |  (PCBA 01)    |   (VBUS, GND, D+, D-)                  |  (PCBA 05)    | SAM-M10Q GNSS      |
-|   |  ESP32-S31    |                                        +-------+-------+ TMP117 / Knowles   |
-|   |  QCC3084 Audio|                                                |                            |
-|   |  USB-PD Hub   |                                                v                            |
-|   +-------+-------+                                   +-------------------------+               |
-|           |                                           | 2x SYMMETRISCHE SPIEGEL-|               |
-|           | 4-Draht Bus (USB-PD)                      | PODS (Links PTT /       |               |
-|           |                                           | Rechts Cam-Tag & BSD)   |               |
-|           |                                           +-------------------------+               |
-|           +-------------------------------+                                                     |
-|           | Strang 1                      | Strang 2                                            |
+|   +---------------+   Kabel 2 Strang 1: 4-Draht (60W PD / USB 2.0)   +---------------+          |
+|   |  ZENTRALBOX   |=================================================>|  FRONT-KNOTEN |          |
+|   |  (PCBA 01)    |   (VBUS, GND, D+, D-)                            |  (PCBA 05)    |          |
+|   |  ESP32-S31    |                                                  +-------+-------+          |
+|   |  QCC3084 Audio|                                                          |                  |
+|   |  4-Zweig Bus  |                                                          v                  |
+|   +-------+-------+                                             +-------------------------+     |
+|           |                                                     | 2x SYMMETRISCHE SPIEGEL-|     |
+|           | Kabel 2: 16-Pin Automotive Header                   | PODS (Links PTT /       |     |
+|           |                                                     | Rechts Cam-Tag & BSD)   |     |
+|           +-------------------------------+                     +-------------------------+     |
+|           | Strang 2 (30W PD)             | Strang 3 (30W PD)                                   |
 |           v                               v                                                     |
 |   +---------------+               +---------------+                                             |
 |   | KOFFER-POD 1  | (Links)       | KOFFER-POD 2  | (Rechts)                                    |
 |   | PCBA 03 Smart |               | PCBA 03 Smart |                                             |
-|   | Intercom-Modul|               | Intercom-Modul|                                             |
-|   | Koffer-USB-Port               | Koffer-USB-Port                                             |
+|   | 2x Hubmagnete |               | 2x Hubmagnete |                                             |
+|   | 30W Koffer-USB|               | 30W Koffer-USB|                                             |
 |   +---------------+               +---------------+                                             |
 |                                                                                                 |
 |   USB-C DFU-Port an PCBA 01                                                                     |
@@ -241,23 +230,29 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ```
 
 ### Der geführte 4-Punkte v10.0 Smoke-Test
-1. [x] **Stromversorgung, USV & USB-PD (Check 1):** Zentralbox über USB-C Netzteil (oder 12V Labornetzteil) verbinden. Interne 5.0 V und 3.3 V Schienen stabil, USV-LiPo (2.200 mAh) lädt mit 4.18 V. USB-PD Power Negotiation versorgt alle Stränge mit sauberer Spannung.
-2. [x] **Koffer-Pods & Intercom-Gateway (Check 2):** Beide Pods melden sich über den USB-2.0-Bus fehlerfrei an. Intercom-Audio (Sena/Cardo/OMM) wird erkannt; PTT-Schaltung reagiert verzögerungsfrei. Integrierter Koffer-USB-Port liefert volle Ladespannung.
-3. [x] **Front-Knoten & Cockpit-Bedienung (Check 3):** SAM-M10Q liefert 3D-GNSS-Fix, TMP117 liefert Umgebungstemperatur, Knowles MEMS reagiert auf Schnipsen. Betätigung der linken PTT-Taste schaltet Funk/Intercom, linke Spiegel-LED leuchtet bernsteinfarben auf. Betätigung der rechten Action-Cam Taste setzt einen Highlight-Marker, rechte Spiegel-LED leuchtet bernsteinfarben auf.
+1. [x] **Stromversorgung, USV & USB-PD (Check 1):** Zentralbox über USB-C Netzteil (oder 12V Labornetzteil) verbinden. Interne 5.0 V und 3.3 V Schienen stabil, USV-LiPo (2.200 mAh) lädt mit 4.18 V. USB-PD Power Negotiation versorgt alle Stränge sauber (60W Front-Knoten, 30W je Pod).
+2. [x] **Koffer-Pods, Mechatronik & Intercom (Check 2):** Beide Pods melden sich über den USB-2.0-Bus fehlerfrei an. Bei KL15 Zündung EIN ziehen die beiden Mini-Hubmagnete auf der Schlittenschiene für exakt 2,0 s synchron an (Kaltstart-Impuls). Intercom-Audio (Sena/Cardo/OMM) wird erkannt; PTT-Schaltung reagiert verzögerungsfrei. Integrierter 30W Koffer-USB-Port liefert volle Ladespannung.
+3. [x] **Front-Knoten & Cockpit-Bedienung (Check 3):** SAM-M10Q im Sensor-Puck liefert 3D-GNSS-Fix, TMP117 liefert Umgebungstemperatur, Knowles MEMS reagiert auf Schnipsen. Betätigung der linken PTT-Taste schaltet Funk/Intercom, linke Spiegel-LED leuchtet bernsteinfarben auf. Betätigung der rechten Action-Cam Taste setzt einen Highlight-Marker, rechte Spiegel-LED leuchtet bernsteinfarben auf.
 4. [x] **LoRa Notfunk & 77 GHz Heck-Radar (Check 4):** SX1262 LoRa 868 MHz Ping-Echo erfolgreich; Wheeltec MR20 Radar meldet Zielerkennung und steuert die 36 Heck-Strobe-LEDs an.
 
 ---
 
 ## 5. Fahrzeugspezifische Montage & Verkabelung am Motorrad
 
-### 5.1 Montage Harley-Davidson 2024+ CVO Road Glide ST (FLTRXSE / Touring Plattform)
+### 5.1 Montage Harley-Davidson Bagger-Plattform (FL Touring: Street Glide, Road Glide, CVO, CVO ST, Road King Special RKS)
+
+> [!NOTE]
+> **HARLEY-DAVIDSON TOURING-PLATTFORM-VEREINHEITLICHUNG:**  
+> Alle FL Touring-Bagger teilen sich dieselben Hartschalenkoffer, dieselbe OEM Ø 19 mm Kofferwand-Durchführung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)), dieselbe unter der Fahrersitzbank montierte Zentralbox und denselben offenen Rahmen-Backbone-Kabelkanal:  
+> * **Verkleidete Bagger (Road Glide / Street Glide / CVO / CVO ST):** Nutzen die Sharknose- bzw. Batwing-Verkleidung mit symmetrischen Rockford Fosgate Lautsprecher-Eckdisplay-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)) und dem 5-Port Handschuhfach-Hub im rechten Media-Fach.  
+> * **Unverkleidete Bagger (Road King Special RKS):** Smartphone/Garmin wird direkt am Lenker montiert; der Front-Node wird im "Front-to-Back Flip" geschützt unter der Lampen-Nacelle platziert (ohne Handschuhfach-Hub).
 
 > [!CAUTION]
-> **GARANTIE- & LACKSCHUTZ: DIE DREI EISERNEN CVO-REGELN:**  
-> 1. **ZERO OUTER FAIRING REMOVAL (Niemals die Sharknose-Außenhaut abnehmen!):**  
->    Bei der 2024+ CVO Road Glide ST sind die Rockford Fosgate Lautsprechergitter und die mittleren Luftführungsschlitze mit extrem bruchgefährdeten Druckclips im lackierten Verkleidungskörper eingerastet. Ein Abhebeln führt fast unweigerlich zu abgebrochenen Haltenasen oder feinen Kratzern im exklusiven Raven Metallic Custom-Lack. **Die Außenverkleidung bleibt für den gesamten OMB-Einbau zu 100 % unangetastet!**  
+> **GARANTIE- & LACKSCHUTZ: DIE DREI EISERNEN BAGGER-REGELN:**  
+> 1. **ZERO OUTER FAIRING REMOVAL (Niemals die Außenverkleidung abnehmen!):**  
+>    Die Lautsprechergitter und Luftführungsschlitze besitzen extrem bruchgefährdete Druckclips. **Die Außenverkleidung bleibt für den gesamten OMB-Einbau zu 100 % unangetastet!**  
 > 2. **ZERO FUEL TANK LIFTING (Niemals den Benzintank anheben oder abbauen!):**  
->    Der Harley-Davidson Touring-Rahmen besitzt auf der Oberseite des Hauptrohrs einen ab Werk integrierten, offenen Kunststoff-Kabelkanal ("Backbone Wire Caddy"). Dieser ist direkt von unterhalb der Fahrersitzbank zugänglich. Mit einer flexiblen Nylon-Einziehfeder wird das 4-Draht-Kabel in 5 Minuten hindurchgezogen – ohne eine einzige Schraube am Tank zu lösen!  
+>    Der Touring-Rahmen besitzt einen offenen Kunststoff-Kabelkanal ("Backbone Wire Caddy") oben auf dem Hauptrohr. Mit einer Nylon-Einziehfeder wird das 4-Draht-Kabel in 5 Minuten hindurchgezogen – ohne Schrauben am Tank zu lösen!  
 > 3. **HERMETISCHES HANDSCHUHFACH (Niemals Kabel über Türdichtungen quetschen!):**  
 >    Das rechte Handschuhfach wird ausschließlich von *unten* durch die werkseitige Gummitülle angefahren. Die Deckeldichtung bleibt zu 100 % unversehrt und absolut wasserdicht.
 
@@ -265,17 +260,19 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 1. Fahrersitzbank abnehmen (hintere Rändelschraube lösen, Sitz nach hinten abziehen).
 2. Die Zentralbox auf der Rahmenbrücke direkt vor/über der Starterbatterie platzieren.
 3. Mit 4x M4 Silentblöcken oder hochfestem 3M Dual-Lock Klettband vibrationsfest fixieren.
-4. 12V-Stromversorgung: Das Pluskabel (mit 7.5A COTS-Sicherung) an Klemme 30 (Dauerplus) bzw. Klemme 15 (geschaltetes Zündungsplus am OEM-Diagnosestecker) anschließen; Massekabel an den zentralen Rahmenmassepunkt legen.
+4. **Zwei-Kabel-Architektur anschließen:**
+   * **Kabel 1 (Deutsch DTM-6 `J1`):** Pluskabel (mit 7.5A COTS-Sicherung) an Klemme 30 (Dauerplus) bzw. Klemme 15 (geschaltetes Zündungsplus am OEM-Diagnosestecker) anschließen; Massekabel an den zentralen Rahmenmassepunkt legen; CAN-Bus (Pins 4/5) an den Bordnetz-CAN führen.
+   * **Kabel 2 (16-Pin Automotive `J_PERIPH`):** Verriegeln und die 4 Stränge zu den jeweiligen Zielorten führen (Strang 1 Front-Knoten, Strang 2 Pod 1, Strang 3 Pod 2, Strang 4 Radar).
 
 #### Schritt 5.1.2: 5-Minuten Backbone-Kabelzug (Zero Tank-Demontage)
 1. Die vordere Sitzzungen-Halterung am Rahmentunnel lokalisieren. Genau dort beginnt der offene OEM-Kabelkanal unter der Tankmittelkonsole.
 2. Die flexible Nylon-Einziehfeder (Fish-Tape, Ø 3 mm) von unter der Sitzbank vorsichtig in den Kanal einschieben und nach vorne führen, bis die Spitze am Lenkkopf austritt.
-3. Das 4-adrige geschirmte Automotive-Kabel (AWG22/28, Strang 4) mit Textilband an der Einzugsfederspitze fixieren.
+3. Das 4-adrige geschirmte Automotive-Kabel (AWG22/28, Strang 1) mit Textilband an der Einzugsfederspitze fixieren.
 4. Einzugsfeder nach vorne durchziehen. Das Kabel liegt nun perfekt geschützt, unsichtbar und scheuerfrei im originalen Kabelkanal.
-5. Das hintere Kabelende am DTM-12 Zentralstecker einpinnen; das vordere Kabelende am Lenkkopf zur oberen Gabelbrücke führen.
+5. Das hintere Kabelende am 16-Pin Peripherie-Kabelbaum anschließen; das vordere Kabelende am Lenkkopf zur oberen Gabelbrücke führen.
 
 #### Schritt 5.1.3: Front-Knoten & Symmetrische Dual Under-Perch Spiegel-Pods
-1. **Front-Knoten:** Mit der Halterung formschön an den Lenker-Risern oder der oberen Gabelbrücke verschrauben. Das aus dem Rahmentunnel austretende 4-Draht-Kabel anstecken.
+1. **Front-Knoten:** Mit der Halterung formschön an den Lenker-Risern oder der oberen Gabelbrücke (bei RKS: unter der Nacelle) verschrauben. Das aus dem Rahmentunnel austretende 4-Draht-Kabel (60W) anstecken.
 2. **Symmetrische Under-Perch Spiegel-Pods (Links & Rechts):**
    * Die linke und rechte Spiegelschraube unter den Armaturen lösen.
    * Die beiden baugleichen Pods aufstecken und Spiegelschrauben mit je $15\,\text{Nm}$ vorschriftsmäßig festziehen.
@@ -294,13 +291,16 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * **0 cm sichtbares Kabel, 0 Schrauben an der Außenverkleidung lösen!**
 4. **Funktion:** Der ESP32-S3 auf `PCBA 05` treibt die Displays per SPI/QSPI (links: Heckradar-Abstandsbalken & Totwinkel; rechts: Turn-by-Turn Pfeile, TPMS-Drücke, Intercom-Sprechstatus und Smartphone-Akkustand).
 
-#### Schritt 5.1.4: Handschuhfach 2-Port USB-Hub (CVO ST Infotainment-Bypass)
-1. Das rechte Handschuhfach der CVO Road Glide ST öffnen.
+#### Schritt 5.1.4: Handschuhfach 5-Port Media- & Power-Injection Hub (Harley Touring)
+1. Das rechte Handschuhfach öffnen.
 2. An der Unterseite des Handschuhfachs befindet sich die originale Harley-Gummitülle für Zubehörverkabelung.
-3. Das USB-Verbindungskabel vom Front-Knoten (oder der OEM-Headunit) von *unten* durch die Tülle nach oben in das Fach führen.
-4. Den kompakten OMB 2-Port USB-Hub anstecken und im Fach mit Klett fixieren:
-   * **Port 1:** Nimmt den Wireless CarPlay Dongle (z.B. Ottocast U2-Air / Carlinkit 5.0) auf. Die Stromversorgung ist absolut stabil (kein Abstürzen der 12.3" Skyline OS Headunit durch Spannungsabfall!).
-   * **Port 2:** Steht frei zum Laden des Fahrer-Smartphones oder für USB-Musiksticks zur Verfügung.
+3. Das Verbindungskabel vom Front-Knoten (kombinierte 60W Power-Injection & High-Speed USB 2.0 Datenleitung für Harley Headset-Emulation) von *unten* durch die Tülle nach oben in das Fach führen.
+4. Den formschlüssigen 5-Port Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) im Fach platzieren:
+   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultraschnelles Laden des Fahrer-Smartphones bei gleichzeitiger Navigation.
+   * **Port 2 (10W Switched Dongle Port):** Versorgt den Wireless CarPlay / Android Auto Dongle (Ottocast U2-Air / Carlinkit 5.0) mit stabiler, gefilterter Spannung (verhindert Bootloops des 12.3" Skyline OS / Boom! Box Displays!).
+   * **Port 3 (Free Media Port):** USB-C Buchse für USB-Musiksticks oder DFU-Firmware-Updates.
+   * **Port 4 (Direct 10W Camera Lead):** Fest verkabelte, wetterfeste 10W USB-C Zuleitung für Lenker- oder Scheiben-Action-Cams (GoPro / Insta360).
+   * **Port 5 (OEM Headunit Upstream & Harley Headset-Emulation via USB):** Verbindet die Datenleitungen direkt mit dem werkseitigen USB-Eingang des Infotainmentsystems (Boom! Box GTS / Skyline OS). Überträgt die MFi-Headset-Emulation für native Apple CarPlay Freischaltung und digitales Helmmikrofon-Audio ohne analoge Brummschleifen.
 5. Die Handschuhfachtür schließt hermetisch dicht – kein Kabel wird über die weiche Dichtlippe gequetscht!
 
 #### Schritt 5.1.5: Koffer-Pods & 100 % Zero-Drill Kofferwand-Durchführung (OEM Ø 19 mm)

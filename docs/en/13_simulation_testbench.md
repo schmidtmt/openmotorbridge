@@ -227,7 +227,7 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Core Components & Test Features:
 1. **Core Active Modules per Motorcycle:**
-   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Dual-Power: 12V DTM-12 & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz transceiver.
+   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz transceiver.
    * **Pods 1 & 2 (Monocoque Pod Enclosures):** Seamless 1-piece monocoque with slide-in lid, EPDM dry-flap, and direct 4-wire bus connection (PCBA 02 retired).
    * **PCBA 03 (Saddlebag Pods, 2x):** 4-wire bus interface with ESP32-C6 host MCU, ES8388 audio codec, up to 30W/60W USB-PD charging port, OptoMOS K1 PTT relay (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
    * **PCBA 05 (Universal Front Node) & PCBA 05B (Mirror Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS acoustic sensing, 4-wire bus interface and symmetrical under-perch mirror pods with 5-gesture switches and BSD LEDs.

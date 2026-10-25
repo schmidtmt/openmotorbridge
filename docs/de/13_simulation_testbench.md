@@ -4,7 +4,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 > [!NOTE]
 > **v10.0 Standardized Node Architecture Testbench-Update:**  
-> OpenMotorBridge v10.0 ersetzt das frühere UWB-Backbone durch einen hochrobusten, geschirmten **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit bis zu 60W Ladeleistung und $< 0{,}2\,\text{ms}$ Latenz. Die Zentralbox (`PCBA 01`) integriert Dual-Power Input (12V Bordnetz via Deutsch DTM-12 vs. 5V–20V USB-PD Sink via TI LM5050 Ideal-Dioden-OR-ing). Die Testbench simuliert das 7-Platinen-System (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`), die symmetrischen Spiegel-Pods mit 5-Gesten-Erkennung, kassettenfreie Monocoque-Pods mit EPDM-Dry-Flap und unterbrechungsfreie USB Audio Class 2.0 Streams.
+> OpenMotorBridge v10.0 ersetzt das frühere UWB-Backbone durch einen hochrobusten, geschirmten **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit bis zu 60W Ladeleistung und $< 0{,}2\,\text{ms}$ Latenz. Die Zentralbox (`PCBA 01`) integriert Dual-Power Input (12V Bordnetz via Deutsch DTM vs. 5V–20V USB-PD Sink via TI LM5050 Ideal-Dioden-OR-ing). Die Testbench simuliert das 7-Platinen-System (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`), die symmetrischen Spiegel-Pods mit 5-Gesten-Erkennung, kassettenfreie Monocoque-Pods mit EPDM-Dry-Flap und unterbrechungsfreie USB Audio Class 2.0 Streams.
 
 ---
 
@@ -230,7 +230,7 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Die Kernkomponenten & Test-Features:
 1. **Aktive Platinenklassen pro Motorrad:**
-   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Dual-Power: 12V DTM-12 & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz Transceiver.
+   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz Transceiver.
    * **PCBA 03 (Satelliten-Pods, 2x):** 4-Draht Bus Interface mit ESP32-C6 Host-MCU, ES8388 Audio-Codec, bis 30W/60W USB-PD Ladeport mit Dry-Flap, OptoMOS K1 PTT-Relais (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
    * **PCBA 05 (Universal Front Node) & PCBA 05B (Spiegel-Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS Akustikmessung, 4-Draht Bus Interface und symmetrische Under-Perch Spiegel-Pods mit 5-Gesten Tastern und BSD LEDs.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**

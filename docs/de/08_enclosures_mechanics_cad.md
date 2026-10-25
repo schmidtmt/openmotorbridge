@@ -26,7 +26,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox 3D Anschnitt CAD](../images/cad/main_box_cutaway_3d.png)
 
-*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit offener 70x10mm Kabelbucht und Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie (2.200 mAh) unter der schwenkbaren Akkubrücke mit Antennenkapselung und Zugentlastung, Deutsch DTM-12 Flansch, Taster SW1, USB-C Servicekappe sowie 100% kabelfreier Deckel mit Gore-Membran.*
+*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit offener 70x10mm Kabelbucht und Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie (2.200 mAh) unter der schwenkbaren Akkubrücke mit Antennenkapselung und Zugentlastung, automotiver Deutsch DTM Flansch, Taster SW1, USB-C Servicekappe sowie 100% kabelfreier Deckel mit Gore-Membran.*
 
 ![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../images/cad/main_box_enclosure_cad.png)
 
@@ -43,7 +43,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 +------------------------------------------------------------+  |
 | 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              |  |
 |    * Vordere Stirnwand (Alle Anschlüsse & Anzeige):        |  |
-|      - Deutsch DTM-12 Flansch (Automotive Haupt-Kabelbaum) |  |
+|      - Automotive Flansch (Kabelbaum J1 & J_PERIPH)        |  |
 |      - Taster SW1 (Silikon-Dichtkappe, Pairing & Reset)    |  |
 |      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) |  |
 |      - Diffuser PMMA-Lichtleiter (Ø 3,2 mm) für WS2812B RGB|  |
@@ -77,7 +77,7 @@ Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwi
 
 ![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
-*Abbildung 8.4: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung unter der schwenkbaren Akkubrücke, die durchgängige Konvektion über die 9 Zwischenbodenschlitze, der scheuerfreie Kabelverlauf durch die offene 70x10mm Kabelbucht zum Deutsch DTM-12 Flansch und die rückseitige 0,4mm Knockout-Membran für den SMA-Port.*
+*Abbildung 8.4: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung unter der schwenkbaren Akkubrücke, die durchgängige Konvektion über die 9 Zwischenbodenschlitze, der scheuerfreie Kabelverlauf durch die offene 70x10mm Kabelbucht zum automotiven Flansch und die rückseitige 0,4mm Knockout-Membran für den SMA-Port.*
 
 ### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
 
@@ -128,7 +128,7 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
   * Pin 2: `GND` (LiPo Masse mit integriertem Murata 10k NTC Temperaturfühler für JEITA-Ladeüberwachung)
 * **Offene Stirnseiten-Kabelbucht ($70{,}0 \times 10{,}0\,\text{mm}$):**
   * Großzügige, zur Front ($Y=0\,\text{mm}$) hin vollkommen offene Ausklinkung ($X = 18\dots 88\,\text{mm}$) im Zwischenboden.
-  * Lässt sämtliche 6 Leitungen (12-Pin DTM-12 Flachband, 10-Pin USB-C Flachband, 12V Strom, LiPo-Akkukabel, 868 MHz LoRa Koax und 2.4 GHz Koax) beim Aufsetzen der Oberwanne völlig frei und ohne Fädel- oder Quetschgefahr hineingleiten.
+  * Lässt sämtliche Leitungen (Automotive Flachbandkabel, 10-Pin USB-C Flachband, 12V Strom, LiPo-Akkukabel, 868 MHz LoRa Koax und 2.4 GHz Koax) beim Aufsetzen der Oberwanne völlig frei und ohne Fädel- oder Quetschgefahr hineingleiten.
 
 ---
 
@@ -139,13 +139,13 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 +-------------------------------------------------------------+
 | +------------+  +--------+  +----------+  +---------------+ |
 | | 1. USB-C   |  | 2. RGB |  | 3. SW1   |  | 4. Deutsch    | |
-| |    Service |  |    LED |  |    Pair/ |  |    DTM-12     | |
+| |    Service |  |    LED |  |    Pair/ |  |    Automotive | |
 | |    Alukappe|  |  Ø3.2mm|  |    Reset |  |    Flansch    | |
 | +------------+  +--------+  +----------+  +---------------+ |
 +-------------------------------------------------------------+
 ```
 
-1. **Deutsch DTM-12 Flansch (Haupt-Kabelbaum):** Automotive-Flansch (Deutsch DTM13-12PA) mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Verbindet intern über `J1` (2x06 Box-Header, 2,54 mm Raster) die 12 zentralen Fahrzeugadern für die Peitschen 1 bis 4: Peitsche 1 (Pod 1: +12V geschaltet, GND), Peitsche 2 (Pod 2: +12V geschaltet, GND), Peitsche 3 (Heck-Radar: +12V geschaltet, GND; Telemetrie 100% drahtlos via UWB) und Peitsche 4 (Bordnetz & CAN: KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH).
+1. **Automotive Flansch (Zwei-Kabel-Architektur J1 & J_PERIPH):** Automotive-Flansch mit integrierter Silikondichtung und 2x M3-Verschraubung ($28{,}0\,\text{mm}$ Lochabstand). Führt die Zwei-Kabel-Architektur der Zentralbox nach außen: Kabel 1 (6-Pin Deutsch DTM06-6S `J1`: KL30, KL15, GND, CAN-H, CAN-L, Shield) und Kabel 2 (16-Pin Automotive Header `J_PERIPH`: 4 Stränge à 4 Adern für Front-Knoten 60W, Pod 1 30W, Pod 2 30W und Heck-Radar MR20 12V/Telemetrie).
 2. **Taster SW1 (`SW_PAIR_RESET`):** Wasserdichter IP67-Minitaster mit Silikon-Dichtkappe und M7-Gewindehülse. Dient dem Bluetooth/Audio-Pairing (3s Betätigung) sowie dem vollständigen Werksreset & NVS Key Purge (10s Betätigung).
 3. **USB-C Service-Port:** Wasserdichte Rundflansch-Buchse mit unverlierbarer blau eloxierter Aluminium-Schraubkappe und EPDM-O-Ring für Firmware-Updates, ESP-IDF Telemetrie und Notfall-Diagnose.
 4. **RGB-Status-LED Sichtfenster:** Diffuser PMMA-Linsenkörper ($\varnothing\,3{,}2\,\text{mm}$) mit umlaufendem O-Ring, der das Licht der onboard WS2812B RGB-LED direkt auf die Frontblende spiegelt (Zustandsanzeige: Grün = Betrieb/Mesh OK, Blau = BT Audio Stream, Orange = Warnung/Radar aktiv, Rot = Sabotage/Alarm).
@@ -633,50 +633,71 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 
 ---
 
-### 6.2 Referenz-Kit 2: Harley-Davidson Touring, Bagger & Cruiser (Road King Special, Street Glide, Electra Glide)
+### 6.2 Referenz-Kit 2: Harley-Davidson Bagger (FL Touring) vs. Cruiser (Softail Plattform)
 
-Für klassische Touring- und Bagger-Modelle mit 2-Up-Komfortsitzbank oder freiem Heckkotflügel bietet OpenMotorBridge eine cleane, kotflügelfreie Integration:
+OpenMotorBridge v10.0 differenziert strikt und präzise zwischen der **FL Touring Plattform (Bagger)** und der **Softail Plattform (Cruiser)**:
 
 ```
-        HARLEY-DAVIDSON TOURING & BAGGER GESAMTSYSTEM-INTEGRATION
+    HARLEY-DAVIDSON TOURING-BAGGER VS. SOFTAIL-CRUISER ARCHITEKTUR
 +-----------------------------------------------------------------------------+
-| 1. COCKPIT (Nacelle / Batwing / Sharknose):                                 |
-|    * Front-Node (PCBA 05) im Hohlraum der Headlight-Nacelle oder Verkleidung |
-|    * Speist Garmin Navi / Smartphone-Halterung & Action-Cam am Lenker       |
-|    * SAM-M10Q GNSS + TMP117 Thermometer an Fahrzeug-Satellit im Fahrtwind   |
-|    * 4-Ader-Bus zur Zentralbox (im Rahmen-Kabelkanal -> 0 Tankdemontage)    |
+| A. TOURING-BAGGER (Road Glide, Street Glide, CVO, CVO ST, Road King Special):|
+|    * KOFFER: 100% IDENTISCHE werksseitige Hartschalenkoffer (Saddlebags).   |
+|      Zero-Drill OEM Ø 19 mm Egress (010_saddlebag_hole_grommet_split.scad), |
+|      U-Tunnel-Distanzscheibe (360° Hebel-Freilauf) & Magnet-Abreißkupplung. |
+|      2x Koffer-Pods (30W PD) mit Universal-Aktorik ("One Size Fits All").   |
+|    * MITTE: Zentralbox auf Batteriebrücke, Backbone im Rahmentunnel-Caddy.  |
+|    * DIE 2 SYSTEMUNTERSCHIEDE:                                               |
+|      1. Faired Bagger (RG/SG/CVO): Front-Node in Verkleidung, Dual Speaker   |
+|         Corner Pods (Displays), 5-Port Handschuhfach Hub (30W PD + Dongle). |
+|      2. Road King Special (RKS): Unverkleideter Bagger. Smartphone/Garmin   |
+|         direkt am Lenker, Front-Node im "Front-to-Back Flip" an Nacelle/Riser|
+|         (kein Handschuhfach-Hub erforderlich).                              |
 +-----------------------------------------------------------------------------+
-| 2. MITTE (Unter Sitzbank):                                                  |
-|    * Zentralbox mittig im Batteriefach (SX1262 LoRa, QCC3084 BT & USB-Hub)  |
-+-----------------------------------------------------------------------------+
-| 3. HECK (Kotflügel & Kennzeichen):                                          |
-|    * Heckkotflügel bleibt 100% frei und sauber (Fender Console entfällt)    |
-|    * Radar mittig unter dem Kennzeichen an Peitsche 3 (Pins 10-11)          |
-+-----------------------------------------------------------------------------+
-| 4. KOFFER:                                                                  |
-|    * Pod 1 (Sena SPIDER X Slim) & Pod 2 (Cardo Edge) in den Kofferdeckeln   |
+| B. SOFTAIL-CRUISER (Low Rider ST, Fat Bob, Breakout, Heritage Classic):     |
+|    * RAHMEN-MONTAGE: Modelle ohne Koffer montieren Pod 1 & 2 extern an      |
+|      Rahmenrohren / Heckstreben (analog zum BMW GS Rohrkäfig-Dock).         |
+|      Wetterfester Outdoor-USB-Port mit IP68 Kappe & Starkregen-Manschette.  |
+|    * KOFFER-CRUISER: Heritage Classic / Sport Glide nutzen Koffer-Pods.     |
+|    * HECK-RADAR: Optionaler Under-Fender Radar-Mount mit Spritzwasserschirm |
+|      (radar_center_underfender_mount.scad) für gecleante Custom/Bobber-Hecks|
 +-----------------------------------------------------------------------------+
 ```
 
-> [!NOTE]
-> **Bereinigung Kotflügel-Konsole (Entfall `pod3_touring_fender_console`):**  
-> Durch den Entfall von Pod 3 wird der Heckkotflügel bei Cruisern und Baggern nicht mehr durch eine aufgesetzte Konsole verbaut. Die klassische Custom-Linie des freiliegenden Blechfenders bleibt zu 100 % erhalten. Das Heckradar wird diskret unter dem Kennzeichen montiert.
+#### 6.2.1 Cockpit-Halterungen: Smartphone, Navi & Action-Cam Stromversorgung (60W Front Engine)
 
-#### 6.2.1 Cockpit-Halterungen: MagSafe-Smartphone & Induktives Cam-Docking
+Für alle Harley-Davidson Cockpit-Konzepte stehen robuste, vibrationsentkoppelte Lösungen zur Verfügung:
 
-Für Harley-Davidson Touring- & Bagger-Modelle (Road Glide Sharknose, Street Glide Batwing, Road King) stehen zwei zerstörungsfreie, aerodynamische Cockpit-Montagelösungen zur Verfügung:
+1. **Smartphone- & Navihalterung (COTS SP Connect / QuadLock & Garmin Zūmo):**
+   * **Montage:** Über universelle 1-Zoll / 1,25-Zoll Lenkerklemme oder AMPS-4-Loch-Flansch an den Risern oder der inneren Verkleidungsstrebe.
+   * **Speisung:** Direkt angebunden an den 60W USB-PD Zweig des Front-Knotens (`PCBA 05`). Liefert bis zu **27W USB-PD Fast Charging** für das Smartphone am Lenker sowie **15W Dauerleistung** für dedizierte Motorrad-Navis (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride).
+   * **Handschuhfach-Laden (Faired Bagger):** Alternativ lädt das Smartphone wetter- und vibrationsgeschützt im rechten Handschuhfach über den **5-Port Handschuhfach Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) mit thermisch begrenzten **30W USB-PD**.
 
-1. **Cockpit-MagSafe Smartphone- / Navihalterung (`009_magsafe_frame_dock.scad` / Cockpit-Adaption):**
-   * **Montage:** Über die universelle 1-Zoll / 1,25-Zoll Lenkerklemme oder den AMPS-4-Loch-Flansch direkt an den Lenker-Risern oder der inneren Verkleidungsstrebe.
-   * **Schnellverschluss & Qi-Laden:** Der integrierte Neodym-Ring fängt das Smartphone im MagSafe-Gehäuse magnetisch zentriert ab (~15 N Haltekraft).
-   * **Speisung:** Direkt angebunden an USB-PD / 12V Port 1 des Front-Knotens (`PCBA 05`), der im Hohlraum der Verkleidung sitzt. Vollkommen verdeckte Kabelführung ohne fliegende Kabel am Lenker.
+2. **Action-Cam Dauerstromversorgung (10W via wetterfestem USB-C):**
+   * **Reales Bordnetz statt induktiver Verluste:** Auf verkleidungsinterne Qi-Kamera-Docks wird bewusst verzichtet (hohe thermische Verluste durch dicke ABS-Wände, Ineffizienz).
+   * **Robuste Verkabelung:** Eine wetterfeste, formschlüssig dichtende USB-C Zuleitung führt direkt von Port `J8` des Front-Knotens zur Action-Cam (GoPro Hero 12/13, Insta360 X3/X4, DJI Osmo) am Lenker oder Verkleidungsbug.
+   * **Automatischer BLE-Shutter:** Startet und stoppt die Kameraaufzeichnung automatisch bei Zündung EIN/AUS und setzt Video-Bookmarks per Doppelklick am rechten Under-Perch Taster.
 
-2. **Road Glide ST Through-Fairing Induktives Cam-Dock (`road_glide_inductive_cam_dock.scad`):**
-   * **Zero-Drill & Zero-Wire Cam-Power:** Kontinuierliche Stromversorgung für Action-Cams (Insta360 X3/X4, GoPro Hero) auf der Sharknose-Außenhaut, **ohne** ein einziges Loch in die Verkleidung zu bohren.
-   * **Zweiteilige IPT-Architektur (Inductive Power Transfer):**
-     - **Innere TX-Cradle:** Wird mit 3M VHB Klebeband unsichtbar hinter dem Scheinwerfer an die Innenseite des $2{,}8\,\text{mm}$ dicken ABS-Fairing-Decks geklebt und nimmt eine $15\,\text{W}$ Qi-Sendespule auf (gespeist von PCBA 05).
-     - **Äußeres Cam-Dock (`road_glide_inductive_cam_dock.stl`):** Aerodynamische Basis auf der Außenseite (arretiert über 3M Dual Lock SJ3550 Klettverschluss). Beinhaltet eine Qi-Empfängerspule mit TI BQ51013B Gleichrichter (5V/2A), ein $30\,\text{mm}$ kurzes USB-C Pigtail zur Kamera und einen universellen 3-Prong Actioncam-Flansch.
-   * **Ergebnis:** $100\,\%$ Originallack erhalten, $100\,\%$ wetterfest, Kamera läuft auf Fernreisen endlos ohne Akkuwechsel.
+3. **5-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
+   * Kompaktes Gehäuse ($72 \times 46 \times 22\,\text{mm}$) für das rechte Medienfach von Touring-Baggern.
+   * Gespeist vom Front-Node (`PCBA 05`) über ein kombiniertes High-Power & USB 2.0 High-Speed Kabel.
+   * Tappt den werksseitigen OEM USB-C Port zur Head Unit (Skyline OS / Boom! Box GTS).
+   * Bietet:
+     - Port 1: **30W USB-PD Schnellladeport** für Smartphone (thermisch optimiert gegen Akkuhitzestau).
+     - Port 2: **10W geschalteter Dongle-Port** für Wireless CarPlay / Android Auto (Ottocast / CarlinKit) mit automatischer Notabschaltung bei Überhitzung.
+     - Port 3: **Freier USB 2.0 Media-Port** für USB-Sticks mit FLAC/MP3-Musik oder OEM-Softwareupdates.
+     - Port 4: **10W wetterfeste Action-Cam Zuleitung** (Direct Lead).
+     - Port 5: **Harley Headset-Emulation via USB** direkt zur Head Unit für native Apple CarPlay Aktivierung und verlustfreies Helmmikrofon-Streaming.
+
+4. **Modularer Snap-On Environmental Sensor-Puck ("Körbchen" / `sensor_puck_environmental.scad`):**
+   * Kompaktes aerodynamisches Gehäuse ($44 \times 44 \times 15\,\text{mm}$), das u-blox SAM-M10Q Multi-GNSS, TI TMP117 Präzisionsthermometer, OPT3001 Umgebungslichtsensor und Knowles MEMS-Mikrofon beherbergt.
+   * **Am Motorrad:** Rastet formschlüssig direkt oben auf den Deckel des Front-Node Monocoques ein.
+   * **Im Auto / Support-Van:** Unclip mit einem Handgriff; wird über ein 1,5m Verlängerungskabel an den Dashboard-/Windschutzscheiben-Adapter ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) angedockt.
+
+5. **Universal Doppel-Schiebeschlitten Mechatronik-Aktorik ("One Size Fits All" / `012_universal_actuator_slide_bracket.scad`):**
+   * Universeller Montageeinsatz im Boden der Koffer-Pods (Pod 1 & Pod 2).
+   * Zwei unabhängige Schiebeschlitten auf Längsnuten erlauben die stufenlose X-Justage von **15 mm bis 85 mm** Tastenabstand.
+   * Klemmt zwei 5V Mini-Hubmagnete mit weichen Shore A50 Silikon-Puffern direkt über die OEM-Einschalttasten beliebiger Headsets (z. B. Cardo Packtalk Edge Intercom + Media bei 50 mm Distanz, Sena 50S/Spider, Midland).
+   * **Vorteil:** Eliminiert individuelle 3D-Druck-Kassetten für jedes Headsetmodell. Löst den Kaltstart bei Zündung-AN durch 2,0s Simultanimpuls absolut verlässlich – **ohne Standby-Batteriefraß, ohne Platinenlöten und ohne Pod-Ausbau!**
 
 #### 6.2.2 Front-Node Montage an der Road King Special ("Front-to-Back Flip" & GNSS-Puck Dock)
 
@@ -843,7 +864,7 @@ Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, ben
    * Zwei beidseitige 36-Zahn Hirth-Rosetten ($10^\circ$-Raster) garantieren absoluten Formschluss – ein vibrationsbedingtes Absacken oder Nachgeben über Wellblechpisten und Schlaglöcher ist physikalisch ausgeschlossen.
    * Das Radar 2.0 Gehäuse wird über 2x M4 V4A-Schrauben direkt von vorne in die internen DIN 934 M4 Muttern des Gehäuses geklemmt.
 6. **Geschützte Kabelverbindung im Rohrschatten:**
-   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über den Deutsch DTM-12 Kabelbaum (Radar-Telemetrie über isolierten High-Speed Bus/UART).
+   * Das M8-Sensorkabel tritt durch einen verdeckten $\varnothing 6{,}0\,\text{mm}$ Führungskanal unmittelbar hinter dem Trägerrohr aus und wird im Rohrschatten entlang des Heckrahmens zur Zentralbox geführt. Direkt gespeist über Strang 4 des 16-Pin Automotive Kabelbaums (Radar-Telemetrie über isolierten High-Speed Bus/UART).
 
 ---
 
@@ -909,7 +930,7 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
    * Die **2-polige IP68-Magnet-Pogo-Abreißkupplung mit N52-Neodym-Magneten und vergoldeten Federkontakten** (z. B. HytePro M411) trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
    * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) – die 5V-Versorgung steht sofort wieder unterbrechungsfrei zur Verfügung.
 3. **Zwei-Zonen-Kabelarchitektur (Reine DC-Speisung):**
-   * **Zone 1 (Außen am Bike):** Robustes 2-Draht Automotive-Kabel ($2 \times 0{,}5\,\text{mm}^2$ PUR / FLRY) von der Zentralbox (Deutsch DTM-12 Peitsche 1 & 2) zum stationären Rahmendock.
+   * **Zone 1 (Außen am Bike):** Robustes 4-Draht Automotive-Kabel (AWG22/28 PUR / FLRY) von der Zentralbox (16-Pin Automotive Kabelbaum Strang 2 & 3) zum stationären Rahmendock.
    * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein extrem schlankes, leichtes 2-adriges Flachbandkabel ($< 2\,\text{mm}$ Dicke) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
 4. **Direktanschluss an die Schacht-Federkontakte des Pods:**
    * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und führt über eine formschlüssige Bodendichtung direkt zu den beiden massiven vergoldeten Federkontakten im Schachtboden des Pods.
@@ -952,7 +973,7 @@ Mit der Umstellung auf die **reine 4-Ader Automotive-Bus-Architektur** (`VCC_BUS
 ---
 
 ##### Konzept A: Der elastische Inline-Breakaway-Kabelstrang (Standard für Adventure & Touring)
-* **Mechanischer Aufbau:** Der 2-Pin COTS-Magnetstecker und die Buchse sitzen als **fliegende Kabelkupplung (Inline Breakaway)** direkt im Leitungsverlauf zwischen fahrzeugseitiger Peitsche (vom DTM-12 Hauptkabelbaum) und Koffer-Vorderwand.
+* **Mechanischer Aufbau:** Die 4-Pin COTS-Magnetkupplung sitzt als **fliegende Kabelkupplung (Inline Breakaway)** direkt im Leitungsverlauf zwischen fahrzeugseitigem Strang (vom 16-Pin Automotive Hauptkabelbaum) und Koffer-Vorderwand.
 * **Zugentlastung & Schutz:** Die Lötstellen an den Pogo-Pins sind mit 2-Komponenten-Polyurethan oder Epoxidharz vergossen und mit doppelwandigem, innenklebendem Schrumpfschlauch (Polyolefin 3:1 mit Heißschmelzkleber) mechanisch armiert.
 * **Fahrzeugführung:** Ein flexibler EPDM-Clip oder Mini-Kabelbinder an der Soziusfußrasten-Aufnahme oder am Heckrahmenrohr hält die fahrzeugseitige Buchse schwingungsfrei im Wind- und Spritzwasserschatten.
 * **Funktion:** Beim Abnehmen des Koffers reißt die Magnetkupplung bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft zerstörungsfrei und werkzeuglos ab – ohne starre Gehäuseschale am Rahmen!
@@ -1465,55 +1486,47 @@ Das **Radar 2.0 Flügel-Gehäuse** ([`radar_mr20_housing.scad`](../../hardware/c
     3. **JST-JWPF 2-Pin Innenstecker:** Das 2-adrige FLRY-B Kabel führt zu einem vollständig silikongedichteten JST-JWPF Stecker im trockenen Gehäuseinnenraum (doppelte Dichtungsbarriere).
     4. **Abtropfschlaufe (Drip-Loop) im Träger:** Das Kabel wird verdeckt im Rückseitenkanal des Kennzeichenträgers geführt und tritt in einem Bogen von unten in die Verschraubung ein. Durch die Schwerkraft tropft abfließendes Wasser an der tiefsten Stelle des Bogens auf die Fahrbahn ab, anstatt zur Dichtung zu kriechen.
 
-### 8.4 Road Glide ST Sharknose: Induktives Durch-die-Verkleidung Cam-Dock (`road_glide_inductive_cam_dock.scad`)
+### 8.4 Harley Touring: Handschuhfach Media- & Power-Injection Hub (`glovebox_power_injection_hub.scad`) & Cockpit-Peripherie
 
-Das **induktive Cam-Dock** ([`road_glide_inductive_cam_dock.scad`](../../hardware/cad/scad/05_accessories/road_glide_inductive_cam_dock.scad)) löst das Problem der Dauerstromversorgung von Action- und 360°-Kameras (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) auf der Nase der Sharknose-Verkleidung **ohne ein einziges Loch zu bohren und ohne sichtbare Außenkabel**:
+Der **5-Port Handschuhfach Media- & Power-Injection Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) löst die Stromversorgungs- und Infotainment-Herausforderungen im rechten Handschuhfach (Media-Compartment) der Harley-Davidson Touring Bagger (Street Glide, Road Glide, CVO, CVO ST) **zu 100 % bohrungsfrei und werterhaltend**:
 
-![Road Glide Induktives Cam-Dock](../images/cad/road_glide_inductive_cam_dock_cad.png)
-
-*Abbildung 8.39: 3D-CAD-Gesamtansicht des Durch-die-Verkleidung Induktiv-Docks (`road_glide_inductive_cam_dock_cad.png`). Sichtbar sind die 15W Qi-Transmitter-Wanne (Unterseite, verdeckt im Verkleidungsinneren), das dielektrische ABS-Verkleidungsdeck der Harley Road Glide (mittig dargestellt) sowie das aerodynamische Tropfenform-Außendock mit 3M Dual-Lock-Boden, integriertem TI BQ51013B Qi-Empfänger und 3-Finger-Gelenk für Actioncams.*
-
-#### 8.4.1 Zweiteilige Systemarchitektur & Schnittstellen zur Action-Cam
+#### 8.4.1 Systemarchitektur & Clean Power-Injection
 
 ```text
- +--------------------------------------------------------+
- | Action-Cam (Insta360 X3/X4 / GoPro Hero / DJI Action)  |
- | [USB-C Ladeport] <---------------------------------+   |
- +--------+-------------------------------------------|---+
-          | Standard 2-Finger-Lasche                  |
-          v                                           | 30 mm USB-C
- +----------------------------------------------------|---+
- | ROAD GLIDE INDUKTIV-CAM-DOCK (AUSSEN)              |   |
- | * Integriertes 3-Finger-Gelenk (M5-Klemmschraube)  |   |
- | * TI BQ51013B Abwärtswandler (5V / 2A) ------------+   |
- | * Qi-Empfängerspule (RX) mit Ferritschild              |
- +------------------------+-------------------------------+
-                          | 3M Dual-Lock SJ3550 Pilzkopfklett
-                          v (sekundenschnell abziehbar)
- ==========================================================
-  Harley-Davidson ABS-Verkleidungsdeck (2.8 mm, 100% ohne Bohrung!)
-   ~ ~ ~ Magnetisches Wechselfeld (15W Qi Induktion) ~ ~ ~
- ==========================================================
-                          ^ (3M VHB 5952 Verklebung innen)
- +------------------------+-------------------------------+
- | INNEN-CRADLE (Unter der Haube / hinter Scheinwerfer)   |
- | * 15W Qi-Senderspule (TX)                              |
- | * Anschlusskabel zu Front-Knoten Port 1 (12V PD)       |
- +--------------------------------------------------------+
+ +-------------------------------------------------------------------------+
+ | HARLEY TOURING RECHTES HANDSCHUHFACH (CVO / ST / RG / SG)               |
+ |                                                                         |
+ |  +-------------------------------------------------------------------+  |
+ |  | GLOVEBOX MEDIA & POWER-INJECTION HUB (glovebox_power_injection_hub)|  |
+ |  | * Port 1 (30W USB-PD): Smartphone Fast-Charging im Fach           |  |
+ |  | * Port 2 (Geschaltet 10W): Wireless CarPlay / AA Dongle           |  |
+ |  | * Port 3 (Service/USB-Stick): Freier Medienport                   |  |
+ |  | * Port 4 (10W Direct Cam Lead): Wetterfeste Zuleitung Action-Cam  |  |
+ |  | * Port 5 (USB Headset-Emulation): Direktanbindung Headunit (GTS)  |  |
+ |  +-----------------------------------+-------------------------------+  |
+ |                                      ^                                  |
+ |                                      | Werkseitige Unterseiten-Tülle    |
+ =======================================|===================================
+   Handschuhfach-Boden (100% Zero-Drill! Dichtung bleibt hermetisch dicht)
+                                        |
+       Zuleitung von Front-Node PCBA 05 (60W USB-PD Engine & Headset-Emulation via USB)
 ```
 
-1. **Mechanische Anbindung an die Kamera:**
-   * **Monolithisches 3-Finger-Gelenk (Universal GoPro-Mount):** Direkt auf der Oberseite des Außendocks sitzt die standardisierte 3-Finger-Aufnahme. Jede gängige Actioncam (GoPro Hero 10-13, DJI Osmo) oder jeder 360°-Kamerarahmen (z. B. Insta360 X3/X4 Haltekäfig) wird direkt mit einer handelsüblichen M5-Rändelschraube aufgesteckt.
-   * **Integrierte M5-Hutmutter-Tasche:** Auf der linken Flanke ist eine formschlüssige Sechskant-Aussparung eingelassen, die eine M5-Mutter unverlierbar hält - die Klemmschraube kann somit einhändig festgezogen werden.
-   * **Optionales 1/4"-20 Stativgewinde:** Alternativ ist im Zentrum eine Bohrung für eine zöllige Messing-Gewindebuchse (1/4"-20 UNC) vorgesehen, um Kameras oder Kugelköpfe direkt aufzuschrauben.
-2. **Elektrische Verbindung (Dauerstrom-Versorgung):**
-   * **Induktive Energiewandlung:** Die im Dockboden eingelassene Qi-Empfängerspule wandelt das durch die $2{,}8\,\text{mm}$ dicke ABS-Verkleidung übertragene Wechselfeld über einen TI BQ51013B Controller in stabile $5\,\text{V} / 2\,\text{A} = 10\,\text{W}$ Gleichspannung um.
-   * **Ultrakurzer USB-C Pigtail ($30\dots 50\,\text{mm}$):** Aus einer schräg nach vorn/oben gerichteten Kabelöffnung des Docks führt ein hochflexibles, kurzes USB-C-Flachbandkabel mit $90^\circ$-Winkelstecker direkt in die Ladebuchse der Kamera.
-   * **Kein Fahrtwind-Flattern:** Da das Kabel nur wenige Zentimeter lang ist und unmittelbar unter dem Kamera-Ladeport austritt, liegt es eng am Gehäuse an - es flattert nicht im Fahrtwind, schlägt nicht gegen den Lack und erzeugt keine Windgeräusche im Mikrofon.
-3. **Praxis-Vorteile auf Tour:**
-   * **100 % Originalzustand:** Absolut bohrungsfrei, null Lackbeschädigung, 100 % wetterfest nach IP67.
-   * **Unendliche Aufnahmezeit:** Hält den Kamera-Akku auch bei rechenintensiver 5.7K/60fps 360°-Daueraufnahme dauerhaft auf 100 % (z. B. als Dashcam im Endlos-Loop).
-   * **Sekundenschnelle Demontage beim Parken:** USB-C-Winkelstecker abziehen, Dock mit einem Handgriff vom 3M Dual-Lock trennen und samt Kamera in der Jackentasche oder dem Koffer verstauen.
+1. **Mechanischer Aufbau & Zero-Drill Montage:**
+   * **Passgenaue Bodenaufnahme:** Das kompakte Gehäuse ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) liegt vibrationsgedämpft am Boden des rechten Handschuhfachs.
+   * **OEM-Tüllen-Durchstich:** Die Zuleitung erfolgt ausschließlich von *unten* durch die ab Werk vorhandene Harley-Gummitülle. Die umlaufende Fach-Türdichtung bleibt unberührt, sodass das Handschuhfach absolut regendicht verschließt.
+2. **Infotainment Clean-Power Injection & Harley Headset-Emulation via USB:**
+   * **Harley Headset-Emulation via USB (Port 5):** Über das integrierte High-Speed Datenpaar der Zuleitung meldet sich OpenMotorBridge an der Headunit (Skyline OS / Boom! Box GTS) als vollwertiges MFi / USB Audio Class Headset an. Apple CarPlay wird sofort freigeschaltet; Sprachbefehle und Intercom-Mikrofone werden digital ohne analoges Brummen direkt in die Headunit eingespeist.
+   * **Keine Headunit-Bootloops:** Handelsübliche Wireless CarPlay / Android Auto Dongles (Ottocast U2-Air, Carlinkit 5.0, AAWireless) überfordern die schwach dimensionierte 500 mA OEM-USB-Buchse der Headunit (Skyline OS / Boom! Box GTS), was zu plötzlichen Reboots führt. Der OMB Hub trennt die Stromversorgung hardwareseitig ab und speist den Dongle aus einer dedizierten, gefilterten 5V/2A (10W) Schiene, während die USB-Datenleitungen (`D+`, `D-`) verlustfrei an die Headunit durchgeschleift werden.
+   * **30W Smartphone Fast-Charging:** Ein zweiter interner USB-C Port lädt das im Fach verstaute Smartphone mit vollem USB-PD Ladestrom (bis zu 30W).
+3. **Direktes Action-Cam Kabel (Ersatz des veralteten induktiven Qi-Docks):**
+   * Statt ineffizienter und hitzeintensiver induktiver Qi-Übertragung durch die 2,8 mm dicke ABS-Verkleidungswand wird eine **direkte, wettergeschützte 10W USB-C Zuleitung** aus der 60W Power-Engine des Front-Knotens an die Actioncam (Insta360 X3/X4, GoPro Hero, DJI Osmo Action) geführt.
+   * Die Kamera wird über standardisierte, vibrationsgedämpfte COTS-Halterungen montiert; die Zuleitung verläuft unauffällig im Verkleidungsschatten.
+   * Smartphone-Qi-Ladung erfolgt bei Bedarf am Lenker über industrieerprobte COTS-Halterungen (SP Connect / QuadLock Wireless Charging Head).
+4. **Modulares Schnapp-Sensor-Puck ("Körbchen", `sensor_puck_environmental.scad`):**
+   * Die hochsensible Umgebungssensorik (u-blox SAM-M10Q GNSS, TI TMP117 Temperatursensor, OPT3001 Umgebungslichtsensor und Knowles I2S MEMS Fahrtwind-Mikrofon) ist in einer **modularen Schnapp-Kapsel** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) untergebracht.
+   * Auf dem Motorrad rastet das Körbchen formschlüssig direkt auf der Front-Node Unterwanne ein.
+   * Im Begleitfahrzeug (Car-Kit) oder bei Sonderbauten kann das Körbchen mit einem Griff ausgeklinkt und über ein dünnes 1,5 m langes 6-Pin Verbindungskabel an optimal exponierter Stelle (z. B. an der Frontscheibenbasis via [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) platziert werden.
 
 ---
 
@@ -1531,6 +1544,7 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Zentralbox** | Oberwanne mit Zwischenboden | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
 | **Zentralbox** | Gehäusedeckel mit Gore-Vent | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
 | **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse (Tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
+| **Satelliten-Pod**| Universelle 2-fach Aktuator-Schlittenschiene (15–85 mm stufenlos) | `02_pod_base/012_universal_actuator_slide_bracket.stl` | `02_pod_base/parts/012_universal_actuator_slide_bracket.scad` |
 | **Adventure Radar**| Gepäckbrücken-Radarträger Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Radar**| Gepäckbrücken-Radarträger Klemmschelle Kappe | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
@@ -1560,6 +1574,8 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 | **Front-Knoten** | Verkleidungs-Rohrschelle (Ø 12–22 mm, AMPS) | `04_front_node/front_node_fairing_tube_clamp.stl` | `04_front_node/front_node_fairing_tube_clamp.scad` |
+| **Front-Knoten** | Modulares Schnapp-Sensor-Puck ("Körbchen" für GNSS/Temp/MEMS) | `04_front_node/sensor_puck_environmental.stl` | `04_front_node/parts/sensor_puck_environmental.scad` |
+| **Front-Knoten** | Handschuhfach 5-Port Media- & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
 | **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Oberschale mit Tastenbett & Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
@@ -1570,7 +1586,6 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit JST-JWPF 2-Pin Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
-| **Kamera-Dock** | Road Glide ST Sharknose 15W Qi Induktives Cam-Dock (3M Dual Lock) | `05_accessories/road_glide_inductive_cam_dock.stl` | `05_accessories/road_glide_inductive_cam_dock.scad` |
 | **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
 | **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 

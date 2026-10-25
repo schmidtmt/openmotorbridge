@@ -30,9 +30,10 @@ This document specifies the protection circuitry against vehicle electrical tran
   * u-blox SAM-M10Q with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, interfaced via Qwiic I2C (`J12`) in the cold ram-air intake zone.
   * Coexistence with TI TMP117 ($\pm 0.1\,^\circ\text{C}$ temperature) and OPT3001 ambient light sensor without RF desensing of the GNSS LNA.
 * **Central ePTFE Pressure Equalization Vent:** $\varnothing\,7.0\,\text{mm}$ Gore/Schreiner Air Vent centered on the enclosure roof symmetrically relieves thermal pressure pulses without distorting RF radiation patterns.
-* **Robust Deutsch DTM-12 Main Harness:**
-  * All 12 pins assigned per DTM-12 pinout table (Pins 1–5, 12 for Branch 4 / Vehicle & CAN; Pins 6–7 for Branch 1 / Pod 1; Pins 8–9 for Branch 2 / Pod 2; Pins 10–11 for Branch 3 / Rear Radar).
-  * Continuous IP68/IP69K sealing with Raychem DR-25 heatshrink and molded boots.
+* **Robust Two-Cable Architecture (COTS Main Wiring Harnesses):**
+  * **Cable 1 (Vehicle Net & CAN):** 6-Pin Deutsch DTM06-6S (`KL30`, `KL15`, `GND`, `CAN_H`, `CAN_L`, `SHIELD`).
+  * **Cable 2 (OMB Periphery Bus):** 16-Pin Automotive Header with 4 autonomous branches of 4 conductors each (Front Node 60W, Pod 1 30W, Pod 2 30W, Rear Radar MR20 12V/Telemetry).
+  * Continuous IP68/IP69K sealing with automotive latches and Raychem DR-25 heatshrink boots.
 
 ---
 
@@ -46,7 +47,7 @@ This document specifies the protection circuitry against vehicle electrical tran
 ### 3.2 Masking Zones Prior to Coating
 The following components and contact surfaces must **not** be coated:
 1. MicroSD card slot internal spring contacts (PCBA 01).
-2. Deutsch DTM-12 header pins & gold-plated spring contacts.
+2. Deutsch DTM-6 and 16-Pin Automotive header pins & gold-plated spring contacts.
 3. J12 Qwiic I2C socket contacts on PCBA 05.
 4. USB ports (USB-A, USB-C) on Front Node.
 5. SMD test points (TP_5V, TP_3V3, TP_GND).

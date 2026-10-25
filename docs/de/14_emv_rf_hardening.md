@@ -29,10 +29,10 @@ Dieses Dokument spezifiziert die Schutzschaltungen gegen Kfz-Bordnetz-Transiente
   * u-blox SAM-M10Q mit integrierter $15 \times 15\,\text{mm}$ Keramik-Patchantenne, angebunden über Qwiic I2C (`J12`) im kalten Fahrtwind-Staudruckbereich.
   * Koexistenz mit TI TMP117 ($\pm 0{,}1\,^\circ\text{C}$ Temperatur) und OPT3001 Umgebungslichtsensor ohne HF-Einstrahlung auf den GNSS-LNA.
 * **Zentrale ePTFE-Druckausgleichsmembran:** $\varnothing\,7{,}0\,\text{mm}$ Gore/Schreiner Air Vent mittig auf dem Gehäusedach gleicht thermische Druckstöße symmetrisch aus, ohne das HF-Fernfeld zu verzerren.
-* **Robuster Deutsch DTM-12 Hauptkabelbaum:**
-  * 4 Abzweige (Peitsche 1: Pod 1 DC-Power +12V geschaltet / GND, Peitsche 2: Pod 2 DC-Power +12V geschaltet / GND, Peitsche 3: Heck-Radar DC-Power +12V geschaltet / GND, Peitsche 4: Bordnetz KL30/KL15/CAN).
-  * Alle 12 Pins belegt nach DTM-12 Belegungstabelle (Pins 1–5, 12 für Peitsche 4 / Bordnetz & CAN; Pins 6–7 für Peitsche 1 / Pod 1; Pins 8–9 für Peitsche 2 / Pod 2; Pins 10–11 für Peitsche 3 / Heck-Radar).
-  * IP68/IP69K Dichtung über Deutsch DTM-Verriegelung und Raychem DR-25 Schrumpfschlauch.
+* **Robuste Zwei-Kabel-Architektur (COTS Hauptkabelbäume):**
+  * **Kabel 1 (Fahrzeugnetz & CAN):** 6-Pin Deutsch DTM06-6S (`KL30`, `KL15`, `GND`, `CAN_H`, `CAN_L`, `SHIELD`).
+  * **Kabel 2 (OMB-Peripheriebus):** 16-Pin Automotive Header mit 4 autarken Strängen à 4 Adern (Front-Knoten 60W, Pod 1 30W, Pod 2 30W, Heck-Radar MR20 12V/Telemetrie).
+  * Durchgängige IP68/IP69K Dichtung über Automotive-Verriegelungen und Raychem DR-25 Schrumpfschlauch.
 
 ### 2.1 Multi-Band HF-Frequenzbelegungs- & Koexistenzmatrix
 
@@ -76,7 +76,7 @@ Zur Gewährleistung maximaler Link-Budgets und reproduzierbarer EMV-Konformität
 ### 3.2 Maskierungszonen vor dem Lackierprozess
 Folgende Bauteile und Kontaktflächen dürfen **nicht** beschichtet werden:
 1. MicroSD-Kartenhalter-Kontakte (innenliegende Federzungen auf PCBA 01).
-2. Deutsch DTM-12 Header-Pins & vergoldete Federzungen-Kontakte.
+2. Deutsch DTM-6 und 16-Pin Automotive Header-Pins & vergoldete Federzungen-Kontakte.
 3. J12 Qwiic I2C Buchsenkontakte auf PCBA 05.
 4. USB-Buchsen (USB-A, USB-C) am Front-Knoten.
 5. SMD-Testpunkte (TP_5V, TP_3V3, TP_GND).

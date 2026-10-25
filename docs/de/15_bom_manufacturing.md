@@ -26,7 +26,8 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS-Diode (33 V Standoff, 53.3 V max Clamping) |
 | **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Rückstellbare PPTC-Sicherung (500 mA Hold / 1.0 A Trip) |
 | **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status-LED für optische Betriebsmodusanzeige |
-| **J1** | DTM13-12PA Header | TE Connectivity | Automotive 12P | Kundenteil | Automotive Deutsch DTM-12 Schnittstelle (11 Pins aktiv) |
+| **J1** | DTM13-6P Header | TE Connectivity | Automotive 6P | Kundenteil | Kabel 1: Automotive Deutsch DTM 6-Pin Schnittstelle (Bordnetz & CAN: KL30, KL15, GND, CAN_H, CAN_L, Schirm) |
+| **J_PERIPH** | 16-Pin Automotive Header | TE Connectivity / Amphenol | Automotive 16P | Kundenteil | Kabel 2: OMB Peripherie-Bus (4 Stränge à 4 Pins: Front 60W, Pod 1 30W, Pod 2 30W, Radar 12V) |
 | **J2** | DM3D-SF MicroSD Slot | Hirose / Korean Hro | SMD Push-Pull | C266624 | 4-Bit SDIO Speicherkarte für Tour-Logging |
 | **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum 2.200 mAh LiPo Pufferakku |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | LoRa 868 MHz U.FL Buchse zu Taoglas FXP895 im Deckel |
@@ -35,10 +36,11 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 2. Koffer-Pod Gehäusesystem (Entfall von PCBA 02)
+## 2. Koffer-Pod Gehäusesystem & Universelle Mechatronik (Entfall von PCBA 02)
 > **Architektur-Hinweis (v10.0 Standardized Node Architecture):**  
-> Die frühere Pod-Bodenplatine `PCBA 02` und mechanische Kassetten-Schlitten sind **vollständig und ersatzlos entfallen**.  
-> Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein monolithisches Monocoque-3D-Druckteil. `PCBA 03` ruht vibrationsgedämpft am Gehäuseboden und wird über eine geschirmte 4-adrige Zuleitung (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) mit 4-Pin IP67 Magnet-Abrissschnittstelle an der Koffertrennkante versorgt. Ein werkzeugfreier Slide-in Deckel verriegelt selbsttätig und öffnet kontaktlos via N52-Magnet im Smart-Keyfob (`PCBA 07`). Eine EPDM-Dry-Flap schützt die Elektronik und den internen 30W/60W USB-PD Ladeport vor Feuchtigkeit.
+> Die frühere Pod-Bodenplatine `PCBA 02` und kassettengebundene Spezialschlitten sind **vollständig und ersatzlos entfallen**.  
+> Das Pod-Gehäuse (`pod_base_housing.stl`) ist ein monolithisches Monocoque-3D-Druckteil. `PCBA 03` ruht vibrationsgedämpft am Gehäuseboden und wird über eine geschirmte 4-adrige Zuleitung (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) mit 4-Pin IP67 Magnet-Abrissschnittstelle an der Koffertrennkante versorgt. Ein werkzeugfreier Slide-in Deckel verriegelt selbsttätig und öffnet kontaktlos via N52-Magnet im Smart-Keyfob (`PCBA 07`). Eine EPDM-Dry-Flap schützt die Elektronik und den internen 30W USB-PD Ladeport vor Feuchtigkeit.  
+> **Universelle Mechatronik ("One Size Fits All"):** Zum automatisierten, materialschonenden Kaltstart von OEM-Intercoms (Cardo Packtalk Edge, Sena 50S/Spider, Midland) ohne Garantieverlust sitzen **zwei Mini-Hubmagnete** (JF-0530B) auf einer stufenlos verstellbaren Schlittenschiene (`012_universal_actuator_slide_bracket.stl`, 15–85 mm Verstellbereich). Bei Zündung-AN (KL15) schaltet `PCBA 03` beide Aktuatoren für 2,0 s simultan ein.
 
 ---
 
@@ -47,13 +49,15 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | SC8721 / TPS25750 | Southchip / TI | QFN-32 | C2843580 | Automotive USB-PD Sink Controller & Synchronous Buck-Boost (bis 30W/60W) |
+| **U1** | SC8721 / TPS25750 | Southchip / TI | QFN-32 | C2843580 | Automotive USB-PD Sink Controller & Synchronous Buck-Boost (bis 30W USB-PD pro Pod) |
 | **U2** | ESP32-C6-MINI-1U | Espressif | SMD Modul (Top) | C5267233 | 32-Bit RISC-V Host-MCU (verwaltet Pod-Profile, USB 2.0 Deskriptoren & Power-Gating) |
 | **U3** | ES8388 | Everest Semi | QFN-28 (Bottom) | C2845349 | 24-Bit / 48 kHz Stereo Audio Codec (getrennte L/R ADC & DAC Kanäle) |
 | **K1** | CPC1017NTR | IXYS / Littelfuse | SOP-4 | C26789 | 60V / 100mA Solid-State OptoMOS Relais für galvanisch getrenntes PTT-Keying (`PTT_KEY`) |
+| **Q1, Q2** | AO3400A | Alpha & Omega | SOT-23 | C20917 | 2x N-Kanal MOSFETs (30V / 5.7A) für Mechatronik-Aktuatoren (2.0s Kaltstart-Impuls) |
 | **F1** | MF-MSMF150-2 | Bourns | 1812 SMD | C22669 | PPTC 1.5A Schutzsicherung für internen USB-Ladezweig |
 | **J_BUS** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD Horiz.| C2897370 | 4-Draht Automotive Backbone (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) |
 | **J_USBC** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | C2765186 | Interne Koffer-Ladedose für OEM-Headsets & Smartphone (bis 30W USB-PD) |
+| **J_ACT** | BM04B-SRSS-TB | JST | 4-Pin 1.0mm SMD Vert. | C160401 | Mechatronik-Aktuator-Header (Pins: 1: VCC_ACT, 2: ACT1_DRIVE, 3: VCC_ACT, 4: ACT2_DRIVE) |
 | **J_AUDIO_PWR**| BM08B-SRSS-TB | JST | 8-Pin 1.0mm SMD Vert. | C160404 | Audio- & Power-Header (Top-Entry, vertikal, getrennte PGND / AGND Sternmassen) |
 
 ---
@@ -63,9 +67,9 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 > [!NOTE]
 > **Architektur-Bereinigung v8.0:** Die Leiterplatte `PCBA 04` und das dritte Satellitengehäuse (Heck-Pod 3) wurden **vollständig und ersatzlos gestrichen**:
 > 1. **LoRa 868 MHz (SX1262):** Sitzt nun direkt auf der Zentralbox (`PCBA 01`), gepuffert durch den USV-Akku (24/7 Diebstahl-Sentry).
-> 2. **Multi-GNSS (SAM-M10Q):** Sitzt im kühlen Fahrtwindbereich, angebunden über den 5-Port Fahrzeug-Satelliten (I2C via `J_VEHICLE`).
+> 2. **Multi-GNSS (SAM-M10Q):** Sitzt im kühlen Fahrtwindbereich, angebunden über den modularen Sensor-Puck (`sensor_puck_environmental.stl`).
 > 3. **Fahrzeug-Backbone:** Erfolgt über den geschirmten 4-Ader Automotive-Bus (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`), der werkzeugfrei durch den Harley-Kabelkanal unter der Tankkonsole verlegt wird (ZERO Tank-Heben!).
-> 4. **Heck-Radar:** Schließt direkt über Peitsche 3 des Deutsch DTM-12 Kabelbaums an die Zentralbox an (12V Bordnetz) und überträgt Zieldaten über eine geschirmte 2-Draht UART-Leitung.
+> 4. **Heck-Radar:** Schließt direkt über Strang 4 des 16-Pin Peripherie-Busses (Kabel 2) an die Zentralbox an (12V Bordnetz) und überträgt Zieldaten über eine geschirmte 2-Draht High-Speed Leitung.
 
 ---
 
@@ -77,10 +81,10 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **U2** | USB2514Bi-AEZG / USB2514B | Microchip | QFN-36 | `C16251` | Automotive/Industrial USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
 | **U3** | LMR36015FSCQRNXRQ1 | Texas Instruments | VQFN-12 | `C2843480` | Automotive 36V Synchronous Buck (5V / 2.0A, 91.8%) für Hub & Peripherie |
 | **U4** | TPS2051BDBVR | Texas Instruments | SOT-23-5 | `C7818` | High-Side USB VBUS Power Switch (1.05A Clamp) für Port 2 Kaltstart-Reset |
-| **U5** | SC8102QDER | Southchip | QFN-32 | `C2843510` | Automotive Synchronous Buck mit USB-PD 20W (9V/2.2A & QC3.0) für Smartphone Port 1 |
+| **U5** | SC8721 / SC8102 | Southchip | QFN-32 | `C2843510` | Automotive Synchronous Buck mit USB-PD 60W (5V/3A, 9V/3A, 12V/3A, 15V/3A, 20V/3A) für Smartphone Fast-Charging, GPS-Navi & Cockpit-Peripherie |
 | **U6** | TCAN334GDCNT | Texas Instruments | SOT-23-8 | `C2843515` | 3.3V CAN-Transceiver (5 Mbps CAN-FD fähig, mit Pin 8 Silent-Listen-Only Mode) |
 | **U7** | LM5050-Q1 | Texas Instruments | SOT-23-6 (B.Cu)| `C111394` | Automotive Ideal-Diode Controller für Dual-Power Input OR-ing |
-| **U8** | SAM-M10Q | u-blox | SMD Modul (Top) | `C5141445` | Ultra-Low-Power Multi-GNSS Empfänger (GPS/GLONASS/Galileo/BeiDou) |
+| **U8** | SAM-M10Q | u-blox | SMD Modul (Top) | `C5141445` | Ultra-Low-Power Multi-GNSS Empfänger (GPS/GLONASS/Galileo/BeiDou) im Sensor-Puck |
 | **U9** | TMP117AIDRVR | Texas Instruments | WSON-6 | `C2843535` | ±0.1°C hochpräziser digitaler I2C Temperatursensor im Fahrtwind |
 | **K1** | CPC1017NTR | IXYS / Littelfuse | SOP-4 | `C26789` | 60V / 100mA 1-Form-A Solid-State Relais für schaltbaren 120R CAN-Abschluss (Auto-Sensing) |
 | **Q1** | DMN63D8LDW-7 | Diodes Incorporated| SOT-363 | `C283890` | Dual N-Kanal MOSFET (30V / 260mA) für richtungsgetrennte Spiegel-Totwinkel-LEDs |
@@ -88,8 +92,9 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **LED1**| WS2812B-2020 | Worldsemi | SMD 2020 | `C2843530` | Digital steuerbare RGB-Status-LED für Gehäusedeckel-Lichtleiter |
 | **MIC1**| MSM261S4030H0R / SPH0645 | Knowles / Sipeed | 3.5x2.65 mm SMD | `C544577` | Digitales I2S-MEMS Akustik-Mikrofon für adaptive Windgeräuschkompensation |
 | **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Speicherdrossel für LMR36015 5V-Hauptregler |
-| **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Speicherdrossel für SC8102 USB-PD Fast-Charge Buck (Port 1) |
-| **J_BUS** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | 4-Draht Automotive Backbone (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) zur Zentralbox |
+| **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Speicherdrossel für SC8721/SC8102 60W USB-PD Fast-Charge Buck-Boost |
+| **J_BUS** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | 4-Draht Automotive Backbone (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) zur Zentralbox (Strang 1, 60W) |
+| **J_SENSOR_EXT**| BM06B-SRSS-TB | JST | 6-Pin 1.0mm SMD Vert. | `C160403` | Modulares Schnapp-Sensor-Puck Interface (GNSS, Temp, Light, MEMS I2C/I2S) |
 | **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung linker Spiegel-Pod (PCBA 05B: BSD LED, PTT/Geste) |
 | **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung rechter Spiegel-Pod (PCBA 05B: BSD LED, Hazard/Geste) |
 | **J7** | TYPE-C-31-M-12 | Korean Hro | SMD Hybrid IP67 | `C2765186` | ESP32-S3 Service- & Flash-Port (Flanke) mit TPU-Dichtstopfen |
@@ -225,25 +230,28 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 ### 10.1 Basis-System (Universal für jedes Motorrad)
 | Baugruppe | STL-Dateiname | Stück | Material & Fertigung | Funktion & Beschreibung |
 | :--- | :--- | :---: | :--- | :--- |
-| **Main Box Unterteil** | [`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque-Unterwanne mit 4x M4 Silentblock-Ohren & Dichtnut (optimiert für 4-Draht Bus & DTM-12) |
+| **Main Box Unterteil** | [`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl) | **1** | MJF PA12 / ASA | Monocoque-Unterwanne mit 4x M4 Silentblock-Ohren & Dichtnut (optimiert für 4-Draht Bus & Zwei-Kabel-Architektur) |
 | **Main Box Zwischenboden** | [`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl) | **1** | MJF PA12 / ASA | Akku-Wanne für 2.200 mAh Flat-LiPo ($68 \times 39 \times 5{,}0\,\text{mm}$), 11x Konvektionsschlitze & Dichtfeder |
 | **Main Box Deckel** | [`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl) | **1** | MJF PA12 / ASA | Gehäusedeckel mit LoRa FXP895 Tasche ($110 \times 20 \times 0{,}8\,\text{mm}$), Gore ePTFE-Ventilsitz & Schraubensenkungen |
 | **Pod-Basisgehäuse** | [`pod_base_housing.stl`](../../hardware/cad/stl/02_pod_base/pod_base_housing.stl) | **2** | MJF PA12 / ASA | Monolithisches 1-Teil-Schachtgehäuse mit integrierter Schottwand, Kontaktführungen & Federdomen |
 | **Pod-Schottwand (integriert)** | [`03_pod_bulkhead_partition.stl`](../../hardware/cad/stl/02_pod_base/components/03_pod_bulkhead_partition.stl) | *(integr.)* | MJF PA12 / ASA | Zu 100 % nahtlos im Monocoque integriert (0 lose Teile, 0 Montageschrauben) |
 | **Pod Slide-in Deckel** | [`pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/pod_slide_lid.stl) | **2** | MJF PA12 / ASA | Werkzeugloser Schiebedeckel mit integrierter FOB-Magnetverriegelung |
 | **Pod Trockenklappe (Dry-Flap)** | [`pod_dry_flap.stl`](../../hardware/cad/stl/02_pod_base/pod_dry_flap.stl) | **2** | TPU 85A / EPDM | Flexible Dicht- und Schutzklappe zwischen Ladebucht und Gerätebett |
+| **Universelle Aktuator-Schlittenschiene**| [`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl) | **2** | MJF PA12 / ASA | Stufenlose 15–85 mm Schlittenführung für 2x Mini-Hubmagnete im Pod-Boden (One-Size-Fits-All) |
 | **Under-Perch Spiegel-Pod Gehäuse**| [`05b_mirror_pod_housing.stl`](../../hardware/cad/stl/04_front_node/05b_mirror_pod_housing.stl) | **2** | MJF PA12 / ASA | Symmetrische Gehäuse unter den Spiegelschrauben (Links & Rechts) |
 | **Front-Knoten Unterwanne** | [`front_node_lower_tub.stl`](../../hardware/cad/stl/04_front_node/front_node_lower_tub.stl) | **1** | MJF PA12 / ASA | Cockpit-Wanne mit AMPS-Bohrbild & Rohrbett (Zero Tank-Heben Kabeldurchführung) |
 | **Front-Knoten Deckel** | [`front_node_upper_lid.stl`](../../hardware/cad/stl/04_front_node/front_node_upper_lid.stl) | **1** | MJF PA12 / ASA | Deckel mit Knowles MEMS Schalleintritt & O-Ring-Dichtnut |
 | **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar**| TPU 95A / 85A | Elastische Dichtkämme für Front-USB & Signale |
 | **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastische Staubschutzkappe mit Haltekollier für Service-Port |
+| **Modulares Schnapp-Sensor-Puck**| [`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) | **1** | MJF PA12 / ASA | Schnapp-Körbchen für GNSS SAM-M10Q, TMP117, OPT3001 & Knowles MEMS (Bike & Car) |
+| **Handschuhfach 5-Port Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiger 5-Port Media- & Power-Injection Hub für rechtes Harley Touring Handschuhfach |
 | **Verkleidungs-Rohrschelle**| [`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl) | *Opt. (1)* | MJF PA12 / ASA | 2-teilige Rohrschelle (Ø 12–22 mm) für Verkleidungsgeweih & Streben unterm Fairing |
 
 ### 10.2 Gateway-Pod-Inlays (Passend zur gewünschten Intercom-Ausstattung)
 > **Hinweis zur Architektur:** Slot 1 und Slot 2 sind **Multi-Protokoll Gateway-Transceiver**, keine Fahrer/Beifahrer-Kopfhörer! Sie verbinden das Motorrad gleichzeitig mit Sena Mesh und Cardo DMC. Fahrer und Sozius funken drahtlos mit ihren normalen Helmen.
 
 | Baugruppe | STL-Dateiname | Stück | Material | Funktion & Beschreibung |
-| :--- | :--- | :---: | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- |
 | **Gateway-Inlay Sena** | [`cartridge_insert_sena.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_sena.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiges Inlay für Sena SPIDER X Slim (Mesh 3.0 / 2.0, Direkt-Micro-Kabelpeitsche) |
 | **Gateway-Inlay Cardo** | [`cartridge_insert_cardo.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_cardo.stl) | *Opt. (1)* | MJF PA12 / ASA | Inlay für Cardo Packtalk Edge / Pro (DMC Gen2) mit Air-Mount |
 | **Gateway-Inlay OMM UCS**| [`cartridge_insert_omm_ucs.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_omm_ucs.stl) | *Opt. (1..2)*| MJF PA12 / ASA | Formschlüssiges Inlay & Ladebucht für OMM 2.4 GHz UCS Modul im Pod |
@@ -263,13 +271,14 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, 4x Spanngurt-Freisparungen, Steinschlag-Gleitkeil & verdecktem 2-Draht DC-Kanal mit Kabelbinderbrücke im Rohrschatten.
   * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
-* **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, Road King):**
-  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 2-Draht DC-Zugentlastungsschnauze.
-  * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 3,6 mm 2-Draht DC-Kabel in OEM Ø 19,0 mm Kofferwandbohrung (100 % Zero-Drill, oberhalb Schwingenlager) inkl. U-geschlitzter Tunnel-Distanzscheibe.
-  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Peitsche 3.
+* **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, CVO, CVO ST, Road King Special):**
+  * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 4-Draht Automotive-Zugentlastung.
+  * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 4,2 mm 4-Draht Buskabel in OEM Ø 19,0 mm Kofferwandbohrung (100 % Zero-Drill, oberhalb Schwingenlager) inkl. U-geschlitzter Tunnel-Distanzscheibe.
+  * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Strang 4 (Radar).
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
-  * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 2-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse). Sowie `road_glide_inductive_cam_dock.stl` (1 Stk.): Induktives Cam-Docking für Sharknose-Verkleidungen. (Legacy-Referenz: `009_magsafe_frame_dock.stl`).
+  * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 4-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse).
+  * `glovebox_power_injection_hub.stl` (1 Stk.): 5-Port Handschuhfach Media- & Power-Injection Hub für rechtes Handschuhfach (Zero-Drill Durchstich, Abgriff OEM USB-C zu Skyline OS / Boom! Box, 30W Phone Fast Charge, 10W geschalteter Dongle-Port, wetterfeste 10W USB-C Kamerazuleitung).
   * `cockpit_speaker_corner_pod.stl` (2 Stk.): Symmetrische Cockpit-Display-Pods für die unteren inneren Ecken der Rockford Fosgate Lautsprechergitter (Bagger / CVO ST).
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
@@ -277,7 +286,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit / Referenz-Kit 5):**
   * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
   * `cockpit_breakout_block.stl` (1 Stk.) & `vehicle_breakout_block.stl` (1 Stk.): Formschlüssige Satelliten-Gehäuse für Mittelkonsole / Armlehne (Cockpit) und Schweller / Einstiegsleiste (Fahrzeug).
-  * `car_dashboard_wedge_dock.stl` (Optional / Legacy): Optionale Armaturenbrett-Ablageaufnahme, falls temporär kein Unter-Sitz-Einbau gewünscht wird. (Standard ist die verdeckte Unter-Sitz-Montage).
+  * `car_dashboard_wedge_dock.stl` (1 Stk.): Scheibenbasis-Wandlerkeil für abgesetztes Schnapp-Sensor-Puck (`sensor_puck_environmental.stl`) im unbedampften Mautbox-Fenster.
 
 ---
 
@@ -285,19 +294,26 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
 
 Für den Aufbau müssen **keine Kabelbäume selbst gecrimpt oder gelötet werden**. Das System verwendet zu 100 % handelsübliche, industriell gefertigte Standard-Kabel (COTS):
 
-### 11.1 Der Hauptkabelbaum am Motorrad (Deutsch DTM-12 COTS-Fertigkabelbaum)
+### 11.1 Die Zwei-Kabel-Architektur der Zentralbox
 
-```
-                       DAS PLUG-AND-PLAY KABELKONZEPT (COTS FERTIGKABEL)
+```text
+               ZWEI-KABEL-ARCHITEKTUR (PLUG-AND-PLAY COTS FERTIGKABEL)
 +-------------------------+
-| Deutsch DTM-12 Fertig-  | --> Vorkonfektionierter IP68/IP69K Deutsch DTM-12 Hauptkabelbaum
-| Kabelbaum (Zentralbox)  | --> Industriell gefertigt, Raychem DR-25 Schrumpfschlauch
-+-+-----------------------+
-  +-> Peitsche 1: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+12V geschaltet / GND) --> Pod 1 (Bucht 1)
-  +-> Peitsche 2: 2-Draht FLRY-B (1.0 m / 1.5 m): Reine DC-Power (+12V geschaltet / GND) --> Pod 2 (Bucht 2)
-  +-> Peitsche 3: 2-Draht FLRY-B (0.5 m): Heck-Radar PCBA 08 (+12V geschaltet / GND)
-  +-> Peitsche 4: AMP Superseal 1.5 6-Pin / FLRY-B (1.0 m): Bordnetz & CAN (KL30, KL15, GND, CAN-H, CAN-L, CHASSIS_EARTH)
-      (Hinweis: Robuster 4-Draht Automotive Bus mit USB-PD & USB 2.0; ZERO Tank-Lifting!)
+| ZENTRALBOX (PCBA 01)    |
+| (Unter Fahrersitzbank)  |
++-+---------------------+-+
+  |                     |
+  | [J1]                | [J_PERIPH]
+  v                     v
+KABEL 1 (Bordnetz & CAN) KABEL 2 (OMB Peripherie-Bus)
+Deutsch DTM06-6S (IP68)  16-Pin Automotive Header (IP68)
+  |                     |
+  +-> Pin 1: KL30 (+12V) +-> Strang 1 (1.5 m, AWG22/28): Front-Node (60W USB-PD + USB 2.0 D+/D-)
+  +-> Pin 2: KL15 (Ign)  +-> Strang 2 (1.0 m, AWG22/28): Pod 1 Links (30W USB-PD + USB 2.0 D+/D-)
+  +-> Pin 3: GND (Masse) +-> Strang 3 (1.0 m, AWG22/28): Pod 2 Rechts (30W USB-PD + USB 2.0 D+/D-)
+  +-> Pin 4: CAN_H       +-> Strang 4 (0.5 m, AWG20/26): Heck-Radar MR20 (12V geschaltet + Telemetrie)
+  +-> Pin 5: CAN_L
+  +-> Pin 6: SHIELD
 ```
 
 ### 11.2 Das 12V Werkstatt- & Begleitfahrzeug-Y-Adapterkabel ("Bench & Support-Car Harness")
@@ -311,8 +327,8 @@ Für Laborprüfungen (Tisch-Inbetriebnahme ohne Motorrad-Kabelbaum) sowie den mo
 | **12V DC Einspeisestecker** | Kfz-Zigarettenanzünderstecker mit 5A Feinsicherung ($5 \times 20\,\text{mm}$) & LED *oder* 4mm Labor-Bananenstecker | COTS Standard | 1 Stk. | Anschluss an Zigarettenanzünder-Buchse oder Labornetzteil |
 | **Stammkabel** | FLRY-B $2 \times 0{,}75\,\text{mm}^2$ (AWG18), Länge $1{,}0\,\text{m}$ (Rot: +12V, Schwarz: GND) | Fahrzeugleitung | 1 m | Zuleitung bis zum Y-Verteilerpunkt |
 | **Abzweig A (Front-Node)** | JST JWPF 2-Pin Buchse `02R-JWPF-VSLE-S` mit Kontakten `SWPR-001T-P025` | JST / Mouser | 1 Stk. | Pin 1: +12V (Rot, KL15), Pin 2: GND (Schwarz), Leitung $1{,}5\,\text{m}$ ($2 \times 0{,}5\,\text{mm}^2$) |
-| **Abzweig B (Zentralbox)** | Deutsch DTM 12-Pin Buchsengehäuse `DTM-06-12S`, Sperrkeil `WM-12S`, Buchsen `0462-201-20141` | TE Connectivity / Mouser | 1 Stk. | Pin 1: KL30 (+12V), Pin 2: KL15 (+12V gebrückt), Pin 3: GND (Schwarz), Leitung $0{,}5\,\text{m}$ ($2 \times 0{,}75\,\text{mm}^2$) |
-| **Blindstopfen (DTM-12)** | Dichtstopfen Größe 20 `0413-204-2005` (Weiß/Rot) | TE Connectivity | 9 Stk. | IP68-Versiegelung der ungenutzten Kammern 4–12 |
+| **Abzweig B (Zentralbox)** | Deutsch DTM 6-Pin Buchsengehäuse `DTM06-6S`, Sperrkeil `WM-6S`, Buchsen `0462-201-20141` | TE Connectivity / Mouser | 1 Stk. | Pin 1: KL30 (+12V), Pin 2: KL15 (+12V gebrückt), Pin 3: GND (Schwarz), Leitung $0{,}5\,\text{m}$ ($2 \times 0{,}75\,\text{mm}^2$) |
+| **Blindstopfen (DTM-6)** | Dichtstopfen Größe 20 `0413-204-2005` (Weiß/Rot) | TE Connectivity | 3 Stk. | IP68-Versiegelung der ungenutzten Kammern 4–6 (CAN-Pins) |
 | **Opt. Abzweig C (Radar)** | JST JWPF 2-Pin Buchse `02R-JWPF-VSLE-S` mit Kontakten `SWPR-001T-P025` | JST / Mouser | Opt. (1)| Pin 1: +12V, Pin 2: GND, Leitung $0{,}5\,\text{m}$ ($2 \times 0{,}35\,\text{mm}^2$) für Radar-Benchtest |
 | **Schrumpfschlauch / Y-Splice**| Raychem ATUM 4:1 mit Innenkleber oder Schrumpfformteil | TE Connectivity | 1 Stk. | Wasserdichte, zugentlastete Kapselung der Y-Verzweigung |
 
@@ -359,17 +375,19 @@ Um handelsübliche OEM-Intercom-Module vollkommen zerstörungsfrei und ohne Gara
 | **Cardo Packtalk Edge / Pro**<br>*(Klasse 4 DMC Gen2)* | **8-Pin JST-SH auf Klinke, Micro-2Pin & 90° USB-C:**<br>- 3.5 mm Stereo-Klinkenstecker (Spk Out L/R)<br>- Cardo 2-Pin Micro-Stecker mit Rastnase (Mic In)<br>- Rechtwinkliger USB-C Stecker (5V Ladeport) | **Pin 1:** `PGND` (USB-C Lade-Masserückstrom bis 500 mA)<br>**Pin 2:** `VCC_5V_PROT` (USB-C 5V Lade- & Dauerstrom)<br>**Pin 3:** `AGND_AUDIO_IN` (Audio Ground Sleeve, $I = 0\,\text{mA}$)<br>**Pin 4:** `AUDIO_IN_L` (Spk L $\rightarrow$ ES8388 Line-In L)<br>**Pin 5:** `AUDIO_IN_R` (Spk R $\rightarrow$ ES8388 Line-In R)<br>**Pin 6:** `OMM_DETECT` (**GND-Brücke im Stecker** $\rightarrow$ hält `U4` auf NC/Analog)<br>**Pin 7:** `AUDIO_IO_P` (`VOICE_OUT` vom ES8388 DAC $\rightarrow$ Cardo Mic)<br>**Pin 8:** `PTT_USB_N` (N/C) | 10 cm | Koppelt wahlweise das Air-Mount Nest oder die Pogo-Pins. Der $500\,\text{mA}$ Ladestrom fließt getrennt über Pin 1 ab, während Audio über Pins 3/4/5 und 7 völlig entkoppelt bleibt – absolut kein Laderauschen im Helm! |
 | **OpenMotorMesh (OMM) 2.4 GHz / 446**<br>*(Klasse C/D Native UCS)* | **8-Pin JST-SH auf USB-C (90° abgewinkelt, 4-polig):**<br>- 8-Pin JST-SH 1.0mm Buchse<br>- Rechtwinkliger USB-C Stecker (VBUS, GND, D+, D-) | **Pin 1:** `PGND` (USB-C GND Power Return)<br>**Pin 2:** `VCC_5V_PROT` (USB-C VBUS 5V Speisung & USV-Ladung)<br>**Pin 3..5:** N/C (Analogpfade unbenutzt)<br>**Pin 6:** `OMM_DETECT` (**Offen / N/C** $\rightarrow$ `R9` zieht auf 3.3V $\rightarrow$ `U4` schaltet auf NO/Digital)<br>**Pin 7:** `AUDIO_IO_P` $\rightarrow$ USB-C D+ (`USB_DP` nativer USB-Audio-Stream)<br>**Pin 8:** `PTT_USB_N` $\rightarrow$ USB-C D- (`USB_DN` nativer USB-Audio-Stream) | 5 cm | **Rein digitaler USB 2.0 Full-Speed Audiokanal:** Überträgt digitalen PCM/Opus-Audiostream verlustfrei zwischen ESP32-C6 Host (`PCBA 03`) und OMM-Modul (`PCBA 09`/`10`). Null D/A-Wandlungsverluste, null Common-Impedance-Brummen. |
 
-### 11.6 Das 4-Draht Automotive Buskabel & Digitale Direktanbindung
+### 11.6 Mechatronischer Kaltstart & Digitaler 4-Draht Automotive Bus
 
-In OpenMotorBridge v10.0 sind mechatronische Hubmagnete und Stößelbrücken **vollständig eliminiert**. Die Steuerung erfolgt digital über BLE GATT / AVRCP oder direkte galvanisch getrennte OptoMOS PTT-Tastung:
+In OpenMotorBridge v10.0 wird der automatisierte Kaltstart über 2 mechatronische Mini-Hubmagnete auf der universellen Schlittenschiene realisiert (2,0 s gleichzeitiger Tastendruck bei KL15 Zündung EIN über `J_ACT` / Dual-AO3400A MOSFETs auf PCBA 03), während die laufende PTT- und Mediensteuerung digital über BLE GATT / AVRCP oder direkte galvanisch getrennte OptoMOS PTT-Tastung erfolgt:
 
-1. **4-Draht Automotive Buskabel:**
+1. **Mechatronische Kaltstart-Aktuatoren (JF-0530B):**
+   * Zwei Mini-Linearhubmagnete (12V DC, 300 mA, 10 mm Hub, ~4 N Druckkraft) mit weichen Shore A50 Silikonkappen auf `012_universal_actuator_slide_bracket.stl`. Sie betätigen die OEM-Tasten (z. B. Cardo Intercom + Media, Sena Phone + Drehrad-Taste) beim Einschalten der Zündung für 2,0 s vollautomatisch – kein manueller Handgriff, kein Garantieverlust durch Löten und kein Entladen des Headset-Akkus im Standby.
+2. **4-Draht Automotive Buskabel:**
    * **Spezifikation:** Geschirmtes 4-Ader-Automotive-Kabel (2x AWG22 Stromversorgung `VCC_BUS` / `GND`, 2x AWG28 verdrillt `USB_D-` / `USB_D+`).
    * **Verlegung:** Vom Zentralbox-Kabelbaum durch den Rahmenkabelkanal (ZERO Tank-Lifting) bis zur Koffertrennstelle.
-2. **OptoMOS PTT-Keying (`CPC1017N`):**
-   * Tastet bei Bedarf analoge Funkgeräte (Midland PMR446) oder Direct-Audio-Ports in $< 10\,\mu	ext{s}$ prellfrei gegen Masse.
-3. **USB-PD Power-Cycling:**
-   * Steuert das Ein- und Ausschalten von OEM-Headsets sauber über softwaredefiniertes Power-Gating der internen USB-Ladeschnittstelle.
+3. **OptoMOS PTT-Keying (`CPC1017N`):**
+   * Tastet bei Bedarf analoge Funkgeräte (Midland PMR446) oder Direct-Audio-Ports in $< 10\,\mu\text{s}$ prellfrei gegen Masse.
+4. **USB-PD Power-Cycling & In-Bag Fast Charge:**
+   * Ermöglicht softwaregesteuertes Power-Gating und bis zu 30W Schnellladen pro Pod im Koffer.
 
 ### 11.7 Die Koffer-Trennstelle (Industrieller 2-Pin Magnet-Pogo "MagSafe-Ersatz") & Befestigung
 
@@ -456,12 +474,12 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | :--- | :--- | :--- | :---: | :--- |
 | **3M Dual Lock SJ3550 Klettband** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rüttelfeste, werkzeuglose Dongle- und Sensor-Montage im Cockpit & Koffer |
 | **3M VHB R130 Klebepad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 Stk. | Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels |
-| **N52 Neodym-Flachmagnet (Slide-in Deckel)** | Edelstahl V4A D = 4.5 mm, L0 = 15 mm | Gutekunst / Web | 4 Stk. | Verriegelungsmagnet im Pod-Schiebedeckel (2x pro Pod) |
+| **Auswerfer-Druckfeder (Schottwand)** | Edelstahl V4A D = 4.5 mm, L0 = 15 mm | Gutekunst / Web | 4 Stk. | Auto-Eject Federn in der Schottwand (2x pro Pod, schiebt Kassette 25 mm heraus) |
 | **Edelstahl-Hülse Schlüsselring (Keyfob)** | 316L V4A Ø 8.5 x 4.5 mm, L = 13 mm | Normteil / Misumi | 1 Stk. | Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse |
 | **M2 Edelstahlmutter (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 8 Stk. | Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (4x pro Modul) |
-| **M2.5 Senkkopfschraube (Mirror-Pod)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung PCBA 05B im Spiegel-Pod (2x pro Pod) |
-| **M2 Pod-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Pod-Boden (4x pro Pod) |
-| **Edelstahl Rastkugel Ø 3.0 mm** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 Stk. | Kugelraste für Schiebedeckel im Pod-Gehäuse |
+| **M2 Halteplattenschraube (Senkkopf)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
+| **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
+| **M2 Schwenkachse Wippe** | DIN 7 V4A Zylinderstift M2 x 8 mm | Normteil / Misumi | 2 Stk. | Präzisions-Drehachse für magnetische Kassetten-Rastwippe im Schlitten |
 | **M2 UCS Modul-Schraube** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 8 Stk. | Verschraubung OMM UCS Gehäuseschalen (4x pro Modul, greift in M2 Muttern) |
 | **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 Stk. | Befestigung der Hauptplatinen (4x Zentralbox PCBA 01, 4x Front-Node PCBA 05) |
 | **M3 Edelstahlmutter (Captive)** | DIN 934 / DIN 985 M3 V4A | Normteil / Amazon | 10 Stk. | Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock – kein Lötkolben nötig!) |
@@ -473,16 +491,16 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **M4 Silentblöcke / Gummipuffer** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz) |
 | **M5 Klemmschraube (Hirth & Rohrschellen)** | DIN 912 V4A M5 x 25 mm | Normteil / Amazon | 3 Stk. | Horizontale Achse für Hirth-Formschlussgelenke & Rohrträger-Klemmschellen (Ø 12-22 mm) |
 | **M5 Stopmutter / Edelstahlmutter** | DIN 985 / DIN 934 M5 V4A | Normteil / Amazon | 3 Stk. | Formschlüssig in Gelenkwangen und Rohrschellenkappen eingelassen |
-| **Stahl-Rastblech (Slide-in Deckel)** | DIN 6325 gehärteter Passstift Ø 6 x 8 mm | Normteil / Misumi | 2 Stk. | Gegenpol für FOB-Magnetschlüssel im Schiebedeckel |
-| **N52 Entriegelungsschlüssel** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 2 Stk. | Berührungsloser Magnetschlüssel zum diebstahlsicheren Auswurf der Pods am Pod |
-| **Rastfeder Edelstahl** | Edelstahl V4A Ø 3.5 mm, L0 = 10 mm | Gutekunst / Web | 2 Stk. | Hält Schiebedeckel-Kugelraste unter Federspannung |
+| **Magnetanker Stahlstift (Kassette)** | DIN 6325 gehärteter Passstift Ø 6 x 8 mm | Normteil / Misumi | 2 Stk. | Ferromagnetischer Stahlanker im Hebelarm der Kassetten-Wippe (reagiert auf N52 Magnetschlüssel) |
+| **N52 Entriegelungsschlüssel** | N52 Neodym-Block 20 x 10 x 5 mm (vernickelt) | Supermagnete / Web | 2 Stk. | Berührungsloser Magnetschlüssel zum diebstahlsicheren Auswurf der Kassetten am Pod |
+| **Wippen-Rückstellfeder** | Edelstahl V4A Ø 3.5 mm, L0 = 10 mm | Gutekunst / Web | 2 Stk. | Hält die Verriegelungskralle der Kassettenwippe mit 2.5 N Vorspannung geschlossen |
 | **Gore ePTFE Druckausgleichs-Ventil** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 Stk. | Druckausgleich & Kondenswasserschutz in der Deckeltasche der Zentralbox |
-| **EPDM Dichtlippe Schiebedeckel** | Silikon-Formdichtung Shore 40A (54 x 18 mm) | Sonderfertigung / Silikon | 2 Stk. | Umlaufende EPDM-Profildichtung am Pod-Schiebedeckel |
+| **Kassetten-Flanschdichtung (Mundloch)** | Silikon-Formdichtung Shore 40A (54 x 18 mm) | Sonderfertigung / Silikon | 2 Stk. | Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 gegen Spritzwasser und Gischt |
 | **OMM Silikon-Profildichtung Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-elastische Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul, IP67) |
 | **Silikon-Dichtschnur Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 0.7 m | Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67 |
 | **1S LiPo Pouch-Akku 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin | EEMB / Web | 1 Stk. | Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-ACH 2P Stecker) |
 | **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
-| **4-Pin Magnet-Abreißkupplung IP67 (COTS)** | HytePro 4-Pin Magnetanschluss IP68 (vergoldet, N52) | HytePro / COTS | 2 Stk. | Wasserdichte Abreißkupplung an der Koffertrennstelle (bis 3A) |
+| **5V DC Miniatur-Hubmagnet** | Ø 6.5 x 12 mm, Hub 1.5-2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 8 Stk. | Mechatronische Tastenbetätigung für Sena & Cardo Tasten (4x pro Smart Slot) |
 | **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
 | **IP67 DC-Direktstecker (CON_POD_DC)** | 2-Pin Automotive Blade mit axialem NBR70 O-Ring & Edelstahl-U-Clip | COTS Automotive / Web | 2 Stk. | Werkzeuglos verriegelnder IP67-Direktstecker für Pod 1 & 2 Stromzuführung (100 % lötfrei) |
 | **Polycarbonat Radom-Sichtfenster** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 Stk. | Mikrowellen- & optisches Fenster für MR20 Radar & 24-LED Halo |
@@ -492,23 +510,23 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **u-blox SAM-M10Q Multi-GNSS Modul** | 15x15 mm Keramik-Patchantenne, Qwiic I2C | SparkFun / u-blox | 1 Stk. | Satellitenortung am 5-Port Fahrzeug-Satelliten mit freier Sicht zum Zenit |
 | **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
 | **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
-| **Taoglas FXP895 868 MHz Flexantenne** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 Stk. | LoRa 868 MHz Antenne für Zentralbox |
+| **Taoglas FXP73 2.4 GHz FPC Flexantenne** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 Stk. | Interne Antenne im Längsschacht des Kassetten-Schlittens für Pod-Betrieb |
 | **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
-| **DLW21SN900HQ2L Gleichtaktdrossel** | SMD 0805 USB 2.0 Common Mode Choke | Murata / Mouser | 3 Stk. | EMV-Entstörung für geschirmten 4-Draht USB-Bus (Zentralbox, Pods) |
+| **Taoglas FXUWB10 UWB Flexantenne** | 6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel | Taoglas / Mouser | 5 Stk. | Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar) |
 | **COTS USB-C Smartphone-Kabel** | Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten) | Amazon / COTS | 1 Stk. | Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung |
 | **Cockpit-Kabelbaum 16-polig (geschirmt)** | 16-poliges geschirmtes Rundkabel (Ø 6.0 mm, 50 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 Stk. | Verbindet PCBA 05 J_COCKPIT mit dem Cockpit-Satellitenverteiler |
 | **Deutsch DTM-12 Hauptkabelbaum** | IP68/IP69K Deutsch DTM-12 COTS Fertigkabelbaum mit Raychem DR-25 | COTS / Deutsch | 1 Stk. | Zentraler Hauptanschluss für Bordnetz, CAN-Bus & DC-Zuleitungen zu den Pods |
 | **Fahrzeug-Kabelbaum 12-polig (geschirmt)** | 12-poliges geschirmtes Rundkabel (Ø 6.5 mm, 40 cm) mit 2.0 mm Verriegelungsstecker | COTS Standard | 1 Stk. | Verbindet PCBA 05 J_VEHICLE mit dem 5-Port Fahrzeug-Satellitenverteiler |
 | **JST-PH Pigtail Sortiments-Set** | 2-Pin, 3-Pin, 4-Pin JST-PH mit vormontierten Litzen | Amazon / COTS | 1 Set | CAN-Bus, Lenkertaster, Spiegel-LEDs, Qi-Lader & Actioncam |
-| **4-Draht Automotive Backbone-Kabel** | Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | Geschirmte 4-adrige Automotive-Leitung (VBUS, GND, D+, D-) durch Rahmentunnel |
+| **J_ACT Aktuator-Kabelbaum** | Vorkonfektioniertes 8-Pin JST-SH Kabel (Top-Entry, gerade Abgangsrichtung) auf 4x 2-Pin Litzenpaare (AWG30 Silikon, 60 mm) | Adafruit / SparkFun | 2 Stk. | 4 verdrillte Paare von PCBA 03 J_ACT (vertikaler Top-Entry) zu den 4 Hubmagneten (keine 180°-Schleife, null Crimpen!) |
 | **J_AUDIO_PWR Kabel Cardo Packtalk** | 8-Pin JST-SH (Top-Entry) auf 3.5mm Spk, Micro-2Pin Mic & 90° USB-C 5V (10 cm) | COTS Standard | 1 Stk. | Koppelt Cardo Air-Mount Halterung via vertikalem Top-Entry mit 5V Lade- & Audiostrom ohne Brummstörungen |
 | **J_AUDIO_PWR Kabel Sena SPIDER X** | 8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 Stk. | Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins) |
 | **KFZ-Sicherungshalter & 2A Sicherung** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol (Klemme 30) |
 | **OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 Stk. | Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale) |
-| **Pure-DC 2-Ader Zuleitung (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 Stk. | 4-Draht Automotive Bus zu Pod 1 & 2 (USB-PD & USB 2.0 Audio/Daten) |
+| **Pure-DC 2-Ader Zuleitung (PUR)** | 2x 0.34 mm² (AWG22) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 2 Stk. | 4-Draht Automotive-Zuleitung zu Pod 1 & 2 (30W USB-PD & USB 2.0 Daten) |
 | **Qwiic Sensorkabel (100 mm)** | 4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze) | SparkFun / Adafruit | 1 Stk. | Verbindung vom 5-Port Fahrzeug-Satelliten zum SAM-M10Q GNSS-Modul |
 | **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
-| **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 Stk. | 4-Draht Zuleitung für Heck-Radar (12V Power & High-Speed CAN/Serial) |
+| **Radar 12V Zuleitung (PUR)** | 2x 0.5 mm² (AWG20) mit JST-JWPF 2-Pin IP67 Stecker | COTS Standard | 1 Stk. | 12V DC Bordnetzspeisung & Trigger für Heck-Radar (Strang 4) |
 | **Universal Pigtail Adapterset (JST-JWPF auf offene Enden)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen |
 | **Zentralbox USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Flanke der Zentralbox |
 
@@ -611,7 +629,7 @@ Um eine 100%ige Langzeitausfallsicherheit nach Automotive-Standard zu gewährlei
 Folgende Bereiche dürfen **unter keinen Umständen** mit Schutzlack benetzt werden:
 1. **Steckverbinder & Kontaktbuchsen:**
    * USB-C Buchsen (`J7` Front-Node, Service-Ports)
-   * Automotive-Steckverbinder & Kontakte (`J_DC_IN` Pods-Schlitzbuchse, JST-JWPF 2-Pin Radar `J1`, Deutsch DTM-12 Zentralbox `J1`)
+   * Automotive-Steckverbinder & Kontakte (Deutsch DTM-6 `J1` & 16-Pin Header `J_PERIPH` Zentralbox, `J_DC_IN` Pods-Schlitzbuchse, JST-JWPF 2-Pin Radar `J1`)
    * JST-SH / JST-PH / Qwiic Buchsenleisten (`J_COCKPIT`, `J_VEHICLE`, `J7` Front-Node, `J_ACT`/`J2` Pods, `J2` Radar-Sensor)
    * MicroSD Kartenleser-Slot (`J2` Zentralbox auf B.Cu)
 2. **Akustische Sensoren & Ventile:**

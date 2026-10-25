@@ -14,17 +14,17 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 |                                                                                        |
 |   SATELLITE BAY 1 (Gateway A * Sena)          SATELLITE BAY 2 (Gateway B * Cardo/OMM)  |
 |   +--------------------------+                +--------------------------+             |
-|   | * Sena SPIDER X / 50S/60S|                | * Cardo Edge / Pro / OMM |             |
-|   | * PCBA 03 Gateway-Board |                | * PCBA 03 Gateway-Board |             |
-|   | * 4x Mechatronic MOSFETs |                | * 4x Mechatronic MOSFETs |             |
+|   | * Sena SPIDER X Slim     |                | * Cardo Packtalk Edge    |             |
+|   | * PCBA 03 Gateway Board  |                | * PCBA 03 Gateway Board  |             |
+|   | * In-Bag USB-PD Port 30W |                | * In-Bag USB-PD Port 30W |             |
 |   +------------+-------------+                +------------+-------------+             |
 |                |                                           |                           |
-|                | 2-Wire DC Power (+5V / GND) from DTM-12   |                           |
-|                | Staggered: T=200ms                        | Staggered: T=350ms        |
+|                | 4-Wire Automotive Bus (VBUS, GND, D+, D-) Branches 2 & 3              |
+|                | Staggered: T=200ms (USB-PD Sink)          | Staggered: T=350ms        |
 |                |                                           |                           |
 |                +-------------+-----------------------------+                           |
-|                              | High-Speed USB 2.0 Audio Class & Control                    |
-|                              | (Automotive USB 2.0 Hub / 6.489 GHz Ch. 5 / Latency < 0.4 ms)     |
+|                              | High-Speed USB 2.0 Audio Class & Control Streams        |
+|                              | (Automotive USB 2.0 / Latency < 0.2 ms / Full Duplex)   |
 |                              v                                                         |
 |       +------------------------------------------------------------+                   |
 |       |     ESP32-S31 CORE 1 DSP & ES8388 24-BIT / 48 kHz AUDIO     |                   |
@@ -451,7 +451,7 @@ Every pod carrier board (`PCBA 03`) connects via the shielded 4-wire Automotive 
 +-------------------------------------------------------------+
 |        4-WIRE USB-PD PLUG-AND-PLAY & SEQUENCING FLOW        |
 +-------------------------------------------------------------+
-| 1. STAGGERED POWER-UP (Sequencer via DTM-12):               |
+| 1. STAGGERED POWER-UP (Sequencer via eFuse):                |
 |    * T=0ms: Central Box & Front Node boot on KL15 ignition  |
 |    * T=200ms: Bay 1 eFuse closes (+5V rail active)          |
 |    * T=350ms: Bay 2 eFuse closes (+5V rail active)          |
