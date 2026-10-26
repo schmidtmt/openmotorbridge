@@ -234,28 +234,33 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 * **Integrated 30W USB-PD Charging Zone & Chassis Socket Header (`J_USB_OUT` / 4-Pin JST-GH 1.25mm SMD):**
   * **Controller:** Ismartware `SW3516` or Injoinic `IP6538` (QFN-32, $5 \times 5\,\text{mm}$) synchronous step-down converter with integrated USB-PD 3.0 / PPS / QC4+ protocol controller and $7 \times 7\,\text{mm}$ shielded power inductor ($10\,\mu\text{H}$).
   * **Header `J_USB_OUT`:** Located at the **upper left bulkhead edge**.
-  * **Internal Silicone Harness to Chassis Wall (Port B):** A 4-conductor ultra-flexible silicone ribbon cable leads from the header directly to the **chassis-mounted USB-C charging receptacle in the bulkhead of the pod enclosure**.
-  * **100% Bilateral Symmetry Guarantee (Left = Right):** Because both saddlebag pods are oriented identically at their bulkhead end-walls, the USB-C charging port remains ergonomically identical on both vehicle sides (no upside-down mirroring as occurs with longitudinal side ports!).
-  * **Mechanical Decoupling:** All insertion, pull, and lever forces from plugging charging cables or shifting luggage are absorbed 100% by the rigid PA12 chassis wall – the PCB remains completely free of mechanical strain and vibration!
+* **Bulkhead Internal Headers & Enclosure Port Arrangement:**
+  * **Short Bulkhead Wall Receptacle Layout (Port A & Port B):** Both external bulkhead ports are horizontally centered ($Y = 35.0\,\text{mm}$) and stacked vertically:
+    * **Port A (Bus Socket):** Positioned above centerline at $Z = 26.5\,\text{mm}$ (with M8 protective collar / sealed cable gland to Central Box).
+    * **Port B (USB-C Fast-Charge Receptacle):** Positioned below centerline at $Z = 11.5\,\text{mm}$ (with $7.0\,\text{mm}$ recessed plug-well for flush waterproof TPU sealing cap).
+  * **Internal Silicone Pigtail Harnesses:** Connections from PCBA 03 to the bulkhead ports run through short, ultra-flexible 4-conductor silicone ribbon cables from headers `J_BUS` and `J_USB_OUT`. All insertion, pull, and leverage forces are absorbed 100% by the monolithic PA12 enclosure wall – the PCB remains completely free of mechanical strain!
+  * **100% Bilateral Symmetry Guarantee (Left = Right):** Because both saddlebag pods are oriented identically at their bulkhead end-walls, the USB-C charging port remains ergonomically identical on both vehicle sides.
 * **Rearward Interfaces (Facing right into the equipment chamber):**
   * **`J_AUDIO_PWR` (8-Pin JST-SH 1.0mm, top-right):** Direct connection to the OEM intercom harness (Sena, Cardo, OMM, Midland).
-  * **`J_ACT` (4-Pin JST-SH 1.0mm, bottom-right):** Direct connection to both 5V mini push-pull solenoids on the universal actuator bracket (`012_universal_actuator_slide_bracket.scad`).
-  * **Advantage:** With $20\,\text{mm}$ vertical separation between Audio (top) and Actuators (bottom), inductive switching spikes from the solenoids cannot couple into sensitive analog microphone/speaker lines. Both harnesses route backwards in parallel – zero cable crossings over the PCB!
-* **Communication & Audio ICs:**
+  * **`J_ACT` (8-Pin JST-SH 1.0mm, bottom-right):** Direct connection to up to 4 actuator channels (mini push-pull solenoids / micro-servos on the universal slide bracket `012_universal_actuator_slide_bracket.scad`).
+  * **Advantage:** Spatial separation between Audio (top) and Actuators (bottom) prevents inductive switching spikes from coupling into sensitive analog audio lines. Both harnesses route backwards in parallel – zero cable crossings over the PCB!
+* **Communication, Power & Audio ICs:**
   * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU for charge monitoring, codec control, actuators, and USB audio bridge.
+  * `U_PD`: Ismartware `SW3516` (QFN-32, $5 \times 5\,\text{mm}$) synchronous 30W USB-PD 3.0 / PPS / QC4+ step-down controller with $7 \times 7\,\text{mm}$ shielded power inductor `L_PD` ($10\,\mu\text{H}$) and 1210 solid polymer filter capacitors.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz low-noise audio codec.
   * `U4`: TI `TS5A3159DBVR` analog/digital audio switch for automatic detection of analog OEM headsets vs. digital OMM modules via Pin 6 (`OMM_DETECT`).
-  * `Q1`, `Q2`: Dual N-channel power MOSFETs (`AO3400A`, 30V/4A) with flyback diodes for 2.0 s cold-start pulse.
+  * `Q1..Q4`: 4x N-channel power MOSFETs (`AO3400A`, 30V/4A) with 4x flyback diodes (`1N4148WS`, D1..D4) for 4 independent actuator driver channels.
+  * `F1`: 1812 SMD Polyfuse (PPTC) for protected 5V actuator and peripheral supply (`VCC_5V_PROT`).
 
 ### 5.2 Pinout of 4-Pin Bus Input (`J_BUS` / 4-Pin JST-GH 1.25mm)
 
-| Pin | Signal Name | Signal Type | Function & Specification |
+| Pin | Signal Name | Signal Type | Function & Specification (internal pigtail to Port A) |
 | :---: | :--- | :---: | :--- |
 | **1** | **`VCC_BUS`** | Power In (+12V...+20V) | Vehicle power / PD supply from Central Box (AWG20, fused 30W) |
 | **2** | **`GND`** | Power Return | Power and signal ground |
-| **3** | **`USB_D+`** | High-Speed Data | USB 2.0 data line D+ to Central Box (ESP32-S3 host) |
-| **4** | **`USB_D-`** | High-Speed Data | USB 2.0 data line D- to Central Box (ESP32-S3 host) |
-| **MP** | **`SHIELD_GND`** | Shield | JST-GH connector shield retention tabs tied to GND plane |
+| **3** | **`USB_DP`** | High-Speed Data | USB 2.0 data line D+ to Central Box (ESP32-S3 host) |
+| **4** | **`USB_DM`** | High-Speed Data | USB 2.0 data line D- to Central Box (ESP32-S3 host) |
+| **MP** | **`GND`** | Shield | JST-GH connector shield retention tabs tied to GND plane |
 
 ### 5.3 Pinout of Internal 30W USB-C Chassis Header (`J_USB_OUT` / 4-Pin JST-GH 1.25mm)
 
@@ -265,30 +270,35 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
 | **2** | **`GND`** | Power Return | Power ground return (AWG20 silicone wire) |
 | **3** | **`CC1`** | PD Config In/Out | Configuration Channel 1 for USB-PD 3.0 / PPS negotiation |
 | **4** | **`CC2`** | PD Config In/Out | Configuration Channel 2 for USB-PD 3.0 / PPS negotiation |
-| **MP** | **`SHIELD_GND`** | Shield | Chassis shield ground of USB-C bulkhead receptacle |
+| **MP** | **`GND`** | Shield | Retention tabs tied to GND plane |
 
 ### 5.4 Pinout of Audio-Power Header (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
 
 | Pin | Signal Name | Direction | Function: Analog Intercom (Sena / Cardo / Midland) | Function: Digital OMM (PCBA 09 / PCBA 10) |
 | :---: | :--- | :---: | :--- | :--- |
-| **1** | **`PGND` / `GND`** | Power Return | **High-Current Power Ground:** Carries charging & DC-DC return ($0.2\dots 0.6\,\text{A}$) | **High-Current Power Ground:** Power return for charger & RF PA ($0.2\dots 0.6\,\text{A}$) |
-| **2** | **`VCC_5V_PROT`** | Power Out | Regulated, protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
-| **3** | **`AGND_AUDIO_IN`**| Audio GND Ref| **Clean Headphone Ground:** 3.5 mm TRS sleeve – **strictly zero DC current ($I = 0\,\text{mA}$)!** | Unused (N/C) or coax shield reference (zero DC current!) |
+| **1** | **`GND`** | Power Return | **Power & Audio Return:** Common low-impedance ground ($0.2\dots 0.6\,\text{A}$) | **Power & RF Ground:** Return for charger & RF PA |
+| **2** | **`VCC_5V_PROT`** | Power Out | Regulated, polyfuse-protected +5V supply for headset battery/charger | Regulated, protected +5V supply for OMM BQ24075 PMIC |
+| **3** | **`GND`** | System GND | Reference and shielding ground | Reference and coax shield |
 | **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Left speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
 | **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Right speaker line-out from headset $\rightarrow$ to ES8388 ADC | Unused (N/C) |
 | **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND Bridge in Harness (0V):** Holds `U4` in normal closed state (NC) | **Open / N/C:** `R9` pulls HIGH ($3.3\,\text{V}$) $\rightarrow$ switches `U4` to Digital USB (NO) |
 | **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Voice from ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Native digital USB audio data stream D+ |
-| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk keying to ground (Midland PMR446 / N/C) | **Digital `USB_DN`:** Native digital USB audio data stream D- |
+| **8** | **`PTT_BTN`** | Digital In $\leftarrow$ | **Physical PTT Button:** Pushbutton input direct to ESP32-C6 GPIO Pin 7 | **PTT Control / Digital Status:** Keying to GND |
 | **MP** | **`GND`** | Shield | SMT connector side mounting tabs tied to solid GND plane | SMT connector side mounting tabs tied to solid GND plane |
 
-### 5.5 Pinout of Mechatronic Actuator Header (`J_ACT` / 4-Pin JST-SH 1.0mm)
+### 5.5 Pinout of Mechatronic Actuator Header (`J_ACT` / 8-Pin JST-SH 1.0mm)
 
 | Pin | Signal Name | Signal Type | Function & Protection |
 | :---: | :--- | :---: | :--- |
-| **1** | **`VCC_5V_ACT`** | Power Out (+5V) | Supply rail for Solenoid 1 & 2 coils (fused via eFuse) |
-| **2** | **`ACT1_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 1 (via AO3400A / flyback diode) |
-| **3** | **`ACT2_DRAIN`** | Open-Drain Out | Switched coil ground Solenoid 2 (via AO3400A / flyback diode) |
-| **4** | **`GND`** | Power Ground | Power ground for driver stage |
+| **1** | **`GND`** | Power Return | Power ground for actuator driver stage |
+| **2** | **`GND`** | Power Return | Power ground for actuator driver stage |
+| **3** | **`ACT_4`** | Open-Drain Out | Switched coil ground Actuator 4 (via AO3400A Q4 / flyback diode D4) |
+| **4** | **`ACT_3`** | Open-Drain Out | Switched coil ground Actuator 3 (via AO3400A Q3 / flyback diode D3) |
+| **5** | **`ACT_2`** | Open-Drain Out | Switched coil ground Actuator 2 (via AO3400A Q2 / flyback diode D2) |
+| **6** | **`ACT_1`** | Open-Drain Out | Switched coil ground Actuator 1 (via AO3400A Q1 / flyback diode D1) |
+| **7** | **`VCC_5V_PROT`** | Power Out (+5V) | Supply rail for actuator coils (polyfuse-protected via F1) |
+| **8** | **`VCC_5V_PROT`** | Power Out (+5V) | Supply rail for actuator coils (polyfuse-protected via F1) |
+| **MP** | **`GND`** | Shield | SMT mounting tabs tied to solid GND plane |
 
 ---
 

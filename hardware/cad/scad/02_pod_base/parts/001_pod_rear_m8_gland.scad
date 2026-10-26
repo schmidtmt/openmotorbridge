@@ -14,7 +14,7 @@
 include <../../00_common/parameters.scad>;
 
 // 1. Port A: Low-Profile M8 Collar / Outer Sealing Shoulder (X = -2.0 .. 0.0 mm)
-module pod_rear_m8_neck(collar_len=2.0, outer_size=16.0, inner_size=11.5, r_corner=1.5, yc=27.0, zc=19.0) {
+module pod_rear_m8_neck(collar_len=2.0, outer_size=16.0, inner_size=11.5, r_corner=1.5, yc=35.0, zc=26.5) {
     translate([-collar_len, yc, zc]) {
         difference() {
             rotate([0, 90, 0])
@@ -46,7 +46,7 @@ module pod_rear_m8_neck(collar_len=2.0, outer_size=16.0, inner_size=11.5, r_corn
 
 // 2. Port A: Rear Wall Cutout Tool for M8 Square Base Pass-Through
 //    (11.5 x 11.5 mm with R = 1.5 mm corner radius; cuts cleanly through 3.5 mm rear wall)
-module pod_rear_m8_through_hole_tool(wall_th=8.0, base_size=11.5, r_corner=1.5, yc=27.0, zc=19.0) {
+module pod_rear_m8_through_hole_tool(wall_th=8.0, base_size=11.5, r_corner=1.5, yc=35.0, zc=26.5) {
     translate([-2.5, yc, zc]) {
         rotate([0, 90, 0])
             hull() {
@@ -67,8 +67,8 @@ module pod_rear_usbc_internal_sleeve(
     depth=14.0,
     outer_w=17.0,
     outer_h=11.5,
-    yc=43.0,
-    zc=19.0
+    yc=35.0,
+    zc=11.5
 ) {
     translate([0, yc, zc]) {
         rotate([0, 90, 0])
@@ -93,8 +93,8 @@ module pod_rear_usbc_pocket_tool(
     pocket_h=8.5,
     port_w=9.6,
     port_h=4.0,
-    yc=43.0,
-    zc=19.0
+    yc=35.0,
+    zc=11.5
 ) {
     // A. 45° Lead-in Chamfer at outer mouth (X = -0.5 .. 1.0 mm)
     translate([-0.6, yc, zc]) {
@@ -144,7 +144,6 @@ module pod_rear_usbc_pocket_tool(
 
 // Standalone preview
 union() {
-    pod_rear_m8_neck(yc=27.0, zc=19.0);
-    translate([0, 43.0 - 27.0, 0])
-        #pod_rear_usbc_pocket_tool(yc=27.0, zc=19.0);
+    pod_rear_m8_neck(yc=35.0, zc=26.5);
+    #pod_rear_usbc_pocket_tool(yc=35.0, zc=11.5);
 }

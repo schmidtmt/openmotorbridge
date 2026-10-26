@@ -42,11 +42,11 @@ BOARDS = [
 
     {
         "name": "03_pod_cartridge_pcba",
-        "title": "OpenMotorBridge Universal Cartridge Carrier PCB",
+        "title": "OpenMotorBridge Satellite Pod Interface PCB (PCBA 03)",
         "sch": os.path.join(BASE_DIR, "kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_sch"),
         "pcb": os.path.join(BASE_DIR, "kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb"),
-        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
-        "is_4layer": False
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
     },
     {
         "name": "05_front_node_pcba",

@@ -23,13 +23,13 @@ module pod3_rear_assembly() {
     color("darkslategray", 0.75)
         pod_base_housing();
 
-    // 2a. Port A: M8 6-Pin IP67 Metal Connector (Connected at rear left, Y = 27 mm)
-    translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
+    // 2a. Port A: M8 6-Pin IP67 Metal Connector (Rear center, top: Z = POD_OUTER_H/2.0 + 7.5)
+    translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
         rotate([0, 180, 0])
             dummy_m8_connector();
 
-    // 2b. Port B: USB-C Waterproof TPU Sealing Cap (Connected at rear right, Y = 43 mm)
-    translate([0.5, POD_OUTER_W/2.0 + 8.0, POD_OUTER_H/2.0])
+    // 2b. Port B: USB-C Waterproof TPU Sealing Cap (Rear center, bottom: Z = POD_OUTER_H/2.0 - 7.5)
+    translate([0.5, POD_OUTER_W/2.0, POD_OUTER_H/2.0 - 7.5])
         rotate([0, 90, 90])
             pod_base_usbc_cap_tpu();
 

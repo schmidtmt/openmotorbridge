@@ -182,8 +182,10 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 3. **Unsichtbare FOB-Magnetentriegelung:** Die Verriegelung erfolgt über eine innenliegende magnetische Rastklinke. Zum Öffnen nähert der Fahrer den Smart-Keyfob (`PCBA 07` mit N52-Neodym-Magnet) an die markierte Gehäusezone an. Das Magnetfeld zieht die Sperrklinke berührungslos zurück und der Deckel gleitet federunterstützt um $10\,\text{mm}$ heraus – 100 % werkzeuglos, ohne sichtbare Schlösser, vandalismus- und diebstahlsicher.
 4. **Zweizonen-Aufbau mit Zwischendeckel (Dry-Flap):**
    * **Untere Zone:** Beherbergt die Trägerplatine `PCBA 03` ($42{,}0 \times 48{,}0\,\text{mm}$) mit nativer USB-PD Speisung und dem 4-Draht Automotive-Backbone.
-   * **Chassis-montierte Koffer-USB-Ladebuchse (30W USB-PD) an der Stirnwand:** In der linken Stirnwand des Pod-Gehäuses (Port B) sitzt eine wettergeschützte USB-C Ladedose, die über ein 4-adriges internes Silikonkabel mit dem Header `J_USB_OUT` auf `PCBA 03` verbunden ist. Dies garantiert 100 % bilaterale Symmetrie (linke und rechte Koffer-Pods ergonomisch identisch) und fängt sämtliche mechanische Steck- und Zugkräfte direkt im PA12-Gehäuse ab.
-   * **4-Pin Bus-Eingang an der Stirnwand (Port A):** Sitzt an der linken Stirnkante unten (`J_BUS`) und führt auf kürzestem Weg (< 15 mm) zur Kofferwandtülle.
+   * **Chassis-montierte Buchsen an der kurzen Gehäusestirnwand (Port A & Port B):** Beide Schnittstellen sitzen horizontal exakt mittig ($Y = 35{,}0\,\text{mm}$) auf der kurzen Gehäuseseite und sind vertikal übereinander gestapelt:
+     * **Port A (Bus-Buchse, oben bei $Z = 26{,}5\,\text{mm}$):** Wettergeschützte M8-/Automotive-Buchse, die über ein kurzes internes 4-adriges Silikon-Flachbandkabel mit dem Header `J_BUS` auf `PCBA 03` verbunden ist.
+     * **Port B (USB-C Ladedose, unten bei $Z = 11{,}5\,\text{mm}$):** Tief eingelassene ($7{,}0\,\text{mm}$), formschlüssige USB-C Buchse (30W USB-PD), die über ein 4-adriges internes Silikonkabel mit dem Header `J_USB_OUT` auf `PCBA 03` verbunden ist.
+     * Dies garantiert 100 % bilaterale Symmetrie (linke und rechte Koffer-Pods ergonomisch identisch) und fängt sämtliche mechanische Steck- und Zugkräfte direkt im PA12-Gehäuse ab – die Platine bleibt völlig zug- und schwingungsfrei.
    * **Zwischendeckel-Spritzschutzblende (Dry-Flap):** Ein aufklappbarer oder einschiebbarer Silikon-/EPDM-Zwischendeckel schirmt die Platine und Kabelanschlüsse vollständig gegen Schmutz und Nässe ab.
    * **Obere Zone (Direktaufnahme für OEM-Intercoms oder Dry-Box):** Nimmt direkt das jeweilige Kommunikationsmodul auf (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS oder Midland PMR446) sowie die universelle Doppel-Schiebeschlitten-Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`). Wird kein Intercom genutzt, fungiert das gesamte Fach als hermetische **Mini-Dry-Box** für Fahrzeugpapiere, Bargeld und Notfallschlüssel.
 
@@ -254,8 +256,8 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 | UNTERE ZONE: ELEKTRONIK & VERSORGUNG                                        |
 | * PCBA 03 Trägerplatine (42x48 mm, MCU, ES8388, SW3516 30W PD, 4-Ader-Bus)  |
-| * Chassis USB-PD Ladebuchse an Stirnwand (30W PD, internes Silikonkabel)     |
-| * 4-Pin Bus-Eingang an Stirnwand (J_BUS, <15 mm zur Kofferwandtülle)        |
+| * Port A Bus-Buchse an Stirnwand oben (M8/Verschraubung, internes Silikonkabel) |
+| * Port B USB-PD Ladedose an Stirnwand unten (30W PD, internes Silikonkabel)   |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -263,13 +265,14 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
    * Die Platine [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-satelliten-pod-interface-board-openmotorbridge_pod_interface) ($42{,}0 \times 48{,}0\,\text{mm}$) ist auf 4x M2.5 Schwingungsdämpfern direkt am Gehäuseboden verschraubt ($36{,}0 \times 42{,}0\,\text{mm}$ Lochabstand).
    * **Front-Begrenzung in X ($42{,}0\,\text{mm}$):** Nutzt ausschließlich den durch den Wegfall der früheren Kassettenfront gewonnenen Bauraum nach vorne. Der gesamte hintere Gehäuseraum ($88\,\text{mm}$ Restlänge) bleibt uneingeschränkt für OEM-Cradles (Cardo Air-Mount, Sena SPIDER-Schale, OMM) und die universelle Doppel-Schiebeschlitten-Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`) reserviert.
    * **Breite in Y ($48{,}0\,\text{mm}$):** Schöpft die lichte Wannenbreite ($63\,\text{mm}$) optimal aus, verdoppelt die Platinenfläche und ermöglicht massives 4-Lagen-Routing mit großzügigen Masseflächen zur Wärmeabfuhr des 30W Step-Down Wandlers.
-   * **Linke Stirnwand (Fahrzeugschnittstellen):**
-     * **Port A (unten):** 4-Pin Bus-Eingang (`J_BUS` 4-Pin JST-GH), kürzester, geradliniger Leitungsweg (< 15 mm) zur Kofferwandtülle ohne Biegungen.
-     * **Port B (oben):** Chassis-montierte USB-C Ladebuchse, angebunden über ein 4-adriges flexibles Silikonkabel an den Platinen-Header `J_USB_OUT`. Gewährleistet 100 % bilaterale Symmetrie für linken und rechten Koffer-Pod und schützt die Leiterplatte vollständig vor Zug- und Hebelkräften.
+   * **Kurze Gehäusestirnwand (Fahrzeugschnittstellen):**
+     * Beide Buchsen sind horizontal exakt mittig auf der kurzen Stirnseite platziert ($Y = 35{,}0\,\text{mm}$) und vertikal übereinander angeordnet:
+     * **Port A (oben, $Z = 26{,}5\,\text{mm}$):** Chassis-montierte Bus-Buchse (4-Draht Automotive Backbone `VCC_BUS`, `GND`, `USB_D+`, `USB_D-`), angebunden über ein internes 4-adriges Silikon-Flachbandkabel an den Header `J_BUS` (4-Pin JST-GH).
+     * **Port B (unten, $Z = 11{,}5\,\text{mm}$):** Chassis-montierte USB-C Ladebuchse (30W USB-PD), angebunden über ein 4-adriges flexibles Silikonkabel an den Platinen-Header `J_USB_OUT` (4-Pin JST-GH). Gewährleistet 100 % bilaterale Symmetrie für linken und rechten Koffer-Pod und schützt die Leiterplatte vollständig vor Zug- und Hebelkräften.
    * **Rückwärtige Schnittstellen (Gerätekammer):**
-     * **`J_AUDIO_PWR` (8-Pin JST-SH, oben rechts):** Verbindung zur OEM-Kabelpeitsche des Intercoms.
-     * **`J_ACT` (4-Pin JST-SH, unten rechts):** Ansteuerung der 5V Kaltstart-Hubmagnete auf der Aktuatorschiene.
-     * Durch $24\,\text{mm}$ vertikalen Abstand sind Audio- und Aktuatorleitungen optimal entkoppelt; beide Kabelstränge laufen parallel nach hinten ab.
+     * **`J_AUDIO_PWR` (8-Pin JST-SH, oben rechts):** Verbindung zur OEM-Kabelpeitsche des Intercoms (`AUDIO_IN_L/R`, `AUDIO_IO_P`, `OMM_DETECT`, `PTT_BTN`, `VCC_5V_PROT`, `GND`).
+     * **`J_ACT` (8-Pin JST-SH, unten rechts):** Ansteuerung der 5V Kaltstart-Hubmagnete auf der Aktuatorschiene (4 Kanäle `ACT_1`..`ACT_4` mit Flyback-Dioden `D1`..`D4`, dualem `VCC_5V_PROT` und dualem `GND`).
+     * Durch räumlichen Abstand sind Audio- und Aktuatorleitungen optimal entkoppelt; beide Kabelstränge laufen parallel nach hinten ab.
 
 2. **Zwischendeckel-Spritzschutzblende (Dry-Flap):**
    * Über der `PCBA 03` sitzt eine schwenkbare oder einschiebbare Zwischenblende aus hochflexiblem Shore 50A Silikon/EPDM.

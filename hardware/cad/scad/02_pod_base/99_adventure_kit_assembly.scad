@@ -103,7 +103,7 @@ module adventure_config_a_gsa_rack() {
             pod_base_housing();
 
         // M8 Industrial PUR Cable at Port A (routes in tube shadow forward)
-        translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
+        translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
             rotate([0, 180, 0])
                 dummy_m8_connector();
 
@@ -157,7 +157,7 @@ module adventure_config_b_transition_dock() {
                 pod_base_housing();
 
             // M8 Cable at Port A routing into the under-seat bridge channel
-            translate([0, POD_OUTER_W/2.0 - 8.0, POD_OUTER_H/2.0])
+            translate([0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
                 rotate([0, 180, 0])
                     dummy_m8_connector();
 

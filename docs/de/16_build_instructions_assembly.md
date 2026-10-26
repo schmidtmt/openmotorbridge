@@ -135,19 +135,22 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
    * Ein **Slide-in Deckel** mit umlaufender Dichtlippe verschließt die Einschuböffnung. Im geschlossenen Zustand verriegelt ein federbelasteter Neodym-Riegelbolzen den Deckel formschlüssig.
    * **Öffnen per FOB:** Zur Entnahme des Kommunikationsmoduls wird der magnetische OMB Smart Keyfob einfach an die Gehäuse-Markierung gehalten. Das Magnetfeld zieht den Riegelbolzen zurück, und der Deckel kann leicht herausgezogen werden.
    * **Zwischendeckel (Dry-Flap):** Direkt hinter dem Außendeckel sitzt eine federbelastete Spritzschutzklappe. Selbst wenn der Kofferdeckel bei Regen geöffnet wird, bleibt die Elektronik absolut trocken.
-   * **Chassis-montierter 30W Koffer-USB-Ladeport:** In der linken Stirnwand des Pods sitzt die wettergeschützte USB-C Ladedose (Port B), die über ein internes hochflexibles 4-adriges Silikonkabel am Header `J_USB_OUT` auf `PCBA 03` angesteckt wird. Dies garantiert 100 % bilaterale Symmetrie für linken und rechten Koffer-Pod und leitet alle mechanischen Einsteckkräfte direkt ins PA12-Gehäuse ab.
+   * **Chassis-montierte Buchsen an der kurzen Gehäusestirnwand (Port A & Port B):** Beide Schnittstellen sitzen horizontal exakt mittig ($Y = 35{,}0\,\text{mm}$) auf der kurzen Gehäuseseite und sind vertikal übereinander angeordnet:
+     * **Port A (oben, $Z = 26{,}5\,\text{mm}$):** Wettergeschützte Bus-Buchse (4-Draht Backbone `VCC_BUS`, `GND`, `USB_D+`, `USB_D-`), angebunden über ein kurzes internes 4-adriges Silikonkabel an den Header `J_BUS` auf `PCBA 03`.
+     * **Port B (unten, $Z = 11{,}5\,\text{mm}$):** Wettergeschützte USB-C Ladedose (30W USB-PD), angebunden über ein internes hochflexibles 4-adriges Silikonkabel an den Header `J_USB_OUT` auf `PCBA 03`.
+     * Dies garantiert 100 % bilaterale Symmetrie für linken und rechten Koffer-Pod und leitet alle mechanischen Steck- und Zugkräfte direkt ins PA12-Gehäuse ab.
 2. **Universelle Aktuator-Schlittenschiene & Kaltstart-Drücker kalibrieren:**
    * Die beiden Mini-Hubmagnete JF-0530B (12V DC, 300 mA, 10 mm Hub) in die Schlittenaufnahmen der universellen Schlittenschiene ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) einsetzen.
    * Auf beide Stößelspitzen die weichen Shore A50 Silikonkappen aufstecken.
    * Die beiden Schlitten stufenlos auf das Tastenraster des eingesetzten OEM-Intercoms einstellen (15–85 mm kontinuierlicher Einstellbereich, z. B. exakt 50 mm Abstand zwischen Intercom- und Medientaste beim Cardo Packtalk Edge bzw. Sena Tastenzentren).
    * Die Schlitten über die unverlierbaren DIN 912 M2.5 x 8 mm Schrauben formschlüssig festklemmen.
-   * Die Schlittenbaugruppe im Pod-Boden verschrauben und das 4-polige Aktuatorkabel an `J_ACT` auf `PCBA 03` anstecken.
-   * **Funktion des Mechatronik-Kaltstarts:** Beim Einschalten der Zündung (KL15) schalten die Dual-AO3400A-MOSFETs auf `PCBA 03` (angesteuert über ESP32-C6 GPIO0 und GPIO1) beide Hubmagnete für exakt 2,0 s vollautomatisch ein. Die Silikonstößel drücken präzise und schonend auf die gummierte Tastatur des Headsets und booten dieses zuverlässig aus dem stromlosen Zustand (Zero-Standby-Entladung, kein Löten an der OEM-Platine nötig, kein manuelles Öffnen vor/nach der Fahrt!).
+   * Die Schlittenbaugruppe im Pod-Boden verschrauben und das Aktuatorkabel an den 8-poligen Header `J_ACT` auf `PCBA 03` anstecken.
+   * **Funktion des Mechatronik-Kaltstarts:** Beim Einschalten der Zündung (KL15) schalten die Quad-AO3400A-MOSFETs auf `PCBA 03` (angesteuert über ESP32-C6 GPIO0, 1, 2, 3) die Hubmagnete für exakt 2,0 s vollautomatisch ein. Die Silikonstößel drücken präzise und schonend auf die gummierte Tastatur des Headsets und booten dieses zuverlässig aus dem stromlosen Zustand (Zero-Standby-Entladung, kein Löten an der OEM-Platine nötig, kein manuelles Öffnen vor/nach der Fahrt!).
 3. **Platinen- & Stecker-Montage:**
    * Platine `PCBA 03` ($42 \times 48\,\text{mm}$) mit 4x M2.5 Schrauben und Schwingungsdämpfern am Gehäuseboden montieren ($36 \times 42\,\text{mm}$ Lochraster).
-   * 4-Draht Bus-Zuleitung von der Kofferwandtülle an den 4-Pin JST-GH Header `J_BUS` an der linken Stirnkante unten anstecken (< 15 mm, geradliniger Weg ohne Biegungen).
-   * 4-adriges internes Silikon-Flachbandkabel von der Gehäuse-USB-C-Dose (Port B) an den oberen linken Header `J_USB_OUT` anstecken.
-   * Rückwärtige Schnittstellen verbinden: Intercom-Kabelpeitsche an `J_AUDIO_PWR` (8-Pin JST-SH oben rechts) und Aktuator-Kabel an `J_ACT` (4-Pin JST-SH unten rechts) anstecken. Beide Kabelstränge laufen parallel nach hinten in die Gerätekammer ohne Platinenüberquerung.
+   * 4-Draht internes Silikonkabel von der Gehäuse-Bus-Buchse (Port A, obere Stirnwand-Position) an den 4-Pin JST-GH Header `J_BUS` an der linken Stirnkante anstecken.
+   * 4-adriges internes Silikon-Flachbandkabel von der Gehäuse-USB-C-Dose (Port B, untere Stirnwand-Position) an den Header `J_USB_OUT` anstecken.
+   * Rückwärtige Schnittstellen verbinden: Intercom-Kabelpeitsche an `J_AUDIO_PWR` (8-Pin JST-SH oben rechts) und Aktuator-Kabel an `J_ACT` (8-Pin JST-SH unten rechts) anstecken. Beide Kabelstränge laufen parallel nach hinten in die Gerätekammer ohne Platinenüberquerung.
 4. **Slide-in Deckel & Magnetverriegelung komplettieren:**
    * Den kleinen N52 Neodym-Magneten mit Führungsstift in die Riegeltasche des Deckels einlegen und mit der Rückstellfeder vorspannen.
    * Dichtprofil in die umlaufende Nut des Slide-in Deckels einpassen und mit Silikonfett schmieren. Deckel probehalber einschieben: Er rastet mit einem deutlichen "Klick" ein. Bei Annäherung des Smart Keyfobs federt der Riegel zurück und gibt den Deckel frei.

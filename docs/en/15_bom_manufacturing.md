@@ -38,7 +38,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
-## 3. PCBA 03: Satellite Pod Interface Rev 4.0 (`openmotorbridge_pod_gateway`, 2-Layer FR4 TG150, 2-Sided SMT)
+## 3. PCBA 03: Satellite Pod Interface Rev 4.0 (`openmotorbridge_pod_cartridge`, 4-Layer FR4 TG150, Single-Sided SMT)
 > **Quantity Note:** Fitted **2x per motorcycle** (Pod 1 Left, Pod 2 Right).
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
@@ -206,7 +206,7 @@ All manufacturing packages reside in the repository under `hardware/production_p
 | Subassembly / PCBA | Gerber ZIP Archive | BOM CSV File | CPL (Pick & Place) CSV | Layers | Manufacturing Notes |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (LM5050-Q1 on B.Cu) |
-| **PCBA 03: Universal Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, 2-sided SMT (Order 2x per vehicle) |
+| **PCBA 03: Universal Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, Single-Sided SMT (Top; Order 2x per vehicle) |
 | **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (LM5050-Q1 on B.Cu) |
 | **PCBA 05B: Mirror Pod** | `05b_mirror_pod_pcba_gerbers_jlcpcb.zip` | `05b_mirror_pod_pcba_bom_jlcpcb.csv` | `05b_mirror_pod_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG, 1.6 mm, TG150, SMT Top (2x per bike for Left & Right, BSD LED + Button) |
 | **PCBA 06: MagSafe Dock** | - | - | - | - | *Purged in v10.0* (replaced by COTS 4-Pin IP67 magnetic breakaway coupling) |

@@ -20,7 +20,9 @@ use <parts/005_pod_strap_hooks.scad>;
 use <../03_pod_cartridges/parts/05_magnetic_lock_latch.scad>;
 
 module pod_base_housing() {
-    port_offset_y = 8.0; // Symmetrical offset from centerline (yc = POD_OUTER_W / 2.0 = 35.0 mm; Port A = 27 mm, Port B = 43 mm)
+    port_yc    = POD_OUTER_W / 2.0;          // 35.0 mm - mittig auf der kurzen Gehäuseseite (Y-Achse)
+    port_a_zc  = POD_OUTER_H / 2.0 + 7.5;    // 26.5 mm - Port A (Bus) oberhalb der Mitte
+    port_b_zc  = POD_OUTER_H / 2.0 - 7.5;    // 11.5 mm - Port B (USB-C) unterhalb der Mitte
 
     difference() {
         union() {
@@ -42,14 +44,14 @@ module pod_base_housing() {
                 hook_h=4.5
             );
 
-            // 3. Rear Port A: M8 Protective Collar (Shifted Left: yc = 27.0 mm)
+            // 3. Rear Port A: M8 Protective Collar (Mittig, oben: zc = 26.5 mm)
             pod_rear_m8_neck(
                 collar_len=2.0,
                 outer_size=16.0,
                 inner_size=11.5,
                 r_corner=1.5,
-                yc=POD_OUTER_W/2.0 - port_offset_y,
-                zc=POD_OUTER_H/2.0
+                yc=port_yc,
+                zc=port_a_zc
             );
 
             // 4. Protective Bulkhead Partition with 6-Pin Shroud & Spring Seats (x = 18 mm)
@@ -65,13 +67,13 @@ module pod_base_housing() {
                 wall=POD_WALL
             );
 
-            // 6. Rear Port B: Internal Sleeve Boss (Encloses USB-C pocket against inner chamber)
+            // 6. Rear Port B: Internal Sleeve Boss (Mittig, unten: zc = 11.5 mm)
             pod_rear_usbc_internal_sleeve(
                 depth=14.0,
                 outer_w=17.0,
                 outer_h=11.5,
-                yc=POD_OUTER_W/2.0 + port_offset_y,
-                zc=POD_OUTER_H/2.0
+                yc=port_yc,
+                zc=port_b_zc
             );
 
             // 7. Ceiling Gore ePTFE Breather Vent Boss (Top center, fused into ceiling)
@@ -79,16 +81,16 @@ module pod_base_housing() {
                 cylinder(r=3.5, h=2.5, center=false, $fn=16);
         }
 
-        // 8. Rear Port A: M8 Square Base Through-Cutout Tool (11.5 x 11.5 mm, yc = 27.0 mm)
+        // 8. Rear Port A: M8 Square Base Through-Cutout Tool (11.5 x 11.5 mm, oben)
         pod_rear_m8_through_hole_tool(
             wall_th=POD_WALL + 2.0,
             base_size=11.5,
             r_corner=1.5,
-            yc=POD_OUTER_W/2.0 - port_offset_y,
-            zc=POD_OUTER_H/2.0
+            yc=port_yc,
+            zc=port_a_zc
         );
 
-        // 9. Rear Port B: Recessed USB-C Vertical Socket Plug-Well & Seat (Depth 7.0 mm)
+        // 9. Rear Port B: Recessed USB-C Vertical Socket Plug-Well & Seat (Depth 7.0 mm, unten)
         pod_rear_usbc_pocket_tool(
             wall_th=18.0,
             pocket_depth=7.0,
@@ -96,8 +98,8 @@ module pod_base_housing() {
             pocket_h=8.5,
             port_w=9.6,
             port_h=4.0,
-            yc=POD_OUTER_W/2.0 + port_offset_y,
-            zc=POD_OUTER_H/2.0
+            yc=port_yc,
+            zc=port_b_zc
         );
 
         // 9. Ceiling Gore Vent Center Breather Hole (Ø 3.0 mm)

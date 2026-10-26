@@ -136,19 +136,22 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * A **slide-in lid** with perimeter seal closes the module bay. When inserted, an internal spring-loaded neodymium latch bolt locks the lid securely in place.
    * **FOB Proximity Unlocking:** To remove the intercom module, simply place the magnetic OMB Smart Keyfob against the exterior alignment notch. The magnetic flux pulls back the latch bolt, allowing the lid to slide out smoothly.
    * **Intermediate Dry-Flap Guard:** Directly behind the exterior lid sits a spring-loaded splash flap. Even if the saddlebag is opened during heavy rain, the internal electronics stay dry.
-   * **Chassis-Mounted 30W Saddlebag USB Charging Port:** On the left bulkhead end-wall of the pod, a weatherproof USB-C socket (Port B) connects via an ultra-flexible 4-conductor internal silicone ribbon cable to header `J_USB_OUT` on `PCBA 03`. This guarantees 100% bilateral symmetry for left and right saddlebag pods and transfers all mechanical plugging stresses directly into the rigid PA12 chassis wall.
+   * **Chassis-Mounted Bulkhead Ports (Port A & Port B):** Both interfaces are horizontally centered ($Y = 35.0\,\text{mm}$) on the short bulkhead end-wall and stacked vertically:
+     * **Port A (top, $Z = 26.5\,\text{mm}$):** Weatherproof Bus socket (4-wire backbone `VCC_BUS`, `GND`, `USB_D+`, `USB_D-`), connected via a short internal 4-conductor silicone ribbon cable to header `J_BUS` on `PCBA 03`.
+     * **Port B (bottom, $Z = 11.5\,\text{mm}$):** Weatherproof USB-C charging port (30W USB-PD), connected via an ultra-flexible 4-conductor internal silicone ribbon cable to header `J_USB_OUT` on `PCBA 03`.
+     * This guarantees 100% bilateral symmetry for left and right saddlebag pods and transfers all mechanical plugging and pull stresses directly into the rigid PA12 chassis wall.
 2. **Equipping & Adjusting the Universal Mechatronic Actuator Slide Bracket:**
    * Insert the two mini-solenoids JF-0530B (12V DC, 300 mA, 10 mm stroke) into the carriage receptacles of the universal slide rail ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)).
    * Push the soft Shore A50 silicone caps onto both plunger tips.
    * Continuously adjust the two sliding carriages to match the button pitch of the installed OEM intercom (15–85 mm continuous adjustment span, e.g. exactly 50 mm gap between Intercom and Media buttons on Cardo Packtalk Edge or Sena button centers).
    * Clamp the carriages form-fittingly in place using the captive DIN 912 M2.5 x 8 mm screws.
-   * Bolt the slide rail assembly into the pod floor and connect the 4-pin actuator harness to `J_ACT` on `PCBA 03`.
-   * **Function of the Mechatronic Cold-Start:** When switching ignition ON (KL15), the dual AO3400A MOSFETs on `PCBA 03` (driven via ESP32-C6 GPIO0 and GPIO1) energize both solenoids automatically for exactly 2.0 s. The silicone plungers press gently and precisely onto the rubberized keypad of the headset, reliably booting it from a completely unpowered state (zero standby battery drain, zero soldering to OEM PCB, zero manual pod disassembly before/after rides!).
+   * Bolt the slide rail assembly into the pod floor and connect the actuator harness to the 8-pin header `J_ACT` on `PCBA 03`.
+   * **Function of the Mechatronic Cold-Start:** When switching ignition ON (KL15), the quad AO3400A MOSFETs on `PCBA 03` (driven via ESP32-C6 GPIO0, 1, 2, 3) energize the solenoids automatically for exactly 2.0 s. The silicone plungers press gently and precisely onto the rubberized keypad of the headset, reliably booting it from a completely unpowered state (zero standby battery drain, zero soldering to OEM PCB, zero manual pod disassembly before/after rides!).
 3. **PCB & Wiring Installation:**
    * Secure `PCBA 03` ($42 \times 48\,\text{mm}$) into the pod body with 4x M2.5 screws and elastomer dampers ($36 \times 42\,\text{mm}$ hole pitch).
-   * Connect the 4-wire bus cable from the saddlebag wall grommet directly to the 4-pin JST-GH header `J_BUS` at the lower left bulkhead edge (< 15 mm direct, straight run without bends).
-   * Connect the 4-conductor flexible silicone ribbon cable from the chassis-mounted USB-C port (Port B) to the upper left header `J_USB_OUT`.
-   * Connect rearward equipment interfaces: Intercom OEM adapter harness to `J_AUDIO_PWR` (8-Pin JST-SH, top-right) and actuator harness to `J_ACT` (4-Pin JST-SH, bottom-right). Both harnesses run parallel backwards into the equipment chamber without crossing over the PCB.
+   * Connect the 4-conductor internal silicone ribbon cable from the chassis-mounted Bus port (Port A, upper bulkhead position) to the 4-pin JST-GH header `J_BUS`.
+   * Connect the 4-conductor flexible silicone ribbon cable from the chassis-mounted USB-C port (Port B, lower bulkhead position) to the header `J_USB_OUT`.
+   * Connect rearward equipment interfaces: Intercom OEM adapter harness to `J_AUDIO_PWR` (8-Pin JST-SH, top-right) and actuator harness to `J_ACT` (8-Pin JST-SH, bottom-right). Both harnesses run parallel backwards into the equipment chamber without crossing over the PCB.
 4. **Slide-in Lid & Magnetic Latch Setup:**
    * Insert the small N52 magnet and guide pin into the latch pocket of the lid and pre-load with the return spring.
    * Fit the sealing profile into the lid's perimeter groove and lubricate lightly with silicone grease. Test-insert the lid: it locks with a crisp mechanical click. Bringing the Smart Keyfob near releases the latch instantly.

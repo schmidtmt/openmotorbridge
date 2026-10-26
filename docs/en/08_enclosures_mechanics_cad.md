@@ -160,8 +160,10 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 3. **Invisible FOB Magnetic Latch:** Locking is handled by an internal spring-loaded magnetic latch. To open, the rider approaches the Smart Keyfob (`PCBA 07` with N52 neodymium core) to the marked housing target. The magnetic field draws the locking pawl back contact-free, allowing the lid to spring outward by $10\,\text{mm}$ -- 100% tool-free, without external locks or pushbuttons, fully tamper- and theft-proof.
 4. **Two-Zone Architecture with Intermediate Dry-Flap:**
    * **Lower Electronics Zone:** Houses the `PCBA 03` interface board ($42.0 \times 48.0\,\text{mm}$) with native USB-PD power supply and 4-wire automotive backbone.
-   * **Chassis-Mounted Bulkhead USB Charging Port (30W USB-PD):** A weatherproof USB-C receptacle in the left bulkhead end-wall (Port B) connects via an ultra-flexible 4-conductor internal silicone harness to header `J_USB_OUT` on `PCBA 03`. This guarantees 100% bilateral symmetry (left and right saddlebag pods are ergonomically identical) and absorbs all plug and pull stresses directly in the PA12 chassis wall.
-   * **4-Pin Bus Bulkhead Input (Port A):** Located at the lower left bulkhead edge (`J_BUS`), providing the shortest, straightest cable path (< 15 mm) to the saddlebag wall grommet.
+   * **Chassis-Mounted Bulkhead Ports (Port A & Port B):** Both external interfaces are horizontally centered ($Y = 35.0\,\text{mm}$) on the short bulkhead end-wall and stacked vertically:
+     * **Port A (Bus Socket, top at $Z = 26.5\,\text{mm}$):** Weatherproof M8/automotive receptacle connected via a short internal 4-conductor silicone ribbon cable to header `J_BUS` on `PCBA 03`.
+     * **Port B (USB-C Charging Socket, bottom at $Z = 11.5\,\text{mm}$):** Deeply recessed ($7.0\,\text{mm}$) form-fitting USB-C socket (30W USB-PD) connected via an ultra-flexible 4-conductor internal silicone ribbon cable to header `J_USB_OUT` on `PCBA 03`.
+     * This guarantees 100% bilateral symmetry (left and right saddlebag pods are ergonomically identical) and transfers all mechanical plugging and lever stresses directly into the rigid PA12 chassis wall -- leaving the PCB completely isolated from mechanical strain.
    * **Intermediate Splash-Guard Cover (Dry-Flap):** A hinged or slide-in silicone/EPDM intermediate barrier hermetically shields the PCB and cable headers from dirt and water.
    * **Upper Equipment Chamber / Dry Box:** Directly accommodates the respective OEM communicator (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446) as well as the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
 
@@ -232,8 +234,8 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
 | LOWER ZONE: ELECTRONICS & POWER SUPPLY                                      |
 | * PCBA 03 Interface Board (42x48 mm, MCU, ES8388, SW3516 30W PD, 4-Wire)    |
-| * Chassis USB-PD Charging Port at Bulkhead (30W PD, internal silicone cable) |
-| * 4-Pin Bus Bulkhead Input (J_BUS, <15 mm to saddlebag wall grommet)        |
+| * Port A Bus Socket at Bulkhead Top (M8/gland, internal silicone cable)      |
+| * Port B USB-PD Socket at Bulkhead Bottom (30W PD, internal silicone cable)   |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -241,13 +243,14 @@ The interior of the satellite pod is partitioned into two vertically isolated le
    * The [PCBA 03](07_pcba_hardware_pinouts.md#5-pcba-03-satellite-pod-interface-board-openmotorbridge_pod_interface) ($42.0 \times 48.0\,\text{mm}$) board mounts on 4x M2.5 elastomer dampers directly to the floor ($36.0 \times 42.0\,\text{mm}$ hole pitch).
    * **Front-Constrained Length in X ($42.0\,\text{mm}$):** Strictly limited to the space freed forward by eliminating the legacy cassette faceplate. The entire rear chamber ($88\,\text{mm}$ clear length) remains fully reserved for OEM cradles (Cardo Air-Mount, Sena SPIDER cradle, OMM) and the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`).
    * **Width in Y ($48.0\,\text{mm}$):** Optimally uses the clear pod tub width ($63\,\text{mm}$), more than doubling PCB area and enabling spacious 4-layer routing with solid thermal GND planes for the 30W step-down converter.
-   * **Left Bulkhead End-Wall (Vehicle Interfaces):**
-     * **Port A (bottom):** 4-pin Bus input (`J_BUS` 4-Pin JST-GH), direct, straight cable route (< 15 mm) to the saddlebag wall grommet without bends.
-     * **Port B (top):** Chassis-mounted USB-C charging port, connected via a 4-conductor flexible silicone ribbon cable to PCB header `J_USB_OUT`. Guarantees 100% bilateral symmetry for left and right saddlebag pods and insulates the PCB from all mechanical insertion and lever forces.
+   * **Short Bulkhead End-Wall (Vehicle Interfaces):**
+     * Both ports are horizontally centered on the short bulkhead wall ($Y = 35.0\,\text{mm}$) and stacked vertically:
+     * **Port A (top, $Z = 26.5\,\text{mm}$):** Chassis-mounted Bus socket (4-wire automotive backbone `VCC_BUS`, `GND`, `USB_D+`, `USB_D-`), connected via a short internal 4-conductor silicone ribbon cable to header `J_BUS` (4-Pin JST-GH).
+     * **Port B (bottom, $Z = 11.5\,\text{mm}$):** Chassis-mounted USB-C charging port (30W USB-PD), connected via an ultra-flexible 4-conductor internal silicone ribbon cable to PCB header `J_USB_OUT` (4-Pin JST-GH). Guarantees 100% bilateral symmetry for left and right saddlebag pods and insulates the PCB from all mechanical insertion and lever forces.
    * **Rearward Interfaces (Facing Equipment Chamber):**
-     * **`J_AUDIO_PWR` (8-Pin JST-SH, top-right):** Intercom OEM harness interface.
-     * **`J_ACT` (4-Pin JST-SH, bottom-right):** Actuator drive for 5V cold-start solenoids on the slide bracket.
-     * $24\,\text{mm}$ vertical separation prevents solenoid inductive switching spikes from coupling into audio lines; both cable runs exit parallel to the rear.
+     * **`J_AUDIO_PWR` (8-Pin JST-SH, top-right):** Intercom OEM harness interface (`AUDIO_IN_L/R`, `AUDIO_IO_P`, `OMM_DETECT`, `PTT_BTN`, `VCC_5V_PROT`, `GND`).
+     * **`J_ACT` (8-Pin JST-SH, bottom-right):** Actuator drive for 5V cold-start solenoids on the slide bracket (4 channels `ACT_1`..`ACT_4` with flyback diodes `D1`..`D4`, dual `VCC_5V_PROT`, and dual `GND`).
+     * Spatial clearance prevents solenoid inductive switching spikes from coupling into audio lines; both cable runs exit parallel to the rear.
 
 2. **Intermediate Dry-Flap Splash Guard:**
    * Above `PCBA 03`, a hinged or slide-in Shore 50A silicone/EPDM flap hermetically seals the lower bay.

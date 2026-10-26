@@ -44,7 +44,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 3. PCBA 03: Satelliten-Pod Interface Rev 4.0 (`openmotorbridge_pod_gateway`, 2-Layer FR4 TG150, 2-seitig SMT)
+## 3. PCBA 03: Satelliten-Pod Interface Rev 4.0 (`openmotorbridge_pod_cartridge`, 4-Layer FR4 TG150, 1-seitig SMT)
 > **Hinweis zur Stückzahl:** Die Trägerplatine ist universell und wird **2x pro Motorrad** verbaut (Pod 1 links, Pod 2 rechts).
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
@@ -212,7 +212,7 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 | Baugruppe / PCBA | Gerber-ZIP Datei | BOM CSV Datei | CPL (Pick & Place) CSV | Lagen | Fertigungs-Hinweis |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (LM5050-Q1 auf B.Cu) |
-| **PCBA 03: Universal-Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG (Gold), 1.2 mm, SMT beidseitig (2x pro Fahrzeug bestellen) |
+| **PCBA 03: Universal-Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, 1-seitig SMT (Top; 2x pro Fahrzeug bestellen) |
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (LM5050-Q1 auf B.Cu) |
 | **PCBA 05B: Spiegel-Pod** | `05b_mirror_pod_pcba_gerbers_jlcpcb.zip` | `05b_mirror_pod_pcba_bom_jlcpcb.csv` | `05b_mirror_pod_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG, 1.6 mm, TG150, SMT Top (2x pro Bike für Links & Rechts, BSD LED + Taster) |
 | **PCBA 06: MagSafe Dock** | - | - | - | - | *Ersatzlos gestrichen in v10.0* (ersetzt durch COTS 4-Pin IP67 Magnet-Abrissschnittstelle) |

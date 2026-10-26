@@ -237,28 +237,33 @@ In OpenMotorBridge v10.0 ist das Kassetten-Schachtsystem vollständig abgelöst:
 * **Integrierte 30W USB-PD Ladezone & Gehäusebuchsen-Abgang (`J_USB_OUT` / 4-Pin JST-GH 1.25mm SMD):**
   * **Controller:** Ismartware `SW3516` oder Injoinic `IP6538` (QFN-32, $5 \times 5\,\text{mm}$) synchroner Step-Down Konverter mit integriertem USB-PD 3.0 / PPS / QC4+ Protokollcontroller und $7 \times 7\,\text{mm}$ geschirmter Speicherinduktivität ($10\,\mu\text{H}$).
   * **Header `J_USB_OUT`:** Sitzt an der **linken Stirnkante oben**.
-  * **Internes Silikonkabel zur Gehäusewand (Port B):** Ein 4-adriges hochflexibles Silikon-Flachbandkabel führt vom Header direkt zur **chassis-montierten USB-C Ladedose in der Stirnwand des Pod-Gehäuses**.
-  * **100 % Symmetriegarantie (Links = Rechts):** Da beide Koffer-Pods an der Stirnseite identisch orientiert sind, bleibt die USB-C Ladedose an beiden Fahrzeugseiten ergonomisch gleich zugänglich (kein Verkehrt-Herum-Spiegeln wie bei Längsseitenports!).
-  * **Mechanische Entkopplung:** Sämtliche Zug-, Biege- und Hebelkräfte beim Einstecken von Ladekabeln oder durch Gepäckstücke werden zu 100 % vom stabilen PA12-Gehäuse abgefangen – die Platine bleibt vollkommen spannungs- und rüttelfrei!
+* **Stirnseitige interne Anschlüsse & Gehäuse-Buchsenanordnung:**
+  * **Anordnung an der kurzen Gehäusestirnwand (Port A & Port B):** Beide Buchsen sitzen horizontal exakt mittig ($Y = 35{,}0\,\text{mm}$) und sind vertikal übereinander gestapelt:
+    * **Port A (Bus-Buchse):** Oberhalb der Mitte bei $Z = 26{,}5\,\text{mm}$ (mit M8-Schutzkragen bzw. dichter Kabelverschraubung zur Zentralbox).
+    * **Port B (USB-C Ladedose):** Unterhalb der Mitte bei $Z = 11{,}5\,\text{mm}$ (mit $7\,\text{mm}$ tief eingelassener Steckertasche für bündige wasserdichte TPU-Schutzkappe).
+  * **Interne Silikon-Kabelpeitschen:** Die Verbindung von der Platine zu den Gehäusebuchsen erfolgt über kurze, hochflexible Silikonkabel von den stirnseitigen Headern `J_BUS` bzw. `J_USB_OUT`. Sämtliche Einsteck-, Rüttel- und Hebelkräfte werden zu 100 % vom stabilen PA12-Monocoque abgefangen – die Platine bleibt völlig zug- und schwingungsfrei!
+  * **100 % Symmetriegarantie (Links = Rechts):** Da beide Koffer-Pods an der Stirnseite identisch orientiert sind, bleibt die USB-C Ladedose an beiden Fahrzeugseiten ergonomisch gleich zugänglich.
 * **Rückwärtige Schnittstellen (Geräteseite, nach rechts in die Gerätekammer):**
   * **`J_AUDIO_PWR` (8-Pin JST-SH 1.0mm, oben rechts):** Direkte Verbindung zur OEM-Kabelpeitsche des Intercoms (Sena, Cardo, OMM, Midland).
-  * **`J_ACT` (4-Pin JST-SH 1.0mm, unten rechts):** Direkte Verbindung zu den beiden 5V Mini-Hubmagneten auf der universellen Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`).
-  * **Vorteil:** Durch den $20\,\text{mm}$ Abstand zwischen Audio (oben) und Aktorik (unten) streuen Schaltimpulse der Magnete nicht in die analogen Mikrofon-/Lautsprecherleitungen ein. Beide Kabelstränge laufen parallel nach hinten ab – null Kabelkreuzungen über der Platine!
-* **Kommunikations- & Audio-ICs:**
+  * **`J_ACT` (8-Pin JST-SH 1.0mm, unten rechts):** Direkte Verbindung zu bis zu 4 Aktuatorkanälen (Hubmagnete / Servos auf der universellen Aktuatorschiene `012_universal_actuator_slide_bracket.scad`).
+  * **Vorteil:** Durch den räumlichen Abstand zwischen Audio (oben) und Aktorik (unten) streuen Schaltimpulse der Magnete nicht in die analogen Audioleitungen ein. Beide Kabelstränge laufen parallel nach hinten ab – null Kabelkreuzungen über der Platine!
+* **Kommunikations-, Leistungs- & Audio-ICs:**
   * `U1`: Espressif `ESP32-C6-MINI-1U` RISC-V MCU zur Ladeüberwachung, Codec-Steuerung, Aktorik und USB-Audio-Brücke.
+  * `U_PD`: Ismartware `SW3516` (QFN-32, $5 \times 5\,\text{mm}$) synchroner 30W USB-PD 3.0 / PPS / QC4+ Step-Down Wandler mit $7 \times 7\,\text{mm}$ geschirmter Speicherinduktivität `L_PD` ($10\,\mu\text{H}$) und 1210er Festpolymer-Filterkondensatoren.
   * `U3`: Everest Semi `ES8388` 24-Bit / 48 kHz Low-Noise Audio-Codec.
   * `U4`: TI `TS5A3159DBVR` Analog/Digital-Audio-Umschalter für automatische Erkennung analoger OEM-Headsets vs. digitaler OMM-Module via Pin 6 (`OMM_DETECT`).
-  * `Q1`, `Q2`: Duale N-Kanal Power-MOSFETs (`AO3400A`, 30V/4A) mit Freilaufdioden für 2,0 s Kaltstart-Impuls.
+  * `Q1..Q4`: 4x N-Kanal Power-MOSFETs (`AO3400A`, 30V/4A) mit 4x Freilaufdioden (`1N4148WS`, D1..D4) für 4 unabhängige Schaltkanäle.
+  * `F1`: 1812 SMD Polyfuse (PPTC) zur Absicherung der 5V Aktorik- und Peripherieversorgung (`VCC_5V_PROT`).
 
 ### 5.2 Pinbelegung des 4-Pin Bus-Eingangs (`J_BUS` / 4-Pin JST-GH 1.25mm)
 
-| Pin | Signalname | Signalart | Funktion & Spezifikation |
+| Pin | Signalname | Signalart | Funktion & Spezifikation (internes Kabel zu Port A) |
 | :---: | :--- | :---: | :--- |
 | **1** | **`VCC_BUS`** | Power In (+12V...+20V) | Bordnetz- / PD-Speisung von Zentralbox (AWG20, abgesichert 30W) |
 | **2** | **`GND`** | Power Return | Leistungs- und Signalmasse |
-| **3** | **`USB_D+`** | High-Speed Data | USB 2.0 Datenleitung D+ zur Zentralbox (ESP32-S31 Host) |
-| **4** | **`USB_D-`** | High-Speed Data | USB 2.0 Datenleitung D- zur Zentralbox (ESP32-S31 Host) |
-| **MP** | **`SHIELD_GND`** | Schirmung | Rastlaschen des JST-GH Steckers auf GND-Plane gelegt |
+| **3** | **`USB_DP`** | High-Speed Data | USB 2.0 Datenleitung D+ zur Zentralbox (ESP32-S3 Host) |
+| **4** | **`USB_DM`** | High-Speed Data | USB 2.0 Datenleitung D- zur Zentralbox (ESP32-S3 Host) |
+| **MP** | **`GND`** | Schirmung | Rastlaschen des JST-GH Steckers auf GND-Plane gelegt |
 
 ### 5.3 Pinbelegung des internen 30W USB-C Gehäuseabgangs (`J_USB_OUT` / 4-Pin JST-GH 1.25mm)
 
@@ -268,30 +273,35 @@ In OpenMotorBridge v10.0 ist das Kassetten-Schachtsystem vollständig abgelöst:
 | **2** | **`GND`** | Power Return | Rückstrom Ladeleistung (AWG20 Silikonader) |
 | **3** | **`CC1`** | PD Config In/Out | Configuration Channel 1 für USB-PD 3.0 / PPS Aushandlung |
 | **4** | **`CC2`** | PD Config In/Out | Configuration Channel 2 für USB-PD 3.0 / PPS Aushandlung |
-| **MP** | **`SHIELD_GND`** | Schirmung | Gehäuseschirmung der USB-C Wandbuchse |
+| **MP** | **`GND`** | Schirmung | Rastlaschen des JST-GH Steckers auf GND-Plane |
 
 ### 5.4 Pinbelegung des Audio-Power-Headers (`J_AUDIO_PWR` / 8-Pin JST-SH 1.0mm)
 
 | Pin | Signalname | Richtung | Funktion: Analog-Intercom (Sena / Cardo / Midland) | Funktion: Digital-OMM (PCBA 09 / PCBA 10) |
 | :---: | :--- | :---: | :--- | :--- |
-| **1** | **`PGND` / `GND`** | Power Return | **Leistungs-Masse:** Rückstrom Lader / DC-DC ($0{,}2\dots 0{,}6\,\text{A}$) | **Leistungs-Masse:** Rückstrom Lader & HF-Endstufe ($0{,}2\dots 0{,}6\,\text{A}$) |
-| **2** | **`VCC_5V_PROT`** | Power Out | Geregelte, abgesicherte +5V Speisung für Headset-Akku/Lader | Geregelte, abgesicherte +5V Speisung für OMM BQ24075 PMIC |
-| **3** | **`AGND_AUDIO_IN`** | Audio GND | **Saubere Kopfhörermasse:** 3.5mm Sleeve – **stromlos ($I = 0\,\text{mA}$)!** | Nicht belegt (N/C) oder Koax-Schirmung (stromlos!) |
+| **1** | **`GND`** | Power Return | **Leistungs- und Audiorückstrom:** Gemeinsame niederohmige Masse ($0{,}2\dots 0{,}6\,\text{A}$) | **Leistungs- und HF-Masse:** Rückstrom Lader & HF-Endstufe |
+| **2** | **`VCC_5V_PROT`** | Power Out | Geregelte, polyfuse-geschützte +5V Speisung für Headset-Akku/Lader | Geregelte, geschützte +5V Speisung für OMM BQ24075 PMIC |
+| **3** | **`GND`** | System GND | Referenz- und Schirmmasse | Referenz- und Koax-Schirmung |
 | **4** | **`AUDIO_IN_L`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Links vom Headset zum ES8388 ADC | Nicht belegt (N/C) |
 | **5** | **`AUDIO_IN_R`** | Audio In $\leftarrow$ | Line-Out Lautsprecher Rechts vom Headset zum ES8388 ADC | Nicht belegt (N/C) |
 | **6** | **`OMM_DETECT`** | Control In $\leftarrow$ | **GND-Brücke im Kabelbaum (0V):** Hält `U4` in Ruhestellung (NC) | **Offen / N/C:** `R9` zieht auf HIGH ($3{,}3\,\text{V}$) $\rightarrow$ schaltet `U4` auf Digital-USB (NO) |
 | **7** | **`AUDIO_IO_P`** | Dual-Mode I/O | **Analog `VOICE_OUT` (via U4 NC):** Sprache vom ES8388 DAC $\rightarrow$ OEM Mic | **Digital `USB_DP` (via U4 NO):** Nativer digitaler USB-Audio-Datenstrom D+ |
-| **8** | **`PTT_USB_N`** | Dual-Mode I/O | **PTT_IO:** Push-to-Talk Tastung gegen Masse (Midland PMR446 / N/C) | **Digital `USB_DN`:** Nativer digitaler USB-Audio-Datenstrom D- |
+| **8** | **`PTT_BTN`** | Digital In $\leftarrow$ | **Physische PTT-Taste:** Tastereingang direkt auf ESP32-C6 GPIO Pin 7 | **PTT-Steuerung / Digital-Status:** Tastung gegen GND |
 | **MP** | **`GND`** | Schirmung | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane | Beidseitige SMD-Montagelaschen des JST-SH Steckers auf GND-Plane |
 
-### 5.5 Pinbelegung des Mechatronik-Aktuator-Headers (`J_ACT` / 4-Pin JST-SH 1.0mm)
+### 5.5 Pinbelegung des Mechatronik-Aktuator-Headers (`J_ACT` / 8-Pin JST-SH 1.0mm)
 
 | Pin | Signalname | Signalart | Funktion & Schutz |
 | :---: | :--- | :---: | :--- |
-| **1** | **`VCC_5V_ACT`** | Power Out (+5V) | Speisung für Solenoid 1 & 2 Spulen (abgesichert über eFuse) |
-| **2** | **`ACT1_DRAIN`** | Open-Drain Out | Geschaltete Spulenmasse Solenoid 1 (via AO3400A / Freilaufdiode) |
-| **3** | **`ACT2_DRAIN`** | Open-Drain Out | Geschaltete Spulenmasse Solenoid 2 (via AO3400A / Freilaufdiode) |
-| **4** | **`GND`** | Power-Masse | Leistungs-Masse für Treiberstufe |
+| **1** | **`GND`** | Power Return | Leistungs-Masse für Aktorikstufe |
+| **2** | **`GND`** | Power Return | Leistungs-Masse für Aktorikstufe |
+| **3** | **`ACT_4`** | Open-Drain Out | Geschaltete Spulenmasse Aktuator 4 (via AO3400A Q4 / Freilaufdiode D4) |
+| **4** | **`ACT_3`** | Open-Drain Out | Geschaltete Spulenmasse Aktuator 3 (via AO3400A Q3 / Freilaufdiode D3) |
+| **5** | **`ACT_2`** | Open-Drain Out | Geschaltete Spulenmasse Aktuator 2 (via AO3400A Q2 / Freilaufdiode D2) |
+| **6** | **`ACT_1`** | Open-Drain Out | Geschaltete Spulenmasse Aktuator 1 (via AO3400A Q1 / Freilaufdiode D1) |
+| **7** | **`VCC_5V_PROT`** | Power Out (+5V) | Speisung für Aktuatorspulen (polyfuse-abgesichert via F1) |
+| **8** | **`VCC_5V_PROT`** | Power Out (+5V) | Speisung für Aktuatorspulen (polyfuse-abgesichert via F1) |
+| **MP** | **`GND`** | Schirmung | SMD-Montagelaschen auf GND-Plane |
 
 ---
 
