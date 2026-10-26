@@ -195,54 +195,66 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das geräumige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A 4-Pin IP67 Magnet-Abrissschnittstelle oben bei $Z = 26{,}5\,\text{mm}$ mit internem Silikon-Flachbandkabel zu `J_BUS`, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem Cardo Packtalk Edge auf OEM Air-Mount Halterung, die 4 seitlichen Riegelzähne des Slot-in Deckels sowie die an der vertikalen Rückwand ($X = 150\,\text{mm}$) liegende optionale SMA-Antennendurchführung (ab Werk 100 % dicht mit $0{,}4\,\text{mm}$ Knockout-Membran; im Deckel befindet sich keine Antennendurchführung).*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das geräumige Monocoque-Gehäuse aus PA12 mit durchgehenden seitlichen U-Profil-Führungsnuten, die stirnseitigen Buchsendurchbrüche (Port A 4-Pin IP67 Magnet-Abrissschnittstelle oben bei $Z = 26{,}5\,\text{mm}$ mit internem Silikon-Flachbandkabel zu `J_BUS`, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem Cardo Packtalk Edge auf OEM Air-Mount Halterung, der horizontal in Längsnuten geführte Slide-in Deckel sowie die an der vertikalen Rückwand ($X = 150\,\text{mm}$) liegende optionale SMA-Antennendurchführung (ab Werk 100 % dicht mit $0{,}4\,\text{mm}$ Knockout-Membran; im Deckel befindet sich keine Antennendurchführung).*
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge, Slot-in Deckel mit 4 seitlichen Riegelzähnen und zentralem Federschieber sowie rückseitige, vertikal in der Rückwand integrierte geschlossene SMA-Knockout-Membran).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die U-Profil-Führungsnuten der Gehäusewände, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge sowie die rückseitige, vertikal in der Rückwand integrierte geschlossene SMA-Knockout-Membran).*
 
 ---
 
-### 4.2 Kinematik des Slot-in Deckels (4 Riegelzähne & Zentral-Federschieber)
+### 4.2 Kinematik des Slide-in Deckels (Längs-Führungsnuten & 100 % innenliegender FOB-Diebstahlschutz)
 
-Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slot-In Verschluss** mit 4 seitlichen Verriegelungszähnen und zentraler Federspannung:
+Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slide-In (Schiebedeckel)** mit horizontalem Einschub entlang präziser Längs-Führungsnuten:
 
 ![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Abbildung 8.8: 3D-CAD-Detailansicht des Slot-in Deckel-Verriegelungsmechanismus. Vier seitliche Riegelzähne (orange, je 2 auf der linken und rechten Seite) greifen formschlüssig in innenseitige Sacktaschen der Gehäusewand. Die Gehäuseaußenwand ist dabei zu 100 % nahtlos, geschlossen und wasserdicht (in der CAD-Darstellung transparent visualisiert, um den inneren Riegelsitz zu zeigen – kein Durchbruch nach außen!). Ein zentraler Federschieber (blau) auf der Deckeloberseite spannt beim Betätigen die Rückstellfeder und zieht die Zähne synchron nach innen ein. Nähert sich der Smart-Keyfob (PCBA 07) dem Zielbereich, gibt das Magnetfeld den federbelasteten Riegel zusätzlich kontaktlos frei.*
+*Abbildung 8.8: 3D-CAD-Schnittansicht des 100 % innenliegenden FOB-Verriegelungsmechanismus: Aus Sicherheits- und Vandalismusschutzgründen existieren auf der Außenseite des Deckels keinerlei Tasten, Schieber oder Hebelwerkzeuge. Ein interner, federbelasteter Edelstahl-/Neodym-Riegelbolzen (Silber, $\varnothing\,4{,}0 \times 6{,}0\,\text{mm}$) sitzt in einer Sacklochbohrung auf der Deckelunterseite. Beim vollständigen Einschieben des Deckels schnappt der Bolzen durch die Rückstellfeder (Gold) nach unten in die Rastbohrung der vorderen Schottwand ein und blockiert den Deckel formschlüssig. Nähert sich der Smart-Keyfob (PCBA 07) der außen markierten RFID-Zone, zieht das N52-Magnetfeld den Bolzen kontaktlos nach oben in den Deckel – der Deckel kann nun nach hinten herausgeschoben werden.*
 
 ```
-       SLOT-IN DECKEL & 4-ZAHN-ZENTRALVERRIEGELUNG (SCHNITTANSICHT)
+       100 % INNENLIEGENDER FOB-MAGNETRIEGEL (SCHNITTANSICHT DURCH DIE STIRNWAND)
 =================================================================================
 
-                POD-GEHÄUSEWAND (PA12-MJF, MIT HINTERSCHNITTENEN RIEGELTASCHEN)
- ------------------------+------------------------------------+------------------
-  [SMART-KEYFOB PCBA 07] |                                    | [RIEGELTASCHE
-   (N52 Neodym-Magnet)   |                                    |  IN GEHÄUSEWAND]
-            v            |                                    |         ^
-      +-----------+      |     ZENTRALER FEDERSCHIEBER        |         | Riegelzahn
-      | N52 MAGNET|      |     (VON AUSSEN BETÄTIGT)          |         | rastet voll
-      |   (Key)   |      |        [ === GRIFF === ]           |         | ein!
-      +-----+-----+      |               |                    |         |
- ========================+===============|====================+=========+=======
-  SLOT-IN DECKEL         |               v                    |         |
-                         |        [RÜCKSTELLFEDER]            |         |
-                         |               |                    |         v
-                         |    +----------+----------+         |   +-------------+
-                         |    | KINEMATIK-VERBINDUNG+---------+---+ RIEGELZAHN  |
-                         |    | (zieht Zähne ein)   |         |   | (4x gesamt) |
-                         |    +---------------------+         |   +-------------+
+            AUSSENBEREICH (GLATTE, VOLLKOMMEN MANIPULATIONSSICHERE DECKELFLÄCHE)
+  ------------------------------------+------------------------------------------
+   [SMART-KEYFOB PCBA 07]             |  GLATTE DECKELOBERFLÄCHE
+    (N52 Neodym-Magnet)               |  (Keine Schieber, keine Knöpfe von außen!)
+             v                        |
+       +-----------+                  |
+       | N52 MAGNET|                  |
+       |   (Key)   |                  |
+       +-----+-----+                  |
+  ===========|========================+==========================================
+   SLOT-IN   | (Magnetfeld zieht      |  SLIDE-IN DECKEL (PA12, mit Führungsfedern)
+   DECKEL    v  Bolzen nach oben)     |
+        +----+----+                   |
+        | [FEDER] | (Rückstellfeder)  |
+        +----+----+                   |
+             |                        |
+        +----+----+                   |
+        | RIEGEL- |                   |
+        | BOLZEN  |                   |
+  ------+----+----+-------------------+------------------------------------------
+   GEHÄUSE-  | (Im verriegelten Zustand taucht Bolzen 3 mm in Gehäusewand ein!)
+   BODEN     v
+        [RASTBOHRUNG]  <-- 100 % INNENLIEGEND! Von außen physisch unzugänglich!
 ```
 
-1. **Formschlüssiges Einschnappen (Slot-In Push-to-Close):**
-   * Der Deckel wird von oben in den Schacht (Slot-In) eingesetzt.
-   * Die $30^\circ$-Einlaufschrägen der 4 Riegelzähne gleiten über die Gehäusekanten, weichen kurz gegen die Rückstellfeder nach innen aus und schnappen am Endanschlag mit einem satten mechanischen Klick in die 4 Wandtaschen ein.
-   * Die umlaufende Silikon-Profildichtung wird dabei gleichmäßig komprimiert. Der Deckel sitzt plan, bündig und absolut rüttelfest (IP67). Ein Aufhebeln ist unmöglich, da die 4 Zähne an allen Ecken sperren.
+1. **Horizontales Einschieben (Slide-In in X-Richtung):**
+   * Der Deckel wird von hinten horizontal in den Einschubschlitz der Gehäusewanne eingeführt.
+   * Durchgehende seitliche Führungsfedern greifen spielfrei in die U-Profil-Führungsnuten der Gehäuseseitenwände.
+   * Am vorderen Endanschlag dichtet eine integrierte EPDM-Profildichtung den Deckel umlaufend absolut wasser- und staubdicht ab (IP67).
 
-2. **Entriegeln über Zentral-Federschieber oder Smart-Keyfob:**
-   * **Manuelle Entriegelung:** Der Fahrer schiebt den ergonomischen Zentralschieber auf der Deckelmitte zusammen. Die 4 Zähne ziehen sich ins Deckelinnere zurück und der Deckel kann leicht nach oben entnommen werden.
-   * **FOB-Diebstahlschutz:** Für diebstahlgefährdete Montagen ist der Zentralschieber über einen internen Magnetriegel gesperrt. Erst bei Annäherung des Smart-Keyfobs (`PCBA 07`) zieht das N52-Magnetfeld den Sperrstift zurück und gibt den Schieber frei.
-   * **100 % Ausfallsicherheit:** Rein mechanisch und permanentmagnetisch – benötigt 0 mA Ruhestrom und funktioniert zuverlässig bei jedem Wetter.
+2. **100 % Innenliegende Diebstahlsicherung (Zero-External-Access):**
+   * **Manipulationssicherheit:** Ein außenliegender Schieber oder Knopf würde es jedem Passanten am geparkten Motorrad ermöglichen, den Deckel zu öffnen und Intercom, Papiere oder Notgeld zu entwenden.
+   * Der OpenMotorBridge Verriegelungsmechanismus liegt daher **zu 100 % im Gehäuseinneren**.
+   * Die Deckeloberseite ist plan, fugenlos und bietet keinerlei Angriffsfläche für Aufhebelwerkzeuge.
+
+3. **Berührungsloses Entriegeln über den Smart-Keyfob (`PCBA 07`):**
+   * Der Fahrer legt seinen Smart-Keyfob auf die dezent markierte Zielzone der Deckeloberseite.
+   * Das starke Magnetfeld des integrierten N52-Neodymkerns überwindet die interne Rückstellfeder und hebt den Edelstahl-Riegelbolzen um $3{,}5\,\text{mm}$ nach oben in den Deckel.
+   * Der Deckel ist frei und kann mit dem Daumen über die hinteren Griffrippen nach hinten herausgeschoben werden.
+   * **Stromlos & wartungsfrei:** Rein mechanisch und permanentmagnetisch – $0\,\text{mA}$ Ruhestrom, kein Batterieverschleiß, unempfindlich gegen Schlamm, Frost und Wasser.
 
 3. **Verdeckte Innenverschraubung & Sabotageschutz:**
    * Die M4/M5-Edelstahlschrauben zur Befestigung des Pod-Gehäuses im Koffer oder am Rahmenrohr liegen im Inneren des Gehäuses unterhalb der Elektronikbucht.
@@ -326,17 +338,18 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
 
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
-   * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt direkt unter den Zwischendeckel an `PCBA 03`.
-   * **Optionaler Mechatronischer Kaltstart-Bügel (`012_universal_actuator_slide_bracket.scad`):**
-     * Falls das Headset komplett ausgeschaltet war und beim Einschalten der Motorradzündung (KL15) vollautomatisch aufgeweckt werden soll, überspannt ein schlanker **Überbrückungs-Bügel (Gantry)** das Cardo-Gerät von oben:
+   * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt an der Rückseite des Cradles heraus, verläuft geschützt unter dem Cradle hindurch und mündet unter dem EPDM-Zwischendeckel direkt in `PCBA 03`.
+   * **Volldigitale Integration (Zero-Actuator-Architektur):**
+     * In OpenMotorBridge v10.0 erfolgt die Steuerung des Cardo Packtalk Edge **100 % digital über Bluetooth 5.4 LE Audio / Cardo BLE API** über den Qualcomm QCC3084 auf der Zentralbox oder die Lenkertaster.
+     * **Mechanischer Hintergrund:** Eine vertikale Montage von Hubmagneten über dem Cardo Packtalk Edge ist im ultraflachen Monocoque-Pod ($32\,\text{mm}$ Innenhöhe) geometrisch weder sinnvoll noch notwendig:
+       1. **Bauhöhen-Konflikt:** Das Cardo Packtalk Edge erreicht auf der Air-Mount Halterung eine Scheitelhöhe von $Z = 21{,}5\,\text{mm}$. Bis zur Deckelunterkante ($Z = 32{,}0\,\text{mm}$) verbleiben lediglich **$10{,}5\,\text{mm}$ lichte Höhe** – handelsübliche vertikale Hubmagnete ($18\dots 30\,\text{mm}$ Bauhöhe) würden mit dem Slide-in Deckel kollidieren.
+       2. **2D-Tastenversatz (X- und Y-Achse):** Die Cardo-Tasten liegen nicht auf einer geraden 1D-Linie, sondern sind diagonal versetzt (vordere Media-Taste bei $X = 22\,\text{mm}, Y = 13\,\text{mm}$; hintere Intercom-Taste bei $X = 63\,\text{mm}, Y = 28\,\text{mm}$ – ein Tiefenversatz von **$15\,\text{mm}$ in der Y-Achse**). Eine 1-achsige Schiene kann diese Tasten geometrisch nicht gleichzeitig anfahren.
+     * Durch die **rein digitale BLE-Ansteuerung** entfallen sämtliche mechanischen Stößel, Bügel und Justageprobleme komplett: **0 % Verschleiß, 0 % Kollisionsgefahr und maximaler freier Bauraum!**
+     * *(Hinweis: Für Legacy-Geräte oder Handfunkgeräte, die zwingend einen physischen Druckknopf benötigen, existiert das optionale 2D-Schlittenmodell `012_universal_actuator_slide_bracket.scad` mit flachliegenden Hebel-Mikroaktoren für Sondergehäuse mit erhöhtem Deckel).*
 
-![Cardo Packtalk Edge mit Mechatronischem Überbrückungs-Aktuator](../images/cad/universal_actuator_slide_bracket_cad.png)
-
-*Abbildung 8.13: Der universelle Überbrückungs-Aktuatorbügel (`012_universal_actuator_slide_bracket.scad`) direkt über dem Cardo Packtalk Edge in OEM Air-Mount Halterung montiert: Schlitten 1 (orange) sitzt bei $X = 22{,}0\,\text{mm}$ exakt senkrecht über der vorderen Media/Power-Taste; Schlitten 2 (blau) sitzt bei $X = 63{,}0\,\text{mm}$ exakt senkrecht über der hinteren Intercom/Power-Taste ($41\,\text{mm}$ Tastenabstand, grüne Maßlinie). Zwei weiche TPU-Stößel drücken bei Zündung-AN für 2,0 s simultan auf beide Tasten, um das Headset ohne Standby-Stromverbrauch aus dem Tiefschlaf zu starten. Bei rein digitaler BLE-Ansteuerung entfällt dieser Bügel komplett.*
-
-3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
-   * Das ultrakompakte UCS-Modul ($68 \times 36 \times 9{,}5\,\text{mm}$) wird formschlüssig eingeclipst.
-   * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0).
+3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
+   * Das UCS-Modul ($78 \times 44 \times 14\,\text{mm}$) und der 5V RF-Power-Booster ($32 \times 24 \times 9\,\text{mm}$) ruhen in einem maßgefertigten, formschlüssigen EPDM-Equipmentbett ($90 \times 52\,\text{mm}$).
+   * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0). Ein internes Koaxialkabel verbindet den SMA-Ausgang direkt mit der Rückwand-Antennendurchführung.
 
 4. **PMR446 Handfunkgeräte & Midland Intercoms:**
    * Kompakte PMR446-Funkgeräte oder Midland-Module (BTR1 / BT Mini) werden über vorkonfektionierte Spiralkabel-Adapterpeitschen an `PCBA 03` angebunden.

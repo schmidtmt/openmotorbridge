@@ -1,113 +1,117 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Central Spring Latch & Lateral Teeth Mechanism
+// OpenMotorBridge - Satellite Pod: 100% Internal Anti-Theft Magnetic Lock
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/016_fob_magnetic_lock_mechanism.scad
-// Description: Detail kinematic 3D view of the slot-in lid locking mechanism:
-//              - 4 Lateral Locking Teeth (2 on left, 2 on right) engaging sidewall pockets.
-//              - Central spring-loaded slider / pinch release on lid top.
-//              - Spring tension pushes teeth outward into sidewalls.
-//              - Actuation (manual pinch or contactless Smart-Keyfob N52 magnetic release)
-//                compresses the central spring and retracts teeth inward.
+// Description: Detailed cross-section of the 100% INTERNAL magnetic deadbolt.
+//
+// Key Security Concept:
+// - Zero external buttons, sliders, or pry points on the lid exterior!
+// - A spring-loaded stainless steel / N52 deadbolt pin (Ø 4.0 x 6.0 mm) sits
+//   entirely on the inside, locking the slide-in lid to the monocoque tub.
+// - Holding the Smart-Keyfob (PCBA 07) over the exterior RFID target zone
+//   magnetically pulls the internal deadbolt upward against the spring,
+//   disengaging the socket and allowing the lid to slide open.
 // =============================================================================
 
-include <../../00_common/parameters.scad>;
+$fn = 32;
 
-RETRACTED = false; // Toggle to true to visualize teeth in retracted state
+module internal_fob_deadbolt_lock_detail(unlocked = false) {
+    pin_lift = unlocked ? 3.5 : 0.0;
 
-module central_spring_latch_mechanism() {
-    stroke_y = RETRACTED ? 2.5 : 0.0;
-
-    // 1. Solid Outer Sidewall of Pod Housing (Translucent Phantom PA12, 100% closed, zero holes!)
-    color([0.32, 0.38, 0.48, 0.40]) {
+    // 1. Cross-Section of Monocoque Tub Front Bulkhead (Dark Anthracite PA12)
+    color([0.28, 0.30, 0.34, 0.9]) {
         difference() {
-            translate([15.0, -8.0, 10.0])
-                cube([80.0, 13.0, 26.0], center=false);
+            translate([0, -18.0, 0])
+                cube([38.0, 36.0, 24.0], center=false);
 
-            // Internal blind pocket for locking tooth (undercut on INSIDE face only, exterior is 100% solid!)
-            translate([35.0 - 4.0, 2.0, 27.5])
-                cube([8.0, 4.0, 3.5], center=false);
+            // Front stop collar recess
+            translate([6.0, -16.0, 15.0])
+                cube([33.0, 32.0, 10.0], center=false);
 
-            // Lid longitudinal guide rail slot on inside rim
-            translate([14.0, 3.5, 27.0])
-                cube([82.0, 16.0, 5.0], center=false);
+            // Left & Right U-groove rail cutaways
+            translate([6.0, -17.5, 17.5])
+                cube([33.0, 2.2, 3.2], center=false);
+            translate([6.0, 15.3, 17.5])
+                cube([33.0, 2.2, 3.2], center=false);
+
+            // Internal Deadbolt Latch Socket (Blind bore in tub floor, 100% inside!)
+            translate([15.0, 0, 10.0])
+                cylinder(r=2.5, h=6.0, center=false, $fn=24);
         }
     }
 
-    // 2. Slot-In Lid Body (Translucent Dark Gray)
-    color([0.22, 0.23, 0.25, 0.85]) {
+    // 2. Slide-in Lid Front Tongue & Body (Charcoal PA12)
+    color([0.20, 0.22, 0.25]) {
         difference() {
-            translate([18.0, 4.5, 27.0])
-                cube([74.0, 45.0, 4.0], center=false);
+            translate([6.0, -15.0, 18.0])
+                cube([28.0, 30.0, 4.0], center=false);
 
-            // Central Slider Track & Spring Cavity
-            translate([42.0, 20.0, 26.5])
-                cube([26.0, 26.0, 4.5], center=false);
+            // Lateral tongues engaged in grooves
+            // (tongues are part of lid)
 
-            // Cross-Link Channels for Lateral Tooth Arms
-            translate([30.0, 4.0, 27.5])
-                cube([10.0, 40.0, 3.0], center=false);
+            // Blind internal bore for deadbolt pin (drilled from UNDERSIDE only!)
+            translate([15.0, 0, 17.0])
+                cylinder(r=2.2, h=4.2, center=false, $fn=24);
 
-            // Inspection cut window over linkage channel
-            translate([29.0, 4.0, 29.5])
-                cube([12.0, 22.0, 3.0], center=false);
+            // Exterior RFID target marking (0.3 mm recessed badge on top - NO hole!)
+            translate([15.0, 0, 21.7])
+                cube([14.0, 8.0, 0.4], center=true);
         }
     }
 
-    // 3. Lateral Locking Tooth & Retracting Arm (Orange - engages sidewall pocket!)
-    color([0.90, 0.52, 0.12]) {
-        // Left locking tooth (X = 35 mm)
-        translate([35.0 - 3.5, 2.2 + stroke_y, 28.0]) {
-            // Tooth head engaging sidewall pocket
-            hull() {
-                cube([7.0, 3.5, 2.8], center=false);
-                translate([1.0, 2.5, 0])
-                    cube([5.0, 1.0, 2.8], center=false);
-            }
-            // Connecting linkage arm to central spring slider
-            translate([1.5, 3.0, 0.4])
-                cube([4.0, 22.0, 2.0], center=false);
-        }
+    // Lateral guide tongues sliding in U-grooves
+    color([0.18, 0.20, 0.23]) {
+        translate([6.0, -17.2, 18.0])
+            cube([28.0, 2.2, 2.5], center=false);
+        translate([6.0, 15.0, 18.0])
+            cube([28.0, 2.2, 2.5], center=false);
     }
 
-    // 4. Central Spring-Loaded Slider & Return Spring (Cobalt Blue & Silver)
-    // Central Slider Block
-    color([0.15, 0.45, 0.85]) {
-        translate([44.0, 22.0 + stroke_y, 28.0]) {
-            cube([22.0, 16.0, 4.5], center=false);
-            // Tactile pinch ridges on top of slider
-            for (gx = [2.0 : 3.5 : 18.0]) {
-                translate([gx, 8.0, 4.5])
-                    cube([1.5, 12.0, 1.0], center=true);
-            }
-        }
-    }
-
-    // Central Coil Return Spring (Silver)
+    // 3. Internal Stainless Steel / Neodym Deadbolt Pin (Ø 4.0 x 6.0 mm)
+    // When locked (pin_lift = 0): Pin extends 3 mm down into tub socket!
+    // When unlocked (pin_lift = 3.5): Pin lifts completely into lid bore!
     color("silver") {
-        translate([55.0, 41.0, 30.2]) {
-            rotate([90, 0, 0])
-                cylinder(r=2.2, h=10.0 + stroke_y, center=false, $fn=16);
-        }
+        translate([15.0, 0, 12.0 + pin_lift])
+            cylinder(r=2.0, h=6.0, center=false, $fn=24);
     }
 
-    // 5. Embedded Steel/Neodymium Detent Core (Crimson Red) for FOB Magnetic Release
-    color("crimson") {
-        translate([55.0, 24.0 + stroke_y, 29.5])
-            cylinder(r=3.5, h=2.5, center=true, $fn=24);
+    // 4. Internal Return Spring (Tensioned when unlocked, pushes down when locked)
+    color("gold") {
+        translate([15.0, 0, 17.5 + pin_lift * 0.4])
+            cylinder(r=1.5, h=2.5 - pin_lift * 0.4, center=false, $fn=16);
     }
 
-    // 6. External Smart-Keyfob (PCBA 07) Hovering Over Release Target
-    translate([55.0, 24.0, 39.0]) {
-        // Keyfob Shell
-        color([0.15, 0.15, 0.15, 0.75])
-            cylinder(r=11.0, h=5.0, center=false, $fn=32);
-
-        // N52 Permanent Magnet Core
-        color("crimson")
+    // 5. Smart-Keyfob (PCBA 07) Hovering Above Exterior (Approaching to Unlock)
+    translate([15.0, 0, 26.0]) {
+        // Keyfob Housing (Rugged Matte Black Puck)
+        color([0.12, 0.12, 0.14, 0.9])
+            cylinder(r=12.0, h=5.0, center=false, $fn=32);
+        // N52 High-Flux Neodymium Magnet Core (Silver)
+        color("silver")
             translate([0, 0, 0.5])
-                cylinder(r=4.5, h=4.0, center=false, $fn=24);
+                cylinder(r=6.0, h=4.0, center=false, $fn=32);
+        // Green Proximity Unlock Indicator Ring
+        color([0.2, 0.9, 0.3])
+            translate([0, 0, 4.8])
+                difference() {
+                    cylinder(r=10.0, h=0.4, center=false, $fn=32);
+                    cylinder(r=8.5, h=0.5, center=false, $fn=32);
+                }
+    }
+
+    // Magnetic flux indication arrows (Cyan)
+    color([0.0, 0.85, 1.0, 0.7]) {
+        for (a = [-3.0, 3.0]) {
+            translate([15.0 + a, 0, 22.5])
+                cylinder(r1=0.8, r2=0.2, h=3.0, center=false, $fn=12);
+        }
     }
 }
 
-// Standalone execution preview
-central_spring_latch_mechanism();
+// Standalone execution preview with clean midplane cross section
+difference() {
+    internal_fob_deadbolt_lock_detail(unlocked = false);
+    // Cut away front half (Y < 0) to reveal internal pin, spring, socket, and tongues
+    translate([-10.0, -40.0, -5.0])
+        cube([60.0, 40.0, 40.0], center=false);
+}

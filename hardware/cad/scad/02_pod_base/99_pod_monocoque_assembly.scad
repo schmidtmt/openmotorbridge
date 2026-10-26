@@ -59,12 +59,13 @@ use <parts/015_pod_monocoque_tub.scad>;
 
 VIEW_MODE = "cutaway"; // ["cutaway", "exploded", "xray", "fob_lock"]
 
-// Exploded offsets
-EXP_LID_Z      = (VIEW_MODE == "exploded") ? 75.0 : 0.0;
-EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 38.0 : 0.0;
-EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 22.0 : 0.0;
-EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 8.0  : 0.0;
-SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 25.0 : 0.0;
+// Exploded & Slide-in offsets
+EXP_LID_X      = (VIEW_MODE == "exploded") ? 55.0 : 0.0;  // Displaced horizontally along X to reveal rear slide-in slot!
+EXP_LID_Z      = (VIEW_MODE == "exploded") ? 15.0 : 0.0;  // Elevated slightly to showcase internal equipment chamber
+EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 24.0 : 0.0;
+EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
+EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 6.0  : 0.0;
+SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : 0.0;  // Lid partially retracted along X-rails to demonstrate sliding action!
 
 module internal_wiring_preview() {
     // Port B USB-C internal silicone cable (from bulkhead at Z=11.5 to J_USB_OUT at X=9.5, Y=22.0)
@@ -136,7 +137,7 @@ module pod_monocoque_full_assembly() {
                 cube([POD_OUTER_L + 60.0, POD_OUTER_W/2.0 + 10.0, POD_OUTER_H + 50.0]);
         }
     } else {
-        translate([2.0 + SLIDE_LID_X, 3.0, POD_OUTER_H - 3.5 + EXP_LID_Z]) {
+        translate([2.0 + SLIDE_LID_X + EXP_LID_X, 3.0, POD_OUTER_H - 3.5 + EXP_LID_Z]) {
             color([0.22, 0.23, 0.25, (VIEW_MODE == "xray" ? 0.35 : 0.95)])
                 pod_slide_lid();
         }

@@ -142,30 +142,54 @@ module pod_variant_cardo() {
 }
 
 // -----------------------------------------------------------------------------
-// VARIANT 3: OMM 2.4 GHz UCS Transceiver Configuration
+// VARIANT 3: OMM 2.4 GHz UCS Transceiver Configuration (Full Scale Equipment Bed)
 // -----------------------------------------------------------------------------
 module pod_variant_omm() {
     pod_monocoque_base_setup();
 
-    // Upper equipment chamber: OMM 2.4 GHz UCS Module & 5V COTS RF Booster
-    translate([54.0, (POD_OUTER_W - 40.0)/2.0, POD_WALL + 2.0]) {
-        // UCS Transceiver Module Housing (Translucent Smoke Gray)
-        color([0.25, 0.35, 0.45, 0.85]) {
+    // Upper equipment chamber: Form-fitting EPDM Cradle Tray filling the full chamber
+    translate([48.0, (POD_OUTER_W - 52.0)/2.0, POD_WALL + 1.0]) {
+        // 1. Tailored High-Density EPDM Base Cradle Tray (90 x 52 mm)
+        color([0.18, 0.19, 0.22]) {
             difference() {
-                cube([68.0, 36.0, 10.0], center=false);
-                translate([2.0, 2.0, 1.5])
-                    cube([64.0, 32.0, 9.0], center=false);
+                cube([90.0, 52.0, 16.0], center=false);
+                // Pocket for main OMM Transceiver unit
+                translate([4.0, 4.0, 3.0])
+                    cube([78.0, 44.0, 14.0], center=false);
             }
         }
-        // 5V Bi-Directional RF Booster (Blue Anodized Aluminum Heatsink)
-        translate([12.0, 10.0, 3.0]) {
-            color([0.1, 0.35, 0.75])
-                cube([25.0, 15.0, 6.0], center=false);
-            // SMA Brass Bulkhead
-            color("gold")
-                translate([25.0, 7.5, 3.0])
-                    rotate([0, 90, 0])
-                        cylinder(r=3.0, h=5.0, center=false, $fn=16);
+
+        // 2. Main OMM 2.4 GHz UCS Transceiver Unit (Full Scale: 78 x 44 x 14 mm)
+        translate([4.0, 4.0, 3.0]) {
+            // Rugged Matte Black Enclosure
+            color([0.12, 0.13, 0.15])
+                cube([78.0, 44.0, 12.0], center=false);
+
+            // Anodized Aluminum Top Faceplate (Gunmetal Gray)
+            color([0.35, 0.38, 0.42])
+                translate([2.0, 2.0, 12.0])
+                    cube([74.0, 40.0, 1.2], center=false);
+
+            // OLED Mini Status Display / LED Activity Bar
+            color([0.1, 0.85, 1.0, 0.95])
+                translate([8.0, 16.0, 13.0])
+                    cube([28.0, 12.0, 0.6], center=false);
+
+            // 5V Bi-Directional RF Power Booster Module (Blue Anodized Aluminum Heatsink)
+            translate([42.0, 6.0, 4.0]) {
+                color([0.12, 0.38, 0.78])
+                    cube([32.0, 24.0, 9.0], center=false);
+                // Gold-Plated SMA Coaxial Bulkhead Connector
+                color("gold")
+                    translate([32.0, 12.0, 4.5])
+                        rotate([0, 90, 0])
+                            cylinder(r=3.2, h=6.0, center=false, $fn=16);
+            }
+
+            // 90° USB-C Ribbon Cable Lead (connecting to PCBA 03 under dry-flap)
+            color([0.2, 0.2, 0.25])
+                translate([-3.0, 18.0, 2.0])
+                    cube([6.0, 10.0, 2.0], center=false);
         }
     }
 }

@@ -135,23 +135,22 @@ module pod_monocoque_tub() {
                 POD_OUTER_H - POD_WALL + 0.5
             ], center=false);
         }
-        // 9. Top Rim Longitudinal Guide Grooves & 4 Lateral Locking Tooth Pockets
-        // Left groove (Y = POD_WALL - 1.5)
-        translate([6.0, POD_WALL - 1.5, POD_OUTER_H - 4.5])
-            cube([POD_OUTER_L - 8.0, 1.8, 2.8], center=false);
-        // Right groove (Y = POD_OUTER_W - POD_WALL - 0.3)
-        translate([6.0, POD_OUTER_W - POD_WALL - 0.3, POD_OUTER_H - 4.5])
-            cube([POD_OUTER_L - 8.0, 1.8, 2.8], center=false);
+        // 9. Top Rim Continuous Slide-in Guide Grooves & Rear Entry Slot (Einschubschlitz)
+        // Left guide groove (Y = POD_WALL - 1.6) runs from front stop (X = 6.0) all the way through rear wall (X = POD_OUTER_L + 1.0)
+        translate([6.0, POD_WALL - 1.6, POD_OUTER_H - 4.5])
+            cube([POD_OUTER_L - 5.0, 2.0, 3.2], center=false);
+        // Right guide groove (Y = POD_OUTER_W - POD_WALL - 0.4)
+        translate([6.0, POD_OUTER_W - POD_WALL - 0.4, POD_OUTER_H - 4.5])
+            cube([POD_OUTER_L - 5.0, 2.0, 3.2], center=false);
 
-        // 4 Lateral Locking Tooth Pockets (2 per sidewall for slot-in lid locking teeth)
-        for (tx = [35.0, 115.0]) {
-            // Left sidewall pockets (Y = POD_WALL)
-            translate([tx - 4.0, POD_WALL - 2.0, POD_OUTER_H - 5.0])
-                cube([8.0, 2.2, 3.2], center=false);
-            // Right sidewall pockets (Y = POD_OUTER_W - POD_WALL)
-            translate([tx - 4.0, POD_OUTER_W - POD_WALL - 0.2, POD_OUTER_H - 5.0])
-                cube([8.0, 2.2, 3.2], center=false);
-        }
+        // Rear Slide-in Entry Opening (Lid slides in horizontally from rear along X)
+        translate([POD_OUTER_L - POD_WALL - 0.5, POD_WALL - 1.6, POD_OUTER_H - 4.8])
+            cube([POD_WALL + 2.0, POD_OUTER_W - 2*POD_WALL + 3.2, 5.0], center=false);
+
+        // Internal FOB Anti-Theft Magnetic Latch Socket (100% INTERNAL - Zero outside access!)
+        // Blind hole at X = 16.0 mm, Y = POD_OUTER_W/2 for the spring-loaded magnetic deadbolt
+        translate([16.0, POD_OUTER_W/2.0, POD_OUTER_H - 9.0])
+            cylinder(r=2.5, h=5.5, center=false, $fn=24);
 
         // 10. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro Style Bulkhead Pocket)
         // Rectangular flange pocket (15.0 x 8.0 mm) with silicone flat-cable internal passthrough
