@@ -325,24 +325,29 @@ In the following 4-variant inspection view (featuring an ergonomically cut-open 
         * When a headset is turned OFF, its internal processor is dormant -- waking it up over BLE is physically impossible.
         * To power on upon vehicle ignition ON (KL15), the Cardo strictly requires pressing **Media Key + Intercom Key simultaneously for 2.0 s**!
         * To power off when parking (preventing parasitic battery drain), the same key combination must be pressed again.
-   * **The Mechatronic Solution: Universal Dual-Carriage Slide Bridge ("One Size Fits All" / `012_universal_actuator_slide_bracket.scad`):**
-     * **Why No OEM-Specific Plates Are Required:** To ensure the pod is 100% universal, **no model-specific 3D-printed cartridges or plates** are used. A single universal portal bridge accommodates virtually any helmet communicator (Cardo Packtalk Edge, Sena 50S/30K, Sena SPIDER ST1/RT1, Midland BTR1, etc.):
+   * **The Mechatronic Solution: Modular Dual-Strut Actuator System ("Slot-In Cross-Struts with 3D Z-Carriages" / `012_universal_actuator_slide_bracket.scad`):**
+     * **Why No Rigid Portal Bridge or Screwed Floor Bosses Are Needed:** To achieve maximum versatility in minimal space, the v10.0 design employs **two completely independent, low-profile cross-struts**:
+       1. **Zero Obstructions on Tub Floor:** The monocoque tub floor remains 100% smooth, continuous, and waterproof. Any helmet communicator (Cardo Packtalk Edge on Air-Mount, Sena in clamp shoe, or handheld radio) enjoys unobstructed floor clearance.
+       2. **Integrated C-Guide Rails in Tub Sidewalls:** Both interior longitudinal sidewalls feature integrated C-profile guide channels with an undercut upper retaining lip at $Z = 22.0\,\text{mm}$.
+       3. **100% Reaction Force Absorption:** When an actuator pushes down with $3\dots 5\,\text{N}$ onto the communicator button, the strut end tabs lock solidly upward into the undercut C-profile -- ensuring extreme torsional stiffness and zero upward deflection.
+       4. **Tool-Free Slide-In & Waterproofing (EPDM Plugs):** Struts slide effortlessly from the rear bulkhead into the sidewall C-rails like precision drawer runners. Once positioned, two molded EPDM rubber plugs are pressed into the rear openings, sealing them 100% dust- and waterproof (IP68) while acting as mechanical travel stops.
 
-![Universal Dual-Carriage Slide Bridge over Cardo Packtalk Edge](../images/cad/universal_actuator_slide_bracket_cad.png)
+![Modular Dual-Strut Actuator System over Cardo Packtalk Edge](../images/cad/universal_actuator_slide_bracket_cad.png)
 
-*Figure 8.13: Universal Dual-Carriage Slide Bridge (`012_universal_actuator_slide_bracket.scad`) inside the Saddlebag Pod: 1. "One Size Fits All": Spans as a rigid portal bridge across the entire equipment bay ($84 \times 42\,\text{mm}$ mounting pattern). 2. Direct 4-Point Chassis Fastening: Four M2.5 stainless steel screws thread directly into four brass heat-set inserts embedded in the monocoque floor bosses (at $X = 56.0$ / $140.0\,\text{mm}$ and $Y = 14.0$ / $56.0\,\text{mm}$). 3. Continuous 2D Key Alignment: Two parallel slotted guide rails (Langlöcher) allow seamless adjustment of the two actuator carriages between 15 mm and 75 mm key spacing. 4. Reaction Force Absorption: The $3\dots 5\,\text{N}$ push force per key is 100% routed through the four corner pillars directly into the rigid $3\,\text{mm}$ carbon/PA12 pod floor -- completely vibration-proof, zero-play, and permanently anchored.*
+*Figure 8.13: Modular Dual-Strut Actuator System (`012_universal_actuator_slide_bracket.scad`) inside the Saddlebag Pod: 1. Two Independent Cross-Struts: Slide along the integrated sidewall C-channels (X-axis). 2. Lateral Alignment (Y-axis): Central slotted rails ($Y = 16\dots 54\,\text{mm}$) allow continuous positioning of the actuator carriages directly above the communicator keys. 3. Height Adjustment (Z-axis): The actuator cage provides a vertical adjustment slot ($8\,\text{mm}$ travel) to dial in the ideal plunger clearance for any button profile (Cardo, Sena, Midland, PMR). 4. 100% IKEA Principle: All clamp points use standard DIN 934 M2.5 stainless hex nuts housed in captive printed hex pockets -- no soldering iron, no heat-set inserts, infinitely serviceable. 5. EPDM Rubber Plugs: Seal the rear rail entries and lock the struts in place.*
 
-   * **Vibration-Proof Chassis Anchoring & Floor Boss Threads:**
-     * **Which Thread Do the Screws Grip Into?**
-       The monocoque tub floor ([`015_pod_monocoque_tub.scad`](../../hardware/cad/scad/02_pod_base/parts/015_pod_monocoque_tub.scad)) integrates **four solid cylindrical mounting bosses** with pilot bores engineered precisely for this purpose:
-       - Front pillar positions: $X = 56.0\,\text{mm}$ at $Y = 14.0\,\text{mm}$ and $Y = 56.0\,\text{mm}$
-       - Rear pillar positions: $X = 140.0\,\text{mm}$ at $Y = 14.0\,\text{mm}$ and $Y = 56.0\,\text{mm}$
-       - These four bosses receive standard **M2.5 brass heat-set inserts (Ruthex)** thermally embedded into the plastic (or M2.5 direct-thread plastics screws).
-     * **How Universal Operation Works Without OEM Plates:**
-       1. **Drop in Any Communicator:** The communicator (e.g., Cardo Edge on its OEM Air-Mount cradle, Sena in its clamping shoe, or a PMR radio) rests vibration-damped on the pod floor between the bosses.
-       2. **Bolt Down the Portal Bridge:** The bridge is secured with 4x M2.5 Torx stainless steel screws into the floor bosses ($0.4\,\text{Nm}$ torque), spanning over the communicator with $21\,\text{mm}$ interior clearance.
-       3. **Slide Carriages Over the Keys:** Loosen the clamp screws on the two carriages. Slide Carriage 1 along the left rail over Key 1; slide Carriage 2 along the right rail over Key 2. Tighten the clamp screws -- done!
-       4. **Zero Shifting or Rattling:** Even under severe 10G off-road shocks or corrugated gravel washboards, the bridge cannot shift or vibrate, forming a rigid bolted box-structure with the chassis. Actuator reaction forces cannot flex upward, delivering 100% stroke force straight down to trigger the buttons.
+   * **True 3-Axis Adjustability (X, Y, Z) & 100% IKEA-Principle Fastening:**
+     * **Which Thread Do the Clamp Screws Grip Into?**
+       True to the OpenMotorBridge IKEA principle, there are **no threads cut into plastic and no brass inserts to melt in**:
+       - Each cross-strut and actuator carriage integrates form-fit **DIN 934 hex nut pockets** for standard A4/V4A stainless steel M2.5 nuts.
+       - Screws grip **exclusively into genuine machine metal threads** (M2.5 stainless screw into DIN 934 stainless nut).
+       - Fasteners can be loosened, fine-tuned, and re-torqued ($0.4\,\text{Nm}$) countless times -- **zero wear, zero stripped plastic threads, 100% vibration-proof under 10G off-road conditions**.
+     * **How the System is Adjusted in 2 Minutes for Any Communicator:**
+       1. **X-Axis (Longitudinal):** Slide the two cross-struts into the sidewall C-rails from the rear and position them over the target keys (e.g., Media Key at $X \approx 76\,\text{mm}$, Intercom Key at $X \approx 117\,\text{mm}$). Snug the end clamp screws.
+       2. **Y-Axis (Lateral):** Slightly loosen the Z-carriage clamp screw and slide the carriage sideways along the strut slot directly over the keycap.
+       3. **Z-Axis (Vertical):** Lower the actuator within the vertical guide slot until the soft Shore A50 TPU plunger foot hovers approx. $0.5\,\text{mm}$ above the button.
+       4. **Lock & Seal:** Tighten the M2.5 clamp screw (locking both Y- and Z-axes simultaneously!). Press the two EPDM rubber plugs into the rear rail slots -- done!
+       5. **Zero Shifting:** Even under brutal 10G off-road jolts or washboard gravel, the assembly cannot budge. Solenoid reaction forces are channeled straight into the rigid sidewall structure, delivering 100% stroke energy directly onto the keycaps.
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * The full-scale UCS transceiver module ($78 \times 44 \times 14\,\text{mm}$) and the 5V RF power booster ($32 \times 24 \times 9\,\text{mm}$) rest securely inside a tailored high-density EPDM equipment bed ($90 \times 52\,\text{mm}$).

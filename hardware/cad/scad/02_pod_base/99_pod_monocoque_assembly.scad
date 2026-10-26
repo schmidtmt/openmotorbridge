@@ -61,8 +61,8 @@ VIEW_MODE = "cutaway"; // ["cutaway", "exploded", "xray", "fob_lock"]
 
 // Exploded & Slide-in offsets
 EXP_LID_X      = (VIEW_MODE == "exploded") ? 55.0 : 0.0;  // Displaced horizontally along X to reveal rear slide-in slot!
-EXP_LID_Z      = (VIEW_MODE == "exploded") ? 15.0 : 0.0;  // Elevated slightly to showcase internal equipment chamber
-EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 24.0 : 0.0;
+EXP_LID_Z      = (VIEW_MODE == "exploded") ? 30.0 : 0.0;  // Elevated to cleanly clear actuator struts
+EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
 EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
 EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 6.0  : 0.0;
 SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : ((VIEW_MODE == "xray") ? 38.0 : 0.0);  // Lid partially retracted along X-rails to demonstrate sliding action!
@@ -116,22 +116,27 @@ module pod_monocoque_full_assembly() {
             pod_dry_flap();
     }
 
-    // 7. Upper Equipment Bay: Communicator & Universal Dual-Carriage Slide Bracket
-    // Communicator (e.g. Cardo Packtalk Edge in OEM cradle, or Sena / Midland / OMM) resting on floor
+    // 7. Upper Equipment Bay: Communicator & Modular Dual-Strut Actuator System
+    // Communicator (e.g. Cardo Packtalk Edge in OEM cradle) resting on smooth monocoque floor
     translate([52.0, (POD_OUTER_W - 46.0)/2.0, POD_WALL + 0.5]) {
         dummy_cardo_oem_airmount_cradle();
         translate([0, 0, 3.5])
             dummy_cardo_packtalk_edge(with_actuators = false);
     }
 
-    // Universal Dual-Carriage Slide Bracket ("One Size Fits All")
-    // Rigid portal bridge bolted directly into the 4x M2.5 brass threaded floor bosses at:
-    // (56.0, 14.0), (56.0, 56.0), (140.0, 14.0), (140.0, 56.0)
-    translate([56.0, 14.0, POD_WALL + 2.5 + EXP_BRACKET_Z]) {
+    // Modular Dual Slot-In Actuator Struts with Z-Carriages (Z = 21.6 mm)
+    // Strut 1 (Front Media key) and Strut 2 (Rear Intercom key)
+    translate([0, 0, EXP_BRACKET_Z]) {
         universal_actuator_slide_bracket(
-            carriage1_x = 22.0,
-            carriage2_x = 63.0,
-            show_actuators = true
+            strut1_x = 76.0,
+            strut2_x = 117.0,
+            carriage1_y = 22.0,
+            carriage2_y = 37.0,
+            carriage1_z = -1.0,
+            carriage2_z = -1.0,
+            show_actuators = true,
+            show_plugs = true,
+            plug_x_offset = (VIEW_MODE == "exploded") ? 22.0 : 0.0
         );
     }
 

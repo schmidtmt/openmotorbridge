@@ -345,24 +345,29 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
        * Ist ein Headset ausgeschaltet, schläft sein interner Prozessor – ein Aufwecken über BLE ist technisch unmöglich.
        * Zum Einschalten bei Zündung-AN (KL15) müssen beim Cardo zwingend **Media-Taste + Intercom-Taste simultan für 2,0 s** gedrückt werden!
        * Zum Ausschalten beim Parken (um die interne Batterie nicht zu leeren) muss dieselbe Tastenkombination erneut gedrückt werden.
-   * **Die mechatronische Lösung: Die universelle Doppel-Schiebeschlitten-Brücke („One Size Fits All“ / `012_universal_actuator_slide_bracket.scad`):**
-     * **Warum keine OEM-spezifischen Platten nötig sind:** Um den Pod zu 100 % universell zu halten, werden **keine gerätespezifischen 3D-Druck-Kassetten oder -Platten** benötigt. Eine einzige universelle Mechatronik-Portalbrücke deckt beliebige Headsets (Cardo Packtalk Edge, Sena 50S/30K, Sena SPIDER ST1/RT1, Midland BTR1 etc.) ab:
+   * **Die mechatronische Lösung: Das modulare Doppel-Traversen-System („Slot-in Querstreben mit 3D-Z-Schlitten“ / `012_universal_actuator_slide_bracket.scad`):**
+     * **Warum keine starre Portalbrücke mehr nötig ist:** Um maximale Flexibilität bei minimalem Bauraum zu erreichen, setzt das v10.0-Design auf **zwei voneinander völlig unabhängige, schlanke Querstreben**:
+       1. **Keine störenden Schraubdome am Boden:** Der Wannenboden bleibt zu 100 % glatt, geschlossen und wasserdicht. Jedes Headset (egal ob Cardo Packtalk Edge im Air-Mount, Sena in der Klemmschale oder Funkgeräte) hat maximalen Freiraum.
+       2. **Integrierte C-Führungsnuten in den Gehäusewänden:** Die beiden Gehäuselängswände besitzen auf $Z = 22{,}0\,\text{mm}$ integrierte C-Profile mit Hinterschnitt (Dach).
+       3. **100 % Kraftableitung der Gegenkraft:** Wenn der Aktuator mit $3\dots 5\,\text{N}$ nach unten auf die Headset-Taste drückt, stützen sich die Enden der Querstreben im C-Profil der Außenwand formschlüssig nach oben ab – absolut verwindungssteif, spielfrei und ohne Durchbiegung.
+       4. **Werkzeuglose Montage & Dichtigkeit (Gummistopfen von außen):** Die Querstreben werden einfach wie in eine Schubladenschiene von hinten in die beiden Wandnuten eingeschoben. Anschließend wird links und rechts an der rückseitigen Öffnung je ein kleiner EPDM-Gummistopfen eingedrückt: Er verschließt die Nutöffnung nach außen zu 100 % wasser- und staubdicht (IP68) und wirkt gleichzeitig als mechanischer Endanschlag.
 
-![Universal Doppel-Schiebeschlitten-Brücke über Cardo Packtalk Edge](../images/cad/universal_actuator_slide_bracket_cad.png)
+![Modulares Doppel-Traversen-Aktuatorsystem über Cardo Packtalk Edge](../images/cad/universal_actuator_slide_bracket_cad.png)
 
-*Abbildung 8.13: Universelle Doppel-Schiebeschlitten-Brücke (`012_universal_actuator_slide_bracket.scad`) im Koffer-Pod: 1. „One Size Fits All“: Überbrückt als formstabile Portalbrücke den gesamten Geräteraum ($84 \times 42\,\text{mm}$ Stützraster). 2. Direkte 4-Punkt Chassis-Verschraubung: Vier M2.5 Edelstahlschrauben greifen direkt in die 4 im Monocoque-Gehäuseboden eingepressten Messing-Gewindebuchsen (bei $X = 56{,}0$ / $140{,}0\,\text{mm}$ und $Y = 14{,}0$ / $56{,}0\,\text{mm}$). 3. Stufenlose 2D-Justage: Zwei parallele Langloch-C-Schienen erlauben die kontinuierliche Verschiebung der beiden Aktuator-Schlitten von 15 mm bis 75 mm Tastenabstand. 4. Reaktionskraft-Kompensation: Die $3\dots 5\,\text{N}$ Betätigungskraft pro Taste wird zu 100 % über die 4 Eckpfeiler in den $3\,\text{mm}$ Carbon/PA12-Boden abgeleitet – absolut vibrationsfest, spielfrei und unlösbar verankert.*
+*Abbildung 8.13: Modulares Doppel-Traversen-Aktuatorsystem (`012_universal_actuator_slide_bracket.scad`) im Koffer-Pod: 1. Zwei unabhängige Querstreben: Gleiten formschlüssig in den integrierten C-Nuten der Gehäusewände (X-Achse). 2. Quer-Justage (Y-Achse): Im zentralen Langloch ($Y = 16\dots 54\,\text{mm}$) wird der Aktuatorschlitten exakt über der Taste positioniert. 3. Höhenanpassung (Z-Achse): Der Aktuatorkäfig besitzt ein vertikales Langloch ($8\,\text{mm}$ Hub), um den Stößelabstand feinfühlig an jede Tastenhöhe (Cardo, Sena, Midland, Funk) anzupassen. 4. 100 % IKEA-Prinzip: Sämtliche Klemmungen nutzen handelsübliche DIN 934 M2.5 Edelstahlmuttern in formschlüssigen Taschen – kein Lötkolben, kein Einschmelzen, unendlich oft lösbar. 5. EPDM-Gummistopfen: Dichten die stirnseitigen Nutöffnungen nach außen ab und sichern die Traversen gegen Verrutschen.*
 
-   * **Vibrationsfeste Verankerung & Gewinde im Gehäuseboden:**
-     * **In welches Gewinde greifen die Schrauben?**
-       Im Gehäuseboden der Monocoque-Wanne ([`015_pod_monocoque_tub.scad`](../../hardware/cad/scad/02_pod_base/parts/015_pod_monocoque_tub.scad)) sind exakt hierfür **vier massive zylindrische Befestigungsdome** mit Kernloch-Vorbohrungen integriert:
-       - Position Front-Pfeiler: $X = 56{,}0\,\text{mm}$ bei $Y = 14{,}0\,\text{mm}$ und $Y = 56{,}0\,\text{mm}$
-       - Position Heck-Pfeiler: $X = 140{,}0\,\text{mm}$ bei $Y = 14{,}0\,\text{mm}$ und $Y = 56{,}0\,\text{mm}$
-       - In diese 4 Dome werden standardmäßig **M2.5 Messing-Gewindeeinsätze (Ruthex / Heat-Set Inserts)** thermisch eingeschmolzen (bzw. M2.5 Direktverschraubungsschrauben für Thermoplaste genutzt).
-     * **Wie funktioniert die Universalität ohne OEM-Platten?**
-       1. **Beliebiges Headset einlegen:** Das Headset (z. B. Cardo Edge in OEM-Air-Mount, Sena in Klemmschale oder PMR-Funkgerät) ruht vibrationsgedämpft auf dem Pod-Boden zwischen den Domen.
-       2. **Brücke aufschrauben:** Die Universalbrücke wird mit 4x M2.5 Torx-Edelstahlschrauben fest in die Gehäusedome verschraubt ($0{,}4\,\text{Nm}$). Sie überspannt das Headset mit $21\,\text{mm}$ lichter Innenhöhe.
-       3. **Schlitten auf Tasten schieben:** Die Klemmschrauben der beiden Schlitten werden gelöst. Schlitten 1 wird im linken Langloch über Taste 1 geschoben; Schlitten 2 im rechten Langloch über Taste 2. Klemmschrauben anziehen – fertig!
-       4. **Null Verrutschen:** Selbst bei extremen 10G Offroad-Erschütterungen oder Schlaglöchern kann die Brücke weder wandern noch vibrieren, da sie eine geschlossene, verschraubte Kastenstruktur mit dem Chassis bildet. Die Reaktionskräfte der Mini-Hubmagnete federn nicht nach oben weg, sondern betätigen mit 100 % Hubkraft die Knöpfe.
+   * **Echte 3-Achsen-Freiheit (X, Y, Z) & 100 % IKEA-Prinzip-Gewinde:**
+     * **In welches Gewinde greifen die Klemmschrauben?**
+       Konsequent nach dem OpenMotorBridge-IKEA-Prinzip gibt es **keinerlei Schraubverbindungen direkt in Kunststoff und kein thermisches Einschmelzen von Gewindebuchsen**:
+       - Jede Querstrebe und jeder Aktuatorschlitten verfügt über formschlüssig eingedruckte **DIN 934 Sechskant-Mutterntaschen** für Standard-V4A-Edelstahlmuttern M2.5.
+       - Die Schrauben greifen **ausschließlich in echtes Metallgewinde** (Edelstahl M2.5 Schraube in Edelstahl DIN 934 Mutter).
+       - Die Verbindung kann beliebig oft gelöst, nachjustiert und wieder mit $0{,}4\,\text{Nm}$ Drehmoment angezogen werden – **null Verschleiß, kein Ausreißen, absolut rüttelfest unter 10G Offroad-Bedingungen**.
+     * **Wie wird das System in 2 Minuten auf jedes beliebige Gerät eingestellt?**
+       1. **X-Achse (Längs):** Die beiden Querstreben von hinten in die Wandnuten einschieben und über den jeweiligen Tasten (z. B. Media-Taste bei $X \approx 76\,\text{mm}$, Intercom-Taste bei $X \approx 117\,\text{mm}$) platzieren. Endklemmschrauben anziehen.
+       2. **Y-Achse (Quer):** Klemmschraube des Z-Schlittens leicht lösen und den Schlitten im Querschlitz seitlich über die Tastenkappe schieben.
+       3. **Z-Achse (Höhe):** Den Aktuator im vertikalen Führungsschlitz absenken, bis der weiche Shore A50 TPU-Stößelfuß mit ca. $0{,}5\,\text{mm}$ Arbeitsabstand über der Taste steht.
+       4. **Fixieren & Abdichten:** Die M2.5-Klemmschraube festziehen (arretiert Y- und Z-Achse gleichzeitig!). Zuletzt die beiden EPDM-Gummistopfen von außen in die Nutenden drücken – fertig!
+       5. **Null Verrutschen:** Selbst bei extremen 10G Offroad-Erschütterungen oder Schlaglöchern kann das System weder wandern noch vibrieren. Die Reaktionskräfte der Mini-Hubmagnete federn nicht nach oben weg, sondern betätigen mit 100 % Hubkraft die Knöpfe.
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * Das UCS-Modul ($78 \times 44 \times 14\,\text{mm}$) und der 5V RF-Power-Booster ($32 \times 24 \times 9\,\text{mm}$) ruhen in einem maßgefertigten, formschlüssigen EPDM-Equipmentbett ($90 \times 52\,\text{mm}$).

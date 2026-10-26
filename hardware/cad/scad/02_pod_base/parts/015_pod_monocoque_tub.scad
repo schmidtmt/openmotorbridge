@@ -102,13 +102,13 @@ module pod_monocoque_tub() {
                     cylinder(r=3.2, h=3.0, $fn=20);
             }
 
-            // 6. Actuator Slide Bracket Mounting Bosses (in rear chamber)
-            for (ax = [56.0, 140.0]) {
-                translate([ax, 14.0, POD_WALL])
-                    cylinder(r=3.0, h=2.5, $fn=20);
-                translate([ax, POD_OUTER_W - 14.0, POD_WALL])
-                    cylinder(r=3.0, h=2.5, $fn=20);
-            }
+            // 6. Actuator Cross-Strut Sidewall Guide Rail Ribs (Z = 20.5..25.5 mm)
+            // Left flank reinforcement rib
+            translate([52.0, POD_WALL - 0.5, 20.5])
+                cube([POD_OUTER_L - 52.0, 3.2, 5.0], center=false);
+            // Right flank reinforcement rib
+            translate([52.0, POD_OUTER_W - POD_WALL - 2.7, 20.5])
+                cube([POD_OUTER_L - 52.0, 3.2, 5.0], center=false);
 
             // 7. Dry-Flap Internal Seating Shelf Ledges
             translate([6.0, POD_WALL, 14.0])
@@ -198,13 +198,20 @@ module pod_monocoque_tub() {
                 cylinder(r=M2_5_PILOT_HOLE_R, h=5.0, $fn=20);
         }
 
-        // 14. 4x M2.5 Pilot Holes for Actuator Slide Bracket
-        for (ax = [56.0, 140.0]) {
-            translate([ax, 14.0, POD_WALL - 0.5])
-                cylinder(r=M2_5_PILOT_HOLE_R, h=5.0, $fn=20);
-            translate([ax, POD_OUTER_W - 14.0, POD_WALL - 0.5])
-                cylinder(r=M2_5_PILOT_HOLE_R, h=5.0, $fn=20);
-        }
+        // 14. Actuator Cross-Struts Sidewall C-Grooves (Z = 21.5..24.5 mm)
+        // Left C-groove: runs along left wall from X = 52.0 mm to rear bulkhead (X = POD_OUTER_L + 1.0 mm)
+        translate([52.0, POD_WALL - 1.0, 21.5])
+            cube([POD_OUTER_L - 51.0, 3.5, 3.0], center=false);
+        // Right C-groove: runs along right wall from X = 52.0 mm to rear bulkhead
+        translate([52.0, POD_OUTER_W - POD_WALL - 2.5, 21.5])
+            cube([POD_OUTER_L - 51.0, 3.5, 3.0], center=false);
+
+        // 14b. Rear EPDM Sealing Plug Pockets (at X = POD_OUTER_L - 4.5 mm to outside)
+        // Countersunk plug seat allowing flush exterior sealing
+        translate([POD_OUTER_L - 4.5, POD_WALL - 2.0, 20.5])
+            cube([6.0, 4.5, 5.0], center=false);
+        translate([POD_OUTER_L - 4.5, POD_OUTER_W - POD_WALL - 2.5, 20.5])
+            cube([6.0, 4.5, 5.0], center=false);
 
         // 15. FOB Contactless Magnetic Latch Cavity (in lateral wall at X = 55 mm)
         translate([52.0, POD_WALL - 1.2, POD_OUTER_H - 12.0])
