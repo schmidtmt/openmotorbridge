@@ -203,6 +203,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
+        "02_pod_base/99_pod_inlay_gallery.scad",
+        os.path.join(CAD_IMG_DIR, "pod_device_variants_quad.png"),
+        "70,128,25,55,0,320,540",
+        "Tomorrow"
+    ),
+    (
         "02_pod_base/parts/012_universal_actuator_slide_bracket.scad",
         os.path.join(CAD_IMG_DIR, "universal_actuator_slide_bracket_cad.png"),
         "55,27,8,55,0,320,180",

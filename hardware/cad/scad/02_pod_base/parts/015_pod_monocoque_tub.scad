@@ -117,6 +117,12 @@ module pod_monocoque_tub() {
                 cube([46.0, 2.5, 2.0], center=false);
             translate([50.0, POD_WALL, 14.0])
                 cube([2.0, POD_OUTER_W - 2*POD_WALL, 2.0], center=false);
+
+            // 7b. Optional Front SMA Bulkhead Reinforcement Boss (inner face at X = POD_OUTER_L - POD_WALL)
+            translate([POD_OUTER_L - POD_WALL - 2.5, POD_OUTER_W/2.0, 19.0]) {
+                rotate([0, 90, 0])
+                    cylinder(r=7.0, h=2.5, center=false, $fn=24);
+            }
         }
 
         // --- SUBTRACTIONS ---
@@ -193,6 +199,21 @@ module pod_monocoque_tub() {
             cube([5.0, POD_OUTER_W + 2.0, 2.5], center=false);
         translate([POD_OUTER_L - 25.0 - 2.5, -1.0, POD_WALL - 1.2])
             cube([5.0, POD_OUTER_W + 2.0, 2.5], center=false);
+
+        // 17. Optional Front SMA Bulkhead Antenna Port (at X = POD_OUTER_L) with 0.4 mm Knockout Membrane
+        // Positioned at X = POD_OUTER_L, Y = POD_OUTER_W / 2.0 = 35.0 mm, Z = 19.0 mm
+        translate([POD_OUTER_L - POD_WALL - 2.6, POD_OUTER_W/2.0, 19.0]) {
+            rotate([0, 90, 0]) {
+                // Internal Ø 6.5 mm through-hole bore leaving 0.4 mm knockout membrane
+                cylinder(r=SMA_BORE_R, h=POD_WALL + 2.5 - 0.4, center=false, $fn=32);
+            }
+        }
+        // External Ø 9.5 mm x 1.2 mm O-ring recess on exterior face (X = POD_OUTER_L)
+        translate([POD_OUTER_L - 1.2, POD_OUTER_W/2.0, 19.0]) {
+            rotate([0, 90, 0]) {
+                cylinder(r=SMA_ORECESS_R, h=1.5, center=false, $fn=32);
+            }
+        }
     }
 }
 

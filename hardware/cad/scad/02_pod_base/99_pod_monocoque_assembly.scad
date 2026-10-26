@@ -15,7 +15,24 @@
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-use <../00_common/dummies/dummy_m8_connector.scad>;
+use <../00_common/dummies/dummy_intercom_units.scad>;
+
+module m8_flush_panel_socket() {
+    color("silver")
+        rotate([0, -90, 0])
+            cylinder(r=5.0, h=3.0, center=false, $fn=32);
+    color([0.1, 0.1, 0.1])
+        translate([-0.5, 0, 0])
+            rotate([0, -90, 0])
+                cylinder(r=3.5, h=2.5, center=false, $fn=24);
+    color("gold") {
+        for (a = [45, 135, 225, 315]) {
+            translate([-1.5, 1.8 * cos(a), 1.8 * sin(a)])
+                rotate([0, -90, 0])
+                    cylinder(r=0.4, h=1.0, center=false, $fn=12);
+        }
+    }
+}
 use <../00_common/dummies/dummy_adapter_pcb.scad>;
 use <parts/008_pod_base_usbc_cap_tpu.scad>;
 use <parts/012_universal_actuator_slide_bracket.scad>;
@@ -64,10 +81,9 @@ module pod_monocoque_full_assembly() {
             pod_monocoque_tub();
     }
 
-    // 2. Port A: M8 4-Pin IP67 Metal Bus Connector (Bulkhead center, top: Z = 26.5 mm)
+    // 2. Port A: M8 4-Pin IP67 Metal Bus Chassis Socket (Bulkhead center, top: Z = 26.5 mm)
     translate([0.0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
-        rotate([0, 180, 0])
-            dummy_m8_connector();
+        m8_flush_panel_socket();
 
     // 3. Port B: In-Bag USB-C Fast-Charge Socket (Bulkhead center, bottom: Z = 11.5 mm)
     translate([0.5, POD_OUTER_W/2.0, POD_OUTER_H/2.0 - 7.5])
@@ -88,9 +104,14 @@ module pod_monocoque_full_assembly() {
             pod_dry_flap();
     }
 
-    // 7. Universal Dual-Actuator Slide Bracket (in upper equipment chamber)
-    translate([48.0, 8.0, POD_WALL + 1.0 + EXP_BRACKET_Z]) {
-        universal_actuator_slide_bracket_assembly();
+    // 7. Upper Equipment Bay: Intercom Module & Air-Mount Cradle
+    translate([50.0, (POD_OUTER_W - 46.0)/2.0, POD_WALL + 1.5 + EXP_BRACKET_Z]) {
+        // OEM Air-Mount Cradle screwed to floor
+        dummy_cardo_oem_airmount_cradle();
+
+        // Packtalk Edge Unit clicked into cradle
+        translate([0, 0, 3.5])
+            dummy_cardo_packtalk_edge(with_actuators = false);
     }
 
     // 8. Tool-Free Slide-In Lid

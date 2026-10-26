@@ -196,27 +196,27 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das formschlüssige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A Bus oben bei $Z = 26{,}5\,\text{mm}$, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$, beide mittig bei $Y = 35{,}0\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem EPDM-Zwischendeckel (Dry-Flap) und der geräumige obere Geräteraum mit der universellen Doppel-Schiebeschlitten-Aktuatorschiene.*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das formschlüssige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A Bus M8-Einbaubuchse oben bei $Z = 26{,}5\,\text{mm}$, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$, beide mittig bei $Y = 35{,}0\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem formschlüssig eingerasteten Cardo Packtalk Edge auf OEM Air-Mount Halterung sowie die rückseitige optionale SMA-Antennendurchführung ($0{,}4\,\text{mm}$ Knockout-Membran).*
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel und Port A/B, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, universelle Doppel-Schiebeschlitten-Aktuatorschiene und formschlüssiger Slide-in Deckel mit FOB-Rastkontur).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel, Port A M8-Einbaubuchse und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge, formschlüssiger Slide-in Deckel mit FOB-Rastkontur sowie rückseitige SMA-Antennendurchführung).*
 
 ---
 
 ### 4.2 Kinematik des Slide-in Deckels & Magnetische FOB-Verriegelung
 
-Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schmutzunempfindlich und diebstahlgeschützt:
+Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schmutzunempfindlich und diebstahlgeschützt über eine **monolithische elastische PA12-Federzunge (Compliant Mechanism)**:
 
 ![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Abbildung 8.8: 3D-CAD-Detailansicht der berührungslosen magnetischen FOB-Anti-Theft-Verriegelung des Slide-in Deckels. Die innenliegende federbelastete Sperrklinke rastet im geschlossenen Zustand formschlüssig in die $90^\circ$-Kerbe des Schiebedeckels ein und wird durch das Magnetfeld des Smart-Keyfobs (PCBA 07) berührungslos nach unten freigegeben.*
+*Abbildung 8.8: 3D-CAD-Detailansicht der berührungslosen magnetischen FOB-Anti-Theft-Verriegelung des Slide-in Deckels. Eine einteilig im PA12-Gehäuse gedruckte elastische Federzunge (orange) mit eingelassenem Magnetanker rastet mit ihrer $90^\circ$-Sperrflanke formschlüssig in die Deckelkerbe ein. Nähert sich der Smart-Keyfob (PCBA 07) dem Zielkreis, zieht das Magnetfeld die Federzunge berührungslos nach unten und gibt den Deckel frei – ohne Drehachsen, ohne Schrauben und ohne lose Federn.*
 
 ```
-          SLIDE-IN DECKEL & FOB-MAGNETVERRIEGELUNG (SCHNITTANSICHT)
+          SLIDE-IN DECKEL & MONOLITHISCHE FEDERZUNGE (SCHNITTANSICHT)
 =================================================================================
 
-                POD-GEHÄUSEWAND (PA12-MJF, NICHT-MAGNETISCH)
+                POD-GEHÄUSEWAND (PA12-MJF, MONOLITHISCHER FEDERARM)
  ------------------------+------------------------------------+------------------
   [SMART-KEYFOB PCBA 07] |                                    | [VERRIEGELUNGS-
    (N52 Neodym-Magnet)   |                                    |  KERBE IM DECKEL]
@@ -227,27 +227,25 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schm
       +-----+-----+      |                                    |         | Deckel!
  ========================+====================================+=========+=======
   SLIDE-IN DECKEL        |                                              |
-                         |     M2 DREHACHSE                             v
-      +-----------+      |      (DREHPUNKT)                   +-----------------+
-      |STAHLANKER +------+-----------o------------------------+ SPERRKLINKE     |
-      |(Ø 6.0 mm) |      Hinterarm   |            Vorderarm   | (30° Ein / 90°)|
-      +-----+-----+      (X = 45 mm) |           (X = 75 mm)  +-----------------+
-            ^                        |                                  ^
-     [V4A-BLATTFEDER]                |                                  | Zieht nach
-      drückt Klinke nach oben!       |                                  | unten frei!
+                         |                                              v
+                         |     MONOLITHISCHER ELASTISCHER     +-----------------+
+                         |     PA12-FEDERARM                  | RASTKOPF MIT    |
+                         +------------------------------------+ MAGNET-EINSATZ  |
+                               (federt bei Magnetfeld elastisch| (30° Ein / 90°)|
+                                nach unten -> gibt frei!)     +-----------------+
 ```
 
 1. **Selbstverriegelndes Einschieben (Push-to-Close):**
    * Der Slide-in Deckel gleitet in seitlichen Führungsnuten über die Dichtlippe.
-   * Am Endanschlag gleitet die $30^\circ$-Einlaufschräge der Sperrklinke über die Gegenkante und schnappt durch die Federkraft der V4A-Blattfeder mit einem satten mechanischen Klick in die $90^\circ$-Rastkerbe des Deckels ein.
+   * Am Endanschlag gleitet die $30^\circ$-Einlaufschräge des Rastkopfs über die Gegenkante und schnappt durch die materialeigene Federelastizität des PA12-Arms mit einem satten mechanischen Klick in die $90^\circ$-Rastkerbe des Deckels ein.
    * Die umlaufende Silikon-Profildichtung wird dabei gleichmäßig komprimiert. Der Deckel schließt spaltfrei und bündig mit der Gehäusekontur ab (IP67). Ein gewaltsames Aufhebeln mit Schraubendrehern ist ohne sichtbare Zerstörung unmöglich.
 
 2. **Kontaktloses Entriegeln mit dem Smart-Keyfob (FOB Magnetic Release):**
    * Auf der Pod-Oberseite bzw. Frontseite ist ein dezenter taktiler Zielkreis ($\varnothing\,16\,\text{mm}$) eingeprägt.
-   * Nähert der Fahrer den Smart-Keyfob (`PCBA 07` mit integriertem N52-Permanentmagneten) oder seinen Fahrzeug-Zündschlüssel an den Zielkreis an, zieht das starke Magnetfeld den ferromagnetischen Stahlanker der Sperrklinke an.
-   * Die Klinke taucht nach unten weg und gibt die $90^\circ$-Rastkerbe frei.
+   * Nähert der Fahrer den Smart-Keyfob (`PCBA 07` mit integriertem N52-Permanentmagneten) oder seinen Fahrzeug-Zündschlüssel an den Zielkreis an, zieht das starke Magnetfeld den eingelassenen ferromagnetischen Anker der Federzunge an.
+   * Die elastische Zunge biegt sich um ca. $2{,}5\,\text{mm}$ nach unten und gibt die $90^\circ$-Rastkerbe frei.
    * Eine integrierte EPDM-Ausstoßfeder drückt den Deckel automatisch um **$10\dots 15\,\text{mm}$ heraus**, sodass er bequem mit einer Hand gegriffen und herausgezogen werden kann.
-   * **100 % Ausfallsicherheit:** Funktioniert rein permanentmagnetisch – benötigt 0 mA Ruhestrom und öffnet selbst bei komplett entleerter Motorradbatterie zuverlässig.
+   * **100 % Ausfallsicherheit:** Funktioniert rein permanentmagnetisch – benötigt 0 mA Ruhestrom, hat keinerlei mechanisch verschleißende Drehachsen oder Hebel und öffnet selbst bei komplett entleerter Motorradbatterie zuverlässig.
 
 3. **Verdeckte Innenverschraubung & Sabotageschutz:**
    * Die M4/M5-Edelstahlschrauben zur Befestigung des Pod-Gehäuses im Koffer oder am Rahmenrohr liegen im Inneren des Gehäuses unterhalb der Elektronikbucht.
@@ -316,11 +314,11 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ### 4.4 Direkte Intercom-Integration (Entfall der elektromechanischen Kassetten)
 
-Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Tauchanker-Stößel und klobigen Kassetten-Einschübe. Die Steuerung der Geräte erfolgt zeitgemäß digital über die zentrale Audio-Engine oder ergonomische Taster. Für Geräte mit mechanischen Tastern kommt die universelle Aktuatorschiene zum Einsatz:
+Durch die Umstellung auf das monolithische Monocoque-Pod-Gehäuse entfallen sämtliche klobigen Wechselschlitten und Kassetten-Einschübe. Stattdessen werden die jeweiligen OEM-Kommunikatoren (oder die Mini-Dry-Box) über passgenaue, flache Einleger (Inlays) direkt in der oberen Gerätekammer über der schützenden EPDM-Dry-Flap platziert:
 
-![Universelle Aktuatorschiene CAD](../images/cad/universal_actuator_slide_bracket_cad.png)
+![Monocoque Satelliten-Pod 4-Varianten Geräte-Einleger](../images/cad/pod_device_variants_quad.png)
 
-*Abbildung 8.12: 3D-CAD-Modell der universellen Doppel-Schiebeschlitten-Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`). Zwei unabhängig voneinander stufenlos auf Längsnuten justierbare Klemmschlitten mit 5V-Miniatur-Hubmagneten und weichen Shore A50 Silikonstempeln bedienen beliebige OEM-Taster (Sena, Cardo, Midland) direkt im oberen Gerätebett – 100 % kassettenfrei und ohne gerätespezifische Wechselschlitten.*
+*Abbildung 8.12: Die universellen modularen Geräte-Einleger des Monocoque-Satelliten-Pods im 4-Varianten-Vergleich (v.l.n.r.): 1. Hermetische Mini-Dry-Box mit Notschlüssel- und Papiere-Fächern, 2. OMM 2.4 GHz UCS Transceiver mit 5V RF-Booster, 3. Cardo Packtalk Edge auf OEM Air-Mount Magnethalterung, 4. Sena SPIDER X Slim im formschlüssigen EPDM-Bett. Alle Varianten nutzen dieselbe Monocoque-Wanne, dieselbe PCBA 03 Trägerplatine und dieselbe schützende Dry-Flap – 100 % kassettenfrei.*
 
 1. **Sena SPIDER X Slim (Referenz-Setup):**
    * Das extrem flache OEM-Gerät wird formschlüssig in ein EPDM-Formsitzbett in die obere Kammer gelegt.

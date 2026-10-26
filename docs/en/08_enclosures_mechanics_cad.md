@@ -174,27 +174,27 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, and the spacious upper equipment chamber with the universal dual-carriage actuator slide bracket.*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus M8 flush chassis socket upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, and the rear optional SMA antenna bulkhead port (with $0.4\,\text{mm}$ knockout membrane).*
 
 ![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle and end-wall Port A/B, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, universal dual-carriage actuator slide bracket, and form-fitting slide-in lid with FOB latch detent).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle, Port A M8 socket and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, form-fitting slide-in lid with FOB latch detent, and rear SMA antenna pass-through).*
 
 ---
 
 ### 4.2 Slide-in Lid Kinematics & FOB Magnetic Latch
 
-Opening and closing the satellite pod is completely intuitive, grime-impervious, and theft-protected:
+Opening and closing the satellite pod is completely intuitive, grime-impervious, and theft-protected via a **monolithic compliant PA12 spring latch**:
 
 ![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism for the slide-in lid. In the closed state, the internal spring-loaded locking pawl positively engages the $90^\circ$ retention notch of the slide-in lid and is drawn downward contact-free when the Smart Keyfob (PCBA 07) approaches.*
+*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism for the slide-in lid. A 1-piece compliant spring tongue (orange) printed directly into the PA12 housing wall features an embedded magnetic anchor disc and positively engages the $90^\circ$ retention notch of the slide-in lid. When the Smart Keyfob (PCBA 07) approaches the tactile target, magnetic attraction flexes the spring tongue downward contact-free, instantly releasing the lid -- with zero axles, zero screws, and zero loose springs.*
 
 ```
-          SLIDE-IN LID & FOB MAGNETIC LATCH (SECTION VIEW)
+       SLIDE-IN LID & COMPLIANT SPRING TONGUE LATCH (SECTION VIEW)
 =================================================================================
 
-                POD ENCLOSURE WALL (PA12-MJF, NON-MAGNETIC)
+                POD ENCLOSURE WALL (PA12-MJF, MONOLITHIC SPRING ARM)
  ------------------------+------------------------------------+------------------
   [SMART KEYFOB PCBA 07] |                                    | [RETENTION NOTCH
    (N52 Neodymium Core)  |                                    |  IN SLIDE LID]
@@ -205,27 +205,25 @@ Opening and closing the satellite pod is completely intuitive, grime-impervious,
       +-----+-----+      |                                    |         |
  ========================+====================================+=========+=======
   SLIDE-IN LID           |                                              |
-                         |     M2 PIVOT AXLE                            v
-      +-----------+      |      (FULCRUM)                     +-----------------+
-      |STEEL ANCHOR+-----+-----------o------------------------+ LOCKING PAWL    |
-      |(Ø 6.0 mm) |      Rear Arm    |            Front Arm   | (30° in / 90°)| |
-      +-----+-----+      (X = 45 mm) |           (X = 75 mm)  +-----------------+
-            ^                        |                                  ^
-     [V4A LEAF SPRING]               |                                  | Swivels downward
-      biases pawl upward!            |                                  | to release!
+                         |                                              v
+                         |     INTEGRAL ELASTIC               +-----------------+
+                         |     PA12 SPRING CANTILEVER         | LATCH HEAD WITH |
+                         +------------------------------------+ MAGNETIC INSERT |
+                               (flexes downward elastically   | (30° in / 90°)| |
+                                upon magnetic field -> frees!) +-----------------+
 ```
 
 1. **Push-to-Close Auto Latching:**
    * The slide-in lid glides in lateral guide grooves over the sealing lip.
-   * At the end-stop, the $30^\circ$ lead-in ramp of the locking pawl rides over the mating edge and snaps positively under V4A spring tension into the $90^\circ$ retention notch of the lid with a crisp mechanical click.
+   * At the end-stop, the $30^\circ$ lead-in ramp of the integral latch head rides over the mating edge and snaps positively under the material's elastic spring tension into the $90^\circ$ retention notch of the lid with a crisp mechanical click.
    * The perimeter silicone gasket compresses uniformly. The lid sits completely flush and gapless against the enclosure rim (IP67). Prying with tools is impossible without destroying the housing.
 
 2. **Contactless Unlocking with Smart Keyfob (FOB Magnetic Release):**
    * On the pod exterior, a subtle tactile target circle ($\varnothing\,16\,\text{mm}$) is molded.
-   * Approaching the Smart Keyfob (`PCBA 07` with N52 magnet) to this circle draws the ferromagnetic steel anchor inward.
-   * The locking pawl swivels downward, clearing the $90^\circ$ notch.
+   * Approaching the Smart Keyfob (`PCBA 07` with N52 magnet) to this circle magnetically attracts the embedded ferromagnetic anchor disc.
+   * The elastic spring arm flexes downward by $\approx 2.5\,\text{mm}$, clearing the $90^\circ$ notch.
    * An integrated EPDM kicker spring automatically pushes the lid outward by **$10\dots 15\,\text{mm}$**, allowing effortless single-handed removal.
-   * **100% Fail-Safe:** Operates purely via permanent magnetism -- requires 0 mA standby current and opens reliably even with a dead motorcycle battery.
+   * **100% Fail-Safe:** Operates purely via permanent magnetism -- requires 0 mA standby current, has zero mechanical pivot pins or loose levers to wear out, and opens reliably even with a dead motorcycle battery.
 
 3. **Concealed Internal Screws & Tamper Protection:**
    * The M4/M5 stainless mounting screws securing the pod inside the bag or to frame tubes reside beneath the lower electronics bay.
@@ -293,11 +291,11 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ### 4.4 Direct Intercom Integration (Zero Electromechanical Actuators)
 
-Eliminating the legacy cartridge sleds removes all problematic electromechanical solenoids and plungers. Communication control is 100% digital via Bluetooth audio or handlebar switches. For intercoms requiring mechatronic button presses, the universal dual-carriage actuator bracket is utilized:
+Transitioning to the monolithic monocoque pod eliminates all bulky cartridge sleds and mechanical ejection hardware. Instead, each OEM communicator (or the mini dry box) nests directly inside the upper equipment bay above the protective EPDM dry-flap using tailored, low-profile inlays:
 
-![Universal Actuator Slide Bracket CAD](../images/cad/universal_actuator_slide_bracket_cad.png)
+![Monocoque Satellite Pod 4-Variant Inlay Gallery](../images/cad/pod_device_variants_quad.png)
 
-*Figure 8.12: 3D CAD model of the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). Two independently adjustable sliding carriages on slotted rails with 5V miniature push-pull solenoids and soft Shore A50 silicone pusher tips operate any OEM communicator buttons (Sena, Cardo, Midland) directly in the upper equipment bay -- 100% cartridge-free and without hardware swaps.*
+*Figure 8.12: Universal modular equipment inlays for the monocoque satellite pod compared across all 4 configurations (from left to right): 1. Hermetic Mini Dry Box with emergency key & backup fuse compartments, 2. OMM 2.4 GHz UCS Transceiver with 5V RF booster, 3. Cardo Packtalk Edge docked on genuine OEM Air-Mount cradle, 4. Sena SPIDER X Slim in contoured EPDM bed. All variants share the exact same monocoque tub, same PCBA 03 carrier board, and same protective dry-flap -- 100% cartridge-free.*
 
 1. **Sena SPIDER X Slim (Reference Setup):**
    * The ultra-flat OEM communicator rests in a contoured EPDM pocket in the upper chamber.
