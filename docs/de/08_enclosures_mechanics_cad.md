@@ -195,39 +195,39 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das geräumige Monocoque-Gehäuse aus PA12 mit durchgehenden seitlichen U-Profil-Führungsnuten, die stirnseitigen Buchsendurchbrüche (Port A 4-Pin IP67 Magnet-Abrissschnittstelle oben bei $Z = 26{,}5\,\text{mm}$ mit internem Silikon-Flachbandkabel zu `J_BUS`, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem Cardo Packtalk Edge auf OEM Air-Mount Halterung, der horizontal in Längsnuten geführte Slide-in Deckel sowie die an der vertikalen Rückwand ($X = 150\,\text{mm}$) liegende optionale SMA-Antennendurchführung (ab Werk 100 % dicht mit $0{,}4\,\text{mm}$ Knockout-Membran; im Deckel befindet sich keine Antennendurchführung).*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Deutlich erkennbar ist die echte Slot-In Führungsmechanik: Die Gehäusewände laufen bis zur vollen Gehäusehöhe von $Z = 38{,}0\,\text{mm}$ durch. Auf der Innenseite beider Seitenwände befindet sich eine tiefe horizontale C-Nut (Führungsrille bei $Z = 32{,}0\dots 35{,}2\,\text{mm}$), in welcher die Führungsfedern des Slide-In Deckels gleiten. Darüber befindet sich eine massive, $2{,}8\,\text{mm}$ starke obere Haltenase (Dach/Hinterschnitt der Wand), die den Deckel nach oben hin formschlüssig sperrt – ein Abheben oder Aushebeln nach oben ist physisch unmöglich (kein Auflegedeckel!). Der Deckel kann ausschließlich horizontal über den hinteren Einschubschlitz ein- und ausgefahren werden. Im Inneren sichtbar: die tiefliegende PCBA 03 unter der EPDM-Dry-Flap, stirnseitig Port A (oben) und Port B (unten) sowie das Cardo Packtalk Edge mit aufgerasteter ultraflacher 2D-Kipphebel-Drückerplatte unterhalb des Deckels.*
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die U-Profil-Führungsnuten der Gehäusewände, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge sowie die rückseitige, vertikal in der Rückwand integrierte geschlossene SMA-Knockout-Membran).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, die auf das Cardo Air-Mount Cradle geklickte ultraflache 2D-Kipphebelplatte (zur automatischen zündungsgekoppelten Tastenbetätigung beim Ein-/Ausschalten), das Cardo Packtalk Edge sowie die rückseitige geschlossene SMA-Knockout-Membran).*
 
 ---
 
-### 4.2 Kinematik des Slide-in Deckels (Längs-Führungsnuten & 100 % innenliegender FOB-Diebstahlschutz)
+### 4.2 Kinematik des Slide-in Deckels (C-Nut-Führungsrille mit oberer Haltenase & 100 % innenliegender FOB-Diebstahlschutz)
 
-Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slide-In (Schiebedeckel)** mit horizontalem Einschub entlang präziser Längs-Führungsnuten:
+Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slide-In (Schiebedeckel)** mit horizontalem Einschub entlang einer verdeckten C-Führungsrille:
 
 ![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
 *Abbildung 8.8: 3D-CAD-Schnittansicht des 100 % innenliegenden FOB-Verriegelungsmechanismus: Aus Sicherheits- und Vandalismusschutzgründen existieren auf der Außenseite des Deckels keinerlei Tasten, Schieber oder Hebelwerkzeuge. Ein interner, federbelasteter Edelstahl-/Neodym-Riegelbolzen (Silber, $\varnothing\,4{,}0 \times 6{,}0\,\text{mm}$) sitzt in einer Sacklochbohrung auf der Deckelunterseite. Beim vollständigen Einschieben des Deckels schnappt der Bolzen durch die Rückstellfeder (Gold) nach unten in die Rastbohrung der vorderen Schottwand ein und blockiert den Deckel formschlüssig. Nähert sich der Smart-Keyfob (PCBA 07) der außen markierten RFID-Zone, zieht das N52-Magnetfeld den Bolzen kontaktlos nach oben in den Deckel – der Deckel kann nun nach hinten herausgeschoben werden.*
 
 ```
-       100 % INNENLIEGENDER FOB-MAGNETRIEGEL (SCHNITTANSICHT DURCH DIE STIRNWAND)
+      SLIDE-IN C-NUT MIT OBERER HALTENASE & 100 % INNENLIEGENDER FOB-MAGNETRIEGEL
 =================================================================================
 
             AUSSENBEREICH (GLATTE, VOLLKOMMEN MANIPULATIONSSICHERE DECKELFLÄCHE)
   ------------------------------------+------------------------------------------
-   [SMART-KEYFOB PCBA 07]             |  GLATTE DECKELOBERFLÄCHE
+   [SMART-KEYFOB PCBA 07]             |  GLATTE DECKELOBERFLÄCHE (Z = 35.2 mm)
     (N52 Neodym-Magnet)               |  (Keine Schieber, keine Knöpfe von außen!)
              v                        |
-       +-----------+                  |
-       | N52 MAGNET|                  |
-       |   (Key)   |                  |
-       +-----+-----+                  |
-  ===========|========================+==========================================
-   SLOT-IN   | (Magnetfeld zieht      |  SLIDE-IN DECKEL (PA12, mit Führungsfedern)
-   DECKEL    v  Bolzen nach oben)     |
-        +----+----+                   |
+       +-----------+                  |    +-----------------------------+
+       | N52 MAGNET|                  |    | OBERE WAND-HALTENASE (DACH) | (Z=35.2..38mm)
+       |   (Key)   |                  |    | Sperrt Deckel nach OBEN!    |
+       +-----+-----+                  |    +--------------+--------------+
+  ===========|========================+===================|======================
+   SLIDE-IN  | (Magnetfeld zieht      |  SLIDE-IN DECKEL  | [C-FÜHRUNGSRILLE]
+   DECKEL    v  Bolzen nach oben)     |  (mit seitlichen  v  (Z=32.0..35.2mm)
+        +----+----+                   |   Führungsfedern im Wandprofil)
         | [FEDER] | (Rückstellfeder)  |
         +----+----+                   |
              |                        |
@@ -240,10 +240,11 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slide-In 
         [RASTBOHRUNG]  <-- 100 % INNENLIEGEND! Von außen physisch unzugänglich!
 ```
 
-1. **Horizontales Einschieben (Slide-In in X-Richtung):**
-   * Der Deckel wird von hinten horizontal in den Einschubschlitz der Gehäusewanne eingeführt.
-   * Durchgehende seitliche Führungsfedern greifen spielfrei in die U-Profil-Führungsnuten der Gehäuseseitenwände.
-   * Am vorderen Endanschlag dichtet eine integrierte EPDM-Profildichtung den Deckel umlaufend absolut wasser- und staubdicht ab (IP67).
+1. **Horizontales Einschieben in die C-Nut (Kein Auflegedeckel!):**
+   * Die linke und rechte Seitenwand des Monocoque-Gehäuses sind nicht nach oben offen abgeschnitten, sondern bilden ein massives **C-Profil**.
+   * Die eigentliche **Führungsrille ($Z = 32{,}0\dots 35{,}2\,\text{mm}$)** ist auf der Innenseite der Gehäusewand $2{,}0\,\text{mm}$ tief eingefräst/eingespritzt.
+   * Oberhalb dieser Rille ragt die Gehäusewand als **massive obere Haltenase ($Z = 35{,}2\dots 38{,}0\,\text{mm}$)** nach innen.
+   * Die Führungsfedern des Deckels gleiten vollständig unterhalb dieser Haltenase. Ein vertikales Abheben oder Aufhebeln ist formschlüssig zu 100 % gesperrt – der Deckel kann nur horizontal nach hinten entlang der X-Achse ausgefahren werden!
 
 2. **100 % Innenliegende Diebstahlsicherung (Zero-External-Access):**
    * **Manipulationssicherheit:** Ein außenliegender Schieber oder Knopf würde es jedem Passanten am geparkten Motorrad ermöglichen, den Deckel zu öffnen und Intercom, Papiere oder Notgeld zu entwenden.
@@ -338,17 +339,22 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
 
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
-   * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt an der Rückseite des Cradles heraus, verläuft geschützt unter dem Cradle hindurch und mündet unter dem EPDM-Zwischendeckel direkt in `PCBA 03`.
-   * **Volldigitale Integration (Zero-Actuator-Architektur):**
-     * In OpenMotorBridge v10.0 erfolgt die Steuerung des Cardo Packtalk Edge **100 % digital über Bluetooth 5.4 LE Audio / Cardo BLE API** über den Qualcomm QCC3084 auf der Zentralbox oder die Lenkertaster.
-     * **Mechanischer Hintergrund:** Eine vertikale Montage von Hubmagneten über dem Cardo Packtalk Edge ist im ultraflachen Monocoque-Pod ($32\,\text{mm}$ Innenhöhe) geometrisch weder sinnvoll noch notwendig:
-       1. **Bauhöhen-Konflikt:** Das Cardo Packtalk Edge erreicht auf der Air-Mount Halterung eine Scheitelhöhe von $Z = 21{,}5\,\text{mm}$. Bis zur Deckelunterkante ($Z = 32{,}0\,\text{mm}$) verbleiben lediglich **$10{,}5\,\text{mm}$ lichte Höhe** – handelsübliche vertikale Hubmagnete ($18\dots 30\,\text{mm}$ Bauhöhe) würden mit dem Slide-in Deckel kollidieren.
-       2. **2D-Tastenversatz (X- und Y-Achse):** Die Cardo-Tasten liegen nicht auf einer geraden 1D-Linie, sondern sind diagonal versetzt (vordere Media-Taste bei $X = 22\,\text{mm}, Y = 13\,\text{mm}$; hintere Intercom-Taste bei $X = 63\,\text{mm}, Y = 28\,\text{mm}$ – ein Tiefenversatz von **$15\,\text{mm}$ in der Y-Achse**). Eine 1-achsige Schiene kann diese Tasten geometrisch nicht gleichzeitig anfahren.
-     * Durch die **rein digitale BLE-Ansteuerung** entfallen sämtliche mechanischen Stößel, Bügel und Justageprobleme komplett: **0 % Verschleiß, 0 % Kollisionsgefahr und maximaler freier Bauraum!**
-     * *(Hinweis: Für Legacy-Geräte oder Handfunkgeräte, die zwingend einen physischen Druckknopf benötigen, existiert das optionale 2D-Schlittenmodell `012_universal_actuator_slide_bracket.scad` mit flachliegenden Hebel-Mikroaktoren für Sondergehäuse mit erhöhtem Deckel).*
+   * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt an der Rückseite des Cradles heraus, verläuft geschützt unter dem Cradle hindurch und mündet unter dem EPDM-Zwischendeckel direkt in `PCBA 03` (Header `J_AUDIO_PWR`).
+   * **Die Hardware-Realität geschlossener OEM-Headsets (Power-On / Power-Off):**
+     * Während native OMB-Transceiver (OMM 2.4 GHz UCS) echtes **USB-Power-On** beherrschen (booten vollautomatisch, sobald 5V anliegen), besitzen kommerzielle Intercoms (Cardo Packtalk Edge/Neo, Sena SPIDER X/50S) **weder USB-Power-On noch Bluetooth-Wakeup im ausgeschalteten Zustand**:
+       * Ist ein Headset ausgeschaltet, schläft sein interner Prozessor – ein Aufwecken über BLE ist technisch unmöglich.
+       * Zum Einschalten bei Zündung-AN (KL15) müssen beim Cardo zwingend **Media-Taste + Intercom-Taste simultan für 2,0 s** gedrückt werden!
+       * Zum Ausschalten beim Parken (um die interne Batterie nicht zu leeren) muss dieselbe Tastenkombination erneut gedrückt werden.
+   * **Die mechatronische Lösung: Die ultraflache 2D-Kipphebel-Drückerplatte (`012_universal_actuator_slide_bracket.scad`):**
+     * Um das Headset vollautomatisch zündungsgekoppelt ein- und auszuschalten, ohne mit dem Slide-in Deckel zu kollidieren, wurde eine spezialisierte **2D-Kipphebel-Drückerplatte** entwickelt:
+
+![Cardo Packtalk Edge mit ultraflacher 2D-Kipphebel-Drückerplatte](../images/cad/universal_actuator_slide_bracket_cad.png)
+
+*Abbildung 8.13: Die ultraflache 2D-Kipphebel-Drückerplatte (`012_universal_actuator_slide_bracket.scad`) aufgerastet auf dem Cardo Air-Mount Cradle: 1. Bauhöhe nur $6{,}5\,\text{mm}$ (passt mit $> 4\,\text{mm}$ Sicherheitsabstand in den $10{,}5\,\text{mm}$ Freiraum unter dem Slide-in Deckel). 2. Flachliegende Horizontal-Aktuatoren treiben zwei $90^\circ$-Winkelhebel an – vertikale Spulenkollisionen sind ausgeschlossen. 3. Alle Schwenklager und Dome ragen nach UNTEN in den Freiraum neben den Tasten, die Oberseite bleibt plan. 4. Exakte 2D-Tastenanpassung: Vorderer Hebel (orange) bei $X = 22{,}0\,\text{mm}, Y = 13{,}0\,\text{mm}$ (Media/Power); hinterer Hebel (blau) bei $X = 63{,}0\,\text{mm}, Y = 28{,}0\,\text{mm}$ (Intercom/Power – $15\,\text{mm}$ Tiefenversatz in Y!). Weiche Shore A50 TPU-Pads drücken beide Tasten bei Zündung-AN simultan für 2,0 s. Das Flachbandkabel führt nach vorne unter der Dry-Flap direkt an `J_ACT` auf `PCBA 03`.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * Das UCS-Modul ($78 \times 44 \times 14\,\text{mm}$) und der 5V RF-Power-Booster ($32 \times 24 \times 9\,\text{mm}$) ruhen in einem maßgefertigten, formschlüssigen EPDM-Equipmentbett ($90 \times 52\,\text{mm}$).
+   * Das OMM-System beherrscht echtes **USB-Power-On**: Sobald die Zentralbox bei KL15 die 5V/12V-Bordbusspannung freigibt, bootet der Transceiver vollautomatisch ohne jegliche mechanische Tasterbetätigung.
    * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0). Ein internes Koaxialkabel verbindet den SMA-Ausgang direkt mit der Rückwand-Antennendurchführung.
 
 4. **PMR446 Handfunkgeräte & Midland Intercoms:**

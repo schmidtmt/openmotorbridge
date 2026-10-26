@@ -175,39 +175,39 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, spacious monolithic PA12 housing with continuous longitudinal U-profile guide grooves, end-wall connector ports (Port A 4-Pin IP67 magnetic break-away receptacle upper at $Z = 26.5\,\text{mm}$ with internal silicone flat ribbon cable to `J_BUS`, Port B USB-C lower at $Z = 11.5\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, the horizontally guided slide-in lid, and the rear optional SMA antenna bulkhead port located on the vertical rear end-wall at $X = 150\,\text{mm}$ (factory sealed with $0.4\,\text{mm}$ solid knockout membrane; the top lid contains no antenna pass-through).*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Clearly visible is the authentic slot-in guide mechanics: The housing sidewalls run up to the full height of $Z = 38.0\,\text{mm}$. On the inner face of both sidewalls is a deep horizontal C-groove ($Z = 32.0\dots 35.2\,\text{mm}$) in which the guide tongues of the slide-in lid glide. Above this groove is a solid $2.8\,\text{mm}$ thick PA12 upper retaining lip (housing ceiling overhang) that locks the lid positively against vertical lifting -- prying or lifting off from above is physically impossible (not a drop-on lid!). The lid can only slide horizontally through the rear entry slot. Inside the chamber: PCBA 03 beneath the protective EPDM dry-flap, end-wall Port A (upper) and Port B (lower), and the Cardo Packtalk Edge with the snapped-on ultra-flat 2D rocker actuator plate seated beneath the lid.*
 
 ![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod illustrating authentic horizontal slide-in kinematics: The slide-in lid retracts backwards along the X-axis out of the rear entry slot. Clearly visible are the continuous lateral guide tongues along the lid flanks, the U-profile guide grooves in the housing sidewalls, the monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, and rear sealed SMA knockout membrane integrated into the vertical end-wall).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod illustrating authentic horizontal slide-in kinematics: The slide-in lid retracts backwards along the X-axis out of the rear entry slot. Clearly visible are the continuous lateral guide tongues along the lid flanks, the deep C-groove guide rails in the housing sidewalls with upper retaining lip, the monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, the ultra-flat 2D dual-rocker actuator plate snapped onto the Cardo Air-Mount cradle (for automatic ignition-coupled power-on/off), Cardo Packtalk Edge, and rear sealed SMA knockout membrane).*
 
 ---
 
-### 4.2 Slide-in Lid Kinematics (Longitudinal Guide Grooves & 100% Internal Anti-Theft Lock)
+### 4.2 Slide-in Lid Kinematics (C-Groove Rails with Retaining Overhang & 100% Internal Anti-Theft Lock)
 
-Opening and closing the satellite pod operates as a genuine **Slide-in mechanism** with horizontal sliding along precision longitudinal guide grooves:
+Opening and closing the satellite pod operates as a genuine **Slide-in mechanism** with horizontal sliding along concealed internal C-groove rails:
 
 ![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
 *Figure 8.8: 3D CAD cross-section view of the 100% internal magnetic deadbolt mechanism. For maximum anti-theft security and tamper protection, the lid exterior features zero buttons, sliders, or pry gaps. An internal spring-loaded stainless steel / neodymium deadbolt pin (silver, $\varnothing\,4.0 \times 6.0\,\text{mm}$) is housed in a blind bore on the lid underside. When fully slid into the housing, the pin drops down under spring tension (gold) into a blind socket in the tub front bulkhead, deadlocking the lid positively. Approaching the Smart Keyfob (PCBA 07) over the exterior RFID target zone magnetically lifts the deadbolt upward into the lid, allowing the lid to slide freely backwards.*
 
 ```
-       100% INTERNAL FOB MAGNETIC DEADBOLT (BULKHEAD SECTION VIEW)
+      SLIDE-IN C-GROOVE WITH UPPER OVERHANG & 100% INTERNAL FOB DEADBOLT
 =================================================================================
 
             EXTERIOR ENVIRONMENT (100% SMOOTH, TAMPER-PROOF LID SURFACE)
   ------------------------------------+------------------------------------------
-   [SMART KEYFOB PCBA 07]             |  SMOOTH LID TOP SURFACE
+   [SMART KEYFOB PCBA 07]             |  SMOOTH LID TOP SURFACE (Z = 35.2 mm)
     (N52 Neodymium Core)              |  (Zero external sliders, buttons, or gaps!)
              v                        |
-       +-----------+                  |
-       | N52 MAGNET|                  |
-       |   (Key)   |                  |
-       +-----+-----+                  |
-  ===========|========================+==========================================
-   SLIDE-IN  | (Magnetic flux lifts   |  SLIDE-IN LID (PA12, with guide tongues)
-   LID       v  deadbolt upward)      |
-        +----+----+                   |
+       +-----------+                  |    +-----------------------------+
+       | N52 MAGNET|                  |    | UPPER WALL OVERHANG (ROOF)  | (Z=35.2..38mm)
+       |   (Key)   |                  |    | Locks lid against UPWARD pull!
+       +-----+-----+                  |    +--------------+--------------+
+  ===========|========================+===================|======================
+   SLIDE-IN  | (Magnetic flux lifts   |  SLIDE-IN LID     | [C-GROOVE CHANNEL]
+   LID       v  deadbolt upward)      |  (with lateral    v  (Z=32.0..35.2mm)
+        +----+----+                   |   guide tongues)
         | [SPRING]| (Return spring)   |
         +----+----+                   |
              |                        |
@@ -220,9 +220,11 @@ Opening and closing the satellite pod operates as a genuine **Slide-in mechanism
         [LATCH SOCKET]  <-- 100% INTERNAL! Physically inaccessible from outside!
 ```
 
-1. **Horizontal Slide-in Action (X-Axis Insertion):**
-   * The lid is inserted horizontally from the rear into the insertion slot of the tub.
-   * Continuous lateral guide tongues engage the U-profile guide grooves in the housing sidewalls with zero vertical play.
+1. **Horizontal Slide-in Action into C-Groove Rails (Zero Drop-on Lifting):**
+   * The left and right sidewalls of the monocoque housing are not open at the top, but form a solid **C-channel profile**.
+   * The actual **guide groove ($Z = 32.0\dots 35.2\,\text{mm}$)** is molded $2.0\,\text{mm}$ deep into the inside face of each sidewall.
+   * Above this groove, the wall projects inward as a **continuous upper retaining lip ($Z = 35.2\dots 38.0\,\text{mm}$)**.
+   * The lid's guide tongues glide completely underneath this lip. Upward lifting or prying is 100% blocked -- the lid can only slide horizontally out the rear slot!
    * At the forward end-stop, a perimeter EPDM compression seal hermetically seals the lid gap (IP67).
 
 2. **100% Internal Anti-Theft Protection (Zero External Access):**
@@ -317,17 +319,22 @@ In the following 4-variant inspection view (featuring an ergonomically cut-open 
 
 2. **Cardo Packtalk Edge / Pro:**
    * The original **Cardo Air-Mount magnetic cradle** screws directly to the housing bed with 2x M3 screws.
-   * The Cardo clicks onto its OEM magnetic mount; the OEM audio whip exits at the rear underside of the cradle, routes protected under the cradle, and plugs beneath the EPDM dry-flap directly into `PCBA 03`.
-   * **Full Digital Integration (Zero-Actuator Architecture):**
-     * In OpenMotorBridge v10.0, the Cardo Packtalk Edge is controlled **100% digitally via Bluetooth 5.4 LE Audio / Cardo BLE API** via the Qualcomm QCC3084 gateway on the Central Box or via the handlebar under-perch thumb switches.
-     * **Mechanical Engineering Rationale:** Mounting electromechanical push solenoids above the Cardo Packtalk Edge inside the ultra-flat monocoque pod ($32\,\text{mm}$ interior height) is physically impractical and unnecessary:
-       1. **Vertical Clearance Conflict:** The Cardo Packtalk Edge on its Air-Mount cradle reaches a crest height of $Z = 21.5\,\text{mm}$. The remaining vertical space to the lid underside ($Z = 32.0\,\text{mm}$) is only **$10.5\,\text{mm}$** -- standard miniature push solenoids ($18\dots 30\,\text{mm}$ overall length) physically collide with the slide-in lid.
-       2. **2D Diagonal Key Offset (X- and Y-Axes):** The Cardo keys are not aligned in a 1D straight line, but are staggered diagonally across the body: front Media key at $X = 22\,\text{mm}, Y = 13\,\text{mm}$; rear Intercom key at $X = 63\,\text{mm}, Y = 28\,\text{mm}$ -- a lateral offset of **$15\,\text{mm}$ along the depth axis ($Y$)**. A single 1D linear rail along $X$ cannot hit both keys simultaneously.
-     * Using **pure digital BLE remote control** completely eliminates all mechanical pushers, brackets, and alignment headaches: **0% wear, 0% collision risk, and 100% maximum interior volume!**
-     * *(Note: For legacy communicators or handheld PMR radios requiring a physical button push, the optional 2D carriage model `012_universal_actuator_slide_bracket.scad` with horizontal lever micro-servos is documented as a specialized accessory for custom high-roof enclosures).*
+   * The Cardo clicks onto its OEM magnetic mount; the OEM audio whip exits at the rear underside of the cradle, routes protected under the cradle, and plugs beneath the EPDM dry-flap directly into `PCBA 03` (header `J_AUDIO_PWR`).
+   * **The Hardware Reality of Commercial OEM Headsets (Power-On / Power-Off):**
+     * While native OMB transceivers (OMM 2.4 GHz UCS) feature native **USB-Power-On** (booting automatically whenever 5V VBUS is energized), commercial intercoms (Cardo Packtalk Edge/Neo, Sena SPIDER X/50S) **have neither USB-Power-On nor Bluetooth-Wakeup in their powered-off state**:
+       * When a headset is turned OFF, its internal processor is dormant -- waking it up over BLE is physically impossible.
+       * To power on upon vehicle ignition ON (KL15), the Cardo strictly requires pressing **Media Key + Intercom Key simultaneously for 2.0 s**!
+       * To power off when parking (preventing parasitic battery drain), the same key combination must be pressed again.
+   * **The Mechatronic Solution: Ultra-Low-Profile 2D Rocker Actuator Plate (`012_universal_actuator_slide_bracket.scad`):**
+     * To automate ignition-coupled power-on and power-off without colliding with the slide-in lid, a dedicated **2D rocker actuator plate** was engineered:
+
+![Cardo Packtalk Edge with Ultra-Flat 2D Rocker Actuator Plate](../images/cad/universal_actuator_slide_bracket_cad.png)
+
+*Figure 8.13: Ultra-flat 2D rocker actuator plate (`012_universal_actuator_slide_bracket.scad`) snapped onto the Cardo Air-Mount cradle: 1. Overall height is only $6.5\,\text{mm}$ (fits with $> 4\,\text{mm}$ clearance inside the $10.5\,\text{mm}$ headroom below the slide-in lid). 2. Flat horizontal micro-actuators drive two $90^\circ$ bellcrank rockers -- vertical coil collisions are completely eliminated. 3. All pivot journals and domes point DOWNWARD into the negative space beside the keys, leaving the top surface flush. 4. Precise 2D key alignment: Front rocker (orange) at $X = 22.0\,\text{mm}, Y = 13.0\,\text{mm}$ (Media/Power); rear rocker (blue) at $X = 63.0\,\text{mm}, Y = 28.0\,\text{mm}$ (Intercom/Power -- $15\,\text{mm}$ lateral Y-axis offset!). Soft Shore A50 TPU pads press both keys simultaneously for 2.0 s upon KL15 ignition ON. The flat flex cable routes forward under the dry-flap directly to `J_ACT` on `PCBA 03`.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * The full-scale UCS transceiver module ($78 \times 44 \times 14\,\text{mm}$) and the 5V RF power booster ($32 \times 24 \times 9\,\text{mm}$) rest securely inside a tailored high-density EPDM equipment bed ($90 \times 52\,\text{mm}$).
+   * The OMM system natively supports **USB-Power-On**: As soon as the Central Box energizes the 5V/12V bus at KL15, the transceiver boots automatically without requiring any physical button presses.
    * Digital USB audio and power route over a short 90° USB-C ribbon cable directly to `PCBA 03` (USB Audio Class 2.0). An internal coaxial pigtail connects the gold SMA output directly to the rear bulkhead antenna fitting.
 
 4. **PMR446 Radios & Midland Communicators:**

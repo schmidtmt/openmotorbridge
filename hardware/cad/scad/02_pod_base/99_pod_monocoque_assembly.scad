@@ -116,7 +116,7 @@ module pod_monocoque_full_assembly() {
             pod_dry_flap();
     }
 
-    // 7. Upper Equipment Bay: Intercom Module & Air-Mount Cradle
+    // 7. Upper Equipment Bay: Cardo Packtalk Edge WITH 2D Dual-Rocker Plate
     translate([50.0, (POD_OUTER_W - 46.0)/2.0, POD_WALL + 1.5 + EXP_BRACKET_Z]) {
         // OEM Air-Mount Cradle screwed to floor
         dummy_cardo_oem_airmount_cradle();
@@ -124,20 +124,29 @@ module pod_monocoque_full_assembly() {
         // Packtalk Edge Unit clicked into cradle
         translate([0, 0, 3.5])
             dummy_cardo_packtalk_edge(with_actuators = false);
+
+        // Ultra-Low-Profile 2D Dual-Rocker Actuator Plate (Clicked onto cradle, height only 6.5 mm!)
+        // Enables fully automatic ignition-coupled Power-On / Power-Off (KL15) for Cardo
+        translate([-1.0, 0, 22.0])
+            cardo_edge_2d_rocker_plate(show_actuators = true);
     }
 
-    // 8. Tool-Free Slide-In Lid
+    // 8. Tool-Free Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.4 mm)
+    // Firmly captured and locked from above by the solid PA12 upper retaining lip (Z = 35.2 to 38.0 mm)
+    lid_z_pos = 32.4;
+
     if (VIEW_MODE == "cutaway") {
         difference() {
-            translate([2.0 + SLIDE_LID_X, 3.0, POD_OUTER_H - 3.5 + EXP_LID_Z]) {
+            translate([2.0 + SLIDE_LID_X, (POD_OUTER_W - 60.5)/2.0, lid_z_pos + EXP_LID_Z]) {
                 color([0.22, 0.23, 0.25, 0.95])
                     pod_slide_lid();
             }
+            // Cut away near corner to expose internal C-groove engagement and equipment
             translate([-10.0, -10.0, -10.0])
-                cube([POD_OUTER_L + 60.0, POD_OUTER_W/2.0 + 10.0, POD_OUTER_H + 50.0]);
+                cube([85.0, POD_OUTER_W/2.0 + 5.0, POD_OUTER_H + 50.0]);
         }
     } else {
-        translate([2.0 + SLIDE_LID_X + EXP_LID_X, 3.0, POD_OUTER_H - 3.5 + EXP_LID_Z]) {
+        translate([2.0 + SLIDE_LID_X + EXP_LID_X, (POD_OUTER_W - 60.5)/2.0, lid_z_pos + EXP_LID_Z]) {
             color([0.22, 0.23, 0.25, (VIEW_MODE == "xray" ? 0.35 : 0.95)])
                 pod_slide_lid();
         }

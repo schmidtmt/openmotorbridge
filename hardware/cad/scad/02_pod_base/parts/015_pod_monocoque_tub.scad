@@ -127,30 +127,35 @@ module pod_monocoque_tub() {
 
         // --- SUBTRACTIONS ---
 
-        // 8. Main Internal Chamber (open at top for slide-in lid and device access)
-        translate([POD_WALL, POD_WALL, POD_WALL]) {
+        // 8. Main Internal Chamber
+        translate([POD_WALL + 1.0, POD_WALL + 1.0, POD_WALL]) {
             cube([
-                POD_OUTER_L - 2*POD_WALL,
-                POD_OUTER_W - 2*POD_WALL,
+                POD_OUTER_L - 2*POD_WALL - 2.0,
+                POD_OUTER_W - 2*POD_WALL - 2.0,
                 POD_OUTER_H - POD_WALL + 0.5
             ], center=false);
         }
-        // 9. Top Rim Continuous Slide-in Guide Grooves & Rear Entry Slot (Einschubschlitz)
-        // Left guide groove (Y = POD_WALL - 1.6) runs from front stop (X = 6.0) all the way through rear wall (X = POD_OUTER_L + 1.0)
-        translate([6.0, POD_WALL - 1.6, POD_OUTER_H - 4.5])
-            cube([POD_OUTER_L - 5.0, 2.0, 3.2], center=false);
-        // Right guide groove (Y = POD_OUTER_W - POD_WALL - 0.4)
-        translate([6.0, POD_OUTER_W - POD_WALL - 0.4, POD_OUTER_H - 4.5])
-            cube([POD_OUTER_L - 5.0, 2.0, 3.2], center=false);
 
-        // Rear Slide-in Entry Opening (Lid slides in horizontally from rear along X)
-        translate([POD_OUTER_L - POD_WALL - 0.5, POD_WALL - 1.6, POD_OUTER_H - 4.8])
-            cube([POD_WALL + 2.0, POD_OUTER_W - 2*POD_WALL + 3.2, 5.0], center=false);
+        // 9. Prominent C-Profile Guide Grooves & Upper Retaining Lips (Rille in der Gehäusewand)
+        // Left C-groove: runs inside left wall (Y = 1.5 to 5.0 mm, Z = 32.0 to 35.2 mm)
+        // Leaving a solid PA12 upper retaining lip (Dach/Hinterschnitt) from Z = 35.2 to 38.0 mm!
+        translate([6.0, 1.5, 32.0])
+            cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
+
+        // Right C-groove: runs inside right wall (Y = POD_OUTER_W - 5.5 to POD_OUTER_W - 1.5 mm, Z = 32.0 to 35.2 mm)
+        // Leaving a solid PA12 upper retaining lip from Z = 35.2 to 38.0 mm!
+        translate([6.0, POD_OUTER_W - 5.5, 32.0])
+            cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
+
+        // Rear Slide-in Insertion Slot (Einschubschlitz in rear bulkhead at X = 150 mm)
+        // The slot is open at the rear for the slide-in lid to enter horizontally along X
+        translate([POD_OUTER_L - POD_WALL - 2.0, 1.5, 31.8])
+            cube([POD_WALL + 4.0, POD_OUTER_W - 3.0, 3.8], center=false);
 
         // Internal FOB Anti-Theft Magnetic Latch Socket (100% INTERNAL - Zero outside access!)
-        // Blind hole at X = 16.0 mm, Y = POD_OUTER_W/2 for the spring-loaded magnetic deadbolt
-        translate([16.0, POD_OUTER_W/2.0, POD_OUTER_H - 9.0])
-            cylinder(r=2.5, h=5.5, center=false, $fn=24);
+        // Blind hole at X = 16.0 mm, Y = POD_OUTER_W/2 in the bulkhead floor
+        translate([16.0, POD_OUTER_W/2.0, 26.0])
+            cylinder(r=2.5, h=6.5, center=false, $fn=24);
 
         // 10. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro Style Bulkhead Pocket)
         // Rectangular flange pocket (15.0 x 8.0 mm) with silicone flat-cable internal passthrough
