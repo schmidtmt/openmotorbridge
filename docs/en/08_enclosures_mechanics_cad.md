@@ -157,16 +157,17 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 1. **Type B (Universal Monocoque Pod Enclosure):** A 100% symmetrical monocoque enclosure ($140.0 \times 65.0 \times 32.0\,\text{mm}$ with $128.0 \times 58.0 \times 26.0\,\text{mm}$ clear internal chamber) permanently mounted in the saddlebag, on the subframe, or on crash bars.
 2. **Slide-in Lid with Push-to-Close Automatic Latching:** A sliding lid guided in perimeter sealing channels that positively latches at the end-stop with an audible mechanical click, compressing the perimeter silicone gasket (IP67).
-3. **Invisible FOB Magnetic Latch:** Locking is handled by an internal spring-loaded magnetic latch. To open, the rider approaches the Smart Keyfob (`PCBA 07` with N52 neodymium core) to the marked housing target. The magnetic field draws the locking pawl back contact-free, allowing the lid to spring outward by $10\,\text{mm}$ -- 100% tool-free, without external locks or pushbuttons, fully tamper- and theft-proof.
+1. **Type B (Universal Monocoque Pod Enclosure):** A 100% bilateral monocoque chassis ($150.0 \times 70.0 \times 38.0\,\text{mm}$ with $145.0 \times 65.0 \times 32.0\,\text{mm}$ clear internal chamber -- **over 40% more usable interior volume** than the former cartridge system), permanently mounted inside the saddlebag, onto the rear subframe, or to crash bars.
+2. **Slot-in Lid with 4-Tooth Central Latch:** A true slot-in lid that positively enters the enclosure well, locking via 4 lateral locking teeth (2 on each flank) into sidewall undercut pockets. An ergonomic central pinch slider on the lid exterior compresses the return spring to retract the teeth for effortless opening.
+3. **Invisible FOB Magnetic Latch:** Locking can additionally be secured and released contact-free via the Smart Keyfob (`PCBA 07` with N52 neodymium core) -- 100% tool-free, without external locks or pushbuttons, fully tamper- and theft-proof.
 4. **Two-Zone Architecture with Intermediate Dry-Flap:**
    * **Lower Electronics Zone:** Houses the `PCBA 03` interface board ($42.0 \times 48.0\,\text{mm}$) with native USB-PD power supply and 4-wire automotive backbone.
    * **Chassis-Mounted Bulkhead Ports (Port A & Port B):** Both external interfaces are horizontally centered ($Y = 35.0\,\text{mm}$) on the short bulkhead end-wall and stacked vertically:
-     * **Port A (Bus Socket, top at $Z = 26.5\,\text{mm}$):** Weatherproof M8/automotive receptacle connected via a short internal 4-conductor silicone ribbon cable to header `J_BUS` on `PCBA 03`.
+     * **Port A (Bus Interface, top at $Z = 26.5\,\text{mm}$):** Flush 4-Pin IP67 magnetic break-away receptacle (HytePro style) connected via an ultra-flat internal 4-conductor silicone ribbon cable (`VCC_BUS`, `USB_D-`, `USB_D+`, `GND`) directly to header `J_BUS` on `PCBA 03`.
      * **Port B (USB-C Charging Socket, bottom at $Z = 11.5\,\text{mm}$):** Deeply recessed ($7.0\,\text{mm}$) form-fitting USB-C socket (30W USB-PD) connected via an ultra-flexible 4-conductor internal silicone ribbon cable to header `J_USB_OUT` on `PCBA 03`.
      * This guarantees 100% bilateral symmetry (left and right saddlebag pods are ergonomically identical) and transfers all mechanical plugging and lever stresses directly into the rigid PA12 chassis wall -- leaving the PCB completely isolated from mechanical strain.
-   * **Intermediate Splash-Guard Cover (Dry-Flap):** A hinged or slide-in silicone/EPDM intermediate barrier hermetically shields the PCB and cable headers from dirt and water.
-   * **Upper Equipment Chamber / Dry Box:** Directly accommodates the respective OEM communicator (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446) as well as the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
-
+   * **Intermediate Splash-Guard Cover (Dry-Flap):** A hinged or removable silicone/EPDM intermediate barrier hermetically shields the PCB and cable headers from dirt and water.
+   * **Upper Equipment Chamber / Dry Box:** Offers a generous $145 \times 65\,\text{mm}$ floor area directly accommodating Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446. When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
 
 ---
 
@@ -174,56 +175,54 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus M8 flush chassis socket upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, and the rear optional SMA antenna bulkhead port (with $0.4\,\text{mm}$ knockout membrane).*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, spacious monolithic PA12 housing, end-wall connector ports (Port A 4-Pin IP67 magnetic break-away receptacle upper at $Z = 26.5\,\text{mm}$ with internal silicone flat ribbon cable to `J_BUS`, Port B USB-C lower at $Z = 11.5\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, the 4 lateral locking teeth of the slot-in lid, and the rear optional SMA antenna bulkhead port (with $0.4\,\text{mm}$ solid knockout membrane).*
 
 ![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle, Port A M8 socket and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, form-fitting slide-in lid with FOB latch detent, and rear SMA antenna pass-through).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, slot-in lid with 4 lateral locking teeth and central spring slider, and rear sealed SMA knockout membrane).*
 
 ---
 
-### 4.2 Slide-in Lid Kinematics & FOB Magnetic Latch
+### 4.2 Slot-in Lid Kinematics (4 Lateral Teeth & Central Spring Slider)
 
-Opening and closing the satellite pod is completely intuitive, grime-impervious, and theft-protected via a **monolithic compliant PA12 spring latch**:
+Opening and closing the satellite pod operates as a true **Slot-In mechanism** with 4 lateral locking teeth and central spring tensioning:
 
 ![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism for the slide-in lid. A 1-piece compliant spring tongue (orange) printed directly into the PA12 housing wall features an embedded magnetic anchor disc and positively engages the $90^\circ$ retention notch of the slide-in lid. When the Smart Keyfob (PCBA 07) approaches the tactile target, magnetic attraction flexes the spring tongue downward contact-free, instantly releasing the lid -- with zero axles, zero screws, and zero loose springs.*
+*Figure 8.8: 3D CAD detail view of the slot-in lid locking mechanism. Four lateral locking teeth (orange, 2 on the left and 2 on the right) positively engage matching undercut pockets in the housing sidewalls. A central spring slider (blue) on the lid exterior compresses the return spring to retract all 4 teeth synchronously inward. When the Smart Keyfob (PCBA 07) approaches the target zone, magnetic attraction additionally releases the spring-loaded latch contact-free.*
 
 ```
-       SLIDE-IN LID & COMPLIANT SPRING TONGUE LATCH (SECTION VIEW)
+       SLOT-IN LID & 4-TOOTH CENTRAL SPRING LATCH (SECTION VIEW)
 =================================================================================
 
-                POD ENCLOSURE WALL (PA12-MJF, MONOLITHIC SPRING ARM)
+                POD ENCLOSURE WALL (PA12-MJF, WITH UNDERCUT TOOTH POCKETS)
  ------------------------+------------------------------------+------------------
-  [SMART KEYFOB PCBA 07] |                                    | [RETENTION NOTCH
-   (N52 Neodymium Core)  |                                    |  IN SLIDE LID]
-            v            |                                    |         ^
-      +-----------+      |                                    |         | 90° locking
-      | N52 MAGNET|      |                                    |         | flank:
-      |   (Key)   |      |                                    |         | blocks lid!
-      +-----+-----+      |                                    |         |
- ========================+====================================+=========+=======
-  SLIDE-IN LID           |                                              |
-                         |                                              v
-                         |     INTEGRAL ELASTIC               +-----------------+
-                         |     PA12 SPRING CANTILEVER         | LATCH HEAD WITH |
-                         +------------------------------------+ MAGNETIC INSERT |
-                               (flexes downward elastically   | (30° in / 90°)| |
-                                upon magnetic field -> frees!) +-----------------+
+  [SMART KEYFOB PCBA 07] |                                    | [TOOTH POCKET
+   (N52 Neodymium Core)  |                                    |  IN POD WALL]
+            v            |        CENTRAL PINCH SLIDER        |         ^
+      +-----------+      |        (OPERATED FROM TOP)         |         | Tooth engages
+      | N52 MAGNET|      |        [ === GRIP RIBS === ]       |         | positively!
+      |   (Key)   |      |                  |                 |         |
+      +-----+-----+      |                  |                 |         |
+ ========================+==================|=================+=========+=======
+  SLOT-IN LID            |                  v                 |         |
+                         |           [RETURN SPRING]          |         |
+                         |                  |                 |         v
+                         |       +----------+----------+      |   +-------------+
+                         |       | KINEMATIC LINKAGE   +------+---+ LOCKING TOOTH|
+                         |       | (retracts teeth in) |      |   | (4x total)  |
+                         |       +---------------------+      |   +-------------+
 ```
 
-1. **Push-to-Close Auto Latching:**
-   * The slide-in lid glides in lateral guide grooves over the sealing lip.
-   * At the end-stop, the $30^\circ$ lead-in ramp of the integral latch head rides over the mating edge and snaps positively under the material's elastic spring tension into the $90^\circ$ retention notch of the lid with a crisp mechanical click.
-   * The perimeter silicone gasket compresses uniformly. The lid sits completely flush and gapless against the enclosure rim (IP67). Prying with tools is impossible without destroying the housing.
+1. **Push-to-Close Auto Latching (Slot-In Push-to-Close):**
+   * The lid is inserted from above into the guide slot.
+   * The $30^\circ$ lead-in ramps of the 4 locking teeth ride over the mating edges, compress the central return spring inward, and snap positively into the 4 sidewall pockets with a crisp mechanical click.
+   * The perimeter silicone gasket compresses uniformly. The lid sits completely flush, gapless, and vibration-proof (IP67). Prying with tools is impossible due to 4-corner positive locking.
 
-2. **Contactless Unlocking with Smart Keyfob (FOB Magnetic Release):**
-   * On the pod exterior, a subtle tactile target circle ($\varnothing\,16\,\text{mm}$) is molded.
-   * Approaching the Smart Keyfob (`PCBA 07` with N52 magnet) to this circle magnetically attracts the embedded ferromagnetic anchor disc.
-   * The elastic spring arm flexes downward by $\approx 2.5\,\text{mm}$, clearing the $90^\circ$ notch.
-   * An integrated EPDM kicker spring automatically pushes the lid outward by **$10\dots 15\,\text{mm}$**, allowing effortless single-handed removal.
-   * **100% Fail-Safe:** Operates purely via permanent magnetism -- requires 0 mA standby current, has zero mechanical pivot pins or loose levers to wear out, and opens reliably even with a dead motorcycle battery.
+2. **Unlocking via Central Spring Slider or Smart Keyfob:**
+   * **Manual Release:** The rider pinches or slides the central slider on the lid top inward against spring tension. The 4 teeth retract into the lid body, allowing effortless vertical removal.
+   * **FOB Anti-Theft Protection:** For high-theft environments, the central slider is blocked by an internal magnetic pin. Approaching the Smart Keyfob (`PCBA 07` with N52 magnet) draws the pin back, enabling slider actuation.
+   * **100% Fail-Safe:** Operates purely mechanically and via permanent magnetism -- requires 0 mA standby current and opens reliably even with a completely dead motorcycle battery.
 
 3. **Concealed Internal Screws & Tamper Protection:**
    * The M4/M5 stainless mounting screws securing the pod inside the bag or to frame tubes reside beneath the lower electronics bay.
@@ -289,13 +288,15 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ---
 
-### 4.4 Direct Intercom Integration (Zero Electromechanical Actuators)
+### 4.4 Direct Intercom Integration & Volume Gain (Zero Cartridges)
 
-Transitioning to the monolithic monocoque pod eliminates all bulky cartridge sleds and mechanical ejection hardware. Instead, each OEM communicator (or the mini dry box) nests directly inside the upper equipment bay above the protective EPDM dry-flap using tailored, low-profile inlays:
+Eliminating the internal cartridge guide rails, double sled walls, and mechanical ejection springs expands the internal cavity dramatically to **$145.0 \times 65.0 \times 32.0\,\text{mm}$** -- yielding a **net usable interior volume increase of over 40%** compared to the previous cartridge concept!
+
+In the following 4-variant inspection view (featuring an ergonomically cut-open front wall), the expansive interior floor and the low-profile `PCBA 03` with its 4-conductor flat silicone ribbon cable routing to the bulkhead 4-pin magnetic breakaway socket (Port A) are clearly visible:
 
 ![Monocoque Satellite Pod 4-Variant Inlay Gallery](../images/cad/pod_device_variants_quad.png)
 
-*Figure 8.12: Universal modular equipment inlays for the monocoque satellite pod compared across all 4 configurations (from left to right): 1. Hermetic Mini Dry Box with emergency key & backup fuse compartments, 2. OMM 2.4 GHz UCS Transceiver with 5V RF booster, 3. Cardo Packtalk Edge docked on genuine OEM Air-Mount cradle, 4. Sena SPIDER X Slim in contoured EPDM bed. All variants share the exact same monocoque tub, same PCBA 03 carrier board, and same protective dry-flap -- 100% cartridge-free.*
+*Figure 8.12: Universal modular equipment inlays for the monocoque satellite pod compared across all 4 configurations with revealed interior (from left to right): 1. Sena SPIDER X Slim in contoured EPDM bed, 2. Cardo Packtalk Edge docked on genuine OEM Air-Mount cradle, 3. OMM 2.4 GHz UCS Transceiver with 5V RF booster, 4. Hermetic Mini Dry Box with emergency key & backup fuse compartments. All variants share the exact same monocoque tub, same PCBA 03 carrier board, same protective dry-flap, and flush 4-pin IP67 magnetic break-away interface -- 100% cartridge-free with maximum room gain.*
 
 1. **Sena SPIDER X Slim (Reference Setup):**
    * The ultra-flat OEM communicator rests in a contoured EPDM pocket in the upper chamber.

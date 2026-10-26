@@ -135,23 +135,34 @@ module pod_monocoque_tub() {
                 POD_OUTER_H - POD_WALL + 0.5
             ], center=false);
         }
-
-        // 9. Top Rim Longitudinal Slide-In Guide Grooves for Slide-In Lid
-        // Left groove (Y = POD_WALL - 0.2)
+        // 9. Top Rim Longitudinal Guide Grooves & 4 Lateral Locking Tooth Pockets
+        // Left groove (Y = POD_WALL - 1.5)
         translate([6.0, POD_WALL - 1.5, POD_OUTER_H - 4.5])
             cube([POD_OUTER_L - 8.0, 1.8, 2.8], center=false);
         // Right groove (Y = POD_OUTER_W - POD_WALL - 0.3)
         translate([6.0, POD_OUTER_W - POD_WALL - 0.3, POD_OUTER_H - 4.5])
             cube([POD_OUTER_L - 8.0, 1.8, 2.8], center=false);
 
-        // 10. Port A: M8 Square Base Through-Cutout Tool
-        pod_rear_m8_through_hole_tool(
-            wall_th=POD_WALL + 2.0,
-            base_size=11.5,
-            r_corner=1.5,
-            yc=port_yc,
-            zc=port_a_zc
-        );
+        // 4 Lateral Locking Tooth Pockets (2 per sidewall for slot-in lid locking teeth)
+        for (tx = [35.0, 115.0]) {
+            // Left sidewall pockets (Y = POD_WALL)
+            translate([tx - 4.0, POD_WALL - 2.0, POD_OUTER_H - 5.0])
+                cube([8.0, 2.2, 3.2], center=false);
+            // Right sidewall pockets (Y = POD_OUTER_W - POD_WALL)
+            translate([tx - 4.0, POD_OUTER_W - POD_WALL - 0.2, POD_OUTER_H - 5.0])
+                cube([8.0, 2.2, 3.2], center=false);
+        }
+
+        // 10. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro Style Bulkhead Pocket)
+        // Rectangular flange pocket (15.0 x 8.0 mm) with silicone flat-cable internal passthrough
+        translate([-1.0, port_yc - 7.5, port_a_zc - 4.0])
+            cube([POD_WALL + 2.0, 15.0, 8.0], center=false);
+        // 2x M2 Fixing Screws for Magnetic Bulkhead Flange
+        for (sy = [port_yc - 9.5, port_yc + 9.5]) {
+            translate([-1.0, sy, port_a_zc])
+                rotate([0, 90, 0])
+                    cylinder(r=1.1, h=POD_WALL + 2.0, $fn=16);
+        }
 
         // 11. Port B: Recessed USB-C Vertical Socket Plug-Well & Seat
         pod_rear_usbc_pocket_tool(
@@ -201,17 +212,18 @@ module pod_monocoque_tub() {
             cube([5.0, POD_OUTER_W + 2.0, 2.5], center=false);
 
         // 17. Optional Front SMA Bulkhead Antenna Port (at X = POD_OUTER_L) with 0.4 mm Knockout Membrane
-        // Positioned at X = POD_OUTER_L, Y = POD_OUTER_W / 2.0 = 35.0 mm, Z = 19.0 mm
-        translate([POD_OUTER_L - POD_WALL - 2.6, POD_OUTER_W/2.0, 19.0]) {
+        // Default state: 100% solid, sealed, airtight & leak-proof (IP68 / IP69K), identical to Central Box.
+        // Total wall thickness with boss = POD_WALL + 2.5 = 5.0 mm.
+        translate([POD_OUTER_L - POD_WALL - 2.5 - 0.1, POD_OUTER_W/2.0, 19.0]) {
             rotate([0, 90, 0]) {
-                // Internal Ø 6.5 mm through-hole bore leaving 0.4 mm knockout membrane
-                cylinder(r=SMA_BORE_R, h=POD_WALL + 2.5 - 0.4, center=false, $fn=32);
+                // Internal blind pilot bore leaving exact 0.4 mm solid membrane
+                cylinder(r=SMA_BORE_R, h=5.0 - 1.2 - 0.4 + 0.1, center=false, $fn=32);
             }
         }
-        // External Ø 9.5 mm x 1.2 mm O-ring recess on exterior face (X = POD_OUTER_L)
+        // External O-ring recess (depth = 1.2 mm) from outside face inward
         translate([POD_OUTER_L - 1.2, POD_OUTER_W/2.0, 19.0]) {
             rotate([0, 90, 0]) {
-                cylinder(r=SMA_ORECESS_R, h=1.5, center=false, $fn=32);
+                cylinder(r=SMA_ORECESS_R, h=1.2, center=false, $fn=32);
             }
         }
     }

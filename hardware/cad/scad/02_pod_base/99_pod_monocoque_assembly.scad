@@ -17,19 +17,36 @@
 include <../00_common/parameters.scad>;
 use <../00_common/dummies/dummy_intercom_units.scad>;
 
-module m8_flush_panel_socket() {
-    color("silver")
-        rotate([0, -90, 0])
-            cylinder(r=5.0, h=3.0, center=false, $fn=32);
-    color([0.1, 0.1, 0.1])
-        translate([-0.5, 0, 0])
-            rotate([0, -90, 0])
-                cylinder(r=3.5, h=2.5, center=false, $fn=24);
+module pod_port_a_magnetic_connector() {
+    // 1. Molded Black PBT Flange Body (14.5 x 7.5 x 4.0 mm, flush in bulkhead)
+    color([0.15, 0.15, 0.18]) {
+        translate([-2.0, -7.25, -3.75])
+            cube([4.0, 14.5, 7.5], center=false);
+    }
+    // 2. Dual Rare-Earth Alignment Magnets (Nickel-plated silver)
+    color("silver") {
+        translate([-2.1, -5.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=1.5, h=1.0, center=false, $fn=16);
+        translate([-2.1, 5.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=1.5, h=1.0, center=false, $fn=16);
+    }
+    // 3. 4x Gold-Plated Pogo Contact Terminals (Pitch 2.2 mm)
     color("gold") {
-        for (a = [45, 135, 225, 315]) {
-            translate([-1.5, 1.8 * cos(a), 1.8 * sin(a)])
-                rotate([0, -90, 0])
-                    cylinder(r=0.4, h=1.0, center=false, $fn=12);
+        for (py = [-3.3, -1.1, 1.1, 3.3]) {
+            translate([-2.2, py, 0])
+                rotate([0, 90, 0])
+                    cylinder(r=0.6, h=1.2, center=false, $fn=16);
+        }
+    }
+    // 4. Internal 4-Conductor Silicone Flat-Ribbon Cable (leads to J_BUS)
+    translate([2.0, -3.6, -1.0]) {
+        for (i = [0:3]) {
+            c_color = (i == 0) ? "red" : (i == 1) ? "white" : (i == 2) ? "green" : "black";
+            color(c_color)
+                translate([0, i * 1.8, 0])
+                    cube([14.0, 1.4, 1.0], center=false);
         }
     }
 }
@@ -50,12 +67,6 @@ EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 8.0  : 0.0;
 SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 25.0 : 0.0;
 
 module internal_wiring_preview() {
-    // Port A Bus internal silicone ribbon (from bulkhead at Z=26.5 to J_BUS at X=9.5, Y=48.0)
-    color([0.2, 0.5, 0.8, 0.9]) {
-        translate([1.5, 33.0, 15.0])
-            rotate([0, 15, 0])
-                cube([8.0, 4.0, 11.0], center=false);
-    }
     // Port B USB-C internal silicone cable (from bulkhead at Z=11.5 to J_USB_OUT at X=9.5, Y=22.0)
     color([0.85, 0.3, 0.2, 0.9]) {
         translate([1.5, 20.0, 8.5])
@@ -69,9 +80,9 @@ module pod_monocoque_full_assembly() {
         difference() {
             color([0.28, 0.30, 0.33])
                 pod_monocoque_tub();
-            // Cut away near half (Y = -10 to 35 mm) so camera looks right into the two zones
-            translate([-10.0, -10.0, -10.0])
-                cube([POD_OUTER_L + 20.0, POD_OUTER_W/2.0 + 10.0, POD_OUTER_H + 20.0]);
+            // Cut away near longitudinal wall (Y = -10 to 22 mm) to open full view into both zones
+            translate([8.0, -10.0, 10.0])
+                cube([POD_OUTER_L - 16.0, 32.0, POD_OUTER_H + 20.0]);
         }
     } else if (VIEW_MODE == "xray") {
         color([0.3, 0.45, 0.65, 0.28])
@@ -81,9 +92,9 @@ module pod_monocoque_full_assembly() {
             pod_monocoque_tub();
     }
 
-    // 2. Port A: M8 4-Pin IP67 Metal Bus Chassis Socket (Bulkhead center, top: Z = 26.5 mm)
+    // 2. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (Bulkhead center, top: Z = 26.5 mm)
     translate([0.0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
-        m8_flush_panel_socket();
+        pod_port_a_magnetic_connector();
 
     // 3. Port B: In-Bag USB-C Fast-Charge Socket (Bulkhead center, bottom: Z = 11.5 mm)
     translate([0.5, POD_OUTER_W/2.0, POD_OUTER_H/2.0 - 7.5])

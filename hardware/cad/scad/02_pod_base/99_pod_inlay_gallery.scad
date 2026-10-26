@@ -9,6 +9,13 @@
 // 2. Cardo Packtalk Edge Inlay (OEM Air-Mount cradle + direct PCBA 03 harness)
 // 3. OMM 2.4 GHz UCS Transceiver Inlay (Direct USB-C Class 2.0 digital audio)
 // 4. Hermetische Mini-Dry-Box (Waterproof safe for motorcycle spare key, papers, fuses)
+//
+// Features:
+// - Ergonomic front-wall cutaway window to reveal the spacious 145 x 65 mm interior
+//   and the bottom PCBA 03 board with flat silicone ribbon wiring.
+// - Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro) with silicone ribbon.
+// - Port B: Recessed USB-C fast-charge socket with TPU weather cap.
+// - Optional rear SMA antenna port (sealed with 0.4 mm knockout membrane).
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -20,45 +27,70 @@ use <parts/008_pod_base_usbc_cap_tpu.scad>;
 use <parts/014_pod_dry_flap.scad>;
 use <parts/015_pod_monocoque_tub.scad>;
 
-module m8_flush_panel_socket() {
-    color("silver")
-        rotate([0, -90, 0])
-            cylinder(r=5.0, h=3.0, center=false, $fn=32);
-    color([0.1, 0.1, 0.1])
-        translate([-0.5, 0, 0])
-            rotate([0, -90, 0])
-                cylinder(r=3.5, h=2.5, center=false, $fn=24);
+// 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro Style)
+module pod_port_a_magnetic_connector() {
+    // 1. Molded Black PBT Flange Body (14.5 x 7.5 x 4.0 mm, flush in bulkhead)
+    color([0.15, 0.15, 0.18]) {
+        translate([-2.0, -7.25, -3.75])
+            cube([4.0, 14.5, 7.5], center=false);
+    }
+    // 2. Dual Rare-Earth Alignment Magnets (Nickel-plated silver)
+    color("silver") {
+        translate([-2.1, -5.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=1.5, h=1.0, center=false, $fn=16);
+        translate([-2.1, 5.0, 0])
+            rotate([0, 90, 0])
+                cylinder(r=1.5, h=1.0, center=false, $fn=16);
+    }
+    // 3. 4x Gold-Plated Pogo Contact Terminals (Pitch 2.2 mm)
     color("gold") {
-        for (a = [45, 135, 225, 315]) {
-            translate([-1.5, 1.8 * cos(a), 1.8 * sin(a)])
-                rotate([0, -90, 0])
-                    cylinder(r=0.4, h=1.0, center=false, $fn=12);
+        for (py = [-3.3, -1.1, 1.1, 3.3]) {
+            translate([-2.2, py, 0])
+                rotate([0, 90, 0])
+                    cylinder(r=0.6, h=1.2, center=false, $fn=16);
+        }
+    }
+    // 4. Internal 4-Conductor Silicone Flat-Ribbon Cable (leads to J_BUS)
+    translate([2.0, -3.6, -1.0]) {
+        for (i = [0:3]) {
+            c_color = (i == 0) ? "red" : (i == 1) ? "white" : (i == 2) ? "green" : "black";
+            color(c_color)
+                translate([0, i * 1.8, 0])
+                    cube([14.0, 1.4, 1.0], center=false);
         }
     }
 }
 
-// Single Monocoque Pod Chamber Base (with PCBA 03 and Dry-Flap installed)
+// Single Monocoque Pod Chamber Base (with cutaway inspection window)
 module pod_monocoque_base_setup() {
-    // Monocoque Tub (Anthracite PA12-MJF)
-    color([0.28, 0.30, 0.33])
-        pod_monocoque_tub();
+    // 1. Monocoque Tub with Ergonomic Front Inspection Cutout
+    // This allows clear visibility of the full floor, PCBA 03, and the expansive 145 x 65 mm interior!
+    difference() {
+        color([0.28, 0.30, 0.33])
+            pod_monocoque_tub();
 
-    // Port A: Flush M8 Socket (Bulkhead top, Z = 26.5 mm)
+        // Front longitudinal wall cutaway window (cuts down near wall for 100% visibility)
+        translate([10.0, -5.0, 14.0])
+            cube([POD_OUTER_L - 20.0, POD_WALL + 6.0, POD_OUTER_H]);
+    }
+
+    // 2. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (Bulkhead top, Z = 26.5 mm)
     translate([0.0, POD_OUTER_W/2.0, POD_OUTER_H/2.0 + 7.5])
-        m8_flush_panel_socket();
+        pod_port_a_magnetic_connector();
 
-    // Port B: Flush In-Bag USB-C Socket with Cap (Bulkhead bottom, Z = 11.5 mm)
+    // 3. Port B: Flush In-Bag USB-C Socket with Cap (Bulkhead bottom, Z = 11.5 mm)
     translate([0.5, POD_OUTER_W/2.0, POD_OUTER_H/2.0 - 7.5])
         rotate([0, 90, 90])
             pod_base_usbc_cap_tpu();
 
-    // Lower PCBA 03 Interface Board
-    translate([6.0, 11.0, POD_WALL + 3.0])
+    // 4. Lower PCBA 03 Interface Board (Green 4-layer FR4 PCB with JST headers)
+    translate([6.0, 11.0, POD_WALL + 2.5])
         dummy_adapter_pcb();
 
-    // EPDM Dry-Flap Splash Shield (Amber Shore 50A)
-    translate([6.0, 7.0, 14.5])
-        color([0.92, 0.68, 0.18, 0.88])
+    // 5. Translucent Amber EPDM Dry-Flap Splash Shield (folded back / protective deck)
+    translate([6.0, 7.0, 14.0])
+        color([0.92, 0.68, 0.18, 0.65])
             pod_dry_flap();
 }
 
@@ -68,14 +100,14 @@ module pod_monocoque_base_setup() {
 module pod_variant_sena() {
     pod_monocoque_base_setup();
 
-    // Upper equipment chamber: Contoured EPDM foam cradle & Sena SPIDER X Slim unit
+    // Upper equipment chamber: Generous space for Sena SPIDER X Slim
     translate([52.0, (POD_OUTER_W - 44.0)/2.0, POD_WALL + 2.0]) {
-        // EPDM contour bed
+        // Slim EPDM cradle bed
         color([0.18, 0.18, 0.20]) {
             difference() {
-                cube([86.0, 44.0, 6.0], center=false);
+                cube([86.0, 44.0, 5.0], center=false);
                 translate([2.0, 2.0, 1.5])
-                    cube([82.0, 40.0, 5.0], center=false);
+                    cube([82.0, 40.0, 4.0], center=false);
             }
         }
         // Sena SPIDER X Slim OEM unit
@@ -145,9 +177,9 @@ module pod_variant_drybox() {
     pod_monocoque_base_setup();
 
     // Upper equipment chamber: Staufach-Einlegeboden for key, papers, and fuses
-    translate([50.0, (POD_OUTER_W - 52.0)/2.0, POD_WALL + 1.0]) {
+    translate([48.0, (POD_OUTER_W - 52.0)/2.0, POD_WALL + 1.0]) {
         cartridge_insert_blindkassette(
-            insert_l = 88.0,
+            insert_l = 92.0,
             insert_w = 52.0,
             plate_th = 2.0,
             wall_h   = 10.0
@@ -159,21 +191,21 @@ module pod_variant_drybox() {
 // Master Quad Gallery Preview
 // -----------------------------------------------------------------------------
 module pod_inlay_quad_gallery() {
-    spacing_y = 85.0;
+    spacing_y = 90.0;
 
     // Variant 1: Sena SPIDER X Slim (Y = 0 mm)
     translate([0, 0 * spacing_y, 0])
         pod_variant_sena();
 
-    // Variant 2: Cardo Packtalk Edge (Y = 85 mm)
+    // Variant 2: Cardo Packtalk Edge (Y = 90 mm)
     translate([0, 1 * spacing_y, 0])
         pod_variant_cardo();
 
-    // Variant 3: OMM 2.4 GHz UCS Transceiver (Y = 170 mm)
+    // Variant 3: OMM 2.4 GHz UCS Transceiver (Y = 180 mm)
     translate([0, 2 * spacing_y, 0])
         pod_variant_omm();
 
-    // Variant 4: Hermetische Mini-Dry-Box (Y = 255 mm)
+    // Variant 4: Hermetische Mini-Dry-Box (Y = 270 mm)
     translate([0, 3 * spacing_y, 0])
         pod_variant_drybox();
 }
