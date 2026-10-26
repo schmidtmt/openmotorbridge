@@ -39,21 +39,31 @@ module cardo_edge_2d_rocker_plate(show_actuators = true) {
                 translate([0, 0, 0])
                     cube([plate_l, plate_w, plate_th], center=false);
 
-                // 4x Downward Snap-Claw Clips (Snaps onto OEM Air-Mount cradle perimeter)
-                for (cx = [6.0, plate_l - 10.0]) {
-                    // Left flank snap arms
-                    translate([cx, -2.0, -5.5])
-                        cube([5.0, 2.5, 6.5], center=false);
-                    translate([cx, -2.0, -5.5])
-                        rotate([0, 0, 0])
-                            cube([5.0, 3.8, 1.8], center=false); // snap barb
+                // 4x Heavy-Duty Downward Structural Snap Legs (22.0 mm tall, reaching cradle base at Z = -22.0 mm!)
+                // Firmly clamping Cardo Edge & latching under the OEM Air-Mount cradle bottom flange
+                for (cx = [8.0, plate_l - 14.0]) {
+                    // Left flank structural snap leg
+                    translate([cx, -2.8, -22.0])
+                        cube([7.0, 3.2, 22.0], center=false);
+                    // Heavy snap hook barb under cradle base
+                    translate([cx, -0.6, -22.8])
+                        cube([7.0, 2.2, 2.2], center=false);
 
-                    // Right flank snap arms
-                    translate([cx, plate_w - 0.5, -5.5])
-                        cube([5.0, 2.5, 6.5], center=false);
-                    translate([cx, plate_w - 1.8, -5.5])
-                        cube([5.0, 3.8, 1.8], center=false); // snap barb
+                    // Right flank structural snap leg
+                    translate([cx, plate_w - 0.4, -22.0])
+                        cube([7.0, 3.2, 22.0], center=false);
+                    // Heavy snap hook barb under cradle base
+                    translate([cx, plate_w - 1.6, -22.8])
+                        cube([7.0, 2.2, 2.2], center=false);
                 }
+
+                // 2x Lateral Chassis Standoff Ears (Direct M2.5 floor boss bolting)
+                // Left chassis ear at X = 44.0 mm, Y = -5.0 mm
+                translate([41.0, -5.5, -22.0])
+                    cube([8.0, 5.5, 24.0], center=false);
+                // Right chassis ear at X = 44.0 mm, Y = plate_w
+                translate([41.0, plate_w, -22.0])
+                    cube([8.0, 5.5, 24.0], center=false);
 
                 // Downward-pointing pivot bearing journals (Dome nach UNTEN!)
                 // Front Lever 1 Journal at X = 22.0, Y = 13.0
@@ -80,11 +90,33 @@ module cardo_edge_2d_rocker_plate(show_actuators = true) {
             // Cable exit chamfer at front nose
             translate([-1.0, 18.0, -1.0])
                 cube([4.0, 10.0, plate_th + 2.0], center=false);
+
+            // 2x M2.5 Chassis Screw Clearance Bores (Through lateral ears into floor bosses)
+            translate([45.0, -2.8, -24.0])
+                cylinder(r=1.4, h=30.0, center=false, $fn=16);
+            translate([45.0, plate_w + 2.8, -24.0])
+                cylinder(r=1.4, h=30.0, center=false, $fn=16);
         }
     }
 
     if (show_actuators) {
-        // 2. Front 90° Bellcrank Rocker Arm (Orange Anodized Aluminum)
+        // 2. 2x M2.5 Stainless Steel Chassis Fastening Screws (Bolted directly to pod floor brass inserts!)
+        color("silver") {
+            // Left M2.5 Torx Cap Screw
+            translate([45.0, -2.8, plate_th]) {
+                cylinder(r=2.3, h=1.8, center=false, $fn=20);
+                translate([0, 0, 1.8]) cylinder(r=1.0, h=0.2, center=false, $fn=6); // hex socket
+                translate([0, 0, -23.0]) cylinder(r=1.25, h=23.0, center=false, $fn=16);
+            }
+            // Right M2.5 Torx Cap Screw
+            translate([45.0, plate_w + 2.8, plate_th]) {
+                cylinder(r=2.3, h=1.8, center=false, $fn=20);
+                translate([0, 0, 1.8]) cylinder(r=1.0, h=0.2, center=false, $fn=6); // hex socket
+                translate([0, 0, -23.0]) cylinder(r=1.25, h=23.0, center=false, $fn=16);
+            }
+        }
+
+        // 3. Front 90° Bellcrank Rocker Arm (Orange Anodized Aluminum)
         // Positioned at X = 22.0 mm, Y = 13.0 mm (Media / Power Key)
         color([0.92, 0.45, 0.10]) {
             translate([22.0, 13.0, -1.5]) {
