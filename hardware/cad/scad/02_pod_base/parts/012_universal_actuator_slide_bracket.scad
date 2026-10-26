@@ -1,23 +1,30 @@
 // =============================================================================
-// OpenMotorBridge - Satellite Pod: Low-Profile 2D Rocker Actuator Plate
+// OpenMotorBridge - Satellite Pod: Universal Dual-Carriage Actuator Slide Bracket
 // =============================================================================
 // File: hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad
-// Description: Ultra-low-profile mechatronic 2D dual-rocker actuator plate
-//              for automatic ignition-coupled Power-On / Power-Off (KL15).
+// Description: "One Size Fits All" Universal Mechatronic Dual-Carriage Slide Bridge.
 //
-// Solves:
-// 1. Hardware Reality: Sena and Cardo DO NOT have USB-Power-On or BLE-Wakeup
-//    when turned OFF. To power on/off with ignition, 2 buttons MUST be pressed!
-// 2. Vertical Headroom: Pod interior is 32 mm, Cardo crest is 21.5 mm -> only 10.5 mm
-//    clearance to lid! Vertical solenoids collide. This plate uses FLAT HORIZONTAL
-//    micro-actuators with 90° downward rockers (total height only 6.5 mm!).
-// 3. 2D Button Staggering: Cardo buttons are not 1D!
-//    - Front Media Key: X = 22.0 mm, Y = 13.0 mm (narrow nose)
-//    - Rear Intercom Key: X = 63.0 mm, Y = 28.0 mm (wide rear) -> 15 mm Y-offset!
-// 4. Downward Pivot Domes: Domes and lever journals point DOWNWARD into the
-//    negative space beside the keys, keeping the top surface 100% flush.
-// 5. Positive Clamping & Routing: Plate clips securely onto the OEM Air-Mount cradle;
-//    flat flex cable routes forward under the dry-flap to J_ACT on PCBA 03.
+// Key Architectural Principles (v10.0 Monocoque Pod):
+// 1. 100% Universal ("One Size Fits All"):
+//    - Fully replaces OEM-specific adapter plates.
+//    - Compatible with Cardo Packtalk Edge, Sena 50S / 30K, Sena SPIDER ST1/RT1,
+//      Midland BTR1, generic PMR446 radios, or custom communicators.
+// 2. Rigid 4-Point Chassis Portal Bridge:
+//    - Spans over the rear equipment chamber from X = 56.0 mm to X = 140.0 mm (84 mm span).
+//    - 4x solid corner pillars bolt directly into the 4x M2.5 brass threaded inserts
+//      in the pod monocoque floor bosses at:
+//      (56.0, 14.0), (56.0, 56.0), (140.0, 14.0), (140.0, 56.0).
+// 3. Dual Longitudinal Slotted Guide Rails (C-Nuten / Langlöcher):
+//    - Two parallel guide slots allow continuous X-adjustment from 15 mm to 75 mm
+//      button spacing.
+// 4. Two Independent Clamping Carriages (Schiebeschlitten 1 & 2):
+//    - Carriage 1 (Front): Slide along Rail 1 (Y ≈ 13 mm), locked via M2.5 clamp screw.
+//    - Carriage 2 (Rear): Slide along Rail 2 (Y ≈ 28 mm), locked via M2.5 clamp screw.
+//    - Each carriage holds one flat 5V micro-solenoid with soft Shore A50 TPU pad.
+// 5. Zero-Play Vibration Resistance & Reaction Force Compensation:
+//    - Bolted firmly into the chassis with 4x M2.5 Torx stainless steel screws.
+//    - Button actuation reaction forces (3..5 N) transfer directly into the 3 mm
+//      carbon-reinforced PA12 chassis floor -- zero flexing, zero slipping.
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
@@ -25,176 +32,221 @@ use <../../00_common/dummies/dummy_intercom_units.scad>;
 
 $fn = 32;
 
-// Ultra-Flat 2D Dual-Rocker Actuator Plate
-module cardo_edge_2d_rocker_plate(show_actuators = true) {
-    plate_l = 86.0;
-    plate_w = 46.0;
-    plate_th = 2.0;
+// Universal Dual-Carriage Actuator Slide Bracket
+module universal_actuator_slide_bracket(
+    carriage1_x = 22.0,   // Position of Carriage 1 along slot (default: Cardo Media key)
+    carriage2_x = 63.0,   // Position of Carriage 2 along slot (default: Cardo Intercom key)
+    show_actuators = true
+) {
+    // 4-Point Mounting Hole Centers (matching floor bosses at X = 56, 140; Y = 14, 56)
+    span_x = 84.0;
+    span_y = 42.0;
+    deck_th = 2.5;
+    deck_z = 21.0; // Height of deck underside above boss tops
+    pillar_w = 8.0;
+    pillar_l = 8.0;
 
-    // 1. Contoured Main Carrier Plate (Molded in Matte Anthracite PA12)
-    color([0.22, 0.24, 0.27]) {
+    // 1. Injection-Molded / SLS PA12 Carbon Portal Bridge Main Frame
+    color([0.20, 0.22, 0.25]) {
         difference() {
             union() {
-                // Main low-profile deck
-                translate([0, 0, 0])
-                    cube([plate_l, plate_w, plate_th], center=false);
+                // Top Bridge Deck (spanning between all 4 pillars)
+                translate([-pillar_l/2.0, -pillar_w/2.0, deck_z])
+                    cube([span_x + pillar_l, span_y + pillar_w, deck_th], center=false);
 
-                // 4x Heavy-Duty Downward Structural Snap Legs (22.0 mm tall, reaching cradle base at Z = -22.0 mm!)
-                // Firmly clamping Cardo Edge & latching under the OEM Air-Mount cradle bottom flange
-                for (cx = [8.0, plate_l - 14.0]) {
-                    // Left flank structural snap leg
-                    translate([cx, -2.8, -22.0])
-                        cube([7.0, 3.2, 22.0], center=false);
-                    // Heavy snap hook barb under cradle base
-                    translate([cx, -0.6, -22.8])
-                        cube([7.0, 2.2, 2.2], center=false);
-
-                    // Right flank structural snap leg
-                    translate([cx, plate_w - 0.4, -22.0])
-                        cube([7.0, 3.2, 22.0], center=false);
-                    // Heavy snap hook barb under cradle base
-                    translate([cx, plate_w - 1.6, -22.8])
-                        cube([7.0, 2.2, 2.2], center=false);
+                // 4x Solid Corner Standoff Pillars (reaching down to tub floor bosses)
+                for (px = [0, span_x]) {
+                    for (py = [0, span_y]) {
+                        translate([px - pillar_l/2.0, py - pillar_w/2.0, 0])
+                            cube([pillar_l, pillar_w, deck_z], center=false);
+                    }
                 }
 
-                // 2x Lateral Chassis Standoff Ears (Direct M2.5 floor boss bolting)
-                // Left chassis ear at X = 44.0 mm, Y = -5.0 mm
-                translate([41.0, -5.5, -22.0])
-                    cube([8.0, 5.5, 24.0], center=false);
-                // Right chassis ear at X = 44.0 mm, Y = plate_w
-                translate([41.0, plate_w, -22.0])
-                    cube([8.0, 5.5, 24.0], center=false);
+                // Longitudinal Side Reinforcement Trusses (Left and Right Flanks)
+                translate([-pillar_l/2.0, -pillar_w/2.0, deck_z - 3.5])
+                    cube([span_x + pillar_l, 4.0, 3.5], center=false);
+                translate([-pillar_l/2.0, span_y + pillar_w/2.0 - 4.0, deck_z - 3.5])
+                    cube([span_x + pillar_l, 4.0, 3.5], center=false);
 
-                // Downward-pointing pivot bearing journals (Dome nach UNTEN!)
-                // Front Lever 1 Journal at X = 22.0, Y = 13.0
-                translate([19.0, 10.0, -4.5])
-                    cube([6.0, 6.0, 5.0], center=false);
-
-                // Rear Lever 2 Journal at X = 63.0, Y = 28.0 (15 mm lateral offset!)
-                translate([60.0, 25.0, -4.5])
-                    cube([6.0, 6.0, 5.0], center=false);
+                // Transverse End Trusses (Front and Rear Arches)
+                translate([-pillar_l/2.0, -pillar_w/2.0, deck_z - 3.5])
+                    cube([4.0, span_y + pillar_w, 3.5], center=false);
+                translate([span_x + pillar_l/2.0 - 4.0, -pillar_w/2.0, deck_z - 3.5])
+                    cube([4.0, span_y + pillar_w, 3.5], center=false);
             }
 
-            // Cutout window over Cardo center phone button & status LEDs
-            translate([34.0, 12.0, -1.0])
-                cube([18.0, 22.0, plate_th + 2.0], center=false);
+            // 4x M2.5 Screw Counterbore Holes into Floor Bosses
+            for (px = [0, span_x]) {
+                for (py = [0, span_y]) {
+                    // Screw clearance shaft through pillar
+                    translate([px, py, -1.0])
+                        cylinder(r=1.4, h=deck_z + deck_th + 2.0, $fn=20);
+                    // Screw head counterbore recess in top deck
+                    translate([px, py, deck_z + deck_th - 1.2])
+                        cylinder(r=2.5, h=2.0, $fn=24);
+                }
+            }
 
-            // Front Rocker Slot (X = 22.0 mm, Y = 13.0 mm)
-            translate([20.0, 11.5, -5.0])
-                cube([4.0, 3.0, 8.0], center=false);
+            // Central Inspection / Display Cutout Window
+            translate([30.0, 10.0, deck_z - 1.0])
+                cube([24.0, span_y - 20.0, deck_th + 2.0], center=false);
 
-            // Rear Rocker Slot (X = 63.0 mm, Y = 28.0 mm)
-            translate([61.0, 26.5, -5.0])
-                cube([4.0, 3.0, 8.0], center=false);
+            // Rail 1: Slotted Guide Rail (Langloch 1) along X (Y = 12.0 mm, span 12..72 mm)
+            translate([12.0, 12.0, deck_z - 1.0])
+                hull() {
+                    cylinder(r=1.6, h=deck_th + 2.0, $fn=16);
+                    translate([58.0, 0, 0])
+                        cylinder(r=1.6, h=deck_th + 2.0, $fn=16);
+                }
 
-            // Cable exit chamfer at front nose
-            translate([-1.0, 18.0, -1.0])
-                cube([4.0, 10.0, plate_th + 2.0], center=false);
+            // Rail 2: Slotted Guide Rail (Langloch 2) along X (Y = 30.0 mm, span 12..72 mm)
+            translate([12.0, 30.0, deck_z - 1.0])
+                hull() {
+                    cylinder(r=1.6, h=deck_th + 2.0, $fn=16);
+                    translate([58.0, 0, 0])
+                        cylinder(r=1.6, h=deck_th + 2.0, $fn=16);
+                }
+        }
+    }
 
-            // 2x M2.5 Chassis Screw Clearance Bores (Through lateral ears into floor bosses)
-            translate([45.0, -2.8, -24.0])
-                cylinder(r=1.4, h=30.0, center=false, $fn=16);
-            translate([45.0, plate_w + 2.8, -24.0])
-                cylinder(r=1.4, h=30.0, center=false, $fn=16);
+    // 2. 4x M2.5 Stainless Steel Torx Chassis Fastening Screws (Bolted into tub floor brass inserts)
+    color("silver") {
+        for (px = [0, span_x]) {
+            for (py = [0, span_y]) {
+                translate([px, py, deck_z + deck_th - 1.0]) {
+                    cylinder(r=2.3, h=1.8, center=false, $fn=20);
+                    translate([0, 0, 1.8]) cylinder(r=1.0, h=0.2, center=false, $fn=6); // hex socket
+                    translate([0, 0, -deck_z - 3.0]) cylinder(r=1.25, h=deck_z + 3.0, center=false, $fn=16);
+                }
+            }
         }
     }
 
     if (show_actuators) {
-        // 2. 2x M2.5 Stainless Steel Chassis Fastening Screws (Bolted directly to pod floor brass inserts!)
-        color("silver") {
-            // Left M2.5 Torx Cap Screw
-            translate([45.0, -2.8, plate_th]) {
-                cylinder(r=2.3, h=1.8, center=false, $fn=20);
-                translate([0, 0, 1.8]) cylinder(r=1.0, h=0.2, center=false, $fn=6); // hex socket
-                translate([0, 0, -23.0]) cylinder(r=1.25, h=23.0, center=false, $fn=16);
+        // =========================================================================
+        // CARRIAGE 1 (Front Key Actuator - Continuously Adjustable in X)
+        // =========================================================================
+        translate([carriage1_x, 12.0, deck_z]) {
+            // Slider Carriage Body
+            color([0.28, 0.30, 0.34]) {
+                difference() {
+                    translate([-6.0, -6.0, 0])
+                        cube([12.0, 12.0, 3.5], center=false);
+                    // Clamp screw bore
+                    translate([0, 0, -1.0])
+                        cylinder(r=1.4, h=6.0, $fn=16);
+                }
             }
-            // Right M2.5 Torx Cap Screw
-            translate([45.0, plate_w + 2.8, plate_th]) {
-                cylinder(r=2.3, h=1.8, center=false, $fn=20);
-                translate([0, 0, 1.8]) cylinder(r=1.0, h=0.2, center=false, $fn=6); // hex socket
-                translate([0, 0, -23.0]) cylinder(r=1.25, h=23.0, center=false, $fn=16);
+
+            // M2.5 Clamping Knurled / Hex Locking Screw
+            color("silver") {
+                translate([0, 0, 3.5]) {
+                    cylinder(r=2.2, h=2.0, center=false, $fn=20);
+                    translate([0, 0, 2.0]) cylinder(r=0.9, h=0.2, center=false, $fn=6);
+                }
             }
+
+            // Micro-Actuator (Flat Horizontal Solenoid with 90° Downward Bellcrank Rocker)
+            color("silver")
+                translate([8.0, 0, 1.8])
+                    rotate([0, 90, 0])
+                        cylinder(r=2.2, h=12.0, center=true, $fn=20);
+            color("gold")
+                translate([2.0, 0, 1.8])
+                    rotate([0, 90, 0])
+                        cylinder(r=1.5, h=3.0, center=true, $fn=16);
+
+            // 90° Downward Bellcrank Rocker (Orange Anodized Aluminum)
+            color([0.92, 0.45, 0.10]) {
+                translate([0, 0, -2.5]) {
+                    rotate([0, 12, 0])
+                        cube([3.0, 2.4, 5.0], center=true);
+                    translate([3.0, 0, 1.8])
+                        cube([6.0, 1.8, 1.6], center=true);
+                }
+            }
+            // Front Soft Shore A50 TPU Pusher Tip
+            color([1.0, 0.6, 0.1])
+                translate([0, 0, -5.5])
+                    cylinder(r=2.2, h=2.0, center=true, $fn=16);
         }
 
-        // 3. Front 90° Bellcrank Rocker Arm (Orange Anodized Aluminum)
-        // Positioned at X = 22.0 mm, Y = 13.0 mm (Media / Power Key)
-        color([0.92, 0.45, 0.10]) {
-            translate([22.0, 13.0, -1.5]) {
-                // Rocker body
-                rotate([0, 12, 0])
-                    cube([3.2, 2.4, 5.0], center=true);
-                // Horizontal pull link
-                translate([4.0, 0, 1.5])
-                    cube([8.0, 1.8, 1.6], center=true);
+        // =========================================================================
+        // CARRIAGE 2 (Rear Key Actuator - Continuously Adjustable in X)
+        // =========================================================================
+        translate([carriage2_x, 30.0, deck_z]) {
+            // Slider Carriage Body
+            color([0.28, 0.30, 0.34]) {
+                difference() {
+                    translate([-6.0, -6.0, 0])
+                        cube([12.0, 12.0, 3.5], center=false);
+                    // Clamp screw bore
+                    translate([0, 0, -1.0])
+                        cylinder(r=1.4, h=6.0, $fn=16);
+                }
             }
-        }
-        // Front Soft Shore A50 TPU Pusher Tip (Pushover Media Key)
-        color([1.0, 0.6, 0.1])
-            translate([22.0, 13.0, -4.5])
-                cylinder(r=2.2, h=1.8, center=true, $fn=16);
 
-        // 3. Rear 90° Bellcrank Rocker Arm (Blue Anodized Aluminum)
-        // Positioned at X = 63.0 mm, Y = 28.0 mm (Intercom / Power Key - 15 mm Y-Offset!)
-        color([0.15, 0.48, 0.88]) {
-            translate([63.0, 28.0, -1.5]) {
-                // Rocker body
-                rotate([0, 12, 0])
-                    cube([3.2, 2.4, 5.0], center=true);
-                // Horizontal pull link
-                translate([4.0, 0, 1.5])
-                    cube([8.0, 1.8, 1.6], center=true);
+            // M2.5 Clamping Knurled / Hex Locking Screw
+            color("silver") {
+                translate([0, 0, 3.5]) {
+                    cylinder(r=2.2, h=2.0, center=false, $fn=20);
+                    translate([0, 0, 2.0]) cylinder(r=0.9, h=0.2, center=false, $fn=6);
+                }
             }
+
+            // Micro-Actuator (Flat Horizontal Solenoid with 90° Downward Bellcrank Rocker)
+            color("silver")
+                translate([8.0, 0, 1.8])
+                    rotate([0, 90, 0])
+                        cylinder(r=2.2, h=12.0, center=true, $fn=20);
+            color("gold")
+                translate([2.0, 0, 1.8])
+                    rotate([0, 90, 0])
+                        cylinder(r=1.5, h=3.0, center=true, $fn=16);
+
+            // 90° Downward Bellcrank Rocker (Blue Anodized Aluminum)
+            color([0.15, 0.48, 0.88]) {
+                translate([0, 0, -2.5]) {
+                    rotate([0, 12, 0])
+                        cube([3.0, 2.4, 5.0], center=true);
+                    translate([3.0, 0, 1.8])
+                        cube([6.0, 1.8, 1.6], center=true);
+                }
+            }
+            // Rear Soft Shore A50 TPU Pusher Tip
+            color([0.2, 0.7, 1.0])
+                translate([0, 0, -5.5])
+                    cylinder(r=2.2, h=2.0, center=true, $fn=16);
         }
-        // Rear Soft Shore A50 TPU Pusher Tip (Pushover Intercom Key)
-        color([0.2, 0.7, 1.0])
-            translate([63.0, 28.0, -4.5])
-                cylinder(r=2.2, h=1.8, center=true, $fn=16);
 
-        // 4. Flat Horizontal Micro-Solenoid / Linear Actuators (Flachliegend: nur 5.0 mm hoch!)
-        // Actuator 1 (Front, driving Media rocker)
-        color("silver")
-            translate([30.0, 13.0, plate_th + 1.2])
-                rotate([0, 90, 0])
-                    cylinder(r=2.2, h=12.0, center=true, $fn=20);
-        color("gold")
-            translate([24.0, 13.0, plate_th + 1.2])
-                rotate([0, 90, 0])
-                    cylinder(r=1.5, h=3.0, center=true, $fn=16);
-
-        // Actuator 2 (Rear, driving Intercom rocker)
-        color("silver")
-            translate([71.0, 28.0, plate_th + 1.2])
-                rotate([0, 90, 0])
-                    cylinder(r=2.2, h=12.0, center=true, $fn=20);
-        color("gold")
-            translate([65.0, 28.0, plate_th + 1.2])
-                rotate([0, 90, 0])
-                    cylinder(r=1.5, h=3.0, center=true, $fn=16);
-
-        // 5. Flat Actuator Ribbon Cable (routes forward under dry-flap to J_ACT on PCBA 03)
+        // Flat Actuator Ribbon Cable (routes forward to PCBA 03 J_ACT)
         color([0.15, 0.15, 0.15]) {
-            translate([0, 20.0, 0.8])
-                cube([30.0, 6.0, 0.6], center=false);
-            // JST-SH 8-Pin connector plug
-            translate([-4.0, 20.0, 0.2])
+            translate([-pillar_l/2.0 - 15.0, 18.0, deck_z + 0.8])
+                cube([25.0, 6.0, 0.6], center=false);
+            translate([-pillar_l/2.0 - 19.0, 18.0, deck_z + 0.2])
                 cube([4.0, 6.0, 2.0], center=false);
         }
     }
 }
 
-// Complete assembly: Cardo Packtalk Edge WITH 2D Rocker Plate clicked into cradle
-module cardo_with_2d_rocker_plate_assembly() {
+// Complete assembly: Universal Slide Bridge mounted over Cardo Packtalk Edge
+module cardo_with_universal_slide_bracket_assembly() {
     // A. Cardo OEM Air-Mount Cradle (Screwed to pod floor)
-    dummy_cardo_oem_airmount_cradle();
+    translate([6.0, (42.0 - 46.0)/2.0 + 1.0, 0])
+        dummy_cardo_oem_airmount_cradle();
 
     // B. Cardo Packtalk Edge (Docked inside cradle)
-    translate([0, 0, 3.5])
+    translate([6.0, (42.0 - 46.0)/2.0 + 1.0, 3.5])
         dummy_cardo_packtalk_edge(with_actuators = false);
 
-    // C. Ultra-Flat 2D Dual-Rocker Plate (Clicked onto cradle, height = only 6.5 mm!)
-    translate([-1.0, 0, 22.0])
-        cardo_edge_2d_rocker_plate(show_actuators = true);
+    // C. Universal Dual-Carriage Slide Bracket (Bolted into the 4 floor bosses)
+    // Carriage 1 aligned over Front Media key (X = 28.0), Carriage 2 over Rear Intercom key (X = 69.0)
+    universal_actuator_slide_bracket(
+        carriage1_x = 28.0,
+        carriage2_x = 69.0,
+        show_actuators = true
+    );
 }
 
 // Standalone execution preview
-cardo_with_2d_rocker_plate_assembly();
+cardo_with_universal_slide_bracket_assembly();

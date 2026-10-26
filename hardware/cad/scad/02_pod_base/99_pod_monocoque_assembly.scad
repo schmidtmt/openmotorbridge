@@ -116,19 +116,23 @@ module pod_monocoque_full_assembly() {
             pod_dry_flap();
     }
 
-    // 7. Upper Equipment Bay: Cardo Packtalk Edge WITH 2D Dual-Rocker Plate
-    translate([50.0, (POD_OUTER_W - 46.0)/2.0, POD_WALL + 1.5 + EXP_BRACKET_Z]) {
-        // OEM Air-Mount Cradle screwed to floor
+    // 7. Upper Equipment Bay: Communicator & Universal Dual-Carriage Slide Bracket
+    // Communicator (e.g. Cardo Packtalk Edge in OEM cradle, or Sena / Midland / OMM) resting on floor
+    translate([52.0, (POD_OUTER_W - 46.0)/2.0, POD_WALL + 0.5]) {
         dummy_cardo_oem_airmount_cradle();
-
-        // Packtalk Edge Unit clicked into cradle
         translate([0, 0, 3.5])
             dummy_cardo_packtalk_edge(with_actuators = false);
+    }
 
-        // Ultra-Low-Profile 2D Dual-Rocker Actuator Plate (Clicked onto cradle, height only 6.5 mm!)
-        // Enables fully automatic ignition-coupled Power-On / Power-Off (KL15) for Cardo
-        translate([-1.0, 0, 22.0])
-            cardo_edge_2d_rocker_plate(show_actuators = true);
+    // Universal Dual-Carriage Slide Bracket ("One Size Fits All")
+    // Rigid portal bridge bolted directly into the 4x M2.5 brass threaded floor bosses at:
+    // (56.0, 14.0), (56.0, 56.0), (140.0, 14.0), (140.0, 56.0)
+    translate([56.0, 14.0, POD_WALL + 2.5 + EXP_BRACKET_Z]) {
+        universal_actuator_slide_bracket(
+            carriage1_x = 22.0,
+            carriage2_x = 63.0,
+            show_actuators = true
+        );
     }
 
     // 8. Tool-Free Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.4 mm)
