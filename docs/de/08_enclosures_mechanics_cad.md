@@ -194,13 +194,13 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ### 4.1 3D-CAD-Modell & Anschnitt des Satelliten-Pods (Typ B)
 
-![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das formschlüssige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A Bus oben bei $Z = 26{,}5\,\text{mm}$, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$, beide mittig bei $Y = 35{,}0\,\text{mm}$) und der geschützte Innenraum für PCBA 03 und OEM-Intercom-Module.*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das formschlüssige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A Bus oben bei $Z = 26{,}5\,\text{mm}$, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$, beide mittig bei $Y = 35{,}0\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem EPDM-Zwischendeckel (Dry-Flap) und der geräumige obere Geräteraum mit der universellen Doppel-Schiebeschlitten-Aktuatorschiene.*
 
-![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/openmotorbridge_pod_exploded_view.png)
+![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der horizontalen Einschubachse (Monocoque-Wanne, Führungsrippen, Slide-in Deckel, Dichtelemente und PCBA 03 Trägerplatine).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel und Port A/B, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, universelle Doppel-Schiebeschlitten-Aktuatorschiene und formschlüssiger Slide-in Deckel mit FOB-Rastkontur).*
 
 ---
 
@@ -208,9 +208,9 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schmutzunempfindlich und diebstahlgeschützt:
 
-![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/magnetic_anti_theft_lock_cad.png)
+![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Abbildung 8.8: 3D-CAD-Detailansicht der berührungslosen magnetischen FOB-Anti-Theft-Verriegelung. Die innenliegende Sperrklinke rastet im geschlossenen Zustand formschlüssig in die $90^\circ$-Kerbe des Slide-in Deckels ein und wird durch das Magnetfeld des Smart-Keyfobs berührungslos nach unten freigegeben.*
+*Abbildung 8.8: 3D-CAD-Detailansicht der berührungslosen magnetischen FOB-Anti-Theft-Verriegelung des Slide-in Deckels. Die innenliegende federbelastete Sperrklinke rastet im geschlossenen Zustand formschlüssig in die $90^\circ$-Kerbe des Schiebedeckels ein und wird durch das Magnetfeld des Smart-Keyfobs (PCBA 07) berührungslos nach unten freigegeben.*
 
 ```
           SLIDE-IN DECKEL & FOB-MAGNETVERRIEGELUNG (SCHNITTANSICHT)
@@ -260,9 +260,9 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schm
 
 Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen gegliedert:
 
-![OpenMotorBridge Satelliten-Pod Röntgen- & Innenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+![OpenMotorBridge Satelliten-Pod Röntgen- & Innenansicht](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Abbildung 8.9: Transparente 3D-Röntgenansicht (X-Ray) des vollständig bestückten Satelliten-Pods. Erkennbar sind die tiefliegende 4-Lagen Trägerplatine PCBA 03 auf M2.5 Elastomer-Dämpfern, die stirnseitige Leitungsführung zur Port A Bus-Verschraubung und zur Port B USB-C Ladedose sowie der uneingeschränkte obere Geräteraum.*
+*Abbildung 8.9: Transparente 3D-Röntgenansicht (X-Ray) des vollständig geschlossenen Monocoque-Satelliten-Pods. Erkennbar sind die tiefliegende 4-Lagen Trägerplatine PCBA 03 auf M2.5 Elastomer-Dämpfern, die stirnseitige Leitungsführung zur Port A Bus-Verschraubung und zur Port B USB-C Ladedose, die abdichtende EPDM-Dry-Flap sowie die im oberen Geräteraum integrierte Aktuatorschiene.*
 
 ```
             POD-INNENAUFBAU: ZWEIZONEN-ARCHITEKTUR & DRY-FLAP
@@ -303,10 +303,6 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 *Abbildung 8.11: Orthografische Draufsicht (Top-Layer F.Cu) der PCBA 03 mit 1,0 mm Eckenfasen, 4x M2.5 Entkopplungsbohrungen ($36{,}0 \times 42{,}0\,\text{mm}$ Raster) und klarer Zonierung in Stromversorgung, Signalverarbeitung und Automotive-Schnittstellen.*
 
-![Pod Poka-Yoke Querschnitt](../images/cad/pod_poka_yoke_cross_section_cad.png)
-
-*Abbildung 8.12: Transversaler CAD-Schnitt durch den Pod-Körper zur Visualisierung der asymmetrischen Nut- und Feder-Führungsgeometrie (Poka-Yoke).*
-
 2. **Zwischendeckel-Spritzschutzblende (Dry-Flap):**
    * Über der `PCBA 03` sitzt eine schwenkbare oder einschiebbare Zwischenblende aus hochflexiblem Shore 50A Silikon/EPDM.
    * Sie dichtet die Platine, Lötanschlüsse und Stecker hermetisch gegen die obere Kammer ab.
@@ -320,28 +316,20 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ### 4.4 Direkte Intercom-Integration (Entfall der elektromechanischen Kassetten)
 
-Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Tauchanker-Stößel und klobigen Kassetten-Einschübe. Die Steuerung der Geräte erfolgt zeitgemäß digital über die zentrale Audio-Engine oder ergonomische Taster:
+Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Tauchanker-Stößel und klobigen Kassetten-Einschübe. Die Steuerung der Geräte erfolgt zeitgemäß digital über die zentrale Audio-Engine oder ergonomische Taster. Für Geräte mit mechanischen Tastern kommt die universelle Aktuatorschiene zum Einsatz:
 
-![Intercom-Kassetten & Schlittenvarianten Trio](../images/cad/cartridge_variants_trio.png)
+![Universelle Aktuatorschiene CAD](../images/cad/universal_actuator_slide_bracket_cad.png)
 
-*Abbildung 8.13: Die universellen modularen Geräte-Einsätze im Überblick: Sena SPIDER X Slim Formnest (links), Cardo Packtalk Edge Air-Mount Halterung (Mitte) und hermetische Mini-Dry-Box (rechts).*
+*Abbildung 8.12: 3D-CAD-Modell der universellen Doppel-Schiebeschlitten-Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`). Zwei unabhängig voneinander stufenlos auf Längsnuten justierbare Klemmschlitten mit 5V-Miniatur-Hubmagneten und weichen Shore A50 Silikonstempeln bedienen beliebige OEM-Taster (Sena, Cardo, Midland) direkt im oberen Gerätebett – 100 % kassettenfrei und ohne gerätespezifische Wechselschlitten.*
 
 1. **Sena SPIDER X Slim (Referenz-Setup):**
    * Das extrem flache OEM-Gerät wird formschlüssig in ein EPDM-Formsitzbett in die obere Kammer gelegt.
    * Die werksseitige 3-adrige Sena-Kabelpeitsche (DC-Power, Audio-Out, Mic-In) wird direkt auf den vorkonfektionierten JST-Stecker von `PCBA 03` gesteckt.
    * Die Bedienung (Mesh Ein/Aus, Kanalwechsel, Lautstärke) erfolgt **100 % digital** über die Bluetooth 5.4 LE Audio-Schnittstelle des Qualcomm QCC3084 auf der Zentralbox oder die programmierbaren Under-Perch Lenkertaster – **null Verschleißteile, null Stößel-Justage!**
 
-![Sena SPIDER X Slim Pod Integration CAD](../images/cad/sena_cartridge_assembly_cad.png)
-
-*Abbildung 8.14: 3D-CAD-Baugruppe der formschlüssigen Sena SPIDER X Slim Integration im universellen Pod-Gehäuse.*
-
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
    * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt direkt unter den Zwischendeckel an `PCBA 03`.
-
-![Cardo Packtalk Edge Pod Integration CAD](../images/cad/cardo_cartridge_assembly_cad.png)
-
-*Abbildung 8.15: 3D-CAD-Baugruppe der Cardo Packtalk Edge Integration mit formschlüssiger Verschraubung der OEM Air-Mount Magnethalterung.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * Das ultrakompakte UCS-Modul ($68 \times 36 \times 9{,}5\,\text{mm}$) wird formschlüssig eingeclipst.

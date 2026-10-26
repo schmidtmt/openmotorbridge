@@ -172,13 +172,13 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ### 4.1 3D CAD Model & Cutaway of Satellite Pod (Type B)
 
-![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), and the protected bay for PCBA 03 and OEM intercom modules.*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, and the spacious upper equipment chamber with the universal dual-carriage actuator slide bracket.*
 
-![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/openmotorbridge_pod_exploded_view.png)
+![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the horizontal insertion axis (monocoque chassis, guide rails, slide-in lid, sealing gaskets, and PCBA 03 carrier board).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle and end-wall Port A/B, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, universal dual-carriage actuator slide bracket, and form-fitting slide-in lid with FOB latch detent).*
 
 ---
 
@@ -186,9 +186,9 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 Opening and closing the satellite pod is completely intuitive, grime-impervious, and theft-protected:
 
-![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/magnetic_anti_theft_lock_cad.png)
+![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism. In the closed state, the internal locking pawl positively retains the $90^\circ$ notch of the slide-in lid and is drawn downward contact-free when the Smart Keyfob approaches.*
+*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism for the slide-in lid. In the closed state, the internal spring-loaded locking pawl positively engages the $90^\circ$ retention notch of the slide-in lid and is drawn downward contact-free when the Smart Keyfob (PCBA 07) approaches.*
 
 ```
           SLIDE-IN LID & FOB MAGNETIC LATCH (SECTION VIEW)
@@ -238,9 +238,9 @@ Opening and closing the satellite pod is completely intuitive, grime-impervious,
 
 The interior of the satellite pod is partitioned into two vertically isolated levels:
 
-![OpenMotorBridge Satellite Pod X-Ray View CAD](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+![OpenMotorBridge Satellite Pod X-Ray View CAD](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Figure 8.9: Transparent 3D X-Ray rendering of the fully assembled satellite pod. Evident are the low-profile 4-layer PCBA 03 board mounted on M2.5 elastomer dampers, internal cable routes to the Port A Bus fitting and Port B USB-C socket, and the unobstructed upper equipment chamber.*
+*Figure 8.9: Transparent 3D X-Ray rendering of the fully closed monocoque satellite pod. Evident are the low-profile 4-layer PCBA 03 board mounted on M2.5 elastomer dampers, internal cable routes to the Port A Bus fitting and Port B USB-C socket, the sealing EPDM dry-flap, and the actuator slide bracket integrated in the upper equipment chamber.*
 
 ```
             POD INTERIOR: TWO-ZONE ARCHITECTURE & DRY-FLAP
@@ -281,10 +281,6 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 *Figure 8.11: Orthographic top view (F.Cu) of PCBA 03 showing 1.0 mm corner chamfers, 4x M2.5 mounting holes ($36.0 \times 42.0\,\text{mm}$ pitch), and clean topological zoning between power stage, host processor, and audio codec circuitry.*
 
-![Pod Poka-Yoke Cross Section CAD](../images/cad/pod_poka_yoke_cross_section_cad.png)
-
-*Figure 8.12: Transverse cross-section of the pod chassis showing the asymmetrical internal guide ribs (Poka-Yoke tongue-and-groove layout).*
-
 2. **Intermediate Dry-Flap Splash Guard:**
    * Above `PCBA 03`, a hinged or slide-in Shore 50A silicone/EPDM flap hermetically seals the lower bay.
    * Opening the slide-in lid in torrential rain or with wet gloves will not expose the sensitive PCBA to dripping water.
@@ -297,28 +293,20 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ### 4.4 Direct Intercom Integration (Zero Electromechanical Actuators)
 
-Eliminating the legacy cartridge sleds removes all problematic electromechanical solenoids and plungers. Communication control is 100% digital:
+Eliminating the legacy cartridge sleds removes all problematic electromechanical solenoids and plungers. Communication control is 100% digital via Bluetooth audio or handlebar switches. For intercoms requiring mechatronic button presses, the universal dual-carriage actuator bracket is utilized:
 
-![Intercom Cartridge Variants Trio CAD](../images/cad/cartridge_variants_trio.png)
+![Universal Actuator Slide Bracket CAD](../images/cad/universal_actuator_slide_bracket_cad.png)
 
-*Figure 8.13: Universal modular equipment inserts: Sena SPIDER X Slim nest (left), Cardo Packtalk Edge Air-Mount cradle (center), and hermetic Mini Dry Box (right).*
+*Figure 8.12: 3D CAD model of the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). Two independently adjustable sliding carriages on slotted rails with 5V miniature push-pull solenoids and soft Shore A50 silicone pusher tips operate any OEM communicator buttons (Sena, Cardo, Midland) directly in the upper equipment bay -- 100% cartridge-free and without hardware swaps.*
 
 1. **Sena SPIDER X Slim (Reference Setup):**
    * The ultra-flat OEM communicator rests in a contoured EPDM pocket in the upper chamber.
    * The factory 3-wire Sena micro-cable whip (DC power, audio-out, mic-in) plugs directly into `PCBA 03`.
    * All controls (Mesh toggle, channel cycling, volume) operate **100% digitally** via the Qualcomm QCC3084 Bluetooth 5.4 LE Audio gateway on the Central Box or via the handlebar under-perch thumb switches -- **zero wear parts, zero mechanical alignment!**
 
-![Sena SPIDER X Slim Pod Integration CAD](../images/cad/sena_cartridge_assembly_cad.png)
-
-*Figure 8.14: 3D CAD assembly view of the flush Sena SPIDER X Slim integration inside the universal pod enclosure.*
-
 2. **Cardo Packtalk Edge / Pro:**
    * The original **Cardo Air-Mount magnetic cradle** screws directly to the housing bed with 2x M3 screws.
    * The Cardo clicks onto its OEM magnetic mount; the OEM audio whip connects under the dry-flap to `PCBA 03`.
-
-![Cardo Packtalk Edge Pod Integration CAD](../images/cad/cardo_cartridge_assembly_cad.png)
-
-*Figure 8.15: 3D CAD assembly view of the Cardo Packtalk Edge integration with rigid fastening of the OEM Air-Mount magnetic dock.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * The compact UCS module ($68 \times 36 \times 9.5\,\text{mm}$) clips into place.

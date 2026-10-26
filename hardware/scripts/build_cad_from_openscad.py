@@ -34,8 +34,12 @@ STL_TARGETS: List[Tuple] = [
     ("01_main_box/02_colsure.scad", "01_main_box/main_box_lid.stl"),
     ("01_main_box/parts/013_battery_antenna_bridge.scad", "01_main_box/main_box_battery_bridge.stl"),
     
-    # 2. Satellite Pod Base
+    # 2. Satellite Pod Base (v10.0 Monocoque Architecture)
     ("02_pod_base/pod_base_housing.scad", "02_pod_base/pod_base_housing.stl"),
+    ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/pod_monocoque_tub.stl"),
+    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/pod_slide_lid.stl"),
+    ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/pod_dry_flap.stl"),
+    ("02_pod_base/parts/012_universal_actuator_slide_bracket.scad", "02_pod_base/universal_actuator_slide_bracket.stl"),
     
     # 3. Pod Cartridges & Modular Inserts
     ("03_pod_cartridges/00_base_sled.scad", "03_pod_cartridges/cartridge_base_sled.stl"),
@@ -170,6 +174,41 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "55,37,18,55,0,310,250",
         "Tomorrow"
     ),
+    # Satellite Pod (v10.0 Monocoque Architecture)
+    (
+        "02_pod_base/99_pod_monocoque_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "pod_monocoque_assembly_cutaway_3d.png"),
+        "75,35,20,55,0,320,300",
+        "Tomorrow Night",
+        ["-D", 'VIEW_MODE="cutaway"']
+    ),
+    (
+        "02_pod_base/99_pod_monocoque_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "pod_monocoque_assembly_exploded_3d.png"),
+        "75,35,50,55,0,320,440",
+        "Tomorrow",
+        ["-D", 'VIEW_MODE="exploded"']
+    ),
+    (
+        "02_pod_base/99_pod_monocoque_assembly.scad",
+        os.path.join(CAD_IMG_DIR, "pod_monocoque_xray_assembly_3d.png"),
+        "75,35,20,55,0,320,330",
+        "Tomorrow",
+        ["-D", 'VIEW_MODE="xray"']
+    ),
+    (
+        "02_pod_base/parts/016_fob_magnetic_lock_mechanism.scad",
+        os.path.join(CAD_IMG_DIR, "pod_slide_lid_magnetic_lock_3d.png"),
+        "52,-10,24,60,0,335,115",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/parts/012_universal_actuator_slide_bracket.scad",
+        os.path.join(CAD_IMG_DIR, "universal_actuator_slide_bracket_cad.png"),
+        "55,27,8,55,0,320,180",
+        "Tomorrow"
+    ),
+    # Legacy Satellite Pod References (Retained for backwards compatibility)
     (
         "02_pod_base/99_pod_base_assembly.scad",
         os.path.join(CAD_IMG_DIR, "openmotorbridge_pod_exploded_view.png"),
