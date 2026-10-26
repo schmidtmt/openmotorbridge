@@ -65,7 +65,7 @@ EXP_LID_Z      = (VIEW_MODE == "exploded") ? 15.0 : 0.0;  // Elevated slightly t
 EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 24.0 : 0.0;
 EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
 EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 6.0  : 0.0;
-SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : 0.0;  // Lid partially retracted along X-rails to demonstrate sliding action!
+SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : ((VIEW_MODE == "xray") ? 38.0 : 0.0);  // Lid partially retracted along X-rails to demonstrate sliding action!
 
 module internal_wiring_preview() {
     // Port B USB-C internal silicone cable (from bulkhead at Z=11.5 to J_USB_OUT at X=9.5, Y=22.0)
@@ -147,7 +147,7 @@ module pod_monocoque_full_assembly() {
         }
     } else {
         translate([2.0 + SLIDE_LID_X + EXP_LID_X, (POD_OUTER_W - 60.5)/2.0, lid_z_pos + EXP_LID_Z]) {
-            color([0.22, 0.23, 0.25, (VIEW_MODE == "xray" ? 0.35 : 0.95)])
+            color([0.22, 0.23, 0.25, (VIEW_MODE == "xray" ? 0.65 : 0.95)])
                 pod_slide_lid();
         }
     }

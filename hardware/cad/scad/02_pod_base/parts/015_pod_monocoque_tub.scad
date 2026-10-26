@@ -147,10 +147,11 @@ module pod_monocoque_tub() {
         translate([6.0, POD_OUTER_W - 5.5, 32.0])
             cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
 
-        // Rear Slide-in Insertion Slot (Einschubschlitz in rear bulkhead at X = 150 mm)
-        // The slot is open at the rear for the slide-in lid to enter horizontally along X
-        translate([POD_OUTER_L - POD_WALL - 2.0, 1.5, 31.8])
-            cube([POD_WALL + 4.0, POD_OUTER_W - 3.0, 3.8], center=false);
+        // Rear Slide-in Insertion Portal (Einschuböffnung an der Stirnwand rechts bei X = 150 mm)
+        // Completely OPEN from Z = 31.9 mm all the way to top rim (Z = 38.0 mm)
+        // Width spans the full C-groove width (Y = 1.4 to 68.6 mm) for an unobstructed entry portal!
+        translate([POD_OUTER_L - POD_WALL - 1.5, 1.4, 31.9])
+            cube([POD_WALL + 5.0, POD_OUTER_W - 2.8, POD_OUTER_H - 31.9 + 3.0], center=false);
 
         // Internal FOB Anti-Theft Magnetic Latch Socket (100% INTERNAL - Zero outside access!)
         // Blind hole at X = 16.0 mm, Y = POD_OUTER_W/2 in the bulkhead floor

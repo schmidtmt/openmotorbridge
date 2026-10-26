@@ -251,7 +251,7 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ![OpenMotorBridge Satellite Pod X-Ray View CAD](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Figure 8.9: Transparent 3D X-Ray rendering of the fully closed monocoque satellite pod. Evident are the low-profile 4-layer PCBA 03 board mounted on M2.5 elastomer dampers, internal cable routes to the Port A Bus fitting and Port B USB-C socket, the sealing EPDM dry-flap, and the actuator slide bracket integrated in the upper equipment chamber.*
+*Figure 8.9: Transparent 3D X-Ray and kinematics view of the monocoque satellite pod with the slide-in lid partially retracted to the right (rearward) for demonstration: Clearly evident is the open right-hand insertion portal (bulkhead opening at the rear) through which the lid enters horizontally along the lateral C-groove guide rails. Revealed in the forward section: the low-profile 4-layer carrier board PCBA 03 beneath the EPDM dry-flap, internal cable routes to Port A (upper) and Port B (lower), and inside the upper equipment chamber the Cardo Packtalk Edge with snapped-on 2D rocker actuator plate.*
 
 ```
             POD INTERIOR: TWO-ZONE ARCHITECTURE & DRY-FLAP

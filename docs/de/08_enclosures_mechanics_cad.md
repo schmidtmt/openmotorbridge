@@ -270,7 +270,7 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ![OpenMotorBridge Satelliten-Pod Röntgen- & Innenansicht](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Abbildung 8.9: Transparente 3D-Röntgenansicht (X-Ray) des vollständig geschlossenen Monocoque-Satelliten-Pods. Erkennbar sind die tiefliegende 4-Lagen Trägerplatine PCBA 03 auf M2.5 Elastomer-Dämpfern, die stirnseitige Leitungsführung zur Port A Bus-Verschraubung und zur Port B USB-C Ladedose, die abdichtende EPDM-Dry-Flap sowie die im oberen Geräteraum integrierte Aktuatorschiene.*
+*Abbildung 8.9: Transparente 3D-Röntgen- und Kinematikansicht des Monocoque-Satelliten-Pods mit zur Demonstration nach rechts (hinten) ausgefahrenem Slide-In Deckel: Deutlich erkennbar ist die geöffnete rechte Einschuböffnung (Portal an der hinteren Stirnwand), durch welche der Deckel horizontal in die seitlichen C-Führungsrillen eingeschoben wird. Im freigelegten vorderen Bereich sichtbar: die tiefliegende 4-Lagen Trägerplatine PCBA 03 unter der EPDM-Dry-Flap, die stirnseitige Leitungsführung zu Port A (oben) und Port B (unten), sowie im oberen Geräteraum das Cardo Packtalk Edge mit aufgerasteter 2D-Kipphebelplatte.*
 
 ```
             POD-INNENAUFBAU: ZWEIZONEN-ARCHITEKTUR & DRY-FLAP
