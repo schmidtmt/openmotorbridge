@@ -195,11 +195,11 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das geräumige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A 4-Pin IP67 Magnet-Abrissschnittstelle oben bei $Z = 26{,}5\,\text{mm}$ mit internem Silikon-Flachbandkabel zu `J_BUS`, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem Cardo Packtalk Edge auf OEM Air-Mount Halterung, die 4 seitlichen Riegelzähne des Slot-in Deckels sowie die rückseitige optionale SMA-Antennendurchführung ($0{,}4\,\text{mm}$ Knockout-Membran).*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das geräumige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A 4-Pin IP67 Magnet-Abrissschnittstelle oben bei $Z = 26{,}5\,\text{mm}$ mit internem Silikon-Flachbandkabel zu `J_BUS`, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$), die tiefliegende Trägerplatine PCBA 03 unter dem schützenden EPDM-Zwischendeckel (Dry-Flap), der obere Geräteraum mit dem Cardo Packtalk Edge auf OEM Air-Mount Halterung, die 4 seitlichen Riegelzähne des Slot-in Deckels sowie die an der vertikalen Rückwand ($X = 150\,\text{mm}$) liegende optionale SMA-Antennendurchführung (ab Werk 100 % dicht mit $0{,}4\,\text{mm}$ Knockout-Membran; im Deckel befindet sich keine Antennendurchführung).*
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge, Slot-in Deckel mit 4 seitlichen Riegelzähnen und zentralem Federschieber sowie rückseitige geschlossene SMA-Knockout-Membran).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der Z-Achse (Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, oberes Intercom-Gerätebett mit OEM Air-Mount Cradle und Cardo Packtalk Edge, Slot-in Deckel mit 4 seitlichen Riegelzähnen und zentralem Federschieber sowie rückseitige, vertikal in der Rückwand integrierte geschlossene SMA-Knockout-Membran).*
 
 ---
 
@@ -209,7 +209,7 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slot-In V
 
 ![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Abbildung 8.8: 3D-CAD-Detailansicht des Slot-in Deckel-Verriegelungsmechanismus. Vier seitliche Riegelzähne (orange, je 2 auf der linken und rechten Seite) greifen formschlüssig in Riegeltaschen der Gehäusewand. Ein zentraler Federschieber (blau) auf der Deckeloberseite spannt beim Betätigen die Rückstellfeder und zieht die Zähne synchron nach innen ein. Nähert sich der Smart-Keyfob (PCBA 07) dem Zielkreis, gibt das Magnetfeld den federbelasteten Riegel zusätzlich kontaktlos frei.*
+*Abbildung 8.8: 3D-CAD-Detailansicht des Slot-in Deckel-Verriegelungsmechanismus. Vier seitliche Riegelzähne (orange, je 2 auf der linken und rechten Seite) greifen formschlüssig in innenseitige Sacktaschen der Gehäusewand. Die Gehäuseaußenwand ist dabei zu 100 % nahtlos, geschlossen und wasserdicht (in der CAD-Darstellung transparent visualisiert, um den inneren Riegelsitz zu zeigen – kein Durchbruch nach außen!). Ein zentraler Federschieber (blau) auf der Deckeloberseite spannt beim Betätigen die Rückstellfeder und zieht die Zähne synchron nach innen ein. Nähert sich der Smart-Keyfob (PCBA 07) dem Zielbereich, gibt das Magnetfeld den federbelasteten Riegel zusätzlich kontaktlos frei.*
 
 ```
        SLOT-IN DECKEL & 4-ZAHN-ZENTRALVERRIEGELUNG (SCHNITTANSICHT)
@@ -327,6 +327,12 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
    * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt direkt unter den Zwischendeckel an `PCBA 03`.
+   * **Optionaler Mechatronischer Kaltstart-Bügel (`012_universal_actuator_slide_bracket.scad`):**
+     * Falls das Headset komplett ausgeschaltet war und beim Einschalten der Motorradzündung (KL15) vollautomatisch aufgeweckt werden soll, überspannt ein schlanker **Überbrückungs-Bügel (Gantry)** das Cardo-Gerät von oben:
+
+![Cardo Packtalk Edge mit Mechatronischem Überbrückungs-Aktuator](../images/cad/universal_actuator_slide_bracket_cad.png)
+
+*Abbildung 8.13: Der universelle Überbrückungs-Aktuatorbügel (`012_universal_actuator_slide_bracket.scad`) direkt über dem Cardo Packtalk Edge in OEM Air-Mount Halterung montiert: Schlitten 1 (orange) sitzt bei $X = 22{,}0\,\text{mm}$ exakt senkrecht über der vorderen Media/Power-Taste; Schlitten 2 (blau) sitzt bei $X = 63{,}0\,\text{mm}$ exakt senkrecht über der hinteren Intercom/Power-Taste ($41\,\text{mm}$ Tastenabstand, grüne Maßlinie). Zwei weiche TPU-Stößel drücken bei Zündung-AN für 2,0 s simultan auf beide Tasten, um das Headset ohne Standby-Stromverbrauch aus dem Tiefschlaf zu starten. Bei rein digitaler BLE-Ansteuerung entfällt dieser Bügel komplett.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * Das ultrakompakte UCS-Modul ($68 \times 36 \times 9{,}5\,\text{mm}$) wird formschlüssig eingeclipst.

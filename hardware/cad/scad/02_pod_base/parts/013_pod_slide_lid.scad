@@ -99,14 +99,10 @@ module pod_slide_lid() {
                 cube([1.8, 14.0, 1.0], center=true);
         }
 
-        // 8. Smart-Keyfob (PCBA 07) FOB Target Circle (Ø 16 mm engraved ring at X = 45 mm)
+        // 8. Smart-Keyfob (PCBA 07) FOB Target Badge (16 x 10 mm rounded RFID/key rectangle, NOT an antenna hole!)
         translate([45.0, LID_W/2.0, LID_PLATE_H - 0.4]) {
-            difference() {
-                cylinder(r=8.0, h=0.6, center=false, $fn=32);
-                cylinder(r=6.5, h=0.7, center=false, $fn=32);
-            }
-            cube([1.4, 6.0, 0.6], center=true);
-            cube([6.0, 1.4, 0.6], center=true);
+            // Subtle 0.4 mm recessed rectangular badge
+            cube([16.0, 10.0, 0.6], center=true);
         }
 
         // 9. Rear Tactile Grip Flutes (Secondary grip zone)

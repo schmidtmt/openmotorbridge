@@ -17,21 +17,17 @@ RETRACTED = false; // Toggle to true to visualize teeth in retracted state
 module central_spring_latch_mechanism() {
     stroke_y = RETRACTED ? 2.5 : 0.0;
 
-    // 1. Cutaway Section of Pod Housing Sidewall (Dark Anthracite PA12)
-    color([0.30, 0.32, 0.36, 0.92]) {
+    // 1. Solid Outer Sidewall of Pod Housing (Translucent Phantom PA12, 100% closed, zero holes!)
+    color([0.32, 0.38, 0.48, 0.40]) {
         difference() {
-            translate([15.0, -10.0, 10.0])
-                cube([80.0, 15.0, 26.0], center=false);
+            translate([15.0, -8.0, 10.0])
+                cube([80.0, 13.0, 26.0], center=false);
 
-            // Sidewall undercut pocket for locking tooth
+            // Internal blind pocket for locking tooth (undercut on INSIDE face only, exterior is 100% solid!)
             translate([35.0 - 4.0, 2.0, 27.5])
                 cube([8.0, 4.0, 3.5], center=false);
 
-            // Cutaway window into tooth pocket so the tooth is 100% visible
-            translate([20.0, -11.0, 15.0])
-                cube([38.0, 18.0, 20.0], center=false);
-
-            // Lid longitudinal guide rail slot
+            // Lid longitudinal guide rail slot on inside rim
             translate([14.0, 3.5, 27.0])
                 cube([82.0, 16.0, 5.0], center=false);
         }

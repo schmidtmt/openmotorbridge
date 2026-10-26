@@ -175,11 +175,11 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, spacious monolithic PA12 housing, end-wall connector ports (Port A 4-Pin IP67 magnetic break-away receptacle upper at $Z = 26.5\,\text{mm}$ with internal silicone flat ribbon cable to `J_BUS`, Port B USB-C lower at $Z = 11.5\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, the 4 lateral locking teeth of the slot-in lid, and the rear optional SMA antenna bulkhead port (with $0.4\,\text{mm}$ solid knockout membrane).*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, spacious monolithic PA12 housing, end-wall connector ports (Port A 4-Pin IP67 magnetic break-away receptacle upper at $Z = 26.5\,\text{mm}$ with internal silicone flat ribbon cable to `J_BUS`, Port B USB-C lower at $Z = 11.5\,\text{mm}$), the floor-mounted PCBA 03 board beneath the protective EPDM dry-flap, the upper equipment chamber with the Cardo Packtalk Edge docked on its OEM Air-Mount cradle, the 4 lateral locking teeth of the slot-in lid, and the rear optional SMA antenna bulkhead port located on the vertical rear end-wall at $X = 150\,\text{mm}$ (factory sealed with $0.4\,\text{mm}$ solid knockout membrane; the top lid contains no antenna pass-through).*
 
 ![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, slot-in lid with 4 lateral locking teeth and central spring slider, and rear sealed SMA knockout membrane).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the vertical Z-axis (monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, upper intercom bed with OEM Air-Mount cradle and Cardo Packtalk Edge, slot-in lid with 4 lateral locking teeth and central spring slider, and rear sealed SMA knockout membrane integrated into the vertical end-wall).*
 
 ---
 
@@ -189,7 +189,7 @@ Opening and closing the satellite pod operates as a true **Slot-In mechanism** w
 
 ![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Figure 8.8: 3D CAD detail view of the slot-in lid locking mechanism. Four lateral locking teeth (orange, 2 on the left and 2 on the right) positively engage matching undercut pockets in the housing sidewalls. A central spring slider (blue) on the lid exterior compresses the return spring to retract all 4 teeth synchronously inward. When the Smart Keyfob (PCBA 07) approaches the target zone, magnetic attraction additionally releases the spring-loaded latch contact-free.*
+*Figure 8.8: 3D CAD detail view of the slot-in lid locking mechanism. Four lateral locking teeth (orange, 2 on the left and 2 on the right) positively engage matching internal blind pockets in the housing sidewalls. The outer enclosure wall is 100% solid, seamless, and waterproof (rendered translucent in CAD only to reveal internal tooth engagement -- zero external holes!). A central spring slider (blue) on the lid exterior compresses the return spring to retract all 4 teeth synchronously inward. When the Smart Keyfob (PCBA 07) approaches the target zone, magnetic attraction additionally releases the spring-loaded latch contact-free.*
 
 ```
        SLOT-IN LID & 4-TOOTH CENTRAL SPRING LATCH (SECTION VIEW)
@@ -306,6 +306,12 @@ In the following 4-variant inspection view (featuring an ergonomically cut-open 
 2. **Cardo Packtalk Edge / Pro:**
    * The original **Cardo Air-Mount magnetic cradle** screws directly to the housing bed with 2x M3 screws.
    * The Cardo clicks onto its OEM magnetic mount; the OEM audio whip connects under the dry-flap to `PCBA 03`.
+   * **Optional Mechatronic Cold-Boot Gantry Bridge (`012_universal_actuator_slide_bracket.scad`):**
+     * When fully automatic cold-power wakeup upon vehicle ignition ON (KL15) is required for dormant headsets without battery drain, a sleek **overhead gantry bridge** spans directly over the docked Cardo unit:
+
+![Cardo Packtalk Edge with Overhead Mechatronic Actuators](../images/cad/universal_actuator_slide_bracket_cad.png)
+
+*Figure 8.13: Universal overhead actuator gantry (`012_universal_actuator_slide_bracket.scad`) mounted directly across the Cardo Packtalk Edge in its OEM Air-Mount cradle: Carriage 1 (orange) is positioned at $X = 22.0\,\text{mm}$ vertically above the front Media/Power key; Carriage 2 (blue) is positioned at $X = 63.0\,\text{mm}$ vertically above the rear Intercom/Power key ($41\,\text{mm}$ button span, green dimension line). Two soft Shore A50 TPU pusher pads press both keys simultaneously for 2.0 s upon KL15 ignition ON to boot the headset without standby parasitic draw. When operating under digital Bluetooth LE Audio control, this bridge is completely omitted.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * The compact UCS module ($68 \times 36 \times 9.5\,\text{mm}$) clips into place.
