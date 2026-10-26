@@ -167,11 +167,28 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
    * **Intermediate Splash-Guard Cover (Dry-Flap):** A hinged or slide-in silicone/EPDM intermediate barrier hermetically shields the PCB and cable headers from dirt and water.
    * **Upper Equipment Chamber / Dry Box:** Directly accommodates the respective OEM communicator (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, or Midland PMR446) as well as the universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). When no intercom is installed, the entire compartment serves as a hermetic **Mini Dry Box** for vehicle registration, cash, and emergency keys.
 
+
 ---
 
-### 4.1 Slide-in Lid Kinematics & FOB Magnetic Latch
+### 4.1 3D CAD Model & Cutaway of Satellite Pod (Type B)
+
+![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Highlighted are the two-zone internal architecture, monolithic PA12 housing, end-wall connector ports (Port A Bus upper at $Z = 26.5\,\text{mm}$, Port B USB-C lower at $Z = 11.5\,\text{mm}$, both centered at $Y = 35.0\,\text{mm}$), and the protected bay for PCBA 03 and OEM intercom modules.*
+
+![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/openmotorbridge_pod_exploded_view.png)
+
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod along the horizontal insertion axis (monocoque chassis, guide rails, slide-in lid, sealing gaskets, and PCBA 03 carrier board).*
+
+---
+
+### 4.2 Slide-in Lid Kinematics & FOB Magnetic Latch
 
 Opening and closing the satellite pod is completely intuitive, grime-impervious, and theft-protected:
+
+![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/magnetic_anti_theft_lock_cad.png)
+
+*Figure 8.8: 3D CAD detail view of the contactless magnetic FOB anti-theft latch mechanism. In the closed state, the internal locking pawl positively retains the $90^\circ$ notch of the slide-in lid and is drawn downward contact-free when the Smart Keyfob approaches.*
 
 ```
           SLIDE-IN LID & FOB MAGNETIC LATCH (SECTION VIEW)
@@ -217,9 +234,13 @@ Opening and closing the satellite pod is completely intuitive, grime-impervious,
 
 ---
 
-### 4.2 Internal Architecture: Two-Zone Layout, Dry-Flap & In-Bag USB
+### 4.3 Internal Architecture: Two-Zone Layout, Dry-Flap & In-Bag USB
 
 The interior of the satellite pod is partitioned into two vertically isolated levels:
+
+![OpenMotorBridge Satellite Pod X-Ray View CAD](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Figure 8.9: Transparent 3D X-Ray rendering of the fully assembled satellite pod. Evident are the low-profile 4-layer PCBA 03 board mounted on M2.5 elastomer dampers, internal cable routes to the Port A Bus fitting and Port B USB-C socket, and the unobstructed upper equipment chamber.*
 
 ```
             POD INTERIOR: TWO-ZONE ARCHITECTURE & DRY-FLAP
@@ -252,6 +273,18 @@ The interior of the satellite pod is partitioned into two vertically isolated le
      * **`J_ACT` (8-Pin JST-SH, bottom-right):** Actuator drive for 5V cold-start solenoids on the slide bracket (4 channels `ACT_1`..`ACT_4` with flyback diodes `D1`..`D4`, dual `VCC_5V_PROT`, and dual `GND`).
      * Spatial clearance prevents solenoid inductive switching spikes from coupling into audio lines; both cable runs exit parallel to the rear.
 
+![PCBA 03 Satellite Pod Interface Board 3D Rendering](../images/pcba/pcba03_pod_cartridge_3d.png)
+
+*Figure 8.10: Photorealistic 3D CAD rendering of the PCBA 03 interface board ($42.0 \times 48.0\,\text{mm}$) with 100% SMT single-sided assembly on top layer F.Cu: 30W USB-PD sync buck stage with SW3516 and 7x7 mm power inductor, ESP32-C6-MINI-1U host MCU, ES8388 24-bit stereo audio codec, 4-channel actuator MOSFET array (Q1..Q4), and end-wall JST-GH headers `J_BUS` and `J_USB_OUT`.*
+
+![PCBA 03 Satellite Pod Interface Board Orthographic Top View](../images/pcba/pcba03_pod_cartridge_top.png)
+
+*Figure 8.11: Orthographic top view (F.Cu) of PCBA 03 showing 1.0 mm corner chamfers, 4x M2.5 mounting holes ($36.0 \times 42.0\,\text{mm}$ pitch), and clean topological zoning between power stage, host processor, and audio codec circuitry.*
+
+![Pod Poka-Yoke Cross Section CAD](../images/cad/pod_poka_yoke_cross_section_cad.png)
+
+*Figure 8.12: Transverse cross-section of the pod chassis showing the asymmetrical internal guide ribs (Poka-Yoke tongue-and-groove layout).*
+
 2. **Intermediate Dry-Flap Splash Guard:**
    * Above `PCBA 03`, a hinged or slide-in Shore 50A silicone/EPDM flap hermetically seals the lower bay.
    * Opening the slide-in lid in torrential rain or with wet gloves will not expose the sensitive PCBA to dripping water.
@@ -262,18 +295,30 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ---
 
-### 4.3 Direct Intercom Integration (Zero Electromechanical Actuators)
+### 4.4 Direct Intercom Integration (Zero Electromechanical Actuators)
 
 Eliminating the legacy cartridge sleds removes all problematic electromechanical solenoids and plungers. Communication control is 100% digital:
+
+![Intercom Cartridge Variants Trio CAD](../images/cad/cartridge_variants_trio.png)
+
+*Figure 8.13: Universal modular equipment inserts: Sena SPIDER X Slim nest (left), Cardo Packtalk Edge Air-Mount cradle (center), and hermetic Mini Dry Box (right).*
 
 1. **Sena SPIDER X Slim (Reference Setup):**
    * The ultra-flat OEM communicator rests in a contoured EPDM pocket in the upper chamber.
    * The factory 3-wire Sena micro-cable whip (DC power, audio-out, mic-in) plugs directly into `PCBA 03`.
    * All controls (Mesh toggle, channel cycling, volume) operate **100% digitally** via the Qualcomm QCC3084 Bluetooth 5.4 LE Audio gateway on the Central Box or via the handlebar under-perch thumb switches -- **zero wear parts, zero mechanical alignment!**
 
+![Sena SPIDER X Slim Pod Integration CAD](../images/cad/sena_cartridge_assembly_cad.png)
+
+*Figure 8.14: 3D CAD assembly view of the flush Sena SPIDER X Slim integration inside the universal pod enclosure.*
+
 2. **Cardo Packtalk Edge / Pro:**
    * The original **Cardo Air-Mount magnetic cradle** screws directly to the housing bed with 2x M3 screws.
    * The Cardo clicks onto its OEM magnetic mount; the OEM audio whip connects under the dry-flap to `PCBA 03`.
+
+![Cardo Packtalk Edge Pod Integration CAD](../images/cad/cardo_cartridge_assembly_cad.png)
+
+*Figure 8.15: 3D CAD assembly view of the Cardo Packtalk Edge integration with rigid fastening of the OEM Air-Mount magnetic dock.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * The compact UCS module ($68 \times 36 \times 9.5\,\text{mm}$) clips into place.
@@ -285,7 +330,7 @@ Eliminating the legacy cartridge sleds removes all problematic electromechanical
 
 ---
 
-### 4.4 The 4-Wire Automotive Backbone (Power & USB 2.0)
+### 4.5 The 4-Wire Automotive Backbone (Power & USB 2.0)
 
 Interconnection from the Central Box to both saddlebag pods utilizes a heavy-duty shielded **4-wire automotive cable harness** ($4 \times 0.34\,\text{mm}^2$, FLRY-B):
 

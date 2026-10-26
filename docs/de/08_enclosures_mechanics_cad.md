@@ -189,11 +189,28 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
    * **Zwischendeckel-Spritzschutzblende (Dry-Flap):** Ein aufklappbarer oder einschiebbarer Silikon-/EPDM-Zwischendeckel schirmt die Platine und Kabelanschlüsse vollständig gegen Schmutz und Nässe ab.
    * **Obere Zone (Direktaufnahme für OEM-Intercoms oder Dry-Box):** Nimmt direkt das jeweilige Kommunikationsmodul auf (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS oder Midland PMR446) sowie die universelle Doppel-Schiebeschlitten-Aktuatorschiene (`012_universal_actuator_slide_bracket.scad`). Wird kein Intercom genutzt, fungiert das gesamte Fach als hermetische **Mini-Dry-Box** für Fahrzeugpapiere, Bargeld und Notfallschlüssel.
 
+
 ---
 
-### 4.1 Kinematik des Slide-in Deckels & Magnetische FOB-Verriegelung
+### 4.1 3D-CAD-Modell & Anschnitt des Satelliten-Pods (Typ B)
+
+![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_cartridge_cutaway_3d.png)
+
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Erkennbar sind die Zweizonen-Architektur, das formschlüssige Monocoque-Gehäuse aus PA12, die stirnseitigen Buchsendurchbrüche (Port A Bus oben bei $Z = 26{,}5\,\text{mm}$, Port B USB-C unten bei $Z = 11{,}5\,\text{mm}$, beide mittig bei $Y = 35{,}0\,\text{mm}$) und der geschützte Innenraum für PCBA 03 und OEM-Intercom-Module.*
+
+![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/openmotorbridge_pod_exploded_view.png)
+
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods entlang der horizontalen Einschubachse (Monocoque-Wanne, Führungsrippen, Slide-in Deckel, Dichtelemente und PCBA 03 Trägerplatine).*
+
+---
+
+### 4.2 Kinematik des Slide-in Deckels & Magnetische FOB-Verriegelung
 
 Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schmutzunempfindlich und diebstahlgeschützt:
+
+![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/magnetic_anti_theft_lock_cad.png)
+
+*Abbildung 8.8: 3D-CAD-Detailansicht der berührungslosen magnetischen FOB-Anti-Theft-Verriegelung. Die innenliegende Sperrklinke rastet im geschlossenen Zustand formschlüssig in die $90^\circ$-Kerbe des Slide-in Deckels ein und wird durch das Magnetfeld des Smart-Keyfobs berührungslos nach unten freigegeben.*
 
 ```
           SLIDE-IN DECKEL & FOB-MAGNETVERRIEGELUNG (SCHNITTANSICHT)
@@ -239,9 +256,13 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt absolut intuitiv, schm
 
 ---
 
-### 4.2 Innenarchitektur: Zweizonen-Aufbau, Zwischendeckel & Koffer-USB
+### 4.3 Innenarchitektur: Zweizonen-Aufbau, Zwischendeckel & Koffer-USB
 
 Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen gegliedert:
+
+![OpenMotorBridge Satelliten-Pod Röntgen- & Innenansicht](../images/cad/openmotorbridge_pod_assembly_render_xray.png)
+
+*Abbildung 8.9: Transparente 3D-Röntgenansicht (X-Ray) des vollständig bestückten Satelliten-Pods. Erkennbar sind die tiefliegende 4-Lagen Trägerplatine PCBA 03 auf M2.5 Elastomer-Dämpfern, die stirnseitige Leitungsführung zur Port A Bus-Verschraubung und zur Port B USB-C Ladedose sowie der uneingeschränkte obere Geräteraum.*
 
 ```
             POD-INNENAUFBAU: ZWEIZONEN-ARCHITEKTUR & DRY-FLAP
@@ -274,6 +295,18 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
      * **`J_ACT` (8-Pin JST-SH, unten rechts):** Ansteuerung der 5V Kaltstart-Hubmagnete auf der Aktuatorschiene (4 Kanäle `ACT_1`..`ACT_4` mit Flyback-Dioden `D1`..`D4`, dualem `VCC_5V_PROT` und dualem `GND`).
      * Durch räumlichen Abstand sind Audio- und Aktuatorleitungen optimal entkoppelt; beide Kabelstränge laufen parallel nach hinten ab.
 
+![PCBA 03 Satelliten-Pod Interface Board 3D Rendering](../images/pcba/pcba03_pod_cartridge_3d.png)
+
+*Abbildung 8.10: Photorealistisches 3D-CAD-Rendering der Trägerplatine PCBA 03 ($42{,}0 \times 48{,}0\,\text{mm}$) mit 100 % Bestückung auf der Top-Layer F.Cu: 30W USB-PD Schnellladezone mit SW3516 und 7x7 mm Power-Induktor, ESP32-C6-MINI-1U Host-MCU, ES8388 24-Bit Stereo-Codec, 4-Kanal Aktuator-MOSFET-Array (Q1..Q4) sowie stirnseitigen JST-GH Headern `J_BUS` und `J_USB_OUT`.*
+
+![PCBA 03 Satelliten-Pod Interface Board Draufsicht Top](../images/pcba/pcba03_pod_cartridge_top.png)
+
+*Abbildung 8.11: Orthografische Draufsicht (Top-Layer F.Cu) der PCBA 03 mit 1,0 mm Eckenfasen, 4x M2.5 Entkopplungsbohrungen ($36{,}0 \times 42{,}0\,\text{mm}$ Raster) und klarer Zonierung in Stromversorgung, Signalverarbeitung und Automotive-Schnittstellen.*
+
+![Pod Poka-Yoke Querschnitt](../images/cad/pod_poka_yoke_cross_section_cad.png)
+
+*Abbildung 8.12: Transversaler CAD-Schnitt durch den Pod-Körper zur Visualisierung der asymmetrischen Nut- und Feder-Führungsgeometrie (Poka-Yoke).*
+
 2. **Zwischendeckel-Spritzschutzblende (Dry-Flap):**
    * Über der `PCBA 03` sitzt eine schwenkbare oder einschiebbare Zwischenblende aus hochflexiblem Shore 50A Silikon/EPDM.
    * Sie dichtet die Platine, Lötanschlüsse und Stecker hermetisch gegen die obere Kammer ab.
@@ -285,18 +318,30 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ---
 
-### 4.3 Direkte Intercom-Integration (Entfall der elektromechanischen Kassetten)
+### 4.4 Direkte Intercom-Integration (Entfall der elektromechanischen Kassetten)
 
 Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Tauchanker-Stößel und klobigen Kassetten-Einschübe. Die Steuerung der Geräte erfolgt zeitgemäß digital über die zentrale Audio-Engine oder ergonomische Taster:
+
+![Intercom-Kassetten & Schlittenvarianten Trio](../images/cad/cartridge_variants_trio.png)
+
+*Abbildung 8.13: Die universellen modularen Geräte-Einsätze im Überblick: Sena SPIDER X Slim Formnest (links), Cardo Packtalk Edge Air-Mount Halterung (Mitte) und hermetische Mini-Dry-Box (rechts).*
 
 1. **Sena SPIDER X Slim (Referenz-Setup):**
    * Das extrem flache OEM-Gerät wird formschlüssig in ein EPDM-Formsitzbett in die obere Kammer gelegt.
    * Die werksseitige 3-adrige Sena-Kabelpeitsche (DC-Power, Audio-Out, Mic-In) wird direkt auf den vorkonfektionierten JST-Stecker von `PCBA 03` gesteckt.
    * Die Bedienung (Mesh Ein/Aus, Kanalwechsel, Lautstärke) erfolgt **100 % digital** über die Bluetooth 5.4 LE Audio-Schnittstelle des Qualcomm QCC3084 auf der Zentralbox oder die programmierbaren Under-Perch Lenkertaster – **null Verschleißteile, null Stößel-Justage!**
 
+![Sena SPIDER X Slim Pod Integration CAD](../images/cad/sena_cartridge_assembly_cad.png)
+
+*Abbildung 8.14: 3D-CAD-Baugruppe der formschlüssigen Sena SPIDER X Slim Integration im universellen Pod-Gehäuse.*
+
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
    * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt direkt unter den Zwischendeckel an `PCBA 03`.
+
+![Cardo Packtalk Edge Pod Integration CAD](../images/cad/cardo_cartridge_assembly_cad.png)
+
+*Abbildung 8.15: 3D-CAD-Baugruppe der Cardo Packtalk Edge Integration mit formschlüssiger Verschraubung der OEM Air-Mount Magnethalterung.*
 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS):**
    * Das ultrakompakte UCS-Modul ($68 \times 36 \times 9{,}5\,\text{mm}$) wird formschlüssig eingeclipst.
@@ -308,7 +353,7 @@ Durch die Umstellung entfallen sämtliche anfälligen elektromechanischen Taucha
 
 ---
 
-### 4.4 Das 4-Draht Automotive-Backbone (Power & USB 2.0)
+### 4.5 Das 4-Draht Automotive-Backbone (Power & USB 2.0)
 
 Die Zuleitung von der Zentralbox zu beiden Seitenkoffer-Pods erfolgt über einen robusten, geschirmten **4-adrigen Automotive-Kabelbaum** ($4 \times 0{,}34\,\text{mm}^2$, FLRY-B):
 
