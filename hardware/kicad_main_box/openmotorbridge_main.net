@@ -2,217 +2,25 @@
 	(version "E")
 	(design
 		(source "/Users/schmidtm/openMotorBridge/hardware/kicad_main_box/openmotorbridge_main.kicad_sch")
-		(date "2026-09-26T14:21:27")
+		(date "2026-10-27T16:40:38")
 		(tool "Eeschema 10.0.5")
 		(sheet
 			(number "1")
 			(name "/")
 			(tstamps "/")
 			(title_block
-				(title "OpenMotorBridge v8.0 - Zentralbox Top-Level Blockschaltbild")
+				(title "OpenMotorBridge v10.0 - Zentralbox Central Unit (PCBA 01)")
 				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v8.0")
-				(date "2026-08-23")
+				(rev "v10.0")
+				(date "2026-10-27")
 				(source "openmotorbridge_main.kicad_sch")
 				(comment
 					(number "1")
-					(value "Universelles 4-Punkte-Satelliten-Gateway (CERN-OHL-S v2)")
+					(value "Pure-DC Micro-Fit 3.0, ESP32-S3, ES8388, TCAN334G CAN-FD, USB2517I 7-Port Hub, QCC3084 BT5.4, SX1262 LoRa")
 				)
 				(comment
 					(number "2")
-					(value "HD26 26-Pin Matrix, ES8388 24-Bit Codec, TCAN334G CAN-FD")
-				)
-				(comment
-					(number "3")
 					(value "")
-				)
-				(comment
-					(number "4")
-					(value "")
-				)
-				(comment
-					(number "5")
-					(value "")
-				)
-				(comment
-					(number "6")
-					(value "")
-				)
-				(comment
-					(number "7")
-					(value "")
-				)
-				(comment
-					(number "8")
-					(value "")
-				)
-				(comment
-					(number "9")
-					(value "")
-				)
-			)
-		)
-		(sheet
-			(number "2")
-			(name "/Power & USV/")
-			(tstamps "/a0000000-0000-0000-0000-000000000002/")
-			(title_block
-				(title "OpenMotorBridge v8.0 - Stromversorgung & USV")
-				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v8.0")
-				(date "2026-08-24")
-				(source "power_supply_ups.kicad_sch")
-				(comment
-					(number "1")
-					(value "TI LM5164-Q1 (100V Buck) + TI BQ24075 (Power-Path & USV)")
-				)
-				(comment
-					(number "2")
-					(value "Automotive Transient Protection (ISO 7637-2, ISO 16750-2)")
-				)
-				(comment
-					(number "3")
-					(value "")
-				)
-				(comment
-					(number "4")
-					(value "")
-				)
-				(comment
-					(number "5")
-					(value "")
-				)
-				(comment
-					(number "6")
-					(value "")
-				)
-				(comment
-					(number "7")
-					(value "")
-				)
-				(comment
-					(number "8")
-					(value "")
-				)
-				(comment
-					(number "9")
-					(value "")
-				)
-			)
-		)
-		(sheet
-			(number "3")
-			(name "/Audio-Frontend & Opto/")
-			(tstamps "/a0000000-0000-0000-0000-000000000004/")
-			(title_block
-				(title "OpenMotorBridge v8.0 - Galvanisch Getrenntes Audio-Frontend")
-				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v8.0")
-				(date "2026-08-24")
-				(source "audio_frontend_isolated.kicad_sch")
-				(comment
-					(number "1")
-					(value "Bourns LM-NP-1001 1:1 600 Ohm Audio-Uebertrager + Toshiba TLP222A PhotoMOS Relais")
-				)
-				(comment
-					(number "2")
-					(value "1.5 kV Galvanische Trennung (GND_ISO_AUDIO) zur totalen Brummschleifen-Befreiung")
-				)
-				(comment
-					(number "3")
-					(value "")
-				)
-				(comment
-					(number "4")
-					(value "")
-				)
-				(comment
-					(number "5")
-					(value "")
-				)
-				(comment
-					(number "6")
-					(value "")
-				)
-				(comment
-					(number "7")
-					(value "")
-				)
-				(comment
-					(number "8")
-					(value "")
-				)
-				(comment
-					(number "9")
-					(value "")
-				)
-			)
-		)
-		(sheet
-			(number "4")
-			(name "/MCU, Audio Codec & CAN/")
-			(tstamps "/a0000000-0000-0000-0000-000000000003/")
-			(title_block
-				(title "OpenMotorBridge v8.5 / v9.0 - MCU, Audio Codec, CAN & RF Transceivers")
-				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v9.0")
-				(date "2026-09-26")
-				(source "mcu_codec_can.kicad_sch")
-				(comment
-					(number "1")
-					(value "ESP32-S3-WROOM-1 + ES8388 Codec + TCAN334G CAN-FD + SX1262 LoRa + DW3110 UWB")
-				)
-				(comment
-					(number "2")
-					(value "Automotive Real-Time Audio, Radar 2.0 Interface & Universal Wireless Architecture")
-				)
-				(comment
-					(number "3")
-					(value "")
-				)
-				(comment
-					(number "4")
-					(value "")
-				)
-				(comment
-					(number "5")
-					(value "")
-				)
-				(comment
-					(number "6")
-					(value "")
-				)
-				(comment
-					(number "7")
-					(value "")
-				)
-				(comment
-					(number "8")
-					(value "")
-				)
-				(comment
-					(number "9")
-					(value "")
-				)
-			)
-		)
-		(sheet
-			(number "5")
-			(name "/HD26 Flansch & 2x13 Header/")
-			(tstamps "/a0000000-0000-0000-0000-000000000005/")
-			(title_block
-				(title "OpenMotorBridge v8.5 / v9.0 - Deutsch DTM-12 Power & CAN Interface")
-				(company "OpenMotorBridge Open Source Hardware")
-				(rev "v9.0")
-				(date "2026-09-26")
-				(source "hd26_interface.kicad_sch")
-				(comment
-					(number "1")
-					(value "Deutsch DTM 12-Pin Automotive Industriestecker (Pure-DC & CAN)")
-				)
-				(comment
-					(number "2")
-					(value "KL30, KL15, GND, CAN-FD, 2x Pod 5V Power, Radar 12V Power; 100% UWB Wireless Data")
 				)
 				(comment
 					(number "3")
@@ -247,8 +55,54 @@
 	)
 	(components
 		(comp
+			(ref "ANT1")
+			(value "Taoglas_FXP895_868MHz_Lid")
+			(footprint "U.FL_Hirose_U.FL-R-SMT-1_Vertical")
+			(fields
+				(field
+					(name "Footprint") "U.FL_Hirose_U.FL-R-SMT-1_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "ANT1_Taoglas_FXP895_868MHz_Lid")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f9c8d416-25ed-4fc0-8ef7-3501c4d53a43")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
 			(ref "C1")
-			(value "100uF/50V")
+			(value "10uF_100V")
 			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
@@ -261,23 +115,23 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "C_Small")
+				(lib "OMB_Main")
+				(part "C1_10uF_100V")
 				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Power & USV")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "b0000000-0000-0000-0000-000000000020")
+			(tstamps "f9b2c325-7355-41a4-a933-fc0141702ccc")
 			(units
 				(unit
 					(name "A")
@@ -294,7 +148,7 @@
 		)
 		(comp
 			(ref "C2")
-			(value "10uF/16V")
+			(value "22uF_16V")
 			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
@@ -307,23 +161,23 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "C_Small")
+				(lib "OMB_Main")
+				(part "C2_22uF_16V")
 				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Power & USV")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "b0000000-0000-0000-0000-000000000050")
+			(tstamps "febfec81-e69f-4e03-8e71-8bfca3fbe2aa")
 			(units
 				(unit
 					(name "A")
@@ -339,8 +193,336 @@
 			)
 		)
 		(comp
+			(ref "C3")
+			(value "100nF_BST")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C3_100nF_BST")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "d72bc3be-1afc-43ca-9f12-ed7bbc1d6151")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C4")
+			(value "100nF_VCC")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C4_100nF_VCC")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "fc961dbd-5169-4a30-a2b9-c1e6db8d4255")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C5")
+			(value "100nF_ESP_EN")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C_100nF_0603")
+				(description "Capacitor 100nF 50V 0603")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "4df0e5f6-64be-45d0-9225-cc0b6ae23d22")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C10")
+			(value "100nF_MCU")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C10_100nF_MCU")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "21ada126-bf15-4109-9528-33ca8a2fb0df")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C11")
+			(value "10uF_MCU")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C11_10uF_MCU")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3bc7deac-316c-4166-9201-7104466bdf8c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C12")
+			(value "100nF_IMU")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "C12_100nF_IMU")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "59e77e8b-bb64-417d-ae52-a01269da014c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D1")
+			(value "WS2812B_RGB")
+			(footprint "LED_SMD:LED_WS2812B-2020")
+			(fields
+				(field
+					(name "Footprint") "LED_SMD:LED_WS2812B-2020")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "D1_WS2812B_RGB")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2dc1439d-b97e-4e6b-81ea-64cf0cf022bf")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
 			(ref "D2")
-			(value "SMBJ36A")
+			(value "SMBJ33CA_TVS")
 			(footprint "Diode_SMD:D_SMB")
 			(fields
 				(field
@@ -353,23 +535,23 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "D_TVS")
+				(lib "OMB_Main")
+				(part "D2_SMBJ33CA_TVS")
 				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Power & USV")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "b0000000-0000-0000-0000-000000000010")
+			(tstamps "4baff341-28cc-44d2-81a6-f6cace88a610")
 			(units
 				(unit
 					(name "A")
@@ -385,8 +567,665 @@
 			)
 		)
 		(comp
+			(ref "D3")
+			(value "LM66100_Ideal_Diode")
+			(footprint "Package_TO_SOT_SMD:SOT-23-6")
+			(description "TI LM66100 Ideal Diode Dual-Power OR-ing")
+			(fields
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-6")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "TI LM66100 Ideal Diode Dual-Power OR-ing")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "D_OR_IDEAL_DIODE")
+				(description "TI LM66100 Ideal Diode Dual-Power OR-ing (USBC_VBUS to 5V Rail)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "d133fac9-662f-42be-bc42-638600adf6c1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "H1")
+			(value "MountingHole")
+			(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+			(fields
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "H1_MountingHole")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "963cf08e-3e1b-44c1-b396-b529f6200474")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "H2")
+			(value "MountingHole")
+			(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+			(fields
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "H2_MountingHole")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "adf6867b-fa13-4eee-b16d-90d3ec1bdbc7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "H3")
+			(value "MountingHole")
+			(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+			(fields
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "H3_MountingHole")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "eaf5e27f-0d65-4020-b633-90b4fda14c37")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "H4")
+			(value "MountingHole")
+			(footprint "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+			(fields
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "H4_MountingHole")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3c2f861c-5bb4-437a-b018-4cf7d83fce71")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "MicroLock_Plus_6Pin_Vertical")
+			(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0671_1x06_P1.25mm_Vertical")
+			(description "Molex Micro-Lock Plus 1.25mm 6-Pin SMD Vertical Header")
+			(fields
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0671_1x06_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 6-Pin SMD Vertical Header")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J_PWR_CAN_6PIN")
+				(description "Molex Micro-Fit 3.0 6-Pin (2x03) Bordnetz & CAN Header (KL30, KL15, GND, CAN-H, CAN-L, Shield)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "14bdba2d-8adf-456b-ae34-31e845d454e3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J2")
+			(value "MicroSD_Card")
+			(footprint "Connector_Card:microSD_HC_Hirose_DM3D-SF")
+			(fields
+				(field
+					(name "Footprint") "Connector_Card:microSD_HC_Hirose_DM3D-SF")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J2_MicroSD_Card")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "30e9251f-a9ef-41d9-85d8-87e8aea98ef3")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "SH1")
+						)
+						(pin
+							(num "SH2")
+						)
+						(pin
+							(num "SH3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "USB_C_Service_Port")
+			(footprint "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P")
+			(description "USB-C 2.0 16-Pin Receptacle Service Port")
+			(fields
+				(field
+					(name "Footprint") "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "USB-C 2.0 16-Pin Receptacle Service Port")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J_USBC_16PIN")
+				(description "USB-C 2.0 16-Pin Receptacle (Service Port & Benchtop DFU/Power)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "46a333eb-6a4c-4432-a157-021625315536")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J4")
+			(value "RGB_LED_3PIN")
+			(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical")
+			(description "Molex Micro-Lock Plus 1.25mm 3-Pin SMD RGB Header")
+			(fields
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 3-Pin SMD RGB Header")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J4_RGB_LED_3PIN")
+				(description "Molex Micro-Lock Plus 1.25mm 3-Pin SMD Header (RGB Status LED)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f732056b-4f0a-49c9-ac7c-76cbe962d561")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J5")
+			(value "PWR_BAT_NTC_4PIN")
+			(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+			(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD LiPo Header")
+			(fields
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 4-Pin SMD LiPo Header")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J5_PWR_BAT_NTC_4PIN")
+				(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (USV LiPo + NTC)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "daa2da8e-0f6a-4283-87ca-4368e9aca501")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J6")
+			(value "Picoflex_16Pin_2x08_Vertical")
+			(footprint "Connector_Molex:Molex_Picoflex_90814-0016_2x08_P1.27mm_Vertical")
+			(description "Molex Picoflex 16-Pin 2x08 Vertical Shrouded Header")
+			(fields
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Picoflex_90814-0016_2x08_P1.27mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Picoflex 16-Pin 2x08 Vertical Shrouded Header")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J_PERIPH_16PIN")
+				(description "Molex Micro-Fit 3.0 16-Pin (2x08) 4-Strang Peripherie Header (Front, Pod 1, Pod 2, Radar)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b499c68c-d621-41cd-bccb-ccb30a6ea16b")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J7")
+			(value "USB_Reserve_Port7")
+			(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+			(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Reserve USB Port 7")
+			(fields
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Reserve USB Port 7")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "J_RES_4PIN")
+				(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (Reserve USB Port 7)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "fea66eaa-dc15-4f7d-9a31-055371f28a2d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
 			(ref "L1")
-			(value "47uH")
+			(value "47uH_Inductor")
 			(footprint "Inductor_SMD:L_Sunlord_MWSA1206S-470")
 			(fields
 				(field
@@ -399,23 +1238,713 @@
 				)
 			)
 			(libsource
-				(lib "Device")
-				(part "L_Small")
+				(lib "OMB_Main")
+				(part "L1_47uH_Inductor")
 				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Power & USV")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "b0000000-0000-0000-0000-000000000040")
+			(tstamps "4aa05508-3cb2-45f8-b7a1-75cf6d803f45")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R1")
+			(value "100k_EN")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R1_100k_EN")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "d545cab9-562a-41c5-a690-c5f6a4d93719")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R2")
+			(value "10k_EN")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R2_10k_EN")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "fefafcbe-c080-42e8-a3e7-2a26240e1088")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R3")
+			(value "5k1_CC1")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_5k1_0603")
+				(description "Resistor 5.1k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "9e3abba3-22e2-4575-91ea-95bbb3dfe4b9")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R4")
+			(value "5k1_CC2")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_5k1_0603")
+				(description "Resistor 5.1k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "12645322-d70e-44f5-ba35-e464a8841660")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R5")
+			(value "10k_HUB_RST")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_10k_0603")
+				(description "Resistor 10k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "581ac28d-5ba9-44f8-bc39-3c3a42c1bea6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R6")
+			(value "10k_ESP_EN")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_10k_0603")
+				(description "Resistor 10k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3af5e337-6c9b-474f-86b9-ecb1ae0770d7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R7")
+			(value "100k_KL15_TOP")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_100k_0603")
+				(description "Resistor 100k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "797f44f1-a015-48e3-9b94-e30df70c4bd5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R8")
+			(value "22k_KL15_BOT")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_22k_0603")
+				(description "Resistor 22k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "f78761e4-ea36-43e5-9c27-671abb588d81")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R9")
+			(value "120R_CAN")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R9_120R_CAN")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "4206fe21-4285-462b-bd0a-d5d9700a798c")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R10")
+			(value "4k7_SDA")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R10_4k7_SDA")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0a3ab96e-cead-4d26-858d-b78cec329e42")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R11")
+			(value "4k7_SCL")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R11_4k7_SCL")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "26b7e334-a69d-414f-a7a9-60991412f085")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R12")
+			(value "100k_BAT_TOP")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_100k_0603")
+				(description "Resistor 100k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8023cec8-4856-45bb-93ea-8a9056a27576")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R13")
+			(value "100k_BAT_BOT")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_100k_0603")
+				(description "Resistor 100k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "61113c8d-a8c1-4655-b824-25519d486cf6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R14")
+			(value "10k_BAT_NTC")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "R_10k_0603")
+				(description "Resistor 10k 0603 1%")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "4c6ba07a-be6c-4266-906b-135639b1c630")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "SW1")
+			(value "SW_PAIR_RESET")
+			(footprint "SW_Push_SPST_NO_Alps_SKRK")
+			(fields
+				(field
+					(name "Footprint") "SW_Push_SPST_NO_Alps_SKRK")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "SW1_SW_PAIR_RESET")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c69e31e1-be9d-4b3a-a486-f15a83706181")
 			(units
 				(unit
 					(name "A")
@@ -445,23 +1974,23 @@
 				)
 			)
 			(libsource
-				(lib "Regulator_Switching")
-				(part "LM5164-Q1")
+				(lib "OMB_Main")
+				(part "U1_LM5164-Q1")
 				(description "")
 			)
 			(property
 				(name "Sheetname")
-				(value "Power & USV")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "b0000000-0000-0000-0000-000000000030")
+			(tstamps "d1b436b2-bef8-4162-ad24-4d1c7dc03624")
 			(units
 				(unit
 					(name "A")
@@ -479,227 +2008,19 @@
 							(num "4")
 						)
 						(pin
-							(num "8")
-						)
-						(pin
-							(num "7")
+							(num "5")
 						)
 						(pin
 							(num "6")
 						)
 						(pin
-							(num "5")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "U9")
-			(value "TPS7A0533")
-			(footprint "Package_TO_SOT_SMD:SOT-23-5")
-			(fields
-				(field
-					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Regulator_Linear")
-				(part "TPS7A0533")
-				(description "")
-			)
-			(property
-				(name "Sheetname")
-				(value "Power & USV")
-			)
-			(property
-				(name "Sheetfile")
-				(value "power_supply_ups.kicad_sch")
-			)
-			(sheetpath
-				(names "/Power & USV/")
-				(tstamps "/a0000000-0000-0000-0000-000000000002/")
-			)
-			(tstamps "b0000000-0000-0000-0000-000000000060")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
+							(num "7")
 						)
 						(pin
-							(num "3")
+							(num "8")
 						)
 						(pin
-							(num "2")
-						)
-						(pin
-							(num "5")
-						)
-						(pin
-							(num "4")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "ANT1")
-			(value "Taoglas_FXP895_868MHz_Lid")
-			(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
-			(fields
-				(field
-					(name "LCSC") "C2834595")
-				(field
-					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Connector")
-				(part "U.FL")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C2834595")
-			)
-			(property
-				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
-			)
-			(property
-				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
-			)
-			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
-			)
-			(tstamps "c0000000-0000-0000-0000-000000000090")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "ANT2")
-			(value "Taoglas_FXUWB10_6.5GHz_Ch5_Floor")
-			(footprint "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
-			(fields
-				(field
-					(name "LCSC") "C2834595")
-				(field
-					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Connector")
-				(part "U.FL")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C2834595")
-			)
-			(property
-				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
-			)
-			(property
-				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
-			)
-			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
-			)
-			(tstamps "c0000000-0000-0000-0000-000000000095")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "SW1")
-			(value "SW_PAIR_RESET")
-			(footprint "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
-			(fields
-				(field
-					(name "LCSC") "C318884")
-				(field
-					(name "Footprint") "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "Switch")
-				(part "SW_Push")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C318884")
-			)
-			(property
-				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
-			)
-			(property
-				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
-			)
-			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
-			)
-			(tstamps "c0000000-0000-0000-0000-000000000099")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "2")
+							(num "9")
 						)
 					)
 				)
@@ -707,13 +2028,11 @@
 		)
 		(comp
 			(ref "U2")
-			(value "ESP32-S3-WROOM-1-N16R8")
-			(footprint "RF_Module:ESP32-S3-WROOM-1")
+			(value "ESP32-S31-WROOM-1U")
+			(footprint "ESP32-S3-WROOM-1U")
 			(fields
 				(field
-					(name "LCSC") "C2913200")
-				(field
-					(name "Footprint") "RF_Module:ESP32-S3-WROOM-1")
+					(name "Footprint") "ESP32-S3-WROOM-1U")
 				(field
 					(name "Datasheet")
 				)
@@ -722,27 +2041,23 @@
 				)
 			)
 			(libsource
-				(lib "RF_Module")
-				(part "ESP32-S3-WROOM-1")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C2913200")
+				(lib "OMB_Main")
+				(part "U2_ESP32-S31-WROOM-1U")
+				(description "Espressif ESP32-S31 Dual-Core RISC-V @ 320MHz with 128-bit SIMD AI Engine")
 			)
 			(property
 				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "c0000000-0000-0000-0000-000000000020")
+			(tstamps "7b3b23d1-11c5-4f3b-9930-d618a58a583c")
 			(units
 				(unit
 					(name "A")
@@ -770,9 +2085,6 @@
 						)
 						(pin
 							(num "8")
-						)
-						(pin
-							(num "18")
 						)
 						(pin
 							(num "9")
@@ -795,17 +2107,93 @@
 						(pin
 							(num "15")
 						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "27")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "29")
+						)
+						(pin
+							(num "30")
+						)
+						(pin
+							(num "31")
+						)
+						(pin
+							(num "32")
+						)
+						(pin
+							(num "33")
+						)
+						(pin
+							(num "34")
+						)
+						(pin
+							(num "35")
+						)
+						(pin
+							(num "36")
+						)
+						(pin
+							(num "37")
+						)
+						(pin
+							(num "38")
+						)
+						(pin
+							(num "39")
+						)
+						(pin
+							(num "40")
+						)
+						(pin
+							(num "41")
+						)
 					)
 				)
 			)
 		)
 		(comp
 			(ref "U3")
-			(value "ES8388")
+			(value "ES8388_Codec")
 			(footprint "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
 			(fields
-				(field
-					(name "LCSC") "C365736")
 				(field
 					(name "Footprint") "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
 				(field
@@ -816,27 +2204,23 @@
 				)
 			)
 			(libsource
-				(lib "Audio")
-				(part "ES8388")
+				(lib "OMB_Main")
+				(part "U3_ES8388_Codec")
 				(description "")
 			)
 			(property
-				(name "LCSC")
-				(value "C365736")
-			)
-			(property
 				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "c0000000-0000-0000-0000-000000000040")
+			(tstamps "1c0d3fbf-b3d2-4b18-b9ff-a5e1f8893101")
 			(units
 				(unit
 					(name "A")
@@ -864,9 +2248,6 @@
 						)
 						(pin
 							(num "8")
-						)
-						(pin
-							(num "13")
 						)
 						(pin
 							(num "9")
@@ -880,6 +2261,139 @@
 						(pin
 							(num "12")
 						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "27")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "29")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U5")
+			(value "BMI270_IMU")
+			(footprint "Package_LGA:LGA-14_2.5x3mm_P0.5mm")
+			(fields
+				(field
+					(name "Footprint") "Package_LGA:LGA-14_2.5x3mm_P0.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "U5_BMI270_IMU")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "03c57220-ba5d-443e-a8af-88e760e8ca13")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
 					)
 				)
 			)
@@ -890,8 +2404,6 @@
 			(footprint "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
 			(fields
 				(field
-					(name "LCSC") "C842340")
-				(field
 					(name "Footprint") "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
 				(field
 					(name "Datasheet")
@@ -901,91 +2413,23 @@
 				)
 			)
 			(libsource
-				(lib "Interface_CAN_LIN")
-				(part "TCAN334G")
+				(lib "OMB_Main")
+				(part "U6_TCAN334G")
 				(description "")
 			)
 			(property
-				(name "LCSC")
-				(value "C842340")
-			)
-			(property
 				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "c0000000-0000-0000-0000-000000000060")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-						(pin
-							(num "3")
-						)
-						(pin
-							(num "4")
-						)
-						(pin
-							(num "2")
-						)
-						(pin
-							(num "6")
-						)
-						(pin
-							(num "5")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "U7")
-			(value "SX1262IMLTRT")
-			(footprint "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
-			(fields
-				(field
-					(name "LCSC") "C190184")
-				(field
-					(name "Footprint") "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(libsource
-				(lib "RF_Transceiver")
-				(part "SX1262")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C190184")
-			)
-			(property
-				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
-			)
-			(property
-				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
-			)
-			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
-			)
-			(tstamps "c0000000-0000-0000-0000-000000000070")
+			(tstamps "555537c5-33a7-495a-9347-7354e8008cc7")
 			(units
 				(unit
 					(name "A")
@@ -1004,9 +2448,6 @@
 						)
 						(pin
 							(num "5")
-						)
-						(pin
-							(num "10")
 						)
 						(pin
 							(num "6")
@@ -1016,9 +2457,6 @@
 						)
 						(pin
 							(num "8")
-						)
-						(pin
-							(num "9")
 						)
 					)
 				)
@@ -1026,42 +2464,36 @@
 		)
 		(comp
 			(ref "U8")
-			(value "DW3110")
-			(footprint "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
+			(value "USB2517I-JZX")
+			(footprint "Package_DFN_QFN:QFN-64-1EP_9x9mm_P0.5mm_EP7.15x7.15mm")
+			(description "Microchip USB2517I-JZX 7-Port USB 2.0 Hub Controller")
 			(fields
 				(field
-					(name "LCSC") "C2934600")
-				(field
-					(name "Footprint") "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
+					(name "Footprint") "Package_DFN_QFN:QFN-64-1EP_9x9mm_P0.5mm_EP7.15x7.15mm")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description")
-				)
+					(name "Description") "Microchip USB2517I-JZX 7-Port USB 2.0 Hub Controller")
 			)
 			(libsource
-				(lib "RF_Transceiver")
-				(part "DW3110")
-				(description "")
-			)
-			(property
-				(name "LCSC")
-				(value "C2934600")
+				(lib "OMB_Main")
+				(part "U_HUB_USB2517I")
+				(description "Microchip USB2517I-JZX 7-Port USB 2.0 Hub Controller (Automotive/Industrial -40..+85C)")
 			)
 			(property
 				(name "Sheetname")
-				(value "MCU, Audio Codec & CAN")
+				(value "openmotorbridge_main")
 			)
 			(property
 				(name "Sheetfile")
-				(value "mcu_codec_can.kicad_sch")
+				(value "openmotorbridge_main.kicad_sch")
 			)
 			(sheetpath
-				(names "/MCU, Audio Codec & CAN/")
-				(tstamps "/a0000000-0000-0000-0000-000000000003/")
+				(names "/")
+				(tstamps "/")
 			)
-			(tstamps "c0000000-0000-0000-0000-000000000080")
+			(tstamps "3f4d70ec-413e-436d-888b-b57322a16519")
 			(units
 				(unit
 					(name "A")
@@ -1082,7 +2514,110 @@
 							(num "5")
 						)
 						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
 							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U9")
+			(value "QCC3084_BT54_AUDIO")
+			(footprint "RF_Module:Qualcomm_QCC3084_Module")
+			(description "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module")
+			(fields
+				(field
+					(name "Footprint") "RF_Module:Qualcomm_QCC3084_Module")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "U9_QCC3084_BT54_AUDIO")
+				(description "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "38246806-6b7f-410d-995c-1f542ba8b3d8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
 						)
 						(pin
 							(num "6")
@@ -1092,6 +2627,304 @@
 						)
 						(pin
 							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U10")
+			(value "SX1262IMLTRT")
+			(footprint "QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
+			(fields
+				(field
+					(name "Footprint") "QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "U10_SX1262IMLTRT")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "13fe8d99-6e71-462e-a131-dc01edec2f4d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "25")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U11")
+			(value "TPS7A0533_LDO")
+			(footprint "Package_TO_SOT_SMD:SOT-23-5")
+			(fields
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "U11_TPS7A0533_LDO")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "c587b8f5-a939-4d8c-8e73-7415493253bd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U12")
+			(value "TPS25921_Quad_eFuse")
+			(footprint "Package_DFN_QFN:QFN-20-1EP_3.5x4mm_P0.5mm")
+			(description "Quad Automotive eFuse Smart Switch")
+			(fields
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-20-1EP_3.5x4mm_P0.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Quad Automotive eFuse Smart Switch")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "U12_QUAD_EFUSE")
+				(description "Quad Automotive eFuse Smart Switch (Front 60W, Pod1 30W, Pod2 30W, Radar 12W)")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "09bc56e8-9af7-40c9-8a0b-7c07eb720591")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Y2")
+			(value "24.000MHz")
+			(footprint "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm")
+			(description "24.000 MHz Crystal for USB2517I Hub")
+			(fields
+				(field
+					(name "Footprint") "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "24.000 MHz Crystal for USB2517I Hub")
+			)
+			(libsource
+				(lib "OMB_Main")
+				(part "Y2_HUB_24MHz")
+				(description "24.000 MHz Crystal for USB2517I Hub")
+			)
+			(property
+				(name "Sheetname")
+				(value "openmotorbridge_main")
+			)
+			(property
+				(name "Sheetfile")
+				(value "openmotorbridge_main.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "3ae30d40-831f-4f54-b508-e3704ca5e910")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
 						)
 					)
 				)
@@ -1102,719 +2935,21 @@
 	(variants)
 	(libparts
 		(libpart
-			(lib "Audio")
-			(part "ES8388")
+			(lib "OMB_Main")
+			(part "ANT1_Taoglas_FXP895_868MHz_Lid")
 			(fields
 				(field
-					(name "Reference") "U3")
+					(name "Reference") "A")
 				(field
-					(name "Value") "ES8388")
+					(name "Value") "Taoglas_FXP895_868MHz_Lid")
 				(field
-					(name "Footprint") "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
+					(name "Footprint") "U.FL_Hirose_U.FL-R-SMT-1_Vertical")
 				(field
 					(name "Datasheet")
 				)
 				(field
 					(name "Description")
 				)
-				(field
-					(name "LCSC") "C365736")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "DVDD_3V3")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "MCLK")
-					(type "input")
-				)
-				(pin
-					(num "3")
-					(name "BCLK")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "WS/LRCK")
-					(type "input")
-				)
-				(pin
-					(num "5")
-					(name "SDATA_IN")
-					(type "input")
-				)
-				(pin
-					(num "6")
-					(name "SDATA_OUT")
-					(type "output")
-				)
-				(pin
-					(num "7")
-					(name "I2C_SDA")
-					(type "input")
-				)
-				(pin
-					(num "8")
-					(name "I2C_SCL")
-					(type "input")
-				)
-				(pin
-					(num "9")
-					(name "LOUT1_P1")
-					(type "output")
-				)
-				(pin
-					(num "10")
-					(name "LIN1_P1")
-					(type "input")
-				)
-				(pin
-					(num "11")
-					(name "LOUT2_P2")
-					(type "output")
-				)
-				(pin
-					(num "12")
-					(name "LIN2_P2")
-					(type "input")
-				)
-				(pin
-					(num "13")
-					(name "GND")
-					(type "power_in")
-				)
-			)
-		)
-		(libpart
-			(lib "Connector")
-			(part "U.FL")
-			(fields
-				(field
-					(name "Reference") "ANT")
-				(field
-					(name "Value") "U.FL-R-SMT-1")
-				(field
-					(name "Footprint") "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C2834595")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "RF")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "GND")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Device")
-			(part "C_Small")
-			(fields
-				(field
-					(name "Reference") "C")
-				(field
-					(name "Value") "C_Small")
-				(field
-					(name "Footprint")
-				)
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "~")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "~")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Device")
-			(part "D_TVS")
-			(fields
-				(field
-					(name "Reference") "D")
-				(field
-					(name "Value") "SMBJ36A")
-				(field
-					(name "Footprint")
-				)
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "A1")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "A2")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Device")
-			(part "L_Small")
-			(fields
-				(field
-					(name "Reference") "L")
-				(field
-					(name "Value") "L_Small")
-				(field
-					(name "Footprint")
-				)
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "~")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "~")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Device")
-			(part "Transformer_1P_1S")
-			(fields
-				(field
-					(name "Reference") "T")
-				(field
-					(name "Value") "Bourns_LM_NP_1001")
-				(field
-					(name "Footprint")
-				)
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "PRI1")
-					(type "passive")
-				)
-				(pin
-					(num "2")
-					(name "PRI2")
-					(type "passive")
-				)
-				(pin
-					(num "3")
-					(name "SEC1")
-					(type "passive")
-				)
-				(pin
-					(num "4")
-					(name "SEC2")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Interface_CAN_LIN")
-			(part "TCAN334G")
-			(fields
-				(field
-					(name "Reference") "U6")
-				(field
-					(name "Value") "TCAN334G")
-				(field
-					(name "Footprint") "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C842340")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "TXD")
-					(type "input")
-				)
-				(pin
-					(num "2")
-					(name "GND")
-					(type "power_in")
-				)
-				(pin
-					(num "3")
-					(name "VCC")
-					(type "power_in")
-				)
-				(pin
-					(num "4")
-					(name "RXD")
-					(type "output")
-				)
-				(pin
-					(num "5")
-					(name "CANL")
-					(type "bidirectional")
-				)
-				(pin
-					(num "6")
-					(name "CANH")
-					(type "bidirectional")
-				)
-			)
-		)
-		(libpart
-			(lib "RF_Module")
-			(part "ESP32-S3-WROOM-1")
-			(fields
-				(field
-					(name "Reference") "U")
-				(field
-					(name "Value") "ESP32-S3-WROOM-1-N16R8")
-				(field
-					(name "Footprint") "RF_Module:ESP32-S3-WROOM-1")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C2913200")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "3V3")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "EN")
-					(type "input")
-				)
-				(pin
-					(num "3")
-					(name "IO1/BAT")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "IO2/UWB_IRQ")
-					(type "input")
-				)
-				(pin
-					(num "5")
-					(name "IO3/LINE_LVL")
-					(type "input")
-				)
-				(pin
-					(num "6")
-					(name "IO4/VIGN")
-					(type "input")
-				)
-				(pin
-					(num "7")
-					(name "IO22/UWB_CS")
-					(type "output")
-				)
-				(pin
-					(num "8")
-					(name "IO21/LORA_CS")
-					(type "output")
-				)
-				(pin
-					(num "9")
-					(name "IO9/I2S_MCLK")
-					(type "output")
-				)
-				(pin
-					(num "10")
-					(name "IO10/I2S_BCLK")
-					(type "output")
-				)
-				(pin
-					(num "11")
-					(name "IO11/I2S_WS")
-					(type "output")
-				)
-				(pin
-					(num "12")
-					(name "IO12/I2S_DOUT")
-					(type "output")
-				)
-				(pin
-					(num "13")
-					(name "IO13/I2S_DIN")
-					(type "input")
-				)
-				(pin
-					(num "14")
-					(name "IO14/I2C_SDA")
-					(type "bidirectional")
-				)
-				(pin
-					(num "15")
-					(name "IO15/I2C_SCL")
-					(type "output")
-				)
-				(pin
-					(num "18")
-					(name "GND")
-					(type "power_in")
-				)
-			)
-		)
-		(libpart
-			(lib "RF_Transceiver")
-			(part "DW3110")
-			(fields
-				(field
-					(name "Reference") "U8")
-				(field
-					(name "Value") "DW3110")
-				(field
-					(name "Footprint") "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.7x1.7mm_ThermalVias")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C2934600")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "VDD_3V3")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "SPICLK")
-					(type "input")
-				)
-				(pin
-					(num "3")
-					(name "SPIMOSI")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "SPIMISO")
-					(type "output")
-				)
-				(pin
-					(num "5")
-					(name "SPICS")
-					(type "input")
-				)
-				(pin
-					(num "6")
-					(name "WAKEUP/IRQ")
-					(type "output")
-				)
-				(pin
-					(num "7")
-					(name "RSTn")
-					(type "input")
-				)
-				(pin
-					(num "8")
-					(name "RF_IO")
-					(type "bidirectional")
-				)
-				(pin
-					(num "9")
-					(name "GND")
-					(type "power_in")
-				)
-			)
-		)
-		(libpart
-			(lib "RF_Transceiver")
-			(part "SX1262")
-			(fields
-				(field
-					(name "Reference") "U7")
-				(field
-					(name "Value") "SX1262IMLTRT")
-				(field
-					(name "Footprint") "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C190184")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "VBAT_UPS")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "SCK")
-					(type "input")
-				)
-				(pin
-					(num "3")
-					(name "MOSI")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "MISO")
-					(type "output")
-				)
-				(pin
-					(num "5")
-					(name "NSS")
-					(type "input")
-				)
-				(pin
-					(num "6")
-					(name "BUSY")
-					(type "output")
-				)
-				(pin
-					(num "7")
-					(name "DIO1")
-					(type "output")
-				)
-				(pin
-					(num "8")
-					(name "NRST")
-					(type "input")
-				)
-				(pin
-					(num "9")
-					(name "RFO")
-					(type "output")
-				)
-				(pin
-					(num "10")
-					(name "GND")
-					(type "power_in")
-				)
-			)
-		)
-		(libpart
-			(lib "Regulator_Linear")
-			(part "TPS7A0533")
-			(fields
-				(field
-					(name "Reference") "U9")
-				(field
-					(name "Value") "TPS7A0533")
-				(field
-					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C544158")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "IN")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "GND")
-					(type "power_in")
-				)
-				(pin
-					(num "3")
-					(name "EN")
-					(type "input")
-				)
-				(pin
-					(num "4")
-					(name "NC")
-					(type "passive")
-				)
-				(pin
-					(num "5")
-					(name "OUT")
-					(type "power_out")
-				)
-			)
-		)
-		(libpart
-			(lib "Regulator_Switching")
-			(part "LM5164-Q1")
-			(fields
-				(field
-					(name "Reference") "U1")
-				(field
-					(name "Value") "LM5164-Q1")
-				(field
-					(name "Footprint") "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C2836263")
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "VIN")
-					(type "power_in")
-				)
-				(pin
-					(num "2")
-					(name "EN/UVLO")
-					(type "input")
-				)
-				(pin
-					(num "3")
-					(name "RON")
-					(type "passive")
-				)
-				(pin
-					(num "4")
-					(name "GND")
-					(type "power_in")
-				)
-				(pin
-					(num "5")
-					(name "FB")
-					(type "input")
-				)
-				(pin
-					(num "6")
-					(name "VCC")
-					(type "passive")
-				)
-				(pin
-					(num "7")
-					(name "BST")
-					(type "passive")
-				)
-				(pin
-					(num "8")
-					(name "SW")
-					(type "output")
-				)
-			)
-		)
-		(libpart
-			(lib "Relay")
-			(part "TLP222A")
-			(fields
-				(field
-					(name "Reference") "U")
-				(field
-					(name "Value") "TLP222A")
-				(field
-					(name "Footprint")
-				)
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-			)
-			(pins
-				(pin
-					(num "1")
-					(name "ANODE")
-					(type "passive")
-				)
-				(pin
-					(num "3")
-					(name "CATHODE")
-					(type "passive")
-				)
-				(pin
-					(num "4")
-					(name "DRAIN1")
-					(type "passive")
-				)
-				(pin
-					(num "6")
-					(name "DRAIN2")
-					(type "passive")
-				)
-			)
-		)
-		(libpart
-			(lib "Switch")
-			(part "SW_Push")
-			(fields
-				(field
-					(name "Reference") "SW")
-				(field
-					(name "Value") "SW_Push")
-				(field
-					(name "Footprint") "Button_Switch_SMD:SW_Push_SPST_NO_Alps_SKRK")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description")
-				)
-				(field
-					(name "LCSC") "C318884")
 			)
 			(pins
 				(pin
@@ -1829,257 +2964,2753 @@
 				)
 			)
 		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C10_100nF_MCU")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF_MCU")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C11_10uF_MCU")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF_MCU")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C12_100nF_IMU")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF_IMU")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C1_10uF_100V")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "10uF_100V")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C2_22uF_16V")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "22uF_16V")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C3_100nF_BST")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF_BST")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C4_100nF_VCC")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF_VCC")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "C_100nF_0603")
+			(description "Capacitor 100nF 50V 0603")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "100nF")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Capacitor 100nF 50V 0603")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "D1_WS2812B_RGB")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "WS2812B_RGB")
+				(field
+					(name "Footprint") "LED_SMD:LED_WS2812B-2020")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "D2_SMBJ33CA_TVS")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "SMBJ33CA_TVS")
+				(field
+					(name "Footprint") "Diode_SMD:D_SMB")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "D_OR_IDEAL_DIODE")
+			(description "TI LM66100 Ideal Diode Dual-Power OR-ing (USBC_VBUS to 5V Rail)")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "LM66100_Ideal_Diode")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-6")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "TI LM66100 Ideal Diode Dual-Power OR-ing (USBC_VBUS to 5V Rail)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "H1_MountingHole")
+			(fields
+				(field
+					(name "Reference") "H")
+				(field
+					(name "Value") "MountingHole")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "H2_MountingHole")
+			(fields
+				(field
+					(name "Reference") "H")
+				(field
+					(name "Value") "MountingHole")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "H3_MountingHole")
+			(fields
+				(field
+					(name "Reference") "H")
+				(field
+					(name "Value") "MountingHole")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "H4_MountingHole")
+			(fields
+				(field
+					(name "Reference") "H")
+				(field
+					(name "Value") "MountingHole")
+				(field
+					(name "Footprint") "MountingHole:MountingHole_3.2mm_M3_Pad_Via")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J2_MicroSD_Card")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "MicroSD_Card")
+				(field
+					(name "Footprint") "Connector_Card:microSD_HC_Hirose_DM3D-SF")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "SH1")
+					(name "SH1")
+					(type "passive")
+				)
+				(pin
+					(num "SH2")
+					(name "SH2")
+					(type "passive")
+				)
+				(pin
+					(num "SH3")
+					(name "SH3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J4_RGB_LED_3PIN")
+			(description "Molex Micro-Lock Plus 1.25mm 3-Pin SMD Header (RGB Status LED)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "RGB_LED_3PIN")
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 3-Pin SMD Header (RGB Status LED)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J5_PWR_BAT_NTC_4PIN")
+			(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (USV LiPo + NTC)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "PWR_BAT_NTC_4PIN")
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (USV LiPo + NTC)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J_PERIPH_16PIN")
+			(description "Molex Micro-Fit 3.0 16-Pin (2x08) 4-Strang Peripherie Header (Front, Pod 1, Pod 2, Radar)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "MicroFit_16Pin_4Strang_Bus")
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Fit_3.0_43045-1600_2x08_P3.00mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Fit 3.0 16-Pin (2x08) 4-Strang Peripherie Header (Front, Pod 1, Pod 2, Radar)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J_PWR_CAN_6PIN")
+			(description "Molex Micro-Fit 3.0 6-Pin (2x03) Bordnetz & CAN Header (KL30, KL15, GND, CAN-H, CAN-L, Shield)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "MicroFit_6Pin_Bordnetz_CAN")
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Fit 3.0 6-Pin (2x03) Bordnetz & CAN Header (KL30, KL15, GND, CAN-H, CAN-L, Shield)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J_RES_4PIN")
+			(description "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (Reserve USB Port 7)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "USB_Reserve_Port7")
+				(field
+					(name "Footprint") "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header (Reserve USB Port 7)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "J_USBC_16PIN")
+			(description "USB-C 2.0 16-Pin Receptacle (Service Port & Benchtop DFU/Power)")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "USB_C_Service_Port")
+				(field
+					(name "Footprint") "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "USB-C 2.0 16-Pin Receptacle (Service Port & Benchtop DFU/Power)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "L1_47uH_Inductor")
+			(fields
+				(field
+					(name "Reference") "L")
+				(field
+					(name "Value") "47uH_Inductor")
+				(field
+					(name "Footprint") "Inductor_SMD:L_Sunlord_MWSA1206S-470")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R10_4k7_SDA")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "4k7_SDA")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R11_4k7_SCL")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "4k7_SCL")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R1_100k_EN")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "100k_EN")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R2_10k_EN")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "10k_EN")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R9_120R_CAN")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "120R_CAN")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R_100k_0603")
+			(description "Resistor 100k 0603 1%")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "100k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor 100k 0603 1%")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R_10k_0603")
+			(description "Resistor 10k 0603 1%")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "10k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor 10k 0603 1%")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R_22k_0603")
+			(description "Resistor 22k 0603 1%")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "22k")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor 22k 0603 1%")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "R_5k1_0603")
+			(description "Resistor 5.1k 0603 1%")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "5k1")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor 5.1k 0603 1%")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "SW1_SW_PAIR_RESET")
+			(fields
+				(field
+					(name "Reference") "S")
+				(field
+					(name "Value") "SW_PAIR_RESET")
+				(field
+					(name "Footprint") "SW_Push_SPST_NO_Alps_SKRK")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U10_SX1262IMLTRT")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "SX1262IMLTRT")
+				(field
+					(name "Footprint") "QFN-24-1EP_4x4mm_P0.5mm_EP2.8x2.8mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "17")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "18")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "19")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "20")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "21")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "22")
+					(type "passive")
+				)
+				(pin
+					(num "23")
+					(name "23")
+					(type "passive")
+				)
+				(pin
+					(num "24")
+					(name "24")
+					(type "passive")
+				)
+				(pin
+					(num "25")
+					(name "25")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U11_TPS7A0533_LDO")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TPS7A0533_LDO")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-5")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U12_QUAD_EFUSE")
+			(description "Quad Automotive eFuse Smart Switch (Front 60W, Pod1 30W, Pod2 30W, Radar 12W)")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TPS25921_Quad_eFuse")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-20-1EP_3.5x4mm_P0.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Quad Automotive eFuse Smart Switch (Front 60W, Pod1 30W, Pod2 30W, Radar 12W)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U1_LM5164-Q1")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "LM5164-Q1")
+				(field
+					(name "Footprint") "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U2_ESP32-S31-WROOM-1U")
+			(description "Espressif ESP32-S31 Dual-Core RISC-V @ 320MHz with 128-bit SIMD AI Engine")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "ESP32-S31-WROOM-1U")
+				(field
+					(name "Footprint") "ESP32-S3-WROOM-1U")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Espressif ESP32-S31 Dual-Core RISC-V @ 320MHz with 128-bit SIMD AI Engine")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "17")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "18")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "19")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "20")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "21")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "22")
+					(type "passive")
+				)
+				(pin
+					(num "23")
+					(name "23")
+					(type "passive")
+				)
+				(pin
+					(num "24")
+					(name "24")
+					(type "passive")
+				)
+				(pin
+					(num "25")
+					(name "25")
+					(type "passive")
+				)
+				(pin
+					(num "26")
+					(name "26")
+					(type "passive")
+				)
+				(pin
+					(num "27")
+					(name "27")
+					(type "passive")
+				)
+				(pin
+					(num "28")
+					(name "28")
+					(type "passive")
+				)
+				(pin
+					(num "29")
+					(name "29")
+					(type "passive")
+				)
+				(pin
+					(num "30")
+					(name "30")
+					(type "passive")
+				)
+				(pin
+					(num "31")
+					(name "31")
+					(type "passive")
+				)
+				(pin
+					(num "32")
+					(name "32")
+					(type "passive")
+				)
+				(pin
+					(num "33")
+					(name "33")
+					(type "passive")
+				)
+				(pin
+					(num "34")
+					(name "34")
+					(type "passive")
+				)
+				(pin
+					(num "35")
+					(name "35")
+					(type "passive")
+				)
+				(pin
+					(num "36")
+					(name "36")
+					(type "passive")
+				)
+				(pin
+					(num "37")
+					(name "37")
+					(type "passive")
+				)
+				(pin
+					(num "38")
+					(name "38")
+					(type "passive")
+				)
+				(pin
+					(num "39")
+					(name "39")
+					(type "passive")
+				)
+				(pin
+					(num "40")
+					(name "40")
+					(type "passive")
+				)
+				(pin
+					(num "41")
+					(name "41")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U3_ES8388_Codec")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "ES8388_Codec")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-28-1EP_4x4mm_P0.4mm_EP2.4x2.4mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "17")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "18")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "19")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "20")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "21")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "22")
+					(type "passive")
+				)
+				(pin
+					(num "23")
+					(name "23")
+					(type "passive")
+				)
+				(pin
+					(num "24")
+					(name "24")
+					(type "passive")
+				)
+				(pin
+					(num "25")
+					(name "25")
+					(type "passive")
+				)
+				(pin
+					(num "26")
+					(name "26")
+					(type "passive")
+				)
+				(pin
+					(num "27")
+					(name "27")
+					(type "passive")
+				)
+				(pin
+					(num "28")
+					(name "28")
+					(type "passive")
+				)
+				(pin
+					(num "29")
+					(name "29")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U5_BMI270_IMU")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "BMI270_IMU")
+				(field
+					(name "Footprint") "Package_LGA:LGA-14_2.5x3mm_P0.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U6_TCAN334G")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TCAN334G")
+				(field
+					(name "Footprint") "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U9_QCC3084_BT54_AUDIO")
+			(description "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module")
+			(docs "https://www.qualcomm.com/products/application/audio/qcc3084")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "QCC3084_BT54_AUDIO")
+				(field
+					(name "Footprint") "RF_Module:Qualcomm_QCC3084_Module")
+				(field
+					(name "Datasheet") "https://www.qualcomm.com/products/application/audio/qcc3084")
+				(field
+					(name "Description") "Qualcomm QCC3084 Dual-A2DP aptX HD / LE Audio Auracast BT 5.4 Module")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "U_HUB_USB2517I")
+			(description "Microchip USB2517I-JZX 7-Port USB 2.0 Hub Controller (Automotive/Industrial -40..+85C)")
+			(docs "https://www.microchip.com/en-us/product/USB2517I")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "USB2517I-JZX")
+				(field
+					(name "Footprint") "Package_DFN_QFN:QFN-64-1EP_9x9mm_P0.5mm_EP7.15x7.15mm")
+				(field
+					(name "Datasheet") "https://www.microchip.com/en-us/product/USB2517I")
+				(field
+					(name "Description") "Microchip USB2517I-JZX 7-Port USB 2.0 Hub Controller (Automotive/Industrial -40..+85C)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "17")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "18")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "19")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "20")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "21")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "22")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "OMB_Main")
+			(part "Y2_HUB_24MHz")
+			(description "24.000 MHz Crystal for USB2517I Hub")
+			(fields
+				(field
+					(name "Reference") "Y")
+				(field
+					(name "Value") "24.000MHz")
+				(field
+					(name "Footprint") "Crystal:Crystal_SMD_2016-4Pin_2.0x1.6mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "24.000 MHz Crystal for USB2517I Hub")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
 	)
-	(libraries
-		(library
-			(logical "Audio")
-			(uri "${KICAD10_SYMBOL_DIR}/Audio.kicad_sym")
-		)
-		(library
-			(logical "Connector")
-			(uri "${KICAD10_SYMBOL_DIR}/Connector.kicad_sym")
-		)
-		(library
-			(logical "Device")
-			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
-		)
-		(library
-			(logical "Interface_CAN_LIN")
-			(uri "${KICAD10_SYMBOL_DIR}/Interface_CAN_LIN.kicad_sym")
-		)
-		(library
-			(logical "RF_Module")
-			(uri "${KICAD10_SYMBOL_DIR}/RF_Module.kicad_sym")
-		)
-		(library
-			(logical "Regulator_Linear")
-			(uri "${KICAD10_SYMBOL_DIR}/Regulator_Linear.kicad_sym")
-		)
-		(library
-			(logical "Regulator_Switching")
-			(uri "${KICAD10_SYMBOL_DIR}/Regulator_Switching.kicad_sym")
-		)
-		(library
-			(logical "Relay")
-			(uri "${KICAD10_SYMBOL_DIR}/Relay.kicad_sym")
-		)
-		(library
-			(logical "Switch")
-			(uri "${KICAD10_SYMBOL_DIR}/Switch.kicad_sym")
-		)
-	)
+	(libraries)
 	(nets
 		(net
-			(code "36")
-			(name "/Power & USV/GND_PWR")
+			(code "1")
+			(name "AGND")
 			(class "Default")
 			(node
-				(ref "D2")
-				(pin "2")
-				(pinfunction "A2_2")
+				(ref "U3")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "17")
+				(pinfunction "17_17")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "38")
-			(name "/Power & USV/KL30_IN")
+			(code "2")
+			(name "BAT_NTC")
 			(class "Default")
 			(node
-				(ref "C1")
-				(pin "1")
-				(pinfunction "~_1")
+				(ref "J5")
+				(pin "3")
+				(pinfunction "3_3")
 				(pintype "passive")
 			)
 			(node
-				(ref "D2")
+				(ref "R14")
 				(pin "1")
-				(pinfunction "A1_1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "25")
+				(pinfunction "25_25")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "BAT_PLUS")
+			(class "Power_5V_3V3")
+			(node
+				(ref "J5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R12")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "BAT_SENSE")
+			(class "Default")
+			(node
+				(ref "R12")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R13")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "31")
+				(pinfunction "31_31")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "BST_BUCK")
+			(class "Default")
+			(node
+				(ref "C3")
+				(pin "1")
+				(pinfunction "1_1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U1")
-				(pin "1")
-				(pinfunction "VIN_1")
-				(pintype "power_in")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
 			)
 		)
 		(net
-			(code "40")
-			(name "/Power & USV/VCC_3V3")
+			(code "6")
+			(name "BT_EN")
 			(class "Default")
 			(node
-				(ref "U9")
-				(pin "5")
-				(pinfunction "OUT_5")
-				(pintype "power_out")
-			)
-		)
-		(net
-			(code "49")
-			(name "Net-(ANT1-RF)")
-			(class "Default")
-			(node
-				(ref "ANT1")
-				(pin "1")
-				(pinfunction "RF_1")
+				(ref "U2")
+				(pin "9")
+				(pinfunction "9_9")
 				(pintype "passive")
 			)
 			(node
-				(ref "U7")
-				(pin "7")
-				(pinfunction "DIO1_7")
-				(pintype "output")
+				(ref "U9")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
 			)
 		)
 		(net
-			(code "50")
-			(name "Net-(ANT2-RF)")
+			(code "7")
+			(name "BT_UART_RX")
 			(class "Default")
 			(node
-				(ref "ANT2")
-				(pin "1")
-				(pinfunction "RF_1")
+				(ref "U2")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "BT_UART_TX")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "BT_USB_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "U8")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "BT_USB_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "U8")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "BUS1_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "3")
+				(pinfunction "3_3")
 				(pintype "passive")
 			)
 			(node
 				(ref "U8")
-				(pin "6")
-				(pinfunction "WAKEUP/IRQ_6")
-				(pintype "output")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
 			)
 		)
 		(net
-			(code "51")
-			(name "Net-(U2-IO13{slash}I2S_DIN)")
-			(class "Default")
+			(code "12")
+			(name "BUS1_DP")
+			(class "USB_Diff_90")
 			(node
-				(ref "U2")
-				(pin "13")
-				(pinfunction "IO13/I2S_DIN_13")
-				(pintype "input")
-			)
-			(node
-				(ref "U3")
-				(pin "3")
-				(pinfunction "BCLK_3")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "52")
-			(name "Net-(U2-IO14{slash}I2C_SDA)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "14")
-				(pinfunction "IO14/I2C_SDA_14")
-				(pintype "bidirectional")
-			)
-			(node
-				(ref "U3")
+				(ref "J6")
 				(pin "4")
-				(pinfunction "WS/LRCK_4")
-				(pintype "input")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
 			)
 		)
 		(net
-			(code "53")
-			(name "Net-(U2-IO15{slash}I2C_SCL)")
+			(code "13")
+			(name "BUS2_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "14")
+			(name "BUS2_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "15")
+			(name "BUS3_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "BUS3_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "BUS4_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "18")
+			(name "BUS4_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "J6")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "17")
+				(pinfunction "17_17")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "CAN_H")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "CAN_L")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "21")
+			(name "CAN_RX")
 			(class "Default")
 			(node
 				(ref "U2")
-				(pin "15")
-				(pinfunction "IO15/I2C_SCL_15")
-				(pintype "output")
+				(pin "22")
+				(pinfunction "22_22")
+				(pintype "passive")
 			)
 			(node
-				(ref "U3")
-				(pin "5")
-				(pinfunction "SDATA_IN_5")
-				(pintype "input")
+				(ref "U6")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
 			)
 		)
 		(net
-			(code "54")
-			(name "Net-(U9-IN)")
+			(code "22")
+			(name "CAN_TX")
 			(class "Default")
 			(node
-				(ref "C2")
+				(ref "U2")
+				(pin "21")
+				(pinfunction "21_21")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
 				(pin "1")
-				(pinfunction "~_1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "CC1")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "3")
+				(pinfunction "3_3")
 				(pintype "passive")
 			)
 			(node
-				(ref "L1")
-				(pin "2")
-				(pinfunction "~_2")
-				(pintype "passive")
-			)
-			(node
-				(ref "U9")
+				(ref "R3")
 				(pin "1")
-				(pinfunction "IN_1")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "55")
-			(name "unconnected-(ANT1-GND-Pad2)")
-			(class "Default")
-			(node
-				(ref "ANT1")
-				(pin "2")
-				(pinfunction "GND_2")
+				(pinfunction "1_1")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "56")
-			(name "unconnected-(ANT2-GND-Pad2)")
+			(code "24")
+			(name "CC2")
 			(class "Default")
 			(node
-				(ref "ANT2")
-				(pin "2")
-				(pinfunction "GND_2")
+				(ref "J3")
+				(pin "6")
+				(pinfunction "6_6")
 				(pintype "passive")
 			)
-		)
-		(net
-			(code "57")
-			(name "unconnected-(C1-~-Pad2)")
-			(class "Default")
 			(node
-				(ref "C1")
-				(pin "2")
-				(pinfunction "~_2")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "58")
-			(name "unconnected-(C2-~-Pad2)")
-			(class "Default")
-			(node
-				(ref "C2")
-				(pin "2")
-				(pinfunction "~_2")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "59")
-			(name "unconnected-(L1-~-Pad1)")
-			(class "Default")
-			(node
-				(ref "L1")
+				(ref "R4")
 				(pin "1")
-				(pinfunction "~_1")
+				(pinfunction "1_1")
 				(pintype "passive")
 			)
 		)
 		(net
-			(code "66")
-			(name "unconnected-(SW1-Pad1)")
+			(code "25")
+			(name "EN_BUCK")
+			(class "Default")
+			(node
+				(ref "R1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "ESP_BOOT")
 			(class "Default")
 			(node
 				(ref "SW1")
@@ -2087,632 +5718,1780 @@
 				(pinfunction "1_1")
 				(pintype "passive")
 			)
+			(node
+				(ref "U2")
+				(pin "27")
+				(pinfunction "27_27")
+				(pintype "passive")
+			)
 		)
 		(net
-			(code "67")
-			(name "unconnected-(SW1-Pad2)")
+			(code "27")
+			(name "ESP_EN")
 			(class "Default")
+			(node
+				(ref "C5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "ESP_USB_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "U2")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "29")
+			(name "ESP_USB_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "U2")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "GND_PWR")
+			(class "Power_12V")
+			(node
+				(ref "ANT1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C12")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C4")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D1")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "D2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D3")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "SH1")
+				(pinfunction "SH1_SH1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "SH2")
+				(pinfunction "SH2_SH2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "SH3")
+				(pinfunction "SH3_SH3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J7")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R13")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R4")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R8")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
 			(node
 				(ref "SW1")
 				(pin "2")
 				(pinfunction "2_2")
 				(pintype "passive")
 			)
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "22")
+				(pinfunction "22_22")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "23")
+				(pinfunction "23_23")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "24")
+				(pinfunction "24_24")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "25")
+				(pinfunction "25_25")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U11")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "26")
+				(pinfunction "26_26")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "40")
+				(pinfunction "40_40")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "41")
+				(pinfunction "41_41")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "29")
+				(pinfunction "29_29")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "22")
+				(pinfunction "22_22")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "Y2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Y2")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "31")
+			(name "GND_SHIELD")
+			(class "Power_12V")
+			(node
+				(ref "H1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "H2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "H3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "H4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "32")
+			(name "HUB_RESET_N")
+			(class "Default")
+			(node
+				(ref "R5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "33")
+			(name "I2C_SCL")
+			(class "Default")
+			(node
+				(ref "R11")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "34")
+			(name "I2C_SDA")
+			(class "Default")
+			(node
+				(ref "R10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "17")
+				(pinfunction "17_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "35")
+			(name "I2S_BCLK")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "30")
+				(pinfunction "30_30")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "36")
+			(name "I2S_DIN")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "37")
+			(name "I2S_DOUT")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "38")
+			(name "I2S_MCLK")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "39")
+			(name "I2S_WS")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "32")
+				(pinfunction "32_32")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "40")
+			(name "KL15_IN")
+			(class "Power_12V")
+			(node
+				(ref "J1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
+			(name "KL15_SENSE")
+			(class "Power_12V")
+			(node
+				(ref "R7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R8")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "42")
+			(name "KL30_IN")
+			(class "Power_12V")
+			(node
+				(ref "C1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "43")
+			(name "LORA_BUSY")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "20")
+				(pinfunction "20_20")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "44")
+			(name "LORA_DIO1")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "45")
+			(name "LORA_NSS")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "21")
+				(pinfunction "21_21")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "24")
+				(pinfunction "24_24")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "46")
+			(name "LORA_RF_868")
+			(class "Default")
+			(node
+				(ref "ANT1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "47")
+			(name "LORA_RST")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "23")
+				(pinfunction "23_23")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "48")
+			(name "RES_USB_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J7")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "20")
+				(pinfunction "20_20")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "49")
+			(name "RES_USB_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "J7")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "21")
+				(pinfunction "21_21")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "50")
+			(name "RGB_LED_DATA")
+			(class "Default")
+			(node
+				(ref "D1")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "28")
+				(pinfunction "28_28")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "51")
+			(name "SD_CD")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "39")
+				(pinfunction "39_39")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "52")
+			(name "SD_CLK")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "35")
+				(pinfunction "35_35")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "53")
+			(name "SD_CMD")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "36")
+				(pinfunction "36_36")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "54")
+			(name "SD_DAT0")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "37")
+				(pinfunction "37_37")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "55")
+			(name "SD_DAT1")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "33")
+				(pinfunction "33_33")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "56")
+			(name "SD_DAT2")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "34")
+				(pinfunction "34_34")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "57")
+			(name "SD_DAT3")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "38")
+				(pinfunction "38_38")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "58")
+			(name "SPI_MISO")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "59")
+			(name "SPI_MOSI")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "60")
+			(name "SPI_SCK")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "20")
+				(pinfunction "20_20")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "61")
+			(name "SW_BUCK")
+			(class "Power_5V_3V3")
+			(node
+				(ref "C3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "L1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "62")
+			(name "UART_RXD0")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "29")
+				(pinfunction "29_29")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "63")
+			(name "UART_TXD0")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "64")
+			(name "USBC_DM")
+			(class "USB_Diff_90")
+			(node
+				(ref "J3")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "65")
+			(name "USBC_DP")
+			(class "USB_Diff_90")
+			(node
+				(ref "J3")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "66")
+			(name "USBC_VBUS")
+			(class "Power_5V_3V3,USB_Diff_90")
+			(node
+				(ref "D3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "67")
+			(name "VBUS_FRONT")
+			(class "Power_12V")
+			(node
+				(ref "J6")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "68")
+			(name "VBUS_POD1")
+			(class "Power_12V")
+			(node
+				(ref "J6")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "69")
+			(name "VBUS_POD2")
+			(class "Power_12V")
+			(node
+				(ref "J6")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "70")
+			(name "VBUS_RADAR")
+			(class "Power_12V")
+			(node
+				(ref "J6")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "U12")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "71")
+			(name "VCC_3V3")
+			(class "Power_5V_3V3")
+			(node
+				(ref "C10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C11")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C12")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R14")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "17")
+				(pinfunction "17_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "U10")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "U11")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "28")
+				(pinfunction "28_28")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U5")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U8")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U9")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
 		)
 		(net
 			(code "72")
-			(name "unconnected-(U1-BST-Pad7)")
-			(class "Default")
+			(name "VCC_5V")
+			(class "Power_5V_3V3")
+			(node
+				(ref "C2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J7")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "L1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
 			(node
 				(ref "U1")
-				(pin "7")
-				(pinfunction "BST_7")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U11")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U11")
+				(pin "3")
+				(pinfunction "3_3")
 				(pintype "passive")
 			)
 		)
 		(net
 			(code "73")
-			(name "unconnected-(U1-EN{slash}UVLO-Pad2)")
-			(class "Default")
+			(name "VCC_BUCK")
+			(class "Power_12V")
+			(node
+				(ref "C4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
 			(node
 				(ref "U1")
-				(pin "2")
-				(pinfunction "EN/UVLO_2")
-				(pintype "input")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
 			)
 		)
 		(net
 			(code "74")
-			(name "unconnected-(U1-FB-Pad5)")
+			(name "XTALIN_24M")
 			(class "Default")
 			(node
-				(ref "U1")
-				(pin "5")
-				(pinfunction "FB_5")
-				(pintype "input")
+				(ref "U8")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "Y2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
 			)
 		)
 		(net
 			(code "75")
-			(name "unconnected-(U1-GND-Pad4)")
+			(name "XTALOUT_24M")
 			(class "Default")
 			(node
-				(ref "U1")
-				(pin "4")
-				(pinfunction "GND_4")
-				(pintype "power_in")
+				(ref "U8")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "Y2")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
 			)
 		)
 		(net
 			(code "76")
-			(name "unconnected-(U1-RON-Pad3)")
+			(name "unconnected-(U3-Pad10)")
 			(class "Default")
 			(node
-				(ref "U1")
-				(pin "3")
-				(pinfunction "RON_3")
-				(pintype "passive")
+				(ref "U3")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "77")
-			(name "unconnected-(U1-SW-Pad8)")
+			(name "unconnected-(U3-Pad11)")
 			(class "Default")
 			(node
-				(ref "U1")
-				(pin "8")
-				(pinfunction "SW_8")
-				(pintype "output")
+				(ref "U3")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "78")
-			(name "unconnected-(U1-VCC-Pad6)")
-			(class "Default")
-			(node
-				(ref "U1")
-				(pin "6")
-				(pinfunction "VCC_6")
-				(pintype "passive")
-			)
-		)
-		(net
-			(code "79")
-			(name "unconnected-(U2-3V3-Pad1)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "1")
-				(pinfunction "3V3_1")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "80")
-			(name "unconnected-(U2-EN-Pad2)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "2")
-				(pinfunction "EN_2")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "81")
-			(name "unconnected-(U2-GND-Pad18)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "18")
-				(pinfunction "GND_18")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "82")
-			(name "unconnected-(U2-IO1{slash}BAT-Pad3)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "3")
-				(pinfunction "IO1/BAT_3")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "83")
-			(name "unconnected-(U2-IO2{slash}UWB_IRQ-Pad4)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "4")
-				(pinfunction "IO2/UWB_IRQ_4")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "84")
-			(name "unconnected-(U2-IO3{slash}LINE_LVL-Pad5)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "5")
-				(pinfunction "IO3/LINE_LVL_5")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "85")
-			(name "unconnected-(U2-IO4{slash}VIGN-Pad6)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "6")
-				(pinfunction "IO4/VIGN_6")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "86")
-			(name "unconnected-(U2-IO9{slash}I2S_MCLK-Pad9)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "9")
-				(pinfunction "IO9/I2S_MCLK_9")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "87")
-			(name "unconnected-(U2-IO10{slash}I2S_BCLK-Pad10)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "10")
-				(pinfunction "IO10/I2S_BCLK_10")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "88")
-			(name "unconnected-(U2-IO11{slash}I2S_WS-Pad11)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "11")
-				(pinfunction "IO11/I2S_WS_11")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "89")
-			(name "unconnected-(U2-IO12{slash}I2S_DOUT-Pad12)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "12")
-				(pinfunction "IO12/I2S_DOUT_12")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "90")
-			(name "unconnected-(U2-IO21{slash}LORA_CS-Pad8)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "8")
-				(pinfunction "IO21/LORA_CS_8")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "91")
-			(name "unconnected-(U2-IO22{slash}UWB_CS-Pad7)")
-			(class "Default")
-			(node
-				(ref "U2")
-				(pin "7")
-				(pinfunction "IO22/UWB_CS_7")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "92")
-			(name "unconnected-(U3-DVDD_3V3-Pad1)")
-			(class "Default")
-			(node
-				(ref "U3")
-				(pin "1")
-				(pinfunction "DVDD_3V3_1")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "93")
-			(name "unconnected-(U3-GND-Pad13)")
+			(name "unconnected-(U3-Pad13)")
 			(class "Default")
 			(node
 				(ref "U3")
 				(pin "13")
-				(pinfunction "GND_13")
-				(pintype "power_in")
+				(pinfunction "13_13")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "79")
+			(name "unconnected-(U3-Pad14)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "80")
+			(name "unconnected-(U3-Pad18)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "81")
+			(name "unconnected-(U3-Pad19)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "82")
+			(name "unconnected-(U3-Pad20)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "20")
+				(pinfunction "20_20")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "83")
+			(name "unconnected-(U3-Pad21)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "21")
+				(pinfunction "21_21")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "84")
+			(name "unconnected-(U3-Pad22)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "22")
+				(pinfunction "22_22")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "85")
+			(name "unconnected-(U3-Pad23)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "23")
+				(pinfunction "23_23")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "86")
+			(name "unconnected-(U3-Pad24)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "24")
+				(pinfunction "24_24")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "87")
+			(name "unconnected-(U3-Pad25)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "25")
+				(pinfunction "25_25")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "88")
+			(name "unconnected-(U3-Pad26)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "26")
+				(pinfunction "26_26")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "89")
+			(name "unconnected-(U3-Pad27)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "27")
+				(pinfunction "27_27")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "90")
+			(name "unconnected-(U5-Pad4)")
+			(class "Default")
+			(node
+				(ref "U5")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "91")
+			(name "unconnected-(U5-Pad9)")
+			(class "Default")
+			(node
+				(ref "U5")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "92")
+			(name "unconnected-(U6-Pad5)")
+			(class "Default")
+			(node
+				(ref "U6")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "93")
+			(name "unconnected-(U10-Pad2)")
+			(class "Default")
+			(node
+				(ref "U10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "94")
-			(name "unconnected-(U3-I2C_SCL-Pad8)")
+			(name "unconnected-(U10-Pad3)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "8")
-				(pinfunction "I2C_SCL_8")
-				(pintype "input")
+				(ref "U10")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "95")
-			(name "unconnected-(U3-I2C_SDA-Pad7)")
+			(name "unconnected-(U10-Pad4)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "7")
-				(pinfunction "I2C_SDA_7")
-				(pintype "input")
+				(ref "U10")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "96")
-			(name "unconnected-(U3-LIN1_P1-Pad10)")
+			(name "unconnected-(U10-Pad5)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "10")
-				(pinfunction "LIN1_P1_10")
-				(pintype "input")
+				(ref "U10")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "97")
-			(name "unconnected-(U3-LIN2_P2-Pad12)")
+			(name "unconnected-(U10-Pad7)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "12")
-				(pinfunction "LIN2_P2_12")
-				(pintype "input")
+				(ref "U10")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "98")
-			(name "unconnected-(U3-LOUT1_P1-Pad9)")
+			(name "unconnected-(U10-Pad16)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "9")
-				(pinfunction "LOUT1_P1_9")
-				(pintype "output")
+				(ref "U10")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive+no_connect")
 			)
 		)
 		(net
 			(code "99")
-			(name "unconnected-(U3-LOUT2_P2-Pad11)")
+			(name "unconnected-(U11-Pad4)")
 			(class "Default")
 			(node
-				(ref "U3")
-				(pin "11")
-				(pinfunction "LOUT2_P2_11")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "100")
-			(name "unconnected-(U3-MCLK-Pad2)")
-			(class "Default")
-			(node
-				(ref "U3")
-				(pin "2")
-				(pinfunction "MCLK_2")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "101")
-			(name "unconnected-(U3-SDATA_OUT-Pad6)")
-			(class "Default")
-			(node
-				(ref "U3")
-				(pin "6")
-				(pinfunction "SDATA_OUT_6")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "102")
-			(name "unconnected-(U6-CANH-Pad6)")
-			(class "Default")
-			(node
-				(ref "U6")
-				(pin "6")
-				(pinfunction "CANH_6")
-				(pintype "bidirectional")
-			)
-		)
-		(net
-			(code "103")
-			(name "unconnected-(U6-CANL-Pad5)")
-			(class "Default")
-			(node
-				(ref "U6")
-				(pin "5")
-				(pinfunction "CANL_5")
-				(pintype "bidirectional")
-			)
-		)
-		(net
-			(code "104")
-			(name "unconnected-(U6-GND-Pad2)")
-			(class "Default")
-			(node
-				(ref "U6")
-				(pin "2")
-				(pinfunction "GND_2")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "105")
-			(name "unconnected-(U6-RXD-Pad4)")
-			(class "Default")
-			(node
-				(ref "U6")
+				(ref "U11")
 				(pin "4")
-				(pinfunction "RXD_4")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "106")
-			(name "unconnected-(U6-TXD-Pad1)")
-			(class "Default")
-			(node
-				(ref "U6")
-				(pin "1")
-				(pinfunction "TXD_1")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "107")
-			(name "unconnected-(U6-VCC-Pad3)")
-			(class "Default")
-			(node
-				(ref "U6")
-				(pin "3")
-				(pinfunction "VCC_3")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "108")
-			(name "unconnected-(U7-BUSY-Pad6)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "6")
-				(pinfunction "BUSY_6")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "109")
-			(name "unconnected-(U7-GND-Pad10)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "10")
-				(pinfunction "GND_10")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "110")
-			(name "unconnected-(U7-MISO-Pad4)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "4")
-				(pinfunction "MISO_4")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "111")
-			(name "unconnected-(U7-MOSI-Pad3)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "3")
-				(pinfunction "MOSI_3")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "112")
-			(name "unconnected-(U7-NRST-Pad8)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "8")
-				(pinfunction "NRST_8")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "113")
-			(name "unconnected-(U7-NSS-Pad5)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "5")
-				(pinfunction "NSS_5")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "114")
-			(name "unconnected-(U7-RFO-Pad9)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "9")
-				(pinfunction "RFO_9")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "115")
-			(name "unconnected-(U7-SCK-Pad2)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "2")
-				(pinfunction "SCK_2")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "116")
-			(name "unconnected-(U7-VBAT_UPS-Pad1)")
-			(class "Default")
-			(node
-				(ref "U7")
-				(pin "1")
-				(pinfunction "VBAT_UPS_1")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "117")
-			(name "unconnected-(U8-GND-Pad9)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "9")
-				(pinfunction "GND_9")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "118")
-			(name "unconnected-(U8-RF_IO-Pad8)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "8")
-				(pinfunction "RF_IO_8")
-				(pintype "bidirectional")
-			)
-		)
-		(net
-			(code "119")
-			(name "unconnected-(U8-RSTn-Pad7)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "7")
-				(pinfunction "RSTn_7")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "120")
-			(name "unconnected-(U8-SPICLK-Pad2)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "2")
-				(pinfunction "SPICLK_2")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "121")
-			(name "unconnected-(U8-SPICS-Pad5)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "5")
-				(pinfunction "SPICS_5")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "122")
-			(name "unconnected-(U8-SPIMISO-Pad4)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "4")
-				(pinfunction "SPIMISO_4")
-				(pintype "output")
-			)
-		)
-		(net
-			(code "123")
-			(name "unconnected-(U8-SPIMOSI-Pad3)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "3")
-				(pinfunction "SPIMOSI_3")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "124")
-			(name "unconnected-(U8-VDD_3V3-Pad1)")
-			(class "Default")
-			(node
-				(ref "U8")
-				(pin "1")
-				(pinfunction "VDD_3V3_1")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "125")
-			(name "unconnected-(U9-EN-Pad3)")
-			(class "Default")
-			(node
-				(ref "U9")
-				(pin "3")
-				(pinfunction "EN_3")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "126")
-			(name "unconnected-(U9-GND-Pad2)")
-			(class "Default")
-			(node
-				(ref "U9")
-				(pin "2")
-				(pinfunction "GND_2")
-				(pintype "power_in")
-			)
-		)
-		(net
-			(code "127")
-			(name "unconnected-(U9-NC-Pad4)")
-			(class "Default")
-			(node
-				(ref "U9")
-				(pin "4")
-				(pinfunction "NC_4")
-				(pintype "passive")
+				(pinfunction "4_4")
+				(pintype "passive+no_connect")
 			)
 		)
 	)
