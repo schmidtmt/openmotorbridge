@@ -9,7 +9,15 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 
 ---
 
-## 1. Type A: Central Control Box (3-Piece Sandwich Architecture)
+## 1. Type A: Central Control Box (3-Piece Sandwich Architecture & v10 Dual-Rail Roadmap)
+
+> [!IMPORTANT]
+> **v10 Architectural Decision: Transition to Dual-Rail Monocoque Slide-In Platform (Aligned with Pod)**  
+> The Central Control Box (Type A) will transition to a **Dual-Rail Monocoque Tub with Slide-In Intermediate Tray and L-Slide Lid**:
+> 1. **Lower Tub:** Stationary front bulkhead for Deutsch DTM, J_PERIPH, and USB-C; PCBA 01 secured to floor with unobstructed top access.
+> 2. **Middle Guide Rails:** Slide-in intermediate tray (carrying 1S LiPo UPS battery and Taoglas antennas) requiring zero separate screws.
+> 3. **Upper Guide Rails:** L-slide lid with wedge-lock compression and rear deadbolt latch.  
+> **Development Sequence:** Final enclosure dimensions will be locked in directly after the **PCBA 01 Main Controller Board** layout is adapted (removal of DW3110 UWB subsystem, integration of new 12V/30W/60W power distribution, and USB data routing).
 
 The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for harsh motorcycle environments (up to 20 g vibration, direct spray, under-seat heat soak):
 

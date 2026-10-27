@@ -11,9 +11,17 @@ Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement,
 
 ---
 
-## 1. Gehäuse Typ A: Zentrale Steuerbox (3-Teiliges Sandwich-Design)
+## 1. Gehäuse Typ A: Zentrale Steuerbox (3-Teiliges Sandwich-Design & v10 Dual-Rail Roadmap)
 
-Das Basisgehäuse der Zentralbox ist als modulares, 3-teiliges IP67/IP69K-Sandwichgehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist:
+> [!IMPORTANT]
+> **v10 Architektur-Entscheidung: Übergang zur Dual-Rail Monocoque Slide-In Plattform (analog zum Pod)**  
+> Die Zentralbox (Typ A) wird auf eine **Dual-Rail Monocoque-Wanne mit einschiebbarer Zwischenboden-Trägerplatte und L-Schiebedeckel** umgestellt:
+> 1. **Untere Wanne:** Feste vordere Stirnwand für Deutsch DTM, J_PERIPH und USB-C; Platine PCBA 01 am Boden von oben frei verschraubbar.
+> 2. **Mittlere Führungsebene:** Einschiebbarer Zwischenboden (Slide-In Tray für 1S LiPo USV-Akku und Taoglas-Antennen) ohne separate Schrauben.
+> 3. **Obere Führungsebene:** L-Schiebedeckel mit Keilanzug (Wedge-Lock) und Heck-Verriegelung.  
+> **Hinweis zur Reihenfolge:** Die finalen Gehäuseabmessungen werden unmittelbar nach der Anpassung der **PCBA 01 Hauptplatine** eingefroren (nach Entfall des DW3110 UWB-Teils und Integration der neuen Power-Verteilung und USB-Datenleitungen).
+
+Das Basisgehäuse der Zentralbox ist als modulares IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist:
 
 - **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H; Unterwanne $17{,}0\,\text{mm}$, Oberwanne $15{,}0\,\text{mm}$, Deckel $6{,}0\,\text{mm}$).
 - **Befestigung:** 4x integrierte Ecklaschen an der Unterwanne mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
