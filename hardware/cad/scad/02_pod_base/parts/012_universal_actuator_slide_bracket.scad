@@ -55,21 +55,21 @@ module epdm_rail_sealing_plug() {
     }
 }
 
-// 2. Independent Cross-Strut (Querstrebe mit Y-Langloch & Endgleitern)
+// 2. Independent Cross-Strut (Querstrebe mit Y-Langloch & bündig versenkten Schrauben)
 module actuator_cross_strut(
     strut_w = 10.0,      // Width in X (mm)
-    strut_th = 3.0,      // Thickness in Z (mm)
+    strut_th = 2.8,      // Thickness in Z (mm) - Ultra-slim 2.8 mm flat profile
     slot_len = 38.0,     // Length of central Y-slot (mm)
     slot_w = 2.8         // M2.5 clearance width (mm)
 ) {
     beam_len_y = 62.5;   // Interior span between sidewalls (Y = 3.75 to 66.25)
     tab_out = 2.4;       // Guide tab protrusion into sidewall C-rail
-    tab_th  = 2.6;       // Tab thickness in Z (slides in 3.0 mm C-rail)
+    tab_th  = 2.4;       // Tab thickness in Z (slides in 2.8 mm C-rail)
 
     color([0.22, 0.24, 0.27]) { // PA12 Carbon dark grey
         difference() {
             union() {
-                // Central Traverse Beam
+                // Central Traverse Beam - Completely flat top surface across entire span
                 translate([-strut_w/2.0, (POD_OUTER_W - beam_len_y)/2.0, 0])
                     cube([strut_w, beam_len_y, strut_th], center=false);
 
@@ -80,12 +80,6 @@ module actuator_cross_strut(
                 // Right Guide Tab (enters right sidewall C-rail at Y = 66.25..68.65 mm)
                 translate([-strut_w/2.0 + 1.0, (POD_OUTER_W + beam_len_y)/2.0 - 0.1, (strut_th - tab_th)/2.0])
                     cube([strut_w - 2.0, tab_out + 0.1, tab_th], center=false);
-
-                // Lateral Clamping Flange Bosses at both ends (for M2.5 locking screws)
-                translate([-strut_w/2.0, (POD_OUTER_W - beam_len_y)/2.0 + 1.0, strut_th])
-                    cube([strut_w, 6.0, 2.2], center=false);
-                translate([-strut_w/2.0, (POD_OUTER_W + beam_len_y)/2.0 - 7.0, strut_th])
-                    cube([strut_w, 6.0, 2.2], center=false);
             }
 
             // Central Y-Axis Slotted Guide Rail (Langloch für M2.5 Schraube)
@@ -96,78 +90,91 @@ module actuator_cross_strut(
                         cylinder(r=slot_w/2.0, h=strut_th + 2.0);
                 }
 
-            // End Clamp Screws & DIN 934 M2.5 Captive Nut Pockets
-            // Left end clamping screw
-            translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 4.0, -1.0])
-                cylinder(r=1.4, h=strut_th + 4.0);
-            translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 4.0, strut_th + 2.2 - NUT_M2_5_H])
-                rotate([0, 0, 30])
-                    hex_nut_pocket(sw=NUT_M2_5_SW, h=NUT_M2_5_H + 0.5, screw_r=1.4, through_h=4.0);
+            // Continuous 90° Countersink along top of Y-slot for flush DIN 7991 M2.5 screw head
+            translate([0, POD_OUTER_W/2.0 - slot_len/2.0, strut_th - 1.4])
+                hull() {
+                    cylinder(r1=slot_w/2.0, r2=2.6, h=1.5);
+                    translate([0, slot_len, 0])
+                        cylinder(r1=slot_w/2.0, r2=2.6, h=1.5);
+                }
 
-            // Right end clamping screw
-            translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 4.0, -1.0])
-                cylinder(r=1.4, h=strut_th + 4.0);
-            translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 4.0, strut_th + 2.2 - NUT_M2_5_H])
-                rotate([0, 0, 30])
-                    hex_nut_pocket(sw=NUT_M2_5_SW, h=NUT_M2_5_H + 0.5, screw_r=1.4, through_h=4.0);
+            // Left end clamping screw - 100% Flush Countersunk Bore (DIN 7991)
+            translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 3.5, -1.0])
+                cylinder(r=1.4, h=strut_th + 2.0);
+            translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 3.5, strut_th - 1.4])
+                cylinder(r1=1.4, r2=2.6, h=1.5);
+
+            // Right end clamping screw - 100% Flush Countersunk Bore (DIN 7991)
+            translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 3.5, -1.0])
+                cylinder(r=1.4, h=strut_th + 2.0);
+            translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 3.5, strut_th - 1.4])
+                cylinder(r1=1.4, r2=2.6, h=1.5);
         }
     }
 
-    // 2x M2.5 Stainless Steel Torx Locking Screws at strut ends
+    // 2x M2.5 Stainless Steel Torx Flush Countersunk Screws (DIN 7991 A4) at strut ends
+    // 100% Flush with the flat top deck - ZERO protrusion above the strut beam!
     color("silver") {
-        translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 4.0, strut_th + 2.2])
-            cylinder(r=2.2, h=1.8, center=false);
-        translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 4.0, strut_th + 2.2])
-            cylinder(r=2.2, h=1.8, center=false);
+        translate([0, (POD_OUTER_W - beam_len_y)/2.0 + 3.5, strut_th - 1.4]) {
+            cylinder(r1=1.4, r2=2.5, h=1.4, center=false);
+            color("dimgray")
+                translate([0, 0, 1.15]) cylinder(r=0.8, h=0.25, center=false, $fn=6);
+        }
+        translate([0, (POD_OUTER_W + beam_len_y)/2.0 - 3.5, strut_th - 1.4]) {
+            cylinder(r1=1.4, r2=2.5, h=1.4, center=false);
+            color("dimgray")
+                translate([0, 0, 1.15]) cylinder(r=0.8, h=0.25, center=false, $fn=6);
+        }
     }
 }
 
-// 3. Compact 2-in-1 Z-Carriage (Y-Schlitten + Z-Höhenverstellung mit 8 mm Hub)
+// 3. Compact Under-Slung 2-in-1 Z-Carriage (Hängender Y-Schlitten + Z-Höhenverstellung mit 8 mm Hub)
 module actuator_z_carriage(
     rocker_color = [0.92, 0.45, 0.10], // Orange or Blue
     z_offset = 0.0                      // Vertical height fine adjustment (-4..+4 mm)
 ) {
-    carriage_l = 13.0; // Dimension in X
-    carriage_w = 11.0; // Dimension in Y
+    carriage_l = 13.0;     // Dimension in X
+    carriage_w = 11.0;     // Dimension in Y
+    carriage_body_h = 7.0; // Body height hanging below strut
 
-    // A. Sliding Base Block (clamps against strut deck)
+    // A. Under-Slung Sliding Carriage Block (rides directly against underside of strut)
     color([0.28, 0.30, 0.34]) {
         difference() {
             union() {
-                // Top Clamping Cap
-                translate([-carriage_l/2.0, -carriage_w/2.0, 3.0])
-                    cube([carriage_l, carriage_w, 3.2], center=false);
-                // Lower Guide Lug (aligns in strut Y-slot)
-                translate([-carriage_l/2.0 + 1.5, -1.3, 0.5])
-                    cube([carriage_l - 3.0, 2.6, 2.5], center=false);
-                // Vertical Guide Bracket Column
-                translate([-carriage_l/2.0, carriage_w/2.0 - 2.5, -8.0])
-                    cube([carriage_l, 2.5, 14.0], center=false);
+                // Main Under-Slung Body Block (hanging below Z = 0)
+                translate([-carriage_l/2.0, -carriage_w/2.0, -carriage_body_h])
+                    cube([carriage_l, carriage_w, carriage_body_h], center=false);
+
+                // Upper Alignment Tongue (protrudes into strut Y-slot for zero-play guide)
+                translate([-carriage_l/2.0 + 1.5, -1.3, 0.0])
+                    cube([carriage_l - 3.0, 2.6, 2.0], center=false);
             }
 
-            // Central Vertical Clamp Bore & Nut Pocket
-            translate([0, 0, -1.0])
-                cylinder(r=1.4, h=8.0);
-            translate([0, 0, 3.0 + 3.2 - NUT_M2_5_H])
-                rotate([0, 0, 0])
+            // Central Vertical Clamp Bore & Captive DIN 934 M2.5 Nut Pocket (accessible underneath)
+            translate([0, 0, -carriage_body_h - 1.0])
+                cylinder(r=1.4, h=carriage_body_h + 3.0);
+            translate([0, 0, -carriage_body_h + 1.2])
+                rotate([0, 0, 30])
                     hex_nut_pocket(sw=NUT_M2_5_SW, h=NUT_M2_5_H + 0.5, screw_r=1.4, through_h=4.0);
 
             // Vertical Z-Adjustment Slotted Guide (Langloch für Z-Hub)
-            translate([0, carriage_w/2.0 + 0.1, -2.0])
+            translate([0, carriage_w/2.0 + 0.1, -carriage_body_h/2.0])
                 rotate([90, 0, 0])
                     hull() {
-                        cylinder(r=1.4, h=4.0);
-                        translate([0, -6.0, 0])
-                            cylinder(r=1.4, h=4.0);
+                        cylinder(r=1.4, h=carriage_w + 1.0);
+                        translate([0, -3.5, 0])
+                            cylinder(r=1.4, h=carriage_w + 1.0);
                     }
         }
     }
 
-    // B. M2.5 Stainless Steel Clamping Screw
+    // B. M2.5 Stainless Steel Flush Countersunk Screw (DIN 7991 Torx)
+    // Sits 100% flush inside the strut's countersunk slot - ZERO protrusion upwards!
     color("silver") {
-        translate([0, 0, 6.2]) {
-            cylinder(r=2.2, h=1.8, center=false);
-            translate([0, 0, 1.8]) cylinder(r=0.9, h=0.2, center=false, $fn=6);
+        translate([0, 0, 2.8 - 1.4]) {
+            cylinder(r1=1.4, r2=2.5, h=1.4, center=false);
+            color("dimgray")
+                translate([0, 0, 1.15]) cylinder(r=0.8, h=0.25, center=false, $fn=6);
         }
     }
 
@@ -175,27 +182,27 @@ module actuator_z_carriage(
     translate([0, 0, z_offset]) {
         // Solenoid body
         color("silver")
-            translate([8.0, 0, 0.0])
+            translate([7.0, 0, -carriage_body_h/2.0])
                 rotate([0, 90, 0])
-                    cylinder(r=2.2, h=11.0, center=true, $fn=20);
+                    cylinder(r=2.2, h=10.0, center=true, $fn=20);
         color("gold")
-            translate([2.0, 0, 0.0])
+            translate([1.5, 0, -carriage_body_h/2.0])
                 rotate([0, 90, 0])
                     cylinder(r=1.5, h=3.0, center=true, $fn=16);
 
         // 90° Downward Bellcrank Rocker Arm
         color(rocker_color) {
-            translate([0, 0, -3.5]) {
+            translate([0, 0, -carriage_body_h/2.0 - 3.0]) {
                 rotate([0, 10, 0])
-                    cube([2.8, 2.2, 5.5], center=true);
-                translate([3.0, 0, 3.0])
-                    cube([5.5, 1.8, 1.6], center=true);
+                    cube([2.8, 2.2, 5.0], center=true);
+                translate([2.5, 0, 2.5])
+                    cube([5.0, 1.8, 1.6], center=true);
             }
         }
 
         // Soft Shore A50 TPU Pusher Tip (depresses intercom key directly)
         color([rocker_color[0]*0.9, rocker_color[1]*0.9, rocker_color[2]*0.9])
-            translate([0, 0, -7.0])
+            translate([0, 0, -carriage_body_h/2.0 - 6.5])
                 cylinder(r=2.2, h=2.0, center=true, $fn=16);
     }
 }

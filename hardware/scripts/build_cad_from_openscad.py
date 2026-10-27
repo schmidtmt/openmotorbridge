@@ -185,7 +185,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_pod_monocoque_assembly.scad",
         os.path.join(CAD_IMG_DIR, "pod_monocoque_assembly_exploded_3d.png"),
-        "75,35,50,55,0,320,440",
+        "80,35,45,55,0,320,440",
         "Tomorrow",
         ["-D", 'VIEW_MODE="exploded"']
     ),
@@ -211,8 +211,36 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/parts/012_universal_actuator_slide_bracket.scad",
         os.path.join(CAD_IMG_DIR, "universal_actuator_slide_bracket_cad.png"),
-        "55,27,8,55,0,320,180",
+        "85,35,10,55,0,320,190",
         "Tomorrow"
+    ),
+    (
+        "02_pod_base/99_pod_inlay_gallery.scad",
+        os.path.join(CAD_IMG_DIR, "pod_variant_sena_cad.png"),
+        "75,35,20,55,0,320,290",
+        "Tomorrow Night",
+        ["-D", 'variant="sena"']
+    ),
+    (
+        "02_pod_base/99_pod_inlay_gallery.scad",
+        os.path.join(CAD_IMG_DIR, "pod_variant_cardo_cad.png"),
+        "75,35,20,55,0,320,290",
+        "Tomorrow Night",
+        ["-D", 'variant="cardo"']
+    ),
+    (
+        "02_pod_base/99_pod_inlay_gallery.scad",
+        os.path.join(CAD_IMG_DIR, "pod_variant_omm_cad.png"),
+        "75,35,20,55,0,320,290",
+        "Tomorrow Night",
+        ["-D", 'variant="omm"']
+    ),
+    (
+        "02_pod_base/99_pod_inlay_gallery.scad",
+        os.path.join(CAD_IMG_DIR, "pod_variant_drybox_cad.png"),
+        "75,35,20,55,0,320,290",
+        "Tomorrow Night",
+        ["-D", 'variant="drybox"']
     ),
     # Legacy Satellite Pod References (Retained for backwards compatibility)
     (

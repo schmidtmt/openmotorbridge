@@ -175,73 +175,68 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 ![OpenMotorBridge Satellite Pod 3D Cutaway CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Clearly visible is the authentic slot-in guide mechanics: The housing sidewalls run up to the full height of $Z = 38.0\,\text{mm}$. On the inner face of both sidewalls is a deep horizontal C-groove ($Z = 32.0\dots 35.2\,\text{mm}$) in which the guide tongues of the slide-in lid glide. Above this groove is a solid $2.8\,\text{mm}$ thick PA12 upper retaining lip (housing ceiling overhang) that locks the lid positively against vertical lifting -- prying or lifting off from above is physically impossible (not a drop-on lid!). The lid can only slide horizontally through the rear entry slot. Inside the chamber: PCBA 03 beneath the protective EPDM dry-flap, end-wall Port A (upper) and Port B (lower), and the Cardo Packtalk Edge with the snapped-on ultra-flat 2D rocker actuator plate seated beneath the lid.*
+*Figure 8.6: Photorealistic 3D CAD cutaway view of the universal satellite pod (Type B). Clearly visible is the authentic slot-in guide mechanics: The housing sidewalls run up to the full height of $Z = 38.0\,\text{mm}$. On the inner face of both sidewalls is a deep horizontal C-groove ($Z = 32.0\dots 35.2\,\text{mm}$) in which the guide tongues of the slide-in lid glide. Above this groove is a solid $2.8\,\text{mm}$ thick PA12 upper retaining lip (housing ceiling overhang) that locks the lid positively against vertical lifting -- prying or lifting off from above is physically impossible (not a drop-on lid!). The lid can only slide horizontally through the rear entry slot. Inside the chamber: PCBA 03 beneath the protective EPDM dry-flap, end-wall Port A (upper) and Port B (lower), and the modular dual-strut actuator system (`012_universal_actuator_slide_bracket.scad`) positioned over the Cardo Packtalk Edge. Due to the under-slung carriage design and 100% flush DIN 7991 countersunk Torx screws, generous overhead clearance of over $8\,\text{mm}$ ($6.2\,\text{mm}$ to seal lip) remains to the lid undersurface -- ensuring zero friction or collision risk.*
 
 ![OpenMotorBridge Satellite Pod Exploded 3D View CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod illustrating authentic horizontal slide-in kinematics: The slide-in lid retracts backwards along the X-axis out of the rear entry slot. Clearly visible are the continuous lateral guide tongues along the lid flanks, the deep C-groove guide rails in the housing sidewalls with upper retaining lip, the monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, the ultra-flat 2D dual-rocker actuator plate snapped onto the Cardo Air-Mount cradle (for automatic ignition-coupled power-on/off), Cardo Packtalk Edge, and rear sealed SMA knockout membrane).*
+*Figure 8.7: 3D CAD exploded assembly of the universal satellite pod illustrating authentic horizontal slide-in kinematics: The slide-in lid retracts backwards along the X-axis out of the rear entry slot. Clearly visible are the continuous lateral guide tongues along the lid flanks, the deep C-groove guide rails in the housing sidewalls with upper retaining lip, the monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, the two independent cross-struts of the modular actuator bracket with flush-countersunk DIN 7991 Torx clamp screws, the Cardo Packtalk Edge in its OEM Air-Mount cradle, and rear EPDM sealing plugs for the C-guide rails.*
 
----
+--### 4.2 Kinematics of the L-Slide-In Lid (L-Profile, Non-Metallic PA12 U-Yoke & 100% Internal FOB Latch)
 
-### 4.2 Slide-in Lid Kinematics (C-Groove Rails with Retaining Overhang & 100% Internal Anti-Theft Lock)
+The Satellite Pod opens and latches via a **one-piece L-profile slide lid** (horizontal cover + upper rear bulkhead molded as a single monolithic part). It slides horizontally along internal C-groove channels and latches automatically via a **100% non-metallic PA12 U-yoke deadbolt** into the fixed lower tub sill:
 
-Opening and closing the satellite pod operates as a genuine **Slide-in mechanism** with horizontal sliding along concealed internal C-groove rails:
+![OpenMotorBridge Magnetic FOB Lock CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-![OpenMotorBridge Magnetic FOB Anti-Theft Latch CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
-
-*Figure 8.8: 3D CAD cross-section view of the 100% internal magnetic deadbolt mechanism. For maximum anti-theft security and tamper protection, the lid exterior features zero buttons, sliders, or pry gaps. An internal spring-loaded stainless steel / neodymium deadbolt pin (silver, $\varnothing\,4.0 \times 6.0\,\text{mm}$) is housed in a blind bore on the lid underside. When fully slid into the housing, the pin drops down under spring tension (gold) into a blind socket in the tub front bulkhead, deadlocking the lid positively. Approaching the Smart Keyfob (PCBA 07) over the exterior RFID target zone magnetically lifts the deadbolt upward into the lid, allowing the lid to slide freely backwards.*
+*Figure 8.8: 3D CAD cross-section of the 100% internal FOB latch mechanism at the rear bulkhead: For security, ergonomic, and RF reasons, the latch is constructed as a wide-spanning, inverted U-yoke from PA12. This eliminates all internal sheet metal that could attenuate 868 MHz LoRa, 2.4 GHz BLE, or Mesh wireless signals. The center cross-bridge houses a small N52 neodymium coin magnet (silver, $\varnothing\,6.0 \times 2.0\,\text{mm}$). Two vertical locking legs at the outer corners snap into blind sockets of the lower tub sill via 45° lead-in chamfers. The open central arch completely clears the fixed SMA antenna port. When the Smart Keyfob (PCBA 07) approaches the exterior RFID target on the rear wall, magnetic attraction lifts the U-yoke by $3.2\,\text{mm}$ -- both corner legs disengage from the sill and the L-lid slides freely backwards.*
 
 ```
-      SLIDE-IN C-GROOVE WITH UPPER OVERHANG & 100% INTERNAL FOB DEADBOLT
+                 L-SLIDE-IN LID: REAR U-YOKE WITH CENTRAL SMA ARCH
 =================================================================================
 
-            EXTERIOR ENVIRONMENT (100% SMOOTH, TAMPER-PROOF LID SURFACE)
+                     EXTERIOR ENVIRONMENT (SMOOTH BULKHEAD WITH RFID TARGET)
   ------------------------------------+------------------------------------------
-   [SMART KEYFOB PCBA 07]             |  SMOOTH LID TOP SURFACE (Z = 35.2 mm)
-    (N52 Neodymium Core)              |  (Zero external sliders, buttons, or gaps!)
+   [SMART KEYFOB PCBA 07]             |  SMOOTH REAR WALL WITH DRIP APRON
+    (N52 Neodymium Core)              |  (3.5 mm overlap over lower tub sill)
              v                        |
        +-----------+                  |    +-----------------------------+
        | N52 MAGNET|                  |    | UPPER WALL OVERHANG (ROOF)  | (Z=35.2..38mm)
        |   (Key)   |                  |    | Locks lid against UPWARD pull!
        +-----+-----+                  |    +--------------+--------------+
   ===========|========================+===================|======================
-   SLIDE-IN  | (Magnetic flux lifts   |  SLIDE-IN LID     | [C-GROOVE CHANNEL]
-   LID       v  deadbolt upward)      |  (with lateral    v  (Z=32.0..35.2mm)
-        +----+----+                   |   guide tongues)
-        | [SPRING]| (Return spring)   |
-        +----+----+                   |
-             |                        |
-        +----+----+                   |
-        | DEAD-   |                   |
-        | BOLT    |                   |
-  ------+----+----+-------------------+------------------------------------------
-   HOUSING   | (When locked, pin protrudes 3 mm into tub floor socket!)
-   FLOOR     v
-        [LATCH SOCKET]  <-- 100% INTERNAL! Physically inaccessible from outside!
+   L-LID     | (Magnetic flux lifts   |  L-SLIDE LID      | [C-GROOVE CHANNEL]
+   BULKHEAD  v  U-yoke upward)        |  (100% flush      v  (Z=32.0..35.2mm)
+        +----+----+                   |   underside!)
+        |N52 COIN | (Ø 6 x 2 mm)      |
+   +====+=========+====+              |   [SPRING 1 / SPRING 2 at corners]
+   | PA12 U-CROSS-BRIDGE|              |   (depress U-yoke into sill sockets)
+   | (RF-Transparent!) |              |
+   +--+-------------+--+              |
+      |             |                 |
+   [LEG 1]       [LEG 2]              |
+   (Left Corner) (Right Corner)       |   OPEN CENTRAL PORTAL ARCH:
+      |             |                 |   Completely clears fixed SMA bulkhead!
+  ----+-------------+-----------------+------------------------------------------
+   FIXED LOWER TUB SILL (Z = 0..14 mm)|
+      v             v                 |
+  [SOCKET 1]    [SOCKET 2]            |   ( O ) FIXED SMA BULKHEAD PORT
+  <-- 100% INTERNAL & TAMPER-PROOF!   |   (Antenna stays securely on motorcycle!)
 ```
 
-1. **Horizontal Slide-in Action into C-Groove Rails (Zero Drop-on Lifting):**
-   * The left and right sidewalls of the monocoque housing are not open at the top, but form a solid **C-channel profile**.
-   * The actual **guide groove ($Z = 32.0\dots 35.2\,\text{mm}$)** is molded $2.0\,\text{mm}$ deep into the inside face of each sidewall.
-   * Above this groove, the wall projects inward as a **continuous upper retaining lip ($Z = 35.2\dots 38.0\,\text{mm}$)**.
-   * The lid's guide tongues glide completely underneath this lip. Upward lifting or prying is 100% blocked -- the lid can only slide horizontally out the rear slot!
-   * At the forward end-stop, a perimeter EPDM compression seal hermetically seals the lid gap (IP67).
+1. **100% Flush Underside (Zero Interior Collisions):**
+   * Relocating the latch into the upper rear wall eliminates all downward-protruding bosses from the lid underside.
+   * The lid glides smoothly over communicators, wiring harnesses, and actuator brackets with ample clearance.
 
-2. **100% Internal Anti-Theft Protection (Zero External Access):**
-   * **Tamper Immunity:** An external slider or release button would allow any passerby to open the pod and steal communicators, registration documents, or cash.
-   * The OpenMotorBridge locking mechanism is therefore **100% internal**.
-   * The lid exterior is completely flush, gapless, and impervious to prying tools.
+2. **100% RF-Transparent PA12 U-Yoke (Zero Antenna Shielding):**
+   * Eliminating stamped sheet-metal parts ensures no wireless signal attenuation for LoRa, Bluetooth, or Mesh radios.
+   * A tiny N52 neodymium coin ($\varnothing\,6.0 \times 2.0\,\text{mm}$) provides minimal moving mass with maximum magnetic coupling.
 
-3. **Contactless Proximity Unlocking via Smart Keyfob (`PCBA 07`):**
-   * The rider places their Smart Keyfob onto the subtly recessed RFID target zone on the lid exterior.
-   * The powerful magnetic field of the N52 neodymium core overcomes the internal return spring and draws the stainless deadbolt $3.5\,\text{mm}$ upward into the lid cavity.
-   * The lid is unlocked and slides out effortlessly backwards using the rear glove-grip push flutes.
-   * **Passive & Fail-Safe:** Operates purely mechanically and via permanent magnetism -- requires 0 mA standby current, has zero batteries to deplete, and works reliably in freezing rain, mud, and dust.
+3. **Slam-to-Shut Dual-Corner Latching:**
+   * Outer corner legs ($Y = 8.5\,\text{mm}$ and $Y = 55.5\,\text{mm}$) snap automatically into the lower tub sill upon full insertion.
+   * Dual-corner engagement prevents twisting, prying, and road vibration chatter.
 
-3. **Concealed Internal Screws & Tamper Protection:**
-   * The M4/M5 stainless mounting screws securing the pod inside the bag or to frame tubes reside beneath the lower electronics bay.
-   * When the lid is closed and latched, the mounting hardware is physically inaccessible.
-   * Any forced attempt to pry or tear the pod away triggers the 6-axis IMU in the Central Box, broadcasting a LoRa (868 MHz) theft alert to the pocket pager in $< 50\,\text{ms}$.
+4. **Labyrinth Shingle Seal (IP67 Drip Apron) & Fixed SMA Bulkhead:**
+   * The upper rear bulkhead features a $3.5\,\text{mm}$ downward drip apron overlapping the lower sill. Rain and road spray cannot crawl upward against gravity.
+   * The optional SMA antenna port resides permanently in the lower tub sill ($Z = 7.5\,\text{mm}$), keeping external antennas and coax pigtails completely undisturbed when opening the pod.s}$.
 
 ---
 
@@ -251,7 +246,7 @@ The interior of the satellite pod is partitioned into two vertically isolated le
 
 ![OpenMotorBridge Satellite Pod X-Ray View CAD](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Figure 8.9: Transparent 3D X-Ray and kinematics view of the monocoque satellite pod with the slide-in lid partially retracted to the right (rearward) for demonstration: Clearly evident is the open right-hand insertion portal (bulkhead opening at the rear) through which the lid enters horizontally along the lateral C-groove guide rails. Revealed in the forward section: the low-profile 4-layer carrier board PCBA 03 beneath the EPDM dry-flap, internal cable routes to Port A (upper) and Port B (lower), and inside the upper equipment chamber the Cardo Packtalk Edge with snapped-on 2D rocker actuator plate.*
+*Figure 8.9: Transparent 3D X-Ray and kinematics view of the monocoque satellite pod with the slide-in lid partially retracted to the right (rearward) for demonstration: Clearly evident is the open right-hand insertion portal (bulkhead opening at the rear) through which the lid enters horizontally along the lateral C-groove guide rails. Revealed in the forward section: the low-profile 4-layer carrier board PCBA 03 beneath the EPDM dry-flap, internal cable routes to Port A (upper) and Port B (lower), and inside the upper equipment chamber the Cardo Packtalk Edge with the modular dual-strut actuator bracket system with flush-countersunk Torx screws.*
 
 ```
             POD INTERIOR: TWO-ZONE ARCHITECTURE & DRY-FLAP
@@ -384,7 +379,7 @@ Interconnection from the Central Box to both saddlebag pods utilizes a heavy-dut
 
 ## 5. Type C: Universal Front Node (Cockpit & Sensor Hub)
 
-The Front Node enclosure was specially engineered for protected installation inside motorcycle front fairings (Batwing, Sharknose, BMW GS/RT beak) or on crash bars:
+The Front Node enclosure was specially engineered for protected installation on handlebars, risers, triple trees, crash bars, or front subframes (**ZERO Fairing Removal!** No disassembly or opening of complex touring fairings like Harley Sharknose / Batwing is required):
 
 - **Outer Dimensions:** Compact **$98.0 \times 68.0 \times 25.0\,\text{mm}$** (L x W x H, tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, black glass-bead blasted and chemically vapor smoothed.
@@ -974,14 +969,17 @@ Wiring the saddlebag lid pods resolves the quintessential operational requiremen
 #### 6.5.3 RF Physics: Why Saddlebag Lids Beat Bag Floors
 Mounting in the lid provides a $> 25\,\text{cm}$ elevated ground clearance, line-of-sight radiation through composite bag lids, and complete isolation from road heat.
 
-#### 6.5.4 Stationary MagSafe Frame Dock (`009_magsafe_frame_dock.scad`) & Horizontal Clamshell Architecture
+#### 6.5.4 The COTS 2-Pin Magnetic Frame Dock (`cots_magnetic_frame_dock.scad`) & Mounting Architecture
 
-![MagSafe Frame Dock Exploded View CAD](../images/cad/magsafe_frame_dock_cad.png)
+With the transition to the **pure 4-wire automotive bus architecture** (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) and the deprecation of the proprietary `PCBA 06`, the saddlebag breakaway disconnect is realized via an industrial COTS magnetic pogo-pin connector (IP68 COTS) or a rugged circular disconnect.
 
-*Figure 8.31: 3D CAD view of the MagSafe Frame Dock (`009_magsafe_frame_dock.scad`). Visible: Upper case with integrated Ø 26 mm frame tube saddle and DIN 934 M3 nut pockets, center PCBA 06 protection board, lower case with half-shell cradles for M8 and MagSafe, upper clamp bracket (`009_magsafe_frame_clamp.stl`), and central M2.5 clamp bolt.*
-
-1. **Stationary Bike-Side Docking:** Fixed to the frame tube beneath the side cover, providing safe pogo breakaway whenever the saddlebag is detached.
-2. **Horizontal Clamshell Design:** Split along the central horizontal plane for water-tight assembly.
+> [!IMPORTANT]
+> **Why the Legacy Frame Dock (`009_magsafe_frame_dock.scad`) is NOT Suitable for COTS Connectors:**
+> * The legacy housing was custom-designed exclusively around `PCBA 06` ($28.0 \times 11.5\,\text{mm}$), featuring a central screw pillar passing directly through the PCB bore, an M8 rear socket, and a 5-pin Apple MagSafe cutout.
+> * Modern COTS magnetic connectors do not use a PCB and have different dimensions ($12.4 \times 5.4\,\text{mm}$ face, $\varnothing 10\,\text{mm}$ body).
+> * Two proven mounting concepts are provided:
+>   1. **Concept A: Inline Floating Breakaway Harness (Standard for Adventure & Touring):** Flying magnetic pogo coupler sealed with polyolefin 3:1 adhesive heat shrink and secured with an EPDM frame clip. Tool-free release at $10\dots 15\,\text{N}$ axial pull.
+>   2. **Concept B: Dedicated COTS Frame Dock ([`cots_magnetic_frame_dock.scad`](../../hardware/cad/scad/02_pod_base/parts/cots_magnetic_frame_dock.scad)):** Rigid MJF PA12 clamp on the $\varnothing 25.4\dots 28.6\,\text{mm}$ ($1"\dots 1.125"$) frame tube beneath the seat, featuring a positive retaining shoulder to absorb the $10\dots 15\,\text{N}$ pull force and integrated captive nut pockets.
 
 ---
 
@@ -1057,7 +1055,7 @@ Mechanically and ergonomically, the Car Support Kit relies on well-engineered, n
 #### 6.8.1 Universal Sun Visor Clip for Pod 1 & Pod 2 (`car_sun_visor_pod_clip.scad`)
 
 Modern passenger cars (wagons, SUVs, sedans, vans) rarely feature rigid rear parcel shelves, and their closed metal bodywork attenuates RF signals like a Faraday cage. The Car Support Kit deploys **two identical universal clips** on both sun visors:
-* **Driver Sun Visor:** Holds **Pod 1** (e.g., Sena SPIDER X Slim or OMM 2.4 GHz Swap Cartridge).
+* **Driver Sun Visor:** Holds **Pod 1** (e.g., Sena SPIDER X Slim or OMM 2.4 GHz Transceiver).
 * **Passenger Sun Visor:** Holds **Pod 2** (e.g., Cardo Packtalk Edge or Midland PMR446).
 
 ```text
@@ -1067,7 +1065,7 @@ OPERATING MODES OF THE CAR SUPPORT KIT:
   - Passenger Sun Visor: Pod 2 with Cardo Packtalk Edge (DMC Gen 2 Group)
   - Grants tour guides and sweep drivers simultaneous voice communications into both intercom worlds!
 * Mode B (Pure Automobile Convoy / Sports Car Rally):
-  - Driver Sun Visor: Pod 1 with OMM 2.4 GHz Swap Cartridge (Channel-hopping Mesh)
+  - Driver Sun Visor: Pod 1 with OMM 2.4 GHz Transceiver (Channel-hopping Mesh)
   - Passenger Sun Visor: Pod 2 with Midland PMR446 (Civilian radio / analog fallback)
 ```
 
@@ -1194,7 +1192,7 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 * **316L Stainless Steel Eyelet:** Solid keyhole bushing ($\varnothing 4.5\,\text{mm}$ ID, $3.5\,\text{mm}$ wall thickness) for standard motorcycle keyrings and carabiners.
 * **Integrated N52 Neodymium Key Block ($20 \times 10 \times 5\,\text{mm}$):**
   * Press-fitted flush into the narrow lateral edge with a corrosion-resistant Ni-Cu-Ni triple plating (bright metallic finish, clearly depicted in the CAD renders) and equipped with a tactile North-pole index rib.
-  * When brought within proximity of the $X = 64\,\text{mm}$ target circle on the Pod housing, the concentrated B-field ($B_r \approx 1.48\,\text{T}$) attracts the internal steel rocker anchor and trips the ejection springs.
+  * When brought within proximity of the magnetic release target zone on the Pod housing, the concentrated B-field ($B_r \approx 1.48\,\text{T}$) attracts the internal steel rocker anchor and releases the slide-in lid latch.
 * **0.5 mm Mu-Metal / Soft Iron Flux Shield:**
   * Positioned immediately behind the N52 magnet. Hermetically shields internal RF and battery components (SX1262 LoRa, Nordic BLE, LiPo cell) against magnetic flux saturation, directing 100% of magnetic force outward.
 * **Silent Alarm Pager with LRA Haptic Motor:**
@@ -1202,13 +1200,13 @@ The **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 * **MagSafe / Qi Inductive Charging:**
   * Rear face integrates a magnetic alignment ring ($\varnothing 28\,\text{mm}$ OD, $\varnothing 22\,\text{mm}$ ID). Snaps onto the cockpit dock (`009_magsafe_frame_dock.stl`) with standard Qi charging pad during rides for automated wireless replenishment.
 * **Zero-False-Alarm Presence Token:**
-  * Proximity BLE beacon authenticates the legitimate owner. Tamper alarms are suppressed when the owner ejects the cartridge, triggering only during unauthorized physical prying attempts.
+  * Proximity BLE beacon authenticates the legitimate owner. Tamper alarms are suppressed when the owner opens the pod lid, triggering only during unauthorized physical prying attempts.
 
 ### 7.2 Architectural Decision: Why N52 Neodymium + LoRa + MagSafe over UWB / Active Servos?
 
 | Criterion | Active Bluetooth / UWB Lock | N52 Permanent Magnet + LoRa Pager (OpenMotorBridge) |
 | :--- | :--- | :--- |
-| **Emergency Release with Dead Battery** | **Impossible** (Cartridge locked inside bike) | **100% Fail-Safe** (Permanent magnet requires zero battery power) |
+| **Emergency Release with Dead Battery** | **Impossible** (Enclosure lid remains locked) | **100% Fail-Safe** (Permanent magnet requires zero battery power) |
 | **Standby Current Consumption** | 15-45 mA (UWB drains keyfob cell in weeks) | **< 50 nA Standby** (Months of runtime, recharges on cockpit dock) |
 | **Mechanical Reliability** | Miniature electric servo jams from road grime/grit | **Solid N52 Neodymium Block** (Indestructible, zero moving parts in key) |
 | **Tamper Alarm Pager Range** | 10-30 m (BLE fails through hotel/garage walls) | **Up to 4.5 km** (Semtech SX1262 868 MHz penetrates reinforced concrete) |
@@ -1313,6 +1311,10 @@ The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad
   * **5.9 GHz V2X Ceramic Patch Antenna Chamber:** Monolithically molded cradle on the left flank houses either $20 \times 20\,\text{mm}$ or $25 \times 25\,\text{mm}$ ceramic patch antennas. Guarantees maximum antenna gain with zero enclosure attenuation and zero internal PCB antenna ground detuning.
   * **Generous Cavity for Cable Adapter & Harness Loops ($112 \times 62 \times 17\,\text{mm}$):** Seamlessly encloses the original MR20 in-line breakout board and harness loops with zero wire pinching.
   * **Optical Polycarbonate Radome & IP67 Sealing:** Flat, untextured PC radome ($116 \times 66 \times 1.6\,\text{mm}$) with perimeter EPDM cord groove provides zero RF insertion loss at 77 GHz and IK08 impact resistance.
+
+![Radar 2.0 Heavy-Duty Swivel Tilt Cradle CAD](../images/cad/radar_swivel_tilt_cradle_cad.png)
+
+*Figure 8.38c: 3D CAD view of the Heavy-Duty Swivel Tilt Cradle (`radar_swivel_tilt_cradle_cad.png`). Visible: massive $58 \times 40 \times 8.5\,\text{mm}$ PA12 adapter plate with 2x M4 counterbores ($40\,\text{mm}$ bolt pattern), centered $\varnothing 34\,\text{mm}$ Garmin clearance, bionic 36-tooth Hirth index tongue aligned at center of gravity ($Z = 0$), and integrated zip-tie strain relief.*
 
 ### 8.4 Harley Touring: Glove Box Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`) & Cockpit Periphery
 

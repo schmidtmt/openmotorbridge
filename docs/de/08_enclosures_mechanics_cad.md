@@ -195,70 +195,66 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod 3D-Anschnitt CAD](../images/cad/pod_monocoque_assembly_cutaway_3d.png)
 
-*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Deutlich erkennbar ist die echte Slot-In Führungsmechanik: Die Gehäusewände laufen bis zur vollen Gehäusehöhe von $Z = 38{,}0\,\text{mm}$ durch. Auf der Innenseite beider Seitenwände befindet sich eine tiefe horizontale C-Nut (Führungsrille bei $Z = 32{,}0\dots 35{,}2\,\text{mm}$), in welcher die Führungsfedern des Slide-In Deckels gleiten. Darüber befindet sich eine massive, $2{,}8\,\text{mm}$ starke obere Haltenase (Dach/Hinterschnitt der Wand), die den Deckel nach oben hin formschlüssig sperrt – ein Abheben oder Aushebeln nach oben ist physisch unmöglich (kein Auflegedeckel!). Der Deckel kann ausschließlich horizontal über den hinteren Einschubschlitz ein- und ausgefahren werden. Im Inneren sichtbar: die tiefliegende PCBA 03 unter der EPDM-Dry-Flap, stirnseitig Port A (oben) und Port B (unten) sowie das Cardo Packtalk Edge mit aufgerasteter ultraflacher 2D-Kipphebel-Drückerplatte unterhalb des Deckels.*
+*Abbildung 8.6: Photorealistischer 3D-CAD-Schräganschnitt des universellen Satelliten-Pods (Typ B). Deutlich erkennbar ist die echte Slot-In Führungsmechanik: Die Gehäusewände laufen bis zur vollen Gehäusehöhe von $Z = 38{,}0\,\text{mm}$ durch. Auf der Innenseite beider Seitenwände befindet sich eine tiefe horizontale C-Nut (Führungsrille bei $Z = 32{,}0\dots 35{,}2\,\text{mm}$), in welcher die Führungsfedern des Slide-In Deckels gleiten. Darüber befindet sich eine massive, $2{,}8\,\text{mm}$ starke obere Haltenase (Dach/Hinterschnitt der Wand), die den Deckel nach oben hin formschlüssig sperrt – ein Abheben oder Aushebeln nach oben ist physisch unmöglich (kein Auflegedeckel!). Der Deckel kann ausschließlich horizontal über den hinteren Einschubschlitz ein- und ausgefahren werden. Im Inneren sichtbar: die tiefliegende PCBA 03 unter der EPDM-Dry-Flap, stirnseitig Port A (oben) und Port B (unten) sowie das modulare Doppel-Traversen-Aktuatorsystem (`012_universal_actuator_slide_bracket.scad`) über dem Cardo Packtalk Edge. Durch die untergehängten Schlitten und 100 % bündig versenkten DIN 7991 Torx-Schrauben verbleibt ein großzügiger lichter Luftraum von über $8\,\text{mm}$ ($6{,}2\,\text{mm}$ zur Dichtlippe) bis zur Deckelunterkante – absolut freigängig und berührungslos.*
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, die auf das Cardo Air-Mount Cradle geklickte ultraflache 2D-Kipphebelplatte (zur automatischen zündungsgekoppelten Tastenbetätigung beim Ein-/Ausschalten), das Cardo Packtalk Edge sowie die rückseitige geschlossene SMA-Knockout-Membran).*
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-### 4.2 Kinematik des L-Slide-in Deckels (L-Profil, metallfreier PA12 U-Bügel & 100 % innenliegender FOB-Diebstahlschutz)
 
----
-
-### 4.2 Kinematik des Slide-in Deckels (C-Nut-Führungsrille mit oberer Haltenase & 100 % innenliegender FOB-Diebstahlschutz)
-
-Das Öffnen und Verschließen des Satelliten-Pods erfolgt als echter **Slide-In (Schiebedeckel)** mit horizontalem Einschub entlang einer verdeckten C-Führungsrille:
+Das Öffnen und Verschließen des Satelliten-Pods erfolgt über einen **einteiligen L-förmigen Schiebedeckel** (horizontaler Deckel + obere Heckwand als monolithisches Bauteil), der horizontal entlang verdeckter C-Führungsrillen gleitet und beim Schließen vollautomatisch über einen **100 % metallfreien PA12 U-Bügel** in die feste untere Wannenschwelle einschnappt:
 
 ![OpenMotorBridge Magnetische FOB-Verriegelung CAD](../images/cad/pod_slide_lid_magnetic_lock_3d.png)
 
-*Abbildung 8.8: 3D-CAD-Schnittansicht des 100 % innenliegenden FOB-Verriegelungsmechanismus: Aus Sicherheits- und Vandalismusschutzgründen existieren auf der Außenseite des Deckels keinerlei Tasten, Schieber oder Hebelwerkzeuge. Ein interner, federbelasteter Edelstahl-/Neodym-Riegelbolzen (Silber, $\varnothing\,4{,}0 \times 6{,}0\,\text{mm}$) sitzt in einer Sacklochbohrung auf der Deckelunterseite. Beim vollständigen Einschieben des Deckels schnappt der Bolzen durch die Rückstellfeder (Gold) nach unten in die Rastbohrung der vorderen Schottwand ein und blockiert den Deckel formschlüssig. Nähert sich der Smart-Keyfob (PCBA 07) der außen markierten RFID-Zone, zieht das N52-Magnetfeld den Bolzen kontaktlos nach oben in den Deckel – der Deckel kann nun nach hinten herausgeschoben werden.*
+*Abbildung 8.8: 3D-CAD-Schnittansicht des 100 % innenliegenden FOB-Verriegelungsmechanismus an der Heckwand: Aus Sicherheits-, Ergonomie- und Funkgründen ist der Verriegelungsriegel als weit gestreckter, umgedrehter U-Bügel aus PA12 ausgeführt. Dadurch existieren im Inneren keinerlei störende Metallflächen, die 868 MHz LoRa, 2.4 GHz BLE oder Mesh abschirmen könnten. In der Mitte des oberen Querstegs sitzt ein kleiner N52-Neodym-Magnet (Silber, $\varnothing\,6{,}0 \times 2{,}0\,\text{mm}$). Zwei vertikale Riegelbeine an den Außenecken schnappen über $45^\circ$-Einlaufschrägen in Sacklöcher der festen unteren Wannenschwelle ein. Der freie Torbogen in der Mitte des U-Bügels lässt die feste SMA-Antennenbuchse komplett frei. Nähert sich der Smart-Keyfob (PCBA 07) der außen markierten RFID-Zone an der Heckwand, hebt die Magnetkraft den U-Bügel um $3{,}2\,\text{mm}$ an – beide Eckriegel geben die Wannenschwelle synchron frei und der L-Deckel kann nach hinten abgezogen werden.*
 
 ```
-      SLIDE-IN C-NUT MIT OBERER HALTENASE & 100 % INNENLIEGENDER FOB-MAGNETRIEGEL
+                 L-SLIDE-IN DECKEL: HECKWAND-U-BÜGEL MIT SMA-TORBOGEN
 =================================================================================
 
-            AUSSENBEREICH (GLATTE, VOLLKOMMEN MANIPULATIONSSICHERE DECKELFLÄCHE)
+                     AUSSENBEREICH (GLATTE HECKWAND MIT RFID-ZIELZONE)
   ------------------------------------+------------------------------------------
-   [SMART-KEYFOB PCBA 07]             |  GLATTE DECKELOBERFLÄCHE (Z = 35.2 mm)
-    (N52 Neodym-Magnet)               |  (Keine Schieber, keine Knöpfe von außen!)
+   [SMART-KEYFOB PCBA 07]             |  GLATTE HECKWANDFLÄCHE MIT TROPFNASE
+    (N52 Neodym-Magnet)               |  (3,5 mm Überlappung über Wannenschwelle)
              v                        |
        +-----------+                  |    +-----------------------------+
        | N52 MAGNET|                  |    | OBERE WAND-HALTENASE (DACH) | (Z=35.2..38mm)
        |   (Key)   |                  |    | Sperrt Deckel nach OBEN!    |
        +-----+-----+                  |    +--------------+--------------+
   ===========|========================+===================|======================
-   SLIDE-IN  | (Magnetfeld zieht      |  SLIDE-IN DECKEL  | [C-FÜHRUNGSRILLE]
-   DECKEL    v  Bolzen nach oben)     |  (mit seitlichen  v  (Z=32.0..35.2mm)
-        +----+----+                   |   Führungsfedern im Wandprofil)
-        | [FEDER] | (Rückstellfeder)  |
-        +----+----+                   |
-             |                        |
-        +----+----+                   |
-        | RIEGEL- |                   |
-        | BOLZEN  |                   |
-  ------+----+----+-------------------+------------------------------------------
-   GEHÄUSE-  | (Im verriegelten Zustand taucht Bolzen 3 mm in Gehäusewand ein!)
-   BODEN     v
-        [RASTBOHRUNG]  <-- 100 % INNENLIEGEND! Von außen physisch unzugänglich!
+   L-DECKEL  | (Magnetfeld zieht      |  L-SLIDE DECKEL   | [C-FÜHRUNGSRILLE]
+   HECKWAND  v  U-Bügel nach oben)    |  (100% planer     v  (Z=32.0..35.2mm)
+        +----+----+                   |   Unterboden!)
+        |N52 COIN | (Ø 6 x 2 mm)      |
+   +====+=========+====+              |   [FEDER 1 / FEDER 2 an den Ecken]
+   | PA12 U-QUERSTEG   |              |   (drücken U-Bügel nach unten)
+   | (RF-transparent!) |              |
+   +--+-------------+--+              |
+      |             |                 |
+   [RIEGEL 1]    [RIEGEL 2]           |
+   (Ecke links)  (Ecke rechts)        |   FREIER MITTLERER TORBOGEN:
+      |             |                 |   Lässt feste SMA-Buchse komplett frei!
+  ----+-------------+-----------------+------------------------------------------
+   FESTE WANNENSCHWELLE (Z = 0..14 mm)|
+      v             v                 |
+  [RASTLOCH 1]  [RASTLOCH 2]          |   ( O ) FESTE SMA-DURCHFÜHRUNG
+  <-- 100 % INNENLIEGEND!             |   (Antenne bleibt beim Öffnen am Motorrad!)
 ```
 
-1. **Horizontales Einschieben in die C-Nut (Kein Auflegedeckel!):**
-   * Die linke und rechte Seitenwand des Monocoque-Gehäuses sind nicht nach oben offen abgeschnitten, sondern bilden ein massives **C-Profil**.
-   * Die eigentliche **Führungsrille ($Z = 32{,}0\dots 35{,}2\,\text{mm}$)** ist auf der Innenseite der Gehäusewand $2{,}0\,\text{mm}$ tief eingefräst/eingespritzt.
-   * Oberhalb dieser Rille ragt die Gehäusewand als **massive obere Haltenase ($Z = 35{,}2\dots 38{,}0\,\text{mm}$)** nach innen.
-   * Die Führungsfedern des Deckels gleiten vollständig unterhalb dieser Haltenase. Ein vertikales Abheben oder Aufhebeln ist formschlüssig zu 100 % gesperrt – der Deckel kann nur horizontal nach hinten entlang der X-Achse ausgefahren werden!
+1. **Vollkommen planer Deckel-Unterboden (Zero Collisions):**
+   * Durch die Verlagerung des Schlosses in die obere Heckwand entfallen sämtliche nach unten ragenden Dome oder Nocken an der Deckelunterseite.
+   * Der Deckel gleitet völlig berührungslos und freigängig über OEM-Intercoms, Ladekabel und Aktuatortraversen hinweg.
 
-2. **100 % Innenliegende Diebstahlsicherung (Zero-External-Access):**
-   * **Manipulationssicherheit:** Ein außenliegender Schieber oder Knopf würde es jedem Passanten am geparkten Motorrad ermöglichen, den Deckel zu öffnen und Intercom, Papiere oder Notgeld zu entwenden.
-   * Der OpenMotorBridge Verriegelungsmechanismus liegt daher **zu 100 % im Gehäuseinneren**.
-   * Die Deckeloberseite ist plan, fugenlos und bietet keinerlei Angriffsfläche für Aufhebelwerkzeuge.
+2. **100 % RF-Transparenter PA12-U-Bügel (Keine Antennen-Abschirmung):**
+   * Kein massives Metallblech: Der U-Bügel besteht vollständig aus PA12 (Multi Jet Fusion) und dämpft weder LoRa- noch Bluetooth-Funkwellen.
+   * Lediglich in der Bogenmitte sitzt eine winzige N52-Neodym-Münze ($\varnothing\,6{,}0 \times 2{,}0\,\text{mm}$), die minimalste Masse bei maximaler magnetischer Kopplung zum Keyfob garantiert.
 
-3. **Berührungsloses Entriegeln über den Smart-Keyfob (`PCBA 07`):**
-   * Der Fahrer legt seinen Smart-Keyfob auf die dezent markierte Zielzone der Deckeloberseite.
-   * Das starke Magnetfeld des integrierten N52-Neodymkerns überwindet die interne Rückstellfeder und hebt den Edelstahl-Riegelbolzen um $3{,}5\,\text{mm}$ nach oben in den Deckel.
-   * Der Deckel ist frei und kann mit dem Daumen über die hinteren Griffrippen nach hinten herausgeschoben werden.
-   * **Stromlos & wartungsfrei:** Rein mechanisch und permanentmagnetisch – $0\,\text{mA}$ Ruhestrom, kein Batterieverschleiß, unempfindlich gegen Schlamm, Frost und Wasser.
+3. **Slam-to-Shut Zweipunkt-Verriegelung:**
+   * An den beiden Außenecken ($Y = 8{,}5\,\text{mm}$ und $Y = 55{,}5\,\text{mm}$) tauchen die Riegelbeine über $45^\circ$-Einlaufschrägen beim Einschieben federnd in die Wannenschwelle ein.
+   * Zweipunkt-Arretierung verhindert jegliches Klappern, Verziehen oder Aushebeln der Flanken.
 
-3. **Verdeckte Innenverschraubung & Sabotageschutz:**
-   * Die M4/M5-Edelstahlschrauben zur Befestigung des Pod-Gehäuses im Koffer oder am Rahmenrohr liegen im Inneren des Gehäuses unterhalb der Elektronikbucht.
+4. **Dachziegel-Dichtprinzip (IP67 Tropfnase) & Feste SMA-Buchse:**
+   * Die Heckwand des L-Deckels überlappt die untere Wannenschwelle mit einer $3{,}5\,\text{mm}$ tiefen Tropfnase nach unten. Spritzwasser kann nicht entgegen der Schwerkraft eindringen.
+   * Die optionale SMA-Antennendurchführung sitzt dauerhaft in der festen unteren Wannenschwelle ($Z = 7{,}5\,\text{mm}$). Beim Abziehen des Deckels verbleiben Antenne und Koaxkabel unberührt und stressfrei am Fahrzeug.ren des Gehäuses unterhalb der Elektronikbucht.
    * Bei geschlossenem und verriegeltem Deckel sind die Schrauben für Werkzeuge physisch unzugänglich.
    * Jeder Versuch, den Pod gewaltsam abzureißen, wird über die 6-Achs-IMU der Zentralbox erkannt und alarmiert den Fahrer in $< 50\,\text{ms}$ über LoRa (868 MHz) auf dem Taschen-Pager.
 
@@ -270,7 +266,7 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ![OpenMotorBridge Satelliten-Pod Röntgen- & Innenansicht](../images/cad/pod_monocoque_xray_assembly_3d.png)
 
-*Abbildung 8.9: Transparente 3D-Röntgen- und Kinematikansicht des Monocoque-Satelliten-Pods mit zur Demonstration nach rechts (hinten) ausgefahrenem Slide-In Deckel: Deutlich erkennbar ist die geöffnete rechte Einschuböffnung (Portal an der hinteren Stirnwand), durch welche der Deckel horizontal in die seitlichen C-Führungsrillen eingeschoben wird. Im freigelegten vorderen Bereich sichtbar: die tiefliegende 4-Lagen Trägerplatine PCBA 03 unter der EPDM-Dry-Flap, die stirnseitige Leitungsführung zu Port A (oben) und Port B (unten), sowie im oberen Geräteraum das Cardo Packtalk Edge mit aufgerasteter 2D-Kipphebelplatte.*
+*Abbildung 8.9: Transparente 3D-Röntgen- und Kinematikansicht des Monocoque-Satelliten-Pods mit zur Demonstration nach rechts (hinten) ausgefahrenem Slide-In Deckel: Deutlich erkennbar ist die geöffnete rechte Einschuböffnung (Portal an der hinteren Stirnwand), durch welche der Deckel horizontal in die seitlichen C-Führungsrillen eingeschoben wird. Im freigelegten vorderen Bereich sichtbar: die tiefliegende 4-Lagen Trägerplatine PCBA 03 unter der EPDM-Dry-Flap, die stirnseitige Leitungsführung zu Port A (oben) und Port B (unten), sowie im oberen Geräteraum das Cardo Packtalk Edge mit dem universellen Doppel-Traversen-Aktuatorsystem mit bündigen Torx-Schrauben.*
 
 ```
             POD-INNENAUFBAU: ZWEIZONEN-ARCHITEKTUR & DRY-FLAP
@@ -337,6 +333,10 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
    * Die werksseitige 3-adrige Sena-Kabelpeitsche (DC-Power, Audio-Out, Mic-In) wird direkt auf den vorkonfektionierten JST-Stecker von `PCBA 03` gesteckt.
    * Die Bedienung (Mesh Ein/Aus, Kanalwechsel, Lautstärke) erfolgt **100 % digital** über die Bluetooth 5.4 LE Audio-Schnittstelle des Qualcomm QCC3084 auf der Zentralbox oder die programmierbaren Under-Perch Lenkertaster – **null Verschleißteile, null Stößel-Justage!**
 
+![Sena SPIDER X Slim im Monocoque-Pod](../images/cad/pod_variant_sena_cad.png)
+
+*Abbildung 8.14: Sena SPIDER X Slim im formschlüssigen EPDM-Bett des universellen Monocoque-Satelliten-Pods. Zu sehen sind das flache Gerätebett in der oberen Kammer, die direkte Kabelpeitsche zur PCBA 03 unter der flexiblen EPDM-Dry-Flap sowie die stirnseitige Port-Anordnung mit Port A (Bus-Abreißkupplung oben) und Port B (USB-C Ladebuchse unten).*
+
 2. **Cardo Packtalk Edge / Pro:**
    * Die originale **Cardo Air-Mount Magnethalterung** wird mit 2x M3-Schrauben direkt im Gehäusebett fixiert.
    * Das Cardo-Gerät klickt mit seiner OEM-Magnethalterung ein. Die originale Cardo-Audiopeitsche führt an der Rückseite des Cradles heraus, verläuft geschützt unter dem Cradle hindurch und mündet unter dem EPDM-Zwischendeckel direkt in `PCBA 03` (Header `J_AUDIO_PWR`).
@@ -369,14 +369,30 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
        4. **Fixieren & Abdichten:** Die M2.5-Klemmschraube festziehen (arretiert Y- und Z-Achse gleichzeitig!). Zuletzt die beiden EPDM-Gummistopfen von außen in die Nutenden drücken – fertig!
        5. **Null Verrutschen:** Selbst bei extremen 10G Offroad-Erschütterungen oder Schlaglöchern kann das System weder wandern noch vibrieren. Die Reaktionskräfte der Mini-Hubmagnete federn nicht nach oben weg, sondern betätigen mit 100 % Hubkraft die Knöpfe.
 
+![Cardo Packtalk Edge im Monocoque-Pod](../images/cad/pod_variant_cardo_cad.png)
+
+*Abbildung 8.15: Cardo Packtalk Edge im originalen OEM Air-Mount Cradle auf dem Boden des Monocoque-Pods Typ B. Unter der amberfarbenen EPDM-Dry-Flap liegt die PCBA 03 Trägerplatine mit direkter Leitungsführung zu den stirnseitigen Steckverbindern. Über dem Cardo-Gerät bietet die Monocoque-Wanne maximalen lichten Raum für das modulare Doppel-Traversen-Aktuatorsystem.*
+
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * Das UCS-Modul ($78 \times 44 \times 14\,\text{mm}$) und der 5V RF-Power-Booster ($32 \times 24 \times 9\,\text{mm}$) ruhen in einem maßgefertigten, formschlüssigen EPDM-Equipmentbett ($90 \times 52\,\text{mm}$).
    * Das OMM-System beherrscht echtes **USB-Power-On**: Sobald die Zentralbox bei KL15 die 5V/12V-Bordbusspannung freigibt, bootet der Transceiver vollautomatisch ohne jegliche mechanische Tasterbetätigung.
    * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0). Ein internes Koaxialkabel verbindet den SMA-Ausgang direkt mit der Rückwand-Antennendurchführung.
 
+![OMM 2.4 GHz UCS Transceiver im Monocoque-Pod](../images/cad/pod_variant_omm_cad.png)
+
+*Abbildung 8.16: OMM 2.4 GHz UCS Transceiver mit 5V RF-Power-Booster im maßgeschneiderten EPDM-Dämpfungsbett des Monocoque-Pods. Das System nutzt 100 % digitales USB Audio Class 2.0 direkt zur PCBA 03 und unterstützt vollautomatisches USB-Power-On beim Einschalten der Bordspannung.*
+
 4. **PMR446 Handfunkgeräte & Midland Intercoms:**
    * Kompakte PMR446-Funkgeräte oder Midland-Module (BTR1 / BT Mini) werden über vorkonfektionierte Spiralkabel-Adapterpeitschen an `PCBA 03` angebunden.
    * Die Hardware-PTT wird über den integrierten Open-Drain MOSFET auf `PCBA 03` gesteuert – getriggert durch den linken Lenker-Daumentaster.
+
+5. **Hermetische Mini-Dry-Box & Staufach:**
+   * Bleibt der obere Geräteraum frei von Intercom-Geräten, wird ein formstabiler Einlegeboden mit integrierten Fächern für Ersatzschlüssel, Fahrzeugpapiere und Notfallsicherungen eingesetzt.
+   * Zusammen mit dem umlaufend abgedichteten Slide-In Deckel und der FOB-Magnetverriegelung entsteht ein diebstahlsicherer, 100 % wasserdichter Motorrad-Safe im Koffer.
+
+![Hermetische Mini-Dry-Box im Monocoque-Pod](../images/cad/pod_variant_drybox_cad.png)
+
+*Abbildung 8.17: Hermetische Mini-Dry-Box-Konfiguration des Monocoque-Satelliten-Pods. Der großzügige $145 \times 65\,\text{mm}$ Innenraum bietet separate Fächer für Notschlüssel, Dokumente und Kfz-Sicherungen, geschützt vor Witterung und unbefugtem Zugriff.*
 
 ---
 
@@ -404,7 +420,7 @@ Die Zuleitung von der Zentralbox zu beiden Seitenkoffer-Pods erfolgt über einen
 
 ## 5. Gehäuse Typ C: Universal Front-Knoten (Cockpit- & Sensor-Hub)
 
-Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Motorrad-Frontverkleidungen (Batwing, Sharknose, BMW GS/RT Schnabel) oder an Sturzbügeln entwickelt:
+Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage an Lenker, Risern, Gabelbrücke oder Sturzbügeln entwickelt (**ZERO Verkleidungsdemontage!** Ein Ausbau oder Öffnen von aufwendigen Touring-Verkleidungen wie Harley Sharknose / Batwing ist keinesfalls erforderlich):
 
 - **Außenabmessungen:** Kompakte **$98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$** (L x B x H, passend für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, schwarz kugelgestrahlt und chemisch geglättet.
@@ -449,29 +465,9 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage in Mo
 +----------------------------------------------------------------------------------------+
 | 4. 3M DUAL-LOCK KLETTNUTEN:                                                            |
 |    * 2x eingefräste 20 mm Nuten für selbstklebendes 3M Dual-Lock Pilzkopfband          |
-|    * Perfekt für ebene Kunststoff-Innenflächen in Batwing- oder Sharknose-Verkleidungen |
+|    * Perfekt für ebene Montageflächen an Gabelbrücke, Riser-Basis oder Konsolen        |
 +----------------------------------------------------------------------------------------+
 ```
-
-#### 5.1.1 Montage an runden Metallstangen unterm Fairing (Verkleidungsgeweih Ø 12–22 mm)
-
-![Universal Front Node Fairing Tube Clamp](../images/cad/front_node_fairing_tube_clamp_assembly.png)
-
-*Abbildung 8.21b: Die modulare 2-teilige Verkleidungs-Rohrschelle (`front_node_fairing_tube_clamp.stl`) mit 120° V-Prisma, EPDM-Dämpfungseinlage und AMPS-Verschraubung an einer Ø 16 mm Verkleidungsstrebe.*
-
-Viele Touren- und Adventure-Motorräder besitzen unter der Verkleidung ("unterm Fairing") stabile, runde Tragrohre und Metallstreben des sogenannten **Verkleidungsgeweihs** bzw. Cockpitrahmens:
-* **Harley-Davidson Road Glide (Sharknose FLTRX / CVO ST):** Das innere Verkleidungsgeweih besteht aus massiven runden Stahlrohren mit **Ø 16 mm (5/8") bis Ø 19 mm (3/4")**.
-* **Harley-Davidson Street Glide / Electra Glide (Batwing FLHX):** Runde Verkleidungs-Haltestreben hinter den Lautsprecher- und Scheinwerferbuchten (**Ø 16–19 mm**).
-* **BMW R 1200 / 1250 / 1300 GS & GSA:** Serienmäßiger runder Edelstahl- / Aluminiumbügel (**Ø 12 mm**) direkt hinter/über dem TFT-Display und unter dem Windschild.
-* **Adventure & Rally Bikes (Yamaha Ténéré 700, KTM Adventure, Ducati DesertX, Africa Twin):** Runde Navigations- und Verkleidungsstreben (**Ø 12 mm, Ø 16 mm oder Ø 22 mm**).
-
-**Vorteile der Montage an den runden Metallstangen unterm Fairing:**
-1. **100 % unsichtbarer Stealth-Einbau:** Der Lenker, die Riser und die Sichtflächen des Cockpits bleiben vollkommen frei von Zusatzkästchen und Kabelwirrwarr.
-2. **Kürzeste Signal- & USB-Wege:** Der Front-Knoten sitzt wenige Zentimeter neben dem OEM-USB-Kabelbaum, dem Display-CAN und dem drahtlosen CarPlay/AA Dongle (Ottocast).
-3. **Maximaler Witterungsschutz:** Vollständig geschützt vor Regen, Fahrtwind, Insektenschlag und UV-Strahlung.
-4. **Zwei Montage-Optionen:**
-   * **Option A (2-teilige Verkleidungs-Rohrschelle `front_node_fairing_tube_clamp.stl`):** Das Basisteil wird mit 4x M4 Senkkopfschrauben von unten in die unverlierbaren AMPS-Muttern der Front-Node Unterwanne geschraubt (wahlweise 0° längs oder 90° quer zum Gehäuse). Die Klemmschelle (`front_node_fairing_tube_clamp_cap.stl`) wird mit 2x M5x25 mm Edelstahlschrauben und DIN 985 Stoppmuttern über das Verkleidungsrohr gespannt. Eine 1,2 mm EPDM-Gummieinlage schützt den Lack und eliminiert Vibrationen.
-   * **Option B (Werkzeuglose 90°-Kreuztunnel):** Die in der Unterwanne integrierten 5,5 mm Führungstunnel erlauben das direkte Verzurren an beliebigen Rohrstangen mittels UV-fester Hochleistungs-Kabelbinder oder Edelstahl-Schlauchschellen mit EPDM-Zwischenlage.
 
 ### 5.2 Schnittstellen- & Gehäuselayout des Front-Knotens (Die IP68 Monocoque 2-Kabelstrang-Architektur)
 
@@ -882,7 +878,7 @@ Auf der BMW R 1200 / 1250 / 1300 GS und GS Adventure wird der Front-Node nach de
    - **Rechts:** Der rechte Daumen markiert Action-Cam Highlights / Bookmarks; die bernsteinfarbene Warn-LED strahlt in den rechten Rückspiegel (Verkehr rechts beim Wiedereinscheren).
    - Echte 360° bilaterale Totwinkel-Überwachung ohne Blickabwendung.
 
-#### 6.3.2 Kassetten-Pods 1 & 2 (Seitenmodule) - Die zwei Montage-Varianten
+#### 6.3.2 Satelliten-Pods 1 & 2 (Seitenmodule) - Die zwei Montage-Varianten
 
 Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundverschiedene Montagepositionen:
 
@@ -907,7 +903,7 @@ Auf Reiseenduros existieren je nach Einsatzzweck und Koffersystem zwei grundvers
     - **Aerodynamischer Bügelfalten-Deckel (`adventure_transition_dock_lid.stl`):** Schließt die Kontur der GS-Karosserie nahtlos ab. Die Trennfuge zwischen Basis und Deckel liegt unsichtbar exakt auf dem scharfen Scheitel der seitlichen Bügelfalten-Charakterlinie ($Z_{\text{crease}} = 22{,}0\,\text{mm}$). Ein $22^\circ$-Keil an der Stirnseite geht bündig in das Sitzbankpolster über – kein Verhaken mit Motorradhose, Knieschleifern oder Stiefeln beim Aufsteigen.
     - **Zwei parametrische Deckel-Varianten (`lid_mode`):**
       1. `"open_intercom"`: Präzise ausgeformte Sicht- und Bedienblende, die die Tasten von Sena SPIDER X Slim oder Cardo Packtalk Edge bündig auf OEM-Niveau einrahmt.
-      2. `"closed_smooth"`: Vollständig geschlossener, fugenloser Aerodynamik-Cowl für den Einsatz mit IP67-Blindkassetten oder autarken OMM-Funkkassetten.
+      2. `"closed_smooth"`: Vollständig geschlossener, fugenloser Aerodynamik-Cowl für den Einsatz mit IP67-Dry-Box oder autarken OMM-Transceivern.
     - **Verschraubung:** 4x M3 Torx-Zylinderschrauben (DIN 7985 / ISO 7380) sichern den Deckel schwingungsfest von oben in Messing-Gewindeeinsätze der Basiswanne.
   * **Integrierte 2-Draht DC-Führung zur Sattelbrücke:**
     Die vordere Schnauzenkammer nimmt das 2-adrige DC-Kabel formschlüssig auf und leitet es über die rahmenseitige Brückenzunge nahtlos in die Kabelrinne der Unter-Sitzbank-Sattelbrücke (`adventure_underseat_cross_rail.stl`) – unsichtbar unter dem Sitzbankschaum direkt zur Zentralbox verlegt.
@@ -953,7 +949,7 @@ Da der Heck-Pod 3 und dessen große Balkonwanne vollständig entfallen sind, ben
 
 #### 6.4.3 Unsichtbarer Magnet-Diebstahlschutz im Fernreise-Einsatz
 
-Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen schützt der hermetisch gekapselte Magnetverschluss die modularen Einschubkassetten (Sena, Cardo, OMM) zuverlässig gegen Gelegenheitsdiebstahl:
+Auf frei zugänglichen Reiseenduros und bei Zwischenstopps auf Fernreisen schützt der hermetisch gekapselte Magnetverschluss des Slide-in-Deckels den Satelliten-Pod und die integrierten Funkgeräte zuverlässig gegen Gelegenheitsdiebstahl:
 * **100 % Schlamm-, Staub- & Eissicherheit:** Hermetisch ohne Schlüsselloch im Inneren des Pods gekapselt.
 * **Verdeckte Entriegelung:** Kontaktlos in Sekundenbruchteilen über den N52-Magnetschlüssel des Smart-Keyfobs.
 
@@ -965,7 +961,7 @@ Das universelle Kofferdeckel-Dock ([`saddlebag_lid_dock.scad`](../../hardware/ca
 
 ![Universal Saddlebag Lid Dock CAD](../images/cad/saddlebag_lid_dock_cad.png)
 
-*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`) mit eingesetztem transluzentem Satelliten-Pod (1:1 Passung im $151 \times 71\,\text{mm}$ Innenbett). Sichtbar sind der inboard gerichtete $22\,\text{mm}$ breite Torx-Montageflansch für die originalen Harley-Scharnierschrauben (Lochabstand $52\,\text{mm}$), die frontale Kabelschnauze mit integrierter Zugentlastung für die 2-Draht DC-Spannungsversorgung (M8 / FLRY-B Leitung parallel zum Deckel-Fangband zur MagSafe-Abreißkupplung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über dem Kassetteneinschub.*
+*Abbildung 8.30: 3D-CAD-Visualisierung des Kofferdeckel-Docks (`saddlebag_lid_dock.scad`) mit eingesetztem transluzentem Satelliten-Pod (1:1 Passung im $151 \times 71\,\text{mm}$ Innenbett). Sichtbar sind der inboard gerichtete $22\,\text{mm}$ breite Torx-Montageflansch für die originalen Harley-Scharnierschrauben (Lochabstand $52\,\text{mm}$), die frontale Kabelschnauze mit integrierter Zugentlastung für die 2-Draht DC-Spannungsversorgung (M8 / FLRY-B Leitung parallel zum Deckel-Fangband zur MagSafe-Abreißkupplung), die umlaufende Halbschale mit EPDM-Spannbandschlitzen und die obere Tropfkante über der Deckel-Einschubschiene.*
 
 #### 6.5.1 Zero-Drill-Befestigung & Mechanisches Konzept
 1. **Nutzung originaler Befestigungspunkte (Zero-Drill):**
@@ -1006,7 +1002,7 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
 1. **Intelligente Stromversorgung & USV-Pufferung über die Zentralbox (Klemme 15 / BQ24075):**
    * Die Koffer-Pods werden **nicht direkt unreguliert** aus dem Bordnetz gespeist, sondern zentral und konditioniert von der **Zentralbox** unter der Sitzbank versorgt.
    * **Zündungsgesteuerter Wake-Up & USV-Pufferung:** Die Zentralbox erfasst das Zündungsplus (Klemme 15, z. B. am Harley P&A-Zubehörstecker). Bei Zündung EIN regelt der LM5164-Q1 Step-Down auf saubere $5{,}0\,\text{V}$ herunter und der integrierte **LiPo-USV-Pufferakku (BQ24075)** fängt selbst härteste Startspannungseinbrüche (Cold Crank bis $6{,}5\,\text{V}$) unterbrechungsfrei in $8{,}5\,\mu\text{s}$ ab - die Koffer-Pods und Funkmodule rebooten niemals beim Anlassen des Motors.
-   * **Automatisierter OEM-Boot per Optokoppler:** Sobald die Versorgungsspannung steht, triggert die Zentralbox über galvanisch getrennte **Toshiba TLP222A Optokoppler** die Tasten-/Power-Einschaltsequenz der OEM-Headset-Adapter (Sena Mesh / Cardo DMC) in den Kassetten.
+   * **Automatisierter OEM-Boot per Optokoppler:** Sobald die Versorgungsspannung steht, triggert die Zentralbox über galvanisch getrennte **Toshiba TLP222A Optokoppler** die Tasten-/Power-Einschaltsequenz der OEM-Headset-Adapter (Sena Mesh / Cardo DMC) im Pod-Gehäuse.
    * **Null Akku-Wartung & automatischer Shutdown:** Die Intercom-Module schalten vollautomatisch mit der Fahrzeugzündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder mit leerem Headset-Akku dazustehen, ist zu 100 % eliminiert.
 2. **Werkstattsichere 2-Pin Magnet-Pogo Abreißkupplung (IP68 COTS):**
    * In Vertragswerkstätten lösen Mechaniker bei Inspektionen, Reifen- oder Bremsenwechseln die Kofferbefestigungen und heben den Koffer in Sekunden ab, ohne nach nachgerüsteten Kabeln zu suchen. Eine feste Schraub- oder Klickverbindung würde hier unweigerlich abreißen.
@@ -1207,7 +1203,7 @@ Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf durchdachten, 
 #### 6.8.1 Universal Sonnenblenden-Clip für Pod 1 & Pod 2 (`car_sun_visor_pod_clip.scad`)
 
 Moderne Automobile besitzen selten feste Heck-Hutablagen, und die geschlossene Blechkarosserie dämpft Funkwellen wie ein Faradayscher Käfig. Das Car Support Kit nutzt daher **zwei baugleiche Universal-Clips** an beiden Sonnenblenden:
-* **Fahrer-Sonnenblende:** Nimmt **Pod 1** auf (z. B. Sena SPIDER X Slim oder OMM 2.4 GHz Swap Cartridge).
+* **Fahrer-Sonnenblende:** Nimmt **Pod 1** auf (z. B. Sena SPIDER X Slim oder OMM 2.4 GHz Transceiver).
 * **Beifahrer-Sonnenblende:** Nimmt **Pod 2** auf (z. B. Cardo Packtalk Edge oder Midland PMR446).
 
 ```text
@@ -1217,7 +1213,7 @@ EINSATZMODI DES CAR-SUPPORT-KITS:
   - Beifahrer-Sonnenblende: Pod 2 mit Cardo Packtalk Edge (DMC Gen 2 Gruppe)
   - Ermöglicht dem Tourguide/Besenfahrer die simultane Sprachverbindung in beide Welten!
 * Modus B (Reine Autokolonne / Rallye):
-  - Fahrer-Sonnenblende: Pod 1 mit OMM 2.4 GHz Swap-Kassette (Kanal-Hopping Mesh)
+  - Fahrer-Sonnenblende: Pod 1 mit OMM 2.4 GHz Transceiver (Kanal-Hopping Mesh)
   - Beifahrer-Sonnenblende: Pod 2 mit Midland PMR446 (Jedermannfunk / analoger Fallback)
 ```
 
@@ -1318,7 +1314,7 @@ Für die Fahrzeugdaten (Geschwindigkeit, Drehzahl, Tankstand, Kühlmitteltempera
 
 ## 7. Gehäuse Typ D: 2-in-1 LoRa Smart-Keyfob & Pager (`smart_keyfob_pager.scad`)
 
-Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad)) löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal und Notwendigkeit separater Kassettenwerkzeuge). Er vereint einen ultrastarken N52-Neodym-Entriegelungsschlüssel und einen autarken 868-MHz-LoRa-Alarmpager in einem ergonomischen, taschentauglichen Gehäuse:
+Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad)) löst die gravierenden Schwächen herkömmlicher Motorrad-Schlüsseltransponder (schwache Knopfzellen, Kälteempfindlichkeit, fehlender Rückkanal und Notwendigkeit separater Entriegelungswerkzeuge). Er vereint einen ultrastarken N52-Neodym-Entriegelungsschlüssel und einen autarken 868-MHz-LoRa-Alarmpager in einem ergonomischen, taschentauglichen Gehäuse:
 
 ![OpenMotorBridge 2-in-1 Smart-Keyfob 3D CAD Assembly](../images/cad/smart_keyfob_pager_assembly.png)
 
@@ -1334,11 +1330,11 @@ Der **OpenMotorBridge 2-in-1 Smart-Keyfob** ([`smart_keyfob_pager.scad`](../../h
 * **Stoßabsorbierender TPU-Kantenschutz:** Umlaufender $0{,}8\,\text{mm}$ TPU-95A Schutzrahmen (Orange `#ff9f0a`) mit Freisparung für die seitliche Magnetkontaktfläche. Schützt Gehäuse und Elektronik zuverlässig bei Stürzen auf Asphalt aus bis zu $2\,\text{m}$ Höhe.
 * **Integrierter N52 Neodym-Schlüsselblock ($20 \times 10 \times 5\,\text{mm}$):**
   * Auf der schmalen Längsseite formschlüssig eingepresst mit korrosionsfester Ni-Cu-Ni Dreifachbeschichtung (silbern-metallisch glänzend, in den CAD-Renderings deutlich sichtbar) und mit einem taktilen Nordpol-Ausrichtungssteg versehen.
-  * Tritt der Keyfob an den $X = 64\,\text{mm}$ Zielkreis des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlanker an und entriegelt die Auswerferfedern.
+  * Tritt der Keyfob an den magnetischen Entriegelungsbereich des Pod-Gehäuses heran, zieht das konzentrierte B-Feld ($B_r \approx 1{,}48\,\text{T}$) den innenliegenden Stahlriegel an und gibt den Slide-in Deckel frei.
 * **0,5 mm Weicheisen- / Mu-Metall-Abschirmblech (Flux Shield):**
   * Direkt hinter dem N52-Magneten platziert. Schirmt die interne Elektronik (SX1262 LoRa-Transceiver, Nordic BLE-SoC, 180 mAh LiPo-Pouch-Akku) hermetisch gegen magnetische Sättigung ab und lenkt den magnetischen Fluss zu 100 % nach außen auf die Gehäusewand.
 * **Stummer Alarm-Pager mit LRA-Vibrationsmotor:**
-  * Ein $\varnothing 10 \times 3{,}6\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Kassettenhebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
+  * Ein $\varnothing 10 \times 3{,}6\,\text{mm}$ Linear Resonant Actuator (LRA) warnt den Fahrer bei Erschütterung, unbefugtem Aufbocken oder Gehäusehebeln lautlos über haptische Vibrationsmuster in der Jackentasche.
 * **MagSafe / Qi Induktiv-Ladeaufnahme:**
   * Auf der Rückseite ist ein magnetischer Ausrichtungsring ($\varnothing 28\,\text{mm}$ außen, $\varnothing 22\,\text{mm}$ innen) integriert. Der Keyfob rastet während der Fahrt auf dem MagSafe Cockpit-Dock (`009_magsafe_frame_dock.stl`) mit Standard-Qi-Ladeeinheit magnetisch ein und wird induktiv nachgeladen.
 
@@ -1350,7 +1346,7 @@ Auf der Trägerplatine `PCBA 07` ([`openmotorbridge_smart_keyfob.kicad_pcb`](../
 Beide Schalter befinden sich zwingend in der **unteren rechten Ecke der Platine** (nur $2{,}25\,\text{mm}$ von der Platinenkante entfernt). Sie können auf dem PCB aus Platz- und Routing-Gründen (HF-Masseflächen für die 868-MHz- und BLE-Chipantennen im linken Platinenbereich, Flucht-Routing des Nordic nRF52840 und Akkupads) nicht verschoben werden. 
 
 Das Gehäuse integriert hierfür ein formschlüssiges **2-Tasten-Bedienfeld auf der Gehäuseoberseite**:
-1. **Taste 1 (`ARM / MUTE` – `SW1`):** Erhabene, ergonomisch geriffelte Tastenkappe mit Schloss-Symbolik zur blinden Bedienung mit Motorradhandschuhen (Scharf-/Unscharfschalten, Quittierung und Stummschaltung von Alarmen, Freigabe der Kassettenentnahme).
+1. **Taste 1 (`ARM / MUTE` – `SW1`):** Erhabene, ergonomisch geriffelte Tastenkappe mit Schloss-Symbolik zur blinden Bedienung mit Motorradhandschuhen (Scharf-/Unscharfschalten, Quittierung und Stummschaltung von Alarmen, Freigabe der Pod-Entriegelung).
 2. **Taste 2 (`SOS / PAIR` – `SW2`):** Leicht vertiefte Schutzkappe mit fühlbarem Tastpunkt. Verhindert versehentliche Hosentaschen-Auslösungen (Firmware erfordert 3 Sekunden Dauerdruck für Notruf-Broadcast oder BLE-Pairing).
 3. **Integrierte Betätigungsstößel (Plungers):** An der Unterseite der Tasten ragen zylindrische Stößel ($h = 3{,}7\,\text{mm}$) durch Passungsbohrungen der Oberschale direkt auf die Druckpunkte der Alps-SKRK-Schalter.
 
@@ -1433,7 +1429,7 @@ Bei der Kombination von ultrastarken Permanentmagneten ($B_r \approx 1{,}48\,\te
 
 | Kriterium | Aktive Bluetooth / UWB Verriegelung | N52-Permanentmagnet + LoRa Pager (OpenMotorBridge) |
 | :--- | :--- | :--- |
-| **Notentriegelung bei leerer Batterie** | **Unmöglich** (Kassette bleibt im Motorrad gefangen) | **100 % Zuverlässig** (Permanentmagnet funktioniert rein physikalisch ohne Strom) |
+| **Notentriegelung bei leerer Batterie** | **Unmöglich** (Gehäusedeckel bleibt blockiert) | **100 % Zuverlässig** (Permanentmagnet funktioniert rein physikalisch ohne Strom) |
 | **Ruhestromverbrauch am Schlüsselbund** | 15-45 mA (UWB-Transceiver leert Knopfzelle in Wochen) | **< 50 nA Standby** (Monatelange Standzeit, lädt induktiv am Cockpit-Dock) |
 | **Mechanische Robustheit & Bauraum** | Miniatur-Servomotor blockiert bei Schmutz/Vibration | **Formschlüssiger N52-Neodymblock** (Unverwüstlich, keine beweglichen Teile im Key) |
 | **Reichweite für Diebstahl-Pager** | 10-30 m (Bluetooth LE bricht hinter Wänden ab) | **Bis zu 4,5 km** (Semtech SX1262 LoRa 868 MHz durchdringt Hotelwände & Garagen) |

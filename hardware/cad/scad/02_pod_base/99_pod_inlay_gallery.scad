@@ -234,5 +234,19 @@ module pod_inlay_quad_gallery() {
         pod_variant_drybox();
 }
 
-// Render complete quad gallery
-pod_inlay_quad_gallery();
+// -----------------------------------------------------------------------------
+// Render Selection
+// -----------------------------------------------------------------------------
+variant = "all"; // [all, sena, cardo, omm, drybox]
+
+if (variant == "sena") {
+    pod_variant_sena();
+} else if (variant == "cardo") {
+    pod_variant_cardo();
+} else if (variant == "omm") {
+    pod_variant_omm();
+} else if (variant == "drybox") {
+    pod_variant_drybox();
+} else {
+    pod_inlay_quad_gallery();
+}

@@ -118,8 +118,8 @@ module pod_monocoque_tub() {
             translate([50.0, POD_WALL, 14.0])
                 cube([2.0, POD_OUTER_W - 2*POD_WALL, 2.0], center=false);
 
-            // 7b. Optional Front SMA Bulkhead Reinforcement Boss (inner face at X = POD_OUTER_L - POD_WALL)
-            translate([POD_OUTER_L - POD_WALL - 2.5, POD_OUTER_W/2.0, 19.0]) {
+            // 7b. Optional Front SMA Bulkhead Reinforcement Boss (inner face of lower sill at X = POD_OUTER_L - POD_WALL)
+            translate([POD_OUTER_L - POD_WALL - 2.5, POD_OUTER_W/2.0, 7.5]) {
                 rotate([0, 90, 0])
                     cylinder(r=7.0, h=2.5, center=false, $fn=24);
             }
@@ -147,16 +147,26 @@ module pod_monocoque_tub() {
         translate([6.0, POD_OUTER_W - 5.5, 32.0])
             cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
 
-        // Rear Slide-in Insertion Portal (Einschuböffnung an der Stirnwand rechts bei X = 150 mm)
-        // Completely OPEN from Z = 31.9 mm all the way to top rim (Z = 38.0 mm)
-        // Width spans the full C-groove width (Y = 1.4 to 68.6 mm) for an unobstructed entry portal!
+        // Rear U-Portal Opening (for L-Slide Lid Upper Heckwand at X = 150 mm)
+        // Completely OPEN above the 14.0 mm lower sill (from Z = 14.0 to top Z = 38.0 mm)
+        translate([POD_OUTER_L - POD_WALL - 1.5, POD_WALL, 14.0])
+            cube([POD_WALL + 5.0, POD_OUTER_W - 2*POD_WALL, POD_OUTER_H - 14.0 + 3.0], center=false);
+
+        // Top C-groove entry throats (leaving C-grooves open at rear for slide-in tongues)
         translate([POD_OUTER_L - POD_WALL - 1.5, 1.4, 31.9])
             cube([POD_WALL + 5.0, POD_OUTER_W - 2.8, POD_OUTER_H - 31.9 + 3.0], center=false);
 
-        // Internal FOB Anti-Theft Magnetic Latch Socket (100% INTERNAL - Zero outside access!)
-        // Blind hole at X = 16.0 mm, Y = POD_OUTER_W/2 in the bulkhead floor
-        translate([16.0, POD_OUTER_W/2.0, 26.0])
-            cylinder(r=2.5, h=6.5, center=false, $fn=24);
+        // Lower Sill (Z = 0..14 mm) Dual Corner Latch Sockets for U-Bracket Legs:
+        // Left corner socket (blind pocket depth 4.0 mm into sill top face)
+        translate([POD_OUTER_L - POD_WALL - 0.5, 6.0, 10.0])
+            cube([2.8, 6.0, 4.5], center=false);
+        // Right corner socket (blind pocket depth 4.0 mm into sill top face)
+        translate([POD_OUTER_L - POD_WALL - 0.5, POD_OUTER_W - 12.0, 10.0])
+            cube([2.8, 6.0, 4.5], center=false);
+
+        // Exterior Step/Rebate on Lower Sill for Flush Overlap of L-Lid Drip Apron (Tropfnase)
+        translate([POD_OUTER_L - 1.6, POD_WALL - 0.5, 10.5])
+            cube([2.0, POD_OUTER_W - 2*POD_WALL + 1.0, 3.8], center=false);
 
         // 10. Port A: 4-Pin IP67 Magnet-Abrissschnittstelle (HytePro Style Bulkhead Pocket)
         // Rectangular flange pocket (15.0 x 8.0 mm) with silicone flat-cable internal passthrough
@@ -224,16 +234,17 @@ module pod_monocoque_tub() {
             cube([5.0, POD_OUTER_W + 2.0, 2.5], center=false);
 
         // 17. Optional Front SMA Bulkhead Antenna Port (at X = POD_OUTER_L) with 0.4 mm Knockout Membrane
+        // Positioned centrally in the 14.0 mm lower sill (Z = 7.5 mm, Y = 35.0 mm).
         // Default state: 100% solid, sealed, airtight & leak-proof (IP68 / IP69K), identical to Central Box.
         // Total wall thickness with boss = POD_WALL + 2.5 = 5.0 mm.
-        translate([POD_OUTER_L - POD_WALL - 2.5 - 0.1, POD_OUTER_W/2.0, 19.0]) {
+        translate([POD_OUTER_L - POD_WALL - 2.5 - 0.1, POD_OUTER_W/2.0, 7.5]) {
             rotate([0, 90, 0]) {
                 // Internal blind pilot bore leaving exact 0.4 mm solid membrane
                 cylinder(r=SMA_BORE_R, h=5.0 - 1.2 - 0.4 + 0.1, center=false, $fn=32);
             }
         }
         // External O-ring recess (depth = 1.2 mm) from outside face inward
-        translate([POD_OUTER_L - 1.2, POD_OUTER_W/2.0, 19.0]) {
+        translate([POD_OUTER_L - 1.2, POD_OUTER_W/2.0, 7.5]) {
             rotate([0, 90, 0]) {
                 cylinder(r=SMA_ORECESS_R, h=1.2, center=false, $fn=32);
             }

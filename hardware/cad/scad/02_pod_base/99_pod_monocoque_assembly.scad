@@ -60,11 +60,11 @@ use <parts/015_pod_monocoque_tub.scad>;
 VIEW_MODE = "cutaway"; // ["cutaway", "exploded", "xray", "fob_lock"]
 
 // Exploded & Slide-in offsets
-EXP_LID_X      = (VIEW_MODE == "exploded") ? 55.0 : 0.0;  // Displaced horizontally along X to reveal rear slide-in slot!
-EXP_LID_Z      = (VIEW_MODE == "exploded") ? 30.0 : 0.0;  // Elevated to cleanly clear actuator struts
-EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
-EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
-EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 6.0  : 0.0;
+EXP_LID_X      = (VIEW_MODE == "exploded") ? 80.0 : 0.0;  // Displaced horizontally along X to reveal rear slide-in slot!
+EXP_LID_Z      = (VIEW_MODE == "exploded") ? 75.0 : 0.0;  // Elevated high with wide, open clearance above actuator struts
+EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 28.0 : 0.0;  // Floats freely above the tub rim in open air
+EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 18.0 : 0.0;
+EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 8.0  : 0.0;
 SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : ((VIEW_MODE == "xray") ? 38.0 : 0.0);  // Lid partially retracted along X-rails to demonstrate sliding action!
 
 module internal_wiring_preview() {
