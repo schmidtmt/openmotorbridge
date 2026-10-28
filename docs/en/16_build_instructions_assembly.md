@@ -75,7 +75,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * **1x Glove Box 4-Port Hub Enclosure:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for right glove compartment of Harley Touring (30W phone, 10W dongle, free port, OEM upstream).
   * **1x Rear Radar Mount:** MR20 radar housing with Hirth-joint swivel/tilt cradle, license plate bracket, and integrated roost deflector.
 * [ ] **Fully Assembled PCBs (SMT Production):**
-  * **1x PCBA 01 (Central Box):** Host board with **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Two-Cable Architecture headers (6-Pin Deutsch DTM `J1` & 16-Pin Automotive Header `J_PERIPH`), Dual-Power Input (12V & USB-C PD Sink with ideal-diode OR-ing), and USB-C DFU port. *(DW3110 UWB completely eliminated!)*
+  * **1x PCBA 01 (Central Box):** Host board with **ESP32-S3-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertical SMD headers (Vehicle Power `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Periphery Bus `J6` Molex Picoflex 1.27mm 16P, UPS `J5` 4P, Status LED `J4` 3P, Spare `J7` 4P), Dual-Power Input (12V Main & 5V USB-C Service Port `J3` with LM66100 Ideal-Diode OR-ing), and DM3D MicroSD Slot `J2`. *(DW3110 UWB completely eliminated!)*
   * **2x PCBA 03 (Saddlebag Pod Gateway):** Universal interface board with 30W USB-PD sink/buck regulator, internal USB-C charging port, intercom audio routing (Sena / Cardo / OMM / Midland), PTT keying, and `J_ACT` 4-Pin header with dual AO3400A MOSFETs for 2.0 s cold-start actuation.
   * **1x PCBA 05 (Front Node Riser Hub):** Compact board with 60W USB-PD engine (Southchip SC8721/SC8102), `J_SENSOR_EXT` 6-Pin port for snap-on sensor puck, and accessory power (27W phone fast charge, 15W dedicated motorcycle GPS nav, 10W cam lead).
   * **2x PCBA 05B (All-in-One Under-Perch Board):** Identical miniature boards for left and right mirror perches with micro-switch (Left: PTT; Right: Cam-Tag) and ultra-bright amber LED (BSD).
@@ -93,13 +93,13 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * Silicone round cord Ø 1.5 mm Shore 40A ($40\,\text{cm}$ Main Box, $25\,\text{cm}$ Front Node)
   * 2x Silicone profile gaskets for saddlebag slide-in lids
   * 2x EPDM/TPU split grommets for saddlebag front wall entry
-  * **1x 1S LiPo Flat-Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Fit 3.0 connector (UPS)
+  * **1x 1S LiPo Flat-Pack 2,200 mAh** ($68 \times 39 \times 5.0\,\text{mm}$) with Molex Micro-Lock Plus 1.25mm 4P connector (UPS)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex Antenna** with U.FL cable
   * **1x Taoglas FXP73 2.4/5 GHz Wi-Fi/BLE Flex Antenna** with U.FL cable
   * 2x Gore ePTFE pressure equalization & acoustic vent membranes
 * [ ] **Pre-Assembled Automotive Cable Harnesses (Two-Cable Architecture):**
-  * **1x Cable 1 (Vehicle & CAN):** 6-Pin Deutsch DTM06-6S COTS pre-molded harness with Raychem DR-25 (KL30, KL15, GND, CAN_H, CAN_L, Shield).
-  * **1x Cable 2 (OMB Periphery Bus):** 16-Pin Automotive COTS harness splitting to 4 branches: Front Node (60W), Pod 1 (30W), Pod 2 (30W), Rear Radar (12V switched).
+  * **1x Cable 1 (Vehicle & CAN):** 6-Pin Deutsch DTM06-6S COTS pre-molded harness with Raychem DR-25 (KL30, KL15, GND, CAN_H, CAN_L, Shield) to internal Molex Micro-Lock Plus 6-Pin header `J1`.
+  * **1x Cable 2 (OMB Periphery Bus):** 16-Pin Automotive COTS harness to internal Molex Picoflex 16-Pin header `J6` (4 branches: Front 60W, Pod 1 30W, Pod 2 30W, Rear Radar 12V).
   * **2x HytePro 4-Pin Magnetic Breakaway Couplings (IP67)** with 4-wire silicone ribbon cable ($V_{\text{BUS}}$, `GND`, `D+`, `D-`).
   * **1x 4-wire high-flex shielded automotive cable (AWG22/28)** for backbone pull (length approx. $1.5\,\text{m}$).
   * **1x Nylon Fish Tape (Ø 3 mm, 2 m length)** for routing through frame backbone.
@@ -113,14 +113,14 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ### Step 1: Central Box (Main Box) Assembly
 1. **Insert Hex Nuts:** Press 4x DIN 934 M3 stainless nuts into the captive hexagonal pockets on the bottom of the lower tub ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)).
 2. **Install Main Board:**
-   * Place the fully populated `PCBA 01` (with ESP32-S31, Qualcomm QCC3084, and USB-PD engine) onto the vibration damping posts.
+   * Place the fully populated `PCBA 01` (with ESP32-S3-WROOM-1U, Microchip USB2517I Hub, Qualcomm QCC3084, and Quad-eFuse) onto the vibration damping posts.
    * Secure board with 4x M2.5 $\times 6\,\text{mm}$ screws.
 3. **Pre-Route Harnesses & Mount Mid Tray:**
-   * Plug in Deutsch DTM-6 vehicle harness into `J1` and 16-Pin Automotive harness into `J_PERIPH` on `PCBA 01`.
+   * Connect internal silicone wire harnesses from bulkhead to vertical PCB headers on `PCBA 01`: Vehicle Power/CAN into `J1` (Molex Micro-Lock Plus 6P) and 4-channel periphery bus into `J6` (Molex Picoflex 16P). Pre-route UPS harness to `J5` (Micro-Lock Plus 4P).
    * Connect U.FL coaxial cables for LoRa (`ANT1`, FXP895) and Wi-Fi antennas.
    * Seat the mid tray ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)). All wires pass smoothly through the $70 \times 10\,\text{mm}$ open front cable bay into the upper chamber without pinching.
 4. **Mount 2,200 mAh LiPo Battery & Hinged Bridge:**
-   * Place the 2,200 mAh LiPo flat pack into the mid tray pocket and connect the Molex Micro-Fit 3.0 plug.
+   * Place the 2,200 mAh LiPo flat pack into the mid tray pocket and connect the Molex Micro-Lock Plus 4P plug to `J5`.
    * Affix both flex antennas (Taoglas FXP895 LoRa and FXP73 2.4 GHz) into the designated recesses of the battery bridge ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)).
    * Insert the bridge's left hinge pins, swing it closed over the battery, and snap the right retaining latch shut. The battery is locked rattle-free up to $20\,\text{g}$.
 5. **Lid & Weatherproofing:**

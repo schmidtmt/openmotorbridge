@@ -75,7 +75,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **1x Handschuhfach 4-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für rechtes Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, OEM Upstream).
   * **1x Heck-Radar Halterung:** MR20 Radar-Gehäuse mit Hirth-Neigungsverstellung, Kennzeichenträger und integriertem Schmutzfänger (Roost-Deflector).
 * [ ] **Vollautomatisch bestückte Platinen (SMT-gefertigt):**
-  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31**, **Qualcomm QCC3084**, SX1262 LoRa 868 MHz, Zwei-Kabel-Anschlüssen (6-Pin Deutsch DTM `J1` & 16-Pin Automotive Header `J_PERIPH`), Dual-Power Input (12V & USB-C PD Sink mit Ideal-Diode OR-ing) und USB-C DFU-Port. *(DW3110 UWB entfällt komplett!)*
+  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S3-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertikalen SMD-Steckverbindern (Bordnetz `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Peripherie-Bus `J6` Molex Picoflex 1.27mm 16P, USV `J5` 4P, Status-LED `J4` 3P, Reserve `J7` 4P), Dual-Power Input (12V Bordnetz & 5V USB-C Service-Port `J3` mit LM66100 Ideal-Diode OR-ing) und DM3D MicroSD-Slot `J2`. *(DW3110 UWB entfällt komplett!)*
   * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit 30W USB-PD Sink/Buck-Regler, Koffer-USB-C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland), PTT-Tastung und `J_ACT` 4-Pin Header mit Dual-AO3400A MOSFETs für 2,0 s Kaltstart-Tastendruck.
   * **1x PCBA 05 (Front-Knoten Riser-Hub):** Kompakt-Platine mit 60W USB-PD Engine (Southchip SC8721/SC8102), `J_SENSOR_EXT` 6-Pin Port für das Schnapp-Sensor-Puck und Zubehörspeisung (27W Phone Fast Charge, 15W dediziertes Motorrad-GPS Nav, 10W Cam-Lead).
   * **2x PCBA 05B (All-in-One Under-Perch Platine):** Baugleiche Mini-Platinen für linken und rechten Spiegelfuß mit hochpräzisem Mikrotaster (Links: PTT; Rechts: Cam-Highlight) und ultraheller Amber-LED (BSD).
@@ -93,13 +93,13 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $25\,\text{cm}$ Front-Knoten)
   * 2x Silikon-Profildichtungen für die Koffer-Slide-in-Deckel
   * 2x EPDM/TPU Wanddurchführungs-Tüllen für die Koffer-Vorderwand
-  * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Fit 3.0 Stecker (USV)
+  * **1x 1S LiPo Flat-Pack 2.200 mAh** ($68 \times 39 \times 5{,}0\,\text{mm}$) mit Molex Micro-Lock Plus 1.25mm 4P Stecker (USV)
   * **1x Taoglas FXP895 LoRa 868 MHz Flex-Antenne** mit U.FL Kabel
   * **1x Taoglas FXP73 2.4/5 GHz Wi-Fi/BLE Flex-Antenne** mit U.FL Kabel
   * 2x Gore ePTFE Druckausgleichs- und Akustik-Membranpads
 * [ ] **Vorkonfektionierte Automotive-Kabelbäume (Zwei-Kabel-Architektur):**
-  * **1x Kabel 1 (Bordnetz & CAN):** 6-Pin Deutsch DTM06-6S COTS Fertigkabelbaum mit Raychem DR-25 (KL30, KL15, GND, CAN_H, CAN_L, Schirm).
-  * **1x Kabel 2 (OMB Peripherie-Bus):** 16-Pin Automotive COTS Kabelbaum auf 4 Stränge: Front-Node (60W), Pod 1 (30W), Pod 2 (30W), Heck-Radar (12V geschaltet).
+  * **1x Kabel 1 (Bordnetz & CAN):** 6-Pin Deutsch DTM06-6S COTS Fertigkabelbaum mit Raychem DR-25 (KL30, KL15, GND, CAN_H, CAN_L, Schirm) auf internen Molex Micro-Lock Plus 6-Pin Stecker `J1`.
+  * **1x Kabel 2 (OMB Peripherie-Bus):** 16-Pin Automotive COTS Kabelbaum auf internen Molex Picoflex 16-Pin Stecker `J6` (4 Stränge: Front 60W, Pod 1 30W, Pod 2 30W, Heck-Radar 12V).
   * **2x HytePro 4-Pin Magnet-Abreißkupplungen (IP67)** mit 4-adrigem Silikon-Flachbandkabel ($V_{\text{BUS}}$, `GND`, `D+`, `D-`).
   * **1x 4-adriges hochflexibles geschirmtes Automotive-Kabel (AWG22/28)** für den Backbone-Zug (Länge ca. $1{,}5\,\text{m}$).
   * **1x Nylon-Einziehfeder (Fish-Tape, Ø 3 mm, Länge 2 m)** zum Durchziehen des Kabels durch den Rahmentunnel.
@@ -113,14 +113,14 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 ### Schritt 1: Zentralbox (Main Box) montieren
 1. **Muttern einlegen:** 4x DIN 934 M3 Edelstahlmuttern von unten in die formschlüssigen Sechskant-Mutterntaschen der Unterwanne ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
 2. **Hauptplatine einsetzen:**
-   * Fertig bestückte `PCBA 01` (mit ESP32-S31, Qualcomm QCC3084 und USB-PD Engine) auf die Dämpferdome setzen.
+   * Fertig bestückte `PCBA 01` (mit ESP32-S3-WROOM-1U, Microchip USB2517I Hub, Qualcomm QCC3084 und Quad-eFuse) auf die Dämpferdome setzen.
    * Platine mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
 3. **Kabelstränge vorverlegen & Zwischenboden aufsetzen:**
-   * Deutsch DTM-6 Bordnetzstecker an `J1` und 16-Pin Automotive Stecker an `J_PERIPH` auf `PCBA 01` anstecken.
+   * Interne Silikon-Kabelpeitschen vom Gehäuseflansch an die vertikalen Header auf `PCBA 01` anstecken: Bordnetz/CAN an `J1` (Molex Micro-Lock Plus 6P) und 4-Kanal Peripherie-Bus an `J6` (Molex Picoflex 16P). USV-Kabel an `J5` (Micro-Lock Plus 4P) vorverlegen.
    * U.FL-Koaxialkabel der LoRa-Antenne (`ANT1`, FXP895) und der Wi-Fi-Antenne anstecken.
    * Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Alle Leitungen gleiten quetschfrei durch die $70 \times 10\,\text{mm}$ Kabelbucht in die obere Kammer.
 4. **2.200 mAh LiPo-Akku & schwenkbare Akkubrücke montieren:**
-   * Den 2.200 mAh LiPo-Flachakku in die Wanne des Zwischenbodens einlegen und Molex Micro-Fit 3.0 Stecker anstecken.
+   * Den 2.200 mAh LiPo-Flachakku in die Wanne des Zwischenbodens einlegen und Molex Micro-Lock Plus 4P Stecker an `J5` anstecken.
    * Beide Flexantennen (Taoglas FXP895 LoRa und Taoglas FXP73 2.4 GHz) in die vorgesehenen Antennentaschen der Akkubrücke ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)) einkleben.
    * Akkubrücke mit ihren beiden Einhängenocken links einstecken, umlegen und mit dem elastischen Schnapphaken rechts verriegeln. Der Akku sitzt bis $20\,\text{g}$ vibrationsfest.
 5. **Gehäusedeckel & Dichtung:**

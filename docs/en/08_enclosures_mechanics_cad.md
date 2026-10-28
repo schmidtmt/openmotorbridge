@@ -129,10 +129,10 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 +-------------------------------------------------------------+
 ```
 
-1. **Automotive Flange (Two-Cable Architecture J1 & J_PERIPH):** Automotive-grade flange with silicone perimeter seal and 2x M3 mounting screws ($28.0\,\text{mm}$ pitch). Routes the Central Box Two-Cable Architecture to the outside: Cable 1 (6-Pin Deutsch DTM06-6S `J1`: KL30, KL15, GND, CAN-H, CAN-L, Shield) and Cable 2 (16-Pin Automotive Header `J_PERIPH`: 4 branches of 4 conductors each for Front Node 60W, Pod 1 30W, Pod 2 30W, and Rear Radar MR20 12V/Telemetry).
+1. **Automotive Flange (Two-Cable Architecture J1 & J6):** Automotive-grade flange with silicone perimeter seal and 2x M3 mounting screws ($28.0\,\text{mm}$ pitch). Routes the Central Box Two-Cable Architecture to the outside: Cable 1 (6-Pin Deutsch DTM06-6S to internal silicone wire harness plugging into vertical PCB header `J1` Molex Micro-Lock Plus 1.25mm: KL30, KL15, GND, CAN-H, CAN-L, Shield) and Cable 2 (16-Pin Automotive connector to internal harness plugging into vertical PCB header `J6` Molex Picoflex 1.27mm 2x08: 4 branches of 4 conductors each for Front Node 60W, Pod 1 30W, Pod 2 30W, and Rear Radar MR20 12V/Telemetry). All PCB headers on PCBA 01 point vertically UP into the enclosure wiring trough, eliminating sharp cable bends at board boundaries.
 2. **SW1 Push-Button (`SW_PAIR_RESET`):** IP67 waterproof momentary tactile switch with sealed silicone boot and M7 threaded bushing. Used for 3-second Bluetooth/audio pairing and 10-second factory reset / NVS key purge.
-3. **USB-C Service Port:** Circular panel-mount waterproof receptacle sealed by a blue anodized aluminum screw cap with captive EPDM O-ring for firmware flashing, ESP-IDF live telemetry, and emergency diagnostics.
-4. **RGB Status LED Viewing Window:** Diffuse PMMA light pipe ($\varnothing\,3.2\,\text{mm}$) with perimeter O-ring channeling light from the onboard WS2812B RGB LED directly to the front face (Green = normal / mesh OK, Blue = BT audio streaming, Orange = radar warning active, Red = theft tamper alert).
+3. **USB-C Service Port:** Circular panel-mount waterproof receptacle sealed by a blue anodized aluminum screw cap with captive EPDM O-ring, wired directly to port `J3` on PCBA 01 for firmware flashing, ESP-IDF live telemetry, and emergency diagnostics.
+4. **RGB Status LED Viewing Window:** Diffuse PMMA light pipe ($\varnothing\,3.2\,\text{mm}$) with perimeter O-ring channeling light from vertical header `J4` / onboard WS2812B RGB LED directly to the front face (Green = normal / mesh OK, Blue = BT audio streaming, Orange = radar warning active, Red = theft tamper alert).
 
 ### 3.1 Integrated Antenna Pockets & RF Transparency
 

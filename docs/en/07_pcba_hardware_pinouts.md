@@ -14,10 +14,10 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 +-------+-------------------------------+---------------+---------+----------------------+
 | Assy  | Name & Function               | PCB Outline   | Layers  | Key ICs / Components |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 01**| **Central Box Main Controller**| 85 x 55 mm    | 4 Layer | ESP32-S31 AI RISC-V, |
-|       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M3) | (ENIG)  | QCC3084 BT 5.4 SoC,  |
-|       | Dual-Power: 12V DTM & USB-PD  |               |         | LM5164, BQ24075 UPS, |
-|       | Sink (5-20V Ideal-Diode OR)   |               |         | SX1262 LoRa, 2-Cable |
+| **PCBA 01**| **Central Box Main Controller**| 85 x 55 mm    | 4 Layer | ESP32-S3-WROOM-1U, USB2517I, |
+|       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164, BQ24075,|
+|       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
+|       | Vertical SMD (MicroLock/Picoflex)|              |         | SX1262 LoRa, ES8388, BMI270, CAN|
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satellite Pod Interface**   | 42 x 48 mm    | 4 Layer | ESP32-C6, ES8388,    |
 |       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
@@ -51,7 +51,7 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 
 ### 1.1 Breakdown by System Component
 1. **Core Assemblies (Standard on Every Motorcycle):**
-   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP mixing, dual Bluetooth headsets, LoRa mesh, and USB-PD coordination. Equipped with **Dual-Power Input** (12V vehicle power via Deutsch DTM-6 or 5V–20V USB-PD Sink via ideal-diode OR-ing for benchtop flashing without a 12V lab power supply) and **Two-Cable Architecture** (Cable 1: 6-Pin Deutsch DTM `J1`; Cable 2: 16-Pin Automotive `J_PERIPH`).
+   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP audio mixing, dual Bluetooth headsets, LoRa mesh, and USB Hub coordination. Equipped with **Dual-Power Input** (12V vehicle power via Molex Micro-Lock Plus `J1` / Deutsch DTM-6 bulkhead or 5V USB-C Service Port `J3` via TI LM66100 ideal-diode OR-ing for benchtop flashing without a 12V lab power supply) and **vertical SMD headers (Pointing UP)** (Vehicle Power `J1`, 4-channel periphery bus `J6` Picoflex 16-Pin, UPS battery `J5`, status LED `J4`, spare USB `J7`, USB-C `J3`).
    * **`PCBA 03` (Satellite Pod Interface Board):** Universal interface board mounted on the floor of both saddlebag pods (Pod 1 & Pod 2). Provides an integrated USB-C fast-charging port (up to 30W/60W) directly inside the bag and connects Sena, Cardo, or OMM losslessly to the 4-wire bus.
    * **`PCBA 05` (Universal Front Node):** Cockpit module at the handlebar riser for Multi-GNSS (SAM-M10Q), ram-air environmental sensing, ambient microphone, and Qi accessory power. Connected via the 4-wire backbone routed through the Harley wire caddy (**ZERO tank lifting required!**).
    * **`PCBA 05B` (Symmetrical Under-Perch Mirror Pods):** Two identical boards clamped under the mirror perch studs (Left & Right) for bilateral Blind Spot Detection (BSD amber LEDs) and software-defined thumb switches (PTT, Voice Assistant, 1-Click Hazard Pin Drop for Waze, Cam-Tags, SOS).
@@ -101,106 +101,318 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Central Box Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Figure 7.1a: PCBA 01 Top 3D -- ESP32-S31 AI RISC-V Main MCU, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 UPS, ES8388 DSP Codec, Semtech SX1262 LoRa, Multi-Port USB-PD Engine, Deutsch DTM-6 Flange J1, and 16-Pin Automotive Header J_PERIPH.*
+*Figure 7.1a: KiCad 3D Render of Central Box Host PCB Top (PCBA 01, 85 x 55 mm, 4 Layers) featuring ESP32-S3-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 UPS Charger, Quad eFuse U12, SX1262 LoRa 868 MHz, and vertical SMD connectors (J1, J6, J5, J4, J7, J3) pointing UP.*
 
 ![PCBA 01 Central Box Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
-*Figure 7.1b: PCBA 01 Bottom 3D -- Hirose DM3D MicroSD Push-Pull Slot, TI LM5050 Ideal-Diode OR-ing Circuit for Dual-Power (12V vehicle power vs. USB-PD Sink), Bosch BMI270 6-Axis IMU, and TCAN334G CAN-FD Transceiver.*
+*Figure 7.1b: KiCad 3D Render of Central Box Host PCB Bottom featuring Hirose DM3D MicroSD Push-Pull Slot, TI LM66100 Ideal-Diode OR-ing Circuit for Dual-Power (12V vehicle power vs. USB-C 5V Service), BMI270 6-Axis IMU, ES8388 Audio Codec, and TCAN334G CAN-FD Transceiver.*
+
+![PCBA 01 Central Box Layout Overview](../images/pcba/pcba01_layout_v10.svg)
+*Figure 7.1c: Vector-based component placement and routing layout of PCBA 01 (v10.0 Dual-Rail Monocoque Slide-In Standard).*
 
 ### 3.1 Board Specifications & Stackup
-* **Dimensions:** $85.0 	imes 55.0\,	ext{mm}$ (Outer contour with 4x M2.5 mounting holes, $77.0 	imes 47.0\,	ext{mm}$ grid spacing).
-* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,	ext{mm}$ thickness, $35\,\mu	ext{m}$ Cu on all 4 layers).
+* **Dimensions:** $85.0 \times 55.0\,\text{mm}$ (Outer contour with 4x M2.5 mounting holes, $77.0 \times 47.0\,\text{mm}$ grid spacing, fully compatible with the Dual-Rail Slide-In chassis).
+* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,\text{mm}$ overall thickness, $35\,\mu\text{m}$ Cu on outer layers L1/L4, $17.5\,\mu\text{m}$ on inner planes L2/L3, ENIG gold finish, impedance-controlled stackup JLCPCB JLC04161H-7628).
 * **Dual-Power Input Circuitry:**
-  * **12V Vehicle Power (Primary):** Deutsch DTM-6 flange `J1`, protected by automotive eFuses.
-  * **USB-PD Sink (Service & Benchtop):** USB-C port on enclosure face with TI LM5050 / P-FET ideal-diode OR-ing. Enables complete operation, firmware flashing, and sensor calibration on a desk using any standard USB-C charger (5V–20V) without a laboratory power supply.
+  * **12V Vehicle Power (Primary):** Molex Micro-Lock Plus 1.25mm 6-Pin vertical header `J1` (connected via internal silicone harness to the external Deutsch DTM04-6P bulkhead connector), fully reverse-polarity and surge-protected, backed by automotive eFuses.
+  * **USB-C Service & Flash Port (`J3`):** 16-Pin USB-C Receptacle featuring a Texas Instruments `LM66100` Ideal Diode (`D3`) for ultra-low forward drop OR-ing (Vehicle 12V vs. USB 5V VBUS). Enables complete benchtop development, WebUSB/DFU flashing, and sensor calibration using any standard USB-C power source without requiring an external 12V lab power supply.
+* **Compact Vertical SMD Headers (Pointing UP):**
+  * All internal connectors are surface-mounted vertical headers pointing upward into the housing's overhead wiring trough. This eliminates sharp wire bends around the PCB edges and allows the PCBA to slide in and out of the enclosure without mechanical resistance.
 * **Top-Layer Components (F.Cu):**
-  * **Main Compute Hub (`U2`):** Espressif `ESP32-S31` (Dual-Core RISC-V @ 320 MHz with 128-bit SIMD AI accelerator for on-device audio/voice recognition, 16 MB Flash, 8 MB Octal-PSRAM) for system control, CAN-FD bus, FreeRTOS DSP audio mixing, and PWA web server.
-  * **Dedicated Helmet Audio SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC ($13 	imes 18\,	ext{mm}$) for Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast broadcast, and crystal-clear handsfree telephony (HFP 1.8 with Wideband Speech) with integrated ceramic chip antenna.
-  * **Long-Range Telemetry (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) with U.FL connector `ANT1` to Taoglas FXP895 antenna embedded in the housing lid.
-  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 72V buck converter and TI `BQ24075` power-path controller with charging circuit for the internal 2,200 mAh UPS pouch cell.
-  * **Status Smart-LED (`D1`):** WS2812B RGB Smart-LED for optical status and pairing indication.
-  * **Controls & Interfaces:** Hardware switch `SW1` (Bluetooth/Audio pairing / factory reset), automotive Deutsch DTM-6 shrouded header `J1`, 16-Pin Automotive header `J_PERIPH`, plus IDC header `J3`.
+  * **Main Compute Hub (`U2`):** Espressif `ESP32-S3-WROOM-1U` (Dual-Core Xtensa LX7 @ 240 MHz with SIMD vector extensions for audio signal processing, 16 MB Flash, 8 MB Octal-PSRAM, U.FL RF connector) handling system management, FreeRTOS DSP audio mixing, CAN-FD, and PWA web server.
+  * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ automotive rating) 7-Port High-Speed 480 Mbps Hub with 24.000 MHz crystal `Y2`. Interconnects Front Node, Pod 1, Pod 2, Radar, Helmet Audio, ESP32, and Service Port synchronously.
+  * **Dedicated Helmet Audio SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC module ($13 \times 18\,\text{mm}$ with integrated ceramic chip antenna) for Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast broadcast, HFP 1.8 Wideband Voice, and native USB Audio Class 2.0 link to Hub `U8`.
+  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 72V buck converter (delivers `VCC_BUCK` / 5V from 12V–72V vehicle supply) and TI `BQ24075` power-path controller with charging electronics for the internal UPS battery.
+  * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-channel solid-state load switch providing dedicated current limiting, telemetry, and fault isolation for all 4 periphery branches (Front, Pod 1, Pod 2, Radar).
+  * **Long-Range Telemetry (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) with U.FL connector `ANT1` linked to the Taoglas FXP895 antenna embedded in the lid.
+  * **Status & Interface Controls:** WS2812B RGB Smart-LED `D1`, pairing tactile switch `SW1`, plus vertical connectors `J1` (Power/CAN 6P), `J6` (Periphery Bus 16P), `J5` (UPS Battery 4P), `J4` (RGB-LED 3P), `J7` (Spare USB 4P), and `J3` (USB-C 16P).
 * **Bottom-Layer Components (B.Cu):**
-  * **MicroSD Socket (`J2`):** Hirose `DM3D-SF` push-pull MicroSD card holder mounted flush to the housing edge for tool-free accessibility.
-  * **Audio Codec (`U3`):** Everest Semi `ES8388` 24-Bit / 48 kHz low-power stereo audio codec.
-  * **Motion Sensor (`U5`):** Bosch `BMI270` 6-axis IMU (I2C) for wake-on-motion theft surveillance and crash logging.
-  * **CAN-FD Transceiver (`U6`):** Texas Instruments `TCAN334G` / `TCAN1042V` 5 Mbps CAN-FD transceiver.
-  * **Low-Noise LDO (`U11`):** Texas Instruments `TPS7A0533` 3.3V ultra-low-noise LDO for analog and sensor rails.
+  * **MicroSD Socket (`J2`):** Hirose `DM3D-SF` push-pull MicroSD card holder (4-Bit High-Speed SDIO) positioned at the front edge for tool-free card swapping.
+  * **Audio Codec (`U3`):** Everest Semi `ES8388` 24-Bit / 48 kHz low-power stereo audio codec (QFN-28).
+  * **6-Axis Motion Sensor (`U5`):** Bosch `BMI270` ultra-low-power IMU (I2C) for wake-on-motion theft surveillance and crash logging.
+  * **CAN-FD Transceiver (`U6`):** Texas Instruments `TCAN334G` 5 Mbps CAN-FD transceiver (SOIC-8).
+  * **Ideal Diode Circuit (`D3`):** Texas Instruments `LM66100` (SOT-23-6) for reverse-current-free Dual-Power OR-ing.
+  * **Analog LDO (`U11`):** Texas Instruments `TPS7A0533` 3.3V ultra-low-noise LDO for clean analog and sensor rails.
 
-### 3.2 Central Box Two-Cable Architecture: Pinout of Header J1 (6-Pin DTM) & Header J_PERIPH (16-Pin Automotive)
+---
 
-To prevent wiring bottlenecks, pin count limitations, and thermal stress, OpenMotorBridge v10.0 strictly segregates vehicle power/CAN from the 4-channel OMB periphery bus across two dedicated, sealed automotive connectors:
+### 3.2 PCB Connectors & Exact Pinout Tables
 
-#### 3.2.1 Header J1: Vehicle Power & CAN Bus (6-Pin Deutsch DTM04-6P Flange)
-Direct interface to vehicle harness (battery, ignition switch, and OEM CAN network):
+#### 3.2.1 Header J1: Vehicle Power & CAN Bus (Molex Micro-Lock Plus 1.25mm 6-Pin SMD Vertical)
+Connects via internal silicone wire harness to the external Deutsch DTM04-6P bulkhead connector:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| HEADER J1: DEUTSCH DTM-6 PINOUT (VEHICLE POWER & CAN-FD)                                                      |
+| HEADER J1: MOLEX MICRO-LOCK PLUS 6-PIN VERTICAL (505568-0671) - VEHICLE POWER & CAN-BUS                       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Harness Branch      | Function & Protection   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | KL30_IN        | +9V...+72V DC Constant+  | AWG20 0.50² | Cable 1 (Battery)   | Constant 12V Main (eFuse)|
-|  2  | KL15_IGN       | +9V...+72V DC Ignition+  | AWG22 0.34² | Cable 1 (Ignition)  | Ignition Sense & Wake-Up|
-|  3  | VEHICLE_GND    | Power Ground (0V)        | AWG20 0.50² | Cable 1 (Battery)   | Central Vehicle Ground  |
-|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | Cable 1 (Vehicle)   | Vehicle CAN-FD Bus High |
-|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | Cable 1 (Vehicle)   | Vehicle CAN-FD Bus Low  |
-|  6  | CHASSIS_SHIELD | Shield Ground / Chassis  | AWG20 0.50² | Cable 1 (Chassis)   | Enclosure & Shield Drain|
+|  1  | KL30_IN        | +9V...+72V DC Constant+  | AWG20 0.50² | DTM Pin 1 (Battery) | Constant 12V Main (eFuse)|
+|  2  | KL15_IN        | +9V...+72V DC Ignition+  | AWG22 0.34² | DTM Pin 2 (Ignition)| Ignition Sense & Wake-Up|
+|  3  | GND_PWR        | Power Ground (0V)        | AWG20 0.50² | DTM Pin 3 (Battery) | Central System Ground   |
+|  4  | CAN_H          | CAN-FD High (ISO 11898-2)| AWG24 0.22² | DTM Pin 4 (Vehicle) | Vehicle CAN-FD Bus High |
+|  5  | CAN_L          | CAN-FD Low (ISO 11898-2) | AWG24 0.22² | DTM Pin 5 (Vehicle) | Vehicle CAN-FD Bus Low  |
+|  6  | GND_SHIELD     | Chassis Shield Ground    | AWG20 0.50² | DTM Pin 6 (Chassis) | Enclosure & Cable Drain |
+| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
+| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-#### 3.2.2 Header J_PERIPH: OMB Periphery Bus (16-Pin Automotive Header, TE Superseal / DTM 16-Pin)
-Supplies 4 independent system branches with 4 conductors each (`VCC`, `GND`, `D+`, `D-`). Each branch is protected on PCBA 01 via a dedicated **TI TPS25921 eFuse**:
+#### 3.2.2 Header J6: OMB 4-Channel Periphery Bus (Molex Picoflex 16-Pin 2x08 Vertical)
+Central high-speed interface (Molex Picoflex `90814-0016`, 1.27mm pitch, vertical top-entry) supplying power and native USB 2.0 data to Front Node, Pod 1, Pod 2, and Radar:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| HEADER J_PERIPH: 16-PIN AUTOMOTIVE PERIPHERY BUS (4 INDEPENDENT 4-WIRE SYSTEM BRANCHES)                       |
+| HEADER J6: MOLEX PICOFLEX 16-PIN (2x08) VERTICAL (90814-0016) - 4 INDEPENDENT OMB SYSTEM BRANCHES            |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Target Component    | Function & Protection   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | VBUS_FRONT_60W | +12V...+20V DC (60W Max) | AWG18 0.75² | Branch 1 (Front)    | Front Node 60W Power    |
-|  2  | GND_FRONT      | Power Ground (0V)        | AWG18 0.75² | Branch 1 (Front)    | Power Return Lead       |
-|  3  | FRONT_USB_DP   | USB 2.0 High-Speed D+    | AWG26 0.14² | Branch 1 (Front)    | Data Uplink 480 Mbps    |
-|  4  | FRONT_USB_DN   | USB 2.0 High-Speed D-    | AWG26 0.14² | Branch 1 (Front)    | Data Uplink 480 Mbps    |
+|  1  | VBUS_FRONT     | +12V DC (up to 60W/5.0A) | AWG18 0.75² | Branch 1 (Front)    | Front Node Power Feed   |
+|  2  | GND_PWR        | Power Ground (0V)        | AWG18 0.75² | Branch 1 (Front)    | Power Return Lead       |
+|  3  | BUS1_DM        | USB 2.0 High-Speed D-    | AWG26 0.14² | Branch 1 (Front)    | Hub Port 2 Data Uplink  |
+|  4  | BUS1_DP        | USB 2.0 High-Speed D+    | AWG26 0.14² | Branch 1 (Front)    | Hub Port 2 Data Uplink  |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  5  | POD1_VBUS_30W  | +12V DC (30W USB-PD)     | AWG20 0.50² | Branch 2 (Pod 1 L)  | Pod 1 Power & Charger   |
-|  6  | POD1_GND       | Power Ground (0V)        | AWG20 0.50² | Branch 2 (Pod 1 L)  | Power Return Lead       |
-|  7  | POD1_USB_DP    | USB 2.0 Audio/Data D+    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Digital Audio & Control |
-|  8  | POD1_USB_DN    | USB 2.0 Audio/Data D-    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Digital Audio & Control |
+|  5  | VBUS_POD1      | +12V DC (up to 30W/2.5A) | AWG20 0.50² | Branch 2 (Pod 1 L)  | Pod 1 Power & Charger   |
+|  6  | GND_PWR        | Power Ground (0V)        | AWG20 0.50² | Branch 2 (Pod 1 L)  | Power Return Lead       |
+|  7  | BUS2_DM        | USB 2.0 High-Speed D-    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Hub Port 3 Audio/Data   |
+|  8  | BUS2_DP        | USB 2.0 High-Speed D+    | AWG28 0.08² | Branch 2 (Pod 1 L)  | Hub Port 3 Audio/Data   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  9  | POD2_VBUS_30W  | +12V DC (30W USB-PD)     | AWG20 0.50² | Branch 3 (Pod 2 R)  | Pod 2 Power & Charger   |
-| 10  | POD2_GND       | Power Ground (0V)        | AWG20 0.50² | Branch 3 (Pod 2 R)  | Power Return Lead       |
-| 11  | POD2_USB_DP    | USB 2.0 Audio/Data D+    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Digital Audio & Control |
-| 12  | POD2_USB_DN    | USB 2.0 Audio/Data D-    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Digital Audio & Control |
+|  9  | VBUS_POD2      | +12V DC (up to 30W/2.5A) | AWG20 0.50² | Branch 3 (Pod 2 R)  | Pod 2 Power & Charger   |
+| 10  | GND_PWR        | Power Ground (0V)        | AWG20 0.50² | Branch 3 (Pod 2 R)  | Power Return Lead       |
+| 11  | BUS3_DM        | USB 2.0 High-Speed D-    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Hub Port 4 Audio/Data   |
+| 12  | BUS3_DP        | USB 2.0 High-Speed D+    | AWG28 0.08² | Branch 3 (Pod 2 R)  | Hub Port 4 Audio/Data   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-| 13  | RADAR_PWR_12V  | +12V switched (1.0A)     | AWG22 0.34² | Branch 4 (Radar)    | Power Rear Radar        |
-| 14  | RADAR_GND      | Power Ground (0V)        | AWG22 0.34² | Branch 4 (Radar)    | Ground Rear Radar       |
-| 15  | RADAR_CAN_H_TX | CAN_H / UART TX (3.3V)   | AWG24 0.22² | Branch 4 (Radar)    | Target Telemetry (20 Hz)|
-| 16  | RADAR_CAN_L_RX | CAN_L / UART RX (3.3V)   | AWG24 0.22² | Branch 4 (Radar)    | Commands & Config       |
+| 13  | VBUS_RADAR     | +12V switched (1.5A max) | AWG22 0.34² | Branch 4 (Radar)    | Rear Radar Power Supply |
+| 14  | GND_PWR        | Power Ground (0V)        | AWG22 0.34² | Branch 4 (Radar)    | Ground Rear Radar       |
+| 15  | BUS4_DM        | USB 2.0 High-Speed D-    | AWG24 0.22² | Branch 4 (Radar)    | Hub Port 5 Telemetry    |
+| 16  | BUS4_DP        | USB 2.0 High-Speed D+    | AWG24 0.22² | Branch 4 (Radar)    | Hub Port 5 Telemetry    |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
+| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-### 3.3 Pinout & System Interconnect: Qualcomm QCC3084 BT 5.4 Audio SoC (`U9`)
+#### 3.2.3 Header J5: UPS Battery & NTC Thermistor (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
+Connects the internal 2,200 mAh UPS cell (LiFePO4 or LiPo) to the BQ24075 power-path manager and ESP32 ADC:
 
 ```
-+----------------------------------------------------------------------------------------+
-| QUALCOMM QCC3084 PINOUT & INTERCONNECTION TO ESP32-S31 / ES8388                        |
-+-----+----------------+--------------------+-------------------+------------------------+
-| Pin | Signal Name    | Signal Type        | Connected to      | Function & Protocol    |
-+-----+----------------+--------------------+-------------------+------------------------+
-|  1  | VCC_3V3        | Power In (+3.3V)   | LM5164 3.3V Rail  | Module Operating Power |
-|  2  | GND            | Ground (0V)        | GND_PWR Plane     | RF and System Ground   |
-|  3  | I2S_MCLK       | Digital In (Clock) | ESP32-S31 (GPIO 9)| Master Clock (12.288M) |
-|  4  | I2S_BCLK       | Digital In (BitClk)| ESP32-S31 (GPIO10)| Bit Clock (3.072 MHz)  |
-|  5  | I2S_WS         | Digital In (LRCK)  | ESP32-S31 (GPIO11)| Word Select (48 kHz)   |
-|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S31 (GPIO12)| Stereo PCM to QCC3084  |
-|  7  | I2S_DIN        | Digital Out (Mic)  | ESP32-S31 (GPIO13)| HFP Microphone to DSP  |
-|  8  | GND            | Ground (0V)        | GND_PWR Plane     | RF Shield Ground       |
-|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S31 (GPIO18)| QCC3084 Telemetry / AT |
-| 10  | BT_UART_RX     | Digital In (UART)  | ESP32-S31 (GPIO17)| ESP32 AT Commands      |
-| 11  | BT_EN          | Digital In (Reset) | ESP32-S31 (GPIO16)| Power-Down & Reset     |
-| 12  | GND            | Ground (0V)        | GND_PWR Plane     | RF Shield Ground       |
-+-----+----------------+--------------------+-------------------+------------------------+
++---------------------------------------------------------------------------------------------------------------+
+| HEADER J5: MOLEX MICRO-LOCK PLUS 4-PIN VERTICAL (505568-0471) - UPS BATTERY & THERMISTOR                       |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Connected to        | Function & Protection   |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Cell +)| AWG22 0.34² | BQ24075 BAT Pin     | Battery Charge/Discharge|
+|  2  | GND_PWR        | Power Ground (Cell -)    | AWG22 0.34² | GND_PWR Plane       | Battery Negative Lead   |
+|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | ESP32-S3 (Pin 25)   | 10k NTC Temp Sensor     |
+|  4  | GND_PWR        | Sensor Ground (0V)       | AWG26 0.14² | GND_PWR Plane       | NTC Return Ground       |
+| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
+| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
+
+#### 3.2.4 Header J4: External Enclosure RGB Smart-LED (Molex Micro-Lock Plus 1.25mm 3-Pin Vertical)
+Drives an optional external status indicator LED located on the housing face or dashboard:
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| HEADER J4: MOLEX MICRO-LOCK PLUS 3-PIN VERTICAL (505568-0371) - EXTERNAL STATUS RGB LED                       |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Connected to        | Function & Protection   |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  1  | VCC_5V         | +5.0V DC (Power Out)     | AWG24 0.22² | 5V Power Plane      | LED Operating Voltage   |
+|  2  | RGB_LED_DATA   | Digital Out (WS2812B DIN)| AWG26 0.14² | ESP32-S3 (Pin 28)   | Serial LED Data Line    |
+|  3  | GND_PWR        | Power Ground (0V)        | AWG24 0.22² | GND_PWR Plane       | LED Ground              |
+| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
+| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+```
+
+#### 3.2.5 Header J7: Spare USB Port 7 (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
+Exposes Downstream Port 7 of the USB2517I Hub for future modular expansions (e.g. cellular modem or dashcam):
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| HEADER J7: MOLEX MICRO-LOCK PLUS 4-PIN VERTICAL (505568-0471) - SPARE USB 2.0 PORT 7                          |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Connected to        | Function & Protection   |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+|  1  | VCC_5V         | +5.0V DC (Power Out)     | AWG22 0.34² | 5V Power Plane      | USB VBUS 5V Supply      |
+|  2  | RES_USB_DM     | USB 2.0 D- (Differential)| AWG28 0.08² | USB2517I (Pin 60)   | Port 7 USB Data Minus   |
+|  3  | RES_USB_DP     | USB 2.0 D+ (Differential)| AWG28 0.08² | USB2517I (Pin 61)   | Port 7 USB Data Plus    |
+|  4  | GND_PWR        | Power Ground (0V)        | AWG22 0.34² | GND_PWR Plane       | USB Ground              |
+| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
+| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
++-----+----------------+--------------------------+-------------+---------------------+-------------------------+
+```
+
+#### 3.2.6 Port J3: USB Type-C Service & Flash Port (16-Pin SMD Receptacle)
+Mounted on the front panel for benchtop debugging, firmware flashing, and configuration:
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| PORT J3: USB TYPE-C 16-PIN RECEPTACLE (HRO TYPE-C-31-M-12) - SERVICE & DFU FLASH PORT                         |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Connected to        | Function & Specification              |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+| A1  | GND_PWR        | Power Ground (0V)        | GND_PWR Plane       | USB-C System Ground                   |
+| A4  | USBC_VBUS      | +5.0V DC (Power In)      | LM66100 Diode (D3)  | 5V USB Bus Supply (Dual-Power Sink)   |
+| A5  | CC1            | Config Channel 1         | 5.1 kΩ Pull-Down    | UFP Discovery & 5V/3A Power Request   |
+| A6  | USBC_DP        | USB 2.0 High-Speed D+    | USB2517I Hub Pin 9  | Upstream USB Data Line Plus           |
+| A7  | USBC_DM        | USB 2.0 High-Speed D-    | USB2517I Hub Pin 8  | Upstream USB Data Line Minus          |
+| A8  | CC2            | Config Channel 2         | 5.1 kΩ Pull-Down    | UFP Discovery & 5V/3A Power Request   |
+| A9  | USBC_VBUS      | +5.0V DC (Power In)      | LM66100 Diode (D3)  | 5V USB Bus Supply (Dual-Power Sink)   |
+| A12 | GND_PWR        | Power Ground (0V)        | GND_PWR Plane       | USB-C System Ground                   |
+| SH1 | GND_SHIELD     | Shield Ground            | Housing Shield      | EMI Enclosure Solder Retention Left   |
+| SH2 | GND_SHIELD     | Shield Ground            | Housing Shield      | EMI Enclosure Solder Retention Right  |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+```
+
+#### 3.2.7 Slot J2: MicroSD Card Reader (Hirose DM3D-SF 9-Pin Push-Pull)
+Provides 4-Bit High-Speed SDIO connection to the ESP32-S3 for uninterrupted telemetry logging:
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| CARD SLOT J2: HIROSE DM3D-SF PUSH-PULL MICROSD SOCKET (4-BIT SDIO)                                            |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+| Pin | Signal Name    | Signal Type / Level      | Connected to        | Function & Specification              |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+|  1  | SD_DAT2        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 34)   | SDIO Data Line 2 (10k Pull-Up)        |
+|  2  | SD_DAT3        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 38)   | SDIO Data Line 3 / Card Select        |
+|  3  | SD_CMD         | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 36)   | SDIO Command / Response Line          |
+|  4  | VCC_3V3        | Power In (+3.3V DC)      | 3.3V LDO Rail       | MicroSD Power Supply (100nF+10µF)     |
+|  5  | SD_CLK         | Digital Out (Clock)      | ESP32-S3 (Pin 35)   | SDIO Bus Clock (up to 40 MHz)         |
+|  6  | GND_PWR        | Ground (0V)              | GND_PWR Plane       | Supply Ground                         |
+|  7  | SD_DAT0        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 37)   | SDIO Data Line 0                      |
+|  8  | SD_DAT1        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 33)   | SDIO Data Line 1                      |
+|  9  | SD_CD          | Digital In (Active Low)  | ESP32-S3 (Pin 39)   | Card Detect Switch (Card Inserted)    |
+| SH  | GND_PWR        | Enclosure Shield         | GND_PWR Plane       | 3x Ground Retention Pads (SH1-SH3)    |
++-----+----------------+--------------------------+---------------------+---------------------------------------+
+```
+
+---
+
+### 3.3 Microchip USB2517I-JZX 7-Port Hub Architecture (`U8`)
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| MICROCHIP USB2517I-JZX (QFN-64): 7-PORT HIGH-SPEED USB 2.0 HUB PORT MAPPING                                   |
++----------+--------------------+-----------------------+---------------------+---------------------------------+
+| Port     | Signal Pins (D-/D+)| Nets                  | Target Component    | Function & Data Stream          |
++----------+--------------------+-----------------------+---------------------+---------------------------------+
+| Upstream | Pin 8 / Pin 9      | USBC_DM / USBC_DP     | Service Port J3     | Host Connection (PC / Tablet)   |
++----------+--------------------+-----------------------+---------------------+---------------------------------+
+| Port 1   | Pin 16 / Pin 17    | ESP_USB_DM / ESP_USB_DP| ESP32-S3 (Pin 13/14)| Native USB CDC, DFU & WebUSB    |
+| Port 2   | Pin 24 / Pin 25    | BUS1_DM / BUS1_DP     | Header J6 (Pin 3/4) | Front Node PCBA 05              |
+| Port 3   | Pin 32 / Pin 33    | BUS2_DM / BUS2_DP     | Header J6 (Pin 7/8) | Saddlebag Pod 1 PCBA 03 (Left)  |
+| Port 4   | Pin 40 / Pin 41    | BUS3_DM / BUS3_DP     | Header J6 (Pin 11/12)| Saddlebag Pod 2 PCBA 03 (Right) |
+| Port 5   | Pin 48 / Pin 49    | BUS4_DM / BUS4_DP     | Header J6 (Pin 15/16)| Rear Radar PCBA 08 (MR20 UART)  |
+| Port 6   | Pin 56 / Pin 57    | BT_USB_DM / BT_USB_DP | QCC3084 (Pin 13/14) | USB Audio Class 2.0 Helmet Audio|
+| Port 7   | Pin 60 / Pin 61    | RES_USB_DM / RES_USB_DP| Header J7 (Pin 2/3) | Spare USB Port for Expansions   |
++----------+--------------------+-----------------------+---------------------+---------------------------------+
+| Clock/RST| Pin 2: RESET_N (100k Pull-Up) | Pin 4/5: XTALIN/XTALOUT linked to 24.000 MHz Crystal Y2 (18pF Caps)       |
++----------+----------------------------------------------------------------------------------------------------+
+```
+
+---
+
+### 3.4 Qualcomm QCC3084 Bluetooth 5.4 Audio SoC Module (`U9`)
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| QUALCOMM QCC3084 (14-PIN MODULE WITH INTEGRATED CERAMIC ANTENNA) - SYSTEM PINOUT                              |
++-----+----------------+--------------------+-------------------+-----------------------------------------------+
+| Pin | Signal Name    | Signal Type        | Connected to      | Function & Protocol                           |
++-----+----------------+--------------------+-------------------+-----------------------------------------------+
+|  1  | VCC_3V3        | Power In (+3.3V)   | 3.3V Power Rail   | Module Operating Voltage                      |
+|  2  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF and System Ground                          |
+|  3  | I2S_MCLK       | Digital In (Clock) | ESP32-S3 (Pin 12) | I2S Master Clock (12.288 MHz)                 |
+|  4  | I2S_BCLK       | Digital In (BitClk)| ESP32-S3 (Pin 30) | I2S Bit Clock (3.072 MHz)                     |
+|  5  | I2S_WS         | Digital In (LRCK)  | ESP32-S3 (Pin 32) | I2S Word Select / Frame Sync (48 kHz)         |
+|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S3 (Pin 15) | Stereo PCM Audio Stream to QCC3084            |
+|  7  | I2S_DIN        | Digital Out (Mic)  | ESP32-S3 (Pin 16) | HFP Microphone Stream to ESP32 DSP            |
+|  8  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF Shield Ground                              |
+|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S3 (Pin 11) | QCC3084 Telemetry and Status                  |
+| 10  | BT_UART_RX     | Digital In (UART)  | ESP32-S3 (Pin 10) | ESP32 AT Commands                             |
+| 11  | BT_EN          | Digital In (Reset) | ESP32-S3 (Pin 9)  | Power-Down & Hardware Reset                   |
+| 12  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF Shield Ground                              |
+| 13  | BT_USB_DM      | USB 2.0 D- (Data)  | USB2517I (Pin 56) | USB Audio Class 2.0 High-Res Stream Minus     |
+| 14  | BT_USB_DP      | USB 2.0 D+ (Data)  | USB2517I (Pin 57) | USB Audio Class 2.0 High-Res Stream Plus      |
++-----+----------------+--------------------+-------------------+-----------------------------------------------+
+```
+
+---
+
+### 3.5 Quad Automotive eFuse Smart Switch (`U12`)
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| QUAD AUTOMOTIVE EFUSE (QFN-20): SOLID-STATE LOAD SWITCH CHANNEL ASSIGNMENTS                                   |
++-------+--------------------+--------------------+--------------------+----------------------------------------+
+| Chan. | Input Pin          | Output Pin         | Net Name           | Protection & Allocation                |
++-------+--------------------+--------------------+--------------------+----------------------------------------+
+| In    | Pin 1, 2           | -                  | KL30_IN            | Vehicle Main +12V DC Supply            |
+| CH 1  | -                  | Pin 5              | VBUS_FRONT         | Front Node Feed (Current Limit: 5.0A)  |
+| CH 2  | -                  | Pin 6              | VBUS_POD1          | Pod 1 Feed (Current Limit: 2.5A)       |
+| CH 3  | -                  | Pin 7              | VBUS_POD2          | Pod 2 Feed (Current Limit: 2.5A)       |
+| CH 4  | -                  | Pin 8              | VBUS_RADAR         | Rear Radar Feed (Current Limit: 1.5A)  |
+| GND   | Pin 10, EP         | -                  | GND_PWR            | Thermal Ground Pad                     |
++-------+--------------------+--------------------+--------------------+----------------------------------------+
+```
+
+---
+
+### 3.6 ESP32-S3-WROOM-1U (`U2`) Complete Pinout Matrix
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| ESP32-S3-WROOM-1U (41-PIN MODULE) PINOUT & GPIO ALLOCATION ON PCBA 01                                         |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+| Pin | Signal Name    | ESP32 GPIO           | Peripheral / IC    | Function & Description                     |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|  1  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
+|  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Operating Voltage ESP32-S3                 |
+|  3  | ESP_EN         | CHIP_PU              | RC Network/Button  | Hardware Enable / Chip Reset               |
+|  4  | SPI_SCK        | GPIO 12 (FSPI CLK)   | SX1262 LoRa (Pin20)| LoRa SPI Bus Clock                         |
+|  5  | KL15_SENSE     | GPIO 4               | Voltage Divider    | Ignition Sense & Wake-Up                   |
+|  6  | SPI_MISO       | GPIO 13 (FSPI MISO)  | SX1262 LoRa (Pin18)| LoRa SPI Data In from Transceiver          |
+|  7  | SPI_MOSI       | GPIO 11 (FSPI MOSI)  | SX1262 LoRa (Pin19)| LoRa SPI Data Out to Transceiver           |
+|  8  | UART_TXD0      | U0TXD                | Debug Header       | Serial Console TX (115200 Baud)            |
+|  9  | BT_EN          | GPIO 1               | QCC3084 (Pin 11)   | Bluetooth Module Reset / Power-Down        |
+| 10  | BT_UART_RX     | GPIO 2               | QCC3084 (Pin 10)   | Bluetooth AT Commands RX                   |
+| 11  | BT_UART_TX     | GPIO 3               | QCC3084 (Pin 9)    | Bluetooth Telemetry / Status TX            |
+| 12  | I2S_MCLK       | GPIO 0               | QCC3084 & ES8388   | I2S Audio Master Clock (12.288 MHz)        |
+| 13  | ESP_USB_DM     | GPIO 19 (USB D-)     | USB2517I (Pin 16)  | Native USB CDC / WebUSB D-                 |
+| 14  | ESP_USB_DP     | GPIO 20 (USB D+)     | USB2517I (Pin 17)  | Native USB CDC / WebUSB D+                 |
+| 15  | I2S_DOUT       | GPIO 17 (I2S DOUT)   | QCC3084 & ES8388   | I2S PCM Audio Out (DSP Mix to Headsets)    |
+| 16  | I2S_DIN        | GPIO 18 (I2S DIN)    | QCC3084 & ES8388   | I2S PCM Audio In (Microphone Streams)      |
+| 17  | I2C_SDA        | GPIO 8 (I2C SDA)     | BMI270 & ES8388    | I2C Data Line Sensor & Codec               |
+| 18  | I2C_SCL        | GPIO 9 (I2C SCL)     | BMI270 & ES8388    | I2C Clock Line Sensor & Codec              |
+| 19  | LORA_DIO1      | GPIO 14              | SX1262 LoRa (Pin15)| LoRa Packet Rx/Tx Interrupt                |
+| 20  | LORA_BUSY      | GPIO 21              | SX1262 LoRa (Pin14)| LoRa Transceiver Busy Indicator            |
+| 21  | CAN_TX         | GPIO 5               | TCAN334G (Pin 1)   | CAN-FD Transmit Data                       |
+| 22  | CAN_RX         | GPIO 6               | TCAN334G (Pin 4)   | CAN-FD Receive Data                        |
+| 23  | LORA_RST       | GPIO 7               | SX1262 LoRa (Pin 1)| LoRa Transceiver Hardware Reset            |
+| 24  | LORA_NSS       | GPIO 10 (FSPI CS)    | SX1262 LoRa (Pin21)| LoRa SPI Chip Select                       |
+| 25  | BAT_NTC        | GPIO 15 (ADC2_CH4)   | Header J5 (Pin 3)   | UPS Battery NTC Temperature Sensing        |
+| 26  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
+| 27  | ESP_BOOT       | GPIO 0 (Boot Mode)   | Pushbutton SW1     | Bootloader Activation on Reset              |
+| 28  | RGB_LED_DATA   | GPIO 48              | Header J4 & D1     | WS2812B RGB Smart-LED Data Line            |
+| 29  | UART_RXD0      | U0RXD                | Debug Header       | Serial Console RX                           |
+| 30  | I2S_BCLK       | GPIO 16 (I2S BCLK)   | QCC3084 & ES8388   | I2S Bit Clock (3.072 MHz)                  |
+| 31  | BAT_SENSE      | GPIO 10 (ADC1_CH9)   | BQ24075 BAT Pin    | Analog UPS Battery Voltage Monitoring       |
+| 32  | I2S_WS         | GPIO 47 (I2S WS)     | QCC3084 & ES8388   | I2S Word Select / Frame Sync (48 kHz)      |
+| 33  | SD_DAT1        | GPIO 33 (SDIO D1)    | MicroSD J2 (Pin 8)  | MicroSD 4-Bit Data Line 1                   |
+| 34  | SD_DAT2        | GPIO 34 (SDIO D2)    | MicroSD J2 (Pin 1)  | MicroSD 4-Bit Data Line 2                   |
+| 35  | SD_CLK         | GPIO 35 (SDIO CLK)   | MicroSD J2 (Pin 5)  | MicroSD Bus Clock                           |
+| 36  | SD_CMD         | GPIO 36 (SDIO CMD)   | MicroSD J2 (Pin 3)  | MicroSD Command / Response Line             |
+| 37  | SD_DAT0        | GPIO 37 (SDIO D0)    | MicroSD J2 (Pin 7)  | MicroSD 4-Bit Data Line 0                   |
+| 38  | SD_DAT3        | GPIO 38 (SDIO D3)    | MicroSD J2 (Pin 2)  | MicroSD 4-Bit Data Line 3                   |
+| 39  | SD_CD          | GPIO 39              | MicroSD J2 (Pin 9)  | Card Detect (MicroSD Card Inserted)         |
+| 40  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
+| 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Central Thermal Ground Pad                  |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+```
+
+---
 
 ---
 

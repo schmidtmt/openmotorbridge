@@ -12,27 +12,30 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | ESP32-S31-WROOM-1U | Espressif Systems | SMD Modul | C2913200 | Haupt-MCU (Dual-Core RISC-V @ 320 MHz, 128-bit SIMD AI-Beschleuniger, 16 MB Flash, 8 MB PSRAM) |
-| **U2** | LM5164-Q1 | Texas Instruments | SOIC-8-EP | C2843477 | Automotive 65V/72V Synchronous Buck Converter |
-| **U3** | BQ24075RGTR | Texas Instruments | VQFN-16 | C15464 | Dynamisches Power-Path Management & LiPo-Lader mit TS |
-| **U4** | BMI270 | Bosch Sensortec | LGA-14 | C2836813 | 6-Achsen IMU für Schräglagen- & Bewegungserkennung |
-| **U5** | ES8388 | Everest Semi | QFN-28 | C365736 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
-| **U6** | TCAN334GDCNR | Texas Instruments | SOT-23-8 | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault) |
-| **U7** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 USV-gepuffert) |
-| **U8** | LM5050-Q1 | Texas Instruments | SOT-23-6 (B.Cu)| C111394 | Automotive Ideal-Diode Controller für Dual-Power Input OR-ing (12V Bordnetz vs. USB-PD Sink) |
+| **U1** | LM5164-Q1 | Texas Instruments | SOIC-8-EP | C2843477 | Automotive 65V/72V Synchronous Buck Converter |
+| **U2** | ESP32-S3-WROOM-1U | Espressif Systems | SMD Modul | C2913200 | Haupt-MCU (Dual-Core Xtensa LX7 @ 240 MHz, 16 MB Flash, 8 MB Octal-PSRAM) |
+| **U3** | ES8388 | Everest Semi | QFN-28 (B.Cu) | C365736 | 24-Bit Stereo Audio Codec (I2S ADC/DAC) |
+| **U5** | BMI270 | Bosch Sensortec | LGA-14 (B.Cu) | C2836813 | 6-Achsen IMU für Schräglagen- & Bewegungserkennung |
+| **U6** | TCAN334G | Texas Instruments | SOIC-8 (B.Cu) | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault Protection) |
+| **U8** | USB2517I-JZX | Microchip | QFN-64 | C136706 | Industrial 7-Port High-Speed USB 2.0 Hub Controller (-40°C...+85°C) |
 | **U9** | Qualcomm QCC3084 | Qualcomm | SMD Modul (13x18mm) | C-Qualcomm | Bluetooth 5.4 Audio SoC (Dual-A2DP, LE Audio Auracast, HFP 1.8 HD Voice) |
-| **U10** | TPS7A0533 | Texas Instruments | SOT-23-5 | C2845350 | 3.3V Ultra-Low-Noise LDO für analoge Signal- & Audio-Speisung |
+| **U10** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 USV-gepuffert) |
+| **U11** | TPS7A0533 | Texas Instruments | SOT-23-5 (B.Cu)| C2845350 | 3.3V Ultra-Low-Noise LDO für analoge Signal- & Audio-Speisung |
+| **U12** | TPS25921 / Quad eFuse | Texas Instruments | QFN-20 | C2843580 | Quad Automotive eFuse Smart Switch (getrennte Absicherung Front, Pod 1, Pod 2, Radar) |
+| **D3** | LM66100DCKR | Texas Instruments | SOT-23-6 (B.Cu)| C443274 | Automotive Ideal-Diode für verlustarmes Dual-Power OR-ing (12V Bordnetz vs. USB-C 5V) |
+| **D1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | Onboard RGB Status-LED für optische Betriebsmodusanzeige |
 | **SW1** | TS-1187A-C-A-B | C&K / Omron | SMD Taster | C318884 | Hardware Pairing- & Reset-Taster (3s Pair, 10s Purge) |
-| **D1** | SMBJ33CA | Littelfuse | DO-214AA (SMB) | C87848 | TVS-Diode (33 V Standoff, 53.3 V max Clamping) |
-| **F1** | MF-MSMF050-2 | Bourns | 1812 SMD | C22668 | Rückstellbare PPTC-Sicherung (500 mA Hold / 1.0 A Trip) |
-| **LED1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | RGB Status-LED für optische Betriebsmodusanzeige |
-| **J1** | DTM13-6P Header | TE Connectivity | Automotive 6P | Kundenteil | Kabel 1: Automotive Deutsch DTM 6-Pin Schnittstelle (Bordnetz & CAN: KL30, KL15, GND, CAN_H, CAN_L, Schirm) |
-| **J_PERIPH** | 16-Pin Automotive Header | TE Connectivity / Amphenol | Automotive 16P | Kundenteil | Kabel 2: OMB Peripherie-Bus (4 Stränge à 4 Pins: Front 60W, Pod 1 30W, Pod 2 30W, Radar 12V) |
-| **J2** | DM3D-SF MicroSD Slot | Hirose / Korean Hro | SMD Push-Pull | C266624 | 4-Bit SDIO Speicherkarte für Tour-Logging |
-| **J_BAT** | Molex Micro-Fit 3.0 2P | Molex | SMD Header | C289110 | Steckverbindung zum 2.200 mAh LiPo Pufferakku |
+| **Y2** | 24.000 MHz Crystal | Murata / Abracon | SMD 3225-4 | C38378 | 24.000 MHz Quarz für USB2517I USB-Hub |
+| **J1** | 505568-0671 | Molex | Micro-Lock Plus 1.25mm 6P Vert.| C2897372 | Kabel 1: Bordnetz & CAN-Bus (KL30, KL15, GND, CAN_H, CAN_L, Schirm) |
+| **J6** | 90814-0016 | Molex | Picoflex 1.27mm 16P Vert. SMD | C2901234 | Kabel 2: OMB 4-Kanal Peripherie-Bus (Front 60W, Pod 1 30W, Pod 2 30W, Radar 12V) |
+| **J5** | 505568-0471 | Molex | Micro-Lock Plus 1.25mm 4P Vert.| C2897370 | USV-Akku Schnittstelle (BAT+, GND, 10k NTC Thermistor, GND) |
+| **J4** | 505568-0371 | Molex | Micro-Lock Plus 1.25mm 3P Vert.| C2897369 | Externe Gehäuse-RGB-Status-LED (5V, WS2812B DIN, GND) |
+| **J7** | 505568-0471 | Molex | Micro-Lock Plus 1.25mm 4P Vert.| C2897370 | Reserve USB 2.0 Port 7 (5V, D-, D+, GND) |
+| **J3** | TYPE-C-31-M-12 | Korean HRO | USB-C 16-Pin SMD Receptacle | C2765186 | Front Service-, DFU-Flash- & Diagnose-Port (USB 2.0 High-Speed) |
+| **J2** | DM3D-SF | Hirose | SMD Push-Pull (B.Cu) | C266624 | 4-Bit High-Speed SDIO MicroSD-Kartenleser für Tour-Logging & Offline-Karten |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | LoRa 868 MHz U.FL Buchse zu Taoglas FXP895 im Deckel |
 
-*(Hinweis: In v10.0 entfällt der frühere UWB-Transceiver DW3110 und ANT2 ersatzlos. Die Daten- und Audioübertragung erfolgt über den geschirmten 4-Draht Automotive-Bus sowie den integrierten Qualcomm QCC3084 BT 5.4 Audio-SoC).*
+*(Hinweis: Alle Platinen-Steckverbinder J1, J6, J5, J4, J7 ragen vertikal nach oben [Pointing UP] in den Gehäuse-Kabelkanal, sodass keine seitlichen Biegeschleifen entstehen und der Slide-In Schlitten vibrationsfrei entnehmbar bleibt).*
 
 ---
 
