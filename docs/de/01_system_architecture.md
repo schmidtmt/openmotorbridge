@@ -234,7 +234,7 @@ Führt 4 autarke Systemzweige (jeweils 4 Adern: `VCC`, `GND`, `D+`, `D-`) und ve
 | **Strang 1 (Front-Backbone)** | 4-Pin Automotive Sealed | **Front-Node & Cockpit** (PCBA 05) | **60W USB-PD** (`VBUS_60W`, AWG18), `GND` (AWG18), `USB_D+` / `USB_D-` (AWG26 verdrillt) |
 | **Strang 2 (Koffer Links)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 1** (Sena / Cardo / OMM) | **30W USB-PD** (`POD1_VBUS`, AWG20), `POD1_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
 | **Strang 3 (Koffer Rechts)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 2** (Cardo / Sena / OMM) | **30W USB-PD** (`POD2_VBUS`, AWG20), `POD2_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
-| **Strang 4 (Heck-Radar)** | Binder M5 4-Pin IP67 | **Heck-Radar MR20** (PCBA 08) | **12V geschaltet** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), `CAN_H`/`TX`, `CAN_L`/`RX` |
+| **Strang 4 (Heck-Radar)** | Binder M5 4-Pin IP67 | **Heck-Radar MR20** (PCBA 08) | **12V geschaltet** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
 
 ### 4.2 Universal Front-Node (PCBA 05) Cockpit-Schnittstellen (60W Power Budget)
 Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und wird über Strang 1 des Backbone-Kabels mit bis zu **60W USB-PD** versorgt:
@@ -392,7 +392,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 
 ### 5.10 Apple Find My & Google Find My Device Schwarmortung (Dual-Beaconing)
 * **Globale Ortung ohne SIM-Karte & laufende Gebühren:**
-  * Im Standby / Deep Sleep sendet der ESP32-S3 im Zeitmultiplex abwechselnd **Apple Find My (FMNP)** und **Google Find My Device (FMDN)** BLE-Werbepakete (alle 2,0 Sekunden, Sendedauer ca. $2{,}5\,\text{ms}$).
+  * Im Standby / Deep Sleep sendet der ESP32-S31 im Zeitmultiplex abwechselnd **Apple Find My (FMNP)** und **Google Find My Device (FMDN)** BLE-Werbepakete (alle 2,0 Sekunden, Sendedauer ca. $2{,}5\,\text{ms}$).
   * Über **~1,5 Mrd. iPhones und ~3 Mrd. Android-Smartphones** weltweit wird das Motorrad bei Diebstahl selbst in Tiefgaragen und fremden Städten anonym und hochpräzise geortet.
 * **Autarkes USV-Powermanagement:**
   * Der mittlere Ruhestrom des Dual-Beaconings liegt bei nur ca. **$15\,\mu\text{A}$**.
@@ -410,12 +410,11 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * Der automatische Wechsel in die Cockpit-Ansicht erfolgt **strikt einmalig auf der steigenden Flanke** des Ladebeginns. Manuelle Navigationen zu anderen Tabs werden respektiert (User Override Protection).
 * **Systemweite Hochfrequenz-Architektur (Die 5 Funkbänder der OpenMotorBridge):**
   1. **Automotive 4-Draht USB-PD & USB 2.0 Backbone (Kabelgebunden):** Hochrobuster physischer Bus (`VBUS`, `GND`, `D+`, `D-`) zwischen Zentralbox, Front-Node und den Koffer-Pods. Ersetzt das frühere UWB-Funkbackbone vollständig: bis zu 60W USB-PD Ladeleistung, latenzfreie USB 2.0 Audio- und Steuerdaten, 100 % immun gegen Funkschatten durch Regenkombis, nasses Gepäck oder Alukoffer.
-  2. **Heck 5.9 GHz V2X & 77 GHz mmWave:** Externe 5.9 GHz V2X-Patchantenne (C-V2X / DSRC) am Heck plus Wheeltec MR20 mmWave Radar für 360°-Umfeldüberwachung und Notfall-Kollisionsstrobe.
-  3. **Front 5 GHz Wi-Fi:** Dedizierter High-Speed Funklink am Front-Knoten für drahtloses Apple CarPlay und Android Auto (Headless CP2AA Bridge).
-  4. **2.4 GHz Audio & Konnektivität:**
-     * *Zentralbox:* Dedizierter Qualcomm HD-Bluetooth Audio-SoC (QCC3084) mit Dual-A2DP und LE Audio / Auracast (synchroner Audio-Mix für Fahrer- und Sozius-Helm) samt HFP-Telephonie-Engine; ESP-internes BLE rein für PWA Dashboard; Wi-Fi für Track-Upload und Handy-Proxy.
-     * *Front-Node:* BLE für Action-Cam Steuerung (GoPro, Insta360, DJI).
-  5. **LoRa 868 MHz (Semtech SX1262):** 3-Kanal-Langstrecken-Backbone zwischen den Fahrzeugen (Public Announcement, Private Session Group, Micro-Cluster/FOB-Pager) mit kilometerweiter Reichweite.
+  2. **Heck 5 GHz V2X & 77 GHz mmWave:** ESP32-C5 mit 5 GHz Raw-Packet-Injection (802.11p OCB) für fahrzeugübergreifende V2X-Warnmeldungen (CAM / DENM) plus Wheeltec MR20 mmWave Radar für 360°-Umfeldüberwachung und Notfall-Kollisionsstrobe.
+  3. **Front 5 GHz / 6 GHz Wi-Fi (C5 / E22):** Dedizierter High-Speed Funklink am Front-Knoten für drahtloses Apple CarPlay und Android Auto (10 cm Line-of-Sight zum Smartphone) sowie High-Speed Dashcam-Videosync. Vollständig befreit von BLE-Overhead.
+  4. **2.4 GHz Audio & Geometrischer BLE-Master:**
+     * *Zentralbox:* Dedizierter Qualcomm HD-Bluetooth Audio-SoC (QCC3084) mit Dual-A2DP und LE Audio / Auracast (synchroner Audio-Mix für Fahrer- und Sozius-Helm) samt HFP-Telephonie-Engine. Der **ESP32-S31 fungiert als zentraler geometrischer BLE-Master** mit externer Gehäuse-U.FL-Antenne und bündelt sämtliche Peripherie (OEM-Adapter in beiden Pods, Lenkertaster, Action-Cam, Keyfob, TPMS und PWA Dashboard). Das interne Wi-Fi des S31 ist im Fahrbetrieb deaktiviert, um jegliche HF-Interferenz mit dem QCC3084 zu verhindern.
+  5. **LoRa 868 MHz (Semtech SX1262):** 3-Kanal-Langstrecken-Backbone zwischen den Fahrzeugen (Public Announcement, Private Session Group, Micro-Cluster/FOB-Pager) mit kilometerweiter Reichweite direkt an der USV-Schiene.
 
 ### 5.12 Kognitive Cockpit-Entlastung & Stille Absicherung im Hintergrund
 * **Strikte Grenzziehung: Wann Automatisierung eingreift - und wann sie schweigt:**
@@ -468,7 +467,7 @@ OpenMotorBridge besitzt für erweiterte Telematik- und Community-Funktionen eine
 
 ### 6.1 Der physische Übertragungsweg: Warum BLE / USB statt Wi-Fi genutzt wird
 * **Physische Wi-Fi-Exklusivität:** Während des Betriebs von drahtlosem Android Auto oder Apple CarPlay ist die WLAN-Schnittstelle des Smartphones mit dem 5-GHz-WLAN des COTS-Dongles belegt. Das Smartphone kann sich hardwarebedingt nicht gleichzeitig mit einem 2,4-GHz-WLAN des ESP32 verbinden.
-* **Unterbrechungsfreier Datenkanal:** Die Übertragung zwischen OpenMotorBridge (ESP32-S3) und dem Smartphone erfolgt daher **strikt über Bluetooth Low Energy (WebBLE / RFCOMM)** oder über das USB-Kabel am Front-Node. Bluetooth und Wi-Fi laufen auf getrennten Funkstacks völlig störungsfrei parallel.
+* **Unterbrechungsfreier Datenkanal:** Die Übertragung zwischen OpenMotorBridge (ESP32-S31) und dem Smartphone erfolgt daher **strikt über Bluetooth Low Energy (WebBLE / RFCOMM)** oder über das USB-Kabel am Front-Node. Bluetooth und Wi-Fi laufen auf getrennten Funkstacks völlig störungsfrei parallel.
 
 ### 6.2 Der Android Internet-Uplink: Layer-5 SOCKS5-Relay, OpenTrafficMap & Waze "Auto-Klick"
 Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mächtige Integrationsmöglichkeiten, die auf iOS durch Apples Sandbox-Richtlinien blockiert werden:

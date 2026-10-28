@@ -258,13 +258,13 @@ Carries 4 autonomous system branches (each with 4 conductors: `VCC`, `GND`, `D+`
 | **Branch 1 (Front Backbone)** | 4-Pin Automotive Sealed | **Front Node & Cockpit** (PCBA 05) | **60W USB-PD** (`VBUS_60W`, AWG18), `GND` (AWG18), `USB_D+` / `USB_D-` (AWG26 twisted) |
 | **Branch 2 (Saddlebag Left)** | 4-Pin Magnetic Breakaway IP68 | **Satellite Pod 1** (Sena / Cardo / OMM) | **30W USB-PD** (`POD1_VBUS`, AWG20), `POD1_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 twisted) |
 | **Branch 3 (Saddlebag Right)** | 4-Pin Magnetic Breakaway IP68 | **Satellite Pod 2** (Cardo / Sena / OMM) | **30W USB-PD** (`POD2_VBUS`, AWG20), `POD2_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 twisted) |
-| **Branch 4 (Rear Radar)** | Binder M5 4-Pin IP67 | **Rear Radar MR20** (PCBA 08) | **12V Switched** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), `CAN_H`/`TX`, `CAN_L`/`RX` |
+| **Branch 4 (Rear Radar)** | Binder M5 4-Pin IP67 | **Rear Radar MR20** (PCBA 08) | **12V Switched** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), `USB_D+` / `USB_D-` (AWG28 twisted) |
 
 ### 4.2 Central Box (PCBA 01) RF & Sensor Interface Architecture
 | Subsystem | Component | Location / Interface | Function |
 | :--- | :--- | :--- | :--- |
 | **LoRa 868 MHz** | Semtech SX1262 | Onboard PCBA 01 (SPI) | Long-range tactical telemetry & 24/7 theft sentry (FXP895 antenna in enclosure lid) |
-| **Automotive Backbone Hub** | USB2514B / High-Speed USB | PCBA 01 | 4-wire Automotive USB-PD & USB 2.0 host engine managing Front Node (60W) and Pods (30W) |
+| **Automotive Backbone Hub** | Microchip USB2517I / High-Speed USB | PCBA 01 | 7-port Automotive USB 2.0 host engine managing Front Node (60W), Pods (30W), Radar (12V) and QCC audio |
 | **CAN-Bus** | TI TCAN334G | Onboard PCBA 01 (Cable 1 DTM-6 pins 4/5) | Vehicle CAN telemetry & listen-only monitoring |
 | **Dual-Bluetooth** | Qualcomm QCC3084 | Top side PCBA 01 (I2S/UART) | Dedicated dual-helmet A2DP/HFP audio gateway |
 | **IMU** | Bosch BMI270 | Onboard PCBA 01 (I2C) | 6-DOF lean angle, acceleration, crash & tilt detection |
@@ -430,7 +430,7 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
 
 ### 5.10 Apple Find My & Google Find My Device Crowdsourced Tracking (Dual-Beaconing)
 * **Global Tracking with Zero SIM & Zero Monthly Fees:**
-  * In standby / deep sleep, the ESP32-S3 broadcasts alternating **Apple Find My (FMNP)** and **Google Find My Device (FMDN)** BLE advertisements every 2.0 seconds ($2{,}5\,\text{ms}$ duration).
+  * In standby / deep sleep, the ESP32-S31 broadcasts alternating **Apple Find My (FMNP)** and **Google Find My Device (FMDN)** BLE advertisements every 2.0 seconds ($2{,}5\,\text{ms}$ duration).
   * Leverages over **~1.5 billion iPhones and ~3 billion Android smartphones** globally to locate stolen motorcycles even inside underground parking garages and unfamiliar cities.
 * **Ultra-Low-Power Autonomous Endurance:**
   * Dual-beaconing draws an average current of only $\approx 15\,\mu\text{A}$.
@@ -447,9 +447,13 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
 * **Single-Edge Transition & Left-Behind Warning:**
   * Automatic switching to the Cockpit view executes **strictly once upon the rising edge** of docking. Manual navigation to other tabs is strictly respected without force-redirecting (User Override Protection).
   * If the rider turns ignition OFF (`KL15 == 0`) and walks away ($d > 3\,\text{m}$) while Qi or USB still detects a seated smartphone, the system sounds two rapid horn chirps and vibrates the Smart-Keyfob to prevent leaving expensive phones behind.
-* **Architectural Elimination of UWB (Transition to 4-Wire Automotive Bus):**
-  * In OpenMotorBridge v10.0, the experimental 6.5 GHz UWB wireless backbone is completely superseded by the ruggedized **4-wire Automotive USB-PD & USB 2.0 backbone (`VBUS`, `GND`, `D+`, `D-`)**.
-  * This provides up to 60W USB-PD charging power to all satellite nodes, delivers deterministic $< 0.2\,\text{ms}$ latency, eliminates antenna de-sensing, and enables Zero-Disassembly WebUSB flashing.
+* **System-Wide RF Architecture (The 5 RF Bands of OpenMotorBridge):**
+  1. **Automotive 4-Wire USB-PD & USB 2.0 Backbone (Wired):** Ultra-rugged physical bus (`VBUS`, `GND`, `D+`, `D-`) between Central Box, Front Node, and Pods. Completely eliminates the former UWB wireless backbone: provides up to 60W USB-PD charging, deterministic $< 0.2\,\text{ms}$ latency, zero packet loss from rider rain gear or aluminum luggage.
+  2. **Rear 5 GHz V2X & 77 GHz mmWave:** ESP32-C5 with 5 GHz raw packet injection (802.11p OCB) for inter-vehicle V2X safety alerts (CAM / DENM) combined with the Wheeltec MR20 mmWave radar for 360° proximity awareness and emergency strobe triggering.
+  3. **Front 5 GHz / 6 GHz Wi-Fi (C5 / E22):** Dedicated high-speed wireless link at the cockpit Front Node for Wireless Apple CarPlay and Android Auto (10 cm line-of-sight to smartphone) and high-speed dashcam video synchronization. Fully freed from BLE stack overhead.
+  4. **2.4 GHz Audio & Geometric BLE Master:**
+     * *Central Box:* Dedicated Qualcomm HD Bluetooth Audio SoC (QCC3084) with Dual-A2DP and LE Audio / Auracast (synchronous audio mix for rider and passenger helmets) plus HFP telephony engine. The **ESP32-S31 serves as the motorcycle's geometric BLE Master** via an external enclosure U.FL antenna, aggregating all peripheral endpoints (OEM adapters in both Pods, handlebar controls, action cam, keyfob, TPMS, and PWA dashboard). Internal S31 Wi-Fi is disabled during ride mode to prevent co-channel interference with the QCC3084.
+  5. **LoRa 868 MHz (Semtech SX1262):** 3-channel long-range inter-vehicle backbone (Public Announcement, Private Session Group, Micro-Cluster/FOB Pager) directly powered from the UPS battery rail.
 
 ### 5.12 Cognitive Cockpit Decluttering & Silent Background Protection
 * **Strict Demarcation: When Automation Acts - and When It Stays Silent:**

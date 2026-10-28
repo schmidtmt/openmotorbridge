@@ -14,7 +14,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 +-------+-------------------------------+---------------+---------+----------------------+
 | Baugruppe | Name & Funktion           | Platinenmaße  | Lagen   | Kern-ICs / Bauteile  |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 01**| **Zentralbox Main Controller** | 85 x 55 mm    | 4 Lagen | ESP32-S3-WROOM-1U, USB2517I, |
+| **PCBA 01**| **Zentralbox Main Controller** | 85 x 55 mm    | 4 Lagen | ESP32-S31-WROOM-1U, USB2517I, |
 |       | (Unter Sitzbank, Audio/USV/PD)| (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164, BQ24075,|
 |       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
 |       | Vertikal-SMD (MicroLock/Picoflex)|              |         | SX1262 LoRa, ES8388, BMI270, CAN|
@@ -101,7 +101,7 @@ Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng
 ## 3. PCBA 01: Zentralbox Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Zentralbox Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S3-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV-Lader, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
+*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV-Lader, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
 
 ![PCBA 01 Zentralbox Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Abbildung 7.1b: KiCad 3D-Render der Zentralbox-Hauptplatine Bottom mit DM3D MicroSD-Push-Pull-Slot, TI LM66100 Ideal-Dioden-OR-ing Schaltung für Dual-Power (12V Bordnetz vs. USB-C Service), BMI270 6-Achs-IMU, ES8388 Audio-Codec und TCAN334G CAN-FD Transceiver.*
@@ -118,7 +118,7 @@ Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng
 * **Kompakte Vertikal-Steckverbinder (Pointing UP):**
   * Sämtliche internen Anschlüsse sind als ultrakompakte, vertikal nach oben weisende SMT-Stecker ausgeführt. Dadurch werden Biegeschleifen an den Platinenkanten vollständig vermieden und die Kabelpeitschen laufen parallel nach oben in den Kabelkanal des Monocoque-Gehäuses ab.
 * **Bestückung Top-Layer (F.Cu):**
-  * **Hauptcontroller (`U2`):** Espressif `ESP32-S3-WROOM-1U` (Dual-Core Xtensa LX7 @ 240 MHz mit Vektor-Erweiterungen für Signalverarbeitung, 16 MB Flash, 8 MB Octal-PSRAM, U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, CAN-FD Management und PWA-Webserver.
+  * **Hauptcontroller (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz mit 128-Bit SIMD AI Engine für On-Device Audio-Signalverarbeitung und Sprachfilterung, 16 MB Flash, 8 MB Octal-PSRAM, externe U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, zentralen geometrischen BLE-Master (Lenkertaster, OEM-Adapter, Action-Cam, Keyfob, TPMS) und CAN-FD Management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 7-Port High-Speed 480 Mbps Hub mit 24.000 MHz Quarz `Y2`. Bindet alle Peripherieknoten (Front, Pod 1, Pod 2, Radar, Helm-Audio, ESP32 und Service-Port) transparent und synchron an.
   * **Dedizierter Helm-Audio-SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC Modul ($13 \times 18\,\text{mm}$ mit integrierter Keramik-Chipantenne) für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast, HFP 1.8 Wideband Telefonie und nativen USB Audio Class 2.0 Uplink zu Hub `U8`.
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 72V-Buck-Converter (erzeugt `VCC_BUCK` / 5V aus dem 12V–72V Bordnetz) und TI `BQ24075` Power-Path-Controller mit Ladeelektronik für den internen USV-Akku.
@@ -202,7 +202,7 @@ Verbindet den internen 2.200-mAh-USV-Pouch-Akku (LiFePO4 oder LiPo) mit dem BQ24
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 |  1  | BAT_PLUS       | +3.2V...+4.2V DC (Akku +)| AWG22 0.34² | BQ24075 BAT-Pin     | Akku-Lade- & Entladestrom|
 |  2  | GND_PWR        | Power-Masse (Akku -)     | AWG22 0.34² | GND_PWR Masseplane  | Batterie-Masse          |
-|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | ESP32-S3 (Pin 25)   | 10k NTC Temperaturfühler|
+|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | ESP32-S31 (Pin 25)  | 10k NTC Temperaturfühler|
 |  4  | GND_PWR        | Sensor-Masse (0V)        | AWG26 0.14² | GND_PWR Masseplane  | NTC-Rückleitung         |
 | MP1 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 1  |
 | MP2 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 2  |
@@ -219,7 +219,7 @@ Ermöglicht den Anschluss einer extern sichtbaren Gehäuse-Status-LED (z.B. im G
 | Pin | Signalname     | Signalart / Pegel        | Querschnitt | Verbunden mit       | Funktion & Schutz       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 |  1  | VCC_5V         | +5.0V DC (Power Out)     | AWG24 0.22² | 5V Power Plane      | LED-Betriebsspannung    |
-|  2  | RGB_LED_DATA   | Digital Out (WS2812B DIN)| AWG26 0.14² | ESP32-S3 (Pin 28)   | Serielles LED-Datensignal|
+|  2  | RGB_LED_DATA   | Digital Out (WS2812B DIN)| AWG26 0.14² | ESP32-S31 (Pin 28)  | Serielles LED-Datensignal|
 |  3  | GND_PWR        | Power-Masse (0V)         | AWG24 0.22² | GND_PWR Masseplane  | LED-Masse               |
 | MP1 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 1  |
 | MP2 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 2  |
@@ -267,7 +267,7 @@ Sitzt an der Gehäusefront für schnellen Werkbank-Zugriff, DFU-Flashen und Diag
 ```
 
 #### 3.2.7 Slot J2: MicroSD-Kartenleser (Hirose DM3D-SF 9-Pin Push-Pull)
-Bietet 4-Bit High-Speed SDIO Anbindung an den ESP32-S3 für unterbrechungsfreie Blackbox-Telemetrie und Offline-Karten:
+Bietet 4-Bit High-Speed SDIO Anbindung an den ESP32-S31 für unterbrechungsfreie Blackbox-Telemetrie und Offline-Karten:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
@@ -275,15 +275,15 @@ Bietet 4-Bit High-Speed SDIO Anbindung an den ESP32-S3 für unterbrechungsfreie 
 +-----+----------------+--------------------------+---------------------+---------------------------------------+
 | Pin | Signalname     | Signalart / Pegel        | Verbunden mit       | Funktion & Spezifikation              |
 +-----+----------------+--------------------------+---------------------+---------------------------------------+
-|  1  | SD_DAT2        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 34)   | SDIO Datenleitung 2 (Pull-Up 10k)     |
-|  2  | SD_DAT3        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 38)   | SDIO Datenleitung 3 / Card Select     |
-|  3  | SD_CMD         | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 36)   | SDIO Command / Response Leitung       |
+|  1  | SD_DAT2        | Digital I/O (3.3V SDIO)  | ESP32-S31 (Pin 34)  | SDIO Datenleitung 2 (Pull-Up 10k)     |
+|  2  | SD_DAT3        | Digital I/O (3.3V SDIO)  | ESP32-S31 (Pin 38)  | SDIO Datenleitung 3 / Card Select     |
+|  3  | SD_CMD         | Digital I/O (3.3V SDIO)  | ESP32-S31 (Pin 36)  | SDIO Command / Response Leitung       |
 |  4  | VCC_3V3        | Power In (+3.3V DC)      | 3.3V LDO Rail       | MicroSD Betriebsspannung (100nF+10µF) |
-|  5  | SD_CLK         | Digital Out (Clock)      | ESP32-S3 (Pin 35)   | SDIO Bus-Takt (bis 40 MHz)            |
+|  5  | SD_CLK         | Digital Out (Clock)      | ESP32-S31 (Pin 35)  | SDIO Bus-Takt (bis 40 MHz)            |
 |  6  | GND_PWR        | Masse (0V)               | GND_PWR Masseplane  | Versorgungsmasse                      |
-|  7  | SD_DAT0        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 37)   | SDIO Datenleitung 0                   |
-|  8  | SD_DAT1        | Digital I/O (3.3V SDIO)  | ESP32-S3 (Pin 33)   | SDIO Datenleitung 1                   |
-|  9  | SD_CD          | Digital In (Active Low)  | ESP32-S3 (Pin 39)   | Card Detect Schalter (Karte gesteckt) |
+|  7  | SD_DAT0        | Digital I/O (3.3V SDIO)  | ESP32-S31 (Pin 37)  | SDIO Datenleitung 0                   |
+|  8  | SD_DAT1        | Digital I/O (3.3V SDIO)  | ESP32-S31 (Pin 33)  | SDIO Datenleitung 1                   |
+|  9  | SD_CD          | Digital In (Active Low)  | ESP32-S31 (Pin 39)  | Card Detect Schalter (Karte gesteckt) |
 | SH  | GND_PWR        | Gehäuseschirmung         | GND_PWR Masseplane  | 3x Schirm- und Halte-Lötpads (SH1-SH3)|
 +-----+----------------+--------------------------+---------------------+---------------------------------------+
 ```
@@ -302,7 +302,7 @@ Der industrielle 7-Port Hub-Controller bildet das digitale Nervenzentrum der Zen
 +----------+--------------------+-----------------------+---------------------+---------------------------------+
 | Upstream | Pin 8 / Pin 9      | USBC_DM / USBC_DP     | Service-Port J3     | Host-Verbindung Laptop / Tablet |
 +----------+--------------------+-----------------------+---------------------+---------------------------------+
-| Port 1   | Pin 16 / Pin 17    | ESP_USB_DM / ESP_USB_DP| ESP32-S3 (Pin 13/14)| Nativer USB-CDC, DFU & WebUSB   |
+| Port 1   | Pin 16 / Pin 17    | ESP_USB_DM / ESP_USB_DP| ESP32-S31 (Pin 13/14)| Nativer USB-CDC, DFU & WebUSB  |
 | Port 2   | Pin 24 / Pin 25    | BUS1_DM / BUS1_DP     | Header J6 (Pin 3/4) | Front-Knoten PCBA 05            |
 | Port 3   | Pin 32 / Pin 33    | BUS2_DM / BUS2_DP     | Header J6 (Pin 7/8) | Koffer-Pod 1 PCBA 03 (Links)    |
 | Port 4   | Pin 40 / Pin 41    | BUS3_DM / BUS3_DP     | Header J6 (Pin 11/12)| Koffer-Pod 2 PCBA 03 (Rechts)   |
@@ -328,15 +328,15 @@ Der auf der Oberseite platzierte **Qualcomm QCC3084** verbindet Helme drahtlos �
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
 |  1  | VCC_3V3        | Power In (+3.3V)   | 3.3V Power Plane  | Modul-Betriebsspannung                        |
 |  2  | GND_PWR        | Masse (0V)         | GND_PWR Plane     | HF- und Systemmasse                           |
-|  3  | I2S_MCLK       | Digital In (Clock) | ESP32-S3 (Pin 12) | I2S Master-Clock (12.288 MHz)                 |
-|  4  | I2S_BCLK       | Digital In (BitClk)| ESP32-S3 (Pin 30) | I2S Bit-Clock (3.072 MHz)                     |
-|  5  | I2S_WS         | Digital In (LRCK)  | ESP32-S3 (Pin 32) | I2S Word-Select / Frame-Sync (48 kHz)         |
-|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S3 (Pin 15) | Stereo-PCM Audiodaten zum QCC3084             |
-|  7  | I2S_DIN        | Digital Out (Mic)  | ESP32-S3 (Pin 16) | HFP-Mikrofonaudio zum ESP32 DSP               |
+|  3  | I2S_MCLK       | Digital In (Clock) | ESP32-S31 (Pin 12)| I2S Master-Clock (12.288 MHz)                 |
+|  4  | I2S_BCLK       | Digital In (BitClk)| ESP32-S31 (Pin 30)| I2S Bit-Clock (3.072 MHz)                     |
+|  5  | I2S_WS         | Digital In (LRCK)  | ESP32-S31 (Pin 32)| I2S Word-Select / Frame-Sync (48 kHz)         |
+|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S31 (Pin 15)| Stereo-PCM Audiodaten zum QCC3084             |
+|  7  | I2S_DIN        | Digital Out (Mic)  | ESP32-S31 (Pin 16)| HFP-Mikrofonaudio zum ESP32 DSP               |
 |  8  | GND_PWR        | Masse (0V)         | GND_PWR Plane     | HF-Schirmmasse                                |
-|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S3 (Pin 11) | QCC3084 Telemetrie- und Statusmeldungen       |
-| 10  | BT_UART_RX     | Digital In (UART)  | ESP32-S3 (Pin 10) | ESP32 AT-Steuerbefehle                        |
-| 11  | BT_EN          | Digital In (Reset) | ESP32-S3 (Pin 9)  | Power-Down & Hardware-Reset                   |
+|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S31 (Pin 11)| QCC3084 Telemetrie- und Statusmeldungen       |
+| 10  | BT_UART_RX     | Digital In (UART)  | ESP32-S31 (Pin 10)| ESP32 AT-Steuerbefehle                        |
+| 11  | BT_EN          | Digital In (Reset) | ESP32-S31 (Pin 9) | Power-Down & Hardware-Reset                   |
 | 12  | GND_PWR        | Masse (0V)         | GND_PWR Plane     | HF-Schirmmasse                                |
 | 13  | BT_USB_DM      | USB 2.0 D- (Data)  | USB2517I (Pin 56) | USB Audio Class 2.0 High-Res Stream Minus     |
 | 14  | BT_USB_DP      | USB 2.0 D+ (Data)  | USB2517I (Pin 57) | USB Audio Class 2.0 High-Res Stream Plus      |
@@ -366,16 +366,16 @@ Die integrierte 4-Kanal-eFuse schützt die Peripherieleitungen vor Kabelkurzschl
 
 ---
 
-### 3.6 ESP32-S3-WROOM-1U (`U2`) Vollständige Pinout-Matrix
+### 3.6 ESP32-S31-WROOM-1U (`U2`) Vollständige Pinout-Matrix
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| ESP32-S3-WROOM-1U (41-PIN MODUL) PINOUT & GPIO-ZUORDNUNG AUF PCBA 01                                          |
+| ESP32-S31-WROOM-1U (41-PIN MODUL) PINOUT & GPIO-ZUORDNUNG AUF PCBA 01                                         |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 | Pin | Signalname     | ESP32 GPIO           | Peripherie / IC    | Funktion & Beschreibung                    |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 |  1  | GND_PWR        | GND                  | Systemmasse        | Power Ground                               |
-|  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Betriebsspannung ESP32-S3                  |
+|  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Betriebsspannung ESP32-S31                 |
 |  3  | ESP_EN         | CHIP_PU              | RC-Glied / Taster  | Hardware Enable / Reset                    |
 |  4  | SPI_SCK        | GPIO 12 (FSPI CLK)   | SX1262 LoRa (Pin20)| LoRa SPI Bus Takt                          |
 |  5  | KL15_SENSE     | GPIO 4               | Spannungsteiler    | Zündungsplus-Erkennung (Wake-Up)           |
@@ -417,6 +417,55 @@ Die integrierte 4-Kanal-eFuse schützt die Peripherieleitungen vor Kabelkurzschl
 | 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Zentrales Massepads & Kühlung              |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 ```
+
+---
+
+### 3.7 Systemweite Funk-Architektur, Frequenztrennung & Geometrischer BLE-Master
+
+In OpenMotorBridge v10.0 ist die drahtlose Kommunikation strikt nach **HF-Physik, geometrischem Schwerpunkt und Frequenztrennung** strukturiert:
+
+```
++---------------------------------------------------------------------------------------------------------------+
+|                            GEOMETRISCHE FUNK-TOPOLOGIE DES MOTORRADS (v10.0)                                  |
++---------------------------------------------------------------------------------------------------------------+
+|                                    [ LENKER / COCKPIT: FRONT NODE ]                                           |
+|                                       • 5 GHz / 6 GHz Wi-Fi (C5 / E22)                                        |
+|                                       • Wireless Android Auto / Apple CarPlay (10 cm)                         |
+|                                       • High-Speed Dashcam Video-Sync & PWA Webserver                         |
+|                                       • Befreit von BLE (keine Kanalüberlastung!)                             |
+|                                                       ▲                                                       |
+|                                                       │  Kabel 2 Strang 1: USB 2.0 High-Speed                 |
+|                                                       │  (480 Mbps) + 12V 60W (Picoflex 16P)                  |
+|                                                       ▼                                                       |
+|     [ POD 1 LINKS: 50 cm ]             [ ZENTRALBOX: GEOMETRISCHER SCHWERPUNKT ]        [ POD 2 RECHTS: 50 cm ]|
+|  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master (U.FL Gehäuseantenne)    • OEM-Adapter (Cardo Edge)|
+|  • In-Bag Ladeelektronik             • Bündelt BLE: Taster, Cams, Keyfob, TPMS       • In-Bag Ladeelektronik  |
+|                                      • Qualcomm QCC3084: Dual-Helm Audio (BT 5.4)                            |
+|                                      • SX1262 LoRa: 868 MHz Schwarm-Telemetrie & SOS                         |
+|                                      • S31 Wi-Fi: IM NORMALBETRIEB AUS (Null Störung)                         |
+|                                                       ▲                                                       |
+|                                                       │  Kabel 2 Strang 4: USB 2.0 High-Speed                 |
+|                                                       │  (480 Mbps) + 12V 1.5A (Picoflex 16P)                 |
+|                                                       ▼                                                       |
+|                                           [ HECK: RADAR NODE ]                                                |
+|                                       • ESP32-C5 Sub-MCU mit 5 GHz V2X                                        |
+|                                       • Wheeltec MR20 Radar & 36-LED Halo                                     |
+|                                       • 100% kabelgebundene Datenübertragung                                  |
++---------------------------------------------------------------------------------------------------------------+
+```
+
+1. **Zentralbox (PCBA 01) als geometrischer BLE-Master:**
+   * **Symmetrische Abstände:** Die Zentralbox sitzt mittig auf der Batteriebrücke unter der Sitzbank und hat zu beiden Koffer-Pods links und rechts exakt denselben kurzen Abstand von nur ca. $50\,\text{cm}$, zum Lenker ca. $90\,\text{cm}$ und zum Fahrer ca. $30\,\text{cm}$.
+   * **Dedizierte U.FL-Antenne:** Der `ESP32-S31` nutzt eine externe U.FL-Antenne im Monocoque-Gehäuse für ein verlustfreies 360°-Rundstrahlfeld über das gesamte Motorrad.
+   * **Zentrale Event-Verarbeitung:** Sämtliche Steuer- und Sensordaten (OEM-Adapter PTT-Status in beiden Koffer-Pods, BMW WonderWheel / Lenkertaster, Action-Cam Trigger, Smart Keyfob und Reifendruck TPMS) laufen direkt per BLE im `ESP32-S31` ein. Dadurch entfällt jede Bus-Latenz über USB.
+   * **Wi-Fi-Deaktivierung im Normalbetrieb:** Das interne 2,4-GHz-WLAN des `ESP32-S31` bleibt im Fahrbetrieb deaktiviert, um jegliche HF-Interferenzen mit dem direkt benachbarten Qualcomm `QCC3084` (Helm-Audio) auszuschließen.
+2. **Front Node (PCBA 05 v10) als Cockpit-WLAN-Spezialist:**
+   * **Strikte Frequenztrennung (5 GHz / 6 GHz):** Der Front-Knoten spannt das Cockpit-WLAN auf 5 GHz (bzw. 6 GHz Wi-Fi 6E via `ESP32-E22` / `ESP32-C5`) auf. Da dieses Band physikalisch weit vom 2,4-GHz-Band der Zentralbox entfernt ist, arbeiten Helm-Bluetooth und Cockpit-WLAN völlig störungsfrei parallel.
+   * **Line-of-Sight zum Smartphone:** 10 bis 20 cm Abstand zum Smartphone im Lenkerhalter ermöglichen Gigabit-Throughput für Dashcam-Downloads und verzögerungsfreies Wireless CarPlay / Android Auto Streaming.
+   * **Kein BLE-Overhead:** Der Front Node benötigt keinen eigenen BLE-Master-Stack.
+3. **Radar Node (PCBA 08 v10) mit 5 GHz V2X:**
+   * Der `ESP32-C5` nutzt seinen 5-GHz-Transceiver im Raw-Packet-Injection-Modus (802.11p OCB) für fahrzeugübergreifende **V2X-Warnmeldungen** (CAM / DENM).
+   * Die Radardaten des Wheeltec MR20 und die Trigger für den 36-LED-Halo werden zu 100 % kabelgebunden über das geschirmte Picoflex-USB-Kabel (Strang 4) mit der Zentralbox synchronisiert.
 
 ---
 
