@@ -20,9 +20,13 @@ BOARDS = [
         "pcb": os.path.join(BASE_DIR, "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb"),
         "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_main_box"),
         "outputs": [
-            ("pcba01_central_box_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.1"]),
-            ("pcba01_central_box_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.05"]),
-            ("pcba01_central_box_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.1"]),
+            ("pcba01_central_box_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.35"]),
+            ("pcba01_central_box_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.15"]),
+            ("pcba01_central_box_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.35"]),
+        ],
+        "svg_outputs": [
+            ("pcba01_layout_v10.svg", ["-l", "F.Cu,B.Cu,Edge.Cuts,F.SilkS", "--page-size-mode", "2", "--fit-page-to-board", "--exclude-drawing-sheet", "--mode-single"]),
+            ("pcba01_layout_v10_zoomed.svg", ["-l", "F.Cu,B.Cu,Edge.Cuts,F.SilkS", "--page-size-mode", "2", "--fit-page-to-board", "--exclude-drawing-sheet", "--mode-single"]),
         ],
         "aliases": [
             ("pcba01_central_box_3d.png", "kicad_3d_render.png"),
@@ -166,6 +170,15 @@ def main():
                 print(f"  ✅ Rendered & copied to docs: {fname}")
             else:
                 print(f"  ❌ Failed rendering {fname}: {res.stderr.strip() or res.stdout.strip()}")
+
+        for fname, svg_args in board.get("svg_outputs", []):
+            dest_docs = os.path.join(DOCS_PCBA_DIR, fname)
+            cmd = [KICAD_CLI, "pcb", "export", "svg"] + svg_args + ["-o", dest_docs, pcb]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode == 0 and os.path.exists(dest_docs):
+                print(f"  ✅ Exported SVG layout to docs: {fname}")
+            else:
+                print(f"  ❌ Failed exporting SVG {fname}: {res.stderr.strip() or res.stdout.strip()}")
 
         # Copy aliases
         for src_name, alias_name in board.get("aliases", []):
