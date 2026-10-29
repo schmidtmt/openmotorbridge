@@ -457,9 +457,11 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
    * **Strict Frequency Separation (5 GHz / 6 GHz):** The Front Node hosts the cockpit Wi-Fi network on 5 GHz (or 6 GHz Wi-Fi 6E via `ESP32-E22` / `ESP32-C5`). Because this frequency is physically isolated from the 2.4 GHz Central Box band, helmet Bluetooth audio and cockpit Wi-Fi coexist with zero packet collisions.
    * **Line-of-Sight to Smartphone:** 10 to 20 cm distance to the docked smartphone enables gigabit throughput for dashcam downloads and stutter-free wireless CarPlay / Android Auto streaming.
    * **Zero BLE Contention:** The Front Node does not manage any BLE connections.
-3. **Radar Node (PCBA 08 v10) with 5 GHz V2X:**
-   * The `ESP32-C5` runs in raw 802.11p OCB packet injection mode for vehicle-to-vehicle **V2X safety broadcasts** (CAM / DENM).
-   * All Wheeltec MR20 radar telemetry and 36-LED halo triggers sync deterministically over the shielded Picoflex USB harness (Branch 4) to the Central Box.
+3. **Radar Node (PCBA 08 v10) with 5.9 GHz C-ITS / V2X (ESP32-C5):**
+   * The `ESP32-C5` runs in 802.11p OCB promiscuous mode (ETSI ITS-G5 on 5.9 GHz, channels 176/180) to capture unencrypted Car-to-X broadcasts (architecture analogous to *OpenTrafficMap* / *CITS-to-go*):
+     - **SPATEM / SPaT & GLOSA:** Live traffic light phase countdowns (remaining red/green time in seconds) and Green Light Optimal Speed Advisory (GLOSA) for green-wave riding displayed in cockpit OLEDs or HUD.
+     - **CAM & DENM:** Early detection of approaching emergency vehicles (siren priority), public transit, road hazard zones, queue tails, and breakdown vehicles.
+   * All data streams (Wheeltec MR20 radar clusters, C-ITS telemetry, and 36-LED halo triggers) sync 100% hardwired over the shielded Picoflex USB harness (Cable 2 Branch 4, USB 2.0 @ 480 Mbps) to the Central Box.
 
 ---
 
@@ -741,10 +743,17 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 *Figure 7.8: 3D CAD view of the routed PCBA 08 (115 x 65 mm) with centered 61 x 51 mm radar aperture for the Wheeltec MR20 horn array, 36x WS2812B warning wing LEDs, ESP32-C5 Dual-Band Sub-MCU, and 5.9 GHz V2X ceramic patch antenna.*
 
 ### 10.1 Technical Board Specifications & Cable Link
-* **Dimensions:** $115.0 	imes 65.0 	imes 1.6\,	ext{mm}$ (2-layer FR-4 High-TG150, ENIG gold finish).
-* **Central Radar Aperture:** $61.0 	imes 51.0\,	ext{mm}$ for the Wheeltec MR20 77-GHz sensor module.
-* **Hardwired Interconnect:** Connected to Central Box via Branch 4 of the 16-Pin Automotive harness (12V switched vehicle power) and a shielded 2-wire UART link for real-time target cluster streaming (115,200 baud).
-* **5.9 GHz V2X Ceramic Patch Antenna:** Dedicated antenna chamber on the left housing flank for direct C-V2X / ITS-G5 communication.
+* **Dimensions:** $115.0 \times 65.0 \times 1.6\,\text{mm}$ (2-layer FR-4 High-TG150, ENIG gold finish).
+* **Central Radar Aperture:** $61.0 \times 51.0\,\text{mm}$ for the Wheeltec MR20 77-GHz sensor module.
+* **Cable Interconnect (Cable 2 Branch 4):** 4-conductor shielded Picoflex cable harness to Central Box (12V switched vehicle feed, GND, twisted USB 2.0 data pair `USB_D+` / `USB_D-` to Port 5 of USB2517I Hub).
+* **5.9 GHz C-ITS / ITS-G5 RF Subsystem (ESP32-C5):**
+  * Dedicated 5.9 GHz antenna chamber with ceramic patch antenna on the left housing flank for unobstructed omnidirectional reception.
+  * Operates the ESP32-C5 in 802.11p OCB promiscuous mode (ETSI ITS-G5 / 5.9 GHz channels 176 and 180) to capture unencrypted Car-to-X broadcasts (architecture analogous to *OpenTrafficMap* / *CITS-to-go*):
+    - **SPATEM / SPaT:** Real-time traffic light phases and remaining red/green countdown in seconds.
+    - **GLOSA:** Green Light Optimal Speed Advisory for seamless green-wave passage.
+    - **MAPEM:** Lane-level intersection geometry to eliminate false traffic light alerts.
+    - **CAM:** Real-time positions of emergency vehicles (siren priority), buses, trams, and connected cars.
+    - **DENM:** Decentralized environmental hazard alerts (queue tails, black ice, breakdowns, crash sites).
 
 ---
 

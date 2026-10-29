@@ -474,12 +474,22 @@ Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mä
 1. **Layer-5 SOCKS5 / Stream-Relay mit Mobilfunk-Bindung:**
    * Die Android-App bindet ihre ausgehenden Sockets explizit an die Mobilfunk-Schnittstelle (`NetworkCapabilities.TRANSPORT_CELLULAR`).
    * **Kein VPN-Konflikt mit Tailscale:** Da das Relay rein auf Anwendungsebene (L5) als unprivilegierter TCP/UDP-Stream arbeitet und **keinen** Android `VpnService`-Slot belegt, bleibt ein parallel genutztes **Tailscale** oder WireGuard (z. B. für Home Assistant / Smart-Home) zu 100 % ungestört aktiv.
-2. **V2X Car-to-X Vernetzung & OpenTrafficMap:**
-   * Der 5.9-GHz-ITS-G5-Empfänger auf PCBA 08 empfängt lokale Car-to-X-Broadcasts:
-     - **SPaT (Signal Phase and Timing):** Umschaltzeiten und Grünphasen vernetzter Lichtsignalanlagen (Ampeln).
-     - **DENM:** Akute Gefahrenmeldungen (Geisterfahrer, Glatteis, Stauende hinter unübersichtlicher Kurve).
-     - **CAM:** Positionen und Geschwindigkeiten benachbarter Fahrzeuge.
-   * OpenMotorBridge überträgt diese Daten über den 4-Draht Bus und BLE an die Companion-App, die sie über das Mobilfunknetz (4G/5G) in das **OpenTrafficMap-Projekt** einspeist und lokale Gefahren-Tiles (GeoJSON) lädt.
+2. **V2X Car-to-X Vernetzung (C-ITS / ITS-G5), Ampel-Countdown (SPaT/GLOSA) & OpenTrafficMap:**
+   * **Hardware & RF-Architektur (ESP32-C5 im 802.11p OCB-Modus):**
+     - Auf dem Heck-Knoten (PCBA 08) fungiert der **ESP32-C5** als autarker C-ITS / ITS-G5 Empfänger. Über modifizierte PHY-Promiscuous-Funktionen im 802.11p OCB-Modus (*Outside the Context of a BSS*) fängt der C5 unverschlüsselte Car-to-X Broadcasts im europäischen 5,9-GHz-ITS-Band (5855–5925 MHz, vorrangig Kanal 180 / 5900 MHz und Kanal 176 / 5880 MHz) direkt aus der Luft ab.
+     - Dieses Verfahren nutzt dieselbe quelloffene Empfänger-Architektur, wie sie durch die Open-Source-Initiative **OpenTrafficMap** und das Community-Projekt **`cits-to-go`** (Codeberg `sascha8a/cits-to-go`, u. a. dokumentiert im c't Magazin 23/2026 bzw. heise+ Ratgeber) etabliert wurde.
+   * **Empfangene Nachrichtenformate & Cockpit-Funktionen:**
+     - **SPATEM / SPaT (*Signal Phase and Timing*):** Liefert den sekundengenauen Ampelphasen-Countdown (Restrot / Restgrün) sowie **GLOSA** (*Green Light Optimal Speed Advisory* – Geschwindigkeitsempfehlung für die „Grüne Welle“, z. B. *„Auf 42 km/h reduzieren für unterbrechungsfreie Grün-Durchfahrt“*). Die Visualisierung erfolgt wahlweise auf den OLEDs der Cockpit Speaker Corner Pods, im Head-Up-Display (HUD) der PWA oder auf dem Smartphone via Android Auto / CarPlay.
+     - **MAPEM / MAP (*Intersection Topology*):** Fahrstreifengenaue Kreuzungstopologie. Ermöglicht präzise spurbezogene Filterung, sodass dem Motorradfahrer ausschließlich die Ampelphase seiner aktuell befahrenen Richtungsspur (z. B. Linksabbieger vs. Geradeaus) signalisiert wird.
+     - **CAM (*Cooperative Awareness Messages*):** Echtzeit-Positions- und Telemetriedaten benachbarter Fahrzeuge. Warnt frühzeitig vor herannahenden Einsatzfahrzeugen (Feuerwehr, Notarzt, Polizei mit Blaulichtvorrang), ÖPNV-Fahrzeugen (Bus/Tram) oder vernetzten Serienfahrzeugen (z. B. Volkswagen Car2X).
+     - **DENM (*Decentralized Environmental Notification Messages*):** Dezentrale Gefahrenmeldungen direkt aus dem Straßenverkehr (Stauende hinter unübersichtlicher Kurve, Pannen- oder Unfallfahrzeuge auf der Fahrspur, Notbremsung vorausfahrender Fahrzeuge, Glatteis/Aquaplaning, Geisterfahrer).
+     - **IVIM (*Infrastructure to Vehicle Information Messages*):** Dynamische Schilderbrücken, temporäre Geschwindigkeitsbegrenzungen und Fahrstreifen-Freigaben.
+   * **In-Vehicle Datenpipeline & Akustische Helmcues:**
+     - Die Rohdaten werden von PCBA 08 zu 100 % kabelgebunden über **Kabel 2 Strang 4 (Picoflex High-Speed USB 2.0 @ 480 Mbps)** zur Zentralbox (PCBA 01) übertragen.
+     - Der **ESP32-S31** parst die Pakete latenzfrei im FreeRTOS-Task und routet sie:
+       1. **Optisch:** An die Cockpit-Displays (Speaker Corner Pod OLEDs / PWA Dashboard).
+       2. **Akustisch via Qualcomm QCC3084:** Diskreter Audio-Chime im Helm 3 Sekunden vor Umschalten auf Grün (Startvorbereitung ohne starren Blick auf die Ampel) sowie akustische Vorwarnung bei Annäherung von Einsatzfahrzeugen.
+       3. **Schwarm-Uplink:** Über BLE / USB an die Android Companion-App (`bar.f0o.omb`), welche die Daten analog zu `CITS-to-go` ins dezentrale OpenTrafficMap-Netzwerk einspeist und lokale Gefahren-Tiles (GeoJSON) nachlädt.
 3. **Waze "Auto-Klick" & Schwarm-Automatisierung:**
    * Um die Community-Warnungen von Waze während der Fahrt ohne gefährliche Touchscreen-Bedienung zu nutzen:
    * Erkennt OMB über V2X ein relevantes Ereignis (Ampel rot, Baustelle, Unfall) oder über die 6-Achs-IMU eine Gefahrensituation (Vollbremsung $> 0{,}6\,\text{g}$, Notbremsstrobe, Sturz):

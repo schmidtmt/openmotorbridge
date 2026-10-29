@@ -499,7 +499,51 @@ The Front Node (PCBA 05) serves on **all motorcycle types** as the universal coc
 
 ---
 
-## 13. Documentation Roadmap & Single Source of Truth (SSOT) Architecture
+## 6. Internet Uplink, V2X Swarm Telemetry & Waze "Auto-Click" (Android Companion)
+
+OpenMotorBridge incorporates a dedicated **Internet Uplink via the Android Companion App** (`bar.f0o.omb`) for extended telematics, C-ITS integration, and community mapping, while keeping all core riding-critical and life-safety functions 100% autonomous and offline-capable:
+
+### 6.1 Physical Transmission Path: Why BLE / USB is Used Instead of Wi-Fi
+* **Physical Wi-Fi Exclusivity:** While running wireless Android Auto or Apple CarPlay, the smartphone's Wi-Fi modem is bound exclusively to the 5 GHz Wi-Fi link of the COTS CP2AA dongle. Standard smartphones cannot connect concurrently to a 2.4 GHz ESP32 hotspot without dropping CarPlay / Android Auto.
+* **Deterministic Data Link:** Telemetry and control data between OpenMotorBridge (ESP32-S31) and the smartphone transfer **strictly via Bluetooth Low Energy (WebBLE / RFCOMM)** or hardwired USB at the Front Node. Bluetooth and Wi-Fi operate on separated stacks with zero mutual packet blocking.
+
+### 6.2 Android Internet Uplink: Layer-5 SOCKS5 Relay, C-ITS / OpenTrafficMap & Waze "Auto-Click"
+On Android devices, the background companion app (`bar.f0o.omb`) delivers powerful integration options:
+1. **Layer-5 SOCKS5 / Stream Relay with Cellular Binding:**
+   * Binds outbound network sockets explicitly to cellular transport (`NetworkCapabilities.TRANSPORT_CELLULAR`).
+   * **Zero Conflict with Tailscale / WireGuard:** Operates purely at application layer (L5) without claiming an Android `VpnService` slot, allowing user VPNs (e.g. Home Assistant Tailscale nodes) to remain 100% active.
+2. **V2X Car-to-X Networking (C-ITS / ITS-G5), Traffic Light Countdown (SPaT/GLOSA) & OpenTrafficMap:**
+   * **Hardware & RF Architecture (ESP32-C5 in 802.11p OCB Mode):**
+     - On the rear Radar Node (PCBA 08), the **ESP32-C5** serves as an autonomous C-ITS / ITS-G5 receiver. Operating in 802.11p OCB mode (*Outside the Context of a BSS*) with modified PHY promiscuous capture, it sniffs unencrypted Car-to-X broadcasts across the European 5.9 GHz ITS band (5855–5925 MHz, primarily channel 180 / 5900 MHz and channel 176 / 5880 MHz).
+     - This leverages the open-source receiver design established by **OpenTrafficMap** and the community project **`cits-to-go`** (Codeberg `sascha8a/cits-to-go`, featured in c't Magazine 23/2026 and heise+).
+   * **Broadcast Formats & Cockpit Capabilities:**
+     - **SPATEM / SPaT (*Signal Phase and Timing*):** Second-by-second traffic light phase countdown (remaining red/green time in seconds) and **GLOSA** (*Green Light Optimal Speed Advisory* – recommended speed for green-wave cruising, e.g. *"Reduce to 42 km/h for green pass-through"*). Visualized on the Cockpit Speaker Corner Pod OLEDs, PWA Head-Up Display (HUD), or Android Auto / CarPlay.
+     - **MAPEM / MAP (*Intersection Topology*):** Lane-level intersection geometry, enabling direction-selective filtering so the rider is only alerted to the traffic light phase of their own turning lane (e.g. left-turn vs. straight).
+     - **CAM (*Cooperative Awareness Messages*):** Real-time telemetry of surrounding vehicles, warning early of approaching emergency vehicles (siren priority), public transit (trams/buses), and connected passenger cars (e.g. VW Car2X).
+     - **DENM (*Decentralized Environmental Notification Messages*):** Direct road hazard alerts (queue tails hidden behind bends, broken-down vehicles, emergency hard-braking ahead, black ice/aquaplaning, wrong-way drivers).
+     - **IVIM (*Infrastructure to Vehicle Information Messages*):** Dynamic overhead speed limits and lane clearance signs.
+   * **In-Vehicle Data Pipeline & Acoustic Helmet Cues:**
+     - Captured raw frames stream from PCBA 08 over **Cable 2 Branch 4 (Picoflex High-Speed USB 2.0 @ 480 Mbps)** to the Central Box (PCBA 01).
+     - The **ESP32-S31** parses frames deterministically inside a FreeRTOS task:
+       1. **Visual:** Dispatched to cockpit displays (Speaker Corner Pod OLEDs / PWA HUD).
+       2. **Acoustic via Qualcomm QCC3084:** Subtle helmet audio chime 3 seconds prior to green switch (prepare for departure without fixating eyes on the light) and urgent acoustic alerts for approaching sirens.
+       3. **Swarm Uplink:** Pushed over BLE/USB to the Android Companion App, which feeds the crowd data into the decentralized OpenTrafficMap network and downloads local GeoJSON hazard tiles.
+3. **Waze "Auto-Click" & Swarm Automation:**
+   * When OMB detects a hazard via V2X or IMU ($a_x < -0.6\,\text{g}$ emergency braking, crash, or obstacle):
+     - Dispatches a trigger packet to the companion app.
+     - Uses Android AccessibilityService/Intents to **automatically dispatch the hazard pin into Waze without touchscreen touching**.
+     - Hands remain on the handlebar while the Waze crowd is updated instantly.
+4. **A-GPS Cold-Start Acceleration (u-blox AssistNow Online):**
+   * Companion app fetches compact AssistNow Online ephemeris data ($3\dots 8\,\text{kB}$) on KL15 ignition ON.
+   * Injected over Qwiic I2C `J12` into SAM-M10Q on Front Node PCBA 05: drops Time-To-First-Fix from $\sim 30\,\text{s}$ to **$< 1.5\,\text{seconds}$** with $+15\,\text{dB}$ sensitivity boost.
+
+### 6.3 100% Offline-First Guarantee (Safety First)
+When mobile cellular drops out on remote mountain passes:
+* All safety-critical functions (77 GHz radar $< 15\,\text{ms}$, 4-wire USB backbone $< 0.2\,\text{ms}$, Intercom matrix, IMU crash detection, emergency brake strobing) continue operating **100% autonomously on vehicle hardware** with zero cloud dependency.
+
+---
+
+## 7. Documentation Roadmap & Single Source of Truth (SSOT) Architecture
 
 To eliminate redundancy and enforce strict ownership of topics, the OpenMotorBridge documentation is structured modularly. Every technical domain possesses an authoritative **Single Source of Truth (SSOT)**:
 

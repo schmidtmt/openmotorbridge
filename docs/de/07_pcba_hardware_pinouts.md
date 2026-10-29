@@ -463,9 +463,11 @@ In OpenMotorBridge v10.0 ist die drahtlose Kommunikation strikt nach **HF-Physik
    * **Strikte Frequenztrennung (5 GHz / 6 GHz):** Der Front-Knoten spannt das Cockpit-WLAN auf 5 GHz (bzw. 6 GHz Wi-Fi 6E via `ESP32-E22` / `ESP32-C5`) auf. Da dieses Band physikalisch weit vom 2,4-GHz-Band der Zentralbox entfernt ist, arbeiten Helm-Bluetooth und Cockpit-WLAN völlig störungsfrei parallel.
    * **Line-of-Sight zum Smartphone:** 10 bis 20 cm Abstand zum Smartphone im Lenkerhalter ermöglichen Gigabit-Throughput für Dashcam-Downloads und verzögerungsfreies Wireless CarPlay / Android Auto Streaming.
    * **Kein BLE-Overhead:** Der Front Node benötigt keinen eigenen BLE-Master-Stack.
-3. **Radar Node (PCBA 08 v10) mit 5 GHz V2X:**
-   * Der `ESP32-C5` nutzt seinen 5-GHz-Transceiver im Raw-Packet-Injection-Modus (802.11p OCB) für fahrzeugübergreifende **V2X-Warnmeldungen** (CAM / DENM).
-   * Die Radardaten des Wheeltec MR20 und die Trigger für den 36-LED-Halo werden zu 100 % kabelgebunden über das geschirmte Picoflex-USB-Kabel (Strang 4) mit der Zentralbox synchronisiert.
+3. **Radar Node (PCBA 08 v10) mit 5.9 GHz C-ITS / V2X (ESP32-C5):**
+   * Der `ESP32-C5` nutzt seinen Transceiver im 802.11p OCB Promiscuous-Modus (ETSI ITS-G5 auf 5,9 GHz, Kanäle 176/180) zum Empfang unverschlüsselter Car-to-X Broadcasts (Architektur analog zu *OpenTrafficMap* / *CITS-to-go*):
+     - **SPATEM / SPaT & GLOSA:** Ampelphasen-Countdown (Restrot / Restgrün) und Geschwindigkeitsempfehlung für die „Grüne Welle“ im Cockpit / HUD.
+     - **CAM & DENM:** Frühwarnung vor herannahenden Einsatzfahrzeugen (Blaulicht-Vorrang), ÖPNV, vorausliegenden Stauenden, Pannenstellen und Gefahren.
+   * Sämtliche Daten (Radartargets des Wheeltec MR20, C-ITS Telemetrie und Trigger für den 36-LED-Halo) werden zu 100 % kabelgebunden und störungsfrei über das geschirmte Picoflex-USB-Kabel (Kabel 2 Strang 4, USB 2.0 @ 480 Mbps) mit der Zentralbox synchronisiert.
 
 ---
 
@@ -699,10 +701,17 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
 *Abbildung 7.8: 3D CAD-Ansicht der gerouteten PCBA 08 (115 x 65 mm) mit mittigem 61 x 51 mm Radarausschnitt für das Wheeltec MR20 Horn-Array, 36x WS2812B Warnflügel-LEDs, ESP32-C5 Dual-Band Sub-MCU und 5.9 GHz V2X Keramik-Patchantenne.*
 
 ### 10.1 Technische Platinen-Kenndaten & Kabel-Anbindung
-* **Abmessungen:** $115{,}0 	imes 65{,}0 	imes 1{,}6\,	ext{mm}$ (2 Lagen FR-4 High-TG150, ENIG-Goldfinish).
-* **Zentraler Radarausschnitt:** $61{,}0 	imes 51{,}0\,	ext{mm}$ für das Wheeltec MR20 77-GHz-Sensormodul.
-* **Kabelanbindung:** Die Verbindung zur Zentralbox erfolgt über Strang 4 des 16-Pin Automotive Kabelbaums (12V geschaltete Bordnetzspeisung) und eine geschirmte 2-Draht UART-Verbindung zur direkten Ziel- und Telemetrieübertragung (115.200 Baud).
-* **5.9 GHz V2X Keramik-Patchantenne:** Autarke Antennenkammer auf der linken Gehäuseflanke für direkte C-V2X / ITS-G5 Kommunikation.
+* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG-Goldfinish).
+* **Zentraler Radarausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ für das Wheeltec MR20 77-GHz-Sensormodul.
+* **Kabelanbindung (Kabel 2 Strang 4):** 4-poliger geschirmter Picoflex-Kabelstrang zur Zentralbox (12V geschaltete Speisung, GND, verdrilltes USB 2.0 Datenpaar `USB_D+` / `USB_D-` an Port 5 des USB2517I Hubs).
+* **5.9 GHz C-ITS / ITS-G5 Funk-Subsystem (ESP32-C5):**
+  * Eigene 5.9-GHz-Antennenkammer mit Keramik-Patchantenne auf der linken Gehäuseflanke für optimalen Rundumempfang.
+  * Nutzt den ESP32-C5 im 802.11p OCB Promiscuous-Modus (ETSI ITS-G5 / 5,9 GHz Kanäle 176 und 180) zum direkten Empfang unverschlüsselter Car-to-X Broadcasts (Architektur analog zu *OpenTrafficMap* / *CITS-to-go*):
+    - **SPATEM / SPaT:** Live-Ampelphasen und sekundengenauer Restrot-/Restgrün-Countdown.
+    - **GLOSA:** Geschwindigkeitsempfehlung zur Nutzung der „Grünen Welle“.
+    - **MAPEM:** Spurgenaue Kreuzungsgeometrie zur Vermeidung falscher Ampelsignalisierungen.
+    - **CAM:** Positionsmeldungen von Rettungsfahrzeugen (Blaulichtvorrang), Bussen/Bahnen und vernetzten Serien-Pkw.
+    - **DENM:** Dezentrale Gefahrenmeldungen (Stauenden, Glatteis, Pannen, Unfälle).
 
 ---
 
