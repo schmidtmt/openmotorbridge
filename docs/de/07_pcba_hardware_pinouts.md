@@ -27,9 +27,17 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
 |       | 4-Draht Bus (Zero Tank-Heben!)|               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05B**| **Symmetrischer Spiegel-Pod** | 32 x 14 mm    | 2 Lagen | Bernstein BSD LED,   |
+| **PCBA 05B**| **Handschuhfach-Hub**         | 76 x 20 mm    | 2 Lagen | Microchip USB2514Bi,  |
+|       | (4-Port Media & Power-Inject) | (2x M2.5)     | (ENIG)  | AP2112K-3.3, 5x USB-C |
+|       | Harley Skyline OS Upstream    | 100% SMT      |         | 15W Phone Fast-Charge |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 05C**| **Symmetrischer Spiegel-Pod** | 32 x 14 mm    | 2 Lagen | Bernstein BSD LED,   |
 |       | (2x identisch für Links/Rechts| (M8/M10 Flansch)| (ENIG) | IP67 Taktiltaster,   |
 |       | 100% Software-Defined Gesten) | 100% SMT      |         | TVS ESD, JST-GH 4P   |
++-------+-------------------------------+---------------+---------+----------------------+
+| **PCBA 05D**| **Umwelt- & GNSS-Sensor-Puck**| 34 x 34 mm    | 2 Lagen | u-blox SAM-M10Q,     |
+|       | (Schnappkorb für Front-Node)  | (Schnapprast) | (ENIG)  | TMP117, OPT3001,     |
+|       | I2C/I2S Umwelt- & Akustik     | 100% SMT      |         | Knowles MEMS Mikro   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen | Nordic nRF52840 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
@@ -624,13 +632,16 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 ---
 
-### 7.2 PCBA 05B: Symmetrische Under-Perch Spiegel-Pod Platine (`openmotorbridge_under_perch_pod`)
+### 7.2 PCBA 05B: Handschuhfach-Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
 
-![PCBA 05B Spiegel-Pod Platine 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
-*Abbildung 7.5c: KiCad 3D-Render der symmetrischen Under-Perch Spiegel-Pod Platine (PCBA 05B, 32 x 14 mm). Zwei baugleiche Platinen arbeiten links und rechts unter den Spiegelschrauben.*
+![PCBA 05B Handschuhfach-Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
+*Abbildung 7.5c: KiCad 3D-Render des Handschuhfach-Hubs (PCBA 05B, 76.0 x 20.0 mm). Aktiver 4-Port Automotive USB 2.0 High-Speed Hub (Microchip USB2514Bi) mit 5x USB-C Buchsen für Harley-Davidson Skyline OS / Boom! Box GTS.*
 
-#### 7.2.1 Technische Platinen-Kenndaten & Bestückung
-* **Abmessungen:** $32{,}0 	imes 14{,}0\,	ext{mm}$, 2 Lagen FR4 High-TG150 ($1{,}6\,	ext{mm}$, ENIG-Goldfinish).
+![PCBA 05B Handschuhfach-Hub Draufsicht](../images/pcba/pcba05b_cockpit_breakout_top.png)
+*Abbildung 7.5d: Bestückungs-Draufsicht PCBA 05B mit 5x USB-C Buchsen (12 mm Raster), CC-Beschaltung und Microchip USB2514Bi Controller.*
+
+#### 7.3.1 Technische Platinen-Kenndaten & Bestückung
+* **Abmessungen:** 32,0 x 14,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
 * **Bauform:** 100 % SMD, Formfaktor passgenau für [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
 * **Bestückung:**
   * **`LED1` (Bernstein BSD Totwinkel-Warn-LED):** Hochleistungs-SMD-LED (590 nm Amber, 120° Abstrahlwinkel), strahlt durch einen optischen Diffusortrichter im 38°-Winkel blendfrei in das jeweilige Spiegelglas.
@@ -638,7 +649,7 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
   * **Entprellung & ESD-Schutz:** 100 nF RC-Glied zur Hardware-Entprellung und bidirektionale TVS-Diode (`D1`, PESD5V0S1BL) gegen elektrostatische Entladungen.
   * **Steckverbinder (`J1`):** 4-polige JST-GH SMD Buchse (`SM04B-GHS-TB`, 1.25 mm Raster) mit formschlüssiger Rastverriegelung.
 
-#### 7.2.2 Pinbelegung des Spiegel-Pod Headers (`J1` / 4-Pin JST-GH)
+#### 7.3.2 Pinbelegung des Spiegel-Pod Headers (`J1` / 4-Pin JST-GH)
 
 | Pin | Signalname | Signalart | Funktion & Pegel |
 | :---: | :--- | :---: | :--- |
@@ -647,11 +658,38 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 | **3** | **`BTN_SIG_N`** | Digital In (Active-Low)| Tastersignal gegen Masse, entprellt mit 100 nF RC-Glied |
 | **4** | **`GND`** | Masse (0V) | Gemeinsame Signal- und Rückmasse |
 
-#### 7.2.3 100 % Software-Defined Tasterbelegung via PWA-Dashboard
+#### 7.3.3 100 % Software-Defined Tasterbelegung via PWA-Dashboard
 Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard völlig frei auf 5 Gesten-Events gemappt werden (`SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS`, `HOLD_GATE`):
-* **Werks-Default Links:** `HOLD_GATE` $ightarrow$ PTT Intercom; `TRIPLE_CLICK` $ightarrow$ Siri/Google Assistant; `DOUBLE_CLICK` $ightarrow$ Mesh-Kanalwechsel.
-* **Werks-Default Rechts:** `SHORT_CLICK` $ightarrow$ Action-Cam Highlight-Tag (Insta360/GoPro BLE); `LONG_PRESS` $ightarrow$ Videoaufnahme Start/Stop; 3s Halten $ightarrow$ 868 MHz LoRa Notfall-SOS.
+* **Werks-Default Links:** `HOLD_GATE` -> PTT Intercom; `TRIPLE_CLICK` -> Siri/Google Assistant; `DOUBLE_CLICK` -> Mesh-Kanalwechsel.
+* **Werks-Default Rechts:** `SHORT_CLICK` -> Action-Cam Highlight-Tag (Insta360/GoPro BLE); `LONG_PRESS` -> Videoaufnahme Start/Stop; 3s Halten -> 868 MHz LoRa Notfall-SOS.
 * **Frei belegbare Aktionen:** 1-Klick Hazard Pin Drop (Waze/OpenTrafficMap), Radar-Stummschaltung 30s, Garagentoröffner (Shelly/Home Assistant), Zusatzscheinwerfer, Heizgriffe.
+
+---
+
+### 7.4 PCBA 05D: Modularer Umwelt- & GNSS-Sensor-Puck (`openmotorbridge_sensor_puck`)
+
+*Abbildung 7.5f: Schnappbarer Sensor-Puck (PCBA 05D, 34 x 34 mm) für [`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad).*
+
+#### 7.4.1 Technische Platinen-Kenndaten & Bestückung
+* **Abmessungen:** 34,0 x 34,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
+* **Befestigung:** Werkzeuglose 4-Punkt-Schnapprastung direkt im oberen Korb des Front-Node Gehäuses oder absetzbar an der Windschutzscheibe via 1,5m JST-GH Kabel.
+* **Bestückung:**
+  * **`U1` (u-blox SAM-M10Q):** Multi-Konstellations-GNSS-Modul (GPS, GLONASS, Galileo, BeiDou) mit integrierter Patch-Antenne.
+  * **`U2` (TI TMP117AIDRVR):** NIST-rückführbarer Digital-Temperatursensor (+-0,1°C Genauigkeit) zur Glatteiswarnung ohne Motorabwärme-Beeinflussung.
+  * **`U3` (TI OPT3001DNPR):** Umgebungslichtsensor mit menschlicher Augencharakteristik (Lux-Messung zur automatischen Umschaltung Tag/Nacht-Modus in PWA und Instrumenten).
+  * **`MK1` (Knowles SPH0645LM4H-B):** I2S Digital MEMS-Mikrofon zur Erfassung von Cockpit-Umgebungsgeräuschen für adaptive Headset-Lautstärkeregelung.
+  * **Steckverbinder (`J1`):** 6-polige JST-GH SMD Buchse (`SM06B-GHS-TB`, 1.25 mm Raster) mit Formschluss.
+
+#### 7.4.2 Pinbelegung des Sensor-Puck Headers (`J1` / 6-Pin JST-GH)
+
+| Pin | Signalname | Signalart | Funktion |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VCC_3V3`** | Power In (+3.3V) | Stabilisierte, gefilterte Systemspannung vom Front-Node LDO |
+| **2** | **`GND`** | Masse (0V) | Signal- und HF-Rückmasse |
+| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C Datenbus (SAM-M10Q, TMP117, OPT3001) |
+| **4** | **`I2C_SCL`** | Input Open-Drain | I2C Taktbus (400 kHz Fast-Mode) |
+| **5** | **`MIC_I2S_DATA`**| Digital Audio Out| I2S Audio-Datenstrom vom Knowles MEMS-Mikrofon |
+| **6** | **`MIC_I2S_WS`** | Digital Clock In | I2S Word Select / Word Clock |
 
 ---
 

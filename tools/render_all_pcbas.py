@@ -69,6 +69,21 @@ BOARDS = [
         ]
     },
     {
+        "id": "pcba05b",
+        "name": "05b_cockpit_breakout",
+        "pcb": os.path.join(BASE_DIR, "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
+        "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_cockpit_breakout"),
+        "outputs": [
+            ("pcba05b_cockpit_breakout_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.2"]),
+            ("pcba05b_cockpit_breakout_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.1"]),
+            ("pcba05b_cockpit_breakout_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.2"]),
+        ],
+        "aliases": [
+            ("pcba05b_cockpit_breakout_3d.png", "cockpit_breakout_3d_render.png"),
+            ("pcba05b_cockpit_breakout_top.png", "cockpit_breakout_3d_render_top.png"),
+        ]
+    },
+    {
         "id": "pcba06",
         "name": "06_magsafe_dock",
         "pcb": os.path.join(BASE_DIR, "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"),
