@@ -9,14 +9,24 @@
 // --- 1. Circle & Curve Resolution ---
 $fn = 60; // Smooth cylinders and holes for high-quality MJF 3D printing
 
-// --- 2. Central Main Box Dimensions (3-Tier Sandwich) ---
+// --- 2. Central Main Box Dimensions (v10 Dual-Rail Monocoque Slide-In Platform) ---
 MAIN_BOX_OUTER_L      = 110.0; // Outer length in X (mm)
 MAIN_BOX_OUTER_W      = 74.0;  // Outer width in Y (mm)
-MAIN_BOX_LOWER_H      = 17.0;  // Lower case height in Z (mm)
-MAIN_BOX_MID_H        = 15.0;  // Mid tray height in Z (mm)
-MAIN_BOX_LID_H        = 4.0;   // Lid plate thickness in Z (mm)
-MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness (mm)
-MAIN_BOX_CORNER_POST  = 7.0;   // Corner clamping screw post size (mm, for M3 hex nut pockets)
+MAIN_BOX_TOTAL_H      = 38.0;  // Total height in Z (mm)
+MAIN_BOX_LOWER_H      = 17.0;  // Reference lower deck height (mm)
+MAIN_BOX_MID_H        = 15.0;  // Reference mid tray height (mm)
+MAIN_BOX_LID_H        = 6.0;   // L-Slide lid top thickness (mm)
+MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness in PA12 (mm)
+MAIN_BOX_CORNER_R     = 3.5;   // Vertical corner fillet radius (mm)
+
+// Dual-Rail Slide-In Guide Heights:
+MAIN_BOX_RAIL1_Z      = 18.0;  // Rail 1 center height: Slide-In Zwischenboden (mm)
+MAIN_BOX_RAIL1_H      = 2.4;   // Rail 1 groove height (mm)
+MAIN_BOX_RAIL1_DEPTH  = 1.5;   // Rail 1 groove depth in sidewall (mm)
+MAIN_BOX_RAIL2_Z      = 33.0;  // Rail 2 center height: L-Slide Lid C-groove (mm)
+MAIN_BOX_RAIL2_H      = 2.8;   // Rail 2 groove height (mm)
+MAIN_BOX_RAIL2_DEPTH  = 1.8;   // Rail 2 groove depth in sidewall (mm)
+MAIN_BOX_REAR_SILL_H  = 15.0;  // Fixed lower rear sill height (mm)
 
 // --- 3. Satellite Pod Dimensions (Universal Enlarged Envelope) ---
 POD_OUTER_L           = 150.0; // Outer length in X (mm, standardized for serial PCBA 03 + Cardo/Sena/OMM)

@@ -11,67 +11,58 @@ Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement,
 
 ---
 
-## 1. Gehäuse Typ A: Zentrale Steuerbox (3-Teiliges Sandwich-Design & v10 Dual-Rail Roadmap)
+## 1. Gehäuse Typ A: Zentrale Steuerbox (v10 Dual-Rail Monocoque Slide-In Plattform)
 
 > [!IMPORTANT]
-> **v10 Architektur-Entscheidung: Übergang zur Dual-Rail Monocoque Slide-In Plattform (analog zum Pod)**  
-> Die Zentralbox (Typ A) wird auf eine **Dual-Rail Monocoque-Wanne mit einschiebbarer Zwischenboden-Trägerplatte und L-Schiebedeckel** umgestellt:
-> 1. **Untere Wanne:** Feste vordere Stirnwand für Deutsch DTM, J_PERIPH und USB-C; Platine PCBA 01 am Boden von oben frei verschraubbar.
-> 2. **Mittlere Führungsebene:** Einschiebbarer Zwischenboden (Slide-In Tray für 1S LiPo USV-Akku und Taoglas-Antennen) ohne separate Schrauben.
-> 3. **Obere Führungsebene:** L-Schiebedeckel mit Keilanzug (Wedge-Lock) und Heck-Verriegelung.  
-> **Hinweis zur Reihenfolge:** Die finalen Gehäuseabmessungen werden unmittelbar nach der Anpassung der **PCBA 01 Hauptplatine** eingefroren (nach Entfall des DW3110 UWB-Teils und Integration der neuen Power-Verteilung und USB-Datenleitungen).
+> **v10 Architektur-Standard: Dual-Rail Monocoque Slide-In Plattform (Vollständige Parität zum Pod-Prinzip)**  
+> Die Zentralbox (Typ A) ist von der historischen 3-Teile-Sandwich-Verschraubung (4 lange Eckschrauben durch Kamine) auf die **v10 Dual-Rail Monocoque Slide-In Plattform** umgestellt:
+> 1. **Monolithische Monocoque-Wanne (`000_monocoque_tub.scad`):** Einteiliger, 5-seitig geschlossener PA12-MJF-Wannenkörper mit 100 % dichtem, homogenem Boden (2,5 mm Wandstärke) und 4x M4 Silentblock-Ohren ($128 \times 46\dots 56\,\text{mm}$). Die Platine PCBA 01 ($85 \times 55\,\text{mm}$) wird bei offenem Gehäuse direkt von oben auf 4x integrierte M2.5/M3-Dome ($77 \times 47\,\text{mm}$ Raster) mit rückseitig versenkten DIN 934 Mutterntaschen verschraubt. Alle vorderen Anschlüsse (Deutsch DTM-6, 16-Pin Peripherie, USB-C und SW1-Taster) sitzen fest in der vorderen Stirnwand.
+> 2. **Mittlere Führungsebene Rail 1 ($Z = 18{,}0\,\text{mm}$, `010_slide_tray.scad`):** Werkzeuglos einschiebbarer Zwischenboden (Slide-In Tray). Führt formschlüssig in Längsnuten der Wannenseitenwände und trennt die Platinenkammer hermetisch vom Akku- und Antennendeck – komplett ohne zusätzliche Schrauben. Hält den 1S LiPo-Pufferakku (67 x 38 x 5 mm) in integrierter Wanne, Taoglas FXP895 (LoRa 868 MHz) und FXP73 (2.4 GHz) in vertieften Klebenestern, verfügt über Kabeldurchführungen (J7 Akku, U.FL Koax) und Konvektionsschlitze zur Kamin-Entwärmung der PCBA 01 Leistungsstufe.
+> 3. **Obere Führungsebene Rail 2 ($Z = 33{,}0\,\text{mm}$, `020_slide_lid.scad`):** L-förmiger Schiebedeckel (L-Slide Lid). Die seitlichen Führungszungen gleiten in tiefe C-Nuten unter einem massiven PA12-Dachüberstand ($Z = 35{,}5\dots 38{,}0\,\text{mm}$), was ein vertikales Aufhebeln unter Vibrationen absolut unmöglich macht. Beim Einschieben nach vorne greift die Keilnase (15° Keilanzug) in die vordere Stirnwandtasche und komprimiert die Dichtung hermetisch.
+> 4. **Integrierte Heckwand mit Slam-to-Shut Verriegelung:** Der vertikale Schenkel des L-Deckels schließt das rückseitige Einschubportal oberhalb der $15{,}0\,\text{mm}$ Wannen-Schwelle und überlappt diese mit einer abtropfenden Labyrinth-Schürze. Zwei nicht-metallische PA12-Schnappriegel an den Ecken rasten beim Einschieben formschlüssig in die Schwellentaschen ein (Entriegelung werkzeuglos oder über Münz-/Hebelschlitz an der Heckseite).
+> 5. **Rückseitige Schwelle & Servicezugang:** Die feste untere Wannen-Schwelle ($Z = 0\dots 15{,}0\,\text{mm}$) beherbergt ein direkt von außen zugängliches MicroSD-Wartungsfenster (wasserdichte Silikonkappe) und einen optionalen SMA-Antennenport.
 
-Das Basisgehäuse der Zentralbox ist als modulares IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** oder **Aluminium-Druckguss** konzipiert, das speziell für raue Motorrad-Bedingungen (Vibrationen bis $20\,\text{g}$, Spritzwasser, Hitzestau unter der Sitzbank) ausgelegt ist:
+Das Gehäuse der Zentralbox ist als ultravibrationsfestes IP67/IP69K-Gehäuse aus **PA12 (MJF-Verfahren)** gefertigt:
 
-- **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H; Unterwanne $17{,}0\,\text{mm}$, Oberwanne $15{,}0\,\text{mm}$, Deckel $6{,}0\,\text{mm}$).
-- **Befestigung:** 4x integrierte Ecklaschen an der Unterwanne mit **Lochabstand $128{,}0 \times 56{,}0\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
-- **Lichte Innenmaße:** $105{,}0 \times 69{,}0 \times 32{,}0\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine PCBA 01 mit symmetrischem Randabstand von $10{,}0\,\text{mm}$ in X und $7{,}0\,\text{mm}$ in Y).
-- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $2{,}5\dots 3{,}0\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
+- **Außenabmessungen:** $110{,}0 \times 74{,}0 \times 38{,}0\,\text{mm}$ (L x B x H; monolithischer Wannenkörper $38{,}0\,\text{mm}$ mit L-Schiebedeckel).
+- **Befestigung:** 4x integrierte Außenlaschen an der Wanne mit **Lochabstand $128{,}0 \times 46\dots 56\,\text{mm}$** für schwingungsdämpfende **M4 Silentblöcke (Shore 50A EPDM)** zur Entkopplung hochfrequenter Motorvibrationen.
+- **Lichte Innenmaße:** $105{,}0 \times 69{,}0 \times 35{,}5\,\text{mm}$ (optimiert für die $85{,}0 \times 55{,}0\,\text{mm}$ 4-Layer Hauptplatine PCBA 01 mit symmetrischem Randabstand von $10{,}0\,\text{mm}$ in X und $7{,}0\,\text{mm}$ in Y).
+- **Material & Fertigung:** PA12 im HP Multi Jet Fusion (MJF) 3D-Druck (min. $2{,}5\,\text{mm}$ Wandstärke), kugelgestrahlt, im Heißbad chemisch geglättet und hydrophob versiegelt.
 - **Schutzart:** IP67 / IP69K (strahlwasser- und tauchdicht bis $1\,\text{m}$ Wassertiefe sowie dampfstrahlbeständig).
-- **100% Lötkolben-Freie Montage & Beliebig Oft Verschraubbar:** Alle Schraubverbindungen nutzen ausnahmslos formschlüssig ins PA12 eingedruckte **DIN 934 Sechskantmutter-Taschen** (M2, M2.5, M3, M4, M5). Selbstschneidende Gewinde in Kunststoff sind vollständig eliminiert: Gehäuse können beliebig oft geöffnet und wieder verschraubt werden, ohne dass Gewinde ausleiern oder Gehäuseteile nach einmaliger Demontage unbrauchbar werden. Messing-Gewindeeinsätze sind vollständig eliminiert.
+- **100% Schraubenlose Kappendemontage & Beliebig Oft Wiederverschließbar:** Der gesamte obere Gehäuseverbund (Zwischenboden und Deckel) kommt ohne eine einzige vertikale Gehäuseschraube aus. Die Platine ist über formschlüssig ins PA12 eingedruckte **DIN 934 Sechskantmutter-Taschen** verschraubt. Messing-Gewindeeinsätze oder selbstschneidende Schrauben in Kunststoff sind eliminiert.
 
-### 1.1 3D-CAD-Modell & 3-Schichten-Sandwichaufbau
+### 1.1 3D-CAD-Modell & Dual-Rail Monocoque Schichtaufbau
 
-![OpenMotorBridge Zentralbox 3D Anschnitt CAD](../images/cad/main_box_cutaway_3d.png)
+![OpenMotorBridge Zentralbox Geschlossenes 3D Gehäuse](../images/cad/main_box_enclosure_cad.png)
 
-*Abbildung 8.1: Photorealistischer 3D-CAD-Schräganschnitt der zentralen Steuerbox. Sichtbar sind die 3 Schichten im geschlossenen Verbund: Unterwanne mit 4-Layer-Platine (ENIG) auf M2.5 Dämpfern, Zwischenboden mit offener 70x10mm Kabelbucht und Konvektionsschlitzen, oberes Akku-Fach mit 1S LiPo-USV-Batterie (2.200 mAh) unter der schwenkbaren Akkubrücke mit Antennenkapselung und Zugentlastung, automotiver Deutsch DTM Flansch, Taster SW1, USB-C Servicekappe sowie 100% kabelfreier Deckel mit Gore-Membran.*
-
-![OpenMotorBridge Zentralbox 3-Teiliges Sandwich-Gehäuse IP67](../images/cad/main_box_enclosure_cad.png)
-
-*Abbildung 8.2: 3D-CAD-Konstruktionsübersicht der zentralen Steuerbox (Typ A).*
+*Abbildung 8.1: Photorealistisches 3D-CAD-Modell der geschlossenen Zentralbox (Typ A) in der v10 Dual-Rail Monocoque-Konstruktion mit vorderen Schnittstellen (DTM-6, 16-Pin Peripherie, USB-C Kappe, SW1 Taster mit RGB-Linse) und zentralem Gore ePTFE Druckausgleichsventil.*
 
 ```
 +------------------------------------------------------------+  ^
-| 1. GEHÄUSEDECKEL (6,0 mm Höhe / 3,0 mm Wandstärke)         |  |
-|    * Gore ePTFE Druckausgleichsmembran (Ø 7,0 mm)          |  | 38,0 mm
-|    * Umlaufende Nut mit Shore 40A Silikon-Profildichtung   |  | Gesamt-
-|    * 100% kabelfreier Deckel (keine Antennen im Deckel;    |  | höhe
-|      absolut stressfreies Abnehmen bei Wartung & Service)  |  |
-|    * Durchgängig massiver PA12-Deckel (>2,5 mm Wandung)    |  |
+| 1. L-SCHIEBEDECKEL (Rail 2 C-Nut Führung bei Z = 33,0 mm)  |  |
+|    * Gore ePTFE Druckausgleichsmembran (Ø 11,5 mm)         |  | 38,0 mm
+|    * 15° Keilnase an der Front für Keilanzug-Dichtungsdruck|  | Gesamt-
+|    * Integrierte Heckwand mit abtropfender Labyrinth-Schürze|  | höhe
+|    * 2x Slam-to-Shut PA12-Schnappriegel in die Heckschwelle |  | (PA12-
+|    * 100% kabelfreier Deckel (keine Antennen im Deckel;    |  |  Wanne)
+|      vollkommen stressfreies Einschieben & Warten)         |  |
 +------------------------------------------------------------+  |
-| 2. OBERWANNE MIT ZWISCHENBODEN (15,0 mm Höhe)              |  |
-|    * Vordere Stirnwand (Alle Anschlüsse & Anzeige):        |  |
-|      - Automotive Flansch (Kabelbaum J1 & J_PERIPH)        |  |
-|      - Taster SW1 (Silikon-Dichtkappe, Pairing & Reset)    |  |
-|      - Wasserdichter USB-C Service-Port (Alu-Schraubkappe) |  |
-|      - Diffuser PMMA-Lichtleiter (Ø 3,2 mm) für WS2812B RGB|  |
-|    * Schwenkbare Akkubrücke (RC-Scharnier & Schnapphaken): |  |
-|      - Hält 1S LiPo (2.200 mAh) mit 1.0mm EPDM vibrationsfest|  |
-|      - Integrierte Nester für Taoglas FXP895 (LoRa 868 MHz)|  |
-|        und Taoglas FXP73 (2.4 GHz) mit Schutzabdeckung     |  |
-|      - Integrierte C-Clip Zugsicherung für Koax- & DC-Kabel|  |
-|    * Zwischenboden (Optimierte Zirkulationsebene):         |  |
-|      - 70,0 x 10,0 mm offene Kabelbucht an der Stirnseite  |  |
-|      - 9x Konvektions- & Druckausgleichsschlitze           |  |
+| 2. EINSCHIEBBARER ZWISCHENBODEN (Rail 1 bei Z = 18,0 mm)   |  |
+|    * Integriertes Akkubett für 1S LiPo (67 x 38 x 5 mm)    |  |
+|    * Vertieftes Klebenest für Taoglas FXP895 (LoRa 868 MHz)|  |
+|    * Vertieftes Klebenest für Taoglas FXP73 (2.4 GHz)      |  |
+|    * Konvektionsschlitze für Kamin-Entwärmung der Platine  |  |
+|    * Scheuerfreie Kabeldurchführungen (J7 Akku, U.FL Koax) |  |
+|    * Ergonomischer Heck-Ziehgriff für werkzeuglosen Service|  |
 +------------------------------------------------------------+  |
-| 3. UNTERWANNE (17,0 mm Höhe - Geschlossene Monocoque-Wanne)|  |
-|    * 4-Layer Hauptplatine (85 x 55 mm) auf M2.5 Standdomen |  |
-|      (77 x 47 mm Lochabstand, DIN 934 M2.5 Mutterntaschen) |  |
-|    * Integrierte Kavität (12 x 12 x 0,8 mm) im Boden       |  |
-|      als Bauraumreserve / historische UWB-Aufnahme         |  |
-|    * Formschlüssige DIN 934 M3 Sechskant-Nut-Pockets       |  |
-|    * 4x M4 Silentblock-Befestigungsohren (vibrationsfest)  |  |
-|    * 100% geschlossener PA12-Wannenboden (>2,2 mm Wandung) |  |
+| 3. MONOLITHISCHE MONOCOQUE-WANNE (Z = 0..38,0 mm)          |  |
+|    * 4-Layer Hauptplatine PCBA 01 (85 x 55 mm) auf 3,5 mm  |  |
+|      Domen (77 x 47 mm Lochabstand, DIN 934 M2.5/M3 Taschen)|  |
+|    * Feste vordere Stirnwand für DTM-6, 16-Pin, USB-C, SW1 |  |
+|    * Feste hintere Schwelle (Z = 0..15 mm) mit MicroSD-Slot|  |
+|      und Schnappriegeltaschen für die Heckwand             |  |
+|    * 4x M4 Silentblock-Befestigungsohren (128 x 46..56 mm) |  |
+|    * 100% geschlossener, leckagefreier Boden (2,5 mm Wand) |  |
 +------------------------------------------------------------+  v
 ```
 
@@ -79,13 +70,13 @@ Das Basisgehäuse der Zentralbox ist als modulares IP67/IP69K-Gehäuse aus **PA1
 
 ![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Abbildung 8.3: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse.*
+*Abbildung 8.2: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse. Sichtbar sind: Monocoque-Wanne mit integrierten Domen und Stirnwandports, bestückte PCBA 01 v10 (ESP32-S31, QCC3084, SX1262 LoRa), einschiebbarer Zwischenboden mit LiPo-Akkubett und Taoglas Dual-Antennen sowie der L-Schiebedeckel mit Gore-Membran und integrierter Heckwand.*
 
 ### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
 
 ![OpenMotorBridge Zentralbox Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
-*Abbildung 8.4: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung unter der schwenkbaren Akkubrücke, die durchgängige Konvektion über die 9 Zwischenbodenschlitze, der scheuerfreie Kabelverlauf durch die offene 70x10mm Kabelbucht zum automotiven Flansch und die rückseitige 0,4mm Knockout-Membran für den SMA-Port.*
+*Abbildung 8.3: Transparente 3D-Röntgenansicht der vollständig geschlossenen Zentralbox. Erkennbar sind die spielfreien Bauteilfreiräume, die geschützte Akku-Lagerung auf dem Zwischenboden, die durchgängige Konvektion über die Zwischenbodenschlitze, der scheuerfreie Kabelverlauf zur Frontstirnwand und das rückseitige MicroSD-Wartungsfenster in der unteren Schwelle.*
 
 ### 1.4 Maßstabsgetreuer Längs- & Querschnitt (X-Z Thermik & Y-Z Kabelführung)
 

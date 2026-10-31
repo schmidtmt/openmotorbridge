@@ -9,65 +9,57 @@ This document specifies the mechanical engineering, thermal dissipation, IP67/IP
 
 ---
 
-## 1. Type A: Central Control Box (3-Piece Sandwich Architecture & v10 Dual-Rail Roadmap)
+## 1. Type A: Central Control Box (v10 Dual-Rail Monocoque Slide-In Platform)
 
 > [!IMPORTANT]
-> **v10 Architectural Decision: Transition to Dual-Rail Monocoque Slide-In Platform (Aligned with Pod)**  
-> The Central Control Box (Type A) will transition to a **Dual-Rail Monocoque Tub with Slide-In Intermediate Tray and L-Slide Lid**:
-> 1. **Lower Tub:** Stationary front bulkhead for Deutsch DTM, J_PERIPH, and USB-C; PCBA 01 secured to floor with unobstructed top access.
-> 2. **Middle Guide Rails:** Slide-in intermediate tray (carrying 1S LiPo UPS battery and Taoglas antennas) requiring zero separate screws.
-> 3. **Upper Guide Rails:** L-slide lid with wedge-lock compression and rear deadbolt latch.  
-> **Development Sequence:** Final enclosure dimensions will be locked in directly after the **PCBA 01 Main Controller Board** layout is adapted (removal of DW3110 UWB subsystem, integration of new 12V/30W/60W power distribution, and USB data routing).
+> **v10 Architectural Standard: Dual-Rail Monocoque Slide-In Platform (Full Parity with Pod Architecture)**  
+> The Central Control Box (Type A) has transitioned from legacy 3-tier vertical screw sandwiches to the **v10 Dual-Rail Monocoque Slide-In Platform**:
+> 1. **Monolithic Monocoque Tub (`000_monocoque_tub.scad`):** One-piece 5-sided PA12-MJF enclosure tub featuring a 100% solid, leak-free bottom floor (2.5 mm wall thickness) and 4x M4 silentblock mounting ears ($128 \times 46\dots 56\,\text{mm}$). The PCBA 01 mainboard ($85 \times 55\,\text{mm}$) installs directly from above with full clearance onto 4x integrated M2.5/M3 standoffs ($77 \times 47\,\text{mm}$ pitch) with captive DIN 934 hex nut pockets on the underside. All front interfaces (Deutsch DTM-6, 16-Pin Periphery, USB-C, and SW1 button) reside stationary on the monolithic front wall.
+> 2. **Middle Guide Rails Track 1 ($Z = 18.0\,\text{mm}$, `010_slide_tray.scad`):** Tool-free slide-in intermediate tray. Slides into longitudinal side wall guide grooves to hermetically separate the mainboard chamber from the battery and antenna compartment without requiring vertical screws. Holds the 1S LiPo backup battery (67 x 38 x 5 mm) in a molded cradle, Taoglas FXP895 (LoRa 868 MHz) and FXP73 (2.4 GHz) in recessed nests, and incorporates cable drop slots (J7 battery, U.FL coax) and convection louvers for chimney cooling of the PCBA 01 power stage.
+> 3. **Upper Guide Rails Track 2 ($Z = 33.0\,\text{mm}$, `020_slide_lid.scad`):** L-shaped slide lid (L-Slide Lid). Lateral guide tongues slide inside deep C-grooves captivated beneath a solid PA12 retaining roof lip ($Z = 35.5\dots 38.0\,\text{mm}$), preventing vertical lift or prying under severe chassis vibration. Upon reaching full insertion, the 15° wedge nose seats into the front wall undercut to compress the front perimeter seal.
+> 4. **Integrated Heckwand with Slam-to-Shut Deadbolt Latching:** The vertical drop leg of the L-lid seals the rear insertion portal above the $15.0\,\text{mm}$ lower sill, overlapping it with an external labyrinth drip apron. Two non-metallic PA12 deadbolt legs snap into sill sockets (released tool-free or via pry slots on the rear face).
+> 5. **Lower Rear Sill & Service Access:** The stationary lower sill ($Z = 0\dots 15.0\,\text{mm}$) hosts an externally accessible MicroSD card slot (watertight silicone cap) and optional SMA antenna bulkhead.
 
 The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for harsh motorcycle environments (up to 20 g vibration, direct spray, under-seat heat soak):
 
-- **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; lower case $17.0\,\text{mm}$, upper case $15.0\,\text{mm}$, lid $6.0\,\text{mm}$).
-- **Mounting:** 4x corner ears on lower case with **hole spacing $128.0 \times 56.0\,\text{mm}$** for M4 EPDM silentblocks (Shore 50A).
-- **Internal Clearance:** $105.0 \times 69.0 \times 32.0\,\text{mm}$ (optimized for the $85.0 \times 55.0\,\text{mm}$ 4-layer main PCBA 01 with symmetric margins of $10.0\,\text{mm}$ in X and $7.0\,\text{mm}$ in Y).
+- **External Dimensions:** $110.0 \times 74.0 \times 38.0\,\text{mm}$ (L x W x H; monolithic $38.0\,\text{mm}$ tub with L-Slide Lid).
+- **Mounting:** 4x corner ears on lower case with **hole spacing $128.0 \times 46\dots 56\,\text{mm}$** for M4 EPDM silentblocks (Shore 50A).
+- **Internal Clearance:** $105.0 \times 69.0 \times 35.5\,\text{mm}$ (optimized for the $85.0 \times 55.0\,\text{mm}$ 4-layer main PCBA 01 with symmetric margins of $10.0\,\text{mm}$ in X and $7.0\,\text{mm}$ in Y).
 - **Ingress Protection:** IP67 / IP69K (dust-tight, submersible to 1 m, steam-jet resistant).
-- **100% Soldering-Iron Free Assembly:** Direct PA12-molded pilot holes ($\varnothing\,2.1\,\text{mm}$ for M2.5 plastic-forming screws) and form-fitting DIN 934 M3 hex nut pockets eliminate all brass heat-set threaded inserts.
+- **100% Screw-Free Lid Servicing & Infinite Re-Usability:** The entire upper enclosure assembly (intermediate tray and top lid) operates without a single vertical enclosure screw. The PCB attaches via captive **DIN 934 hex nut pockets**, eliminating stripped plastic threads and brass heat-set inserts.
 
-![OpenMotorBridge Central Box 3D Cutaway CAD](../images/cad/main_box_cutaway_3d.png)
+### 1.1 3D CAD Model & Dual-Rail Monocoque Architecture
 
-*Figure 8.1: Photorealistic 3D CAD diagonal cutaway render of the Central Control Box. The 3-tier sandwich is exposed: bottom tub with 4-layer PCB (ENIG) on M2.5 standoffs, intermediate tray with open front 70x10mm cabling bay and convection cooling slots, upper LiPo UPS battery cradle with 2,200 mAh cell clamped under the hinged battery & dual-antenna bridge with cable strain reliefs, automotive Deutsch DTM flange, SW1 button, USB-C service port, and 100% cable-free solid lid with Gore ePTFE vent.*
+![OpenMotorBridge Central Box Closed 3D Enclosure](../images/cad/main_box_enclosure_cad.png)
 
-### 1.1 3D CAD Model & 3-Piece Sandwich Architecture
-
-![OpenMotorBridge Central Box 3-Piece Sandwich IP67](../images/cad/main_box_enclosure_cad.png)
-
-*Figure 8.2: 3D CAD visualization of the Central Control Box (Type A).*
+*Figure 8.1: Photorealistic 3D CAD render of the closed Central Box (Type A) in v10 Dual-Rail Monocoque construction with front interfaces (DTM-6, 16-Pin Periphery, USB-C cap, SW1 button with RGB lens) and central Gore ePTFE pressure compensation vent.*
 
 ```
 +------------------------------------------------------------+  ^
-| 1. ENCLOSURE LID (6.0 mm Height / 3.0 mm Wall Thickness)   |  |
-|    * Gore ePTFE pressure equalization vent (Ø 7.0 mm)      |  | 38.0 mm
-|    * Perimeter groove with Shore 40A silicone cord gasket  |  | Total
-|    * 100% cable-free, solid lid (zero antennas in lid;     |  | Height
-|      stress-free opening during field maintenance)         |  |
-|    * Homogeneous PA12 structure (>2.5 mm wall to exterior) |  |
+| 1. L-SLIDE LID (Rail 2 C-Groove at Z = 33.0 mm)            |  |
+|    * Gore ePTFE pressure equalization vent (Ø 11.5 mm)     |  | 38.0 mm
+|    * 15° Front wedge nose for positive gasket compression  |  | Total
+|    * Integrated rear Heckwand with overlapping drip apron  |  | Height
+|    * 2x Slam-to-Shut PA12 deadbolt latches into rear sill  |  | (PA12
+|    * 100% cable-free lid (zero antennas in lid; stress-free|  |  Tub)
+|      slide-in and maintenance)                             |  |
 +------------------------------------------------------------+  |
-| 2. UPPER CASE WITH INTERMEDIATE TRAY (15.0 mm Height)      |  |
-|    * Front Panel: Automotive flange (J1 & J_PERIPH),       |  |
-|      SW1 button (silicone boot), USB-C service port,       |  |
-|      diffuse PMMA light pipe (Ø 3.2 mm) for WS2812B RGB    |  |
-|    * Rear Panel: SMA antenna port with 0.4 mm knockout     |  |
-|      membrane (IP68/IP69K sealed by default; punch-out)    |  |
-|    * Hinged Battery & Antenna Bridge (013_...bridge.scad): |  |
-|      - Holds 1S LiPo (68x39x5.0 mm, 2,200 mAh) via EPDM   |  |
-|      - Integrated pockets for Taoglas FXP895 (LoRa 868)    |  |
-|        & Taoglas FXP73 (2.4 GHz) under 0.8 mm snap cover   |  |
-|      - Integrated C-clip strain relief for coax/power leads|  |
-|    * Intermediate Floor: Open front cable bay (70x10 mm)   |  |
-|      & 9x convection / pressure equalization slots         |  |
+| 2. SLIDE-IN INTERMEDIATE TRAY (Rail 1 at Z = 18.0 mm)      |  |
+|    * Molded battery cradle for 1S LiPo (67 x 38 x 5 mm)    |  |
+|    * Recessed adhesive nest for Taoglas FXP895 (LoRa 868)  |  |
+|    * Recessed adhesive nest for Taoglas FXP73 (2.4 GHz)    |  |
+|    * Convection louvers for PCBA 01 power stage chimney    |  |
+|    * Cable drop slots (J7 battery, U.FL coaxial lines)     |  |
+|    * Ergonomic rear pull handle for tool-free servicing    |  |
 +------------------------------------------------------------+  |
-| 3. LOWER CASE (17.0 mm Height - Monocoque Tub)             |  |
-|    * 4-Layer Main PCB (85 x 55 mm) on M2.5 standoffs       |  |
-|      (77 x 47 mm hole pitch, Ø 2.1 mm PA12 pilot holes)    |  |
-|    * Integrated cavity (12 x 12 x 0.8 mm) in floor         |  |
-|      as reserve space / historical UWB housing             |  |
-|    * Captive DIN 934 M3 hex nut pockets                    |  |
-|    * 4x M4 silentblock mounting ears                       |  |
-|    * 100% solid PA12 floor without through-holes (>2.2 mm) |  |
+| 3. MONOLITHIC MONOCOQUE TUB (Z = 0..38.0 mm)               |  |
+|    * 4-Layer Main PCBA 01 (85 x 55 mm) on 3.5 mm standoffs |  |
+|      (77 x 47 mm hole pitch, captive DIN 934 M2.5/M3 nuts) |  |
+|    * Stationary front wall for DTM-6, 16-Pin, USB-C, SW1   |  |
+|    * Stationary rear sill (Z = 0..15 mm) with MicroSD slot |  |
+|      and deadbolt latch sockets                            |  |
+|    * 4x M4 silentblock mounting ears (128 x 46..56 mm)     |  |
+|    * 100% solid, leak-free floor (2.5 mm PA12 wall)        |  |
 +------------------------------------------------------------+  v
 ```
 
@@ -75,13 +67,13 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 
 ![OpenMotorBridge Central Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Figure 8.3: 1:1:1 Euclidean CAD exploded view of the Central Box along the Z-axis.*
+*Figure 8.2: 1:1:1 Euclidean CAD exploded view of the Central Box along the vertical Z-axis. Shown: Monocoque tub with integrated standoffs and front ports, populated PCBA 01 v10 (ESP32-S31, QCC3084, SX1262 LoRa), slide-in intermediate tray with LiPo battery and Taoglas dual antennas, and L-Slide Lid with Gore vent and integrated Heckwand.*
 
 ### 1.3 3D X-Ray Assembly & Component Clearance
 
 ![OpenMotorBridge Central Box Mated 3D X-Ray CAD Fitting](../images/cad/main_box_assembly_mated_3d.png)
 
-*Figure 8.4: Transparent 3D X-ray view of the closed Central Box showing clean internal clearances.*
+*Figure 8.3: Transparent 3D X-ray view of the closed Central Box showing clean internal clearances.*
 
 ### 1.4 True-to-Scale Longitudinal & Cross Section (X-Z Thermal & Y-Z Cable Routing)
 

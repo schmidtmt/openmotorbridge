@@ -1,75 +1,27 @@
 // =============================================================================
-// OpenMotorBridge - Main Box: Complete Mid Tray (Oberwanne / Zwischenboden)
+// OpenMotorBridge - Central Main Box: Complete Slide-In Tray (v10.0)
 // =============================================================================
 // File: hardware/cad/scad/01_main_box/01_upper_deck.scad
-// Description: Ready-to-print mid tray with partition floor, LiPo battery cradle,
-//              wire routing slot, convective vent slots, front port cutouts
-//              (Deutsch DTM-12, USB-C, SW1, RGB LED), rear SMA antenna port,
-//              and lower tongue lip / upper sealing groove.
+// Description: Ready-to-print slide-in intermediate tray (Zwischenboden) for the
+//              Central Box (Gehäuse Typ A) utilizing the v10 Dual-Rail Principle:
+//              - Tool-free slide-in mounting on Rail 1 (Z = 18.0 mm).
+//              - Integrated cradle for 1S LiPo backup battery (67 x 38 x 5 mm).
+//              - Dedicated RF nests for Taoglas FXP895 (LoRa) & FXP73 (2.4 GHz).
+//              - Thermal convection breathing slots for PCBA 01 buck converter.
+//              - J7 battery lead and dual U.FL coaxial cable drop channels.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
-include <../00_common/screw_bosses.scad>;
-use <parts/001_lower_screws_enclosure.scad>;
-use <parts/005_sealing_groove.scad>;
-use <parts/010_mid_tray_frame.scad>;
-use <parts/011_mid_partition_floor.scad>;
-use <parts/012_front_cutouts.scad>;
+use <parts/010_slide_tray.scad>;
 
 module main_box_mid_tray() {
-    difference() {
-        union() {
-            // 1. Outer Frame
-            main_box_mid_tray_frame(
-                length=MAIN_BOX_OUTER_L,
-                width=MAIN_BOX_OUTER_W,
-                height=MAIN_BOX_MID_H,
-                wall=MAIN_BOX_WALL
-            );
-
-            // 2. Mid Partition Floor (Akkubett + 10x Lüftungsschlitze)
-            translate([MAIN_BOX_WALL, MAIN_BOX_WALL, 0.0]) {
-                main_box_mid_partition_floor(
-                    floor_l=MAIN_BOX_OUTER_L - 2*MAIN_BOX_WALL,
-                    floor_w=MAIN_BOX_OUTER_W - 2*MAIN_BOX_WALL,
-                    floor_t=2.0
-                );
-            }
-
-            // 3. 4x M3 Corner Clamping Posts (Continuous clamping chimney)
-            main_box_corner_posts(
-                length=MAIN_BOX_OUTER_L,
-                width=MAIN_BOX_OUTER_W,
-                height=MAIN_BOX_MID_H,
-                post_size=MAIN_BOX_CORNER_POST,
-                hole_r=M3_SCREW_HOLE_R
-            );
-
-            // 4. Bottom Sealing Tongue Lip (Feder for Lower Case sealing groove)
-            main_box_sealing_tongue_lip(
-                length=MAIN_BOX_OUTER_L,
-                width=MAIN_BOX_OUTER_W
-            );
-        }
-
-        // 5. Front Wall Port Cutouts (Deutsch DTM-12, USB-C, SW1, Status LED)
-        main_box_front_cutout_tool(wall_th=MAIN_BOX_WALL);
-
-        // 6. Optional Rear SMA Antenna Port (Ø 6.5 mm with O-Ring pocket for LoRa 868 MHz)
-        main_box_rear_antenna_cutout_tool(
-            length=MAIN_BOX_OUTER_L,
-            width=MAIN_BOX_OUTER_W,
-            wall_th=MAIN_BOX_WALL
-        );
-
-        // 7. Top Perimeter Sealing Groove (Nut for Lid O-Ring Gasket)
-        main_box_sealing_groove_tool(
-            length=MAIN_BOX_OUTER_L,
-            width=MAIN_BOX_OUTER_W,
-            z_top=MAIN_BOX_MID_H
-        );
-    }
+    main_box_slide_tray(
+        tray_l = 104.4,
+        tray_w = 68.0,
+        tray_t = 2.0,
+        rail_z = MAIN_BOX_RAIL1_Z
+    );
 }
 
-// Render complete mid tray
+// Render complete slide-in tray
 main_box_mid_tray();
