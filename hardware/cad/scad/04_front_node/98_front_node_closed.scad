@@ -1,8 +1,8 @@
 // =============================================================================
-// OpenMotorBridge - Universal Front Node: Closed Enclosure Model
+// OpenMotorBridge - Universal Front Node: Closed Enclosure Model (v10.0)
 // =============================================================================
 // File: hardware/cad/scad/04_front_node/98_front_node_closed.scad
-// Description: Fully assembled and closed waterproof enclosure model for
+// Description: Fully assembled and closed waterproof v10 Monocoque model for
 //              collision verification, volume checks, and 3D rendering.
 // =============================================================================
 
@@ -10,42 +10,35 @@ include <../00_common/parameters.scad>;
 use <00_front_node_tub.scad>;
 use <01_front_node_lid.scad>;
 use <parts/005_cable_combs.scad>;
+use <parts/sensor_puck_environmental.scad>;
 use <03_front_node_usbc_plug.scad>;
 
 module front_node_closed_assembly() {
-    // 1. Lower Enclosure Tub
-    color("dimgray")
+    ch_x_start = FRONT_NODE_WALL + 3.5; // 6.0 mm
+    ch_y_start = FRONT_NODE_WALL + 3.5; // 6.0 mm
+
+    // 1. Lower Monocoque Enclosure Tub
+    color([0.16, 0.18, 0.20])
         front_node_lower_tub();
         
-    // 2. Upper Lid (Mated flush on top of lower tub)
-    color([0.25, 0.25, 0.27])
-        translate([0, 0, FRONT_NODE_TUB_H])
-            front_node_upper_lid();
+    // 2. Upper L-Slide Lid (Mated form-fit in C-grooves and locked)
+    color([0.22, 0.24, 0.26])
+        front_node_upper_lid();
             
-    // 3. South Cockpit Cable Gland Boot (in South wall at X = 43.0 mm)
+    // 3. South Cockpit Cable Gland Boot
     front_node_south_cable_boot_installed();
         
-    // 4. North Vehicle Cable Gland Boot (in North wall at X = 39.0 mm)
+    // 4. North Vehicle Cable Gland Boot
     front_node_north_cable_boot_installed();
         
-    // 5. USB-C Protective Plug (in position at East wall, forward right flank)
+    // 5. USB-C Protective Plug (in position at East wall)
     translate([FRONT_NODE_OUTER_L - 7.2, 24.1, FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + FRONT_NODE_PCB_H + 1.8])
         rotate([0, 90, 90])
             front_node_usbc_plug();
-            
-    // 6. 4x M3 Corner Clamping Screws (DIN 912 stainless steel)
-    corner_offsets = [
-        [FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
-        [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
-        [FRONT_NODE_CORNER_R, FRONT_NODE_OUTER_W - FRONT_NODE_CORNER_R],
-        [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_OUTER_W - FRONT_NODE_CORNER_R]
-    ];
-    color("silver") {
-        for (co = corner_offsets) {
-            translate([co[0], co[1], FRONT_NODE_OUTER_H - 2.5])
-                cylinder(r=2.8, h=2.5, center=false); // Screw heads
-        }
-    }
+
+    // 6. Modular Snap-On Environmental Sensor Puck (docked into top lid)
+    translate([ch_x_start + 55.0 - 22.0, ch_y_start + 28.0 - 22.0, FRONT_NODE_OUTER_H - 1.2])
+        sensor_puck_environmental_assembly();
 }
 
 front_node_closed_assembly();

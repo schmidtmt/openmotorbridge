@@ -417,27 +417,28 @@ Die Zuleitung von der Zentralbox zu beiden Seitenkoffer-Pods erfolgt über einen
 
 ---
 
-## 5. Gehäuse Typ C: Universal Front-Knoten (Cockpit- & Sensor-Hub)
+## 5. Gehäuse Typ C: Universal Front-Knoten (v10.0 Monocoque Slot-In Cockpit- & Sensor-Hub)
 
-Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage an Lenker, Risern, Gabelbrücke oder Sturzbügeln entwickelt (**ZERO Verkleidungsdemontage!** Ein Ausbau oder Öffnen von aufwendigen Touring-Verkleidungen wie Harley Sharknose / Batwing ist keinesfalls erforderlich):
+Das Gehäuse des Front-Knotens wurde in Version 10.0 analog zur Zentralbox (`01_main_box`) und den Satelliten-Pods (`02_pod_base`) auf die **schraubenlose v10 Monocoque Slot-In / Slide-In Architektur** umgestellt. Es wurde speziell für die geschützte Montage an Lenker, Risern, Gabelbrücke oder Sturzbügeln entwickelt (**ZERO Verkleidungsdemontage!** Ein Ausbau oder Öffnen von aufwendigen Touring-Verkleidungen wie Harley Sharknose / Batwing ist keinesfalls erforderlich):
 
-- **Außenabmessungen:** Kompakte **$98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$** (L x B x H, passend für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05).
+- **Außenabmessungen:** Schlanke **$98{,}0 \times 68{,}0 \times 22{,}0\,\text{mm}$** (L x B x H, passend für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, schwarz kugelgestrahlt und chemisch geglättet.
 - **Schutzart:** IP67 (tauch- und strahlwasserdicht) mit integrierter Gore-Tex Druckausgleichsmembran (ePTFE Vent) gegen Kondenswasserbildung.
-- **Automotive-Backbone-Integration:** Die Anbindung zur Zentralbox erfolgt über das geschirmte 4-adrige Automotive-Kabel (12V Bordnetz, GND, USB 2.0 D+/D-), das ohne Tankdemontage durch den Harley-Kabelkanal bzw. BMW-Rahmenstrang geführt wird (**ZERO Tank-Demontage!**).
-- **Laminarer GNSS- & Klima-Sensor-Puck:** Die Sensorik (u-blox SAM-M10Q Multi-GNSS Patch-Modul mit $15 \times 15\,\text{mm}$ Groundplane, TI TMP117 Labor-Temperatursensor $\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter und TI OPT3001 Umgebungslichtsensor) ist direkt im Anströmbereich des Riser/Schnabels platziert.
+- **v10 Slide-In Kinematik (L-Slide Schiebedeckel):** Längsseitige C-Profil Führungsnuten in Nord- und Südflanke mit durchgehenden PA12-Niederhaltelippen fixieren den Deckel 100 % formschlüssig gegen Schwingungen. An der Ostwand zieht ein $15^\circ$ Keilanzug (Front Wedge-Lock) den Deckel nach unten/vorne an die Dichtung; an der West-Einschuböffnung verriegelt ein Slam-to-Shut Schnappriegel (Deadbolt) im massiven Unterschwellen-Portal völlig werkzeuglos.
+- **Universal Dual Wi-Fi 6E Antennensystem (ESP32-E22 2x2 MIMO 5/6 GHz):** Speziell gestaltete Kombi-Antennennester im Deckelhohlraum nehmen wahlweise **selbstklebende Flex-PCB Dipole** (z. B. Taoglas FXP73 / Molex) oder **interne Stummelantennen** ($\varnothing 6{,}5 \times 32\,\text{mm}$ über integrierte Schnapp-C-Clips) auf. Getrennte Koaxial-Zugentlastungskanäle führen direkt zu den U.FL-Buchsen `ANT1` und `ANT2` auf PCBA 05 mit $90^\circ$ Polarisations- und Raumdiversität.
+- **Laminarer GNSS- & Klima-Sensor-Puck:** Die modulare Sensorik (u-blox SAM-M10Q Multi-GNSS Patch-Modul mit $15 \times 15\,\text{mm}$ Groundplane, TI TMP117 Labor-Temperatursensor $\pm 0{,}1\,^\circ\text{C}$ Glatteis-Wächter und TI OPT3001 Umgebungslichtsensor) dockt über formschlüssige Rastlaschen direkt werkzeuglos auf dem Schiebedeckel an.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Abbildung 8.18: Geschlossenes Front-Node IP67-Gehäuse.*
+*Abbildung 8.18: Geschlossenes Front-Node v10 Monocoque Slot-In IP67-Gehäuse mit angedocktem Sensor-Puck.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Abbildung 8.19: 3D-Explosionsdarstellung des Front-Knotens entlang der Z-Achse.*
+*Abbildung 8.19: 3D-Explosionsdarstellung des Front-Knotens: Monocoque-Unterwanne, PCBA 05 (82 x 50 mm), 2x Wi-Fi 6E Antennenebene, L-Slide Schiebedeckel und Sensor-Puck.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Abbildung 8.20: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal, UWB-Antennentasche im Boden und VBUS-Lastschalter.*
+*Abbildung 8.20: Transparente 3D-Schnittansicht des Front-Knotens mit Knowles MEMS Schallkanal, C-Profil Führungsschienen und interner Wi-Fi Antennenkammer.*
 
 ### 5.1 Das 4-in-1 Universal-Befestigungssystem des Front-Knotens
 
@@ -470,52 +471,49 @@ Das Gehäuse des Front-Knotens wurde speziell für die geschützte Montage an Le
 
 ### 5.2 Schnittstellen- & Gehäuselayout des Front-Knotens (Die IP68 Monocoque 2-Kabelstrang-Architektur)
 
-Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) setzt in v9.6 auf eine hermetisch dichte **IP68 Monocoque-Unterwanne mit genau zwei abgedichteten Rundkabel-Auslässen** anstelle der früheren 12 Einzel-Steckverbinder an offenen EPDM-Dichtkämmen:
+Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) setzt in v10.0 auf eine hermetisch dichte **IP68 Monocoque-Unterwanne mit genau zwei abgedichteten Rundkabel-Auslässen** und schraubenloser C-Schienen-Führung:
 
 > [!NOTE]
-> **Hintergrund der Konsolidierung (Entfall der 12-Port EPDM-Kämme & 2. Ladekreis):**
-> 1. **IP68 Dichtigkeit statt flatterndem Deckel:** Die früheren 70 mm breiten Gehäuseaussparungen an den 98 mm Längsflanken führten zu massiver Schwächung des Gehäusedeckels. In der Flankenmitte fehlte der vertikale Anpressdruck, wodurch Dichtkämme unter Vibrationen und Temperaturschwankungen undicht wurden. Das neue Monocoque-Gehäuse besitzt rundum geschlossene, formstabile Wände mit umlaufender Nut für eine 1,5 mm NBR/EPDM-Dichtschnur und 6-fach symmetrische Verschraubung.
-> 2. **Vertikaler Bauraum:** Gesteckte JST-PH Buchsenleisten beanspruchten mit Biegeradius 17,1 mm vertikale Höhe in einer 25,0 mm Box – Leitungen wurden direkt unterm Deckel um 90° abgeknickt.
-> 3. **Wegfall redundanter Ladekreise:** Smartphone-Schnellladen am Lenker (BMW GS / Road King) und Laden im Handschuhfach (Road Glide) schließen sich fahrzeugbezogen gegenseitig aus. Der redundante zweite 20W-Ladekreis `U8` (SC8102/SW3526), die Speicherdrossel `L3` und die Ports `J5_MP3` sowie `J6_AUX` entfallen ersatzlos. Ein einziger 20W USB-PD Regler (`U5`) speist die benötigte Ladezone.
-> 4. **Wirtschaftlichkeit:** Anstelle von vier verschiedenen 10er-Packungen teurer Micro-Steckverbinder (80–100 € Beschaffungsaufwand) nutzt das System handelsübliche Standard-COTS-Kabel.
+> **Vorteile der v10 Monocoque Slot-In Architektur gegenüber 4-Eckverschraubungen:**
+> 1. **100 % gleichmäßige Niederhaltekraft:** Anstelle punktueller Eckverschraubungen, die bei langen Flanken ($98\,\text{mm}$) zu Durchbiegung und Dichtungsermüdung führten, halten durchgehende C-Profil Führungsschienen mit $1{,}6\,\text{mm}$ PA12-Niederhaltelippen den Deckel über die gesamte Gehäuselänge spielfrei und vibrationsfest fest.
+> 2. **Keilanzug & Slam-to-Shut Deadbolt:** Die Einschubkinematik nutzt einen $15^\circ$ Keilanzug am geschlossenen Ost-Ende, der die Frontdichtung beim Einschieben automatisch komprimiert. Zwei federnde Schnappriegel im West-Portal sichern den Deckel rüttelfest gegen Zurückrutschen.
+> 3. **Universal-Antennenunterbringung:** Die beiden Wi-Fi 6E Antennen für den ESP32-E22 Companion (2x2 MIMO) sind geschützt im Deckelbett integriert – kompatibel sowohl mit flachen Flex-Dipolen als auch mit $\varnothing 6{,}5\,\text{mm}$ In-Gehäuse Stummelantennen.
+> 4. **Wirtschaftlichkeit & Wartungsfreundlichkeit:** Zero Schraubenwerkzeug zum Öffnen der Box nötig; Service-Zugang zum Flashen über die unverlierbar abgedichtete USB-C Buchse `J7` von außen.
 
 ```
-                         FRONT-KNOTEN IP68 MONOCOQUE-LAYOUT (TOP-VIEW)
+                         FRONT-KNOTEN v10 MONOCOQUE-LAYOUT (TOP-VIEW)
 +-----------------------------------------------------------------------------------------------------------------------------+
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | LINKE FLANKE / WEST (X = 0 mm)     |              INNENRAUM (PCBA 05, 82 x 50 mm)    | RECHTE FLANKE / OST (X = 98 mm)      |
 |                                    |                                                 |                                      |
-| * Vollwandiges MJF PA12 Monocoque  | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: IP67 USB-C Service-Buchse mit  |
-|   (100 % geschlossen, 0 Schlitze)  | * USB2514B Automotive 4-Port USB 2.0 Hub        |   formschlüssigem TPU-Schutzstopfen  |
-| * Schirmt interne Leistungsschaltung| * Single SC8102 / SW3526 20W USB-PD Controller  |   (100 % hermetisch verschließbar)   |
-|   - D4: SMCJ24CA 24V TVS-Diode     | * L2: Geschirmte Hochstrom-Speicherdrossel      | * SW1 (Boot) & SW2 (Reset) Taster    |
-|   - U3 / L1: TPS54302 5V/3A Buck   | * MK1: MSM261S4030 / SPH0645 I2S MEMS-Mikrofon  | * LED1: WS2812B RGB Statusanzeige    |
-|   - U6: TCAN334G CAN-Transceiver   | * K1: CPC1017N 120 Ohm Bus-Terminierungs-Relais |   (Polycarbonat-Lichtleiter-Dom)     |
-|   - K1: CPC1017N CAN Auto-Sensing  | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      |                                      |
-|   - Q2: DMP3017SFG Verpolschutz    | * U4: TPS2051B USB-Power-Gate (Dongle-Kaltstart)|                                      |
-| * M4/M5 Silentblock-Flanschohr     | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        | * M4/M5 Silentblock-Flanschohr       |
-|   (Mitte Y = 34.0 mm, Z = 0..5 mm) | * J_COCKPIT: 16-Pin Dual-Row 2.0 mm SMT-Header  |   (Mitte Y = 34.0 mm, Z = 0..5 mm)   |
-|                                    | * J_VEHICLE: 12-Pin Dual-Row 2.0 mm SMT-Header  |                                      |
+| * Monocoque Einschubportal mit     | * ESP32-P4 / ESP32-S3 Core Controller           | * J7: IP67 USB-C Service-Buchse mit  |
+|   massiver 6.0 mm Unterschwelle    | * ESP32-E22 Wi-Fi 6E Radio (ANT1 & ANT2 U.FL)   |   formschlüssigem TPU-Schutzstopfen  |
+| * 2x Deadbolt Schnappriegel-Taschen| * USB2514B Automotive 4-Port USB 2.0 Hub        |   (100 % hermetisch verschließbar)   |
+| * Heckwand Tropfnasen-Überdeckung  | * SW3526 20W USB-PD Controller & Drossel        | * Keilanzug-Nut für Deckel-Vordersitz|
+| * SW1 (Boot) & SW2 (Reset) Taster  | * MK1: Knowles SPH0645 I2S MEMS-Mikrofon        | * LED1: WS2812B RGB Statusanzeige    |
+| * Schirmt interne Leistungsteile   | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      |   (Polycarbonat-Lichtleiter-Dom)     |
+|   - D4: SMCJ36CA 36V TVS-Diode     | * U4: TPS2051B USB-Power-Gate (Dongle-Kaltstart)| * M4/M5 Silentblock-Flanschohr       |
+|   - U3 / L1: TPS54302 5V/3A Buck   | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        |   (Mitte Y = 34.0 mm, Z = 0..5 mm)   |
+| * M4/M5 Silentblock-Flanschohr     | * 4x M2.5 Standoffs (75.0 x 43.0 mm Bohrbild)   |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 |       AUSLASS 1 (SÜDFLANKE): COCKPIT-STRANG         |          AUSLASS 2 (NORDFLANKE): FAHRZEUG-STRANG                      |
 |       Geschirmtes Rundkabel Ø 6.0 mm (16-adrig)     |          Geschirmtes Rundkabel Ø 6.5 mm (12-adrig)                    |
 |       mit TPU-Dichtmanschette / Knickschutztülle    |          mit TPU-Dichtmanschette / Knickschutztülle                  |
-|       ==> Führt zum Cockpit-Satelliten-Verteiler    |          ==> Führt zum Fahrzeug-Satelliten-Verteiler (5 Ports)        |
+|       ==> Führt zum Cockpit-Satelliten-Verteiler    |          ==> Führt zum Fahrzeug-Satelliten-Verteiler                  |
 +-----------------------------------------------------+-----------------------------------------------------------------------+
 ```
 
 1. **Die zwei hermetischen Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$ / $\varnothing 6{,}5\,\text{mm}$):**
-   - **Auslass 1 (Cockpit-Kabelstrang, Südflanke):** Führt ein 16-adriges geschirmtes Rundkabel vom Platinen-Header `J_COCKPIT` (16-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Knickschutztülle direkt zum **Cockpit-Satelliten-Verteilerblock**. Beinhaltet: USB Upstream Host (Harley Skyline / Boom! Box), CP2AA Wireless Dongle Strom & Daten, Smartphone USB-PD 20W Fast-Charge Lade- und CC-Leitungen, Action-Cam / Navi 5V-Speisung sowie PTT-Lenkertastersignal.
-   - **Auslass 2 (Fahrzeug-Kabelstrang, Nordflanke):** Führt ein 12-adriges geschirmtes Rundkabel vom Platinen-Header `J_VEHICLE` (12-Pin Dual-Row 2.0 mm Verriegelungsstecker) durch eine TPU-Dichtmanschette zum **Fahrzeug-Satelliten-Verteilerblock**. Beinhaltet: 12V Zündungsplus (KL15) & Power-GND, CAN-Bus differenziell (CAN_H, CAN_L), Totwinkel-Spiegel-LEDs L/R (BSD), 12V geschalteten Zusatzscheinwerfer-Ausgang sowie die 4-polige I2C-Sensorleitung (+3.3V, GND, SDA, SCL) zum abgesetzten Sensor-Puck.
+   - **Auslass 1 (Cockpit-Kabelstrang, Südflanke):** Führt ein geschirmtes Rundkabel vom Platinen-Header durch eine TPU-Knickschutztülle direkt zum **Cockpit-Satelliten-Verteilerblock**. Beinhaltet: USB Upstream Host, CP2AA Wireless Dongle Strom & Daten, Smartphone USB-PD 20W Fast-Charge Lade- und CC-Leitungen, Action-Cam / Navi 5V-Speisung sowie PTT-Lenkertastersignal.
+   - **Auslass 2 (Fahrzeug-Kabelstrang, Nordflanke):** Führt ein geschirmtes Rundkabel durch eine TPU-Dichtmanschette zum **Fahrzeug-Satelliten-Verteilerblock**. Beinhaltet: 12V Zündungsplus (KL15) & Power-GND, Totwinkel-Spiegel-LEDs L/R (BSD), 12V geschalteten Zusatzscheinwerfer-Ausgang sowie die 4-polige I2C-Sensorleitung (+3.3V, GND, SDA, SCL) zum abgesetzten Sensor-Puck.
 2. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
    - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit unverlierbarem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und WebSerial-Konfiguration ohne Werkzeug und ohne Gehäuseöffnung.
-   - **100 % Hermetisch:** Da der Sensorbus direkt über das Nordkabel `J_VEHICLE` zum Fahrzeug-Satelliten geführt wird, entfällt der separate Kabeldurchbruch `J12` an der Ostwand vollständig – die rechte Flanke bleibt dauerhaft absolut dicht.
-   - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) unter elastischer TPU-Dichtmembran; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = 4-Draht Automotive-USB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = CAN-Fehler / Failsafe.
+   - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) an der Westwand; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = 4-Draht Automotive-USB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = Fehler / Failsafe.
 3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
-   - Vollwandige Monocoque-Schutzwand ohne jede Gehäusedurchbrechung. Maximaler Stoß-, Vibrations- und Spritzwasserschutz für die direkt dahinterliegende Leistungselektronik (TVS-Diode `D4`, 12V Buck `U3`, CAN-Transceiver `U6`, Optorelais `K1`, PMOS-Verpolschutz `Q2`).
+   - Horizontales Einschubportal für den Schiebedeckel mit integrierter $6{,}0\,\text{mm}$ hoher Bodenschwelle zum Schutz der Elektronik vor Schmutz- und Feuchtigkeitseintrag. Die Heckwand des Schiebedeckels überlappt die Schwelle mit einer umlaufenden Labyrinth-Tropfnase.
 4. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - **Historische UWB-Antennentasche:** Formschlüssige Vertiefung ($11 \times 11 \times 0{,}6\,\text{mm}$) diente in früheren Prototypen der Aufnahme der Taoglas FXUWB10 Flex-Antenne. In v10.0 durch das geschirmte 4-Draht Automotive-Bus-Backbone abgelöst.
    - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
+
 
 ---
 

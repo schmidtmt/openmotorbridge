@@ -95,7 +95,7 @@ M4_SCREW_HOLE_R       = 2.2;   // M4 clearance hole (r = 2.2 mm -> Ø 4.4 mm)
 M8_BORE_R             = 4.0;   // M8 cable through-bore (r = 4.0 mm -> Ø 8.0 mm)
 M8_STUDS_OUTER_R      = 6.0;   // M8 neck outer radius (Ø 12.0 mm)
 
-// --- 8. Universal Front Node Enclosure Dimensions (Type E: 98 x 68 x 25 mm) ---
+// --- 8. Universal Front Node Enclosure Dimensions (Type E: 98 x 68 x 22 mm v10 Monocoque) ---
 FRONT_NODE_PCB_L      = 82.0;  // PCB length in X (mm, PCBA 05)
 FRONT_NODE_PCB_W      = 50.0;  // PCB width in Y (mm, PCBA 05)
 FRONT_NODE_PCB_H      = 1.6;   // PCB thickness in Z (mm)
@@ -103,18 +103,24 @@ FRONT_NODE_PCB_R      = 2.5;   // PCB corner radius (mm)
 
 FRONT_NODE_CHAMBER_L  = 86.0;  // Internal chamber length in X (mm, 2mm margin per side)
 FRONT_NODE_CHAMBER_W  = 56.0;  // Internal chamber width in Y (mm, 3mm margin per side)
-FRONT_NODE_TUB_H      = 17.5;  // Lower tub depth in Z (mm)
-FRONT_NODE_LID_H      = 7.5;   // Upper lid height in Z (mm)
+FRONT_NODE_TUB_H      = 19.5;  // Monocoque lower tub depth in Z (mm)
+FRONT_NODE_LID_H      = 6.0;   // Upper slide lid thickness in Z (mm)
 FRONT_NODE_WALL       = 2.5;   // Wall thickness in HP MJF PA12 (mm)
 FRONT_NODE_CORNER_R   = 4.0;   // Outer enclosure corner radius (mm)
 
 FRONT_NODE_OUTER_L    = FRONT_NODE_CHAMBER_L + 2 * FRONT_NODE_WALL + 7.0; // 98.0 mm
 FRONT_NODE_OUTER_W    = FRONT_NODE_CHAMBER_W + 2 * FRONT_NODE_WALL + 7.0; // 68.0 mm
-FRONT_NODE_OUTER_H    = FRONT_NODE_TUB_H + FRONT_NODE_LID_H;              // 25.0 mm
+FRONT_NODE_OUTER_H    = 22.0;                                             // Total closed height in Z (mm)
+
+// Front Node v10 Monocoque Slide-In Kinematics
+FRONT_NODE_RAIL_Z      = 16.5; // Guide rail centerline height in Z (mm)
+FRONT_NODE_RAIL_H      = 2.8;  // Receptive C-groove height in Z (mm)
+FRONT_NODE_RAIL_DEPTH  = 1.6;  // Receptive C-groove depth into North/South walls (mm)
+FRONT_NODE_REAR_SILL_H = 6.0;  // Height of solid bottom sill at West portal (mm)
 
 // PCB Standoff Heights & Radii (100% Soldering-Iron Free)
-FRONT_NODE_STANDOFF_H = 3.0;   // Height of PCB standoffs from floor (mm)
-FRONT_NODE_STANDOFF_R = 3.0;   // Outer radius of M2.5 screw bosses (mm)
+FRONT_NODE_STANDOFF_H = 3.5;   // Height of PCB standoffs from floor (mm)
+FRONT_NODE_STANDOFF_R = 3.2;   // Outer radius of M2.5 screw bosses (mm)
 FRONT_NODE_CORE_HOLE_R= M2_5_PILOT_HOLE_R; // Core hole for direct M2.5 screw engagement (Ø 2.1 mm)
 
 // AMPS 4-Hole Mounting Pattern (38 x 30 mm with DIN 934 M4 Captive Nut Pockets)
@@ -127,4 +133,5 @@ AMPS_NUT_H            = NUT_M4_H;  // Captive M4 hex nut pocket depth (3.4 mm)
 FRONT_NODE_MIC_HOLE_R = 1.25;  // Sound canal radius (Ø 2.5 mm)
 FRONT_NODE_MIC_MEMB_R = 3.0;   // Gore ePTFE membrane pocket radius (Ø 6.0 mm)
 FRONT_NODE_MIC_MEMB_D = 0.8;   // Membrane pocket depth (mm)
+
 

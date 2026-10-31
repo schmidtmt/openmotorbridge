@@ -377,27 +377,28 @@ Interconnection from the Central Box to both saddlebag pods utilizes a heavy-dut
 
 ---
 
-## 5. Type C: Universal Front Node (Cockpit & Sensor Hub)
+## 5. Type C: Universal Front Node (v10.0 Monocoque Slot-In Cockpit & Sensor Hub)
 
-The Front Node enclosure was specially engineered for protected installation on handlebars, risers, triple trees, crash bars, or front subframes (**ZERO Fairing Removal!** No disassembly or opening of complex touring fairings like Harley Sharknose / Batwing is required):
+In Version 10.0, the Front Node enclosure transitions to the **screwless v10 Monocoque Slot-In / Slide-In architecture**, mirroring the proven mechanical platform of the Central Box (`01_main_box`) and Satellite Pods (`02_pod_base`). It is engineered specifically for sheltered installation on handlebars, risers, triple trees, crash bars, or front subframes (**ZERO Fairing Removal!** No disassembly or opening of complex touring fairings like Harley Sharknose / Batwing is required):
 
-- **Outer Dimensions:** Compact **$98.0 \times 68.0 \times 25.0\,\text{mm}$** (L x W x H, tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05).
+- **Outer Dimensions:** Slim **$98.0 \times 68.0 \times 22.0\,\text{mm}$** (L x W x H, tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05).
 - **Material:** HP Multi Jet Fusion (MJF) PA12, black glass-bead blasted and chemically vapor smoothed.
 - **Protection Class:** IP67 (submersion and high-pressure water jet proof) with integrated Gore-Tex pressure equalization vent (ePTFE vent) against condensation.
-- **Automotive Backbone Integration:** Connection to the Central Box is handled via the shielded 4-wire automotive harness (12V vehicle power, GND, USB 2.0 D+/D-), routed directly through the Harley wire caddy or BMW frame channel without lifting the fuel tank (**ZERO tank lifting required!**).
-- **Laminar GNSS & Climate Sensor Puck:** The remote sensor cluster (u-blox SAM-M10Q Multi-GNSS patch module with $15 \times 15\,\text{mm}$ ground plane, TI TMP117 laboratory-grade $\pm 0.1\,^\circ\text{C}$ temperature sensor, and TI OPT3001 ambient light sensor) sits in the laminar oncoming airflow scoop at the riser/beak.
+- **v10 Slide-In Kinematics (L-Slide Lid):** Longitudinal C-profile guide rails in North and South sidewalls with solid PA12 retaining roof lips captivate the lid with 100% form-fit against vibration. At the East wall, a $15^\circ$ wedge nose (Front Wedge-Lock) pulls the lid down/forward into the front gasket; at the West insertion portal, dual tool-free deadbolt snaps (Slam-to-Shut) lock into the massive lower sill.
+- **Universal Dual Wi-Fi 6E Antenna System (ESP32-E22 2x2 MIMO 5/6 GHz):** Specially engineered internal hybrid antenna cradles inside the lid cavity accommodate either **self-adhesive Flex PCB dipoles** (e.g. Taoglas FXP73 / Molex) or **internal omnidirectional stub antennas** ($\varnothing 6.5 \times 32\,\text{mm}$ via integrated snap-in C-clips). Dedicated coaxial strain-relief routing channels lead directly to U.FL ports `ANT1` and `ANT2` on PCBA 05 with $90^\circ$ polarization and spatial diversity.
+- **Laminar GNSS & Climate Sensor Puck:** The modular sensor cluster (u-blox SAM-M10Q Multi-GNSS patch module with $15 \times 15\,\text{mm}$ ground plane, TI TMP117 laboratory-grade $\pm 0.1\,^\circ\text{C}$ temperature sensor, and TI OPT3001 ambient light sensor) docks tool-free via positive snap-latches directly onto the slide lid.
 
 ![Universal Front Node Closed CAD](../images/cad/front_node_closed_cad.png)
 
-*Figure 8.18: Closed Front Node IP67 enclosure.*
+*Figure 8.18: Closed Front Node v10 Monocoque Slot-In IP67 enclosure with docked Sensor Puck.*
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Figure 8.19: 3D exploded view of the Front Node along the vertical Z-axis.*
+*Figure 8.19: 3D exploded view of the Front Node: Monocoque lower tub, PCBA 05 (82 x 50 mm), dual Wi-Fi 6E antenna tier, L-Slide Lid, and Sensor Puck.*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
-*Figure 8.20: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct and VBUS load switch.*
+*Figure 8.20: Transparent 3D cutaway view of the Front Node showing Knowles MEMS acoustic duct, C-profile guide rails, and internal Wi-Fi antenna chamber.*
 
 ### 5.1 The 4-in-1 Universal Mounting System of the Front Node
 
@@ -425,54 +426,53 @@ The Front Node enclosure was specially engineered for protected installation on 
 | 4. 3M DUAL-LOCK VELCRO CHANNELS:                                                       |
 |    * 2x recessed 20 mm channels for self-adhesive 3M Dual-Lock mushroom tape           |
 |    * Perfect for flat plastic inner fairing surfaces in Batwing or Sharknose cowls     |
-+-------------------------------------### 5.2 Front Node Enclosure & Interface Layout (The IP68 Monocoque 2-Harness Architecture)
++----------------------------------------------------------------------------------------+
+```
 
-In v9.6, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) shifts to a hermetically sealed **IP68 monocoque lower tub with exactly two sealed round jacket cable exits**, replacing the earlier 12 individual headers that relied on fragile EPDM cable combs:
+### 5.2 Front Node Enclosure & Interface Layout (The IP68 Monocoque 2-Harness Architecture)
+
+In v10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) relies on a hermetically sealed **IP68 monocoque lower tub with exactly two sealed round jacket cable exits** and screwless C-rail slide retention:
 
 > [!NOTE]
-> **Rationale for Consolidation (Elimination of 12-Port EPDM Combs & 2nd PD Controller):**
-> 1. **IP68 Hermetic Sealing vs. Flapping Lid:** The previous 70 mm wide cutouts along the 98 mm side walls severely compromised enclosure rigidity. Lacking vertical clamping pressure at the wall centers, the flexible EPDM combs degraded and leaked under temperature cycling and engine vibration. The new monocoque enclosure features continuous solid structural walls with an integrated perimeter groove for a 1.5 mm NBR/EPDM O-ring cord and 6 symmetrical clamping screws.
-> 2. **Vertical Envelope:** Mated JST-PH headers with wire bends required 17.1 mm of vertical height inside a 25.0 mm box, forcing wires into severe 90° pinches directly beneath the lid.
-> 3. **Elimination of Redundant Charging Stages:** Handlebar smartphone fast-charging (BMW GS / Road King) and glovebox media charging (Road Glide) are mutually exclusive vehicle archetypes. The second 20W buck controller `U8` (SC8102/SW3526), storage choke `L3`, and ports `J5_MP3` and `J6_AUX` are eliminated without replacement. A single 20W USB-PD controller (`U5`) powers the active charging zone.
-> 4. **Cost & Sourcing:** Rather than requiring four separate 10-packs of niche micro-connectors (80–100 € sourcing overhead), the system relies on off-the-shelf standard COTS USB-C cables.
+> **Advantages of the v10 Monocoque Slot-In Architecture over 4-Corner Screws:**
+> 1. **100% Continuous Hold-Down Force:** Rather than point clamping at corners—which led to center-wall bowing and gasket fatigue on long $98\,\text{mm}$ spans—continuous C-profile guide rails with $1.6\,\text{mm}$ PA12 retaining lips secure the lid along its entire length rattle-free.
+> 2. **Front Wedge-Lock & Slam-to-Shut Deadbolt:** The insertion kinematics utilize a $15^\circ$ wedge nose at the closed East end that automatically compresses the front perimeter seal. Dual resilient snap deadbolts in the West portal lock the lid securely against vibration.
+> 3. **Universal Antenna Accommodation:** Dual Wi-Fi 6E antennas for the ESP32-E22 companion (2x2 MIMO) are sheltered inside the lid cavity—compatible with both adhesive flex dipoles and $\varnothing 6.5\,\text{mm}$ internal stub antennas.
+> 4. **Serviceability & Maintenance:** Zero screws required to open the box; external firmware flashing and diagnostics via the sealed USB-C port `J7`.
 
 ```
-                         FRONT NODE IP68 MONOCOQUE LAYOUT (TOP VIEW)
+                         FRONT NODE v10 MONOCOQUE LAYOUT (TOP VIEW)
 +-----------------------------------------------------------------------------------------------------------------------------+
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | LEFT FLANK / WEST (X = 0 mm)       |              INTERNAL CHAMBER (82 x 50 mm PCB)  | RIGHT FLANK / EAST (X = 98 mm)       |
 |                                    |                                                 |                                      |
-| * Solid MJF PA12 Monocoque Wall    | * ESP32-S3-WROOM-1-N16R8 Dual-Core MC           | * J7: IP67 Waterproof USB-C Service  |
-|   (100% solid, zero penetrations)  | * USB2514B Automotive 4-Port USB 2.0 Hub        |   Port with tethered TPU sealing cap |
-| * Shields internal power stage:    | * Single SC8102 / SW3526 20W USB-PD Controller  |   (100% Hermetically Sealed)         |
-|   - D4: SMCJ24CA 24V TVS Diode     | * L2: Shielded high-current power inductor      | * SW1 (Boot) & SW2 (Reset) Switches  |
-|   - U3 / L1: TPS54302 5V/3A Buck   | * MK1: MSM261S4030 / SPH0645 I2S MEMS Micro     | * LED1: WS2812B RGB Status Display   |
-|   - U6: TCAN334G CAN Transceiver   | * K1: CPC1017N 120 Ohm Bus-Termination Relay    |   (Polycarbonate Light-Pipe Dome)    |
-|   - K1: CPC1017N CAN Auto-Sensing  | * Q1: DMN63D8LDW Mirror BSD Driver Stage        |                                      |
-|   - Q2: DMP3017SFG Reverse-Polarity| * U4: TPS2051B USB Power Gate (Dongle restart)  |                                      |
-| * M4/M5 Silentblock Flange Ear     | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        | * M4/M5 Silentblock Flange Ear       |
-|   (Center Y = 34.0 mm, Z = 0..5 mm)| * J_COCKPIT: 16-Pin Dual-Row 2.0 mm SMT Header  |   (Center Y = 34.0 mm, Z = 0..5 mm)  |
-|                                    | * J_VEHICLE: 12-Pin Dual-Row 2.0 mm SMT Header  |                                      |
+| * Monocoque insertion portal with  | * ESP32-P4 / ESP32-S3 Core Controller           | * J7: IP67 Waterproof USB-C Service  |
+|   solid 6.0 mm lower sill          | * ESP32-E22 Wi-Fi 6E Radio (ANT1 & ANT2 U.FL)   |   Port with tethered TPU sealing cap |
+| * 2x Deadbolt snap catch sockets   | * USB2514B Automotive 4-Port USB 2.0 Hub        |   (100% Hermetically Sealed)         |
+| * Heckwand drip apron overlap      | * SW3526 20W USB-PD Controller & Choke          | * Front Wedge-Lock pocket for lid    |
+| * SW1 (Boot) & SW2 (Reset) Switches| * MK1: Knowles SPH0645 I2S MEMS Microphone      | * LED1: WS2812B RGB Status Display   |
+| * Shields internal power stage:    | * Q1: DMN63D8LDW Mirror BSD Driver Stage        |   (Polycarbonate Light-Pipe Dome)    |
+|   - D4: SMCJ36CA 36V TVS Diode     | * U4: TPS2051B USB Power Gate (Dongle restart)  | * M4/M5 Silentblock Flange Ear       |
+|   - U3 / L1: TPS54302 5V/3A Buck   | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        |   (Center Y = 34.0 mm, Z = 0..5 mm)  |
+| * M4/M5 Silentblock Flange Ear     | * 4x M2.5 Standoffs (75.0 x 43.0 mm pitch)      |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 |       EXIT 1 (SOUTH FLANK): COCKPIT HARNESS         |          EXIT 2 (NORTH FLANK): VEHICLE HARNESS                        |
 |       Shielded round cable Ø 6.0 mm (16-conductor)  |          Shielded round cable Ø 6.5 mm (12-conductor)                |
 |       with molded TPU strain-relief boot            |          with molded TPU strain-relief boot                          |
-|       ==> Connects to Cockpit Breakout Satellite    |          ==> Connects to Vehicle Breakout Satellite (5 Ports)        |
+|       ==> Connects to Cockpit Breakout Satellite    |          ==> Connects to Vehicle Breakout Satellite                  |
 +-----------------------------------------------------+-----------------------------------------------------------------------+
 ```
 
 1. **The Two Hermetic Round Cable Exits ($\\varnothing 6.0\\,\\text{mm}$ / $\\varnothing 6.5\\,\\text{mm}$):**
-   - **Exit 1 (Cockpit Harness, South Flank):** Routes a 16-conductor shielded round jacket cable from PCB header `J_COCKPIT` (16-pin dual-row 2.0 mm positive-latch header) through a flexible TPU sealing boot directly to the **Cockpit Breakout Satellite**. Carries: OEM Upstream USB Host (Harley Skyline / Boom! Box), CP2AA Wireless Dongle power and data, Smartphone USB-PD 20W fast-charging power and CC lines, Action-Cam / 5V-Navi auxiliary power, and the handlebar PTT switch input.
-   - **Exit 2 (Vehicle Harness, North Flank):** Routes a 12-conductor shielded round jacket cable from PCB header `J_VEHICLE` (12-pin dual-row 2.0 mm positive-latch header) through a flexible TPU sealing boot to the **Vehicle Breakout Satellite**. Carries: 12V switched ignition power (KL15) and ground, differential CAN-Bus (CAN_H, CAN_L), Blind Spot Detection mirror warning LED outputs L/R, 12V switched auxiliary light output, and the 4-pin I2C sensor bus (+3.3V, GND, SDA, SCL) to the remote puck.
+   - **Exit 1 (Cockpit Harness, South Flank):** Routes a shielded round jacket cable through a flexible TPU sealing boot directly to the **Cockpit Breakout Satellite**. Carries: OEM Upstream USB Host, CP2AA Wireless Dongle power and data, Smartphone USB-PD 20W fast-charging power and CC lines, Action-Cam / 5V-Navi auxiliary power, and handlebar PTT switch input.
+   - **Exit 2 (Vehicle Harness, North Flank):** Routes a shielded round jacket cable through a flexible TPU sealing boot to the **Vehicle Breakout Satellite**. Carries: 12V switched ignition power (KL15) and ground, Blind Spot Detection mirror warning LED outputs L/R, 12V switched auxiliary light output, and 4-pin I2C sensor bus (+3.3V, GND, SDA, SCL) to the remote puck.
 2. **Right Short Flank / East Flank ($X = 98.0\\,\\text{mm}$):**
-   - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\\text{tub}} = 24.1\\,\\text{mm}$) with tethered TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike firmware flashing, serial debugging, and WebSerial parameter configuration without tools or enclosure disassembly.
-   - **100% Hermetically Sealed:** Because the sensor bus routes directly through the North vehicle harness `J_VEHICLE` to the 5-port Vehicle Satellite, the separate `J12` East-wall cable cutout is eliminated entirely—leaving the East flank permanently and reliably sealed.
-   - **Tactile Switches & Indicators:** Miniature `SW1` (Boot) and `SW2` (Reset) buttons sealed beneath an elastic TPU overlay; optical polycarbonate light pipe in lid for the **WS2812B RGB Status LED** (`LED1`): Green = Normal Operation, Blue = 4-Wire Automotive USB Backbone Active, Yellow = USB Enumeration / Dongle Boot, Red = CAN Error / Failsafe.
+   - **Service & Diagnostics:** IP67 waterproof USB-C service receptacle (`J7`, $Y_{\text{tub}} = 24.1\,\text{mm}$) with tethered TPU sealing cap (`front_node_usbc_cap_tpu.stl`) for direct on-bike firmware flashing, serial debugging, and WebSerial parameter configuration without tools or enclosure disassembly.
+   - **Tactile Switches & Indicators:** Miniature `SW1` (Boot) and `SW2` (Reset) buttons at West wall; optical polycarbonate light pipe in lid for the **WS2812B RGB Status LED** (`LED1`): Green = Normal Operation, Blue = 4-Wire Automotive USB Backbone Active, Yellow = USB Enumeration / Dongle Boot, Red = Error / Failsafe.
 3. **Left Short Flank / West Flank ($X = 0\,\text{mm}$):**
-   - Solid continuous monocoque wall without cutouts. Provides maximum impact, vibration, and water spray protection for the adjacent internal power components (TVS diode `D4`, 12V buck `U3`, CAN transceiver `U6`, opto-relay `K1`, PMOS reverse-polarity `Q2`).
+   - Horizontal slide insertion portal with integrated $6.0\,\text{mm}$ lower sill protecting internal electronics against moisture and debris. The slide lid's Heckwand overlaps the sill with a labyrinth drip apron.
 4. **Bottom Face ($Z = 0\,\text{mm}$):**
-   - **Historical UWB Antenna Pocket:** Recessed pocket ($11 \times 11 \times 0.6\,\text{mm}$) in the lower tub floor accommodated the Taoglas FXUWB10 flex antenna in earlier prototypes. In v10.0, superseded by the shielded 4-wire automotive bus backbone.
-   - **MEMS Acoustic Duct:** Acoustic canal ($\varnothing 2.5\,\text{mm}$) protected by a hydrophobic and oleophobic Gore ePTFE membrane ($\varnothing 6.0 \times 0.8\,\text{mm}$) for the Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ microphone (`MK1`) for dynamic speed-dependent volume control (Speed-Volume-Control).
+   - **MEMS Acoustic Duct:** Acoustic canal ($\varnothing 2.5\,\text{mm}$) protected by a hydrophobic and oleophobic Gore ePTFE membrane ($\varnothing 6.0 \times 0.8\,\text{mm}$) for the Knowles SPH0645 $I^2S$ microphone (`MK1`) for dynamic speed-dependent volume control (Speed-Volume-Control).
 
 ---
 

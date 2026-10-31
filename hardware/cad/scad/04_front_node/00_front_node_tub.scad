@@ -1,9 +1,11 @@
 // =============================================================================
-// OpenMotorBridge - Universal Front Node: Lower Enclosure Tub (Unterteil)
+// OpenMotorBridge - Universal Front Node: Monocoque Lower Tub (v10.0 Slot-In)
 // =============================================================================
 // File: hardware/cad/scad/04_front_node/00_front_node_tub.scad
-// Description: HP MJF PA12 waterproof lower case tub with 4-in-1 universal
-//              mounting system, PCB standoffs, acoustic vent, and cable comb slots.
+// Description: HP MJF PA12 waterproof monolithic monocoque lower case tub with
+//              4-in-1 universal mounting system, PCBA 05 standoffs, acoustic vent,
+//              longitudinal C-profile guide rails, front wedge lock pocket, and
+//              rear slide portal. 100% free of vertical clamping screws!
 // =============================================================================
 
 include <../00_common/parameters.scad>;
@@ -11,90 +13,67 @@ include <../00_common/screw_bosses.scad>;
 use <parts/000_front_node_base_tub.scad>;
 use <parts/001_pcb_standoffs.scad>;
 use <parts/002_acoustic_vent.scad>;
-use <parts/003_sealing_system.scad>;
 use <parts/004_mounting_system.scad>;
 use <parts/005_cable_combs.scad>;
 
 module front_node_lower_tub() {
+    ch_x_start = FRONT_NODE_WALL + 3.5; // 6.0 mm
+    ch_y_start = FRONT_NODE_WALL + 3.5; // 6.0 mm
+    rail_bottom_z = FRONT_NODE_RAIL_Z - FRONT_NODE_RAIL_H/2.0; // 15.1 mm
+
     difference() {
         union() {
-            // 1. Monolithic Base Tub Body (Hollowed outer block with rounded corners)
+            // 1. Monolithic Monocoque Base Tub Body (with C-rails, front wedge pocket & West portal)
             front_node_base_tub();
             
-            // 2. Additive 2x M4/M5 Silentblock Flange Mounting Ears (East & West)
+            // 2. Additive 2x M4/M5 Silentblock Flange Mounting Ears (East & West flanks)
             front_node_flange_ears(ear_len = 14.0, ear_w = 14.0, ear_h = 5.0, hole_r = 2.5);
 
-            // 3. Additive Internal UWB Antenna Cradle Boss (Taoglas FXUWB10 at X=45.0, Y=34.0)
-            translate([45.0, 34.0, FRONT_NODE_WALL]) {
-                translate([0, 0, 0.6])
-                    cube([15.0, 15.0, 1.2], center=true);
-            }
+            // 3. Stiffening fillets along bottom interior perimeter
+            translate([ch_x_start + 1.0, ch_y_start + 1.0, FRONT_NODE_WALL])
+                cube([FRONT_NODE_CHAMBER_L - 2.0, 1.2, 1.5], center=false);
+            translate([ch_x_start + 1.0, ch_y_start + FRONT_NODE_CHAMBER_W - 2.2, FRONT_NODE_WALL])
+                cube([FRONT_NODE_CHAMBER_L - 2.0, 1.2, 1.5], center=false);
         }
         
-        // 4. Perimeter Sealing Groove (Nut for Ø 1.5 mm O-ring cord)
-        front_node_sealing_groove_tool(
-            length = FRONT_NODE_OUTER_L,
-            width  = FRONT_NODE_OUTER_W,
-            z_top  = FRONT_NODE_TUB_H,
-            groove_w = 2.0,
-            groove_depth = 1.6
+        // 4. South Cockpit Cable Gland Cutout (Y = 0 mm, X = 35.5 mm, Z = 9.5 mm)
+        // Kept below the C-rail guide roof (z_top = 15.1 mm) to preserve continuous guide rail!
+        south_round_cable_gland_cutout(
+            x_center = 35.5,
+            z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 3.5,
+            bore_r   = 4.5,
+            collar_r = 6.0,
+            z_top    = rail_bottom_z
         );
-        
-        // 5. 4x M3 Corner Clamping Screw Holes with Captive DIN 934 M3 Hex Nut Pockets
-        // 100% Soldering-Iron Free & Infinite Maintenance Cycles: Steel-in-Steel Clamping (analogous to Central Box)
-        corner_offsets = [
-            [FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
-            [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_CORNER_R],
-            [FRONT_NODE_CORNER_R, FRONT_NODE_OUTER_W - FRONT_NODE_CORNER_R],
-            [FRONT_NODE_OUTER_L - FRONT_NODE_CORNER_R, FRONT_NODE_OUTER_W - FRONT_NODE_CORNER_R]
-        ];
-        for (co = corner_offsets) {
-            translate([co[0], co[1], -0.1])
-                rotate([0, 0, 15])
-                    hex_nut_pocket(
-                        sw=NUT_M3_SW,
-                        h=NUT_M3_H + 0.2,
-                        screw_r=M3_SCREW_HOLE_R,
-                        through_h=FRONT_NODE_TUB_H + 2.0
-                    );
-        }
-        
-        // 6. South Cockpit Cable Gland Bore (Y = 0 mm, X = 35.5 mm, Z = 9.5 mm)
-        // Directly aligned with J_COCKPIT (KiCad X=127.50 mm, Y=114.50 mm)
-        south_round_cable_gland_cutout();
             
-        // 7. North Vehicle Cable Gland Bore (Y = 68.0 mm, X = 35.5 mm, Z = 9.5 mm)
-        // Directly aligned with J_VEHICLE (KiCad X=127.50 mm, Y=75.42 mm)
-        north_round_cable_gland_cutout();
+        // 5. North Vehicle Cable Gland Cutout (Y = 68.0 mm, X = 35.5 mm, Z = 9.5 mm)
+        north_round_cable_gland_cutout(
+            x_center = 35.5,
+            z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 3.5,
+            bore_r   = 4.5,
+            collar_r = 6.0,
+            z_top    = rail_bottom_z
+        );
             
-        // 8. USB-C Service Port Opening (East wall)
+        // 6. USB-C Service Port Opening (East wall, X = 98 mm, Y = 24.1 mm)
         front_node_usbc_service_cutout();
             
-        // 9. Acoustic Vent Port Cutout for Knowles MEMS (floor)
-        translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, 0])
+        // 7. Acoustic Vent Port Cutout for Knowles MEMS (floor, aligned with MK1)
+        translate([ch_x_start, ch_y_start, 0])
             front_node_acoustic_vent_cutout(floor_thickness = FRONT_NODE_WALL);
             
-        // 10. AMPS 4-Hole Mounting Pattern Cutouts (floor underside)
+        // 8. AMPS 4-Hole Mounting Pattern Cutouts (floor underside)
         front_node_amps_cutouts(h_depth = 5.0);
         
-        // 11. Crossed Zip-Tie & Hose Clamp Tunnels (floor underside)
+        // 9. Crossed Zip-Tie & Hose Clamp Tunnels (floor underside)
         front_node_ziptie_tunnels(slot_w = 5.5, slot_depth = 1.4);
         
-        // 12. 3M Dual-Lock Landing Pad Recess (floor underside)
+        // 10. 3M Dual-Lock Landing Pad Recess (floor underside)
         front_node_dual_lock_recess(pad_l = 50.0, pad_w = 28.0, pad_depth = 0.6);
-
-        // 13. Internal UWB Antenna Floor Pocket (Taoglas FXUWB10: 12.0 x 12.0 x 0.8 mm)
-        // Positioned directly below Qorvo DW3110 / ANT_UWB on PCBA 05 B.Cu (X=45.0, Y=34.0)
-        translate([45.0, 34.0, FRONT_NODE_WALL + 1.2 - 0.4]) {
-            cube([12.0, 12.0, 0.9], center=true);
-            // U.FL Cable Relief Channel leading to ANT_UWB towards North (+Y)
-            translate([0, 5.0, 0])
-                cube([3.5, 6.0, 0.9], center=true);
-        }
     }
     
-    // 13. Additive: 4x Internal M2.5 PCB Standoffs (rising from floor)
-    translate([FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL + 3.5, FRONT_NODE_WALL]) {
+    // 11. Additive: 4x Internal M2.5 PCB Standoffs (rising from floor at H1-H4 pitch 75.0 x 43.0 mm)
+    translate([ch_x_start, ch_y_start, FRONT_NODE_WALL]) {
         front_node_pcb_standoffs(h = FRONT_NODE_STANDOFF_H);
     }
 }
