@@ -607,7 +607,7 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 * **60W USB-PD Power-Engine:**
   * TPS54302 Synchronous Buck Converter (`U3`): Erzeugt stabile +5V (bis 3A) für Peripherie, Pods und WS2812B.
   * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Bis 30W USB-PD (PPS, QC4+, AFC, FCP) für Smartphone-Schnellladen am Lenker oder Handschuhfach.
-  * TLV75533P Low-Noise LDO (`U7`): Liefert saubere +3.3V Systemspannung für ESP32-P4, ESP32-E22, TCAN334G und Sensoren.
+  * TLV75533P Low-Noise LDO (`U7`): Liefert saubere +3.3V Systemspannung für ESP32-P4, ESP32-E22 und Sensoren.
   * TPS2051B Load Switch (`U4`): Softwaregesteuertes Power-Gating für den CP2AA Dongle mit Fault-Reporting.
   * TPS1H100 Smart High-Side Switch (`Q2`): Schaltbarer 12V High-Side Ausgang (`J_AUX_LIGHT`) für LED-Zusatzscheinwerfer oder Heizgriff-Steuerung.
 * **Modularer Sensor-Puck ("Körbchen") Schnittstelle (`J_SENSOR_EXT` / 6-Pin JST-GH):**
@@ -619,7 +619,6 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
   * 2x 4-polige JST-SH Buchsen (`J_DISP_L` und `J_DISP_R`) zu den beiden Cockpit Speaker Corner Pod Displays (`cockpit_speaker_corner_pod.scad`).
   * 1x 2-polige JST-PH Buchse (`J10`): Power-Only 12V/15W Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride.
   * 1x 2-polige JST-PH Buchse (`J8`): Power-Only 5V/10W BC 1.2 DCP Speisung für GoPro / Insta360 Action-Cam am Cockpit.
-  * 1x 2-polige JST-GH Buchse (`J_CAN`): Dedizierter Fahrzeug- und Cockpit-CAN-Bus mit schaltbarer CPC1017N 120 $\Omega$ Terminierung.
   * 1x 2-polige JST-PH Buchse (`J_AUX_LIGHT`): Geschalteter 12V Treiber-Ausgang für Zusatzscheinwerfer.
   * 1x 6-polige JST-GH Buchse (`J4`): Handschuhfach Media- & Power-Injection Hub Anbindung.
 

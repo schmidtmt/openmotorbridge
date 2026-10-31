@@ -601,7 +601,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 * **60W Power Engine:**
   * TPS54302 Synchronous Buck Converter (`U3`): Regulates clean +5V (up to 3A) for cockpit peripherals, mirror pods, and WS2812B LEDs.
   * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Up to 30W USB-PD (PPS, QC4+, AFC, FCP) for driver smartphone fast charging.
-  * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-P4, ESP32-E22, TCAN334G, and onboard sensors.
+  * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-P4, ESP32-E22, and onboard sensors.
   * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle with overcurrent fault reporting.
   * TPS1H100 Smart High-Side Switch (`Q2`): Switched 12V high-side output (`J_AUX_LIGHT`) for auxiliary light pods or heated grips.
 * **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**
@@ -613,7 +613,6 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * 2x 4-pin JST-SH receptacles (`J_DISP_L` and `J_DISP_R`) to both Cockpit Speaker Corner Pod displays (`cockpit_speaker_corner_pod.scad`).
   * 1x 2-pin JST-PH receptacle (`J10`): Power-Only 12V/15W feed for Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride.
   * 1x 2-pin JST-PH receptacle (`J8`): Power-Only 5V/10W BC 1.2 DCP feed for GoPro / Insta360 action cams at the cockpit.
-  * 1x 2-pin JST-GH receptacle (`J_CAN`): Dedicated vehicle and cockpit CAN bus with software-switched CPC1017N 120 $\Omega$ termination.
   * 1x 2-pin JST-PH receptacle (`J_AUX_LIGHT`): Switched 12V auxiliary light driver output.
   * 1x 6-pin JST-GH receptacle (`J4`): Glovebox Media & Power-Injection Hub interface.
 
