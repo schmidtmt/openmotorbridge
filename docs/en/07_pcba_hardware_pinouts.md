@@ -23,9 +23,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
 |       | In-Bag 30W USB-PD Charge Port | 2-Sided SMT   |         | 30W PD, J_AUDIO_PWR  |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05**| **Universal Front Node**      | 82 x 50 mm    | 4 Layer | ESP32-S3, SAM-M10Q,  |
-|       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Knowles MEMS Mic,    |
-|       | 4-Wire Bus (Zero Tank Lift!)  |               |         | SC8102 PD, TMP117    |
+| **PCBA 05**| **Universal Front Node**      | 82 x 50 mm    | 4 Layer | ESP32-P4, ESP32-E22, |
+|       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
+|       | 4-Wire Bus (Zero Tank Lift!)  |               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05B**| **Symmetrical Mirror Pod**    | 32 x 14 mm    | 2 Layer | Amber BSD LED,       |
 |       | (2x Identical for Left/Right  | (M8/M10 Stud) | (ENIG)  | IP67 Tactile Switch, |
@@ -576,30 +576,46 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 ## 7. PCBA 05: Universal Front Node (`openmotorbridge_front_node`)
 
 ![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
-*Figure 7.5a: KiCad 3D view of the Universal Front Node Top (PCBA 05, 82 x 50 mm) with ESP32-S3-WROOM-1U, u-blox SAM-M10Q GNSS, Knowles MEMS acoustic sensor, Southchip SC8102 USB-PD, and connectors for symmetrical mirror pods.*
+*Figure 7.5a: KiCad 3D view of the Universal Front Node Top (PCBA 05, 82 x 50 mm) featuring the ESP32-P4 Dual-Core RISC-V Host MCU (0% Radio on Silicon, native 480 Mbps USB HS PHY), ESP32-E22 Companion Radio (Wi-Fi 6E 5/6 GHz 2x2 MIMO with Dual-U.FL Ports via SDIO 3.0), USB2514Bi Industrial Hub, modular Sensor Puck interface, Knowles MEMS acoustic sensor, 60W Power Engine (SW3526 30W USB-PD, TPS54302 5V Buck, TPS2051B Dongle Gate, TPS1H100 Aux Switch), and modular JST automotive connectors.*
 
-### 7.1 Board Specifications & 60W Power Engine
-* **Dimensions:** $82.0 	imes 50.0\,	ext{mm}$ (enclosure footprint $98 	imes 68 	imes 25\,	ext{mm}$ in sealed IP68 monocoque housing at handlebar riser).
-* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,	ext{mm}$, ENIG gold finish).
-* **Automotive Backbone Connection (Branch 1):** Shielded 4-wire cable from Central Box (12V-20V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
-* **60W USB-PD Power Engine (`U8`, Southchip SC8721 / SC8102 Synchronous Buck-Boost):**
-  * Reliably feeds the complete cockpit payload without brownouts:
-    * Driver smartphone fast-charging: up to 27W USB-PD (9V/3A) at handlebar or via glove box hub.
-    * Dedicated motorcycle GPS (Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride): 15W (12V/1.25A or 5V/3A) directly at `J10`. **Power-Only:** Pure DC power without USB host data lines (`D+`, `D-`) so the navigation unit immediately starts active route guidance instead of entering PC mass storage mode.
-    * Action-cam continuous power: 10W (5V/2A) weather-sealed USB-C lead directly on Front Node (`J8`) for GoPro / Insta360. **Power-Only / BC 1.2 DCP:** D+/D- shorted ($R < 200\,\Omega$) with zero USB2514B host connection, preventing PC connection / webcam lockups and avoiding cable detours through the glovebox.
-    * Dual Cockpit OLED Displays: 2W for both speaker corner pods inside the speaker grilles.
-    * ESP32-S3 host MCU, sensor processing & audio AGC: 3.5W.
-    * Total peak load approx 57.5W – perfectly balanced, high efficiency, thermally sustained within the standard 60W power tier (20V / 3A).
+### 7.1 Board Specifications & v10 Dual-Chip Architecture (ESP32-P4 + ESP32-E22)
+* **Dimensions:** $82.0 \times 50.0\,\text{mm}$ with 4x M2.5 mounting holes ($75.0 \times 43.0\,\text{mm}$ hole pitch, enclosure footprint $98 \times 68 \times 25\,\text{mm}$ in sealed IP68 monocoque housing at handlebar riser).
+* **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish, impedance-controlled 50 $\Omega$ single-ended / 90 $\Omega$ differential USB & SDIO).
+* **Host Microcontroller (`U1`, ESP32-P4-NR16):**
+  * Dual-Core RISC-V processor clocked up to 400 MHz with integrated High-Speed USB 2.0 PHY (480 Mbps).
+  * **0.0% Radio on Silicon:** Complete absence of on-chip RF power amplifiers ensures maximum signal integrity and zero electromagnetic interference into sensitive I2S microphone traces or GPS receiver frontends.
+  * Native 480 Mbps USB link to Downstream Port 4 of the `USB2514Bi` Hub for ultra-low latency Harley Headset Emulation (MFi / USB Audio Class) and CDC-NCM Ethernet tethering.
+* **Wireless Companion Radio (`U9`, ESP32-E22-WROOM-2X2):**
+  * High-performance Wi-Fi 6E transceiver operating on the 5 GHz and 6 GHz bands with 2x2 MIMO.
+  * Dual U.FL coaxial RF connectors (`ANT1` Main, `ANT2` MIMO) on the top PCB surface for low-loss pigtails to external housing or riser antennas.
+  * High-speed link to host MCU `ESP32-P4` via a 4-bit SDIO 3.0 bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
+  * **2.4 GHz Elimination:** 2.4 GHz RF is 100% eliminated from the Front Node, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3084 / S31 Bluetooth / BLE mesh.
+* **USB Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
+  * Upstream Port: Connected to `J1` Backbone (4-wire automotive harness to Central Box).
+  * Port 1 (`USB_DN1`): Glovebox / 30W USB-PD fast-charge controller (SW3526).
+  * Port 2 (`USB_DN2`): JST-GH 4-pin receptacle (`J_DONGLE`) with TPS2051B power-gating (`CP2AA_PWR_EN`) for wireless CarPlay/Android-Auto dongles.
+  * Port 3 (`USB_DN3`): Glovebox media hub extension (`J4`).
+  * Port 4 (`USB_HS`): Dedicated 480 Mbps point-to-point interconnect to the `ESP32-P4` native USB HS PHY.
+  * Independent USB-C Service & Flash Port (`J7`): Directly routed to the hardware ESP32-P4 USB Serial/JTAG controller for bench diagnosis, DFU flashing, and emergency recovery without interfering with the internal hub bus.
+* **Automotive Backbone Connection (`J1`, Branch 1):** Shielded 4-wire cable from Central Box (12V-20V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
+* **60W Power Engine:**
+  * TPS54302 Synchronous Buck Converter (`U3`): Regulates clean +5V (up to 3A) for cockpit peripherals, mirror pods, and WS2812B LEDs.
+  * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Up to 30W USB-PD (PPS, QC4+, AFC, FCP) for driver smartphone fast charging.
+  * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-P4, ESP32-E22, TCAN334G, and onboard sensors.
+  * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle with overcurrent fault reporting.
+  * TPS1H100 Smart High-Side Switch (`Q2`): Switched 12V high-side output (`J_AUX_LIGHT`) for auxiliary light pods or heated grips.
 * **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**
   * Routes I2C (`SCL`, `SDA`, `3V3`, `GND`) and I2S (`I2S_SD`, `I2S_WS`) to the snap-on sensor cradle ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
   * Integrates u-blox SAM-M10Q Multi-GNSS, TI TMP117 precision thermometer, OPT3001 light sensor, and Knowles I2S MEMS.
   * Snaps directly onto the Front Node on bikes; unclips for remote mounting on car/van windshields via 1.5m extension lead.
-* **Peripheral Ports:**
+* **Peripheral Ports (100% Modular JST Receptacles):**
   * 2x 4-pin JST-GH receptacles (`J_POD_L` and `J_POD_R`) to both symmetrical under-perch mirror pods (`PCBA 05B`).
   * 2x 4-pin JST-SH receptacles (`J_DISP_L` and `J_DISP_R`) to both Cockpit Speaker Corner Pod displays (`cockpit_speaker_corner_pod.scad`).
-  * SP Connect / QuadLock handlebar charging lead (up to 27W) & Garmin Zūmo XT2 Power-Only GPS tap (`J10`, 15W).
-  * Direct 10W Action-Cam Power-Only Port (`J8`, 2-Pin JST-PH / BC 1.2 DCP pigtail lead for GoPro/Insta360 at the cockpit).
-  * 4-Port Glovebox Media & Power-Injection Hub interface ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)): Combined Power & High-Speed USB 2.0 cable. Supplies regulated power injection (30W phone fast charge, 10W switched dongle, free media port) and routes the USB host data lines to Port 4 for **Harley Headset Emulation via USB** (MFi / USB Audio Class composite accessory, native Apple CarPlay enablement, and lossless digital helmet microphone audio).
+  * 1x 2-pin JST-PH receptacle (`J10`): Power-Only 12V/15W feed for Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride.
+  * 1x 2-pin JST-PH receptacle (`J8`): Power-Only 5V/10W BC 1.2 DCP feed for GoPro / Insta360 action cams at the cockpit.
+  * 1x 2-pin JST-GH receptacle (`J_CAN`): Dedicated vehicle and cockpit CAN bus with software-switched CPC1017N 120 $\Omega$ termination.
+  * 1x 2-pin JST-PH receptacle (`J_AUX_LIGHT`): Switched 12V auxiliary light driver output.
+  * 1x 6-pin JST-GH receptacle (`J4`): Glovebox Media & Power-Injection Hub interface.
 
 ---
 
