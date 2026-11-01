@@ -469,9 +469,9 @@ Das Gehäuse des Front-Knotens wurde in Version 10.0 analog zur Zentralbox (`01_
 +----------------------------------------------------------------------------------------+
 ```
 
-### 5.2 Schnittstellen- & Gehäuselayout des Front-Knotens (Die IP68 Monocoque 2-Kabelstrang-Architektur)
+### 5.2 Schnittstellen- & Gehäuselayout des Front-Knotens (Die dornenfreie IP68 Multi-Port Architektur)
 
-Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) setzt in v10.0 auf eine hermetisch dichte **IP68 Monocoque-Unterwanne mit genau zwei abgedichteten Rundkabel-Auslässen** und schraubenloser C-Schienen-Führung:
+Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmotorbridge_front_node.kicad_pcb`](../../hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb)) setzt in v10.0 auf eine hermetisch dichte **IP68 Monocoque-Unterwanne mit dezenten, bündig abschließenden TPU-Dichteinsätzen und formschlüssigen Blindstopfen**, die vollständig ohne hervorstehende Tüllenhörner („kein Igel-Look“) auskommt:
 
 > [!NOTE]
 > **Vorteile der v10 Monocoque Slot-In Architektur gegenüber 4-Eckverschraubungen:**
@@ -479,39 +479,57 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 > 2. **Keilanzug & Slam-to-Shut Deadbolt:** Die Einschubkinematik nutzt einen $15^\circ$ Keilanzug am geschlossenen Ost-Ende, der die Frontdichtung beim Einschieben automatisch komprimiert. Zwei federnde Schnappriegel im West-Portal sichern den Deckel rüttelfest gegen Zurückrutschen.
 > 3. **Universal-Antennenunterbringung:** Die beiden Wi-Fi 6E Antennen für den ESP32-E22 Companion (2x2 MIMO) sind geschützt im Deckelbett integriert – kompatibel sowohl mit flachen Flex-Dipolen als auch mit $\varnothing 6{,}5\,\text{mm}$ In-Gehäuse Stummelantennen.
 > 4. **Wirtschaftlichkeit & Wartungsfreundlichkeit:** Zero Schraubenwerkzeug zum Öffnen der Box nötig; Service-Zugang zum Flashen über die unverlierbar abgedichtete USB-C Buchse `J7` von außen.
+> 5. **Kein Igel-Look & keine Durchstoßmembranen:** Alle Kabeldurchführungen schließen plan mit der Außenwand ab ($0\,\text{mm}$ Überstand, dezenter $0{,}8\,\text{mm}$ Sicherungskragen innen). Unbelegte Ports sind mit formschlüssigen TPU-Blindstopfen absolut wasserdicht verschlossen. Bei Abnahme von Zubehör (z. B. Action-Cam) wird der Port wieder mit dem Blindstopfen verschlossen – kein baumelndes Restkabel, kein offenes Loch.
 
 ```
-                         FRONT-KNOTEN v10 MONOCOQUE-LAYOUT (TOP-VIEW)
+                          FRONT-KNOTEN v10 MONOCOQUE-LAYOUT (TOP-VIEW)
 +-----------------------------------------------------------------------------------------------------------------------------+
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | LINKE FLANKE / WEST (X = 0 mm)     |              INNENRAUM (PCBA 05, 82 x 50 mm)    | RECHTE FLANKE / OST (X = 98 mm)      |
 |                                    |                                                 |                                      |
-| * Monocoque Einschubportal mit     | * ESP32-P4 / ESP32-S3 Core Controller           | * J7: IP67 USB-C Service-Buchse mit  |
+| * Monocoque Einschubportal mit     | * ESP32-P4 Core MCU (0% Radio, native 480M USB) | * J7: IP67 USB-C Service-Buchse mit  |
 |   massiver 6.0 mm Unterschwelle    | * ESP32-E22 Wi-Fi 6E Radio (ANT1 & ANT2 U.FL)   |   formschlüssigem TPU-Schutzstopfen  |
-| * 2x Deadbolt Schnappriegel-Taschen| * USB2514B Automotive 4-Port USB 2.0 Hub        |   (100 % hermetisch verschließbar)   |
-| * Heckwand Tropfnasen-Überdeckung  | * SW3526 20W USB-PD Controller & Drossel        | * Keilanzug-Nut für Deckel-Vordersitz|
+| * 2x Deadbolt Schnappriegel-Taschen| * USB2514Bi Automotive 4-Port USB 2.0 Hub       |   (100 % hermetisch verschließbar)   |
+| * Heckwand Tropfnasen-Überdeckung  | * SW3526 30W USB-PD Controller & Drossel        | * Keilanzug-Nut für Deckel-Vordersitz|
 | * SW1 (Boot) & SW2 (Reset) Taster  | * MK1: Knowles SPH0645 I2S MEMS-Mikrofon        | * LED1: WS2812B RGB Statusanzeige    |
-| * Schirmt interne Leistungsteile   | * Q1: DMN63D8LDW Spiegel-BSD Treiber-Stufe      |   (Polycarbonat-Lichtleiter-Dom)     |
+| * Schirmt interne Leistungsteile   | * TPS1H100 Smart High-Side Switch (Aux Light)   |   (Polycarbonat-Lichtleiter-Dom)     |
 |   - D4: SMCJ36CA 36V TVS-Diode     | * U4: TPS2051B USB-Power-Gate (Dongle-Kaltstart)| * M4/M5 Silentblock-Flanschohr       |
 |   - U3 / L1: TPS54302 5V/3A Buck   | * U7: TLV75533P 3.3V Ultra-Low-Noise LDO        |   (Mitte Y = 34.0 mm, Z = 0..5 mm)   |
 | * M4/M5 Silentblock-Flanschohr     | * 4x M2.5 Standoffs (75.0 x 43.0 mm Bohrbild)   |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
-|       AUSLASS 1 (SÜDFLANKE): COCKPIT-STRANG         |          AUSLASS 2 (NORDFLANKE): FAHRZEUG-STRANG                      |
-|       Geschirmtes Rundkabel Ø 6.0 mm (16-adrig)     |          Geschirmtes Rundkabel Ø 6.5 mm (12-adrig)                    |
-|       mit TPU-Dichtmanschette / Knickschutztülle    |          mit TPU-Dichtmanschette / Knickschutztülle                  |
-|       ==> Führt zum Cockpit-Satelliten-Verteiler    |          ==> Führt zum Fahrzeug-Satelliten-Verteiler                  |
-+-----------------------------------------------------+-----------------------------------------------------------------------+
+| COCKPIT-WAND (SÜDFLANKE Y = 0 mm in Draufsicht / zum Fahrer):                                                               |
+|  * Port 1 [ CKPT 1 ] (X = 33.5 mm): Oval-Port (11.0 x 5.5 mm) für J_POD_R + J_DISP_R (Rechtes Cockpit)                      |
+|  * Port 2 [ SENSOR ] (X = 46.5 mm): Oval-Port (11.0 x 5.5 mm) für J_SENSOR_EXT (Sensor-Puck oben gerastet)                  |
+|  * Port 3 [ CKPT 2 ] (X = 70.5 mm): Oval-Port (11.0 x 5.5 mm) für J_POD_L + J_DISP_L (Linkes Cockpit)                       |
++-----------------------------------------------------------------------------------------------------------------------------+
+| FAHRZEUG- & ZUBEHÖR-WAND (NORDFLANKE Y = 68 mm / nach vorne/unten):                                                         |
+|  * Port 1 [ MAIN ]   (X = 35.0 mm): Oval-Port (11.0 x 5.5 mm) für J1 Backbone (4P) + J4 Hub / Lenkerlader (6P)              |
+|  * Port 2 [ DONGLE ] (X = 52.0 mm): Oval-Port (11.0 x 5.5 mm) für J_DONGLE (CarPlay/AA) - Standard: Bündiger Blindstopfen  |
+|  * Port 3 [ AUX 12V ](X = 62.0 mm): Mini-Port (6.5 x 4.5 mm) für J_AUX_LIGHT 12V geschaltet (Zusatzscheinwerfer)           |
+|  * Port 4 [ NAV 12V ](X = 70.25 mm): Mini-Port (6.5 x 4.5 mm) für J10 Navi-Power 12V (Garmin / Chigee AIO-5)                |
+|  * Port 5 [ CAM 5V ] (X = 78.25 mm): Mini-Port (6.5 x 4.5 mm) für J8 Action-Cam 5V (GoPro / Insta360)                      |
++-----------------------------------------------------------------------------------------------------------------------------+
 ```
 
-1. **Die zwei hermetischen Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$ / $\varnothing 6{,}5\,\text{mm}$):**
-   - **Auslass 1 (Cockpit-Kabelstrang, Südflanke):** Führt ein geschirmtes Rundkabel vom Platinen-Header durch eine TPU-Knickschutztülle direkt zum **Cockpit-Satelliten-Verteilerblock**. Beinhaltet: USB Upstream Host, CP2AA Wireless Dongle Strom & Daten, Smartphone USB-PD 20W Fast-Charge Lade- und CC-Leitungen, Action-Cam / Navi 5V-Speisung sowie PTT-Lenkertastersignal.
-   - **Auslass 2 (Fahrzeug-Kabelstrang, Nordflanke):** Führt ein geschirmtes Rundkabel durch eine TPU-Dichtmanschette zum **Fahrzeug-Satelliten-Verteilerblock**. Beinhaltet: 12V Zündungsplus (KL15) & Power-GND, Totwinkel-Spiegel-LEDs L/R (BSD), 12V geschalteten Zusatzscheinwerfer-Ausgang sowie die 4-polige I2C-Sensorleitung (+3.3V, GND, SDA, SCL) zum abgesetzten Sensor-Puck.
-2. **Rechte Schmalseite / Ostflanke ($X = 98{,}0\,\text{mm}$):**
-   - **Service & Diagnose:** IP67 wasserdichte USB-C Service-Buchse (`J7`, $Y_{\text{tub}} = 24{,}1\,\text{mm}$) mit unverlierbarem TPU-Schutzstopfen (`front_node_usbc_cap_tpu.stl`) zum direkten Flashen, Debuggen und WebSerial-Konfiguration ohne Werkzeug und ohne Gehäuseöffnung.
-   - **Taster & Status:** Miniaturtaster `SW1` (Boot) und `SW2` (Reset) an der Westwand; Polycarbonat-Lichtleiter im Deckel für die **WS2812B RGB-Status-LED** (`LED1`): Grün = OK, Blau = 4-Draht Automotive-USB Backbone aktiv, Gelb = USB-Enumeration / CP2AA Dongle Boot, Rot = Fehler / Failsafe.
-3. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
+1. **Cockpit-Wand (zum Lenker / Fahrer, 3x identische Oval-Ausbrüche $11{,}0 \times 5{,}5\,\text{mm}$):**
+   - **`CKPT 1` ($X = 33{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Rechts (`J_POD_R`) und optional Speaker Corner Display Rechts (`J_DISP_R`) auf. Verwendet entweder den 2-Kabel-Dichteinsatz oder einen 1-Kabel-Einsatz.
+   - **`SENSOR` ($X = 46{,}5\,\text{mm}$):** Führt das 6-polige JST-GH Flachbandkabel für `J_SENSOR_EXT` nach oben direkt in den aufgerasteten Sensor-Puck.
+   - **`CKPT 2` ($X = 70{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Links (`J_POD_L`) und optional Speaker Corner Display Links (`J_DISP_L`) auf.
+   - **Software-Defined Zuweisung:** Die Cockpit-Ports `CKPT 1` und `CKPT 2` sind in der Firmware symmetrisch tauschbar (1-Klick Swap in WebUI). Ein Überkreuzen von Kabeln am Riser ist ausgeschlossen.
+
+2. **Fahrzeug- & Zubehör-Wand (nach vorne / unten):**
+   - **`MAIN` ($X = 35{,}0\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Nimmt das 4-adrige geschirmte Backbone-Kabel (`J1`) von der Zentralbox sowie das 6-polige Verbindungskabel zum Handschuhfach-Hub (`J4`) auf.
+   - **`DONGLE` ($X = 52{,}0\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Führt den USB-Downstream 2 mit fernsteuerbarem Kaltstart-Reset (`TPS2051B`). Bei Touring-Bikes (CarPlay-Dongle im Handschuhfach) mit planem TPU-Blindstopfen verschlossen. An RKS / GS bei Nachrüst-CarPlay-Display (Chigee/Carpuride) als 1-Kabel-Port belegt.
+   - **`AUX 12V` ($X = 62{,}0\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für Zusatzscheinwerfer oder Heizgriffe.
+   - **`NAV 12V` ($X = 70{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für 12V Garmin Zūmo XT2 / Tread / Chigee AIO-5 Speisung.
+   - **`CAM 5V` ($X = 78{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für entstörte 5V Action-Cam Speisung.
+
+3. **Poka-Yoke Gehäuseprägung & Dichteinsätze:**
+   - Direkt über allen Ports ist das HP MJF PA12 Gehäuse $0{,}5\,\text{mm}$ tief mit Beschriftung und Spannung geprägt (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN`, `CKPT 1`, `SENSOR`, `CKPT 2`).
+   - Jeder TPU-Blindstopfen und Kabelstopfen besitzt dieselbe Kennzeichnung formgeprägt auf der Stirnfläche. Verwechslung und Überspannungsschäden sind ausgeschlossen.
+4. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
    - Horizontales Einschubportal für den Schiebedeckel mit integrierter $6{,}0\,\text{mm}$ hoher Bodenschwelle zum Schutz der Elektronik vor Schmutz- und Feuchtigkeitseintrag. Die Heckwand des Schiebedeckels überlappt die Schwelle mit einer umlaufenden Labyrinth-Tropfnase.
-4. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
+5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
    - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
 
 

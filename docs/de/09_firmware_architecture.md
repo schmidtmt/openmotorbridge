@@ -175,10 +175,22 @@ Zur flexiblen Anbindung moderner OEM-Intercoms ohne mechanische Hubmagnete nutzt
 | **`0x0401`** | Klasse D | **Midland PMR446 (G9 Pro)** | 2-Pin Doppelklinkenpeitsche | OptoMOS PTT-Keying (`CPC1017N`), galvanisch getrennt |
 | **`0x0000`** | Klasse 0 | **Dry-Box / Gepäckbucht** | Keine Audio-Endgeräte | Reiner 30W/60W USB-PD Ladeport für Smartphone/Powerbank |
 
-### 5.2 Symmetrische Dual Under-Perch Spiegel-Pods & 5-Gesten-Engine (`PCBA 05B`)
-Die beiden identischen Spiegel-Pods (`PCBA 05B`) unter den Spiegelschrauben bieten taktile Daumenbedienung und bilaterale Totwinkel-Warnung (BSD):
+### 5.2 Symmetrische Dual Under-Perch Spiegel-Pods & 5-Gesten-Engine (`PCBA 05C`)
+Die beiden identischen Spiegel-Pods ([`PCBA 05C`](07_pcba_hardware_pinouts.md#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) unter den Spiegelschrauben bieten taktile Daumenbedienung und bilaterale Totwinkel-Warnung (BSD):
 * **5 Gesten-Trigger:** Jeder Taster erfasst autark `SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS` und `HOLD_GATE`.
 * **100 % Freie Tastenbelegung:** Über das PWA Dashboard kann jede Geste frei einer Aktion zugewiesen werden (z. B. Push-to-Talk, Sprachassistent Siri/Google, Waze 1-Click Gefahren-Marker, Action-Cam Tags für Insta360/GoPro/DJI, Radar-Mute, Garagentor via BLE).
+
+#### 5.2.1 Software-Defined Cockpit Port Mapping & Auto-Learn Engine
+Um **jegliches Überkreuzen von Kabeln am Riser vollständig zu vermeiden**, sind die physischen Anschlüsse `CKPT 1` und `CKPT 2` nicht starr an eine Lenkerseite gebunden, sondern werden über die Firmware dynamisch zugeordnet:
+* **NVS-Konfigurationsschlüssel:**
+  * `cfg_ckpt_pod_swap` (`uint8_t`: `0` = Default: `CKPT 1` Rechts, `CKPT 2` Links; `1` = Getauscht).
+  * `cfg_ckpt_disp_swap` (`uint8_t`: `0` = Default: `CKPT 1` Rechts, `CKPT 2` Links; `1` = Getauscht).
+* **1-Klick Toggle (WebUI / PWA):** In den Cockpit-Einstellungen ermöglicht ein Schalter das sofortige, unterbrechungsfreie Tauschen der Lenkerseiten für LEDs, Taster und Displayinhalte.
+* **Plug & Play Auto-Learn Setup-Wizard:**
+  1. Der Nutzer startet im Dashboard den geführten Assistenten *"Cockpit-Kalibrierung"*.
+  2. Die PWA fordert auf: *"Bitte jetzt den LINKEN Spiegeltaster drücken."*
+  3. Der Front-Node ESP32-P4 registriert die erste Flanke am entsprechenden GPIO (`BTN_SIG_1` oder `BTN_SIG_2`), weist diesen Port dauerhaft im NVS als `LOGICAL_LEFT` zu (und den Gegenport als `LOGICAL_RIGHT`) und bestätigt dies mit einem kurzen, doppelten Aufblinken der linken Bernstein-LED.
+  4. Montagefehler oder verdreht montierte Boxen werden damit in 2 Sekunden ohne Werkzeug korrigiert.
 
 ---
 

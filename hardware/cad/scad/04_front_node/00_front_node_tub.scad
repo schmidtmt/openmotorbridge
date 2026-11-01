@@ -36,24 +36,11 @@ module front_node_lower_tub() {
                 cube([FRONT_NODE_CHAMBER_L - 2.0, 1.2, 1.5], center=false);
         }
         
-        // 4. South Cockpit Cable Gland Cutout (Y = 0 mm, X = 35.5 mm, Z = 9.5 mm)
-        // Kept below the C-rail guide roof (z_top = 15.1 mm) to preserve continuous guide rail!
-        south_round_cable_gland_cutout(
-            x_center = 35.5,
-            z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 3.5,
-            bore_r   = 4.5,
-            collar_r = 6.0,
-            z_top    = rail_bottom_z
-        );
+        // 4. Multi-Port Cockpit & Vehicle Cutouts (below C-rail guide roof z_top = 15.1 mm)
+        front_node_all_ports_cutouts();
             
-        // 5. North Vehicle Cable Gland Cutout (Y = 68.0 mm, X = 35.5 mm, Z = 9.5 mm)
-        north_round_cable_gland_cutout(
-            x_center = 35.5,
-            z_center = FRONT_NODE_WALL + FRONT_NODE_STANDOFF_H + 3.5,
-            bore_r   = 4.5,
-            collar_r = 6.0,
-            z_top    = rail_bottom_z
-        );
+        // 5. Poka-Yoke Debossed Labels in Outer PA12 Tub Wall (0.6 mm deep)
+        front_node_all_port_labels_deboss();
             
         // 6. USB-C Service Port Opening (East wall, X = 98 mm, Y = 24.1 mm)
         front_node_usbc_service_cutout();

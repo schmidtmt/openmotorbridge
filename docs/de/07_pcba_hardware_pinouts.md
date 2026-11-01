@@ -1,6 +1,6 @@
 # 07 - Hardware-Architektur & Platinen-Pinouts (Das standardisierte v10.0 Lineup)
 
-Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`)** des OpenMotorBridge Gesamtsystems (v10.0 Standardized Node Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
+Dieses Dokument bildet die **zentrale, autoritative Hardware-Spezifikation aller aktiven Platinen-Baugruppen (`PCBA 01`, `03`, `05`, `05B`, `05C`, `05D`, `07`, `08`, `09`, `10`)** des OpenMotorBridge Gesamtsystems (v10.0 Standardized Node Architecture), einschließlich Lagenaufbau, Impedanzkontrolle, Net-Klassen, Funktionszonen und vollständigen Pinout-Tabellen.
 
 ---
 
@@ -10,7 +10,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 
 ```
 +----------------------------------------------------------------------------------------+
-|                   DAS 7-PLATINEN-LINEUP DER OPENMOTORBRIDGE v10.0                      |
+|                   DAS 10-PLATINEN-LINEUP DER OPENMOTORBRIDGE v10.0                     |
 +-------+-------------------------------+---------------+---------+----------------------+
 | Baugruppe | Name & Funktion           | Platinenmaße  | Lagen   | Kern-ICs / Bauteile  |
 +-------+-------------------------------+---------------+---------+----------------------+
@@ -24,7 +24,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | In-Bag 30W USB-PD Ladebuchse  | 2-seitig SMT  |         | 30W PD, J_AUDIO_PWR  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05**| **Universal Front-Knoten**    | 82 x 50 mm    | 4 Lagen | ESP32-P4, ESP32-E22, |
-|       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
+|       | (Cockpit Riser Hub & Media)   | (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
 |       | 4-Draht Bus (Zero Tank-Heben!)|               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05B**| **Handschuhfach-Hub**         | 76 x 20 mm    | 2 Lagen | Microchip USB2514Bi,  |
@@ -35,9 +35,9 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (2x identisch für Links/Rechts| (M8/M10 Flansch)| (ENIG) | IP67 Taktiltaster,   |
 |       | 100% Software-Defined Gesten) | 100% SMT      |         | TVS ESD, JST-GH 4P   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05D**| **Umwelt- & GNSS-Sensor-Puck**| 34 x 34 mm    | 2 Lagen | u-blox SAM-M10Q,     |
+| **PCBA 05D**| **Umwelt- & GNSS-Sensor-Puck**| 34 x 34 mm    | 4 Lagen | u-blox SAM-M10Q,     |
 |       | (Schnappkorb für Front-Node)  | (Schnapprast) | (ENIG)  | TMP117, OPT3001,     |
-|       | I2C/I2S Umwelt- & Akustik     | 100% SMT      |         | Knowles MEMS Mikro   |
+|       | I2C/I2S Umwelt & Daisy-Chain  | 100% SMT      |         | JST-GH In, JST-SH Out|
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen | Nordic nRF52840 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
@@ -61,15 +61,17 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 1. **Kern-Baugruppen (Standard-Ausstattung jedes Bikes):**
    * **`PCBA 01` (Zentralbox Main Controller):** Zentrale Recheneinheit unter der Sitzbank für Energie-Management, USV, DSP-Mischung, Dual-Bluetooth-Headsets, LoRa-Schwarm und USB-Hub Koordination. Ausgestattet mit **Dual-Power Input** (12V Bordnetz via Molex Micro-Lock Plus `J1` / Gehäuseflansch Deutsch DTM-6 oder 5V USB-C Service-Port `J3` via TI LM66100 Ideal-Dioden-OR-ing für schreibtischbasiertes Flashen ohne 12V-Labornetzteil) und **vertikalen SMD-Steckverbindern (Pointing UP)** (Bordnetz `J1`, 4-Kanal Peripherie-Bus `J6` Picoflex 16-Pin, USV-Akku `J5`, Status-LED `J4`, Reserve-USB `J7`, USB-C `J3`).
    * **`PCBA 03` (Satelliten-Pod Interface Board):** Universelle Schnittstellenplatine am Boden beider Seitenkoffer-Pods (Pod 1 & Pod 2). Bietet einen integrierten USB-C Schnellladeport (bis 30W/60W) direkt im Koffer und bindet Sena, Cardo oder OMM verlustfrei an den 4-Draht-Bus an.
-   * **`PCBA 05` (Universal Front-Knoten):** Cockpit-Einheit am Riser für Multi-GNSS (SAM-M10Q), Kaltluft-Sensorik, Ambient-Mikrofon und Qi-Zusatzspeisung. Verbunden über den 4-Draht-Kabelbaum durch den Harley-Kabelkanal (**ZERO Tank-Demontage!**).
-   * **`PCBA 05B` (Symmetrische Under-Perch Spiegel-Pods):** Zwei baugleiche Platinen unter den Spiegelschrauben (Links & Rechts) für bilaterale Totwinkelwarnung (BSD bernsteinfarbene LEDs) und softwaredefinierte Daumentaster (PTT, Voice Assistant, 1-Klick Hazard Pin Drop für Waze, Cam-Tags, SOS).
+   * **`PCBA 05` (Universal Front-Knoten):** Cockpit-Einheit am Riser mit ESP32-P4 + ESP32-E22 Dual-Chip, Wi-Fi 6E MIMO, USB-Hub, Qi-Zusatzspeisung und integriertem Knowles SPH0645 MEMS-Mikrofon über dem Gehäuse-Bodenventil. Verbunden über den 4-Draht-Kabelbaum durch den Harley-Kabelkanal (**ZERO Tank-Demontage!**).
+   * **`PCBA 05B` (Handschuhfach-Hub & Cockpit Breakout):** 4-Port Media- & Power-Injection Hub mit Microchip USB2514Bi für Harley Skyline OS Upstream und Phone Fast-Charge im Handschuhfach.
+   * **`PCBA 05C` (Symmetrische Under-Perch Spiegel-Pods):** Zwei baugleiche Platinen unter den Spiegelschrauben (Links & Rechts) für bilaterale Totwinkelwarnung (BSD bernsteinfarbene LEDs) und softwaredefinierte Daumentaster (PTT, Voice Assistant, 1-Klick Hazard Pin Drop für Waze, Cam-Tags, SOS).
+   * **`PCBA 05D` (Modularer Umwelt- & GNSS-Sensor-Puck):** Schnappbare $34 \times 34\,\text{mm}$ Cockpit-Kuppel mit u-blox SAM-M10Q Multi-GNSS Patch-Antenne, thermisch entkoppeltem TMP117 NIST-Temperatursensor und OPT3001 Umgebungslichtsensor.
 2. **Empfohlene Erweiterungen & Peripherie:**
    * **`PCBA 07` (2-in-1 LoRa Smart-Keyfob & Silent Pager):** Tragbarer Schlüsselanhänger für 4,5 km Weitbereichs-Alarmierung, N52-Magnetschlüssel zum kontaktlosen Entriegeln des Pod-Slide-in Deckels und induktive Qi-Ladung.
    * **`PCBA 08` (Radar 2.0 Sub-MCU & Warnflügel):** Heckmodul mit 77-GHz-mmWave-Sensorik (AoP), autonomem Brems- und Kollisionsstrobe sowie 5.9 GHz V2X-Uplink, fest über 12V und UART angebunden.
    * **`PCBA 09` / `PCBA 10` (OMM UCS Intercom-Module):** Autarke ECE 22.06 Module für den Helm oder als Plug-in Audio-Engines im Koffer-Pod via USB Audio Class 2.0.
 3. **Ersatzlos entfallene Baugruppen (Architektur-Bereinigung v10.0):**
    * **`PCBA 02` (Frühere Pod-Basisplatine):** Vollständig entfallen. Das Pod-Gehäuse ist ein Monocoque mit Slide-in Deckel und Dry-Flap; `PCBA 03` ruht direkt auf Dämpfern am Gehäuseboden.
-   * **`PCBA 04` (Heck-Pod 3):** Vollständig gestrichen; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05`.
+   * **`PCBA 04` (Heck-Pod 3):** Vollständig gestrichen; LoRa sitzt auf `PCBA 01`, GNSS auf `PCBA 05D`.
    * **`PCBA 06` (MagSafe Frame Dock Platine):** Ersetzt durch handelsübliche 4-Pin IP67 Magnet-Abrissschnittstellen (COTS).
    * **Qorvo DW3110 UWB Transceiver:** Auf allen Platinen ersatzlos gestrichen zugunsten des robusten 4-Draht Automotive-Backbones mit nativer USB 2.0 Datenübertragung und WebUSB.
 
@@ -77,7 +79,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 
 ## 2. Fertigungsstandard & JLCPCB 4-Lagen Stackup (JLC04161H-7628)
 
-Für alle 4-Lagen-Platinen (`PCBA 01` und `PCBA 05`) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
+Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCBA 10`) wird der identische, streng impedanzkontrollierte Lagenaufbau verwendet:
 
 ```
 +-------------------------------------------------------------+
@@ -622,13 +624,51 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
   * Führt I2C (`SCL`, `SDA`, `3V3`, `GND`) und I2S (`I2S_SD`, `I2S_WS`) zum schnappbaren Sensor-Puck ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
   * Beherbergt u-blox SAM-M10Q Multi-GNSS, TI TMP117 Präzisionsthermometer, OPT3001 Umgebungslichtsensor und Knowles I2S MEMS.
   * Am Motorrad direkt oben auf den Front-Node gerastet; im Auto/Van per 1,5m Verlängerungskabel absetzbar an der Windschutzscheibe.
-* **Peripherie-Ausgänge (100% modulare JST-Buchsen):**
-  * 2x 4-polige JST-GH Buchsen (`J_POD_L` und `J_POD_R`) zu den symmetrischen Under-Perch Spiegel-Pods (`PCBA 05B`).
-  * 2x 4-polige JST-SH Buchsen (`J_DISP_L` und `J_DISP_R`) zu den beiden Cockpit Speaker Corner Pod Displays (`cockpit_speaker_corner_pod.scad`).
-  * 1x 2-polige JST-PH Buchse (`J10`): Power-Only 12V/15W Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride.
-  * 1x 2-polige JST-PH Buchse (`J8`): Power-Only 5V/10W BC 1.2 DCP Speisung für GoPro / Insta360 Action-Cam am Cockpit.
-  * 1x 2-polige JST-PH Buchse (`J_AUX_LIGHT`): Geschalteter 12V Treiber-Ausgang für Zusatzscheinwerfer.
-  * 1x 6-polige JST-GH Buchse (`J4`): Handschuhfach Media- & Power-Injection Hub Anbindung.
+* **Peripherie-Ausgänge & Gehäuse-Ports (100% modulare JST-Buchsen):**
+  * **Cockpit-Wand (zum Lenker / Fahrer, 3x Oval-Durchbrüche $11{,}0 \times 5{,}5\,\text{mm}$):**
+    * **`CKPT 1` (Rechts auf PCB, $X = 21{,}5$ und $33{,}5\,\text{mm}$):**
+      * `J_POD_R` (JST-GH 4P): Rechter Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) (BSD Amber LED + Taster).
+      * `J_DISP_R` (JST-SH 4P): Rechtes Cockpit Speaker Corner Pod Display (I2C Bus + 3.3V + GND).
+    * **`SENSOR` (Mitte auf PCB, $X = 46{,}5\,\text{mm}$):**
+      * `J_SENSOR_EXT` (JST-GH 6P): Umwelt- & GNSS-Sensor-Puck ([`PCBA 05D`](#74-pcba-05d-modularer-umwelt--gnss-sensor-puck)) nach oben in den Schnappkorb.
+    * **`CKPT 2` (Links auf PCB, $X = 59{,}5$ und $70{,}5\,\text{mm}$):**
+      * `J_DISP_L` (JST-SH 4P): Linkes Cockpit Speaker Corner Pod Display (I2C Bus + 3.3V + GND).
+      * `J_POD_L` (JST-GH 4P): Linker Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) (BSD Amber LED + Taster).
+    * **Software-Defined Cockpit Ports:** Die Zuordnung von `CKPT 1` und `CKPT 2` zur linken bzw. rechten Lenkerseite ist in der Firmware **100 % frei konfigurierbar** (1-Klick Swap in WebUI oder automatischer Setup-Wizard *"Bitte linken Spiegeltaster drücken"*). Dadurch **entfällt jegliches Überkreuzen von Kabeln am Riser**.
+  * **Fahrzeug- & Zubehör-Wand (nach vorne / unten):**
+    * **`MAIN` ($X \approx 35\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):**
+      * `J1` (JST-GH 4P, $X = 20{,}47\,\text{mm}$): 4-Ader Automotive-Backbone (12V Bordnetz, GND, USB 2.0 D+/D- zur Zentralbox).
+      * `J4` (JST-GH 6P, $X = 32{,}22\,\text{mm}$): Handschuhfach-Hub ([`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) Verbindung bzw. Lenker-Schnelllader.
+    * **`DONGLE` ($X \approx 52\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):**
+      * `J_DONGLE` (JST-GH 4P, $X = 43{,}97\,\text{mm}$): USB-Downstream 2 mit fernsteuerbarem Kaltstart-Reset (`TPS2051B`).
+    * **`AUX 12V` ($X = 62{,}0\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):**
+      * `J_AUX_LIGHT` (JST-PH 2P, $X = 54{,}0\,\text{mm}$): Geschalteter 12V High-Side Ausgang (bis 2.5 A / 30 W, `TPS1H100`) für Zusatzscheinwerfer oder Heizgriffe.
+    * **`NAV 12V` ($X = 70{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):**
+      * `J10` (JST-PH 2P, $X = 62{,}25\,\text{mm}$): Dauerhafte 12V / 15W Cockpit-Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride.
+    * **`CAM 5V` ($X = 78{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):**
+      * `J8` (JST-PH 2P, $X = 70{,}25\,\text{mm}$): Entstörte 5V / 10W Speisung für GoPro / Insta360 Action-Cam am Lenker.
+
+---
+
+### 7.1.1 Port-Matrix & Einsatz-Szenarien
+
+| Gehäuse-Port | PCB-Header | Spezifikation / Signal | Beschriftung | Szenario A: Touring (Skyline OS / GTS & Handschuhfach) | Szenario B: Universal (RKS, GS/GSA, Low Rider ST, Naked) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Cockpit Rechts** | `J_POD_R` | JST-GH 4P (5V, BSD LED, Taster, GND) | `CKPT 1` | **Aktiv:** Rechter Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) | **Aktiv:** Rechter Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) |
+| **Cockpit Rechts** | `J_DISP_R` | JST-SH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 1` | **Aktiv:** Speaker Corner Display Rechts | **Blindstopfen** (keine Verkleidungs-Lautsprecher) |
+| **Cockpit Mitte** | `J_SENSOR_EXT` | JST-GH 6P (3.3V, GND, I2C, I2S, UART)| `SENSOR` | **Aktiv:** Sensor-Puck ([`PCBA 05D`](#74-pcba-05d-modularer-umwelt--gnss-sensor-puck)) oben gerastet | **Aktiv:** Sensor-Puck ([`PCBA 05D`](#74-pcba-05d-modularer-umwelt--gnss-sensor-puck)) oben gerastet |
+| **Cockpit Links** | `J_DISP_L` | JST-SH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 2` | **Aktiv:** Speaker Corner Display Links | **Blindstopfen** (keine Verkleidungs-Lautsprecher) |
+| **Cockpit Links** | `J_POD_L` | JST-GH 4P (5V, BSD LED, Taster, GND) | `CKPT 2` | **Aktiv:** Linker Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) | **Aktiv:** Linker Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) |
+| **Fahrzeug West** | `J1` | JST-GH 4P (12V-20V, GND, USB HS D+/D-)| `MAIN` | **IMMER Aktiv:** 4-Draht Lifeline von Zentralbox [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) | **IMMER Aktiv:** 4-Draht Lifeline von Zentralbox [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) |
+| **Fahrzeug West** | `J4` | JST-GH 6P (5V, USB DN3, Fast-Charge) | `MAIN` | **Aktiv:** Verbindung zu Handschuhfach-Hub ([`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) | **Optional:** Lenker-USB-C Lader oder **Blindstopfen** |
+| **Fahrzeug Mitte** | `J_DONGLE` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blindstopfen:** CarPlay-Dongle sitzt im Handschuhfach an [`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout) | **NUR aktiv** bei Nachrüst-CP/AA Display; sonst **Blindstopfen** |
+| **Fahrzeug Ost 1** | `J_AUX_LIGHT`| JST-PH 2P (12V switched, max 2.5A) | `AUX 12V`| **Optional:** Zusatzscheinwerfer oder **Mini-Blindstopfen** | **Optional:** Zusatzscheinwerfer oder **Mini-Blindstopfen** |
+| **Fahrzeug Ost 2** | `J10` | JST-PH 2P (12V dauerhaft, max 1.5A) | `NAV 12V`| **Mini-Blindstopfen:** Werks-Display (Skyline OS / GTS) aktiv | **Aktiv:** 12V Speisung für Garmin Zūmo XT2 / Chigee AIO-5 |
+| **Fahrzeug Ost 3** | `J8` | JST-PH 2P (5V BC1.2 DCP, max 2.0A) | `CAM 5V` | **Mini-Blindstopfen:** Bei Action-Cam Fahrt mit Mini-Kabelstopfen | **Mini-Blindstopfen:** Bei Action-Cam Fahrt mit Mini-Kabelstopfen |
+
+> [!IMPORTANT]
+> **Poka-Yoke Überspannungsschutz & Kennzeichnung:**
+> Um versehentliche Zerstörung empfindlicher 5V-Peripherie (Action-Cams) durch Anstecken an 12V-Ports zuverlässig zu verhindern, sind alle Durchbrüche im HP MJF PA12 Gehäuse **0,5 mm tief und unverlierbar mit Spannung und Funktion geprägt** (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN`, `CKPT 1`, `SENSOR`, `CKPT 2`). Zusätzlich tragen alle TPU-Blindstopfen und Kabel-Dichteinsätze erhabene Buchstabenkürzel (`CAM`, `NAV`, `AUX`, `DONGLE`).
 
 ---
 
@@ -639,6 +679,10 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 ![PCBA 05B Handschuhfach-Hub Draufsicht](../images/pcba/pcba05b_cockpit_breakout_top.png)
 *Abbildung 7.5d: Bestückungs-Draufsicht PCBA 05B mit 5x USB-C Buchsen (12 mm Raster), CC-Beschaltung und Microchip USB2514Bi Controller.*
+
+---
+
+### 7.3 PCBA 05C: Symmetrischer Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
 
 #### 7.3.1 Technische Platinen-Kenndaten & Bestückung
 * **Abmessungen:** 32,0 x 14,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
@@ -666,30 +710,34 @@ Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard v
 
 ---
 
-### 7.4 PCBA 05D: Modularer Umwelt- & GNSS-Sensor-Puck (`openmotorbridge_sensor_puck`)
+![PCBA 05D Sensor-Puck 3D](../images/pcba/pcba05d_sensor_puck_3d.png)
+*Abbildung 7.5f: 3D CAD-Ansicht des schnappbaren 4-Lagen Sensor-Pucks (PCBA 05D, 34 x 34 mm) mit u-blox SAM-M10Q Patch-Antenne, thermischem Doppel-L-Schlitz für TMP117 und horizontalen JST-GH/SH Steckverbindern.*
 
-*Abbildung 7.5f: Schnappbarer Sensor-Puck (PCBA 05D, 34 x 34 mm) für [`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad).*
+![PCBA 05D Sensor-Puck Draufsicht](../images/pcba/pcba05d_sensor_puck_top.png)
+*Abbildung 7.5g: Bestückungs-Draufsicht PCBA 05D.*
 
 #### 7.4.1 Technische Platinen-Kenndaten & Bestückung
-* **Abmessungen:** 34,0 x 34,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
+* **Abmessungen:** $34{,}0 \times 34{,}0\,\text{mm}$ mit $2{,}0\,\text{mm}$ Eck-Fasen, 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, ENIG-Goldfinish, Layer 2: 100% durchgehende HF-GND-Plane für GNSS-Patch, Layer 3: 3.3V Power-Plane).
 * **Befestigung:** Werkzeuglose 4-Punkt-Schnapprastung direkt im oberen Korb des Front-Node Gehäuses oder absetzbar an der Windschutzscheibe via 1,5m JST-GH Kabel.
 * **Bestückung:**
-  * **`U1` (u-blox SAM-M10Q):** Multi-Konstellations-GNSS-Modul (GPS, GLONASS, Galileo, BeiDou) mit integrierter Patch-Antenne.
-  * **`U2` (TI TMP117AIDRVR):** NIST-rückführbarer Digital-Temperatursensor (+-0,1°C Genauigkeit) zur Glatteiswarnung ohne Motorabwärme-Beeinflussung.
-  * **`U3` (TI OPT3001DNPR):** Umgebungslichtsensor mit menschlicher Augencharakteristik (Lux-Messung zur automatischen Umschaltung Tag/Nacht-Modus in PWA und Instrumenten).
-  * **`MK1` (Knowles SPH0645LM4H-B):** I2S Digital MEMS-Mikrofon zur Erfassung von Cockpit-Umgebungsgeräuschen für adaptive Headset-Lautstärkeregelung.
-  * **Steckverbinder (`J1`):** 6-polige JST-GH SMD Buchse (`SM06B-GHS-TB`, 1.25 mm Raster) mit Formschluss.
+  * **`U1` (u-blox SAM-M10Q):** Multi-Konstellations-GNSS-Modul (GPS, GLONASS, Galileo, BeiDou) mit integrierter $15{,}5 \times 15{,}5\,\text{mm}$ Keramik-Patch-Antenne.
+  * **`U2` (TI TMP117AIDRVR):** NIST-rückführbarer Digital-Temperatursensor ($\pm 0{,}1^\circ\text{C}$ Genauigkeit) auf einer durch einen $0{,}8\,\text{mm}$ U-förmigen Frässchlitz thermisch entkoppelten Platinen-Zunge im laminaren Front-Lufteinlass zur Glatteiswarnung ohne Motorabwärme-Beeinflussung.
+  * **`U3` (TI OPT3001DNPR):** Umgebungslichtsensor mit menschlicher Augencharakteristik unter der oberen $\varnothing 4{,}5\,\text{mm}$ optischen Gehäuseöffnung (Lux-Messung zur automatischen Umschaltung Tag/Nacht-Modus in PWA und Instrumenten).
+  * **`J1` (Primary In):** 6-polige JST-GH SMD Buchse (`SM06B-GHS-TB`, 1.25 mm Raster) horizontal nach Osten zum Front-Node Kabelstrang.
+  * **`J2` (Daisy-Chain Expansion Out):** 6-polige JST-SH SMD Buchse (`SM06B-SRSS-TB`, 1.00 mm Raster) horizontal nach Osten für zukünftige Cockpit-Zusatzsensoren (bei Nichtbenutzung mit bündigem TPU-Blindstopfen abgedichtet).
+  *(Hinweis zum Akustiksensor: Das Knowles SPH0645 I2S MEMS-Mikrofon verbleibt geschützt vor direktem Fahrtwind auf der Unterseite des Universal Front-Knotens [`PCBA 05`](#7-pcba-05-universal-front-knoten-openmotorbridge_front_node) über dem Gore-Membran Bodenventil; die I2S-Leitungen werden über den Puck als generischer `EXT_I2S` Bus für Erweiterungen durchgeschleift).*
 
-#### 7.4.2 Pinbelegung des Sensor-Puck Headers (`J1` / 6-Pin JST-GH)
+#### 7.4.2 Pinbelegung des Sensor-Puck Primary In (`J1` / 6-Pin JST-GH) & Expansion Out (`J2` / 6-Pin JST-SH)
 
-| Pin | Signalname | Signalart | Funktion |
-| :---: | :--- | :---: | :--- |
-| **1** | **`VCC_3V3`** | Power In (+3.3V) | Stabilisierte, gefilterte Systemspannung vom Front-Node LDO |
-| **2** | **`GND`** | Masse (0V) | Signal- und HF-Rückmasse |
-| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C Datenbus (SAM-M10Q, TMP117, OPT3001) |
-| **4** | **`I2C_SCL`** | Input Open-Drain | I2C Taktbus (400 kHz Fast-Mode) |
-| **5** | **`MIC_I2S_DATA`**| Digital Audio Out| I2S Audio-Datenstrom vom Knowles MEMS-Mikrofon |
-| **6** | **`MIC_I2S_WS`** | Digital Clock In | I2S Word Select / Word Clock |
+| Pin | Signalname | Signalart | Funktion auf PCBA 05D & Bus-Verhalten |
+| :---: | :--- | :--- :| :--- |
+| **1** | **`VCC_3V3`** | Power (+3.3V) | Stabilisierte Systemspannung (versorgt L3 Power-Plane, U1, U2, U3, durchgeschleift zu J2) |
+| **2** | **`GND`** | Masse (0V) | Signal- und HF-Rückmasse (direkte Anbindung an L2 Solid GND-Plane, durchgeschleift zu J2) |
+| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C Datenbus (SAM-M10Q Addr `0x42`, OPT3001 Addr `0x44`, TMP117 Addr `0x48`, zu J2) |
+| **4** | **`I2C_SCL`** | Input Open-Drain | I2C Taktbus (400 kHz Fast-Mode, durchgeschleift zu J2) |
+| **5** | **`EXT_I2S_DATA`** | Bidi Digital | Generischer I2S Audio-/Sensordatenstrom (direkt 1:1 von J1 zu J2 durchgeschleift) |
+| **6** | **`EXT_I2S_WS`** | Clock Digital | Generischer I2S Word Select / Frame Clock (direkt 1:1 von J1 zu J2 durchgeschleift) |
+| **MP** | **`GND`** | Schirmung | Rastlaschen der JST-Buchsen auf GND-Plane |
 
 ---
 
