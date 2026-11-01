@@ -684,6 +684,12 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 ### 7.3 PCBA 05C: Symmetrischer Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
 
+![PCBA 05C Spiegel-Pod 3D](../images/pcba/pcba05c_mirror_pod_3d.png)
+*Abbildung 7.5e: 3D-CAD-Ansicht des symmetrischen Under-Perch Spiegel-Pods (PCBA 05C, 32 x 14 mm) mit Bernstein BSD Totwinkel-Warn-LED (1206), IP67-versiegeltem Kurzhubtaster (Omron B3SL-1002P) und horizontalem JST-GH 4-Pin SMD-Steckverbinder.*
+
+![PCBA 05C Spiegel-Pod Draufsicht](../images/pcba/pcba05c_mirror_pod_top.png)
+*Abbildung 7.5f: Bestückungs-Draufsicht PCBA 05C mit TVS-Diode D1, Entprellkondensator C1 und Vorwiderstand R1.*
+
 #### 7.3.1 Technische Platinen-Kenndaten & Bestückung
 * **Abmessungen:** 32,0 x 14,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
 * **Bauform:** 100 % SMD, Formfaktor passgenau für [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
@@ -710,11 +716,13 @@ Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard v
 
 ---
 
+### 7.4 PCBA 05D: Schnappbarer Sensor-Puck (`openmotorbridge_sensor_puck`)
+
 ![PCBA 05D Sensor-Puck 3D](../images/pcba/pcba05d_sensor_puck_3d.png)
-*Abbildung 7.5f: 3D CAD-Ansicht des schnappbaren 4-Lagen Sensor-Pucks (PCBA 05D, 34 x 34 mm) mit u-blox SAM-M10Q Patch-Antenne, thermischem Doppel-L-Schlitz für TMP117 und horizontalen JST-GH/SH Steckverbindern.*
+*Abbildung 7.5g: 3D CAD-Ansicht des schnappbaren 4-Lagen Sensor-Pucks (PCBA 05D, 34 x 34 mm) mit u-blox SAM-M10Q Patch-Antenne, thermischem Doppel-L-Schlitz für TMP117 und horizontalen JST-GH/SH Steckverbindern.*
 
 ![PCBA 05D Sensor-Puck Draufsicht](../images/pcba/pcba05d_sensor_puck_top.png)
-*Abbildung 7.5g: Bestückungs-Draufsicht PCBA 05D.*
+*Abbildung 7.5h: Bestückungs-Draufsicht PCBA 05D.*
 
 #### 7.4.1 Technische Platinen-Kenndaten & Bestückung
 * **Abmessungen:** $34{,}0 \times 34{,}0\,\text{mm}$ mit $2{,}0\,\text{mm}$ Eck-Fasen, 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, ENIG-Goldfinish, Layer 2: 100% durchgehende HF-GND-Plane für GNSS-Patch, Layer 3: 3.3V Power-Plane).

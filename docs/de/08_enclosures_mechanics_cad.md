@@ -1473,7 +1473,7 @@ Die **symmetrischen Dual Under-Perch Spiegel-Pods** ([`under_perch_mirror_pod.sc
 
 * **Mechanische & Elektronische Vorteile:**
   * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die oberen Armaturenklemmen bleiben zu **100 % frei für Zusatzschalter (z. B. Klappenauspuff)**.
-  * **Baugleiche Platine (`PCBA 05B`):** Beide Pods nutzen exakt dieselbe Miniatur-Leiterplatte (`PCBA 05B` All-in-One Under-Perch Board). Die Zuordnung Links/Rechts erfolgt über den Kabelstrang (`J_POD_L` bzw. `J_POD_R` am Front-Node).
+  * **Baugleiche Platine (`PCBA 05C`):** Beide Pods nutzen exakt dieselbe Miniatur-Leiterplatte (`PCBA 05C` All-in-One Under-Perch Board). Die Zuordnung Links/Rechts erfolgt über den Kabelstrang (`J_POD_L` bzw. `J_POD_R` am Front-Node).
   * **Universelle Befestigung:** Klemmung direkt unter dem Spiegelgewinde (M8 / M10 / M12 oder Harley-Torx-Schraube).
   * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt die Lenkermontage. Ein optionaler Taster ruht in der Mittelkonsole/Schalthebel, während die Sprachsteuerung primär drahtlos über CarPlay oder Headset erfolgt.
 
@@ -1484,7 +1484,7 @@ Die Funktionen der beiden physischen Daumentaster sind **zu 100 % softwaredefini
 Über das lokale **OMB PWA-Dashboard** kann jeder Taster (Links und Rechts völlig unabhängig) frei programmiert und mit multiplen Gesten belegt werden.
 
 * **Hardware-Ebene (Zero-Hardcoding):**
-  * Auf `PCBA 05B` arbeitet ein hochzuverlässiger, IP67-versiegelter taktiler Mikrotaster (`SW1`) mit spürbarem Druckpunkt ($300\,\text{g}$ Betätigungskraft, optimal taktiles Feedback auch mit dicken Leder-Winterhandschuhen).
+  * Auf `PCBA 05C` arbeitet ein hochzuverlässiger, IP67-versiegelter taktiler Mikrotaster (`SW1`) mit spürbarem Druckpunkt ($300\,\text{g}$ Betätigungskraft, optimal taktiles Feedback auch mit dicken Leder-Winterhandschuhen).
   * Der Taster schaltet als aktives Low-Signal gegen Masse, geschützt durch ein 100 nF RC-Entprellglied und eine bidirektionale TVS-Diode gegen elektrostatische Entladungen (ESD).
   * Das Signal wird über den 4-poligen JST-GH Kabelbaum direkt an interruptfähige GPIOs des Front-Node MCU (`PCBA 05`) geleitet.
 
@@ -1678,6 +1678,9 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Smart-Keyfob** | Silikon-Dicht-Tastmatte (Dual-Keypad, Orange) | `05_accessories/smart_keyfob_silicone_keypad.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Tasterhalter** | Under-Perch Tasterhalter für M4 Harley-Armatur | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
 | **Tasterhalter** | Spiegelschaft-Adapterplatte für M8/M10 | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
+| **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod (Assembly) | `05_accessories/under_perch_mirror_pod.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod Unterschale | `05_accessories/under_perch_mirror_pod_base.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod Oberschale (38° Trichter) | `05_accessories/under_perch_mirror_pod_cover.stl` | `05_accessories/under_perch_mirror_pod.scad` |
 | **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
 | **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |

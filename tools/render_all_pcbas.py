@@ -84,6 +84,30 @@ BOARDS = [
         ]
     },
     {
+        "id": "pcba05c",
+        "name": "05c_mirror_pod",
+        "pcb": os.path.join(BASE_DIR, "hardware/kicad_mirror_pod/openmotorbridge_mirror_pod.kicad_pcb"),
+        "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_mirror_pod"),
+        "outputs": [
+            ("pcba05c_mirror_pod_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.25"]),
+            ("pcba05c_mirror_pod_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.15"]),
+            ("pcba05c_mirror_pod_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.25"]),
+        ],
+        "aliases": []
+    },
+    {
+        "id": "pcba05d",
+        "name": "05d_sensor_puck",
+        "pcb": os.path.join(BASE_DIR, "hardware/kicad_sensor_puck/openmotorbridge_sensor_puck.kicad_pcb"),
+        "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_sensor_puck"),
+        "outputs": [
+            ("pcba05d_sensor_puck_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.2"]),
+            ("pcba05d_sensor_puck_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.1"]),
+            ("pcba05d_sensor_puck_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.2"]),
+        ],
+        "aliases": []
+    },
+    {
         "id": "pcba06",
         "name": "06_magsafe_dock",
         "pcb": os.path.join(BASE_DIR, "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"),
