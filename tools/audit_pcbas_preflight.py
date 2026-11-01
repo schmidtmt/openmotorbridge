@@ -68,7 +68,7 @@ BOARDS = {
         "pcb": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb",
         "sch": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_sch",
         "mcu_ref": "U1",
-        "mcu_type": "ESP32-C5-WROOM-1U",
+        "mcu_type": "ESP32-C3-WROOM-02U",
         "fw_headers": [
             "firmware/radar_submcu/src/radar_mr20_protocol.h"
         ]
@@ -302,6 +302,16 @@ def audit_board(board_id, cfg):
         print(f"    - Pad 11 (GPIO 9 / BOOT):      Net = '{pad11_net}'")
         print(f"    - Pad 14 (GPIO 12 / USB_D-):   Net = '{pad14_net}'")
         print(f"    - Pad 15 (GPIO 13 / USB_D+):   Net = '{pad15_net}'")
+
+    elif "ESP32-C3" in cfg["mcu_type"] or "ESP32-C5" in cfg["mcu_type"]:
+        pad8_net = mcu_pads.get("8", "")
+        pad13_net = mcu_pads.get("13", "")
+        pad16_net = mcu_pads.get("16", "")
+        pad17_net = mcu_pads.get("17", "")
+        print(f"    - Pad 8  (GPIO 8 / DATA):      Net = '{pad8_net}'")
+        print(f"    - Pad 13 (GPIO 9 / BOOT):      Net = '{pad13_net}'")
+        print(f"    - Pad 16 (GPIO 18 / USB_D-):   Net = '{pad16_net}'")
+        print(f"    - Pad 17 (GPIO 19 / USB_D+):   Net = '{pad17_net}'")
         
     elif "CH32V003" in cfg["mcu_type"]:
         print(f"    - CH32V003 48MHz RISC-V: Pin 4=NRST, Pin 8/18=PD1_SWIO")

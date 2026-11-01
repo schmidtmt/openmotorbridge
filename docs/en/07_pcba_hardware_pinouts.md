@@ -35,9 +35,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Silent Pager, N52 Key & Qi)  | (Pocket M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
 |       | Opens Pod Slide-in Lid Latch  |               |         | BQ51003 Qi, JST-ACH  |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Layer | ESP32-C5 Dual-Band,  |
-|       | (Wheeltec 77GHz & V2X Patch)  | (Wing M2.5)   | (ENIG)  | Wheeltec MR20 (AoP), |
-|       | 12V & UART Hardwire Link      |               |         | 36x WS2812B, JWPF 12V|
+| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Layer | ESP32-C3/C5 Sub-MCU, |
+|       | (Wheeltec 77GHz & V2X Patch)  | (Wing M3)     | (ENIG)  | Wheeltec MR20 (AoP), |
+|       | 12V & Bus Hardwire Link       |               |         | 36x WS2812B, JST-GH  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 09**| **OMM 2.4 GHz UCS Intercom**  | 60 x 30 mm    | 2 Layer | ESP32-C6 RISC-V,     |
 |       | (ECE 22.06 Standalone & Pod)  | (UCS M2)      | (ENIG)  | TI BQ24075, ES8388,  |
@@ -755,20 +755,105 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 ## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Visual Warning Wings (`openmotorbridge_radar_submcu`)
 
 ![PCBA 08 Radar 2.0 Sub-MCU & Warning Wings 3D](../images/pcba/pcba08_radar_submcu_3d.png)
-*Figure 7.8: 3D CAD view of the routed PCBA 08 (115 x 65 mm) with centered 61 x 51 mm radar aperture for the Wheeltec MR20 horn array, 36x WS2812B warning wing LEDs, ESP32-C5 Dual-Band Sub-MCU, and 5.9 GHz V2X ceramic patch antenna.*
 
-### 10.1 Technical Board Specifications & Cable Link
-* **Dimensions:** $115.0 \times 65.0 \times 1.6\,\text{mm}$ (2-layer FR-4 High-TG150, ENIG gold finish).
-* **Central Radar Aperture:** $61.0 \times 51.0\,\text{mm}$ for the Wheeltec MR20 77-GHz sensor module.
-* **Cable Interconnect (Cable 2 Branch 4):** 4-conductor shielded Picoflex cable harness to Central Box (12V switched vehicle feed, GND, twisted USB 2.0 data pair `USB_D+` / `USB_D-` to Port 5 of USB2517I Hub).
-* **5.9 GHz C-ITS / ITS-G5 RF Subsystem (ESP32-C5):**
-  * Dedicated 5.9 GHz antenna chamber with ceramic patch antenna on the left housing flank for unobstructed omnidirectional reception.
-  * Operates the ESP32-C5 in 802.11p OCB promiscuous mode (ETSI ITS-G5 / 5.9 GHz channels 176 and 180) to capture unencrypted Car-to-X broadcasts (architecture analogous to *OpenTrafficMap* / *CITS-to-go*):
-    - **SPATEM / SPaT:** Real-time traffic light phases and remaining red/green countdown in seconds.
-    - **GLOSA:** Green Light Optimal Speed Advisory for seamless green-wave passage.
-    - **MAPEM:** Lane-level intersection geometry to eliminate false traffic light alerts.
-    - **CAM:** Real-time positions of emergency vehicles (siren priority), buses, trams, and connected cars.
-    - **DENM:** Decentralized environmental hazard alerts (queue tails, black ice, breakdowns, crash sites).
+*Figure 7.8a: 3D CAD view of the routed PCBA 08 top side (115 x 65 mm) with centered 61 x 51 mm radar aperture for the Wheeltec MR20 horn array and 36x WS2812B-2020 halo warning wing LEDs.*
+
+![PCBA 08 Radar 2.0 Sub-MCU & Warning Wings Bottom 3D](../images/pcba/pcba08_radar_submcu_bottom_3d.png)
+
+*Figure 7.8b: 3D CAD view of the PCBA 08 bottom side -- Right: 12V -> 5V/3.3V TI TPS54302 buck converter and TPS7A0533 LDO power stage; Left: ESP32-C3-WROOM-02U sub-MCU with external U.FL gold port; Bottom: Vertical JST-GH (J1, Bus/12V) and JST-SH (J2, Radar) connectors.*
+
+### 10.1 Technical Board Specifications & Layer Stackup
+* **Dimensions:** $115.0 \times 65.0 \times 1.6\,\text{mm}$ ($R = 5.0\,\text{mm}$ corner radii).
+* **Central Radar Aperture:** $61.0 \times 51.0\,\text{mm}$ form-fitting aperture for the 77-GHz horn antenna array of the Wheeltec MR20 mmWave radar transceiver.
+* **Layer Stackup:** 2-layer FR-4 High-TG150, $1.6\,\text{mm}$ board thickness, $35\,\mu\text{m}$ copper (1 oz), ENIG gold finish (Electroless Nickel Immersion Gold).
+* **Fasteners:** 4x M3 mounting holes ($\varnothing 3.2\,\text{mm}$) spaced $107.0 \times 57.0\,\text{mm}$ for direct vibration-damped screw mounting inside the monocoque winged housing ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)).
+* **Design Rules:** OMB-v10 standard ($0.127\,\text{mm}$ trace/clearance, $0.25\,\text{mm}$ microvias with $0.15\,\text{mm}$ laser drill, $0.05\,\text{mm}$ annular ring).
+
+### 10.2 Component Placement & Circuit Architecture
+
+1. **Top Layer (`F.Cu`) -- 36-LED Halo Warning Wings (`D1` to `D36`):**
+   * 36x ultra-bright **WS2812B-2020** addressable RGB LEDs in compact $2.0 \times 2.0\,\text{mm}$ PLCC-4 packages.
+   * **Symmetrical Wing Array:** 18 LEDs along the left wing, 18 LEDs along the right wing.
+   * **Clean Daisy-Chain:** Data signal originates at MCU GPIO8 (`WS2812_DATA`) via series resistor to `DIN` of D1, chained via `DOUT` sequentially through D36. Chain termination on D36 Pad 4 is cleanly terminated with `no_connect`.
+   * **Solid 5V Power Delivery:** Full-plane 5V copper pour on `F.Cu` guarantees low-IR-drop current delivery up to $1.8\,\text{A}$ during simultaneous white-strobe emergency activation (blind spot / Prio-1 collision alert).
+
+2. **Bottom Layer (`B.Cu`) -- Segregated Power & MCU Architecture:**
+   * **Right Side (Integrated 12V Power Stage):**
+     - **Texas Instruments TPS54302DDCR (`U3`):** 3A synchronous step-down converter (400 kHz, 4.5V--28V Vin) in SOT-23-6 package. Converts switched 12V vehicle input (`VCC_12V`) at $\approx 92\%$ efficiency to stable $5.0\,\text{V}$ (`VCC_5V`) for the 36 LEDs and radar sensor.
+     - **Texas Instruments TPS7A0533PDBVR (`U2`):** Ultra-low-quiescent-current LDO ($I_Q = 1\,\mu\text{A}$) in SOT-23-5 package. Supplies clean, highly stable $3.3\,\text{V}$ (`VCC_3V3`) to the host MCU.
+     - **Filtering & Support:** 4.7 µH shielded power choke (`L1`, SMD 4040), $10\,\mu\text{F}$ / 50V ceramic input capacitor (`C_IN1`), $22\,\mu\text{F}$ / 16V output capacitor (`C_OUT1`), and $100\,\text{nF}$ bootstrap capacitor (`C_BOOT`).
+   * **Left Side (Sub-MCU & RF Subsystem):**
+     - **Espressif ESP32-C3-WROOM-02U (`U1`):** 32-bit RISC-V single-core processor @ 160 MHz with 4 MB SPI flash and factory U.FL gold port. The external micro-coaxial port eliminates PCB trace antennas entirely -- zero copper keepouts or plane cutouts needed, ensuring maximum ground-plane shielding integrity.
+     - **Boot & Reset Circuitry:** Tactile SMD micro-switch `SW1` (boot mode strapping on GPIO9), pull-up resistors `R1` ($10\,\text{k}\Omega$ for `ESP_EN`), `R2` ($10\,\text{k}\Omega$ for `ESP_IO9_BOOT`), and decoupling capacitors `C3`/`C4` ($100\,\text{nF}$).
+
+3. **Vertical Rear-Facing Headers (`B.Cu`):**
+   * Both connectors mount vertically facing backwards into the enclosure cavity to eliminate harness bending stress:
+     - **`J1` (Central Box Bus & 12V Power):** 4-pin **JST-GH** vertical header (`BM04B-GHS-TBT`, 1.25 mm pitch with positive locking latch).
+     - **`J2` (Radar Module Direct Link):** 4-pin **JST-SH** vertical header (`BM04B-SRSS-TB`, 1.00 mm pitch).
+
+---
+
+### 10.3 Connector Pinout Definitions
+
+#### Header `J1` -- Central Box Bus & Vehicle Power Link (JST-GH 4-Pin Vertical)
+| Pin | Signal Name | Signal Type | Description |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_12V` | Power In | +12V switched vehicle power (Branch 3 of Central Box harness) |
+| **2** | `GND` | Power | System ground / power return |
+| **3** | `BUS_DP` | USB 2.0 D+ | Differential data pair (Port 5 of USB2517I Hub) / Native USB DFU |
+| **4** | `BUS_DM` | USB 2.0 D- | Differential data pair (Port 5 of USB2517I Hub) / Native USB DFU |
+| **MP**| `GND` | Shield | Mechanical SMD shield anchor tabs |
+
+#### Header `J2` -- Wheeltec MR20 77-GHz Radar Interface (JST-SH 4-Pin Vertical)
+| Pin | Signal Name | Signal Type | Description |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | Power Out | +5.0V regulated power for MR20 radar sensor (max. 400 mA) |
+| **2** | `GND` | Power | Signal and power ground |
+| **3** | `MR20_TX` | UART In | 115,200 baud radar target vectors from MR20 (to MCU GPIO4 / U1 Pin 4) |
+| **4** | `MR20_RX` | UART Out | Configuration commands to MR20 (from MCU GPIO5 / U1 Pin 5) |
+| **MP**| `GND` | Shield | Mechanical SMD shield anchor tabs |
+
+---
+
+### 10.4 Complete Pinout of Host MCU U1 (ESP32-C3-WROOM-02U)
+
+| Module Pad | Signal Name | MCU GPIO / Function | Description / Hardware Interconnect |
+| :---: | :--- | :--- | :--- |
+| **1** | `GND` | Ground | System ground return |
+| **2** | `VCC_3V3` | Power In | +3.3V supply from TI TPS7A0533 (`U2`) |
+| **3** | *NC* | GPIO2 | Unconnected |
+| **4** | `MR20_TX` | GPIO3 / U0RXD | Radar UART RX (receives 20 Hz target vectors from J2 Pin 3) |
+| **5** | `MR20_RX` | GPIO4 / U0TXD | Radar UART TX (transmits config packets to J2 Pin 4) |
+| **6** | *NC* | GPIO5 | Unconnected |
+| **7** | `ESP_EN` | CHIP_PU | Chip enable with $10\,\text{k}\Omega$ pull-up `R1` and $100\,\text{nF}$ `C3` |
+| **8** | `WS2812_DATA` | GPIO8 | High-speed RMT/SPI data stream to DIN of first halo LED `D1` |
+| **9** | `GND` | Ground | System ground |
+| **10** | *NC* | GPIO6 | Unconnected |
+| **11** | *NC* | GPIO7 | Unconnected |
+| **12** | *NC* | NC | Unconnected |
+| **13** | `ESP_IO9_BOOT`| GPIO9 | Boot strapping pin with $10\,\text{k}\Omega$ pull-up `R2` and push-button `SW1` |
+| **14** | *NC* | GPIO10 | Unconnected |
+| **15** | *NC* | GPIO11 | Unconnected |
+| **16** | `BUS_DM` | GPIO18 / USB_D- | Native USB 2.0 D- to Central Box (`J1` Pin 4) |
+| **17** | `BUS_DP` | GPIO19 / USB_D+ | Native USB 2.0 D+ to Central Box (`J1` Pin 3) |
+| **18** | `GND` | Ground | System ground |
+| **19** | `GND` | Thermal EP | Bottom thermal exposed pad / RF ground |
+
+---
+
+### 10.5 5.9 GHz C-ITS / ITS-G5 RF Subsystem & Radar Telemetry
+* **Autonomous V2X Uplink:**
+  * Driven via the U.FL gold port through a short $40\,\text{mm}$ RG-178 coaxial whip to the external 5.9 GHz ceramic patch antenna mounted on the housing side cavity.
+  * Operates ETSI ITS-G5 (802.11p OCB) on safety channels 176 and 180:
+    - **SPATEM / SPaT:** Live signal phases and countdown timer in seconds.
+    - **GLOSA:** Green Light Optimal Speed Advisory for wave tracking.
+    - **MAPEM:** High-precision intersection map to prevent false alerts.
+    - **CAM:** Proximity beacons from emergency responders, buses, and connected vehicles.
+    - **DENM:** Decentralized hazard notifications (traffic jams, black ice, disabled vehicles).
+* **Local Edge-AI TTC Computation:**
+  * MR20 front-end streams 20-Hz target vectors (range, relative velocity, azimuth angle).
+  * Sub-MCU evaluates Time-to-Collision ($\text{TTC} = \frac{d}{v_{\text{rel}}}$) in real time.
+  * When $\text{TTC} < 2.5\,\text{s}$, the autonomous strobe pattern triggers on the 36 halo LEDs without USB stack latency, and a high-priority packet (`USB_PKT_RADAR_TARGETS` with `URGENT` flag) notifies the Central Box to duck helmet audio by $-12\,\text{dB}$ and inject the audible warning chime.
 
 ---
 

@@ -43,9 +43,9 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
 |       | Öffnet Pod-Slide-in Deckel    |               |         | BQ51003 Qi, JST-ACH  |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C5 Dual-Band,  |
-|       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M2.5) | (ENIG)  | Wheeltec MR20 (AoP), |
-|       | 12V & UART Kabelanbindung     |               |         | 36x WS2812B, JWPF 12V|
+| **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C3/C5 Sub-MCU, |
+|       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M3)   | (ENIG)  | Wheeltec MR20 (AoP), |
+|       | 12V & Bus Kabelanbindung      |               |         | 36x WS2812B, JST-GH  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 09**| **OMM 2.4 GHz UCS Intercom**  | 60 x 30 mm    | 2 Lagen | ESP32-C6 RISC-V,     |
 |       | (ECE 22.06 Autonom & Pod)     | (UCS M2)      | (ENIG)  | TI BQ24075, ES8388,  |
@@ -807,20 +807,105 @@ Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfalle
 ## 10. PCBA 08: 77 GHz mmWave Radar Sub-MCU & Warnflügel (`openmotorbridge_radar_submcu`)
 
 ![PCBA 08 Radar 2.0 Sub-MCU & Warnflügel 3D](../images/pcba/pcba08_radar_submcu_3d.png)
-*Abbildung 7.8: 3D CAD-Ansicht der gerouteten PCBA 08 (115 x 65 mm) mit mittigem 61 x 51 mm Radarausschnitt für das Wheeltec MR20 Horn-Array, 36x WS2812B Warnflügel-LEDs, ESP32-C5 Dual-Band Sub-MCU und 5.9 GHz V2X Keramik-Patchantenne.*
 
-### 10.1 Technische Platinen-Kenndaten & Kabel-Anbindung
-* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ (2 Lagen FR-4 High-TG150, ENIG-Goldfinish).
-* **Zentraler Radarausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ für das Wheeltec MR20 77-GHz-Sensormodul.
-* **Kabelanbindung (Kabel 2 Strang 4):** 4-poliger geschirmter Picoflex-Kabelstrang zur Zentralbox (12V geschaltete Speisung, GND, verdrilltes USB 2.0 Datenpaar `USB_D+` / `USB_D-` an Port 5 des USB2517I Hubs).
-* **5.9 GHz C-ITS / ITS-G5 Funk-Subsystem (ESP32-C5):**
-  * Eigene 5.9-GHz-Antennenkammer mit Keramik-Patchantenne auf der linken Gehäuseflanke für optimalen Rundumempfang.
-  * Nutzt den ESP32-C5 im 802.11p OCB Promiscuous-Modus (ETSI ITS-G5 / 5,9 GHz Kanäle 176 und 180) zum direkten Empfang unverschlüsselter Car-to-X Broadcasts (Architektur analog zu *OpenTrafficMap* / *CITS-to-go*):
-    - **SPATEM / SPaT:** Live-Ampelphasen und sekundengenauer Restrot-/Restgrün-Countdown.
+*Abbildung 7.8a: 3D CAD-Ansicht der gerouteten PCBA 08 Top-Seite (115 x 65 mm) mit mittigem 61 x 51 mm Radarausschnitt für das Wheeltec MR20 Horn-Array und 36x WS2812B-2020 Halo-Warnflügel-LEDs.*
+
+![PCBA 08 Radar 2.0 Sub-MCU & Warnflügel Bottom 3D](../images/pcba/pcba08_radar_submcu_bottom_3d.png)
+
+*Abbildung 7.8b: 3D CAD-Ansicht der PCBA 08 Bottom-Seite – Rechts: 12V -> 5V/3.3V TI TPS54302 Buck- und TPS7A0533 LDO-Power-Stage; Links: ESP32-C3-WROOM-02U Sub-MCU mit U.FL-Goldport; Unten: Senkrechte JST-GH (J1, Bus/12V) und JST-SH (J2, Radar) Steckverbinder.*
+
+### 10.1 Technische Platinen-Kenndaten & Lagenaufbau
+* **Abmessungen:** $115{,}0 \times 65{,}0 \times 1{,}6\,\text{mm}$ ($R = 5{,}0\,\text{mm}$ Außenkantenrundung).
+* **Zentraler Radarausschnitt:** $61{,}0 \times 51{,}0\,\text{mm}$ formschlüssig für das 77-GHz-Hornantennenarray des Wheeltec MR20 mmWave-Radars.
+* **Lagenaufbau:** 2-Lagen FR-4 High-TG150, $1{,}6\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (1 oz), ENIG-Goldfinish (Electroless Nickel Immersion Gold).
+* **Befestigung:** 4x M3 Montagelöcher ($\varnothing 3{,}2\,\text{mm}$) mit $107{,}0 \times 57{,}0\,\text{mm}$ Rastermaß zur schwingungsgedämpften Direktverschraubung im Monocoque-Flügelgehäuse ([`radar_mr20_housing.scad`](../../hardware/cad/scad/05_accessories/radar_mr20_housing.scad)).
+* **Design-Regeln:** OMB-v10 Standard ($0{,}127\,\text{mm}$ Trace/Clearance, $0{,}25\,\text{mm}$ Microvias mit $0{,}15\,\text{mm}$ Laserdrill, $0{,}05\,\text{mm}$ Restring).
+
+### 10.2 Bestückung & Schaltungsarchitektur
+
+1. **Top Layer (`F.Cu`) – 36-LED Halo-Warnflügel (`D1` bis `D36`):**
+   * 36x ultrahelle **WS2812B-2020** Addressable RGB-LEDs im kompakten $2{,}0 \times 2{,}0\,\text{mm}$ PLCC-4 Gehäuse.
+   * **Symmetrische Flügelführung:** 18 LEDs auf dem linken Flügel, 18 LEDs auf dem rechten Flügel.
+   * **Störungsfreie Daisy-Chain:** Die Datenleitung läuft von MCU-Pin GPIO8 (`WS2812_DATA`) über Serienwiderstand direkt an `DIN` von D1 und wird über `DOUT` bis D36 durchgeschleift. Das Kettenende an D36 Pad 4 ist sauber als `no_connect` abgeschlossen.
+   * **Direkte 5V-Speisung:** Vollflächige 5V-Powerplane auf `F.Cu` zur verlustarmen Stromzuführung bis zu $1{,}8\,\text{A}$ bei simultanem Weiß-Strobe (Blind-Spot / Prio-1 Kollisionswarnung).
+
+2. **Bottom Layer (`B.Cu`) – Getrenntes Power- & MCU-Layout:**
+   * **Rechte Hälfte (Integrierte 12V-Power-Stage):**
+     - **Texas Instruments TPS54302DDCR (`U3`):** 3A synchroner Abwärtswandler (400 kHz, 4.5V–28V Vin) im SOT-23-6 Gehäuse. Wandelt die geschaltete 12V-Bordnetzspannung (`VCC_12V`) mit $\approx 92\,\%$ Wirkungsgrad in stabile $5{,}0\,\text{V}$ (`VCC_5V`) für die 36 LEDs und das Radar.
+     - **Texas Instruments TPS7A0533PDBVR (`U2`):** Ultra-Low-Quiescent-Current LDO ($I_Q = 1\,\mu\text{A}$) im SOT-23-5 Gehäuse. Erzeugt die saubere, hochstabile $3{,}3\,\text{V}$ Versorgungsspannung (`VCC_3V3`) für die Host-MCU.
+     - **Filterung & Stützung:** 4.7 µH Shielded Power Inductor (`L1`, SMD 4040), $10\,\mu\text{F}$ / 50V Keramik-Eingangskondensator (`C_IN1`), $22\,\mu\text{F}$ / 16V Ausgangskondensator (`C_OUT1`) sowie $100\,\text{nF}$ Bootstrap-Kondensator (`C_BOOT`).
+   * **Linke Hälfte (Sub-MCU & Funksubsystem):**
+     - **Espressif ESP32-C3-WROOM-02U (`U1`):** 32-Bit RISC-V Single-Core Prozessor @ 160 MHz mit 4 MB SPI Flash und werksseitigem U.FL-Goldport. Durch den externen U.FL-Steckanschluss entfällt die störende Leiterplattenantenne vollständig – keine HF-Keepouts oder Cu-Freistellungen nötig, maximale Masseflächen-Stabilität.
+     - **Boot- & Reset-Schaltung:** Taktiler SMD-Mikrotaster `SW1` (Boot-Mode auf GPIO9), Pull-Up-Widerstände `R1` ($10\,\text{k}\Omega$ für `ESP_EN`), `R2` ($10\,\text{k}\Omega$ für `ESP_IO9_BOOT`) sowie Entkopplungskondensatoren `C3`/`C4` ($100\,\text{nF}$).
+
+3. **Senkrechte Steckverbinder nach hinten (`B.Cu`):**
+   * Zur Vermeidung abknickender Kabel im Gehäusehohlraum sind beide Steckbuchsen senkrecht nach hinten montiert:
+     - **`J1` (Zentralbox-Bus & Power):** 4-poliger **JST-GH** Header (`BM04B-GHS-TBT`, 1.25 mm Raster mit formschlüssiger Verriegelung).
+     - **`J2` (Radar-Direktanschluss):** 4-poliger **JST-SH** Header (`BM04B-SRSS-TB`, 1.00 mm Raster).
+
+---
+
+### 10.3 Steckverbinder-Pinbelegung
+
+#### Header `J1` – Zentralbox Bus- & Bordnetz-Anbindung (JST-GH 4-Pin Vertikal)
+| Pin | Signalname | Signal-Typ | Beschreibung |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_12V` | Power In | +12V geschaltetes Bordnetz (Peitsche 3 der Zentralbox) |
+| **2** | `GND` | Power | Zentralmasse / Power Return |
+| **3** | `BUS_DP` | USB 2.0 D+ | Differenzielles Datenpaar (Port 5 USB2517I Hub) / Native USB DFU |
+| **4** | `BUS_DM` | USB 2.0 D- | Differenzielles Datenpaar (Port 5 USB2517I Hub) / Native USB DFU |
+| **MP**| `GND` | Shield | Mechanische SMD-Schirmlaschen |
+
+#### Header `J2` – Wheeltec MR20 77-GHz-Radar-Interface (JST-SH 4-Pin Vertikal)
+| Pin | Signalname | Signal-Typ | Beschreibung |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | Power Out | +5.0V geregelte Speisung für das MR20 Radarmodul (max. 400 mA) |
+| **2** | `GND` | Power | Signal- und Versorgungsmasse |
+| **3** | `MR20_TX` | UART In | 115.200 Baud Radar-Zielvektoren vom MR20 (an MCU GPIO4 / U1 Pin 4) |
+| **4** | `MR20_RX` | UART Out | Konfigurationskommandos zum MR20 (von MCU GPIO5 / U1 Pin 5) |
+| **MP**| `GND` | Shield | Mechanische SMD-Schirmlaschen |
+
+---
+
+### 10.4 Vollständige Pinbelegung der Host-MCU U1 (ESP32-C3-WROOM-02U)
+
+| Modul-Pad | Signalname | MCU GPIO / Funktion | Beschreibung / Hardware-Verbindung |
+| :---: | :--- | :--- | :--- |
+| **1** | `GND` | Masse | Systemmasse (Rückleitung) |
+| **2** | `VCC_3V3` | Power In | +3.3V Versorgungsspannung von TI TPS7A0533 (`U2`) |
+| **3** | *NC* | GPIO2 | Unbelegt |
+| **4** | `MR20_TX` | GPIO3 / U0RXD | Radar UART RX (empfängt 20 Hz Zielvektoren von J2 Pin 3) |
+| **5** | `MR20_RX` | GPIO4 / U0TXD | Radar UART TX (sendet Konfigurationspakete an J2 Pin 4) |
+| **6** | *NC* | GPIO5 | Unbelegt |
+| **7** | `ESP_EN` | CHIP_PU | Chip-Enable mit $10\,\text{k}\Omega$ Pull-up `R1` und $100\,\text{nF}$ `C3` |
+| **8** | `WS2812_DATA` | GPIO8 | High-Speed RMT/SPI-Datenstrom zu DIN der ersten Halo-LED `D1` |
+| **9** | `GND` | Masse | Systemmasse |
+| **10** | *NC* | GPIO6 | Unbelegt |
+| **11** | *NC* | GPIO7 | Unbelegt |
+| **12** | *NC* | NC | Unbelegt |
+| **13** | `ESP_IO9_BOOT`| GPIO9 | Boot-Strapping Pin mit $10\,\text{k}\Omega$ Pull-up `R2` und Taster `SW1` |
+| **14** | *NC* | GPIO10 | Unbelegt |
+| **15** | *NC* | GPIO11 | Unbelegt |
+| **16** | `BUS_DM` | GPIO18 / USB_D- | Native USB 2.0 D- zur Zentralbox (`J1` Pin 4) |
+| **17** | `BUS_DP` | GPIO19 / USB_D+ | Native USB 2.0 D+ zur Zentralbox (`J1` Pin 3) |
+| **18** | `GND` | Masse | Systemmasse |
+| **19** | `GND` | Thermal EP | Unterseitiges Thermal Pad / HF-Masse |
+
+---
+
+### 10.5 5.9 GHz C-ITS / ITS-G5 Funk-Subsystem & Radar-Telemetrie
+* **Autonomer V2X-Uplink:**
+  * Über die U.FL-Goldbuchse und ein kurzes $40\,\text{mm}$ RG-178 Koaxialkabel wird die externe 5.9 GHz Keramik-Patchantenne in der seitlichen Gehäuseaussparung angesteuert.
+  * Unterstützt ETSI ITS-G5 (802.11p OCB) auf den V2X-Sicherheitskanälen 176 und 180:
+    - **SPATEM / SPaT:** Live-Ampelphasen und sekundengenauer Restrot-/Restgrün-Countdown im Cockpit.
     - **GLOSA:** Geschwindigkeitsempfehlung zur Nutzung der „Grünen Welle“.
     - **MAPEM:** Spurgenaue Kreuzungsgeometrie zur Vermeidung falscher Ampelsignalisierungen.
     - **CAM:** Positionsmeldungen von Rettungsfahrzeugen (Blaulichtvorrang), Bussen/Bahnen und vernetzten Serien-Pkw.
     - **DENM:** Dezentrale Gefahrenmeldungen (Stauenden, Glatteis, Pannen, Unfälle).
+* **Lokale Edge-AI TTC-Berechnung:**
+  * Das MR20 mmWave-Frontend liefert 20-Hz-Rohzielvektoren (Distanz, Relativgeschwindigkeit, Azimutwinkel).
+  * Die Sub-MCU berechnet in Echtzeit Time-to-Collision ($\text{TTC} = \frac{d}{v_{\text{rel}}}$).
+  * Bei $\text{TTC} < 2{,}5\,\text{s}$ wird autonom und ohne USB-Latenz das Prio-1 Warnflügel-Stroboskop ausgelöst und simultan ein USB-Interrupt (`USB_PKT_RADAR_TARGETS` mit `URGENT`-Flag) an die Zentralbox gesendet, der das Helm-Audio um $-12\,\text{dB}$ absenkt und den Warn-Ping einspielt.
 
 ---
 

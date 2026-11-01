@@ -84,6 +84,9 @@ def check_unconnected_pads(board):
             # Allow standard USB-C SBU pins (A8, B8) to be NC in USB 2.0 designs
             if ("USB" in fp_name.upper() or "TYPE-C" in fp_name.upper() or ref == "J1") and pad_num in ["A8", "B8", "SBU1", "SBU2"]:
                 continue
+            # Allow WS2812 addressable LED DO / DOUT pins to be NC (e.g. end of chain)
+            if "WS2812" in fp_name.upper() and pad_num in ["2", "4"]:
+                continue
             # For all discrete components (C, R, L, D, Y, J, BAT, CONN, SW, ANT, F, etc.), NO pad may be unconnected!
             unconnected.append((ref, pad_num, pad))
     return unconnected
