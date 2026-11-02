@@ -288,7 +288,7 @@ Alle Gehäuseteile sind konsequent für das **IKEA-Prinzip** konstruiert: **Kein
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit / Referenz-Kit 5):**
   * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
-  * `cockpit_breakout_block.stl` (1 Stk.) & `vehicle_breakout_block.stl` (1 Stk.): Formschlüssige Satelliten-Gehäuse für Mittelkonsole / Armlehne (Cockpit) und Schweller / Einstiegsleiste (Fahrzeug).
+  * `glovebox_power_injection_hub.stl` (1 Stk.): Formschlüssiges Hub-Gehäuse für Mittelkonsole / Armlehne (Power-Injection & USB-Host Abgriff im Begleitfahrzeug).
   * `car_dashboard_wedge_dock.stl` (1 Stk.): Scheibenbasis-Wandlerkeil für abgesetztes Schnapp-Sensor-Puck (`sensor_puck_environmental.stl`) im unbedampften Mautbox-Fenster.
 
 ---
@@ -338,33 +338,30 @@ Für Laborprüfungen (Tisch-Inbetriebnahme ohne Motorrad-Kabelbaum) sowie den mo
 ### 11.3 HF-Antennen & Sensoren (COTS)
 1. **Geschirmtes 4-Draht Automotive Backbone-Kabel (2.5 m):** 2x AWG22 + 2x AWG28 verdrillt mit Folienschirm für USB 2.0 & bis zu 60W USB-PD.
 2. **LoRa 868 MHz Flex-Antenne (1 Stk.):** **Taoglas FXP895** ($110 \times 20 \times 0{,}8\,\text{mm}$) mit 50 $\Omega$ U.FL Speisung für Zentralbox-Deckeltasche.
-3. **Multi-GNSS Modul (1 Stk.):** **u-blox SAM-M10Q** mit integrierter $15 \times 15\,\text{mm}$ Keramik-Patchantenne, angebunden am 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`).
-4. **Umgebungssensoren (Fahrzeug-Satellit I2C Daisy-Chain):**
+3. **Multi-GNSS Modul (1 Stk.):** **u-blox SAM-M10Q** mit integrierter $15{,}5 \times 15{,}5\,\text{mm}$ Keramik-Patchantenne auf PCBA 05D, angebunden am Port `SENSOR` des Front-Knotens.
+4. **Umgebungssensoren (PCBA 05D I2C Bus):**
    * **TI TMP117:** Hochpräziser Temperatursensor ($\pm 0{,}1\,^\circ\text{C}$) für Glatteis-Frühwarnung.
 5. **868-MHz-Miniatur-Magnetfuß-Dachantenne (1 Stk., Default im Car-Kit):** Kompakter $\varnothing 30\,\text{mm}$ Magnetfuß mit 8 cm Edelstahlstrahler (+3.0 dBi) und $2{,}5\,\text{m}$ RG-174 Koaxialkabel (SMA-Stecker) für kratzfreie Montage auf dem Fahrzeugdach (überwindet die 20-30 dB Karosseriedämpfung). Ergänzt durch ein $100\,\text{mm}$ IP67 SMA-auf-U.FL Einbau-Pigtail mit O-Ring für den rückseitigen Knockout der Zentralbox.
 
-### 11.4 Internes COTS-Kabelset & Pigtails für Front-Node & Peripherie
+### 11.4 Vorkonfektioniertes COTS-Kabelset für Front-Node & Peripherie (v10 Multi-Port)
 
-Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, den modularen Satelliten-Verteilern und der Peripherie kommen **ausschließlich industriell vorkonfektionierte COTS-Kabel (Plug & Play)** zum Einsatz. Es muss kein einziger Steckkontakt von Hand gecrimpt werden:
+Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, dem Handschuhfach-Hub und der Cockpit-/Fahrzeugperipherie kommen **ausschließlich industriell vorkonfektionierte COTS-Kabel (Plug & Play)** zum Einsatz. Es muss kein einziger Steckkontakt von Hand gecrimpt werden:
 
 | Funktion / Baugruppe | Header auf Platine | Steckertyp & Raster | Gegenstück / Gehäuseauslass | Länge | Bezugsquelle / Typ |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Cockpit-Hauptstrang (Motorrad)** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellitenverteiler (`cockpit_breakout_block`) | 50 cm | Geschirmtes 16-adriges Rundkabel (Ø 6.0 mm) mit TPU-Dichtung |
-| **Cockpit-Strang (Pkw-Kit)** | Front-Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit-Satellit in Mittelkonsole / Armlehne | 75 cm | Hochflexibles 16-adriges Schleppkettenkabel (gleicht 25 cm Sitzverstellung aus) |
-| **Fahrzeug-Hauptstrang** | Front-Node `J_VEHICLE` | 12-Pin Dual-Row (2.0 mm Latch) | Fahrzeug-Satellitenverteiler (`vehicle_breakout_block`) | 40 cm | Geschirmtes 12-adriges Rundkabel (Ø 6.5 mm) mit TPU-Dichtung |
-| **Smartphone Ladekabel** | Cockpit-Satellit Port 1 | USB-C Stecker (COTS) | Smartphone am Lenker (mit 3D-Zugentlastungsklemme) | 20–30 cm | Handelsübliches USB-C auf USB-C Kabel (gewinkelt/geflochten) |
-| **CP2AA Wireless Dongle** | Cockpit-Satellit Port 2 | USB-C oder USB-A Buchse | Ottocast / Carlinkit Adapter im Cockpit | 15 cm | COTS USB-Kabel mit Rüttelsicherung |
-| **OEM Upstream Host** | Cockpit-Satellit Port 3 | USB-C Buchse | Motorrad-Infotainment (Harley Skyline / Boom! Box) | 30 cm | COTS USB-C auf OEM-USB Stecker |
-| **Action-Cam Stromversorgung** | Cockpit-Satellit Port 4 | USB-C Buchse (Power-Only) | Action-Cam (GoPro / Insta360) am Lenker/Scheibe | 20–40 cm | COTS USB-C Ladekabel mit Rüttelsicherung |
-| **Navi 5V Stromversorgung** | Cockpit-Satellit Port 5 | USB-C Buchse (Power-Only) | Navigationsgerät (Garmin / TomTom / Beeline) | 20–30 cm | COTS USB-C Ladekabel mit Rüttelsicherung |
-| **Lenkertaster / PTT** | Cockpit-Satellit Klemme | Schraub-/Federklemme 2-Pin | Lenkerarmatur (PTT Funk / Voice-Assistent) | 80 cm | 2-adriges Steuerkabel zur Lenkerarmatur |
-| **Bordnetz 12V In** | Fahrzeug-Satellit Port 1 | JST-JWPF 2-Pin (IP67) | Offene Litzen (0.5 mm²) mit Posi-Tap / Cartool-Stecker | 50 cm | COTS JST-JWPF 2P Pigtail (KL15 Standlicht & GND) |
-| **Fahrzeug CAN-Bus (Motorrad)** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Offene Litzen mit Posi-Tap für CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P Pigtail |
-| **OBD2 Pkw-Direktkabel (Opt.)** | Fahrzeug-Satellit Port 2 | JST-JWPF 3-Pin (IP67) | Flacher 90° OBD2-Stecker im Fahrerfußraum | 80 cm | Ultraflaches Flachbandkabel (baut nur 10 mm auf, null Pedalkonflikt) |
-| **Spiegel-Warn-LEDs (BSD)**| Fahrzeug-Satellit Port 3 | JST-JWPF 3-Pin (IP67) | Y-Kabel ($2 \times 2$-Pin) zu bernsteinfarbenen Spiegel-LEDs | 120 cm | COTS JST-JWPF 3P Y-Pigtail |
-| **Aux-Licht Schaltausgang**| Fahrzeug-Satellit Port 4 | JST-JWPF 2-Pin (IP67) | 2-Pin Litzen zum Zusatzscheinwerfer / Stroboskop | 40 cm | COTS JST-JWPF 2P Pigtail |
-| **Qwiic / GNSS I2C Bus** | Fahrzeug-Satellit Port 5 | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker zu SAM-M10Q GNSS- & TMP117 Puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
-| **MR20 Radar-Interconnect**| Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker direkt in das Wheeltec MR20 Sensormodul | 40-50 mm | COTS JST-SH 4P zu JST-SH 4P |
+| **Handschuhfach-Hub Zuleitung** | Front-Node `J4` (`MAIN`) | JST-GH 6-Pin (1.25 mm Latch) | Handschuhfach-Hub Port 0 (Upstream) | 60 cm | Geschirmtes 6-adriges High-Speed USB 2.0 & Power-Kabel |
+| **Wireless CP/AA Dongle** | Front-Node `J_DONGLE` | JST-GH 4-Pin (1.25 mm Latch) | Ottocast / Carlinkit Adapter im Cockpit | 20 cm | COTS USB-Kabel mit Rüttelsicherung (geschalteter 5V Port) |
+| **Action-Cam Stromversorgung** | Front-Node `J8` (`CAM 5V`) | JST-PH 2-Pin (2.0 mm) | Action-Cam (GoPro / Insta360) am Lenker/Scheibe | 30–50 cm | COTS JST-PH auf USB-C Power-Only Ladekabel |
+| **Navi 12V Stromversorgung** | Front-Node `J_NAV` (`NAV 12V`) | JST-PH 2-Pin (2.0 mm) | Navigationsgerät (Garmin Zumo / TomTom Rider) | 30–50 cm | COTS JST-PH 2P Pigtail (geschaltete 12V) |
+| **Zusatzscheinwerfer (Aux Light)** | Front-Node `J_AUX_LIGHT` (`AUX 12V`)| JST-PH 2-Pin (2.0 mm) | Zusatzscheinwerfer / Nebelleuchten | 40 cm | COTS JST-PH 2P Pigtail (geschaltete 12V / 3A) |
+| **Linker Spiegel-Pod (PTT & BSD)**| Front-Node `J1_CKPT` (`CKPT 1`)| JST-GH 4-Pin (1.25 mm Latch) | PCBA 05C im linken Under-Perch Spiegel-Pod | 45 cm | COTS JST-GH 4P Kabel (PTT-Taster & bernsteinfarbene BSD-LED) |
+| **Sensor-Puck (GNSS / Klima)** | Front-Node `J_SENSOR` (`SENSOR`)| JST-GH 6-Pin (1.25 mm Latch) | PCBA 05D im Schnapp-Sensor-Puck Korb | 15 cm | COTS JST-GH 6P Kabel (I2C Bus & generic I2S) |
+| **Rechter Spiegel-Pod (CAM & BSD)**| Front-Node `J2_CKPT` (`CKPT 2`)| JST-GH 4-Pin (1.25 mm Latch) | PCBA 05C im rechten Under-Perch Spiegel-Pod | 45 cm | COTS JST-GH 4P Kabel (Action-Cam Taster & BSD-LED) |
+| **Smartphone Ladekabel (Bagger)** | Handschuhfach-Hub Port 1 | USB-C Buchse | Smartphone im rechten Handschuhfach | 20 cm | COTS USB-C auf USB-C / Lightning Schnellladekabel (30W PD) |
+| **Dongle Port (Handschuhfach)** | Handschuhfach-Hub Port 2 | USB-C Buchse | Wireless CP/AA Adapter im Handschuhfach | 15 cm | COTS USB-C auf USB-C/A Kabel (10W geschaltet) |
+| **Media USB Stick (Bagger)** | Handschuhfach-Hub Port 3 | USB-C Buchse | FLAC/MP3 USB-Stick oder Werkstatt-Diagnose | Direkt | COTS USB-C Speicherstick |
+| **OEM Upstream Host** | Handschuhfach-Hub Port 4 | USB-C Buchse | OEM Harley USB-C Port zu Boom! Box / Skyline OS | 25 cm | COTS USB-C Patchkabel |
+| **MR20 Radar-Interconnect** | Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker direkt in das Wheeltec MR20 Sensormodul | 40–50 mm | COTS JST-SH 4P zu JST-SH 4P |
 | **Zentralbox CarPlay Port**| Zentralbox `J3` | IDC 10-Pin (2.54 mm) | Wasserdichte Panel-Mount USB-C Buchse (IP67) an der Gehäuseflanke | 15 cm | COTS IDC-10 auf USB-C Panel-Mount |
 | **USV LiPo-Akku Anschluss**| Zentralbox `J5` | JST-PH 4-Pin / Molex | Anschlusskabel mit NTC-Sensor des 2.200 mAh LiPo Flat-Packs | 8 cm | Am LiPo-Pouch konfektioniert |
 

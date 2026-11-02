@@ -532,69 +532,69 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
    - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
 
+![Universal Front Node Cockpit Ports CAD](../images/cad/front_node_north_ports.png)
+
+*Abbildung 8.22: Cockpit-Portwand des Front-Knotens (Y = 68 mm / fahrerzugewandt) mit bündigen TPU-Dichtmanschetten für Port 1 [ CKPT 1 ] (Spiegel-Pod / Display Rechts), Port 2 [ SENSOR ] (Sensor-Puck) und Port 3 [ CKPT 2 ] (Spiegel-Pod / Display Links) sowie aufgerastetem Sensor-Puck.*
+
+![Universal Front Node Vehicle Ports CAD](../images/cad/front_node_south_ports.png)
+
+*Abbildung 8.23: Fahrzeug- & Zubehör-Portwand des Front-Knotens (Y = 0 mm / fahrzeugzugewandt) mit bündigen Ports für Port 1 [ MAIN ] (4P-Backbone & 6P-Handschuhfach-Hub), Port 2 [ DONGLE ] (CarPlay/AA) sowie den 3 Mini-Ports [ AUX 12V ], [ NAV 12V ] und [ CAM 5V ]. Verwechslungsfrei geprägt und mit formschlüssigen TPU-Blindstopfen abgedichtet.*
 
 ---
 
-### 5.3 Die modularen Satelliten-Verteilerblöcke („Lego-Prinzip“)
+### 5.3 Die Evolution von den Satelliten-Blöcken zum integrierten Handschuhfach-Hub (PCBA 05B)
 
-Anstatt empfindliche Einzelstecker im Spritzwasserbereich des Motorrads zu verteilen, münden die beiden Hauptkabelstränge in zwei spezialisierte, kompakte Satellitenblöcke:
+In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satellitenblöcke vorgesehen: ein separater „Cockpit-Satellit“ und ein „Fahrzeug-Satellit“, die über Schwalbenschwanz-Führungen (Dovetail) gekoppelt werden konnten. **In Version 10.0 ist dieses Konzept durch die integrierte Multi-Port-Architektur grundlegend vereinfacht und professionalisiert worden:**
 
 ```
-                            DAS MODULARE SATELLITEN-PRINZIP
- +-----------------------------------+             +-----------------------------------+
- |   COCKPIT-SATELLITENBLOCK         |             |   FAHRZEUG-SATELLITENBLOCK        |
- |   (cockpit_breakout_block.scad)   |             |   (vehicle_breakout_block.scad)   |
- +-----------------------------------+             +-----------------------------------+
- | * 5x Standard USB-C Buchsen:      |             | * 5x Wasserdichte Raststeckverbinder|
- |   - [ PHONE 20W ] USB-PD Fast-Chg |             |   (JST-JWPF IP67 / JST-SM COTS):  |
- |   - [ DONGLE ] CP2AA Wireless Hub |             |   - [ 12V IN ] KL15 & Power-GND   |
- |   - [ HOST ] Skyline / Boom! Box  |             |   - [ CAN BUS ] Differenziell     |
- |   - [ CAM 5V ] Power-Only (DCP)   |             |   - [ MIRROR BSD ] Spiegel-LEDs   |
- |   - [ NAVI 5V ] Power-Only (DCP)  |             |   - [ AUX LIGHT ] 12V Aux / Navi  |
- | * Schraubklemme für PTT-Taster    |             |   - [ GNSS / CLIMATE PUCK ] 4P I2C|
- | * Mechanische Zug- & Rüttelsicher-|             | * 60s Schnelltausch im Defektfall |
- |   ung: 3D-Klemmspange mit 2x M3   |             +-----------------------------------+
- +-----------------------------------+                               |
-                   \                                                 /
-                    \----------- Schwalbenschwanz-Kupplung ---------/
-                                  (Dovetail-Schienenverbinder)
-                                              |
-                                              v
-                          [ KOMBI-BLOCK FÜR VERKLEIDUNGS-MOTORRÄDER ]
-                          (Road Glide Sharknose / Batwing Fairing)
+                            DIE v10 HARDWARE-EVOLUTION (FRONT-BEREICH)
+  +-------------------------------------+             +-------------------------------------+
+  |   VORMALS: FAHRZEUG-SATELLIT        |             |   VORMALS: COCKPIT-SATELLIT         |
+  |   (vehicle_breakout_block.scad)     |             |   (cockpit_breakout_block.scad)     |
+  +-------------------------------------+             +-------------------------------------+
+                     |                                                   |
+                     v                                                   v
+  [ IN FRONT-NODE INTEGRIERT (PCBA 05) ]              [ NEU: 4-PORT HANDSCHUHFACH-HUB (05B) ]
+  * Alle Fahrzeug- & Sensoranschlüsse                 * Spezieller Media- & Power-Hub für
+    sitzen bündig in der IP68 Wanne:                    Harley Media Compartment (Glovebox)
+    - MAIN (4P Backbone + 6P Hub)                     * 30W USB-PD Phone Fast Charge
+    - DONGLE (CarPlay/AA geschaltet)                  * 10W geschalteter Dongle-Port (Reset)
+    - AUX 12V (Zusatzscheinwerfer)                    * USB 2.0 Host Pass-Through (Skyline)
+    - NAV 12V (Garmin / Chigee AIO-5)                 * USB 2.0 Media Pass-Through (Sticks)
+    - CAM 5V (Action-Cam entstört)                    * Integrierte thermische Louvers
+    - CKPT 1 & 2 (Spiegel-Pods / Disp)                * Kompakte Maße: 72 x 46 x 22 mm
+  * Externe Box ERSATZLOS ENTFALLEN!                  * Dovetail-Verbinder ENTFALLEN!
 ```
 
-1. **Cockpit-Satellit (`cockpit_breakout_block.scad`):**
-   - **Anschlüsse:** Robuste, eindeutig laserbeschriftete **Standard-USB-C-Buchsen** (`[ PHONE 20W ]`, `[ DONGLE ]`, `[ HOST ]`, `[ CAM 5V ]`, `[ NAVI 5V ]`) sowie eine 2-polige Schraub-/Federklemme für den PTT-Lenkertaster.
-   - **Power-Only für Cam & Navi:** Action-Cams (GoPro, Insta360) und USB-Navis (Garmin, TomTom, Beeline) sind als reine Stromversorgungs-Ports (BC 1.2 DCP mit intern gebrückten Datenleitungen) ausgelegt. Dadurch wird zuverlässig verhindert, dass angeschlossene Kameras oder Navis in den blockierenden PC-Massenspeicher- oder Webcam-Modus wechseln. Auf der Front-Node-Platine werden somit keinerlei USB-Hub-Datenkanäle verschwendet.
-   - **Integrierte mechanische Zug- und Rüttelsicherung:** Eine formschlüssige 3D-gedruckte Klemmleiste, die mit zwei M3-Inbusschrauben fixiert wird, spannt die Steckerhälse aller eingesteckten USB-C-Kabel unlösbar fest. Selbst stärkste Motor- und Fahrbahnvibrationen führen zu keinem Wackelkontakt oder Lösen der Stecker.
-   - **COTS-Kabel-Freiheit:** Der Fahrer kann handelsübliche Standard-USB-C-Kabel beliebig konfigurieren (20 cm kurz, gewinkelt, geflochten) – kein teures Sonderzubehör erforderlich.
+1. **Vollständiger Entfall des externen Fahrzeug-Satelliten:**
+   - Durch die direkte Integration der bündigen IP68-Multi-Port-Dichtmanschetten in der Monocoque-Unterwanne des Front-Knotens (`PCBA 05`) werden alle Fahrzeug- und Sensorleitungen direkt steckbar am Hauptgehäuse abgewickelt.
+   - Ein separater Fahrzeug-Satellitenblock mit offenen JST-Steckern im Spritzwasserbereich ist **vollständig entfallen**. Das spart wertvollen Bauraum hinter Verkleidungen, eliminiert unnötige Übergangswiderstände und senkt die Fehleranfälligkeit bei Starkregen.
 
-   ![Cockpit Breakout Satellite CAD](../images/cad/cockpit_breakout_block_cad.png)
+2. **Aufgehen des Cockpit-Satelliten im Handschuhfach-Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
+   - Der vormalige Cockpit-Verteiler ist als spezialisierter, kompakter **4-Port Handschuhfach Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) für das rechte Handschuhfach (Media Compartment) moderner Touring-Bagger (Road Glide, Street Glide, CVO, CVO ST 2024+) aufgegangen.
+   - **Abmessungen:** Schlanke $72{,}0 \times 46{,}0 \times 22{,}0\,\text{mm}$ (HP MJF PA12), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
+   - **Funktionale Schnittstellen:**
+     - **Upstream Host:** Verbindet sich mit der werksseitigen Harley USB-C Buchse der Head Unit (Skyline OS / Boom! Box GTS).
+     - **12V DC Speisung:** Gespeist über die 6-polige Verbindung vom Front-Node (`J4` an `PCBA 05`).
+     - **Port 1 (Smartphone Fast Charge):** Thermisch optimierter 30W USB-PD Ladeport (verhindert gefährlichen Akkuhitzestau im geschlossenen Fach).
+     - **Port 2 (CarPlay/AA Dongle):** 10W geschalteter VBUS für drahtlose CarPlay/Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.
+     - **Port 3 (Media Pass-Through):** High-Speed USB 2.0 Schnittstelle für USB-Sticks mit Musikdateien (FLAC/MP3) oder offizielle Harley-Software-Updates.
+     - **Port 4 (Harley Headset-Emulation):** Emuliert das Harley-Headset direkt über USB für native Apple CarPlay Aktivierung ohne externe Dongles oder Brücken.
+   - **Passive Konvektionskühlung:** Schräg angeordnete Entlüftungslamellen im Gehäusedeckel leiten die Abwärme des SC8102 Buck-Boost-Reglers zuverlässig nach oben ab.
 
-2. **Fahrzeug-Satellit (`vehicle_breakout_block.scad`):**
-   - **5 abgedichtete COTS-Ports:** Ausgestattet mit industriellen, codierten COTS-Raststeckern (JST-JWPF IP67 wasserdicht oder JST-SM mit Schutztülle) für:
-     - `[ 12V IN ]`: KL15 Zündungsplus & Power-GND (2-Pin)
-     - `[ CAN BUS ]`: CAN_H, CAN_L, Masse (3-Pin)
-     - `[ MIRROR BSD ]`: Totwinkel-Spiegel-LEDs links & rechts (3-Pin)
-     - `[ AUX LIGHT ]`: Geschalteter 12V Zusatzscheinwerfer oder Aktivhalterung (2-Pin)
-     - `[ GNSS / CLIMATE PUCK ]`: 4-poliger I2C-Sensorport (+3.3V, GND, SDA, SCL) für den externen u-blox SAM-M10Q / TMP117 / OPT3001 Sensor-Puck im Verkleidungsschnabel
-   - **12V-Aktivhalterungen:** Für Motorrad-Navis mit 12V-Aktivhalterung (z. B. Garmin Zūmo XT/XT2 Motorradhalterung oder BMW ConnectedRide Cradle) erfolgt die Stromversorgung direkt über den geschalteten 12V-Ausgang des Fahrzeug-Satelliten.
-   - **Wartungsfreundlichkeit:** Bei Beschädigung eines Spiegels mit Radar-LED, eines Zusatzscheinwerfers oder eines Sensors wird die Komponente in 60 Sekunden werkzeuglos abgesteckt und getauscht, ohne das Hauptgehäuse öffnen zu müssen.
+![Handschuhfach Media & Power-Injection Hub CAD](../images/cad/glovebox_power_injection_hub_cad.png)
 
-   ![Vehicle Breakout Satellite CAD](../images/cad/vehicle_breakout_block_cad.png)
+*Abbildung 8.24: 4-Port Handschuhfach Media & Power-Injection Hub (PCBA 05B, glovebox_power_injection_hub.scad) für das rechte Medienfach von Touring-Baggern mit 30W USB-PD, geschaltetem Dongle-Port, USB 2.0 Media Pass-Through und passiven Konvektionsschlitzen.*
 
-3. **Modulare Kombinierbarkeit ("Lego-Prinzip"):**
-   - **Getrennt montiert (BMW GS Adventure & Harley Road King Special):** Der Cockpit-Satellit sitzt direkt am Lenker bzw. Scheibenhalter; der Fahrzeug-Satellit sitzt fest am Rahmen oder Schnabel. Dadurch wird **kein einziges unnötiges Kabel über das bewegliche Lenkkopflager** geführt!
-   - **Zusammengeclipst (Harley Road Glide / Sharknose & Batwing Fairing):** Beide Satellitenblöcke besitzen an den Gehäuseflanken formschlüssige Schwalbenschwanz-Führungen (Dovetail). Sie lassen sich mit einem Klick zu einer kompakten, gemeinsamen Verteilereinheit zusammenstecken und im Handschuhfach oder hinter dem Innenverkleidungsträger montieren.
-
-   ![Front Node Satellites Dovetail Combo CAD](../images/cad/front_node_satellites_dovetail_combo_cad.png)
+3. **Entfall der Schwalbenschwanz-Kupplung (Dovetail):**
+   - Da kein Fahrzeug-Satellit mehr existiert und der Handschuhfach-Hub fest im Medienfach sitzt, entfällt der kombinierte Schwalbenschwanz-Schieber ersatzlos.
+   - Bei unverkleideten Naked Cruisern (Road King Special) und Reiseenduros (BMW GS) dockt Zubehör (Lenker-Smartphone-Lader, Action-Cam, Navi, PTT-Schalter) direkt an den bündigen Ports des Front-Knotens an – vollkommen ohne Satellitengehäuse.
 
 ---
 
 ### 5.4 Fahrzeugspezifische Montage- & Integrationskonzepte
 
-Die Kombination aus IP68 Monocoque-Front-Knoten und modularen Satelliten löst die spezifischen Herausforderungen der drei maßgeblichen Fahrzeug-Archetypen:
+Die v10 Monocoque-Architektur des Front-Knotens in Verbindung mit dem Handschuhfach-Hub löst die spezifischen Herausforderungen der drei maßgeblichen Fahrzeug-Archetypen:
 
 ```
 +-----------------------------------------------------------------------------------------------------+
@@ -605,47 +605,45 @@ Die Kombination aus IP68 Monocoque-Front-Knoten und modularen Satelliten löst d
 | * Montageort: Am Verkleidungsgeweih| * Montageort: Tief an Riser-   | * Montageort: Am inneren      |
 |   unter dem Schnabel hinter den    |   Basis / Gabelbrücke unter    |   Verkleidungsgeweih          |
 |   Seitenverkleidungen (wie ezCAN)  |   Scheinwerfer & Windschild    |   (Ø 16-19 mm Rohr mit        |
-| * Kabelführung: Genau 1 geschirm-  | * "Front-to-Back Flip":        |   front_node_fairing_clamp)   |
-|   ter Cockpit-Strang führt entlang |   - Kabel treten NACH VORNE    | * Satelliten: Cockpit- &      |
-|   der originalen BMW Bremsleitungs-|     in den Nacelle-Schatten aus|   Fahrzeug-Satellit per       |
-|   führung zum Lenkersatelliten     |   - Fahrer blickt auf cleane,  |   Dovetail zu einem Kombi-    |
-| * Fahrzeug-Satellit verbleibt      |     geschlossene Gehäusewand   |   Block vereint im            |
-|   fest am Rahmen / Geweih          |   - Integrierte Mikro-Halterung|   Verkleidungshohlraum        |
-| * Zero Kabelgewirr am Lenkkopf     |     für SAM-M10Q GNSS-Puck     | * Kürzeste Wege zu Display,   |
-|                                    | * Kein CAN nach vorne (Zentral-|   Ottocast & Handschuhfach    |
-|                                    |   box übernimmt CAN am Diagn.) |                               |
+| * Kabelführung: Zuleitungen für    | * "Front-to-Back Flip":        |   front_node_fairing_clamp)   |
+|   Spiegel-Pods (CKPT 1/2) & Navi   |   - Flush-Ports treten NACH    | * Handschuhfach: 4-Port Hub   |
+|   führen direkt vibrationsfest am  |     VORNE in Nacelle-Schatten  |   (PCBA 05B) für 30W Phone-   |
+|   BMW Bremsleitungsstrang entlang  |   - Fahrer blickt auf cleane,  |   Laden, Dongle & Media-Stick |
+| * Keine Satellitenboxen nötig:     |     geschlossene Gehäusewand   | * Zero Fairing Disassembly!   |
+|   AUX 12V & NAV 12V docken bündig  |   - Integriertes Dock für      | * Kürzeste Wege zu Skyline,   |
+|   direkt am Front-Node an          |     SAM-M10Q GNSS-Puck         |   Displays & Kaltluft-Sensor  |
+| * Zero Kabelgewirr am Lenkkopf     | * Kein CAN nach vorne nötig    |                               |
 +------------------------------------+--------------------------------+-------------------------------+
 ```
 
 1. **BMW R 1200 / 1250 / 1300 GS & Adventure (Schnabel- & Geweihmontage):**
    - Das Front-Node-Gehäuse wird mit seiner universellen 4-in-1 Bodenaufnahme oder Silentblöcken geschützt im Hohlraum unter dem Schnabel hinter den Seitenverkleidungen am vorderen Verkleidungsgeweih montiert (in direkter Analogie zu professionellen Steuergeräten wie Hex ezCAN oder Denali CANsmart).
-   - Vom Front-Node führt **genau ein** abgedichtetes Cockpit-Mantelkabel ($\varnothing 6{,}0\,\text{mm}$) vibrations- und scheuergeschützt entlang der werkseitigen BMW Bremsleitungs- und Kabelbaumführung am Lenkkopf nach oben zum Lenker.
-   - Am Lenker stellt der Cockpit-Satellit die USB-PD 20W Ladebuchse für die Smartphone-Halterung (SP Connect / QuadLock) und den PTT-Taster bereit. Der Fahrzeug-Satellit verbleibt fest am Rahmen/Geweih; Zusatzscheinwerfer und Spiegel-LEDs werden direkt dort eingesteckt.
+   - Vom Front-Node führen die Zuleitungen für Spiegel-Pods (`CKPT 1`/`CKPT 2`), Sensor-Puck und Smartphone-Lader direkt vibrationsgeschützt entlang der werkseitigen BMW Bremsleitungs- und Kabelbaumführung am Lenkkopf nach oben zum Lenker.
+   - Am Lenker versorgt Port `CKPT 1` bzw. `CKPT 2` die Spiegel-Pods mit Totwinkel-Warn-LEDs und PTT-Taster. Es ist kein externer Fahrzeug-Satellit erforderlich – Zusatzscheinwerfer (`AUX 12V`) und Motorrad-Navi (`NAV 12V`) docken direkt bündig an den Ports der Front-Node Monocoque-Unterwanne an.
 2. **Harley-Davidson Road King Special (RKS) & Naked Cruiser ("Front-to-Back Flip"):**
    - Bei puristischen Motorrädern ohne Verkleidung sitzt der Front-Knoten tief an der Lenker-Riser-Basis bzw. der oberen Gabelbrücke vor dem Lenker.
    - **Das "Front-to-Back Flip" Montageprinzip:** Das Gehäuse wird um $180^\circ$ gedreht montiert:
-     - Die beiden Rundkabel-Auslässe treten **nach vorne** aus und verschwinden unsichtbar im toten optischen Schatten der massiven Scheinwerfer-Nacelle bzw. der Gabelabdeckung.
+     - Die bündigen Multi-Port-Dichtmanschetten treten **nach vorne / unten** aus und verschwinden unsichtbar im toten optischen Schatten der massiven Scheinwerfer-Nacelle bzw. der Gabelabdeckung.
      - Die dem Fahrer zugewandte Gehäusewand ist eine vollkommen geschlossene, homogene Sichtfläche ohne sichtbare Stecker, Buchsen oder Schraubenköpfe.
-     - Auf dieser Fahrerseite ist eine formschlüssige **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert, der über ein kurzes, verdecktes Sensorkabel am Port `[ GNSS / CLIMATE PUCK ]` des Fahrzeug-Satelliten angebunden ist. Der Fahrer sieht eine elegante, technisch hochwertige Einheit anstelle von Kabelwirrwarr.
+     - Auf dieser Fahrerseite ist eine formschlüssige **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert, der über ein kurzes, verdecktes Sensorkabel am Port `SENSOR` des Front-Knotens angebunden ist. Der Fahrer sieht eine elegante, technisch hochwertige Instrumenteneinheit anstelle von Kabelwirrwarr.
      - Da die Road King Special kein Cockpit-CAN-Display besitzt, wird kein CAN-Bus nach vorne geführt – die Zentralbox unter der Sitzbank übernimmt das CAN-Logging direkt am 6-poligen HD-Diagnosestecker.
    - **Die 3 flexiblen Cockpit-Betriebsmodi (Zero-Hardware-Change):**
-     Durch den modularen Cockpit-Satelliten ([`cockpit_breakout_block.scad`](../../hardware/cad/scad/04_front_node/cockpit_breakout_block.scad)) stehen dem Fahrer an einem Naked Bike / RKS drei vollwertige, steckbare Betriebskonzepte zur Verfügung – ohne dass auch nur eine einzige Platine oder Gehäusekomponente getauscht werden muss:
+     Durch die integrierte Multi-Port-Architektur stehen dem Fahrer an einem Naked Bike / RKS drei vollwertige, steckbare Betriebskonzepte zur Verfügung – ohne dass auch nur eine einzige Platine oder Gehäusekomponente getauscht werden muss:
      
-     | Modus | Smartphone / `[ PHONE 20W ]` | `[ HOST ]` Port | `[ DONGLE ]` Port | `[ NAVI 5V ]` / `[ CAM 5V ]` |
-     | :--- | :--- | :--- | :--- | :--- |
-     | **Modus A: Purist / SP Connect** *(Default)* | Smartphone am Lenker (Navigation & Display) | *Frei / Reserve* | *Frei* | Action-Cam (GoPro / Insta360) |
-     | **Modus B: Classic Navi** | Smartphone in Tasche (geladen) | *Frei* | *Frei* | Garmin Zūmo XT / TomTom Rider |
-     | **Modus C: Smart-Screen Upgrade** *(Optional)* | Smartphone in Tasche (geladen) | **Carpuride / Chigee Screen** | **Ottocast CP2AA Dongle** | Action-Cam (GoPro / Insta360) |
+     | Modus | Smartphone / Lenker-Lader | `[ DONGLE ]` Port | `[ NAV 12V ]` / `[ CAM 5V ]` |
+     | :--- | :--- | :--- | :--- |
+     | **Modus A: Purist / SP Connect** *(Default)* | Smartphone am Lenker (Navigation & Display) | *Frei / Blindstopfen* | Action-Cam (GoPro / Insta360) |
+     | **Modus B: Classic Navi** | Smartphone in Tasche (geladen) | *Frei / Blindstopfen* | Garmin Zūmo XT / TomTom Rider |
+     | **Modus C: Smart-Screen Upgrade** *(Optional)* | Smartphone in Tasche (geladen) | **Ottocast CP2AA Dongle** | Carpuride / Chigee Smart-Screen |
 
      * **Das clevere Prinzip von Modus C (Standalone Smart-Screen):**
-       * Anstelle eines OEM-Radios (wie bei der Road Glide) wird ein handelsüblicher 5"- oder 7"-Motorrad-Touchscreen (Carpuride W502/W702, Chigee AIO-5, Ottocast Screen) an den Port **`[ HOST ]`** angeschlossen. Der Screen fungiert als USB-Host-Anzeigeeinheit.
-       * Über den internen Automotive-Hub (`USB2514B`) auf PCBA 05 kommuniziert dieser Screen direkt mit dem Wireless-Dongle am Port **`[ DONGLE ]`**. Selbst extrem günstige Nachrüst-Displays, die ab Werk nur *kabelgebundenes* CarPlay/Android Auto beherrschen, werden dadurch sofort **vollwertig drahtlos (Wireless CarPlay & Wireless Android Auto)**!
-       * **Zero-Power-Penalty:** Ein 5"- oder 7"-Screen zieht bei maximaler Sonnenlicht-Helligkeit ca. 5V @ 1,5–2,0A (7,5–10W). Da der Smart-Screen das separate Navigationsgerät ersetzt, entfällt der Strombedarf von `[ NAVI 5V ]` komplett – das Strom-Budget wird 1:1 vom Screen genutzt. Der 5V/3A Buck-Regler (`U3`) bleibt thermisch im grünen Bereich.
-       * **Helm-Audio & PTT:** Navigationsansagen und Musik werden weiterhin in voller Klangtreue direkt vom Smartphone via Bluetooth / OMM an das Helm-Headset (Cardo/Sena) gestreamt. Der PTT-Taster an der Cockpit-Leiste triggert wie gewohnt Siri / Google Assistant.
-       * **Rüttelfeste Montage:** Das kurze 20 cm USB-C-Kabel zum Screen wird durch die 3D-Klemmspange des Cockpit-Satelliten unlösbar gesichert.
+       * Anstelle eines OEM-Radios (wie bei der Road Glide) wird ein handelsüblicher 5"- oder 7"-Motorrad-Touchscreen (Carpuride W502/W702, Chigee AIO-5) an den Front-Node angebunden. Der Screen fungiert als USB-Host-Anzeigeeinheit.
+       * Über den internen Automotive-Hub (`USB2514B`) auf PCBA 05 kommuniziert dieser Screen direkt mit dem Wireless-Dongle am Port **`[ DONGLE ]`**. Selbst günstige Nachrüst-Displays, die ab Werk nur *kabelgebundenes* CarPlay/Android Auto beherrschen, werden dadurch sofort **vollwertig drahtlos (Wireless CarPlay & Wireless Android Auto)**!
+       * **Zero-Power-Penalty:** Ein 5"- oder 7"-Screen zieht bei maximaler Sonnenlicht-Helligkeit ca. 5V @ 1,5–2,0A (7,5–10W). Da der Smart-Screen das separate Navigationsgerät ersetzt, entfällt der Strombedarf von `[ NAV 12V ]` komplett – das Strom-Budget wird 1:1 vom Screen genutzt.
+       * **Helm-Audio & PTT:** Navigationsansagen und Musik werden weiterhin in voller Klangtreue direkt vom Smartphone via Bluetooth / OMM an das Helm-Headset (Cardo/Sena) gestreamt. Der PTT-Taster an den Spiegel-Pods triggert wie gewohnt Siri / Google Assistant.
 3. **Harley-Davidson Road Glide / Street Glide (Touring Sharknose & Batwing Fairing):**
    - Der Front-Knoten wird mit der 2-teiligen Rohrschelle ([`front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad)) direkt an die runden Stahlrohre (Ø 16–19 mm) des inneren Verkleidungsgeweihs geklemmt.
-   - Beide Satellitenblöcke werden über die Schwalbenschwanzführung zu einem gemeinsamen Kombi-Block zusammengesteckt und im Verkleidungshohlraum oder der Media-Bay platziert.
+   - Das rechte Handschuhfach (Media Compartment) nimmt den **4-Port Handschuhfach-Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) auf. Die Zuleitung führt unsichtbar von unten durch die werksseitige Gummitülle direkt vom Port `MAIN` des Front-Knotens.
    - Kürzeste Wege zu Harley Skyline OS / Boom! Box GTS, Ottocast CP2AA Wireless Dongle und Kaltluft-Sensorik.
 4. **Bagger & Touring Cockpit-Glance-Displays: Symmetrische Dual Speaker Corner-Pods ([`cockpit_speaker_corner_pod.scad`](../../hardware/cad/scad/04_front_node/cockpit_speaker_corner_pod.scad)):**
    - **Fahrpraxis & Ergonomie:** Bei modernen Touring-Baggern lädt das Fahrer-Smartphone wetter- und vibrationsgeschützt im rechten Handschuhfach (Media-Compartment) via USB-PD (schützt optische Bildstabilisatoren vor Vibrationen und Akkus vor Überhitzung in der Sonne). Für sicherheitskritische Blicke (Glanceable Telemetry) benötigt der Fahrer jedoch eine reflexionsarme, permanente Anzeige im primären Sichtfeld.
@@ -805,9 +803,9 @@ Bei unverkleideten Custom- und Bagger-Bikes wie der **Harley-Davidson Road King 
                [ SCHEINWERFER-NACELLE (SCHATTEN) ]
                                ^
                                |
-               Kabelauslässe treten NACH VORNE aus:
-               * Auslass 1: Cockpit-Strang (16-polig) -> Nacelle
-               * Auslass 2: Fahrzeug-Strang (12-polig) -> Nacelle
+               Multi-Port Dichtleisten treten NACH VORNE / UNTEN aus:
+               * Cockpit-Ports (CKPT 1, SENSOR, CKPT 2) -> Nacelle
+               * Fahrzeug-Ports (MAIN, DONGLE, AUX, NAV, CAM) -> Nacelle
                  +--------------------------------+
                  |    FRONT-NODE GEHÄUSEWANNE     |
                  |  (180° um die Z-Achse gedreht) |
@@ -824,14 +822,14 @@ Bei unverkleideten Custom- und Bagger-Bikes wie der **Harley-Davidson Road King 
 
 1. **Montageort & Orientierung:**
    - Der Front-Node wird tief an der **Lenker-Riser-Basis bzw. der oberen Gabelbrücke** direkt vor dem Lenker montiert.
-   - Das Gehäuse wird um **$180^\circ$ gedreht** verbaut: Die beiden abgedichteten Rundkabel-Auslässe ($\varnothing 6{,}0\,\text{mm}$) treten **nach vorne** in den toten optischen Schatten der massiven Scheinwerfer-Nacelle aus.
+   - Das Gehäuse wird um **$180^\circ$ gedreht** verbaut: Die bündig abschließenden TPU-Dichtmanschetten treten **nach vorne / unten** in den toten optischen Schatten der massiven Scheinwerfer-Nacelle aus.
 2. **Die fahrerseitige Sichtblende mit GNSS-Puck-Dock (`sam_m10q_rks_puck_dock.scad`):**
    - Die dem Fahrer zugewandte Gehäusewand ist eine vollkommen geschlossene, plane Designfläche ohne sichtbare Stecker, Buchsen oder Schraubenköpfe.
-   - In diese Wand ist eine formschöne **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert. Der Puck wird über ein ultrakurzes, verdeckt verlegtes Kabel direkt am 5. Port des Fahrzeug-Satelliten (`[ GNSS / CLIMATE PUCK ]`) angebunden.
+   - In diese Wand ist eine formschöne **Mikro-Halterung für den externen u-blox SAM-M10Q GNSS-Puck** integriert. Der Puck wird über ein ultrakurzes, verdeckt verlegtes Sensorkabel direkt am Port `SENSOR` des Front-Knotens angebunden.
    - **Ergebnis:** Anstelle von Haltebügeln oder Kabelsalat blickt der Fahrer auf eine minimalistische, hochwertige Instrumentenfläche mit integriertem GNSS-Auge.
-3. **Satelliten & Leitungsverlauf:**
-   - **Cockpit-Satellit:** Sitzt dezent unter der linken Schalterarmatur oder seitlich am Riser. Bietet die USB-PD 20W Buchse für die Smartphone-Halterung (SP Connect / QuadLock) und die PTT-Klemme.
-   - **Fahrzeug-Satellit:** Sitzt unsichtbar im Hohlraum der Lampen-Nacelle. Greift dort Zündungsplus (KL15 Standlicht) und Masse ab und speist die Totwinkel-Spiegel-LEDs.
+3. **Direkte Leitungsführung (Zero Satelliten-Gehäuse):**
+   - **Lenker-Peripherie:** Die Zuleitungen für den Smartphone-Halter (SP Connect / QuadLock) und die Under-Perch Spiegel-Pods (Warn-LED & PTT-Taster) führen direkt von den Ports `CKPT 1` und `CKPT 2` verdeckt zum Lenker.
+   - **Fahrzeug- & Scheinwerferbereich:** In der Lampen-Nacelle wird Zündungsplus (KL15 Standlicht) und Masse für den Front-Node bereitgestellt; Zusatzscheinwerfer docken bündig am Port `AUX 12V` an.
    - **Zero CAN über den Tank:** Da die Road King Special kein CAN-Cockpit-Display besitzt, wird **kein CAN-Bus-Kabel nach vorne** verlegt. Die Zentralbox unter der Sitzbank greift den CAN-Bus direkt am 6-poligen Harley-Diagnosestecker ab.
 
 ---
@@ -1208,7 +1206,7 @@ Für den professionellen Einsatz in Begleitfahrzeugen (Support-Vans bei geführt
 
 Mechanisch und fahrzeugintegrativ basiert das Car Support Kit auf durchdachten, schraub- und bohrungsfreien Komponenten:
 1. Dem **Universal Sonnenblenden-Clip für Pod 1 & 2 (2x)** ([`car_sun_visor_pod_clip.scad`](../../hardware/cad/scad/05_accessories/car_sun_visor_pod_clip.scad) / [`car_sun_visor_pod_clip.stl`](../../hardware/cad/stl/05_accessories/car_sun_visor_pod_clip.stl)) zur reflexionsfreien Abstrahlung durch die Frontscheibe.
-2. Dem kompakten **Cockpit-Satellitenblock (`PCBA 05B`)** in der Mittelkonsole / Armlehne mit $75\,\text{cm}$ Schleppketten-Kabel zum Front-Node unterm Fahrersitz.
+2. Dem kompakten **Handschuhfach- / Mittelkonsolen-Hub (`PCBA 05B`)** in der Mittelkonsole / Armlehne mit $75\,\text{cm}$ Schleppketten-Kabel zum Front-Node unterm Fahrersitz.
 3. Der **Unter-Sitz-Montage** von Front-Node (Fahrersitz) und Zentralbox (Beifahrersitz) mit thermischem Schutz und kreuzungsfreier Leitungsführung.
 4. Der **externen 868-MHz-Magnetfuß-Dachantenne** mit $2{,}5\,\text{m}$ RG-174 Koaxialkabel für ungehinderte $360^\circ$-Rundumreichweite ($15\dots 25\,\text{km}$) zur Motorradgruppe.
 5. Dem abgesetzten **SAM-M10Q Multi-GNSS-Puck** an der A-Säule / Scheibenbasis.
@@ -1317,8 +1315,8 @@ Daher ist im **Referenz-Kit 5 (Car Support Kit)** die **externe Magnetfuß-Dacha
 #### 6.8.4 Telemetrie: Autarke Bluetooth-OBD2-Kopplung vs. Festverdrahtung
 
 Für die Fahrzeugdaten (Geschwindigkeit, Drehzahl, Tankstand, Kühlmitteltemperatur nach ISO 15765-4) unterstützt das System zwei praxiserprobte Wege:
-1. **Kabelgebundenes 90°-Flachbandkabel zum Fahrzeug-Satelliten (Günstig, robust & pedalfrei):**
-   - Ein ultraflaches, $80\,\text{cm}$ langes $90^\circ$-Winkelkabel ([`cable_obd2_flat_jwpf_3p`](../../data/bom_parts.json)) baut an der OBD2-Buchse nur ca. $10\,\text{mm}$ auf und führt die Leitungen (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) direkt hinter die Schweller-/Teppichverkleidung zum Fahrzeug-Satelliten ([`vehicle_breakout_block`](#)) an der Fahrersitzbasis.
+1. **Kabelgebundenes 90°-Flachbandkabel zur Zentralbox / Core Unit (Günstig, robust & pedalfrei):**
+   - Ein ultraflaches, $80\,\text{cm}$ langes $90^\circ$-Winkelkabel ([`cable_obd2_flat_jwpf_3p`](../../data/bom_parts.json)) baut an der OBD2-Buchse nur ca. $10\,\text{mm}$ auf und führt die Leitungen (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) direkt hinter die Schweller-/Teppichverkleidung zur Zentralbox an der Fahrersitzbasis.
    - **Vorteil:** Kein teurer Zusatz-Dongle nötig, absolut null Funkstrecke, und keine Kollisionsgefahr mit der Kupplung beim Schalten.
 2. **Drahtloser BLE-Dongle (Plug & Play / Mietwagen):**
    - Für Fahrzeuge, bei denen die OBD2-Buchse frei liegt (z. B. Handschuhfach, Mittelkonsole) oder kein Kabel gelegt werden soll. Die Zentralbox fungiert als BLE-Master und koppelt sich autark mit einem *vGate iCar Pro BLE 4.0* oder *OBDLink CX*. (Tipp bei beengtem Pedalraum: Falls ein vorhandener langer BT-Dongle stört, kann ein ultraflaches 10-cm-Flachband-Verlängerungskabel genutzt werden, um den Dongle hinter die Fußraumverkleidung zu legen).

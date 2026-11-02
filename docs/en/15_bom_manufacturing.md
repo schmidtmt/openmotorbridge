@@ -285,7 +285,7 @@ All enclosure parts are strictly engineered according to the **IKEA Principle**:
   * `radar_swivel_tilt_cradle.stl` (1 pc): Heavy-duty swivel tilt cradle with 2x M4 screws.
 * **Kit 4: Support Car / Van Convoy Kit (Car-Kit / Reference Kit 5):**
   * `car_sun_visor_pod_clip.stl` (2 pcs): Quick-release spring clips for secure, vibration-free mounting of Pod 1 and Pod 2 to the sun visors in chase car or van (driver and passenger side).
-  * `cockpit_breakout_block.stl` (1 pc) & `vehicle_breakout_block.stl` (1 pc): Form-fitting satellite breakout blocks for center console / armrest (cockpit) and door sill / rocker trim (vehicle).
+  * `glovebox_power_injection_hub.stl` (1 pc): Form-fitting hub enclosure for center console / armrest (power-injection & USB host tap in chase vehicle).
   * `car_dashboard_wedge_dock.stl` (1 pc): Windshield base conversion wedge for remote snap-on sensor puck (`sensor_puck_environmental.stl`) in non-metallized toll window.
 
 
@@ -336,33 +336,30 @@ For laboratory testing (bench commissioning without motorcycle harness) as well 
 ### 11.3 RF Antennas & Sensors (COTS)
 1. **Shielded 4-Wire Automotive Backbone Cable (2.5 m):** 2x AWG22 + 2x AWG28 twisted with foil shield for USB 2.0 & up to 60W USB-PD.
 2. **LoRa 868 MHz Flex Antenna (1 pc):** **Taoglas FXP895** ($110 \times 20 \times 0.8\,\text{mm}$) with 50 $\Omega$ U.FL feed for Central Box lid pocket.
-3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15 \times 15\,\text{mm}$ ceramic patch antenna, connected to port 5 of the Vehicle Satellite (`[ GNSS / CLIMATE PUCK ]`).
-4. **Environmental Sensors (Vehicle Satellite I2C Daisy-Chain):**
+3. **Multi-GNSS Module (1 pc):** **u-blox SAM-M10Q** with integrated $15.5 \times 15.5\,\text{mm}$ ceramic patch antenna on PCBA 05D, connected to port `SENSOR` of Front Node.
+4. **Environmental Sensors (PCBA 05D I2C Bus):**
    * **TI TMP117:** High-precision temperature sensor ($\pm 0.1\,^\circ\text{C}$) for black ice early warning.
 5. **868 MHz Miniature Magnetic Roof Mount Antenna (1 pc, Default in Car Kit):** Compact $\varnothing 30\,\text{mm}$ magnetic base with 8 cm stainless whip (+3.0 dBi) and $2.5\,\text{m}$ RG-174 coaxial cable (SMA male) for scratch-free roof mounting (overcoming 20-30 dB chassis attenuation). Complemented by a $100\,\text{mm}$ IP67 SMA female to U.FL bulkhead pigtail with O-ring for Central Box rear knockout.
 
-### 11.4 Internal COTS Cable Set & Pigtails for Front Node & Periphery
+### 11.4 Pre-Assembled COTS Harnesses for Front Node & Peripherals (v10 Multi-Port)
 
-For all interconnections between the hermetic IP68 Front Node, the modular satellite breakout blocks, and peripherals, **factory pre-crimped COTS cables (Plug & Play)** are utilized exclusively. Zero manual crimping or field soldering is required:
+For all interconnections between the hermetic IP68 Front Node, the Glovebox Hub, and cockpit/vehicle peripherals, **factory pre-crimped COTS cables (Plug & Play)** are utilized exclusively. Zero manual crimping or field soldering is required:
 
 | Function / Assembly | Header on PCB | Connector Type & Pitch | Mating End / Enclosure Outlet | Length | Sourcing / Model |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Cockpit Main Harness (Motorcycle)** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite (`cockpit_breakout_block`) | 50 cm | Shielded 16-conductor round cable (Ø 6.0 mm) with TPU seal |
-| **Cockpit Harness (Car-Kit)** | Front Node `J_COCKPIT` | 16-Pin Dual-Row (2.0 mm Latch) | Cockpit Satellite in center console / armrest | 75 cm | High-flexibility 16-conductor drag-chain cable (compensates for 25 cm seat travel) |
-| **Vehicle Main Harness** | Front Node `J_VEHICLE` | 12-Pin Dual-Row (2.0 mm Latch) | Vehicle Satellite (`vehicle_breakout_block`) | 40 cm | Shielded 12-conductor round cable (Ø 6.5 mm) with TPU seal |
-| **Smartphone Charge Cable** | Cockpit Satellite Port 1 | Standard USB-C Plug | Smartphone on handlebar (with 3D strain-relief clamp) | 20–30 cm | Standard COTS USB-C to USB-C cable (angled/braided) |
-| **CP2AA Wireless Dongle** | Cockpit Satellite Port 2 | USB-C or USB-A Socket | Ottocast / Carlinkit dongle in fairing | 15 cm | COTS USB cable with anti-vibration clamp |
-| **OEM Upstream Host** | Cockpit Satellite Port 3 | USB-C Socket | Head unit (Harley Skyline / Boom! Box) | 30 cm | COTS USB-C to OEM USB male plug |
-| **Action Cam Power Supply** | Cockpit Satellite Port 4 | USB-C Socket (Power-Only) | Action Cam (GoPro / Insta360) on handlebar/screen | 20–40 cm | COTS USB-C charging cable with strain clamp |
-| **Navi 5V Power Supply** | Cockpit Satellite Port 5 | USB-C Socket (Power-Only) | GPS Navigator (Garmin / TomTom / Beeline) | 20–30 cm | COTS USB-C charging cable with strain clamp |
-| **Handlebar PTT Switch** | Cockpit Satellite Terminal | Screw / Spring Terminal 2-Pin | Handlebar controls (PTT intercom / voice assistant) | 80 cm | 2-conductor control wire to handlebar switch |
-| **Vehicle 12V DC In** | Vehicle Satellite Port 1 | JST-JWPF 2-Pin (IP67) | Flying leads (0.5 mm²) with Posi-Tap / Cartool plug | 50 cm | COTS JST-JWPF 2P pigtail (KL15 ignition & GND) |
-| **Vehicle CAN-Bus (Motorcycle)** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flying leads with Posi-Tap for CAN_H / CAN_L / GND | 50 cm | COTS JST-JWPF 3P pigtail |
-| **OBD2 Car Direct Cable (Opt.)** | Vehicle Satellite Port 2 | JST-JWPF 3-Pin (IP67) | Flat 90° OBD2 male connector in driver footwell | 80 cm | Ultra-flat ribbon cable (10 mm profile, zero pedal conflict) |
-| **Mirror BSD Warning LEDs**| Vehicle Satellite Port 3 | JST-JWPF 3-Pin (IP67) | Y-cable ($2 \times 2$-Pin) to amber mirror LED indicators | 120 cm | COTS JST-JWPF 3P Y-pigtail |
-| **Auxiliary Light Output** | Vehicle Satellite Port 4 | JST-JWPF 2-Pin (IP67) | 2-pin flying leads to driving lights / strobe relay | 40 cm | COTS JST-JWPF 2P pigtail |
-| **Qwiic / GNSS I2C Bus** | Vehicle Satellite Port 5 | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector to SAM-M10Q & TMP117 puck | 10–20 cm | SparkFun Qwiic / Adafruit STEMMA QT COTS |
-| **MR20 Radar Interconnect**| Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector directly to Wheeltec MR20 module | 40-50 mm | COTS JST-SH 4P to JST-SH 4P |
+| **Glovebox Hub Feed Line** | Front Node `J4` (`MAIN`) | JST-GH 6-Pin (1.25 mm Latch) | Glovebox Hub Port 0 (Upstream) | 60 cm | Shielded 6-conductor High-Speed USB 2.0 & power cable |
+| **Wireless CP/AA Dongle** | Front Node `J_DONGLE` | JST-GH 4-Pin (1.25 mm Latch) | Ottocast / Carlinkit dongle in fairing | 20 cm | COTS USB cable with anti-vibration clamp (gated 5V port) |
+| **Action Cam Power Supply** | Front Node `J8` (`CAM 5V`) | JST-PH 2-Pin (2.0 mm) | Action Cam (GoPro / Insta360) on handlebar/screen | 30–50 cm | COTS JST-PH to USB-C power-only charging cable |
+| **Navi 12V Power Supply** | Front Node `J_NAV` (`NAV 12V`) | JST-PH 2-Pin (2.0 mm) | GPS Navigator (Garmin Zumo / TomTom Rider) | 30–50 cm | COTS JST-PH 2P pigtail (switched 12V) |
+| **Auxiliary Light Output** | Front Node `J_AUX_LIGHT` (`AUX 12V`)| JST-PH 2-Pin (2.0 mm) | Auxiliary driving lights / fog lights | 40 cm | COTS JST-PH 2P pigtail (switched 12V / 3A) |
+| **Left Mirror Pod (PTT & BSD)** | Front Node `J1_CKPT` (`CKPT 1`)| JST-GH 4-Pin (1.25 mm Latch) | PCBA 05C in left Under-Perch Mirror Pod | 45 cm | COTS JST-GH 4P cable (PTT switch & amber BSD alert LED) |
+| **Sensor Puck (GNSS / Climate)** | Front Node `J_SENSOR` (`SENSOR`)| JST-GH 6-Pin (1.25 mm Latch) | PCBA 05D in snap-on sensor basket | 15 cm | COTS JST-GH 6P cable (I2C bus & generic I2S) |
+| **Right Mirror Pod (CAM & BSD)**| Front Node `J2_CKPT` (`CKPT 2`)| JST-GH 4-Pin (1.25 mm Latch) | PCBA 05C in right Under-Perch Mirror Pod | 45 cm | COTS JST-GH 4P cable (Action cam tag button & BSD LED) |
+| **Smartphone Charge Cable (Bagger)**| Glovebox Hub Port 1 | USB-C Receptacle | Smartphone in right glove compartment | 20 cm | COTS USB-C to USB-C / Lightning fast-charge cable (30W PD) |
+| **Dongle Port (Glovebox)** | Glovebox Hub Port 2 | USB-C Receptacle | Wireless CP/AA adapter in glovebox | 15 cm | COTS USB-C to USB-C/A cable (10W switched) |
+| **Media USB Stick (Bagger)** | Glovebox Hub Port 3 | USB-C Receptacle | FLAC/MP3 USB thumb drive or service flashing | Direct | COTS USB-C flash drive |
+| **OEM Upstream Host** | Glovebox Hub Port 4 | USB-C Receptacle | OEM Harley USB-C port to Boom! Box / Skyline OS | 25 cm | COTS USB-C patch cable |
+| **MR20 Radar Interconnect** | Radar PCBA 08 `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector directly to Wheeltec MR20 module | 40–50 mm | COTS JST-SH 4P to JST-SH 4P |
 | **Central Box CarPlay Port**| Central Box `J3` | IDC 10-Pin (2.54 mm) | Waterproof panel-mount USB-C receptacle (IP67) | 15 cm | COTS IDC-10 to USB-C panel-mount |
 | **UPS LiPo Battery Plug** | Central Box `J5` | JST-PH 4-Pin / Molex | Integrated harness with NTC of 2,200 mAh LiPo pack | 8 cm | Pre-crimped on LiPo battery pouch |
 

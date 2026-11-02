@@ -618,13 +618,26 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 ---
 
-### 7.2 PCBA 05B: Symmetrical Under-Perch Mirror Pod Board (`openmotorbridge_under_perch_pod`)
+### 7.2 PCBA 05B: Glovebox Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
 
-![PCBA 05B Mirror Pod Board 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
-*Figure 7.5c: KiCad 3D view of the symmetrical Under-Perch Mirror Pod Board (PCBA 05B, 32 x 14 mm). Two identical boards operate on the left and right beneath the mirror perch studs.*
+![PCBA 05B Glovebox Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
+*Figure 7.5c: KiCad 3D render of the Glovebox Hub (PCBA 05B, 76.0 x 20.0 mm). Active 4-port automotive USB 2.0 High-Speed hub (Microchip USB2514Bi) with 5x USB-C receptacles for Harley-Davidson Skyline OS / Boom! Box GTS.*
 
-#### 7.2.1 Technical Board Specifications & Components
-* **Dimensions:** $32.0 	imes 14.0\,	ext{mm}$, 2 Layers FR4 High-TG150 ($1.6\,	ext{mm}$, ENIG gold finish).
+![PCBA 05B Glovebox Hub Top View](../images/pcba/pcba05b_cockpit_breakout_top.png)
+*Figure 7.5d: Component placement top view of PCBA 05B featuring 5x USB-C receptacles (12 mm pitch), CC termination logic, and Microchip USB2514Bi controller.*
+
+---
+
+### 7.3 PCBA 05C: Symmetrical Under-Perch Mirror Pod Board (`openmotorbridge_mirror_pod`)
+
+![PCBA 05C Mirror Pod 3D](../images/pcba/pcba05c_mirror_pod_3d.png)
+*Figure 7.5e: 3D CAD view of the symmetrical Under-Perch Mirror Pod (PCBA 05C, 32 x 14 mm) with amber BSD blind-spot warning LED (1206), IP67-sealed tactile microswitch (Omron B3SL-1002P), and horizontal JST-GH 4-pin SMD receptacle.*
+
+![PCBA 05C Mirror Pod Top View](../images/pcba/pcba05c_mirror_pod_top.png)
+*Figure 7.5f: Component placement top view of PCBA 05C with TVS diode D1, debounce capacitor C1, and ballast resistor R1.*
+
+#### 7.3.1 Technical Board Specifications & Components
+* **Dimensions:** $32.0 \times 14.0\,\text{mm}$, 2 Layers FR4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish).
 * **Form Factor:** 100% SMT, tailored for [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
 * **Components:**
   * **`LED1` (Amber BSD Blind-Spot Warning LED):** High-power SMD LED (590 nm amber, 120° viewing angle) projecting glare-free at a 38° angle into the mirror glass.
@@ -632,7 +645,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * **Debouncing & ESD Protection:** 100 nF RC filter for hardware debounce and bidirectional TVS diode (`D1`, PESD5V0S1BL) against electrostatic discharge.
   * **Connector (`J1`):** 4-pin JST-GH SMD receptacle (`SM04B-GHS-TB`, 1.25 mm pitch) with positive mechanical latch.
 
-#### 7.2.2 Pinout of Mirror Pod Header (`J1` / 4-Pin JST-GH)
+#### 7.3.2 Pinout of Mirror Pod Header (`J1` / 4-Pin JST-GH)
 
 | Pin | Signal Name | Signal Type | Function & Level |
 | :---: | :--- | :---: | :--- |
@@ -641,17 +654,44 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 | **3** | **`BTN_SIG_N`** | Digital In (Active-Low)| Switch signal to ground, hardware debounced with 100 nF RC filter |
 | **4** | **`GND`** | Ground (0V) | Common signal and return ground |
 
-#### 7.2.3 100% Software-Defined Button Mapping via PWA Dashboard
+#### 7.3.3 100% Software-Defined Button Mapping via PWA Dashboard
 Both buttons are hardware-identical and freely assignable via the PWA dashboard across 5 gesture triggers (`SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS`, `HOLD_GATE`):
-* **Left Factory Default:** `HOLD_GATE` $
-ightarrow$ PTT Intercom; `TRIPLE_CLICK` $
-ightarrow$ Siri/Google Assistant; `DOUBLE_CLICK` $
-ightarrow$ Mesh Channel Cycle.
-* **Right Factory Default:** `SHORT_CLICK` $
-ightarrow$ Action-Cam Highlight Tag (Insta360/GoPro BLE); `LONG_PRESS` $
-ightarrow$ Video Record Start/Stop; 3s Hold $
-ightarrow$ 868 MHz LoRa Emergency SOS.
+* **Left Factory Default:** `HOLD_GATE` $\rightarrow$ PTT Intercom; `TRIPLE_CLICK` $\rightarrow$ Siri/Google Assistant; `DOUBLE_CLICK` $\rightarrow$ Mesh Channel Cycle.
+* **Right Factory Default:** `SHORT_CLICK` $\rightarrow$ Action-Cam Highlight Tag (Insta360/GoPro BLE); `LONG_PRESS` $\rightarrow$ Video Record Start/Stop; 3s Hold $\rightarrow$ 868 MHz LoRa Emergency SOS.
 * **Bindable Action Catalog:** 1-Click Hazard Pin Drop (Waze/OpenTrafficMap), Radar Acoustic Mute 30s, Garage Door Trigger (Shelly/Home Assistant), Auxiliary Lights, Heated Grips.
+
+---
+
+### 7.4 PCBA 05D: Snap-On Sensor Puck (`openmotorbridge_sensor_puck`)
+
+![PCBA 05D Sensor Puck 3D](../images/pcba/pcba05d_sensor_puck_3d.png)
+*Figure 7.5g: 3D CAD view of the snap-on 4-layer Sensor Puck (PCBA 05D, 34 x 34 mm) with u-blox SAM-M10Q patch antenna, thermal double-L isolation slot for TMP117, and horizontal JST-GH/SH receptacles.*
+
+![PCBA 05D Sensor Puck Top View](../images/pcba/pcba05d_sensor_puck_top.png)
+*Figure 7.5h: Component placement top view of PCBA 05D.*
+
+#### 7.4.1 Technical Board Specifications & Components
+* **Dimensions:** $34.0 \times 34.0\,\text{mm}$ with $2.0\,\text{mm}$ corner chamfers, 4 layers FR-4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish, Layer 2: 100% continuous RF GND plane for GNSS patch, Layer 3: 3.3V power plane).
+* **Mounting:** Tool-free 4-point snap retention directly in the upper basket of the Front Node enclosure or remote-mountable at the windshield via 1.5m JST-GH cable.
+* **Components:**
+  * **`U1` (u-blox SAM-M10Q):** Multi-constellation GNSS module (GPS, GLONASS, Galileo, BeiDou) with integrated $15.5 \times 15.5\,\text{mm}$ ceramic patch antenna.
+  * **`U2` (TI TMP117AIDRVR):** NIST-traceable digital temperature sensor ($\pm 0.1^\circ\text{C}$ accuracy) isolated on a thermally decoupled PCB tongue via a $0.8\,\text{mm}$ U-slot directly in the laminar frontal intake for black ice detection unaffected by engine waste heat.
+  * **`U3` (TI OPT3001DNPR):** Ambient light sensor with human eye spectral response beneath the upper $\varnothing 4.5\,\text{mm}$ optical casing port (lux measurement for auto day/night mode switching in PWA and instrument clusters).
+  * **`J1` (Primary In):** 6-pin JST-GH SMD receptacle (`SM06B-GHS-TB`, 1.25 mm pitch) facing east to the Front Node wire harness.
+  * **`J2` (Daisy-Chain Expansion Out):** 6-pin JST-SH SMD receptacle (`SM06B-SRSS-TB`, 1.00 mm pitch) facing east for future cockpit sensors (sealed with flush TPU blanking plug when unused).
+  *(Note on acoustic sensing: The Knowles SPH0645 I2S MEMS microphone remains sheltered from direct airflow on the underside of Universal Front Node [`PCBA 05`](#7-pcba-05-universal-front-node-openmotorbridge_front_node) above the Gore-Tex vent; I2S signals pass through the puck as a generic `EXT_I2S` bus for modular extensions).*
+
+#### 7.4.2 Pinout of Sensor Puck Primary In (`J1` / 6-Pin JST-GH) & Expansion Out (`J2` / 6-Pin JST-SH)
+
+| Pin | Signal Name | Signal Type | Function on PCBA 05D & Bus Behavior |
+| :---: | :--- | :---: | :--- |
+| **1** | **`VCC_3V3`** | Power (+3.3V) | Regulated system rail (supplies L3 power plane, U1, U2, U3, passed to J2) |
+| **2** | **`GND`** | Ground (0V) | Signal and RF ground (direct connection to L2 solid GND plane, passed to J2) |
+| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C data bus (SAM-M10Q addr `0x42`, OPT3001 addr `0x44`, TMP117 addr `0x48`, to J2) |
+| **4** | **`I2C_SCL`** | Input Open-Drain | I2C clock bus (400 kHz Fast-Mode, passed to J2) |
+| **5** | **`EXT_I2S_DATA`** | Bidi Digital | Generic I2S audio/sensor data stream (passed 1:1 from J1 to J2) |
+| **6** | **`EXT_I2S_WS`** | Clock Digital | Generic I2S Word Select / Frame Clock (passed 1:1 from J1 to J2) |
+| **MP** | **`GND`** | Shield | Mechanical latch tabs soldered to GND plane |
 
 ---
 

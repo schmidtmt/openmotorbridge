@@ -313,7 +313,19 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "04_front_node/98_front_node_closed.scad",
         os.path.join(CAD_IMG_DIR, "front_node_bottom_cad.png"),
-        "49,34,0,135,0,310,270",
+        "49,34,5,130,0,320,240",
+        "Tomorrow"
+    ),
+    (
+        "04_front_node/98_front_node_closed.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_south_ports.png"),
+        "49,34,15,75,0,335,230",
+        "Tomorrow"
+    ),
+    (
+        "04_front_node/98_front_node_closed.scad",
+        os.path.join(CAD_IMG_DIR, "front_node_north_ports.png"),
+        "49,34,15,75,0,155,230",
         "Tomorrow"
     ),
     (
@@ -543,7 +555,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "04_front_node/glovebox_power_injection_hub.scad",
         os.path.join(CAD_IMG_DIR, "glovebox_power_injection_hub_cad.png"),
-        "0,0,10,55,0,320,240",
+        "36,23,11,55,0,320,170",
         "Tomorrow"
     ),
 ]
@@ -590,8 +602,17 @@ def compile_single_stl(target: Tuple, idx: int, total: int) -> Tuple[bool, str, 
         size_kb = os.path.getsize(stl_path) / 1024.0
         return True, f"✅ Exported {stl_rel} ({size_kb:.1f} KB) in {dt:.1f}s", dt
 
-def compile_stls():
-    total = len(STL_TARGETS)
+def compile_stls(filter_pattern: str = None):
+    targets = STL_TARGETS
+    if filter_pattern:
+        targets = [
+            t for t in targets
+            if filter_pattern.lower() in t[0].lower() or filter_pattern.lower() in t[1].lower()
+        ]
+    total = len(targets)
+    if total == 0:
+        print(f"⚠️ No STL targets match filter '{filter_pattern}'.")
+        return
     print(f"\n🔨 Compiling {total} OpenSCAD models to Production STLs (Parallel across {MAX_WORKERS} workers)...")
     sys.stdout.flush()
     start_total = time.time()
@@ -600,7 +621,7 @@ def compile_stls():
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_map = {
             executor.submit(compile_single_stl, target, idx, total): target
-            for idx, target in enumerate(STL_TARGETS, 1)
+            for idx, target in enumerate(targets, 1)
         }
         for future in as_completed(future_map):
             completed_count += 1
@@ -644,8 +665,17 @@ def render_single_image(target: Tuple, idx: int, total: int) -> Tuple[bool, str,
         size_kb = os.path.getsize(img_path) / 1024.0
         return True, f"✅ Rendered {img_name} ({size_kb:.1f} KB) in {dt:.1f}s", dt
 
-def render_images():
-    total = len(RENDER_TARGETS)
+def render_images(filter_pattern: str = None):
+    targets = RENDER_TARGETS
+    if filter_pattern:
+        targets = [
+            t for t in targets
+            if filter_pattern.lower() in t[0].lower() or filter_pattern.lower() in os.path.basename(t[1]).lower()
+        ]
+    total = len(targets)
+    if total == 0:
+        print(f"⚠️ No render targets match filter '{filter_pattern}'.")
+        return
     print(f"\n📸 Generating {total} High-Resolution 3D PNG Renders (Parallel across {MAX_WORKERS} workers)...")
     sys.stdout.flush()
     start_total = time.time()
@@ -654,7 +684,7 @@ def render_images():
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_map = {
             executor.submit(render_single_image, target, idx, total): target[1]
-            for idx, target in enumerate(RENDER_TARGETS, 1)
+            for idx, target in enumerate(targets, 1)
         }
         for future in as_completed(future_map):
             completed_count += 1
@@ -685,16 +715,31 @@ def main():
     
     do_stls = True
     do_renders = True
-    if "--renders-only" in sys.argv:
-        do_stls = False
-    elif "--stls-only" in sys.argv:
-        do_renders = False
+    filter_pattern = None
+    
+    args = sys.argv[1:]
+    idx = 0
+    while idx < len(args):
+        arg = args[idx]
+        if arg == "--renders-only":
+            do_stls = False
+        elif arg == "--stls-only":
+            do_renders = False
+        elif arg == "--filter" and idx + 1 < len(args):
+            idx += 1
+            filter_pattern = args[idx]
+        elif not arg.startswith("--"):
+            filter_pattern = arg
+        idx += 1
+        
+    if filter_pattern:
+        print(f"🔍 Applying target filter: '{filter_pattern}'")
         
     if do_stls:
         clean_old_stls()
-        compile_stls()
+        compile_stls(filter_pattern)
     if do_renders:
-        render_images()
+        render_images(filter_pattern)
     fix_permissions_and_attributes()
     
     print("\n" + "=" * 80)
