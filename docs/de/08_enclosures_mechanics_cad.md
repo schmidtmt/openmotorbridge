@@ -1458,20 +1458,20 @@ Die **symmetrischen Dual Under-Perch Spiegel-Pods** ([`under_perch_mirror_pod.sc
 
 ![Under-Perch Tactile Switch Bracket 3D CAD](../images/cad/under_perch_switch_bracket_cad.png)
 
-*Abbildung 8.36: 3D-CAD-Ansicht des Under-Perch Spiegel-Pods (`under_perch_mirror_pod_cad.png`). Dargestellt sind der M8/M10-Spiegelflansch mit Verdrehschutz zur Armatur, der ergonomische Daumen-Tasterdom (IP67-Mikrotaster) sowie der nach oben zum Spiegelglas ausgerichtete Diffusortrichter für die bernsteinfarbene Totwinkel-Warn-LED (BSD).*
+*Abbildung 8.36: 3D-CAD-Ansicht des Under-Perch Spiegel-Pods (`under_perch_switch_bracket_cad.png`). Dargestellt sind der M8/M10-Spiegelflansch mit Verdrehschutz zur Armatur, der ergonomische Daumen-Tasterdom (IP67-Mikrotaster an der Außenkante), der axiale Kabelabgang sowie der nach oben zum Spiegelglas ausgerichtete 38°-Stadion-Diffusortrichter für die dualen bernsteinfarbenen Totwinkel-Warn-LEDs (BSD).*
 
 * **Symmetrische Ergonomie & Funktionsaufteilung (Links & Rechts):**
   * **Linker Under-Perch Pod (Kommunikation & Audio):**
     * **Taktiler Daumen-PTT-Taster:** Latenzfreie Push-to-Talk-Funkübertragung für Sena, Cardo, Midland oder OMM Mesh; Dreifachklick aktiviert Siri / Google Assistant.
-    * **Linke Totwinkel-Warn-LED (BSD Amber):** Strahlt blendfrei im $38^\circ$-Winkel direkt in das linke Spiegelglas, sobald das Heck-Radar ein sich von hinten links näherndes Fahrzeug erfasst.
+    * **Linke Totwinkel-Warnung (Duale BSD Amber LEDs):** Strahlt blendfrei im $38^\circ$-Winkel direkt in das linke Spiegelglas, sobald das Heck-Radar ein sich von hinten links näherndes Fahrzeug erfasst (doppelte Leuchtkraft für helle Sommertage).
   * **Rechter Under-Perch Pod (Action-Cam & Media-Bookmarks):**
     * **Taktiler Daumen-Taster für Action-Cam:** Kurzdruck setzt sofort einen Highlight-Marker / Bookmark im laufenden Video (BLE-Kopplung mit Insta360 X3/X4, GoPro Hero 11/12/13 oder DJI Osmo Action 4/5); langer Druck startet oder stoppt die Aufnahme (bzw. 3s Halten für Notfall-SOS).
-    * **Rechte Totwinkel-Warn-LED (BSD Amber):** Strahlt blendfrei in das rechte Spiegelglas, wenn sich ein Fahrzeug im toten Winkel rechts befindet (lebensrettend beim Wiedereinscheren nach Überholvorgängen).
+    * **Rechte Totwinkel-Warnung (Duale BSD Amber LEDs):** Strahlt blendfrei in das rechte Spiegelglas, wenn sich ein Fahrzeug im toten Winkel rechts befindet (lebensrettend beim Wiedereinscheren nach Überholvorgängen).
   * **Bilateraler Sicherheitsgewinn:** Der Fahrer erhält eine intuitive, seitengetrennte Totwinkelwarnung direkt im Blickfeld des Spiegels, den er instinktiv ansteuert.
 
 * **Mechanische & Elektronische Vorteile:**
   * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die oberen Armaturenklemmen bleiben zu **100 % frei für Zusatzschalter (z. B. Klappenauspuff)**.
-  * **Baugleiche Platine (`PCBA 05C`):** Beide Pods nutzen exakt dieselbe Miniatur-Leiterplatte (`PCBA 05C` All-in-One Under-Perch Board). Die Zuordnung Links/Rechts erfolgt über den Kabelstrang (`J_POD_L` bzw. `J_POD_R` am Front-Node).
+  * **Echte baugleiche Universal-Platine (`PCBA 05C`):** Durch das konsequent bilateral-symmetrische Design entlang der Mittellinie ($Y=0$) mit stirnseitigem JST-GH Stecker, zentralem M2-Schraubdom und oberhalb/unterhalb angeordneten LEDs nutzen beide Gehäuse (Links und Rechts) **exakt dieselbe, unmodifizierte Platine**.
   * **Universelle Befestigung:** Klemmung direkt unter dem Spiegelgewinde (M8 / M10 / M12 oder Harley-Torx-Schraube).
   * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt die Lenkermontage. Ein optionaler Taster ruht in der Mittelkonsole/Schalthebel, während die Sprachsteuerung primär drahtlos über CarPlay oder Headset erfolgt.
 
@@ -1521,9 +1521,13 @@ Die Funktionen der beiden physischen Daumentaster sind **zu 100 % softwaredefini
   * **Linker Taster:** `HOLD_GATE` $\rightarrow$ `INTERCOM_PTT_GATE`; `TRIPLE_CLICK` $\rightarrow$ `VOICE_ASSISTANT`; `DOUBLE_CLICK` $\rightarrow$ `MESH_CHANNEL_NEXT`.
   * **Rechter Taster:** `SHORT_CLICK` $\rightarrow$ `CAM_HIGHLIGHT_TAG`; `LONG_PRESS` $\rightarrow$ `CAM_RECORD_TOGGLE`; 3s Halten $\rightarrow$ `EMERGENCY_SOS_BROADCAST`.
 
-### 8.2 Spiegel-Totwinkel-LED Gehäuse (`bsd_mirror_indicator_pod.scad`)
+### 8.2 Spiegel-Totwinkel-LED Gehäuse (`bsd_mirror_indicator_pod.scad`) [Optional / Historischer Sonderfall]
 
-Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) integriert die Radarwarnung (Port `J9` am Front-Node) aerodynamisch und blendfrei in das Cockpit:
+> [!NOTE]
+> **In der v10.0 Standard-Architektur obsolet:** Das separate Schellen-Gehäuse `bsd_mirror_indicator_pod.scad` wird in der v10-Standardkonfiguration **vollständig durch den symmetrischen Under-Perch Spiegel-Pod ([Kapitel 8.1](08_enclosures_mechanics_cad.md#81-symmetrische-dual-under-perch-spiegel-pods-under_perch_mirror_podscad) / PCBA 05C) ersetzt**. Der Under-Perch Pod vereint die 38°-Totwinkel-Warn-LED (`LED1`) und den ergonomischen Handschuh-Taster (`SW1`) formschlüssig unter der Spiegelschraube (M8/M10) und wird direkt an den Front-Node (`J_POD_L` / `J_POD_R`) angebunden.
+> Das Schellen-Gehäuse `bsd_mirror_indicator_pod.scad` verbleibt lediglich als optionale Sonderfall-Alternative für Motorräder, die bauartbedingt keine Perch-Montage erlauben (z. B. reine Lenkerenden- oder Rundarm-Spiegel).
+
+Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) integriert die Radarwarnung alternativ aerodynamisch und blendfrei über eine Klemmschelle am Spiegelarm:
 
 ![Blind Spot Detection Mirror Indicator Pod 3D CAD](../images/cad/bsd_mirror_indicator_pod_cad.png)
 
@@ -1532,7 +1536,7 @@ Das **Spiegel-Totwinkel-LED Gehäuse** ([`bsd_mirror_indicator_pod.scad`](../../
 * **Optische & Gesetzliche Sicherheit (StVZO / ECE R50):**
   * **Gezielte Fahrer-Projektion:** Der um 38° nach innen geneigte Lichttunnel projiziert das gelb/rote Radar-Stroboskoplicht exakt in das periphere Sichtfeld des Fahrerhelms.
   * **100 % Blendfreiheit:** Ein 3,8 mm tiefer Visier-Überhang und die blickdichte Vorderwand schirmen das Licht vollständig nach vorne und zur Seite ab. Kein Blenden des Gegenverkehrs, kein Irritieren anderer Verkehrsteilnehmer - voll TÜV-konform.
-  * **Universalklemmung:** Zweiteilige Halbschale für Ø 10 mm (Harley, BMW, KTM) und Ø 12 mm Spiegelarme mit verdeckter Kabelführung zu Port `J9`.
+  * **Universalklemmung:** Zweiteilige Halbschale für Ø 10 mm (Harley, BMW, KTM) und Ø 12 mm Spiegelarme mit verdeckter Kabelführung.
 
 ### 8.3 Radar 2.0 mmWave Flügel-Gehäuse & Garmin-Bajonett (`radar_mr20_housing.scad`)
 

@@ -628,22 +628,23 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 ---
 
-### 7.3 PCBA 05C: Symmetrical Under-Perch Mirror Pod Board (`openmotorbridge_mirror_pod`)
+### 7.3 PCBA 05C: Bilateral-Symmetric Universal Under-Perch Mirror Pod Board (`openmotorbridge_mirror_pod`)
 
 ![PCBA 05C Mirror Pod 3D](../images/pcba/pcba05c_mirror_pod_3d.png)
-*Figure 7.5e: 3D CAD view of the symmetrical Under-Perch Mirror Pod (PCBA 05C, 32 x 14 mm) with amber BSD blind-spot warning LED (1206), IP67-sealed tactile microswitch (Omron B3SL-1002P), and horizontal JST-GH 4-pin SMD receptacle.*
+*Figure 7.5e: 3D CAD view of the bilateral-symmetric Under-Perch Mirror Pod (PCBA 05C, 32 x 14 mm) with dual amber BSD blind-spot warning LEDs (LED1/LED2 symmetrically above and below the central M2 fastener), IP67-sealed tactile microswitch (Omron B3SL-1002P) on the outboard edge, and horizontal JST-GH 4-pin SMD receptacle on the inboard short edge.*
 
 ![PCBA 05C Mirror Pod Top View](../images/pcba/pcba05c_mirror_pod_top.png)
-*Figure 7.5f: Component placement top view of PCBA 05C with TVS diode D1, debounce capacitor C1, and ballast resistor R1.*
+*Figure 7.5f: Component placement top view of PCBA 05C with TVS diode D1, debounce capacitor C1, and independent ballast resistors R1/R2 for maximum fault tolerance and bright sunlight visibility.*
 
 #### 7.3.1 Technical Board Specifications & Components
 * **Dimensions:** $32.0 \times 14.0\,\text{mm}$, 2 Layers FR4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish).
+* **Bilateral-Symmetric Universal Design:** The PCB is mathematically and mechanically 100% symmetric along its central longitudinal axis ($Y = 7.0\,\text{mm}$). Consequently, **a single manufactured PCB variant serves both Left and Right mirror perches**. When mirroring the enclosure (`mirror([0, 1, 0])`), the end connector, central M2 screw boss, and tactile button remain in identical positions on the $Y=0$ axis, while the dual synchronous LEDs simply swap top and bottom positions.
 * **Form Factor:** 100% SMT, tailored for [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
 * **Components:**
-  * **`LED1` (Amber BSD Blind-Spot Warning LED):** High-power SMD LED (590 nm amber, 120° viewing angle) projecting glare-free at a 38° angle into the mirror glass.
-  * **`SW1` (Tactile Thumb Microswitch):** IP67-sealed tactile microswitch with crisp 300g actuation force for positive glove operation.
+  * **Dual `LED1` & `LED2` (Amber BSD Blind-Spot Warning LEDs):** Twin high-power SMD LEDs (1206, 590 nm amber, 120° viewing angle) located symmetrically above ($Y = 11.2\,\text{mm}$) and below ($Y = 2.8\,\text{mm}$) the central M2 mounting hole, illuminating through the $38^\circ$ stadium diffuser lens for doubled lumen output in direct sunlight.
+  * **`SW1` (Tactile Thumb Microswitch):** IP67-sealed tactile microswitch (Omron B3SL-1002P, $X = 26.5\,\text{mm}, Y = 7.0\,\text{mm}$) with crisp 300g actuation force for positive glove operation.
   * **Debouncing & ESD Protection:** 100 nF RC filter for hardware debounce and bidirectional TVS diode (`D1`, PESD5V0S1BL) against electrostatic discharge.
-  * **Connector (`J1`):** 4-pin JST-GH SMD receptacle (`SM04B-GHS-TB`, 1.25 mm pitch) with positive mechanical latch.
+  * **Connector (`J1`):** 4-pin JST-GH SMD receptacle (`SM04B-GHS-TB`, 1.25 mm pitch) mounted axially on the short edge at $X = 5.25\,\text{mm}, Y = 7.0\,\text{mm}$ (runs cable cleanly along handlebar).
 
 #### 7.3.2 Pinout of Mirror Pod Header (`J1` / 4-Pin JST-GH)
 

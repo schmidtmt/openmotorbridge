@@ -3,16 +3,19 @@
 tools/build_mirror_pod_pcba.py
 ==============================
 Builds the complete, production-ready KiCad 10 project for:
-PCBA 05C: Symmetrischer Under-Perch Spiegel-Pod (openmotorbridge_mirror_pod)
+PCBA 05C: Bilateral-Symmetric Under-Perch Mirror Pod (openmotorbridge_mirror_pod)
 
-Components:
-- J1: 4-pin JST-GH Horizontal SMD connector (SM04B-GHS-TB)
-- SW1: Omron B3SL-1002P sealed IP67 tactile switch (350g force)
-- LED1: 1206 Amber BSD Totwinkel-Warn-LED (590 nm, 120° beam angle)
-- R1: 150 Ohm 0603 current limiting resistor for LED1
-- C1: 100 nF 0603 hardware debounce capacitor
-- D1: SOD-323 TVS ESD protection diode (PESD5V0S1BL)
-- H1, H2: M2 mounting holes with ground pads
+Key Symmetry Architecture:
+- 100% Bilaterally Symmetric across the central longitudinal axis (Y = 7.00 mm).
+- One single, universal PCBA serves BOTH Left and Right motorcycle mirror perches.
+- J1: 4-pin JST-GH Horizontal SMD connector on West edge (X = 5.25, Y = 7.00).
+- H1: Single M2 central mounting hole at center (X = 16.00, Y = 7.00).
+- LED1 & LED2: Dual 1206 Amber BSD Warning LEDs placed symmetrically
+  above (Y = 11.20) and below (Y = 2.80) the central mounting hole.
+- R1 & R2: Independent 150 Ohm series resistors for LED1 and LED2.
+- SW1: Omron B3SL-1002P sealed IP67 tactile switch at East edge (X = 26.50, Y = 7.00).
+- C1: 100 nF debounce capacitor.
+- D1: SOD-323 TVS ESD protection diode.
 """
 
 import os
@@ -115,7 +118,7 @@ def build_pcb():
     W, H = 32.0, 14.0
 
     net_names = [
-        "", "GND", "VCC_LED", "BSD_LED_N", "BTN_SIG_N", "NET_LED_ANODE"
+        "", "GND", "VCC_LED", "BSD_LED_N", "BTN_SIG_N", "NET_LED1_ANODE", "NET_LED2_ANODE"
     ]
 
     net_map = {}
@@ -148,7 +151,7 @@ def build_pcb():
         fp.SetLayer(pcbnew.F_Cu)
         fp.SetPosition(pcbnew.VECTOR2I(to_nm(x), to_nm(y)))
         fp.SetOrientationDegrees(rot_deg)
-        fp.Reference().SetVisible(True)
+        fp.Reference().SetVisible(False)
         fp.Value().SetVisible(False)
 
         if model_3d:
@@ -174,12 +177,12 @@ def build_pcb():
         board.Add(fp)
         return fp
 
-    # 1. J1: JST-GH 4-Pin Horizontal SMD
-    # Rot = 270: Solder pads face East (X+), cable entry from West (X=0)
+    # 1. J1: JST-GH 4-Pin Horizontal SMD (centered at X = 5.25, Y = 7.00)
+    # Rot = 270: Solder pads face East (+X), cable entry from West (X=0)
     place_fp(
         "Connector_JST.pretty", "JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal",
         "J1", "JST_GH_4P_POD",
-        5.80, 7.00, 270.0,
+        5.25, 7.00, 270.0,
         {
             "1": "VCC_LED",
             "2": "BSD_LED_N",
@@ -190,11 +193,69 @@ def build_pcb():
         model_3d="Connector_JST.3dshapes/JST_GH_SM04B-GHS-TB_1x04-1MP_P1.25mm_Horizontal.step"
     )
 
-    # 2. SW1: Omron B3SL-1002P Tactile Switch (centered at X = 16.5, Y = 7.0)
+    # 2. H1: Central Single M2 Mounting Hole (centered at X = 16.00, Y = 7.00)
+    place_fp(
+        "MountingHole.pretty", "MountingHole_2.2mm_M2_Pad",
+        "H1", "M2",
+        16.00, 7.00, 0.0,
+        {"1": "GND"}
+    )
+
+    # 3. LED1: Upper 1206 Amber BSD Warning LED (Y = 11.20)
+    # Pad 1 = Cathode (BSD_LED_N), Pad 2 = Anode (NET_LED1_ANODE)
+    place_fp(
+        "LED_SMD.pretty", "LED_1206_3216Metric",
+        "LED1", "AMBER_590NM",
+        16.00, 11.20, 0.0,
+        {
+            "1": "BSD_LED_N",
+            "2": "NET_LED1_ANODE"
+        },
+        model_3d="LED_SMD.3dshapes/LED_1206_3216Metric.step"
+    )
+
+    # 4. LED2: Lower 1206 Amber BSD Warning LED (Y = 2.80)
+    # Pad 1 = Cathode (BSD_LED_N), Pad 2 = Anode (NET_LED2_ANODE)
+    place_fp(
+        "LED_SMD.pretty", "LED_1206_3216Metric",
+        "LED2", "AMBER_590NM",
+        16.00, 2.80, 0.0,
+        {
+            "1": "BSD_LED_N",
+            "2": "NET_LED2_ANODE"
+        },
+        model_3d="LED_SMD.3dshapes/LED_1206_3216Metric.step"
+    )
+
+    # 5. R1: Series Resistor for LED1 (150 Ohm 0603 at Y = 11.20)
+    place_fp(
+        "Resistor_SMD.pretty", "R_0603_1608Metric",
+        "R1", "150R",
+        20.50, 11.20, 0.0,
+        {
+            "1": "NET_LED1_ANODE",
+            "2": "VCC_LED"
+        },
+        model_3d="Resistor_SMD.3dshapes/R_0603_1608Metric.step"
+    )
+
+    # 6. R2: Series Resistor for LED2 (150 Ohm 0603 at Y = 2.80)
+    place_fp(
+        "Resistor_SMD.pretty", "R_0603_1608Metric",
+        "R2", "150R",
+        20.50, 2.80, 0.0,
+        {
+            "1": "NET_LED2_ANODE",
+            "2": "VCC_LED"
+        },
+        model_3d="Resistor_SMD.3dshapes/R_0603_1608Metric.step"
+    )
+
+    # 7. SW1: Omron B3SL-1002P Tactile Switch at East Edge (centered at X = 26.50, Y = 7.00)
     place_fp(
         "Button_Switch_SMD.pretty", "SW_SPST_B3SL-1002P",
         "SW1", "PTT_CAM_SW",
-        16.50, 7.00, 0.0,
+        26.50, 7.00, 0.0,
         {
             "1": "GND",
             "2": "BTN_SIG_N"
@@ -202,36 +263,11 @@ def build_pcb():
         model_3d="Button_Switch_SMD.3dshapes/SW_SPST_B3SL-1002P.step"
     )
 
-    # 3. LED1: 1206 Amber BSD LED (centered at X = 26.5, Y = 7.0)
-    # Pad 1 = Cathode (BSD_LED_N), Pad 2 = Anode (NET_LED_ANODE)
-    place_fp(
-        "LED_SMD.pretty", "LED_1206_3216Metric",
-        "LED1", "AMBER_590NM",
-        26.50, 7.00, 0.0,
-        {
-            "1": "BSD_LED_N",
-            "2": "NET_LED_ANODE"
-        },
-        model_3d="LED_SMD.3dshapes/LED_1206_3216Metric.step"
-    )
-
-    # 4. R1: Series Resistor for LED1 (150 Ohm 0603)
-    place_fp(
-        "Resistor_SMD.pretty", "R_0603_1608Metric",
-        "R1", "150R",
-        24.00, 11.50, 90.0,
-        {
-            "1": "VCC_LED",
-            "2": "NET_LED_ANODE"
-        },
-        model_3d="Resistor_SMD.3dshapes/R_0603_1608Metric.step"
-    )
-
-    # 5. C1: Debounce Capacitor (100nF 0603)
+    # 8. C1: Debounce Capacitor (100nF 0603 at upper channel)
     place_fp(
         "Capacitor_SMD.pretty", "C_0603_1608Metric",
         "C1", "100nF",
-        16.50, 12.00, 0.0,
+        10.50, 10.00, 0.0,
         {
             "1": "BTN_SIG_N",
             "2": "GND"
@@ -239,11 +275,11 @@ def build_pcb():
         model_3d="Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
     )
 
-    # 6. D1: TVS ESD Diode (SOD-323)
+    # 9. D1: TVS ESD Diode (SOD-323 at lower channel)
     place_fp(
         "Diode_SMD.pretty", "D_SOD-323",
         "D1", "PESD5V0S1BL",
-        11.50, 11.50, 90.0,
+        10.50, 4.00, 0.0,
         {
             "1": "BTN_SIG_N",
             "2": "GND"
@@ -251,36 +287,21 @@ def build_pcb():
         model_3d="Diode_SMD.3dshapes/D_SOD-323.step"
     )
 
-    # 7. Mounting Holes (M2 with GND pad)
-    place_fp(
-        "MountingHole.pretty", "MountingHole_2.2mm_M2_Pad",
-        "H1", "M2",
-        3.20, 2.50, 0.0,
-        {"1": "GND"}
-    )
-    place_fp(
-        "MountingHole.pretty", "MountingHole_2.2mm_M2_Pad",
-        "H2", "M2",
-        29.50, 2.50, 0.0,
-        {"1": "GND"}
-    )
+    # Clean non-overlapping Silkscreen
+    def add_silk_text(text, x, y, size=0.6, thick=0.10):
+        t = pcbnew.PCB_TEXT(board)
+        t.SetText(text)
+        t.SetPosition(pcbnew.VECTOR2I(to_nm(x), to_nm(y)))
+        t.SetTextSize(pcbnew.VECTOR2I(to_nm(size), to_nm(size)))
+        t.SetTextThickness(to_nm(thick))
+        t.SetLayer(pcbnew.F_SilkS)
+        board.Add(t)
+        return t
 
-    # Add Text on Silkscreen
-    txt1 = pcbnew.PCB_TEXT(board)
-    txt1.SetText("PCBA 05C // MIRROR POD")
-    txt1.SetPosition(pcbnew.VECTOR2I(to_nm(16.0), to_nm(1.5)))
-    txt1.SetTextSize(pcbnew.VECTOR2I(to_nm(0.7), to_nm(0.7)))
-    txt1.SetTextThickness(to_nm(0.12))
-    txt1.SetLayer(pcbnew.F_SilkS)
-    board.Add(txt1)
-
-    txt2 = pcbnew.PCB_TEXT(board)
-    txt2.SetText("BSD LED")
-    txt2.SetPosition(pcbnew.VECTOR2I(to_nm(26.5), to_nm(4.2)))
-    txt2.SetTextSize(pcbnew.VECTOR2I(to_nm(0.6), to_nm(0.6)))
-    txt2.SetTextThickness(to_nm(0.10))
-    txt2.SetLayer(pcbnew.F_SilkS)
-    board.Add(txt2)
+    add_silk_text("PCBA 05C // SYMMETRIC", 16.0, 0.9, size=0.55, thick=0.09)
+    add_silk_text("OMB BSD", 16.0, 13.1, size=0.55, thick=0.09)
+    add_silk_text("SW1", 26.5, 2.6, size=0.6, thick=0.10)
+    add_silk_text("J1", 5.25, 2.6, size=0.6, thick=0.10)
 
     # Routing helper
     def add_track(layer, net_name, x1, y1, x2, y2, width=0.25):
@@ -303,60 +324,70 @@ def build_pcb():
         return v
 
     # Coordinates:
-    # J1: (5.80, 7.00), Rot 270
-    # J1 Pad 1 (VCC_LED): (7.65, 5.12)
-    # J1 Pad 2 (BSD_LED_N): (7.65, 6.38)
-    # J1 Pad 3 (BTN_SIG_N): (7.65, 7.62)
-    # J1 Pad 4 (GND): (7.65, 8.88)
+    # J1: (5.25, 7.00), Rot 270
+    # J1 Pad 1 (VCC_LED): (7.10, 5.125)
+    # J1 Pad 2 (BSD_LED_N): (7.10, 6.375)
+    # J1 Pad 3 (BTN_SIG_N): (7.10, 7.625)
+    # J1 Pad 4 (GND): (7.10, 8.875)
 
     # Route 1: VCC_LED
-    # From J1 Pad 1 (7.65, 5.12) -> (8.5, 4.0) -> (21.5, 4.0) -> (21.5, 10.725) -> R1 Pad 1 (24.0, 10.725)
-    # Let's route VCC_LED along upper channel Y = 4.0 mm
-    add_track(pcbnew.F_Cu, "VCC_LED", 7.65, 5.12, 8.50, 4.00, 0.30)
-    add_track(pcbnew.F_Cu, "VCC_LED", 8.50, 4.00, 22.00, 4.00, 0.30)
-    add_track(pcbnew.F_Cu, "VCC_LED", 22.00, 4.00, 24.00, 6.00, 0.30)
-    add_track(pcbnew.F_Cu, "VCC_LED", 24.00, 6.00, 24.00, 10.725, 0.30)
+    # From J1 Pad 1 (7.10, 5.125) -> routes to R2 (Pad 2 at 21.25, 2.80) along lower corridor Y=1.5
+    add_track(pcbnew.F_Cu, "VCC_LED", 7.10, 5.125, 7.50, 4.00, 0.30)
+    add_track(pcbnew.F_Cu, "VCC_LED", 7.50, 4.00, 7.50, 1.80, 0.30)
+    add_track(pcbnew.F_Cu, "VCC_LED", 7.50, 1.80, 21.25, 1.80, 0.30)
+    add_track(pcbnew.F_Cu, "VCC_LED", 21.25, 1.80, 21.25, 2.80, 0.30)
 
-    # Route 2: NET_LED_ANODE
-    # R1 Pad 2 (24.0, 12.275) -> (27.9, 12.275) -> LED1 Pad 2 (27.9, 7.0)
-    add_track(pcbnew.F_Cu, "NET_LED_ANODE", 24.00, 12.275, 27.90, 12.275, 0.25)
-    add_track(pcbnew.F_Cu, "NET_LED_ANODE", 27.90, 12.275, 27.90, 7.00, 0.25)
+    # Branch to R1 (Pad 2 at 21.25, 11.20) via B_Cu
+    add_via("VCC_LED", 7.50, 1.80)
+    add_track(pcbnew.B_Cu, "VCC_LED", 7.50, 1.80, 7.50, 12.20, 0.30)
+    add_via("VCC_LED", 7.50, 12.20)
+    add_track(pcbnew.F_Cu, "VCC_LED", 7.50, 12.20, 21.25, 12.20, 0.30)
+    add_track(pcbnew.F_Cu, "VCC_LED", 21.25, 12.20, 21.25, 11.20, 0.30)
 
-    # Route 3: BSD_LED_N
-    # From J1 Pad 2 (7.65, 6.38) -> (9.5, 6.38) -> (9.5, 5.0) -> (23.0, 5.0) -> (25.1, 7.0) LED1 Pad 1
-    # Wait, LED1 Pad 1 is at (25.1, 7.0)!
-    add_track(pcbnew.F_Cu, "BSD_LED_N", 7.65, 6.38, 9.50, 6.38, 0.25)
-    add_track(pcbnew.F_Cu, "BSD_LED_N", 9.50, 6.38, 10.88, 5.00, 0.25)
-    # SW1 body is between X=13.62 and 19.38, with pads at Y=5.0 and Y=9.0.
-    # But wait! On B.Cu we can route BSD_LED_N with 2 vias, OR run it under SW1 center!
-    # SW1 center (X=16.5, Y=7.0) has 4mm clearance between pads!
-    # Let's route BSD_LED_N straight through SW1 center:
-    add_track(pcbnew.F_Cu, "BSD_LED_N", 10.88, 5.00, 12.00, 6.00, 0.25)
-    add_track(pcbnew.F_Cu, "BSD_LED_N", 12.00, 6.00, 13.00, 7.00, 0.25)
-    # Wait, SW1 center is at Y = 7.0.
-    # Let's check via to B.Cu for clean separation:
-    add_via("BSD_LED_N", 12.00, 6.00)
-    add_track(pcbnew.B_Cu, "BSD_LED_N", 12.00, 6.00, 24.00, 6.00, 0.25)
-    add_via("BSD_LED_N", 24.00, 6.00)
-    add_track(pcbnew.F_Cu, "BSD_LED_N", 24.00, 6.00, 25.10, 7.00, 0.25)
+    # Route 2: NET_LED1_ANODE
+    # R1 Pad 1 (19.75, 11.20) -> LED1 Pad 2 (17.40, 11.20)
+    add_track(pcbnew.F_Cu, "NET_LED1_ANODE", 19.75, 11.20, 17.40, 11.20, 0.25)
 
-    # Route 4: BTN_SIG_N
-    # From J1 Pad 3 (7.65, 7.62) -> D1 Pad 1 (11.5, 10.45)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 7.65, 7.62, 8.50, 8.50, 0.25)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 8.50, 8.50, 10.00, 10.00, 0.25)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 10.00, 10.00, 11.50, 10.45, 0.25)
-    # D1 Pad 1 (11.5, 10.45) -> SW1 Pad 1 (13.62, 5.0) & C1 Pad 1 (15.725, 12.0)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 11.50, 10.45, 13.62, 9.00, 0.25)
-    # SW1 Pad 1 is at Y = 5.0 (Rot 0) or Y = 9.0?
-    # Earlier print: Pad 1 at (-2.88, -2.0) and (+2.88, -2.0) -> at Y = 7.0 - 2.0 = 5.0!
-    # Pad 2 at (-2.88, +2.0) and (+2.88, +2.0) -> at Y = 7.0 + 2.0 = 9.0!
-    # So SW1 Pad 2 is at Y = 9.0, SW1 Pad 1 is at Y = 5.0!
-    # Let's connect BTN_SIG_N to Pad 2 (Y = 9.0) and GND to Pad 1 (Y = 5.0) - perfectly symmetrical switch!
-    # Let's update SW1 pin nets: Pad 2 = BTN_SIG_N, Pad 1 = GND!
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 11.50, 10.45, 13.62, 9.00, 0.25)
-    # Connect to C1 Pad 1 (15.725, 12.0)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 13.62, 9.00, 14.50, 10.00, 0.25)
-    add_track(pcbnew.F_Cu, "BTN_SIG_N", 14.50, 10.00, 15.725, 12.00, 0.25)
+    # Route 3: NET_LED2_ANODE
+    # R2 Pad 1 (19.75, 2.80) -> LED2 Pad 2 (17.40, 2.80)
+    add_track(pcbnew.F_Cu, "NET_LED2_ANODE", 19.75, 2.80, 17.40, 2.80, 0.25)
+
+    # Route 4: BSD_LED_N
+    # From J1 Pad 2 (7.10, 6.375) -> split to LED1 (Pad 1 at 14.60, 11.20) and LED2 (Pad 1 at 14.60, 2.80)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 7.10, 6.375, 8.50, 6.375, 0.25)
+    # Lower branch to LED2
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 8.50, 6.375, 9.50, 5.00, 0.25)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 9.50, 5.00, 13.00, 5.00, 0.25)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 13.00, 5.00, 14.60, 3.40, 0.25)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 14.60, 3.40, 14.60, 2.80, 0.25)
+    # Upper branch to LED1
+    add_via("BSD_LED_N", 8.50, 6.375)
+    add_track(pcbnew.B_Cu, "BSD_LED_N", 8.50, 6.375, 13.00, 9.00, 0.25)
+    add_via("BSD_LED_N", 13.00, 9.00)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 13.00, 9.00, 14.60, 10.60, 0.25)
+    add_track(pcbnew.F_Cu, "BSD_LED_N", 14.60, 10.60, 14.60, 11.20, 0.25)
+
+    # Route 5: BTN_SIG_N
+    # From J1 Pad 3 (7.10, 7.625) -> C1 Pad 1 (9.75, 10.00) & D1 Pad 1 (9.75, 4.00)
+    add_track(pcbnew.F_Cu, "BTN_SIG_N", 7.10, 7.625, 8.20, 7.625, 0.25)
+    add_track(pcbnew.F_Cu, "BTN_SIG_N", 8.20, 7.625, 9.75, 9.175, 0.25)
+    add_track(pcbnew.F_Cu, "BTN_SIG_N", 9.75, 9.175, 9.75, 10.00, 0.25)
+
+    # To D1 Pad 1 via B_Cu
+    add_via("BTN_SIG_N", 8.20, 7.625)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 8.20, 7.625, 9.75, 4.00, 0.25)
+    add_via("BTN_SIG_N", 9.75, 4.00)
+
+    # From C1 / D1 to SW1 Pad 2 (23.625, 9.00) via B_Cu under center
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 8.20, 7.625, 11.00, 7.00, 0.25)
+    # Route safely around H1 hole (H1 is at 16.0, 7.0)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 11.00, 7.00, 13.50, 7.00, 0.25)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 13.50, 7.00, 16.00, 4.60, 0.25)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 16.00, 4.60, 18.50, 7.00, 0.25)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 18.50, 7.00, 22.00, 7.00, 0.25)
+    add_track(pcbnew.B_Cu, "BTN_SIG_N", 22.00, 7.00, 23.625, 8.625, 0.25)
+    add_via("BTN_SIG_N", 23.625, 8.625)
+    add_track(pcbnew.F_Cu, "BTN_SIG_N", 23.625, 8.625, 23.625, 9.00, 0.25)
 
     # Ground Copper Zones on F.Cu and B.Cu
     for layer in [pcbnew.F_Cu, pcbnew.B_Cu]:
@@ -383,7 +414,7 @@ def build_pcb():
     filler.Fill(board.Zones())
 
     board.Save(PCB_PATH)
-    print(f"✓ Saved PCB to {PCB_PATH}")
+    print(f"✓ Saved bilateral-symmetric PCB to {PCB_PATH}")
     return board
 
 def generate_schematic(board):
@@ -426,12 +457,12 @@ def generate_schematic(board):
     lines.append(f'\t(uuid "{gen_uuid()}")')
     lines.append('\t(paper "A3")')
     lines.append('\t(title_block')
-    lines.append('\t\t(title "OpenMotorBridge PCBA 05C: Symmetrischer Under-Perch Spiegel-Pod")')
-    lines.append('\t\t(date "2026-11-01")')
-    lines.append('\t\t(rev "v10.0-parity")')
+    lines.append('\t\t(title "OpenMotorBridge PCBA 05C: Universal Bilateral-Symmetric Under-Perch Pod")')
+    lines.append('\t\t(date "2026-11-03")')
+    lines.append('\t\t(rev "v10.1-symmetric")')
     lines.append('\t\t(company "OpenMotorBridge Open Source Hardware")')
-    lines.append('\t\t(comment 1 "Amber BSD Totwinkel-LED, Omron B3SL IP67 Taster, TVS ESD Schutz")')
-    lines.append('\t\t(comment 2 "J1: 4-Pin JST-GH (VCC_LED, BSD_LED_N, BTN_SIG_N, GND)")')
+    lines.append('\t\t(comment 1 "Dual Amber BSD LEDs (LED1/LED2), Central M2 Hole, Omron B3SL IP67 Switch")')
+    lines.append('\t\t(comment 2 "Universal 1-PCB for both Left & Right Mirror Perch Pods")')
     lines.append('\t)')
     lines.append('\t(lib_symbols')
 
@@ -523,11 +554,11 @@ def generate_schematic(board):
     print(f"✓ Generated 100% parity schematic {SCH_PATH}")
 
 def main():
-    print("Building OpenMotorBridge PCBA 05C (Mirror Pod)...")
+    print("Building OpenMotorBridge PCBA 05C (Bilateral-Symmetric Mirror Pod)...")
     create_project_file()
     board = build_pcb()
     generate_schematic(board)
-    print("PCBA 05C build complete!")
+    print("PCBA 05C bilateral-symmetric build complete!")
 
 if __name__ == '__main__':
     main()

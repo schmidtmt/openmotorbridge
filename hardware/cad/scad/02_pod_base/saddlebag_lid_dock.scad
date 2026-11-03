@@ -54,12 +54,12 @@ module saddlebag_lid_dock() {
                 }
             }
 
-            // 3. Single-Port Cable Strain-Relief Snout (Dedicated to Port B at Y=46)
+            // 3. Single-Port Cable Strain-Relief Snout (Dedicated to Port B at Y=38.5, Z=14.5)
             // Completely encloses the slim 2-wire DC tether cable with solid protective roof
-            translate([CRADLE_OUTER_L - 4.0, 35.0, 0]) {
+            translate([CRADLE_OUTER_L - 4.0, (DOCK_WALL + DOCK_POD_W/2.0) - 11.0, 0]) {
                 hull() {
-                    cube([4.0, 22.0, 28.5]);
-                    translate([14.0, 2.0, 0]) cube([1.0, 18.0, 26.5]);
+                    cube([4.0, 22.0, 23.5]);
+                    translate([14.0, 2.0, 0]) cube([1.0, 18.0, 21.5]);
                 }
             }
 
@@ -85,14 +85,14 @@ module saddlebag_lid_dock() {
         }
 
         // C1. Port A (M8): Internal Blind Clearance Pocket (No external through-hole!)
-        // Aligned at Dock Y = DOCK_WALL + 27.0 = 30.0 mm, Z = DOCK_WALL + 19.0 = 22.0 mm
+        // Aligned at Dock Y = DOCK_WALL + DOCK_POD_W/2 = 38.5 mm, Z = DOCK_WALL + 26.5 = 29.5 mm
         // Provides 3.0 mm clearance for the 2.0 mm protruding M8 collar & screw cap on the pod,
         // while the exterior dock wall remains 100% solid and clean (0 false cables).
-        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, 30.0, 22.0]) {
+        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, DOCK_WALL + DOCK_POD_W/2.0, DOCK_WALL + POD_OUTER_H/2.0 + 7.5]) {
             rotate([0, 90, 0])
                 hull() {
-                    for (dy = [-6.5, 6.5]) {
-                        for (dz = [-6.5, 6.5]) {
+                    for (dy = [-7.0, 7.0]) {
+                        for (dz = [-7.0, 7.0]) {
                             translate([dz, dy, 0])
                                 cylinder(r=2.0, h=3.0, center=false, $fn=16);
                         }
@@ -101,9 +101,9 @@ module saddlebag_lid_dock() {
         }
 
         // C2. Port B (Slim USB-C): Primary Saddlebag Tether Cable Exit Bore & Plug-Well
-        // Aligned at Dock Y = DOCK_WALL + 43.0 = 46.0 mm, Z = DOCK_WALL + 18.0 = 21.0 mm
+        // Aligned at Dock Y = DOCK_WALL + DOCK_POD_W/2 = 38.5 mm, Z = DOCK_WALL + 11.5 = 14.5 mm
         // Tunnel is fully enclosed within the snout housing (solid continuous roof)
-        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, 46.0, 21.0]) {
+        translate([CRADLE_OUTER_L - DOCK_WALL - 0.1, DOCK_WALL + DOCK_POD_W/2.0, DOCK_WALL + POD_OUTER_H/2.0 - 7.5]) {
             rotate([0, 90, 0])
                 hull() {
                     for (dy = [-3.0, 3.0]) {

@@ -1229,20 +1229,20 @@ The **Symmetrical Dual Under-Perch Mirror Pods** ([`under_perch_mirror_pod.scad`
 
 ![Under-Perch Tactile Switch Bracket 3D CAD](../images/cad/under_perch_switch_bracket_cad.png)
 
-*Figure 8.36: 3D CAD view of the Under-Perch Mirror Pod (`under_perch_mirror_pod_cad.png`). Depicted are the M8/M10 mirror flange with anti-rotation shoulder to the switchgear, the ergonomic thumb tactile button dome (IP67 micro-switch), and the upward-aimed light tunnel diffuser for the amber Blind Spot Detection (BSD) warning LED.*
+*Figure 8.36: 3D CAD view of the Under-Perch Mirror Pod (`under_perch_switch_bracket_cad.png`). Depicted are the M8/M10 mirror flange with anti-rotation shoulder to the switchgear, the ergonomic thumb tactile button dome (IP67 microswitch on outboard edge), the axial cable conduit, and the upward-aimed 38° stadium light tunnel diffuser for the dual amber Blind Spot Detection (BSD) warning LEDs.*
 
 * **Symmetrical Ergonomics & Functional Division (Left & Right):**
   * **Left Under-Perch Pod (Intercom & Voice Communication):**
     * **Tactile Thumb PTT Button:** Zero-latency Push-to-Talk intercom transmission for Sena, Cardo, Midland, or OMM Mesh; triple-click triggers Siri / Google Assistant.
-    * **Left Blind-Spot Alert LED (BSD Amber):** Projects glare-free at a $38^\circ$ inward angle directly onto the left mirror glass when the rear radar detects approaching traffic on the left.
+    * **Left Blind-Spot Alert (Dual BSD Amber LEDs):** Projects glare-free at a $38^\circ$ inward angle directly onto the left mirror glass when the rear radar detects approaching traffic on the left (doubled lumen output for sunny conditions).
   * **Right Under-Perch Pod (Action-Cam & Media Bookmarks):**
     * **Tactile Thumb Action-Cam Button:** Short-press instantly sets a highlight bookmark / chapter tag in ongoing footage (BLE connection with Insta360 X3/X4, GoPro Hero 11/12/13, or DJI Osmo Action 4/5); long-press starts or stops recording (3s hold triggers emergency SOS).
-    * **Right Blind-Spot Alert LED (BSD Amber):** Projects glare-free onto the right mirror glass when traffic is detected in the right blind spot (critical when merging right after passing).
+    * **Right Blind-Spot Alert (Dual BSD Amber LEDs):** Projects glare-free onto the right mirror glass when traffic is detected in the right blind spot (critical when merging right after passing).
   * **Bilateral Safety Advantage:** Delivers intuitive, side-specific blind-spot warnings directly in the peripheral sightline of the exact mirror the rider checks naturally.
 
 * **Mechanical & Electrical Economy:**
   * **0 mm Straight Handlebar Space:** Consumes zero millimeter of straight handlebar tube, leaving upper master cylinder clamps **100% free for valved exhaust switches (Dr. Jekill & Mr. Hyde / KessTech)**.
-  * **Identical PCBA (`PCBA 05B`):** Both left and right pods deploy the exact same miniature printed circuit board (`PCBA 05B` All-in-One Under-Perch Board). Side allocation is assigned via the wiring harness (`J_POD_L` and `J_POD_R` on Front Node).
+  * **Universal Bilateral-Symmetric PCBA (`PCBA 05C`):** Thanks to the 100% bilaterally symmetric layout along the central $Y=0$ axis with short-edge JST-GH connector, central single M2 screw boss, and dual LEDs, **both left and right pods deploy the exact same un-modified PCB** without needing separate left/right layouts.
   * **Universal Mounting:** Clamps directly beneath mirror perch threads (M8 / M10 / M12 or Harley Torx bolt).
   * **Automotive Integration (Reference Kit 5 - Chase Van):** Handlebar brackets are omitted; a discrete switch rests on the center console or shift lever, with primary voice handled handsfree via CarPlay or headset.
 
@@ -1292,9 +1292,13 @@ Via the local **OMB PWA Dashboard**, each button (Left and Right completely inde
   * **Left Button:** `HOLD_GATE` $\rightarrow$ `INTERCOM_PTT_GATE`; `TRIPLE_CLICK` $\rightarrow$ `VOICE_ASSISTANT`; `DOUBLE_CLICK` $\rightarrow$ `MESH_CHANNEL_NEXT`.
   * **Right Button:** `SHORT_CLICK` $\rightarrow$ `CAM_HIGHLIGHT_TAG`; `LONG_PRESS` $\rightarrow$ `CAM_RECORD_TOGGLE`; 3s Hold $\rightarrow$ `EMERGENCY_SOS_BROADCAST`.
 
-### 8.2 Blind Spot Detection (BSD) Mirror Indicator Pod (`bsd_mirror_indicator_pod.scad`)
+### 8.2 Blind Spot Detection (BSD) Mirror Indicator Pod (`bsd_mirror_indicator_pod.scad`) [Optional / Legacy Clamp]
 
-The **BSD Mirror Indicator Pod** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) aerodynamically integrates rear radar alerts (Port `J9` on Front Node PCBA 05) into the rider's peripheral cockpit vision:
+> [!NOTE]
+> **Obsolete in v10.0 Standard Architecture:** The clamp-on enclosure `bsd_mirror_indicator_pod.scad` is **fully superseded in the v10 standard architecture by the Symmetrical Dual Under-Perch Mirror Pod ([Section 8.1](08_enclosures_mechanics_cad.md#81-symmetrical-dual-under-perch-mirror-pods-under_perch_mirror_podscad) / PCBA 05C)**. The Under-Perch Pod unifies the 38° upward blind-spot warning LED (`LED1`) and tactile glove button (`SW1`) directly under the mirror perch stud (M8/M10) connected to Front Node `J_POD_L` / `J_POD_R`.
+> The clamp pod `bsd_mirror_indicator_pod.scad` remains available as an optional retrofit accessory strictly for motorcycles where perch mounting is not possible (e.g. bar-end clamp mirrors).
+
+The **BSD Mirror Indicator Pod** ([`bsd_mirror_indicator_pod.scad`](../../hardware/cad/scad/05_accessories/bsd_mirror_indicator_pod.scad)) aerodynamically integrates rear radar alerts via a mirror stem clamp into the rider's peripheral cockpit vision:
 
 ![Blind Spot Detection Mirror Indicator Pod 3D CAD](../images/cad/bsd_mirror_indicator_pod_cad.png)
 

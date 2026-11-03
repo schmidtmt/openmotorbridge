@@ -18,9 +18,9 @@
 include <../00_common/parameters.scad>;
 
 FENDER_R_TRANS = 140.0;
-POD_L          = 136.0;
-POD_W          = 71.0;
-POD_H          = 38.5;
+POD_L          = POD_OUTER_L + 1.0; // 151.0 mm (standardized for 150mm v10 Pod)
+POD_W          = POD_OUTER_W + 1.0; // 71.0 mm
+POD_H          = POD_OUTER_H + 0.5; // 38.5 mm
 
 DOCK_WALL      = 2.5;
 TRAY_H         = 24.0;
@@ -62,7 +62,7 @@ module core_dock_tray() {
             cube([DOCK_WALL + 3.0, 32.0, TRAY_H], center=false);
 
         // Weight reduction cutouts in floor
-        for (fx = [-35.0, 0.0, 35.0]) {
+        for (fx = [-42.0, 0.0, 42.0]) {
             translate([fx, 0, -1.0])
                 linear_extrude(height=6.0, center=false)
                     rounded_box_2d(22.0, 44.0, r=4.0);
@@ -78,7 +78,7 @@ module core_dock_tray() {
 
 // 2. Bionic Upward Spring Arches (Hold-down against cowl ceiling)
 module ceiling_spring_arches() {
-    for (ax = [-38.0, +38.0]) {
+    for (ax = [-42.0, +42.0]) {
         translate([ax, 0, 0]) {
             // Left arch
             hull() {

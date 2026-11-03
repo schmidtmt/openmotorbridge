@@ -1,18 +1,25 @@
 // =============================================================================
-// OpenMotorBridge - Accessories: Symmetrical Under-Perch Mirror Pod
+// OpenMotorBridge - Accessories: Universal Bilateral-Symmetric Under-Perch Mirror Pod
 // =============================================================================
 // File: hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad
-// Description: Unified under-perch enclosure housing PCBA 05C (32 x 14 mm).
-//              Integrates M8/M10 mirror stem clamp flange, tactile thumb button
-//              (PTT / Action-Cam bookmark), and 38° upward blind-spot warning
-//              diffuser light tunnel into a single sleek PA12-CF pod.
+// Description: Universal under-perch enclosure housing the bilateral-symmetric
+//              PCBA 05C (32 x 14 mm). 100% mathematically and mechanically
+//              invariant along the central Y=0 axis: ONE single PCBA design serves
+//              BOTH Left and Right motorcycle mirror perches without modifications!
+//
+// Features:
+// - Single Central M2 Fastener at (0, 0) - identical in both left and right pods.
+// - Dual Amber BSD LEDs (LED1 at +Y=4.2, LED2 at -Y=4.2) under unified 38° stadium light hood.
+// - Tactile thumb button at +X=10.5, Y=0 (PTT / Action-Cam bookmark).
+// - Axial JST-GH cable entry at -X=16.0, Y=0 (runs straight along handlebar).
+// - Clamps under M8/M10 mirror stem with anti-rotation perch lip.
 // =============================================================================
 
 include <../00_common/parameters.scad>;
 
 // --- Render Selection ---
 part = "assembly"; // Options: "assembly", "base", "cover", "lens", "pcb_dummy", "exploded"
-side = "left";     // Options: "left", "right" (mirrored across X-axis)
+side = "left";     // Options: "left", "right" (flange mirrors across Y=0)
 
 // --- PCBA 05C Dimensions ---
 PCB_L               = 32.0;  // Length (mm)
@@ -33,38 +40,39 @@ CORNER_R            = 2.5;   // Outer fillet radius (mm)
 FLANGE_THICK        = 4.5;   // Robust clamping flange thickness (mm)
 FLANGE_DIA          = 22.0;  // Flange outer diameter (mm)
 MIRROR_HOLE_DIA     = 10.3;  // Fits standard M8 and M10 mirror stems (mm)
-FLANGE_OFFSET_X     = -14.0; // Offset from PCBA center along X (mm)
-FLANGE_OFFSET_Y     = 18.0;  // Inward offset from pod center along Y (mm)
+FLANGE_OFFSET_X     = -10.0; // Offset from pod center along X (mm)
+FLANGE_OFFSET_Y     = 17.5;  // Lateral offset from pod center along Y (mm)
 ANTI_ROTATION_LIP_H = 1.5;   // Registration shoulder against perch body (mm)
 
-// --- Optical BSD LED Light Tunnel (38° Upward to Mirror Glass) ---
-LED_X_OFFSET        = 14.0;  // Aligned with LED1 on PCBA 05C (mm from center)
-LED_Y_OFFSET        = 0.85;  // Aligned with LED1 Y position (mm from center)
+// --- Optical BSD LED Stadium Light Tunnel (38° Upward to Mirror Glass) ---
+// Symmetrically spans across both LED1 (+4.2 mm) and LED2 (-4.2 mm)
+TUNNEL_X            = 0.0;   // Centered along X at PCBA center
+TUNNEL_Y_SPAN       = 8.4;   // Distance between LED centers (4.2 - (-4.2))
+TUNNEL_WIDTH        = 6.0;   // Aperture width along X (mm)
+TUNNEL_LENGTH       = 13.0;  // Aperture length along Y (mm)
 TUNNEL_ANGLE        = 38.0;  // Angle upward into rider's mirror eye-box (degrees)
-TUNNEL_APERTURE_DIA = 6.0;   // Light tunnel aperture diameter (mm)
 HOOD_OVERHANG       = 3.2;   // StVZO anti-glare sun hood extension (mm)
-LENS_DIA            = 5.6;   // Frosted amber optical diffuser lens (mm)
-LENS_THICK          = 1.2;   // Lens disk thickness (mm)
+LENS_X              = 5.2;   // Frosted amber diffuser lens width (mm)
+LENS_Y              = 12.2;  // Frosted amber diffuser lens length (mm)
+LENS_THICK          = 1.2;   // Lens thickness (mm)
 
 // --- Tactile Switch Actuation Dome (Omron B3SL-1002P) ---
-SW_X_OFFSET         = -10.875; // Aligned with SW1 on PCBA 05C (mm from center)
-SW_Y_OFFSET         = 1.75;    // Aligned with SW1 Y position (mm from center)
-BUTTON_CAP_DIA      = 8.5;     // Ergonomic thumb paddle diameter (mm)
-BUTTON_RECESS_DEPTH = 1.5;     // Guard bezel to prevent accidental actuation (mm)
-ACTUATOR_TRAVEL     = 0.6;     // Tactile travel (mm)
+SW_X_OFFSET         = 10.5;  // Centered on SW1 on PCBA 05C (mm from center)
+SW_Y_OFFSET         = 0.0;   // Symmetrically centered on Y=0 axis (mm)
+BUTTON_CAP_DIA      = 8.5;   // Ergonomic thumb paddle diameter (mm)
+BUTTON_RECESS_DEPTH = 1.5;   // Guard bezel to prevent accidental actuation (mm)
+ACTUATOR_TRAVEL     = 0.6;   // Tactile travel (mm)
 
 // --- JST-GH 4-Pin Cable Gland Conduit ---
-CABLE_PORT_DIA      = 4.2;     // Bore for 4-core AWG28 shielded PUR cable (mm)
-CABLE_STRAIN_L      = 6.0;     // Integrated conical strain relief nipple (mm)
+CABLE_PORT_DIA      = 4.2;   // Bore for 4-core AWG28 shielded PUR cable (mm)
+CABLE_STRAIN_L      = 6.0;   // Integrated conical strain relief nipple (mm)
 
-// --- Fasteners (M2 Stainless Thread-Forming Screws) ---
-M2_SCREW_DIA        = 2.2;     // Clearance hole (mm)
-M2_BOSS_OD          = 5.2;     // Screw boss outer diameter (mm)
-M2_POCKET_DEPTH     = 7.0;     // Core hole depth (mm)
-H1_X                = -12.8;   // Matched to PCBA 05C H1 (mm from center)
-H1_Y                = -4.5;    // Matched to PCBA 05C H1 (mm from center)
-H2_X                = 13.5;    // Matched to PCBA 05C H2 (mm from center)
-H2_Y                = -4.5;    // Matched to PCBA 05C H2 (mm from center)
+// --- Central Single Fastener (M2 Stainless Thread-Forming Screw) ---
+M2_SCREW_DIA        = 2.2;   // Clearance hole (mm)
+M2_BOSS_OD          = 5.4;   // Central screw boss outer diameter (mm)
+M2_POCKET_DEPTH     = 7.5;   // Core hole depth in base (mm)
+H1_X                = 0.0;   // Central mounting screw at X=0
+H1_Y                = 0.0;   // Central mounting screw at Y=0 (100% symmetric!)
 
 // --- Colors ---
 COLOR_PA12_CF       = [0.22, 0.23, 0.25, 1.0]; // Matte charcoal PA12-CF
@@ -87,6 +95,19 @@ module rounded_box(x, y, z, r) {
     }
 }
 
+module stadium(x, y, h) {
+    r = min(x, y) / 2;
+    hull() {
+        if (x >= y) {
+            translate([-x/2 + r, 0, 0]) cylinder(r=r, h=h, $fn=32);
+            translate([ x/2 - r, 0, 0]) cylinder(r=r, h=h, $fn=32);
+        } else {
+            translate([0, -y/2 + r, 0]) cylinder(r=r, h=h, $fn=32);
+            translate([0,  y/2 - r, 0]) cylinder(r=r, h=h, $fn=32);
+        }
+    }
+}
+
 // =============================================================================
 // Component Modules
 // =============================================================================
@@ -102,7 +123,7 @@ module mirror_flange() {
             hull() {
                 translate([FLANGE_OFFSET_X, FLANGE_OFFSET_Y, 0])
                     cylinder(d=FLANGE_DIA * 0.85, h=FLANGE_THICK, $fn=32);
-                translate([FLANGE_OFFSET_X + 6, 0, 0])
+                translate([FLANGE_OFFSET_X + 4, 0, 0])
                     rounded_box(16, POD_W, FLANGE_THICK, CORNER_R);
             }
 
@@ -111,7 +132,7 @@ module mirror_flange() {
                 cylinder(d1=4.0, d2=3.0, h=ANTI_ROTATION_LIP_H, $fn=24);
         }
 
-        // Center mirror stem through-hole
+        // Center mirror stem through-hole (M8 / M10 clear)
         translate([FLANGE_OFFSET_X, FLANGE_OFFSET_Y, -1])
             cylinder(d=MIRROR_HOLE_DIA, h=FLANGE_THICK + ANTI_ROTATION_LIP_H + 2, $fn=48);
 
@@ -130,34 +151,30 @@ module pod_base() {
             // Integrated mirror stem mounting flange
             mirror_flange();
 
-            // Cable entry snout
+            // Cable entry snout (Centered at Y=0, X=-POD_L/2)
             translate([-POD_L/2 - CABLE_STRAIN_L/2, 0, BASE_H/2])
                 rotate([0, 90, 0])
                     cylinder(d1=CABLE_PORT_DIA + 3.0, d2=CABLE_PORT_DIA + 1.8, h=CABLE_STRAIN_L, center=true, $fn=24);
 
-            // Internal PCB mounting bosses
-            for (p = [[H1_X, H1_Y], [H2_X, H2_Y]]) {
-                translate([p[0], p[1], 0])
-                    cylinder(d=M2_BOSS_OD, h=BASE_H - COVER_H + 1.5, $fn=24);
-            }
+            // Single Central PCB mounting boss at (0, 0)
+            translate([H1_X, H1_Y, 0])
+                cylinder(d=M2_BOSS_OD, h=BASE_H - COVER_H + 1.5, $fn=32);
         }
 
-        // Internal PCBA cavity (32 x 14 mm + tolerance)
+        // Internal PCBA cavity (32 x 14 mm + clearance)
         translate([0, 0, WALL_THICK])
             rounded_box(PCB_L + 2*PCB_CLEARANCE, PCB_W + 2*PCB_CLEARANCE, BASE_H, 1.0);
 
-        // M2 Screw pilot holes
-        for (p = [[H1_X, H1_Y], [H2_X, H2_Y]]) {
-            translate([p[0], p[1], BASE_H - COVER_H - M2_POCKET_DEPTH + 1.5])
-                cylinder(d=M2_SCREW_DIA - 0.4, h=M2_POCKET_DEPTH + 1, $fn=16);
-        }
+        // M2 Central screw pilot hole at (0, 0)
+        translate([H1_X, H1_Y, BASE_H - COVER_H - M2_POCKET_DEPTH + 1.5])
+            cylinder(d=M2_SCREW_DIA - 0.4, h=M2_POCKET_DEPTH + 1, $fn=24);
 
-        // Cable conduit pass-through
+        // Cable conduit pass-through (Axial on Y=0)
         translate([-POD_L/2 - CABLE_STRAIN_L - 1, 0, BASE_H/2])
             rotate([0, 90, 0])
                 cylinder(d=CABLE_PORT_DIA, h=POD_L/2 + CABLE_STRAIN_L, $fn=24);
 
-        // Tactile button thumb opening on lower face
+        // Tactile button thumb opening on lower face (X=10.5, Y=0)
         translate([SW_X_OFFSET, SW_Y_OFFSET, -1]) {
             cylinder(d=BUTTON_CAP_DIA, h=WALL_THICK + 2, $fn=32);
             // Finger-centering conical chamfer
@@ -179,13 +196,13 @@ module pod_cover() {
             // Main cover plate
             rounded_box(POD_L, POD_W, COVER_H, CORNER_R);
 
-            // Upward 38° Blind Spot Light Tunnel Hood
-            translate([LED_X_OFFSET, LED_Y_OFFSET, COVER_H])
+            // Upward 38° Bilateral BSD Light Tunnel Hood (Covers both LED1 and LED2)
+            translate([TUNNEL_X, 0, COVER_H])
                 rotate([0, -TUNNEL_ANGLE, 0])
                     difference() {
-                        cylinder(d=TUNNEL_APERTURE_DIA + 2.4, h=HOOD_OVERHANG + 3.0, $fn=32);
+                        stadium(TUNNEL_WIDTH + 2.4, TUNNEL_LENGTH + 2.4, HOOD_OVERHANG + 3.0);
                         translate([0, 0, -1])
-                            cylinder(d=TUNNEL_APERTURE_DIA, h=HOOD_OVERHANG + 5.0, $fn=32);
+                            stadium(TUNNEL_WIDTH, TUNNEL_LENGTH, HOOD_OVERHANG + 5.0);
                     }
         }
 
@@ -193,25 +210,24 @@ module pod_cover() {
         translate([0, 0, -0.5])
             rounded_box(POD_L - 2*WALL_THICK, POD_W - 2*WALL_THICK, COVER_H - 1.8, 1.0);
 
-        // Light aperture through cover to LED1
-        translate([LED_X_OFFSET, LED_Y_OFFSET, -1])
+        // Light aperture through cover to dual LEDs
+        translate([TUNNEL_X, 0, -1])
             rotate([0, -TUNNEL_ANGLE, 0])
-                cylinder(d=TUNNEL_APERTURE_DIA, h=COVER_H + HOOD_OVERHANG + 6, $fn=32);
+                stadium(TUNNEL_WIDTH, TUNNEL_LENGTH, COVER_H + HOOD_OVERHANG + 6);
 
-        // M2 Screw counterbores
-        for (p = [[H1_X, H1_Y], [H2_X, H2_Y]]) {
-            translate([p[0], p[1], -1])
-                cylinder(d=M2_SCREW_DIA, h=COVER_H + 2, $fn=24);
-            translate([p[0], p[1], COVER_H - 2.0])
-                cylinder(d=4.2, h=3.0, $fn=24);
-        }
+        // Single Central M2 Screw counterbore at (0, 0)
+        translate([H1_X, H1_Y, -1])
+            cylinder(d=M2_SCREW_DIA, h=COVER_H + 2, $fn=24);
+        translate([H1_X, H1_Y, COVER_H - 2.0])
+            cylinder(d=4.6, h=3.0, $fn=24);
     }
 }
 
 module diffuser_lens() {
-    translate([LED_X_OFFSET, LED_Y_OFFSET, COVER_H + 2.0])
+    translate([TUNNEL_X, 0, COVER_H + 2.0])
         rotate([0, -TUNNEL_ANGLE, 0])
-            cylinder(d=LENS_DIA, h=LENS_THICK, center=true, $fn=32);
+            translate([0, 0, -LENS_THICK/2])
+                stadium(LENS_X, LENS_Y, LENS_THICK);
 }
 
 module button_dome() {
@@ -226,24 +242,40 @@ module button_dome() {
 
 module pcba_dummy() {
     translate([0, 0, BASE_H - COVER_H]) {
-        // Green FR4 substrate
-        color(COLOR_FR4)
-            rounded_box(PCB_L, PCB_W, PCB_T, 1.5);
+        // Green FR4 substrate with central mounting hole
+        difference() {
+            color(COLOR_FR4)
+                rounded_box(PCB_L, PCB_W, PCB_T, 1.5);
+            translate([H1_X, H1_Y, -0.5])
+                cylinder(d=2.2, h=PCB_T + 1.0, $fn=24);
+        }
 
-        // J1 Connector (JST-GH 4P)
-        color([0.9, 0.9, 0.9, 1.0])
-            translate([0.5, 3.65, PCB_T])
+        // J1 Connector (JST-GH 4P) at -X=10.75, Y=0
+        color([0.95, 0.95, 0.95, 1.0])
+            translate([-10.75, 0.0, PCB_T + 1.4])
                 cube([6.0, 4.25, 2.8], center=true);
 
-        // SW1 (Omron B3SL-1002P)
+        // SW1 (Omron B3SL-1002P) at +X=10.5, Y=0
         color([0.3, 0.3, 0.3, 1.0])
             translate([SW_X_OFFSET, SW_Y_OFFSET, -1.5])
                 cube([6.0, 6.0, 3.0], center=true);
 
-        // LED1 (1206 Amber)
-        color([1.0, 0.7, 0.1, 1.0])
-            translate([LED_X_OFFSET, LED_Y_OFFSET, PCB_T + 0.4])
+        // Dual 1206 Amber BSD LEDs (Symmetric along Y=0)
+        // LED1 (+Y = 4.2 mm)
+        color(COLOR_AMBER_LENS)
+            translate([0.0, 4.2, PCB_T + 0.4])
                 cube([3.2, 1.6, 0.8], center=true);
+
+        // LED2 (-Y = 4.2 mm)
+        color(COLOR_AMBER_LENS)
+            translate([0.0, -4.2, PCB_T + 0.4])
+                cube([3.2, 1.6, 0.8], center=true);
+
+        // R1 & R2 Resistors
+        color([0.2, 0.2, 0.2, 1.0]) {
+            translate([4.5, 4.2, PCB_T + 0.25]) cube([1.6, 0.8, 0.5], center=true);
+            translate([4.5, -4.2, PCB_T + 0.25]) cube([1.6, 0.8, 0.5], center=true);
+        }
     }
 }
 

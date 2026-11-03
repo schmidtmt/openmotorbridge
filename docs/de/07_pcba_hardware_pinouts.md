@@ -682,22 +682,23 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 ---
 
-### 7.3 PCBA 05C: Symmetrischer Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
+### 7.3 PCBA 05C: Bilateral-Symmetrischer Universal Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
 
 ![PCBA 05C Spiegel-Pod 3D](../images/pcba/pcba05c_mirror_pod_3d.png)
-*Abbildung 7.5e: 3D-CAD-Ansicht des symmetrischen Under-Perch Spiegel-Pods (PCBA 05C, 32 x 14 mm) mit Bernstein BSD Totwinkel-Warn-LED (1206), IP67-versiegeltem Kurzhubtaster (Omron B3SL-1002P) und horizontalem JST-GH 4-Pin SMD-Steckverbinder.*
+*Abbildung 7.5e: 3D-CAD-Ansicht des bilateral-symmetrischen Under-Perch Spiegel-Pods (PCBA 05C, 32 x 14 mm) mit dualen Bernstein BSD Totwinkel-Warn-LEDs (LED1/LED2 ober- und unterhalb der zentralen M2-Befestigung), IP67-versiegeltem Kurzhubtaster (Omron B3SL-1002P) an der Außenkante und horizontalem JST-GH 4-Pin SMD-Steckverbinder an der Stirnseite.*
 
 ![PCBA 05C Spiegel-Pod Draufsicht](../images/pcba/pcba05c_mirror_pod_top.png)
-*Abbildung 7.5f: Bestückungs-Draufsicht PCBA 05C mit TVS-Diode D1, Entprellkondensator C1 und Vorwiderstand R1.*
+*Abbildung 7.5f: Bestückungs-Draufsicht PCBA 05C mit TVS-Diode D1, Entprellkondensator C1 und getrennten Vorwiderständen R1/R2 für maximale Redundanz und Sonnenlicht-Sichtbarkeit.*
 
 #### 7.3.1 Technische Platinen-Kenndaten & Bestückung
 * **Abmessungen:** 32,0 x 14,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
+* **Bilateral-Symmetrisches Universal-Design:** Die Platine ist entlang der Mittellinie ($Y = 7{,}0\,\text{mm}$) zu 100 % achsensymmetrisch konstruiert. Dadurch wird **nur noch ein einziger Platinentyp für beide Lenkerseiten (Links & Rechts)** gefertigt. Beim Spiegeln des Gehäuses (`mirror([0, 1, 0])`) bleiben Stirnseiten-Stecker, zentraler M2-Schraubdom und Daumentaster exakt auf $Y=0$, während die beiden synchronen LEDs lediglich ihre Plätze ober- und unterhalb des Schraublochs tauschen.
 * **Bauform:** 100 % SMD, Formfaktor passgenau für [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
 * **Bestückung:**
-  * **`LED1` (Bernstein BSD Totwinkel-Warn-LED):** Hochleistungs-SMD-LED (590 nm Amber, 120° Abstrahlwinkel), strahlt durch einen optischen Diffusortrichter im 38°-Winkel blendfrei in das jeweilige Spiegelglas.
-  * **`SW1` (Taktiler Daumen-Mikrotaster):** IP67-versiegelter Kurzhub-Mikrotaster mit spürbarem 300g Druckpunkt für zuverlässige Bedienung mit Winterhandschuhen.
+  * **Duale `LED1` & `LED2` (Bernstein BSD Totwinkel-Warn-LEDs):** Zwei Hochleistungs-SMD-LEDs (1206, 590 nm Amber, 120° Abstrahlwinkel), symmetrisch oberhalb ($Y = 11{,}2\,\text{mm}$) und unterhalb ($Y = 2{,}8\,\text{mm}$) des zentralen M2-Schraublochs. Strahlen gemeinsam durch den $38^\circ$-Stadion-Diffusortrichter im Gehäusedeckel für doppelte Leuchtkraft bei direkter Sonneneinstrahlung.
+  * **`SW1` (Taktiler Daumen-Mikrotaster):** IP67-versiegelter Kurzhub-Mikrotaster (Omron B3SL-1002P, $X = 26{,}5\,\text{mm}, Y = 7{,}0\,\text{mm}$) mit spürbarem 300g Druckpunkt für zuverlässige Bedienung mit Winterhandschuhen.
   * **Entprellung & ESD-Schutz:** 100 nF RC-Glied zur Hardware-Entprellung und bidirektionale TVS-Diode (`D1`, PESD5V0S1BL) gegen elektrostatische Entladungen.
-  * **Steckverbinder (`J1`):** 4-polige JST-GH SMD Buchse (`SM04B-GHS-TB`, 1.25 mm Raster) mit formschlüssiger Rastverriegelung.
+  * **Steckverbinder (`J1`):** 4-polige JST-GH SMD Buchse (`SM04B-GHS-TB`, 1.25 mm Raster) stirnseitig bei $X = 5{,}25\,\text{mm}, Y = 7{,}0\,\text{mm}$ (Kabel führt axial am Lenkerrohr entlang).
 
 #### 7.3.2 Pinbelegung des Spiegel-Pod Headers (`J1` / 4-Pin JST-GH)
 
