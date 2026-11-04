@@ -99,22 +99,22 @@ OpenMotorBridge v10.0 definiert die Plattform über **standardisierte Funktionsk
      * **Linker Spiegel-Pod:** Taktiler Daumen-PTT-Taster (Funk/Intercom & Sprachassistent) + linke bernsteinfarbene Totwinkel-Warn-LED (BSD) gerichtet auf das linke Spiegelglas.
      * **Rechter Spiegel-Pod:** Taktiler Daumen-Taster für Action-Cam (Kurzdruck: Highlight-Tag / Bookmark für Insta360/GoPro/DJI via BLE; Langdruck: Video Start/Stopp / SOS) + rechte bernsteinfarbene Totwinkel-Warn-LED (BSD) gerichtet auf das rechte Spiegelglas.
    * **100 % Software-Defined Button Mapping (Freie Tastenbelegung via PWA):** Physische Taster frei konfigurierbar (Kurzdruck, Doppelklick, Halten für PTT, Gefahren-Marker, Cam-Tags, Garagentor via BLE).
-   * **Sicherheitsgewinn:** Echte bilaterale Totwinkelüberwachung direkt im peripheren Sichtfeld beider Spiegel. 100 % symmetrische Ergonomie, baugleiche innere Platine (`PCBA 05B`).
-6. **4-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Im rechten Medienfach der Touring-Verkleidung (Road Glide, Street Glide, CVO, CVO ST). Wird vom Front-Node (`PCBA 05`) über eine kombinierte High-Power & USB 2.0 Zuleitung versorgt. Tappt den werksseitigen Harley USB-C Port zur Head Unit (Skyline OS / Boom! Box) und speist geregelte **30W USB-PD** (thermisch optimiert für geschlossene Handschuhfächer) für das Smartphone sowie **10W geschaltete Dongle-Power** (Wireless CarPlay / Android Auto mit Überhitzungs-Notabschaltung) ein. 1x freier Media USB 2.0 Port für USB-Sticks/Updates. **Harley Headset-Emulation via USB:** Das High-Speed Datenpaar verbindet den Front-Node direkt mit Port 4 zur OEM-Headunit; OMB emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay nativ frei und leitet Helm-Mikrofonaudio digital ohne Massebrummen ein. Alle im Handschuhfach angeschlossenen Geräte verbleiben zu 100 % im Fach (Action-Cam & Navi werden direkt am Front-Node versorgt – kein Kabeldurchzug durch das Fach!).
+   * **Sicherheitsgewinn:** Echte bilaterale Totwinkelüberwachung direkt im peripheren Sichtfeld beider Spiegel. 100 % symmetrische Ergonomie, baugleiche innere Z-Stacked-Platine (`PCBA 05C`, $18{,}25 \times 14{,}0\,\text{mm}$).
+6. **4-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`):** Im rechten Medienfach der Touring-Verkleidung (Road Glide, Street Glide, CVO, CVO ST). Wird vom Front-Node (`PCBA 05`) über eine kombinierte High-Power & USB 2.0 Zuleitung versorgt (`J2 FRONT_NODE`). Tappt den werksseitigen Harley USB-C Port zur Head Unit (`J1 SKYLINE_HOST`) und speist auf der Südflanke geregelte **30W USB-PD** (`J3 PHONE_CHARGE`), **10W geschaltete Dongle-Power** (`J4 DONGLE`) sowie einen freien **Media USB 2.0 Port** (`J5 MEDIA`) ein. **Harley Headset-Emulation via USB:** Das High-Speed Datenpaar verbindet den Front-Node direkt mit der OEM-Headunit; OMB emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay nativ frei und leitet Helm-Mikrofonaudio digital ohne Massebrummen ein. Alle im Handschuhfach angeschlossenen Geräte verbleiben zu 100 % im Fach (Action-Cam & Navi werden direkt am Front-Node versorgt – kein Kabeldurchzug durch das Fach!).
 7. **Radar 2.0 Sub-MCU & Heck-Wings (PCBA 08 am Heck):** Autonomes 77-GHz Heck-Radar (Wheeltec MR20), versorgt über Strang 4 des 16-Pin Peripherie-Kabelbaums mit 4-Draht Power & High-Speed Bus; 36 Strobe-Warn-LEDs, Abtropfschlaufe (Drip-Loop) und integrierter Schmutzfänger (Roost-Deflector). Optionaler Under-Fender Mount für Cruiser/Bobber.
 
 ```
                      DIE STANDARDISIERTEN FUNKTIONSKNOTEN (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. FRONT-NODE (Am Lenker-Riser):  SAM-M10Q GNSS, Kaltluft-Sensorik,         |
-|    Knowles Wind-MEMS, Qi/USB-PD Zubehörspeisung, Riser-Klemmung             |
+| 1. FRONT-NODE (Am Lenker-Riser):  PCBA 05 (ESP32-P4 + E22) & PCBA 05D Puck  |
+|    (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind-MEMS, 30W USB-PD          |
 +-----------------------------------------------------------------------------+
-| 2. SYMMETRISCHE DUAL UNDER-PERCH SPIEGEL-PODS (Links & Rechts):             |
-|    * Links:  Taktile PTT-Taste, Linke Totwinkel-Warn-LED (BSD Amber)        |
-|    * Rechts: Taktile Action-Cam-Tag Taste, Rechte Totwinkel-LED (BSD Amber) |
+| 2. SYMMETRISCHE DUAL UNDER-PERCH SPIEGEL-PODS (PCBA 05C Links & Rechts):    |
+|    * Links:  Taktile PTT-Taste, Linke Totwinkel-Warn-LEDs (2x BSD Amber)    |
+|    * Rechts: Taktile Action-Cam-Tag Taste, Rechte Totwinkel-LEDs (2x Amber) |
 +-----------------------------------------------------------------------------+
-| 3. HANDSCHUHFACH-HUB (Rechts): 2-Port USB-Hub, unterseitige OEM-Tülle,      |
-|    stabiler Ottocast CarPlay/AA Bypass, 1x freier USB-Ladeport              |
+| 3. HANDSCHUHFACH-HUB (PCBA 05B Rechts): 4-Port Hub mit 5x USB-C Dual-Edge   |
+|    (North: Front-Node & Skyline Host | South: 30W Phone, Dongle, Media)     |
 +-----------------------------------------------------------------------------+
 | 4. ZENTRALBOX (Unter Sitz/Akku): ESP32-S31 AI-Host, QCC3084 Audio-SoC,      |
 |    SX1262 LoRa 868MHz, Multi-Port USB-PD Engine, USV, Zwei-Kabel-Anschluss  |
@@ -184,7 +184,7 @@ Für Naked Bikes, Enduros und klassische Rahmenrohre verfügen die Universal-Pod
 
 ### 2.4 Universelle OEM-Adapter-Kompatibilität (Off-the-Shelf)
 Die universellen Monocoque-Pods ($150 \times 70 \times 38\,\text{mm}$ mit werkzeuglosem Slide-in Deckel, Trockenklappe und $124 \times 53 \times 28\,\text{mm}$ Innenraum) nehmen alle handelsüblichen OEM-Geräte im ungeöffneten Originalzustand direkt in der oberen Bucht auf:
-* **Klasse S (Direkte Pod-Aufnahme * OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Cardo Packtalk Edge (Air-Mount), OMM UCS 2.4 GHz - 100 % ungeöffnetes Originalgerät im PA12-MJF Konturbett mit 3-Punkt EPDM-Dämpfung gegen $20\,\text{g}$ Vibration, direkt an PCBA 03 angebunden (USB-PD Ladeversorgung bis 30W, USB Audio Class, direkte elektrische PTT-Tastung oder BLE-Steuerung), null Pogo-Pins, null Löten, 100 % Erhalt von Werksgarantie & IP67-Schutz. Fehleranfällige Wechselkassettenschlitten und Hubmagnete sind vollständig eliminiert.
+* **Klasse S (Direkte Pod-Aufnahme * OMB-Referenz):** z. B. Sena SPIDER X Slim (Primärempfehlung), Cardo Packtalk Edge (Air-Mount), OMM UCS 2.4 GHz - 100 % ungeöffnetes Originalgerät im universellen TPU-Elastomerbett auf dem `011_pod_slide_tray` gegen $20\,\text{g}$ Vibration, direkt an `PCBA 03` angebunden (USB-PD Ladeversorgung bis 30W, USB Audio Class, direkte elektrische PTT-Tastung oder BLE-Steuerung plus 2x mechatronische Kaltstart-Drücker auf `012_universal_actuator_slide_bracket` für automatisches Aufwecken bei KL15), null Pogo-Pins, null Löten am Headset, 100 % Erhalt von Werksgarantie & IP67-Schutz. Modellspezifische Hartplastik-Wechselkassetten sind vollständig eliminiert.
 * **Klasse A (Drahtlos-Bridges & USB-Speisung):** z. B. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red - versorgt über flaches 90° Micro-USB/USB-C Kabel, drahtlose Audioübertragung zum Helm, externe SMA-Bulkhead-Doppelbuchse mit Schutzkappe an der Frontblende.
 * **Klasse B (Pogo-Pin Federkontakt-Cradles):** z. B. Sena 50S/60S/30K/20S EVO - vollwertiges analoges Audio (ES8388 Codec auf PCBA 03) und PTT-Tastung via AO3400A MOSFETs.
 * **Klasse C (Magnetischer Air-Mount):** z. B. Cardo Packtalk Edge / Pro (Hinweis: Packtalk Neo unterstützt kein Laden während der Fahrt und ist ausgeschlossen) - werkzeugloses magnetisches Andocken über 2x N52 Neodym-Magnete.

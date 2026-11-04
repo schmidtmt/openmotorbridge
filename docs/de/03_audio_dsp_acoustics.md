@@ -6,7 +6,7 @@ Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMo
 
 ## 1. Zero-Ground-Loop Digital-Topologie & Dual-Helm Bluetooth Hub
 
-In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über lange Kabelbäume ein permanentes Problem. OpenMotorBridge löst dies in v8.5 / v9.0 fundamental durch **physikalische Entkopplung**:
+In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über lange Kabelbäume ein permanentes Problem. OpenMotorBridge löst dies in v10.0 fundamental durch **physikalische Entkopplung**:
 
 1. **Vollständiger Entfall analoger Fahrzeugleitungen:**
    * Es verlaufen **keinerlei analoge Audioleitungen** durch den Fahrzeugkabelbaum.

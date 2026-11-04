@@ -3,9 +3,9 @@
 *(Hinweis: Sämtliche CAD- und 3D-Baugruppenansichten werden im Zuge der finalen Render-Phase aktualisiert).*
 
 Dieses Dokument spezifiziert die mechanische Konstruktion, das Thermomanagement, das IP67/IP69K-Gehäusedesign, die Kinematik des Auto-Eject-Schnellwechselsystems sowie alle CAD- und STL-Modelle aller Gehäuse-Baugruppen der OpenMotorBridge v10.0 Standardized Node Architecture:
-1. **Zentrale Steuerbox (Typ A):** 3-teiliges Sandwich-Gehäuse mit Zwischenboden ($70{,}0 \times 10{,}0\,\text{mm}$ offene Kabelbucht), integrierter Akku-Wanne mit schwenkbarer Akkubrücke (Doppel-Antennennest für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz mit $0{,}8\,\text{mm}$ Schutzblende und C-Clip Zugsicherung), 100 % kabelfreiem Gehäusedeckel, Unterwannen-Bodenkammer ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) als geschlossene Reserve-Kavität (historische UWB-Aufnahme), rückseitigem SMA-Antennendurchgang mit wasserdichter $0{,}4\,\text{mm}$ Knockout-Membran (ab Werk IP68/IP69K geschlossen) und planarem 4-Layer Kupfer-Wärmespreader.
-2. **Universeller Koffer-Satelliten-Pod (Typ B):** Baugleiches Monocoque-Gehäuse für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit werkzeuglosem Slide-in Deckel, verdeckter FOB-Magnetverriegelung (Öffnen über Smart-Keyfob), innenliegendem Zwischendeckel (Dry-Flap), integrierter Koffer-USB-Ladebuchse (5V/12V PD bis zu 30W/60W), direkter EPDM-Nestaufnahme für OEM-Intercoms (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) oder 100 % wasserdichter Dry-Box sowie 4-Draht-Automotive-Bus mit 4-Pin IP67 Magnet-Abrissschnittstelle.
-3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) für die $82 \times 50\,\text{mm}$ 4-Lagen PCBA 05 mit 4-in-1 Universal-Befestigungssystem (AMPS, Riser-Klemme, Silentblöcke, 3M Dual-Lock), Direktanbindung an die symmetrischen Dual Under-Perch Spiegel-Pods, 4-adrigem Automotive-Backbone (ohne Tankdemontage!), integriertem u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 Sensoren im Anströmbereich und Knowles MEMS Windgeräusch-Mikrofon.
+1. **Zentrale Steuerbox (Typ A):** v10 Dual-Rail Monocoque Slide-In Plattform (`000_monocoque_tub.scad`, `010_slide_tray.scad`, `020_slide_lid.scad`) mit 5-seitig geschlossener Monocoque-Wanne, schraubenlos einschiebbarem Zwischenboden (Rail 1 bei $Z = 18{,}0\,\text{mm}$ mit integriertem 1S LiPo-Akkubett sowie vertieften Klebenestern für Taoglas FXP895 LoRa-868 und Taoglas FXP73 2.4-GHz), 100 % kabelfreiem L-Schiebedeckel (Rail 2 bei $Z = 33{,}0\,\text{mm}$ mit Slam-to-Shut PA12-Schnappriegeln), rückseitigem MicroSD-Wartungsfenster und optionalem SMA-Antennendurchgang in der festen Wannenschwelle sowie planarem 4-Layer Kupfer-Wärmespreader.
+2. **Universeller Koffer-Satelliten-Pod (Typ B):** Baugleiches Monocoque-Gehäuse (`002_pod_housing_base.scad`, `011_pod_slide_tray.scad`, `021_pod_slide_lid.scad`) für beide Satelliten-Pods (Pod 1 & 2 Audio/Intercom, 2x symmetrisch) mit werkzeuglosem L-Slide-in Deckel, verdeckter FOB-Magnetverriegelung (Öffnen über Smart-Keyfob), innenliegendem Zwischendeckel (Dry-Flap), integrierter Koffer-USB-Ladebuchse (5V/12V PD bis zu 30W/60W), direkter EPDM-Nestaufnahme mit universeller Doppel-Aktuator-Schlittenschiene (`012_universal_actuator_slide_bracket.scad`) für OEM-Intercoms (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) oder 100 % wasserdichter Dry-Box sowie 4-Draht-Automotive-Bus mit 4-Pin IP67 Magnet-Abrissschnittstelle.
+3. **Universal Front-Knoten (Typ C):** Ultrakompakter Cockpit- & Sensor-Hub ($98{,}0 \times 68{,}0 \times 25{,}0\,\text{mm}$) in der v10 Dual-Rail Monocoque-Architektur (`001_front_node_monocoque_tub.scad`, `010_front_node_slide_tray.scad`, `020_front_node_slide_lid.scad`) für die $82 \times 50\,\text{mm}$ 4-Lagen `PCBA 05` mit 4-in-1 Universal-Befestigungssystem (AMPS, Riser-Klemme, Silentblöcke, 3M Dual-Lock), Direktanbindung an die symmetrischen Dual Under-Perch Spiegel-Pods (`PCBA 05C`), 5x USB-C Handschuhfach-Hub (`PCBA 05B`), 4-adrigem Automotive-Backbone (ohne Tankdemontage!) und abgesetztem aerodynamischem Sensor-Puck (`PCBA 05D` mit u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 Sensoren im Anströmbereich und Knowles MEMS Windgeräusch-Mikrofon).
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Typ D):** Ultrakompakter Taschenbegleiter ($58{,}0 \times 34{,}0 \times 13{,}0\,\text{mm}$) aus PA12-MJF mit umlaufendem TPU-Kantenschutz, integriertem N52-Neodym-Auswerferschlüssel, $0{,}5\,\text{mm}$ Mu-Metall-Flussschirmung, MagSafe/Qi-Induktionsladeaufnahme, LRA-Haptikmotor und drahtlosem SX1262 LoRa/BLE Alarm-Pager.
 5. **Fahrzeugspezifische Referenz-Montagekits (Zero-Drill):** Vollständig konstruierte, zerstörungsfreie Bolt-On Montagekits für CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3) sowie Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 mit minimalem Unterbrücken-Radarträger).
 
@@ -117,24 +117,24 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
    * **3.3V LDO:** $T_j = 110{,}4\,^\circ\text{C}$ (Zulässig bis $+125\,^\circ\text{C}$).
    * **1S LiPo Akku:** Verbleibt in der oberen Kammer sicher unter $60\,^\circ\text{C}$ (JEITA-NTC pausiert Ladevorgang bei $> 45\,^\circ\text{C}$).
 
-### 2.2 Oberwanne: 1S LiPo-Akkuaufnahme & Zwischenboden-Durchführungen
-* **Integrierte LiPo-Akkutasche:** Auf der Oberseite des Zwischenbodens sitzt eine formschlüssige Aussparung ($68{,}0 \times 39{,}0 \times 5{,}0\,\text{mm}$) für eine ultra-flache **2.200 mAh 1S LiPo-Pufferzelle** (Typ 504068 oder 503870). Durch die gezielte Vergrößerung der horizontalen Grundfläche statt der Bauhöhe bleibt die gesamte Gehäusehöhe der Zentralbox strikt bei **$38{,}0\,\text{mm}$**, sodass unter der Motorradsitzbank kein einziger Millimeter Freigang verloren geht.
-* **100 % freier Querschnitt aller 11 Konvektionsschlitze:** Das Akkubett ist zentral bei $X = 17{,}0\dots 88{,}0\,\text{mm}$ und $Y = 13{,}0\dots 55{,}0\,\text{mm}$ platziert. Dadurch halten alle 11 Lüftungsschlitze (5 an der Rückwand, 4 an den Flanken, 2 an der Front) mindestens $2{,}5\dots 4{,}5\,\text{mm}$ Randabstand ein. Die Kaminwirkung und Innenluft-Zirkulation für die Abwärme von LM5164-Q1 und BQ24075 im Unterdeck bleibt uneingeschränkt erhalten.
-* **Vibrationssicherung via schwenkbare Akkubrücke ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)):** Ein formschlüssig einrastender, monolithischer PA12-Niederhalter mit Steckscharnier links ($X=17\,\text{mm}$) und elastischem RC-Schnappverschluss rechts ($X=88\,\text{mm}$) drückt die Zelle über einen $1{,}0\,\text{mm}$ EPDM-Moosgummistreifen vibrationsfest (geprüft bis $20\,\text{g}$) ein – komplett schrauben- und werkzeuglos öffenbar.
-* **Integrierte Antennenkapselung & Zugsicherung:** Die Oberseite der Brücke beherbergt geschützte Nester für die Taoglas FXP895 (LoRa 868 MHz) und Taoglas FXP73 (2.4 GHz) unter einer $0{,}8\,\text{mm}$ PA12-Clip-Schutzblende. Formschlüssige C-Clips ($\varnothing 1{,}2\,\text{mm}$) am Scharnierende absorbieren alle Zugkräfte der Koaxial- und DC-Leitungen.
-* **Molex Micro-Fit 3.0 Akkuanschluss (`J_BAT`):**
+### 2.2 Einschiebbarer Zwischenboden (`010_slide_tray.scad`): 1S LiPo-Akkuaufnahme & Antennennester
+* **Integrierte LiPo-Akkutasche:** Auf der Oberseite des einschiebbaren Zwischenbodens (`010_slide_tray.scad`, Rail 1 bei $Z = 18{,}0\,\text{mm}$) sitzt eine formschlüssige Aussparung ($68{,}0 \times 39{,}0 \times 5{,}0\,\text{mm}$) für eine ultra-flache **2.200 mAh 1S LiPo-Pufferzelle** (Typ 504068 oder 503870). Durch die gezielte Vergrößerung der horizontalen Grundfläche statt der Bauhöhe bleibt die gesamte Gehäusehöhe der Zentralbox strikt bei **$38{,}0\,\text{mm}$**, sodass unter der Motorradsitzbank kein einziger Millimeter Freigang verloren geht.
+* **100 % freier Querschnitt aller 11 Konvektionsschlitze:** Das Akkubett ist zentral bei $X = 17{,}0\dots 88{,}0\,\text{mm}$ und $Y = 13{,}0\dots 55{,}0\,\text{mm}$ platziert. Dadurch halten alle 11 Lüftungsschlitze (5 an der Rückkante, 4 an den Flanken, 2 an der Front) mindestens $2{,}5\dots 4{,}5\,\text{mm}$ Randabstand ein. Die Kaminwirkung und Innenluft-Zirkulation für die Abwärme von LM5164-Q1 und BQ24075 im Unterdeck bleibt uneingeschränkt erhalten.
+* **Vibrationssicherung im Slide-In Tray:** Die LiPo-Zelle ruht auf einem $1{,}0\,\text{mm}$ EPDM-Moosgummistreifen im Akkubett des Zwischenbodens (`010_slide_tray.stl`) und wird über ein elastisches EPDM-Spannband bzw. die integrierten Haltezungen vibrationsfest (geprüft bis $20\,\text{g}$) gesichert – komplett schrauben- und werkzeuglos entnehmbar.
+* **Integrierte Antennennester & Zugsicherung:** Auf dem Zwischenboden sitzen vertiefte Klebenester für die Taoglas FXP895 (LoRa 868 MHz) und Taoglas FXP73 (2.4 GHz). Gerundete Kabeldurchführungen (`J7` Akku, U.FL Koax) leiten die Anschlussleitungen scheuerfrei in die untere Platinenkammer.
+* **Molex Micro-Fit 3.0 Akkuanschluss (`J_BAT` / `J7`):**
   * Pin 1: `VBAT+` ($+3{,}7\,\text{V}$ LiPo Pluspol über BQ24075)
   * Pin 2: `GND` (LiPo Masse mit integriertem Murata 10k NTC Temperaturfühler für JEITA-Ladeüberwachung)
 * **Offene Stirnseiten-Kabelbucht ($70{,}0 \times 10{,}0\,\text{mm}$):**
   * Großzügige, zur Front ($Y=0\,\text{mm}$) hin vollkommen offene Ausklinkung ($X = 18\dots 88\,\text{mm}$) im Zwischenboden.
-  * Lässt sämtliche Leitungen (Automotive Flachbandkabel, 10-Pin USB-C Flachband, 12V Strom, LiPo-Akkukabel, 868 MHz LoRa Koax und 2.4 GHz Koax) beim Aufsetzen der Oberwanne völlig frei und ohne Fädel- oder Quetschgefahr hineingleiten.
+  * Lässt sämtliche Leitungen (Automotive Flachbandkabel, 16-Pin Peripherie-Harness, 12V Strom, LiPo-Akkukabel, 868 MHz LoRa Koax und 2.4 GHz Koax) beim Einschieben des Zwischenbodens völlig frei und ohne Fädel- oder Quetschgefahr passieren.
 
 ---
 
 ## 3. Stirnseitige Anschlüsse, Antennen-Aufnahmen & Rückwand-Option
 
 ```
-                  VORDERE STIRNWAND DER OBERWANNE
+                VORDERE STIRNWAND DER MONOCOQUE-WANNE
 +-------------------------------------------------------------+
 | +------------+  +--------+  +----------+  +---------------+ |
 | | 1. USB-C   |  | 2. RGB |  | 3. SW1   |  | 4. Deutsch    | |
@@ -153,18 +153,17 @@ Die Gesamtabwärme der Zentralbox liegt im normalen Fahrbetrieb bei lediglich **
 
 OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonzept ohne störende äußere Antennenstummel bei maximaler Reichweite:
 1. **LoRa 868 MHz Primärantenne (Taoglas FXP895):**
-   * Formschlüssig in die Oberseite der schwenkbaren Akkubrücke (`013_battery_antenna_bridge.scad`) eingelassenes Antennennest ($86{,}0 \times 16{,}0 \times 1{,}0\,\text{mm}$) unter einer $0{,}8\,\text{mm}$ PA12-Clip-Schutzblende.
-   * Die Antenne strahlt horizontal polarisiert nach oben durch den $2{,}5\,\text{mm}$ dünnen, HF-neutralen PA12-Deckel ($\varepsilon_r \approx 2{,}3\dots 2{,}7$, $\tan\delta \approx 0{,}015$). Dies garantiert eine maximale Rundum-Reichweite von bis zu $15\,\text{km}$ im OMM-Mesh.
-   * Der Gehäusedeckel (`020_lid_plate.scad`) bleibt hierbei zu 100 % passiv und kabelfrei – bei Wartungsarbeiten kann er gefahrlos abgenommen werden, ohne U.FL-Koaxialleitungen zu belasten oder abzureißen.
-2. **Wi-Fi 4 / BLE 5.0 Antenne für ESP32-S3 (Taoglas FXP73):**
-   * Ebenfalls formschlüssig auf der Akkubrücke gelagert ($47{,}0 \times 7{,}5 \times 0{,}8\,\text{mm}$). Sie versorgt den ESP32-S3-WROOM-1U (`U2`) verlustfrei mit 2.4-GHz-HF für das Web-Interface und OTA-Firmware-Updates.
-3. **LoRa 868 MHz Sekundäroption (SMA-Bulkhead mit 0,4 mm Knockout-Membran für Carbon-Bikes & Rallye):**
-   * In der hinteren Stirnwand der Oberwanne (`012_front_cutouts.scad`) befindet sich an $X = 85{,}0\,\text{mm}$ ein vorbereiteter SMA-Antennenanschluss ($\varnothing\,6{,}5\,\text{mm}$ Durchbruch mit $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung).
+   * Formschlüssig in die Oberseite des einschiebbaren Zwischenbodens (`010_slide_tray.scad`) eingelassenes Antennennest ($86{,}0 \times 16{,}0 \times 1{,}0\,\text{mm}$).
+   * Die Antenne strahlt horizontal polarisiert nach oben durch den $2{,}5\,\text{mm}$ dünnen, HF-neutralen PA12-L-Schiebedeckel (`020_slide_lid.scad`, $\varepsilon_r \approx 2{,}3\dots 2{,}7$, $\tan\delta \approx 0{,}015$). Dies garantiert eine maximale Rundum-Reichweite von bis zu $15\,\text{km}$ im OMM-Mesh.
+   * Der L-Schiebedeckel (`020_slide_lid.scad`) bleibt hierbei zu 100 % passiv und kabelfrei – bei Wartungsarbeiten kann er gefahrlos nach hinten abgezogen werden, ohne U.FL-Koaxialleitungen zu belasten oder abzureißen.
+2. **Wi-Fi 6 / BLE 5.4 Antenne für ESP32-S31 (Taoglas FXP73):**
+   * Ebenfalls formschlüssig auf dem Zwischenboden (`010_slide_tray.scad`) gelagert ($47{,}0 \times 7{,}5 \times 0{,}8\,\text{mm}$). Sie versorgt das ESP32-S31-WROOM-1U Modul (`U2`) verlustfrei mit 2.4-GHz-HF für das Web-Interface und OTA-Firmware-Updates.
+3. **LoRa 868 MHz Sekundäroption (SMA-Bulkhead in der festen Wannenschwelle mit 0,4 mm Knockout-Membran für Carbon-Bikes & Rallye):**
+   * In der festen hinteren Wannenschwelle (`000_monocoque_tub.scad`, $Z = 0\dots 15{,}0\,\text{mm}$) befindet sich an $X = 85{,}0\,\text{mm}$ ein vorbereiteter SMA-Antennenanschluss ($\varnothing\,6{,}5\,\text{mm}$ Durchbruch mit $\varnothing\,9{,}5 \times 1{,}2\,\text{mm}$ O-Ring-Senkung).
    * **Ab Werk 100 % hermetisch dicht (IP68/IP69K):** Eine integrierte $0{,}4\,\text{mm}$ dünne PA12-Knockout-Membran versiegelt das Gehäuse standardmäßig vollständig.
-   * **Werkzeugloses Durchstoßen bei Bedarf:** Wird für Carbon-Heckverkleidungen oder Rallye-Einsätze eine externe Whip-Antenne benötigt, lässt sich die $0{,}4\,\text{mm}$ Membran mit einem kleinen Dorn/Schraubendreher sauber herausdrücken und eine IP67 SMA-Einbaubuchse mit O-Ring montieren.
-4. **Historische UWB-Antennentasche (v10.0 Reserve-Bauraum):**
-   * Die im Boden der Unterwanne (`00_lower_deck.scad`) eingelassene Tasche ($12{,}0 \times 12{,}0 \times 0{,}8\,\text{mm}$) diente in früheren Prototypen der Aufnahme der Taoglas FXUWB10 UWB-Antenne für den entfallenen DW3110-Transceiver. In v10.0 bleibt dieser Gehäusebereich als mechanische Reserve frei bzw. wird durch den massiven PA12-Boden planar geschlossen. Sämtliche fahrzeuginterne Daten- und Audioverbindungen laufen über den geschirmten 4-Ader Automotive-Bus.
-   * Der Wannenboden bleibt nach unten mit $>2{,}2\,\text{mm}$ PA12-Wandung 100% hermetisch geschlossen und spritzwasserdicht.
+   * **Werkzeugloses Durchstoßen bei Bedarf:** Wird für Carbon-Heckverkleidungen oder Rallye-Einsätze eine externe Whip-Antenne benötigt, lässt sich die $0{,}4\,\text{mm}$ Membran mit einem kleinen Dorn/Schraubendreher sauber herausdrücken und eine IP67 SMA-Einbaubuchse mit O-Ring montieren. Da die Buchse in der festen Schwelle sitzt, bleibt die Antenne beim Abziehen des L-Deckels unberührt am Gehäuse.
+4. **100 % geschlossener Monocoque-Wannenboden (Entfall der historischen UWB-Antennentasche):**
+   * Der Boden der Monocoque-Wanne (`000_monocoque_tub.scad`) ist in v10.0 als durchgehend homogene, $2{,}5\,\text{mm}$ starke PA12-Wandung ohne Aussparungen für das entfallene UWB-System ausgeführt. Sämtliche fahrzeuginterne Daten- und Audioverbindungen laufen über den geschirmten 4-Ader Automotive-Bus.
 5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Nutzt die onboard 2.4-GHz-Keramik-Chipantenne mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
 
@@ -198,7 +197,9 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-### 4.2 Kinematik des L-Slide-in Deckels (L-Profil, metallfreier PA12 U-Bügel & 100 % innenliegender FOB-Diebstahlschutz)
+*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, die zwei unabhängigen Quertraversen der modularen Aktuatorschiene mit bündig versenkten DIN 7991 Torx-Klemmschrauben, das Cardo Packtalk Edge im OEM Air-Mount Cradle sowie die hinteren EPDM-Dichtstopfen für die C-Führungsnuten.*
+
+### 4.2 Kinematik des L-Slide-in Deckels (L-Profil, metallfreier PA12 U-Bügel & 100 % innenliegender FOB-Diebstahlschutz)
 
 Das Öffnen und Verschließen des Satelliten-Pods erfolgt über einen **einteiligen L-förmigen Schiebedeckel** (horizontaler Deckel + obere Heckwand als monolithisches Bauteil), der horizontal entlang verdeckter C-Führungsrillen gleitet und beim Schließen vollautomatisch über einen **100 % metallfreien PA12 U-Bügel** in die feste untere Wannenschwelle einschnappt:
 
@@ -253,8 +254,8 @@ Das Öffnen und Verschließen des Satelliten-Pods erfolgt über einen **einteili
 
 4. **Dachziegel-Dichtprinzip (IP67 Tropfnase) & Feste SMA-Buchse:**
    * Die Heckwand des L-Deckels überlappt die untere Wannenschwelle mit einer $3{,}5\,\text{mm}$ tiefen Tropfnase nach unten. Spritzwasser kann nicht entgegen der Schwerkraft eindringen.
-   * Die optionale SMA-Antennendurchführung sitzt dauerhaft in der festen unteren Wannenschwelle ($Z = 7{,}5\,\text{mm}$). Beim Abziehen des Deckels verbleiben Antenne und Koaxkabel unberührt und stressfrei am Fahrzeug.ren des Gehäuses unterhalb der Elektronikbucht.
-   * Bei geschlossenem und verriegeltem Deckel sind die Schrauben für Werkzeuge physisch unzugänglich.
+   * Die optionale SMA-Antennendurchführung sitzt dauerhaft in der festen unteren Wannenschwelle ($Z = 7{,}5\,\text{mm}$). Beim Abziehen des Deckels verbleiben Antenne und Koaxkabel unberührt und stressfrei am Fahrzeug.
+   * Die Befestigungsschrauben des Pods sitzen geschützt im Inneren des Gehäuses unterhalb der Elektronikbucht. Bei geschlossenem und verriegeltem Deckel sind die Schrauben für Werkzeuge physisch unzugänglich.
    * Jeder Versuch, den Pod gewaltsam abzureißen, wird über die 6-Achs-IMU der Zentralbox erkannt und alarmiert den Fahrer in $< 50\,\text{ms}$ über LoRa (868 MHz) auf dem Taschen-Pager.
 
 ---
@@ -678,8 +679,8 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 |    * Symmetrische Dual Under-Perch Spiegel-Pods (PTT & BSD-Warn-LEDs)        |
 |    * Dual Speaker Corner-Pods: 2x Cockpit-Displays an Rockford-Gittern      |
 |      (Radar-Balken, Turn-by-Turn, TPMS, Akku - 0 cm sichtbares Kabel)       |
-|    * Handschuhfach-Hub: 2-Port USB-Hub im Fach von UNTEN durch OEM-Tülle    |
-|    * SAM-M10Q GNSS + TMP117 + Knowles MEMS im laminaren Fahrtwind           |
+|    * Handschuhfach-Hub: 4-Port Media- & Power-Hub (PCBA 05B, 5x USB-C)        |
+|    * Sensor-Puck (PCBA 05D): SAM-M10Q GNSS + TMP117 + Knowles MEMS            |
 +-----------------------------------------------------------------------------+
 | 2. VERKABELUNG (Backbone Wire Caddy - Zero Tank Lifting):                   |
 |    * 4-Draht Automotive Bus (USB-PD & USB 2.0) verlegt per Nylon-Einzug     |
@@ -1017,15 +1018,15 @@ Die Verkabelung der Kofferdeckel-Pods löst das fundamentale Praxiskriterium des
    * **Zündungsgesteuerter Wake-Up & USV-Pufferung:** Die Zentralbox erfasst das Zündungsplus (Klemme 15, z. B. am Harley P&A-Zubehörstecker). Bei Zündung EIN regelt der LM5164-Q1 Step-Down auf saubere $5{,}0\,\text{V}$ herunter und der integrierte **LiPo-USV-Pufferakku (BQ24075)** fängt selbst härteste Startspannungseinbrüche (Cold Crank bis $6{,}5\,\text{V}$) unterbrechungsfrei in $8{,}5\,\mu\text{s}$ ab - die Koffer-Pods und Funkmodule rebooten niemals beim Anlassen des Motors.
    * **Automatisierter OEM-Boot per Optokoppler:** Sobald die Versorgungsspannung steht, triggert die Zentralbox über galvanisch getrennte **Toshiba TLP222A Optokoppler** die Tasten-/Power-Einschaltsequenz der OEM-Headset-Adapter (Sena Mesh / Cardo DMC) im Pod-Gehäuse.
    * **Null Akku-Wartung & automatischer Shutdown:** Die Intercom-Module schalten vollautomatisch mit der Fahrzeugzündung ein und aus. Das Risiko, vor der Fahrt das Laden zu vergessen oder mit leerem Headset-Akku dazustehen, ist zu 100 % eliminiert.
-2. **Werkstattsichere 2-Pin Magnet-Pogo Abreißkupplung (IP68 COTS):**
+2. **Werkstattsichere 4-Pin Magnet-Pogo Abreißkupplung (IP67 COTS):**
    * In Vertragswerkstätten lösen Mechaniker bei Inspektionen, Reifen- oder Bremsenwechseln die Kofferbefestigungen und heben den Koffer in Sekunden ab, ohne nach nachgerüsteten Kabeln zu suchen. Eine feste Schraub- oder Klickverbindung würde hier unweigerlich abreißen.
-   * Die **2-polige IP68-Magnet-Pogo-Abreißkupplung mit N52-Neodym-Magneten und vergoldeten Federkontakten** (z. B. HytePro M411) trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
-   * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) – die 5V-Versorgung steht sofort wieder unterbrechungsfrei zur Verfügung.
-3. **Zwei-Zonen-Kabelarchitektur (Reine DC-Speisung):**
-   * **Zone 1 (Außen am Bike):** Robustes 4-Draht Automotive-Kabel (AWG22/28 PUR / FLRY) von der Zentralbox (16-Pin Automotive Kabelbaum Strang 2 & 3) zum stationären Rahmendock.
-   * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein extrem schlankes, leichtes 2-adriges Flachbandkabel ($< 2\,\text{mm}$ Dicke) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
-4. **Direktanschluss an die Schacht-Federkontakte des Pods:**
-   * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und führt über eine formschlüssige Bodendichtung direkt zu den beiden massiven vergoldeten Federkontakten im Schachtboden des Pods.
+   * Die **4-polige IP67-Magnet-Pogo-Abreißkupplung mit N52-Neodym-Magneten und vergoldeten Federkontakten** trennt sich bei ca. $10\dots 15\,\text{N}$ axialer Zugkraft **völlig verschleiß- und zerstörungsfrei**.
+   * Beim Wiedereinsetzen des Koffers zieht sich die Kupplung durch die magnetische Polung vollautomatisch zentrierend zusammen (*Klack*) – der 4-Draht Automotive-Bus steht sofort wieder unterbrechungsfrei zur Verfügung.
+3. **Zwei-Zonen-Kabelarchitektur (4-Draht Automotive-Bus):**
+   * **Zone 1 (Außen am Bike):** Robustes 4-Draht Automotive-Kabel ($4 \times 0{,}34\,\text{mm}^2$ FLRY-B) von der Zentralbox (16-Pin Automotive Kabelbaum Strang 2 & 3) zum stationären Rahmendock.
+   * **Zone 2 (Im Koffer):** Da der Kofferinnenraum trocken, sauber und witterungsgeschützt ist, kommt ein extrem schlankes, leichtes 4-adriges Flachbandkabel ($< 2\,\text{mm}$ Dicke) zum Einsatz. Es trägt nicht auf, nimmt kein Koffervolumen weg und beansprucht die Dichtkanten nicht.
+4. **Direktanschluss an die Trägerplatine des Pods:**
+   * Das schlanke Koffer-Kabel läuft parallel zum textilen Deckel-Fangband in den Kofferdeckel und führt über Port A direkt zum Header `J_BUS` auf `PCBA 03` im Pod.
    * Im Kofferinneren befinden sich **keinerlei zusätzliche Adapterplatinen, Zwischenstecker oder Lötstellen**.
 5. **100 % Zero-Drill Durchführung & 2-Stufen-Zugentlastung ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)):**
    * **Montageort (100 % Bohrungsfrei):** Der Kabelausgang nutzt die originale vordere Befestigungsbohrung an der Koffer-Vorderwand (oberhalb des Schwingenlagers, zum Fahrzeugrahmen gewandt). Weder Kofferboden noch Kofferwände werden gebohrt (Werterhalt & Rissvermeidung!).
@@ -1638,11 +1639,14 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 
 | Baugruppe | Funktion / Bauteil | Druckfertige STL-Datei | Parametrischer OpenSCAD Code |
 | :--- | :--- | :--- | :--- |
-| **Zentralbox** | Unterwanne mit Dichtnut & Halteohren | `01_main_box/main_box_lower_case.stl` | `01_main_box/00_lower_deck.scad` |
-| **Zentralbox** | Oberwanne mit Zwischenboden | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
-| **Zentralbox** | Gehäusedeckel mit Gore-Vent | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
-| **Satelliten-Pod**| 5-seitiges Monocoque-Gehäuse (Tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
+| **Zentralbox** | Monolithische Monocoque-Wanne mit Domen & Halteohren | `01_main_box/000_monocoque_tub.stl` | `01_main_box/000_monocoque_tub.scad` |
+| **Zentralbox** | Einschiebbarer Zwischenboden (Rail 1: LiPo-Bett & Antennen) | `01_main_box/010_slide_tray.stl` | `01_main_box/010_slide_tray.scad` |
+| **Zentralbox** | L-Schiebedeckel mit Gore-Vent & Slam-to-Shut Heckwand (Rail 2) | `01_main_box/020_slide_lid.stl` | `01_main_box/020_slide_lid.scad` |
+| **Satelliten-Pod**| Monolithisches Monocoque-Gehäuse (Wanne mit C-Führungsnuten) | `02_pod_base/002_pod_housing_base.stl` | `02_pod_base/parts/002_pod_housing_base.scad` |
+| **Satelliten-Pod**| Einschiebbarer Zwischendeckel / Dry-Flap Tray (Rail 1) | `02_pod_base/011_pod_slide_tray.stl` | `02_pod_base/parts/011_pod_slide_tray.scad` |
+| **Satelliten-Pod**| L-Slide-in Deckel mit FOB-Magnetriegel (Rail 2) | `02_pod_base/021_pod_slide_lid.stl` | `02_pod_base/parts/021_pod_slide_lid.scad` |
 | **Satelliten-Pod**| Universelle 2-fach Aktuator-Schlittenschiene (15–85 mm stufenlos) | `02_pod_base/012_universal_actuator_slide_bracket.stl` | `02_pod_base/parts/012_universal_actuator_slide_bracket.scad` |
+| **Satelliten-Pod**| Geteilte Zero-Drill TPU-Kofferdichtung (Ø 19 mm OEM Bohrung) | `02_pod_base/010_saddlebag_hole_grommet_split.stl` | `02_pod_base/parts/010_saddlebag_hole_grommet_split.scad` |
 | **Adventure Radar**| Gepäckbrücken-Radarträger Basis (Ø 18 mm Rohr) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Radar**| Gepäckbrücken-Radarträger Klemmschelle Kappe | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Pods 1/2**| GS Transition Dock Basis-Wanne (Bügelfalten-Unterteil) | `02_pod_base/adventure_transition_dock_base.stl` | `02_pod_base/adventure_transition_dock.scad` |
@@ -1652,55 +1656,42 @@ Die CAD-Dateistruktur von OpenMotorBridge folgt einer strengen hierarchischen CS
 | **Adventure Pods 1/2**| GSA Heavy-Duty Klemmschelle Kappe (Ø 18 mm Rohr) | `02_pod_base/adventure_gsa_clamp_cap.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
 | **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Basis (Minimal-Option) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Adventure Pods 1/2**| GSA Rohrträger-Klemmschelle Kappe (Minimal-Option) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
-| **Rahmendock** | MagSafe Rahmen-Dock Gehäuseoberteil (Rohrsattel, Flügel & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Rahmendock** | MagSafe Rohrschellen-Bügel (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Rahmendock** | MagSafe Rahmen-Dock Gehäuseunterteil (PCB-Ledge & M2.5 Senkung) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
+| **Rahmendock** | COTS Magnet-Rahmendock Basis & Rohrschelle | `02_pod_base/cots_magnetic_frame_dock.stl` | `02_pod_base/cots_magnetic_frame_dock.scad` |
 | **Kofferdeckel-Dock** | Harley One-Touch Kofferdeckel-Dock Halbschale | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
 | **Radarhalter** | Entkoppelte Kennzeichen-Radarhalterung | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Radarhalter** | Stealth Center Under-Fender Radar-Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
 | **Radar-Gelenk** | Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) | `02_pod_base/radar_swivel_tilt_cradle.stl` | `02_pod_base/radar_swivel_tilt_cradle.scad` |
 | **Radar-Zubehör** | Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
-| **Kassette** | Universeller Basisschlitten mit Dichtung | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
-| **Kassette** | Magnetischer Diebstahlschutz-Rastbolzen (Sägezahn-Mechanik) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |
-| **Kassette** | Sena SPIDER X Slim Adapterkassette | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
-| **Kassette** | Cardo Packtalk Edge Adapterkassette | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
-| **Kassette** | IP67 Blindkassette (wasserdichte Dry Box)| `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
-| **Kassette** | OMM 2.4 GHz UCS-Inlaykassette | `03_pod_cartridges/cartridge_insert_omm_ucs.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
-| **Kassette** | OMM 2.4 GHz Antennen-Halterung | `03_pod_cartridges/cartridge_antenna_bracket_omm.stl` | `03_pod_cartridges/parts/04_antenna_bracket_omm.scad` |
-| **Front-Knoten** | Unterwanne mit 4-in-1 Boden & Ohren | `04_front_node/front_node_lower_tub.stl` | `04_front_node/00_front_node_tub.scad` |
-| **Front-Knoten** | Gehäusedeckel mit LED & FPC-Tasche | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
+| **OMM-Inlay** | OMM 2.4 GHz UCS-Inlay & Antennenhalterung im Pod | `03_pod_cartridges/cartridge_insert_omm_ucs.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
+| **Front-Knoten** | Monolithische Monocoque-Wanne mit 4-in-1 Boden & Ohren | `04_front_node/001_front_node_monocoque_tub.stl` | `04_front_node/001_front_node_monocoque_tub.scad` |
+| **Front-Knoten** | Einschiebbarer Zwischenboden (Rail 1) | `04_front_node/010_front_node_slide_tray.stl` | `04_front_node/010_front_node_slide_tray.scad` |
+| **Front-Knoten** | L-Schiebedeckel mit LED-Linsentunnel & FPC-Tasche (Rail 2) | `04_front_node/020_front_node_slide_lid.stl` | `04_front_node/020_front_node_slide_lid.scad` |
 | **Front-Knoten** | EPDM/TPU Dichtkamm-Paar mit Steg | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front-Knoten** | TPU USB-C Staubschutzstopfen | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
 | **Front-Knoten** | Verkleidungs-Rohrschelle (Ø 12–22 mm, AMPS) | `04_front_node/front_node_fairing_tube_clamp.stl` | `04_front_node/front_node_fairing_tube_clamp.scad` |
-| **Front-Knoten** | Modulares Schnapp-Sensor-Puck ("Körbchen" für GNSS/Temp/MEMS) | `04_front_node/sensor_puck_environmental.stl` | `04_front_node/parts/sensor_puck_environmental.scad` |
-| **Front-Knoten** | Handschuhfach 4-Port Media- & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
-| **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Front-Knoten** | Handschuhfach 4-Port Media- & Power-Injection Hub (PCBA 05B) | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
+| **Sensor-Puck** | Aerodynamischer Sensor-Puck Oberschale & Unterschale (PCBA 05D) | `05_accessories/sensor_puck_top.stl` / `sensor_puck_bottom.stl` | `05_accessories/sensor_puck_enclosure.scad` |
+| **Smart-Keyfob** | PA12-MJF Unterschale mit MagSafe-Tasche (PCBA 07) | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Oberschale mit Tastenbett & Diffusor-Bohrung | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Stoßdämpfer-Kantenband (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | Silikon-Dicht-Tastmatte (Dual-Keypad, Orange) | `05_accessories/smart_keyfob_silicone_keypad.stl` | `05_accessories/smart_keyfob_pager.scad` |
-| **Tasterhalter** | Under-Perch Tasterhalter für M4 Harley-Armatur | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
-| **Tasterhalter** | Spiegelschaft-Adapterplatte für M8/M10 | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
-| **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod (Assembly) | `05_accessories/under_perch_mirror_pod.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod (Assembly, PCBA 05C) | `05_accessories/under_perch_mirror_pod.stl` | `05_accessories/under_perch_mirror_pod.scad` |
 | **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod Unterschale | `05_accessories/under_perch_mirror_pod_base.stl` | `05_accessories/under_perch_mirror_pod.scad` |
 | **Spiegel-Pod** | Symmetrischer Under-Perch Spiegel-Pod Oberschale (38° Trichter) | `05_accessories/under_perch_mirror_pod_cover.stl` | `05_accessories/under_perch_mirror_pod.scad` |
-| **Spiegel-Radar** | BSD Spiegel-Totwinkel-Pod Oberteil (38° Trichter) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Spiegel-Radar** | BSD Spiegel-Klemmschelle Unterteil (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Spiegel-Radar** | BSD Diffusorlinse (Bernstein / transluzent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit JST-JWPF 2-Pin Flansch & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
+| **Radar 2.0** | Wheeltec MR20 77GHz Gehäuse mit JST-JWPF Flansch & Radome (PCBA 08) | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
 | **Auto-Zubehör** | Begleitfahrzeug / Auto Universal Sonnenblenden-Clip für Pod 1 & 2 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
-| **Kassette** | Universelle 2D-Langloch-Rasterplatte & seitliche Aktuator-Ausleger | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
 
 ### 9.2 Baukasten-Komponenten & Dummies (`components/`-Verzeichnisse)
 
 In den `components/`-Verzeichnissen liegen die isolierten Basiskörper (vor Differenzoperationen) und Zubehörteile:
-- **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
-- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.stl` (Radiale Formschluss-Verzahnung), `dummy_m8_connector.stl`.
+- **`01_main_box/components/`**: `000_monocoque_tub.stl`, `010_slide_tray.stl`, `020_slide_lid.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
+- **`02_pod_base/components/`**: `002_pod_housing_base.stl`, `011_pod_slide_tray.stl`, `021_pod_slide_lid.stl`, `012_universal_actuator_slide_bracket.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `011_gopro_hirth_lock.stl` (Radiale Formschluss-Verzahnung).
 - **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `cartridge_insert_omm_ucs.stl`.
 - **`04_front_node/components/`**:
-  - `01_front_node_base_tub.stl`: Monolithischer, abgerundeter Basiskörper mit ausgehöhlter Innenkammer (Grundquader im CSG-Verfahren).
-  - `02_pcb_standoffs.stl`: 4x M2.5 Schraubdome für PCBA05.
+  - `001_front_node_monocoque_tub.stl`: Monolithischer, abgerundeter Monocoque-Basiskörper mit C-Führungsnuten.
+  - `02_pcb_standoffs.stl`: 4x M2.5 Schraubdome für PCBA 05.
   - `03_mounting_ears.stl`: 2x M4/M5 Schwingungsdämpfer-Flanschohren.
-  - `dummy_front_node_pcb.stl`: 3D-Prüfdummy der PCBA05 mit Steckverbinder-Höhenprofilen.
+  - `dummy_front_node_pcb.stl`: 3D-Prüfdummy der PCBA 05 mit Steckverbinder-Höhenprofilen.
 
 ---
 

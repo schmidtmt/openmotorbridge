@@ -1,6 +1,6 @@
 # 06 - Telemetrie, Sensorfusion (ADR), Blackbox & WebDAV-Sync
 
-Dieses Dokument spezifiziert das Telemetrie-, Navigations- und Speichersystem der OpenMotorBridge v9.6 Clean Architecture: die hochpräzise Koppelnavigation (**Automotive Dead Reckoning - ADR**) mit 15-State Error-State Kalman-Filter (ES-EKF), den fahrzeugübergreifenden **Schwarm-Telemetrie-Austausch über LoRa 868.3 MHz**, die 4-Bit High-Speed SDIO-Schnittstelle, den DSGVO- und BGH-konformen Ringspeicher mit kryptographischer ECDSA-Signierung, den automatischen WebDAV-Upload sowie die framegenaue **1-PPS Actioncam-Synchronisation**.
+Dieses Dokument spezifiziert das Telemetrie-, Navigations- und Speichersystem der OpenMotorBridge v10.0 Standardized Node Architecture: die hochpräzise Koppelnavigation (**Automotive Dead Reckoning - ADR**) mit 15-State Error-State Kalman-Filter (ES-EKF), den fahrzeugübergreifenden **Schwarm-Telemetrie-Austausch über LoRa 868.3 MHz**, die 4-Bit High-Speed SDIO-Schnittstelle, den DSGVO- und BGH-konformen Ringspeicher mit kryptographischer ECDSA-Signierung, den automatischen WebDAV-Upload sowie die framegenaue **1-PPS Actioncam-Synchronisation**.
 
 ## 1. Speicheranbindung & High-Speed SDIO (4-Bit @ 40 MHz)
 

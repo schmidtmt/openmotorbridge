@@ -198,7 +198,7 @@ Alle unterstützten Intercom- und Funkgeräte sind in klar voneinander abgegrenz
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  KLASSENORIENTIERTE HARDWARE-PROFIL-MATRIX (v9.6 REVISED)                |
+|                  KLASSENORIENTIERTE HARDWARE-PROFIL-MATRIX (v10.0 STANDARD)              |
 +----------+-------------------------------------+-----------------------+----------------+
 | Klasse   | Gerätefamilien                      | Funk-Protokoll        | DLE-Score Bonus|
 +----------+-------------------------------------+-----------------------+----------------+

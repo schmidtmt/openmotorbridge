@@ -12,7 +12,7 @@ Beide Baugruppen nutzen den standardisierten **ECE 22.06 UCS-Formfaktor** ($68{,
 
 ## 1. Modul-Konzept, ECE 22.06 UCS-Formfaktor & Trennung der Baugruppen
 
-Um Missverständnissen zwischen der Träger-Mechatronik und den Intercom-Modulen vorzubeugen, trennt OpenMotorBridge v9.6 strikt zwischen **zwei physischen Funktionsebenen**:
+Um Missverständnissen zwischen der Träger-Mechatronik und den Intercom-Modulen vorzubeugen, trennt OpenMotorBridge v10.0 strikt zwischen **zwei physischen Funktionsebenen**:
 
 ```
 +---------------------------------------------------------------------------------------------------+

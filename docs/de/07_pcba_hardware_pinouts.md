@@ -752,7 +752,7 @@ Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard v
 
 ## 8. PCBA 06: MagSafe Frame Dock (Ersatzlos entfallen)
 
-Die separate Platine `PCBA 06` ist in v9.6 **vollständig und ersatzlos entfallen**:
+Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfallen**:
 * Da über die fahrzeugseitige Koffer-Trennstelle ausschließlich 2-Draht DC-Gleichspannung geführt wird, kommt anstelle einer proprietären Leiterplatte ein **industrieller 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS)** zum Einsatz.
 * Kurzschlussschutz und Überlastbegrenzung erfolgen zentral auf `PCBA 01` durch die jeweiligen **TI TPS25921 eFuses**.
 

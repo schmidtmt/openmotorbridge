@@ -706,7 +706,7 @@ Both buttons are hardware-identical and freely assignable via the PWA dashboard 
 
 ## 8. PCBA 06: MagSafe Frame Dock (Retired without Replacement)
 
-The separate board `PCBA 06` has been **completely retired without replacement in v9.6**:
+The separate board `PCBA 06` has been **completely retired without replacement in v10.0**:
 * Because the motorcycle pannier disconnect interface carries strictly 2-wire DC power, an **industrial 2-pin magnetic pogo connector (IP68 COTS)** is used instead of a custom PCB.
 * Short-circuit protection and overload limiting are handled centrally on `PCBA 01` via **TI TPS25921 eFuses**.
 

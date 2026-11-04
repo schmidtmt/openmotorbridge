@@ -1,9 +1,9 @@
 # 08 - Mechanical Enclosures, CAD Models & Sealing System (All Units)
 
 This document specifies the mechanical engineering, thermal dissipation, IP67/IP69K sealing concepts, kinematics of the quick-change auto-eject system, and all CAD and STL assets of OpenMotorBridge v10.0 Standardized Node Architecture:
-1. **Central Control Box (Type A):** 3-piece sandwich enclosure with intermediate tray ($70.0 \times 10.0\,\text{mm}$ open front cable bay), hinged battery bridge with dual-antenna pockets (Taoglas FXP895 LoRa-868 and Taoglas FXP73 2.4-GHz under a $0.8\,\text{mm}$ protective snap shroud and C-clip strain-relief clamps), 100% cable-free lid plate, bottom tub pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) as sealed reserve cavity (historical UWB housing), rear SMA antenna bulkhead with waterproof $0.4\,\text{mm}$ knockout membrane (IP68/IP69K sealed by default), and planar 4-layer copper heat spreader.
-2. **Universal Saddlebag Satellite Pod System (Type B):** Mechanically identical monocoque enclosure for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) featuring a tool-free slide-in lid, concealed FOB magnetic latch (unlocked via Smart Keyfob), internal intermediate splash shield (dry-flap), integrated in-bag USB charging port (5V/12V PD up to 30W/60W), direct EPDM contoured cradle for OEM communicators (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) or 100% watertight dry box, and 4-wire automotive backbone with 4-pin IP67 magnetic breakaway dock.
-3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) tailored for the $82 \times 50\,\text{mm}$ 4-layer PCBA 05 with a 4-in-1 universal mounting system (AMPS, riser clamp, silentblocks, 3M Dual-Lock), direct interfacing to symmetrical dual under-perch mirror pods, 4-wire automotive backbone (ZERO fuel tank removal!), integrated u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 airflow sensors, and Knowles MEMS wind noise microphone.
+1. **Central Control Box (Type A):** v10 Dual-Rail Monocoque Slide-In Platform (`000_monocoque_tub.scad`, `010_slide_tray.scad`, `020_slide_lid.scad`) with 5-sided monolithic PA12 tub, tool-free slide-in intermediate tray (Rail 1 at $Z = 18.0\,\text{mm}$ with molded 1S LiPo battery cradle and recessed nests for Taoglas FXP895 LoRa-868 and Taoglas FXP73 2.4-GHz), 100% cable-free L-Slide Lid (Rail 2 at $Z = 33.0\,\text{mm}$ with Slam-to-Shut PA12 deadbolt latches), rear MicroSD maintenance slot and optional SMA antenna bulkhead in the fixed lower sill, and planar 4-layer copper heat spreader.
+2. **Universal Saddlebag Satellite Pod System (Type B):** Mechanically identical monocoque enclosure (`002_pod_housing_base.scad`, `011_pod_slide_tray.scad`, `021_pod_slide_lid.scad`) for both satellite pods (Pods 1 & 2 Audio/Intercom, 2x symmetric) featuring a tool-free L-slide-in lid, concealed FOB magnetic latch (unlocked via Smart Keyfob), internal intermediate splash shield (dry-flap), integrated in-bag USB charging port (5V/12V PD up to 30W/60W), direct EPDM contoured cradle with universal dual-carriage actuator slide bracket (`012_universal_actuator_slide_bracket.scad`) for OEM communicators (Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS, Midland PMR446) or 100% watertight dry box, and 4-wire automotive backbone with 4-pin IP67 magnetic breakaway dock.
+3. **Universal Front Node (Type C):** Ultra-compact Cockpit & Sensor Hub ($98.0 \times 68.0 \times 25.0\,\text{mm}$) in v10 Dual-Rail Monocoque architecture (`001_front_node_monocoque_tub.scad`, `010_front_node_slide_tray.scad`, `020_front_node_slide_lid.scad`) tailored for the $82 \times 50\,\text{mm}$ 4-layer `PCBA 05` with a 4-in-1 universal mounting system (AMPS, riser clamp, silentblocks, 3M Dual-Lock), direct interfacing to symmetrical dual under-perch mirror pods (`PCBA 05C`), 5x USB-C glovebox hub (`PCBA 05B`), 4-wire automotive backbone (ZERO fuel tank removal!), and external aerodynamic Sensor Puck (`PCBA 05D` with u-blox SAM-M10Q GNSS, TI TMP117 / OPT3001 airflow sensors, and Knowles MEMS wind noise microphone).
 4. **2-in-1 LoRa Smart-Keyfob & Pager (Type D):** Ultra-compact pocket companion ($58.0 \times 34.0 \times 13.0\,\text{mm}$) molded in PA12-MJF with perimeter TPU shock bumper, integrated N52 neodymium ejection key, $0.5\,\text{mm}$ Mu-metal magnetic flux shield, MagSafe/Qi inductive charging receiver, LRA haptic motor, and wireless SX1262 LoRa/BLE alert pager.
 5. **Vehicle-Specific Reference Mounting Kits (Zero-Drill):** Fully engineered, non-destructive bolt-on mounting kits for CVO Road Glide ST (Kit 1), Road King Special (Kit 2), Classic Bagger & Cruiser (Kit 3), and Adventure & Touring Enduros (BMW GS, KTM Adventure, Africa Twin - Kit 4 with minimal under-rack radar bracket).
 
@@ -130,22 +130,19 @@ Total heat dissipation during standard riding is only **$\approx 1{,}5\,\text{W}
 
 OpenMotorBridge implements a dual, fully integrated internal antenna concept eliminating protruding external antennas while maintaining maximum range:
 1. **LoRa 868 MHz Primary Antenna (Taoglas FXP895):**
-   * Form-fitting nest ($86.0 \times 16.0 \times 1.0\,\text{mm}$) molded into the top side of the hinged battery bridge (`013_battery_antenna_bridge.scad`) protected by a $0.8\,\text{mm}$ snap-on PA12 protective cover plate.
-   * Radiates horizontally polarized RF upwards through the $2.5\,\text{mm}$ RF-neutral PA12 lid ($\varepsilon_r \approx 2.3\dots 2.7$, $\tan\delta \approx 0.015$), providing up to $15\,\text{km}$ LoRa mesh range.
-   * Leaves the enclosure lid (`020_lid_plate.scad`) 100% passive and cable-free, allowing rapid field opening without risk of tearing fragile U.FL coax leads.
-2. **Wi-Fi 4 / BLE 5.0 Antenna for ESP32-S3 (Taoglas FXP73):**
-   * Securely encapsulated in a parallel nest on the battery bridge ($47.0 \times 7.5 \times 0.8\,\text{mm}$), feeding the ESP32-S3-WROOM-1U (`U2`) with 2.4 GHz RF for the web dashboard and OTA updates.
-3. **LoRa 868 MHz Secondary Option (Rear SMA Bulkhead with 0.4 mm Knockout Membrane):**
-   * Positioned on the upper tray rear wall (`012_front_cutouts.scad`) at $X = 85.0\,\text{mm}$ ($\varnothing\,6.5\,\text{mm}$ through-bore with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore).
+   * Form-fitting nest ($86.0 \times 16.0 \times 1.0\,\text{mm}$) molded into the top side of the slide-in intermediate tray (`010_slide_tray.scad`).
+   * Radiates horizontally polarized RF upwards through the $2.5\,\text{mm}$ RF-neutral PA12 L-Slide Lid (`020_slide_lid.scad`, $\varepsilon_r \approx 2.3\dots 2.7$, $\tan\delta \approx 0.015$), providing up to $15\,\text{km}$ LoRa mesh range.
+   * Leaves the enclosure L-Slide Lid (`020_slide_lid.scad`) 100% passive and cable-free, allowing rapid field opening without risk of tearing fragile U.FL coax leads.
+2. **Wi-Fi 6 / BLE 5.4 Antenna for ESP32-S31 (Taoglas FXP73):**
+   * Securely encapsulated in a parallel nest on the slide-in intermediate tray (`010_slide_tray.scad`, $47.0 \times 7.5 \times 0.8\,\text{mm}$), feeding the ESP32-S31-WROOM-1U (`U2`) with 2.4 GHz RF for the web dashboard and OTA updates.
+3. **LoRa 868 MHz Secondary Option (Rear SMA Bulkhead in Stationary Sill with 0.4 mm Knockout Membrane):**
+   * Positioned on the stationary lower rear sill (`000_monocoque_tub.scad`, $Z = 0\dots 15.0\,\text{mm}$) at $X = 85.0\,\text{mm}$ ($\varnothing\,6.5\,\text{mm}$ through-bore with $\varnothing\,9.5 \times 1.2\,\text{mm}$ O-ring counterbore).
    * **Factory IP68/IP69K Sealed:** Molded with a solid $0.4\,\text{mm}$ PA12 knockout membrane, keeping the enclosure 100% airtight and waterproof by default.
-   * **Tool-Free Punch-Out:** For carbon fiber cowls or rally raid whip antennas, the $0.4\,\text{mm}$ membrane can be cleanly punched out with a small driver to install an IP67 SMA bulkhead socket with O-ring.
-4. **Historical UWB Antenna Pocket (v10.0 Reserved Space / Legacy Compatibility):**
-   * Recessed pocket ($12.0 \times 12.0 \times 0.8\,\text{mm}$) in the lower tub floor (`00_lower_deck.scad`) housed the Taoglas FXUWB10 UWB antenna for the superseded DW3110 transceiver in earlier prototypes. In v10.0, this area remains as mechanical reserve or is planar-sealed, with all vehicle interconnects running over the shielded 4-wire automotive bus.
-   * Preserves $>2.2\,\text{mm}$ solid, homogeneous PA12 floor thickness underneath for hermetic IP67/IP69K sealing.
+   * **Tool-Free Punch-Out:** For carbon fiber cowls or rally raid whip antennas, the $0.4\,\text{mm}$ membrane can be cleanly punched out with a small driver to install an IP67 SMA bulkhead socket with O-ring. Because the port resides in the stationary sill, the antenna remains undisturbed when sliding the L-lid open.
+4. **100% Solid Monocoque Floor (Removal of Legacy UWB Antenna Pocket):**
+   * In v10.0, the bottom floor of `000_monocoque_tub.scad` is a continuous, homogeneous $2.5\,\text{mm}$ PA12 wall with all vehicle interconnects running over the shielded 4-wire automotive bus.
 5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
    * Utilizes the onboard ceramic chip antenna with optimized copper keepout on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
-
----
 
 ---
 
@@ -155,8 +152,6 @@ In OpenMotorBridge v10.0, the legacy modular cartridge system (with dual enclosu
 
 Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right saddlebag) adopt an **ultra-compact, direct monocoque enclosure featuring a tool-free slide-in lid, concealed FOB magnetic latch, protective intermediate dry-flap, and integrated in-bag USB charging port**:
 
-1. **Type B (Universal Monocoque Pod Enclosure):** A 100% symmetrical monocoque enclosure ($140.0 \times 65.0 \times 32.0\,\text{mm}$ with $128.0 \times 58.0 \times 26.0\,\text{mm}$ clear internal chamber) permanently mounted in the saddlebag, on the subframe, or on crash bars.
-2. **Slide-in Lid with Push-to-Close Automatic Latching:** A sliding lid guided in perimeter sealing channels that positively latches at the end-stop with an audible mechanical click, compressing the perimeter silicone gasket (IP67).
 1. **Type B (Universal Monocoque Pod Enclosure):** A 100% bilateral monocoque chassis ($150.0 \times 70.0 \times 38.0\,\text{mm}$ with $145.0 \times 65.0 \times 32.0\,\text{mm}$ clear internal chamber -- **over 40% more usable interior volume** than the former cartridge system), permanently mounted inside the saddlebag, onto the rear subframe, or to crash bars.
 2. **Slot-in Lid with 4-Tooth Central Latch:** A true slot-in lid that positively enters the enclosure well, locking via 4 lateral locking teeth (2 on each flank) into sidewall undercut pockets. An ergonomic central pinch slider on the lid exterior compresses the return spring to retract the teeth for effortless opening.
 3. **Invisible FOB Magnetic Latch:** Locking can additionally be secured and released contact-free via the Smart Keyfob (`PCBA 07` with N52 neodymium core) -- 100% tool-free, without external locks or pushbuttons, fully tamper- and theft-proof.
@@ -181,7 +176,7 @@ Instead, both satellite pods (Pod 1 in the left saddlebag, Pod 2 in the right sa
 
 *Figure 8.7: 3D CAD exploded assembly of the universal satellite pod illustrating authentic horizontal slide-in kinematics: The slide-in lid retracts backwards along the X-axis out of the rear entry slot. Clearly visible are the continuous lateral guide tongues along the lid flanks, the deep C-groove guide rails in the housing sidewalls with upper retaining lip, the monocoque chassis with tube saddle, Port A magnetic connector and Port B USB-C socket, PCBA 03 carrier board on M2.5 elastomer dampers, EPDM dry-flap protective shield, the two independent cross-struts of the modular actuator bracket with flush-countersunk DIN 7991 Torx clamp screws, the Cardo Packtalk Edge in its OEM Air-Mount cradle, and rear EPDM sealing plugs for the C-guide rails.*
 
---### 4.2 Kinematics of the L-Slide-In Lid (L-Profile, Non-Metallic PA12 U-Yoke & 100% Internal FOB Latch)
+### 4.2 Kinematics of the L-Slide-In Lid (L-Profile, Non-Metallic PA12 U-Yoke & 100% Internal FOB Latch)
 
 The Satellite Pod opens and latches via a **one-piece L-profile slide lid** (horizontal cover + upper rear bulkhead molded as a single monolithic part). It slides horizontally along internal C-groove channels and latches automatically via a **100% non-metallic PA12 U-yoke deadbolt** into the fixed lower tub sill:
 
@@ -236,7 +231,7 @@ The Satellite Pod opens and latches via a **one-piece L-profile slide lid** (hor
 
 4. **Labyrinth Shingle Seal (IP67 Drip Apron) & Fixed SMA Bulkhead:**
    * The upper rear bulkhead features a $3.5\,\text{mm}$ downward drip apron overlapping the lower sill. Rain and road spray cannot crawl upward against gravity.
-   * The optional SMA antenna port resides permanently in the lower tub sill ($Z = 7.5\,\text{mm}$), keeping external antennas and coax pigtails completely undisturbed when opening the pod.s}$.
+   * The optional SMA antenna port resides permanently in the lower tub sill ($Z = 7.5\,\text{mm}$), keeping external antennas and coax pigtails completely undisturbed when opening the pod.
 
 ---
 
@@ -638,8 +633,8 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 |    * Symmetrical Dual Under-Perch Mirror Pods (PTT & BSD Warning LEDs)      |
 |    * Dual Speaker Corner-Pods: 2x Cockpit Displays on Rockford Grilles      |
 |      (Radar Bar, Turn-by-Turn, TPMS, Battery - 0 cm visible cable!)         |
-|    * Glove Box Hub: 2-Port USB Hub in right compartment from BELOW via OEM  |
-|    * SAM-M10Q GNSS + TMP117 + Knowles MEMS in cooling oncoming airflow      |
+|    * Glove Box Hub: 4-Port Media & Power Hub (PCBA 05B, 5x USB-C)            |
+|    * Sensor Puck (PCBA 05D): SAM-M10Q GNSS + TMP117 + Knowles MEMS           |
 +-----------------------------------------------------------------------------+
 | 2. WIRING (Backbone Wire Caddy - Zero Tank Lifting):                        |
 |    * 4-Wire Automotive Bus (USB-PD & USB 2.0) pulled via nylon fish tape    |
@@ -1383,11 +1378,14 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 
 | Assembly | Component / Function | Ready-to-Print STL | Parametric OpenSCAD Source |
 | :--- | :--- | :--- | :--- |
-| **Central Box** | Lower tub with seal groove & mounting ears | `01_main_box/main_box_lower_case.stl` | `01_main_box/00_lower_deck.scad` |
-| **Central Box** | Upper case with mid-tray partition | `01_main_box/main_box_mid_tray.stl` | `01_main_box/01_upper_deck.scad` |
-| **Central Box** | Enclosure lid with Gore vent recess | `01_main_box/main_box_lid.stl` | `01_main_box/02_colsure.scad` |
-| **Satellite Pod**| 5-sided monocoque housing (tunnel) | `02_pod_base/pod_base_housing.stl` | `02_pod_base/pod_base_housing.scad` |
+| **Central Box** | Monolithic monocoque tub with standoffs & mounting ears | `01_main_box/000_monocoque_tub.stl` | `01_main_box/000_monocoque_tub.scad` |
+| **Central Box** | Slide-in intermediate tray (Rail 1: LiPo cradle & antennas) | `01_main_box/010_slide_tray.stl` | `01_main_box/010_slide_tray.scad` |
+| **Central Box** | L-Slide Lid with Gore vent & Slam-to-Shut Heckwand (Rail 2) | `01_main_box/020_slide_lid.stl` | `01_main_box/020_slide_lid.scad` |
+| **Satellite Pod**| Monolithic monocoque housing (tub with C-groove rails) | `02_pod_base/002_pod_housing_base.stl` | `02_pod_base/parts/002_pod_housing_base.scad` |
+| **Satellite Pod**| Slide-in intermediate dry-flap tray (Rail 1) | `02_pod_base/011_pod_slide_tray.stl` | `02_pod_base/parts/011_pod_slide_tray.scad` |
+| **Satellite Pod**| L-Slide-in lid with FOB magnetic latch (Rail 2) | `02_pod_base/021_pod_slide_lid.stl` | `02_pod_base/parts/021_pod_slide_lid.scad` |
 | **Satellite Pod**| Universal Dual-Carriage Actuator Slide Bracket (15–85 mm continuous span) | `02_pod_base/012_universal_actuator_slide_bracket.stl` | `02_pod_base/parts/012_universal_actuator_slide_bracket.scad` |
+| **Satellite Pod**| Split Zero-Drill TPU Saddlebag Grommet (Ø 19 mm OEM bore) | `02_pod_base/010_saddlebag_hole_grommet_split.stl` | `02_pod_base/parts/010_saddlebag_hole_grommet_split.scad` |
 | **Satellite Pod**| Touring Saddlebag Lid Dock (Pods 1 & 2) | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
 | **Adventure Radar**| Luggage bridge radar mount base (Ø 18 mm tube) | `02_pod_base/adventure_rack_radar_mount.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
 | **Adventure Radar**| Luggage bridge radar clamp cap | `02_pod_base/adventure_rack_radar_clamp_cap.stl` | `02_pod_base/adventure_rack_radar_mount.scad` |
@@ -1398,50 +1396,41 @@ The OpenMotorBridge CAD repository follows a strict hierarchical Constructive So
 | **Adventure Pods 1/2**| GSA Heavy-Duty Clamp Cap (Ø 18 mm Tube) | `02_pod_base/adventure_gsa_clamp_cap.stl` | `02_pod_base/adventure_gsa_cage_dock.scad` |
 | **Adventure Pods 1/2**| GSA Pannier Rack Clamp Base (Minimal Option) | `02_pod_base/adventure_pannier_rack_clamp_base.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
 | **Adventure Pods 1/2**| GSA Pannier Rack Clamp Cap (Minimal Option) | `02_pod_base/adventure_pannier_rack_clamp_cap.stl` | `02_pod_base/adventure_pannier_rack_clamp.scad` |
-| **Frame Dock** | MagSafe Frame Dock Upper Shell (Tube Saddle, Wings & M2.5 Nut-Pocket) | `02_pod_base/components/009_magsafe_frame_dock.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Frame Dock** | MagSafe Tube Clamp Strap (Ø 26 mm) | `02_pod_base/components/009_magsafe_frame_clamp.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Frame Dock** | MagSafe Frame Dock Lower Shell (PCB Ledge & M2.5 Counterbore) | `02_pod_base/components/009_magsafe_frame_lid.stl` | `02_pod_base/parts/009_magsafe_frame_dock.scad` |
-| **Saddlebag Lid Dock** | Harley One-Touch Saddlebag Lid Dock Half-Shell | `02_pod_base/saddlebag_lid_dock.stl` | `02_pod_base/saddlebag_lid_dock.scad` |
+| **Frame Dock** | COTS Magnetic Frame Dock Base & Tube Clamp | `02_pod_base/cots_magnetic_frame_dock.stl` | `02_pod_base/cots_magnetic_frame_dock.scad` |
 | **Radar Mount** | Decoupled License-Plate Radar Bracket | `02_pod_base/radar_license_plate_bracket.stl` | `02_pod_base/radar_license_plate_bracket.scad` |
 | **Radar Mount** | Stealth Center Under-Fender Radar Mount (Custom / Bobber) | `02_pod_base/radar_center_underfender_mount.stl` | `02_pod_base/radar_center_underfender_mount.scad` |
 | **Radar Swivel**| Radar 2.0 Heavy-Duty Swivel Tilt Cradle (Actioncam/GoPro Hirth) | `02_pod_base/radar_swivel_tilt_cradle.stl` | `02_pod_base/radar_swivel_tilt_cradle.scad` |
 | **Radar Accessories**| Garmin Varia Quarter-Turn Anti-Theft Lock Dock | `02_pod_base/radar_varia_gopro_lock_dock.stl` | `02_pod_base/radar_varia_gopro_lock_dock.scad` |
-| **Cartridge** | Universal base sled with O-ring groove | `03_pod_cartridges/cartridge_base_sled.stl` | `03_pod_cartridges/00_base_sled.scad` |
-| **Cartridge** | Magnetic anti-theft locking latch (Sawtooth mechanics) | `03_pod_cartridges/cartridge_magnetic_lock_latch.stl` | `03_pod_cartridges/parts/05_magnetic_lock_latch.scad` |
-| **Cartridge** | Sena SPIDER X Slim adapter cartridge | `03_pod_cartridges/cartridge_insert_sena.stl` | `03_pod_cartridges/parts/01_insert_sena.scad` |
-| **Cartridge** | Cardo Packtalk Edge adapter cartridge | `03_pod_cartridges/cartridge_insert_cardo.stl` | `03_pod_cartridges/parts/02_insert_cardo.scad` |
-| **Cartridge** | IP67 Blank dry box insert dummy | `03_pod_cartridges/cartridge_insert_blindkassette.stl` | `03_pod_cartridges/parts/03_insert_blindkassette.scad` |
-| **Cartridge** | OMM 2.4 GHz Swap Cartridge | `03_pod_cartridges/cartridge_omm_transceiver.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
-| **Front Node** | Lower tub with 4-in-1 base & mounting ears | `04_front_node/front_node_lower_tub.stl` | `04_front_node/00_front_node_tub.scad` |
-| **Front Node** | Upper lid with LED tunnel & FPC antenna pocket | `04_front_node/front_node_upper_lid.stl` | `04_front_node/01_front_node_lid.scad` |
+| **OMM Inlay** | OMM 2.4 GHz UCS Inlay & Antenna Bracket | `03_pod_cartridges/cartridge_insert_omm_ucs.stl` | `03_pod_cartridges/cartridge_omm_transceiver.scad` |
+| **Front Node** | Monolithic monocoque tub with 4-in-1 base & mounting ears | `04_front_node/001_front_node_monocoque_tub.stl` | `04_front_node/001_front_node_monocoque_tub.scad` |
+| **Front Node** | Slide-in intermediate tray (Rail 1) | `04_front_node/010_front_node_slide_tray.stl` | `04_front_node/010_front_node_slide_tray.scad` |
+| **Front Node** | L-Slide lid with LED tunnel & FPC antenna pocket (Rail 2) | `04_front_node/020_front_node_slide_lid.stl` | `04_front_node/020_front_node_slide_lid.scad` |
 | **Front Node** | EPDM/TPU cable glands (pair with sprue runner) | `04_front_node/front_node_cable_glands_tpu.stl` | `04_front_node/02_front_node_cable_glands.scad` |
 | **Front Node** | TPU USB-C protective sealing plug | `04_front_node/front_node_usbc_cap_tpu.stl` | `04_front_node/03_front_node_usbc_plug.scad` |
-| **Front Node** | Modular Snap-On Sensor Puck ("Körbchen" for GNSS/Temp/MEMS) | `04_front_node/sensor_puck_environmental.stl` | `04_front_node/parts/sensor_puck_environmental.scad` |
-| **Front Node** | 4-Port Glove Box Media & Power-Injection Hub | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
-| **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
+| **Front Node** | Fairing Tube Clamp (Ø 12–22 mm, AMPS) | `04_front_node/front_node_fairing_tube_clamp.stl` | `04_front_node/front_node_fairing_tube_clamp.scad` |
+| **Front Node** | 4-Port Glove Box Media & Power-Injection Hub (PCBA 05B) | `04_front_node/glovebox_power_injection_hub.stl` | `04_front_node/glovebox_power_injection_hub.scad` |
+| **Sensor Puck** | Aerodynamic Sensor Puck Top & Bottom Shell (PCBA 05D) | `05_accessories/sensor_puck_top.stl` / `sensor_puck_bottom.stl` | `05_accessories/sensor_puck_enclosure.scad` |
+| **Smart-Keyfob** | PA12-MJF Lower Shell with MagSafe Pocket (PCBA 07) | `05_accessories/smart_keyfob_lower_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | PA12-MJF Upper Shell with Diffuser Bore | `05_accessories/smart_keyfob_upper_shell.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | TPU Shock Bumper Rim (Orange) | `05_accessories/smart_keyfob_tpu_rim.stl` | `05_accessories/smart_keyfob_pager.scad` |
 | **Smart-Keyfob** | Silicone Keypad (Dual-Keypad, Orange) | `05_accessories/smart_keyfob_silicone_keypad.stl` | `05_accessories/smart_keyfob_pager.scad` |
-| **Switch Bracket**| Under-Perch Switch Bracket for M4 Harley Switchgear | `05_accessories/under_perch_switch_bracket.stl` | `05_accessories/under_perch_switch_bracket.scad` |
-| **Switch Bracket**| Mirror Stem Adapter Plate (M8/M10) | `05_accessories/under_perch_mirror_plate.stl` | `05_accessories/under_perch_switch_bracket.scad` |
-| **Mirror Radar** | BSD Mirror Indicator Pod Upper Cowl (38° Tunnel) | `05_accessories/bsd_mirror_upper_pod.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Mirror Radar** | BSD Mirror Clamp Strap Lower Halfshell (Ø 10 mm) | `05_accessories/bsd_mirror_lower_clamp.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Mirror Radar** | BSD Diffuser Lens Disc (Amber / Translucent) | `05_accessories/bsd_mirror_lens.stl` | `05_accessories/bsd_mirror_indicator_pod.scad` |
-| **Radar 2.0** | Wheeltec MR20 77GHz Housing with Binder M5 Flange & Radome | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
-| **Car Support** | Support Vehicle / Car Universal Sun Visor Clip for Pods 1 & 2 | `05_accessories/car_sun_visor_pod_clip.stl` | `05_accessories/car_sun_visor_pod_clip.scad` |
-| **Cartridge** | Universal 2D Slot-Grid Plate & Lateral Actuator Outriggers | `03_pod_cartridges/cartridge_universal_actuator_rails.stl` | `03_pod_cartridges/cartridge_universal_actuator_rails.scad` |
+| **Mirror Pod** | Symmetrical Under-Perch Mirror Pod (Assembly, PCBA 05C) | `05_accessories/under_perch_mirror_pod.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Mirror Pod** | Symmetrical Under-Perch Mirror Pod Base Shell | `05_accessories/under_perch_mirror_pod_base.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Mirror Pod** | Symmetrical Under-Perch Mirror Pod Upper Cover (38° Tunnel) | `05_accessories/under_perch_mirror_pod_cover.stl` | `05_accessories/under_perch_mirror_pod.scad` |
+| **Radar 2.0** | Wheeltec MR20 77GHz Housing with JST-JWPF Flange & Radome (PCBA 08) | `05_accessories/radar_mr20_housing.stl` | `05_accessories/radar_mr20_housing.scad` |
+| **Car Support** | Support Vehicle / Car Universal Sun Visor Clip for Pods 1 & 2 | `05_accessories/car_sun_visor_pod3_clip.stl` | `05_accessories/car_sun_visor_pod3_clip.scad` |
 
 ### 9.2 Modular Component Breakdowns & Dummies (`components/` Folders)
 
 The `components/` directories host isolated base bodies (prior to CSG difference operations) and inspection parts:
-- **`01_main_box/components/`**: `01_lower_tub_empty.stl`, `02_corner_screws_enclosure.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `05_sealing_groove.stl`, `06_mid_tray_frame.stl`, `07_mid_partition_floor.stl`, `08_lid_plate.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
-- **`02_pod_base/components/`**: `01_pod_tunnel_base.stl`, `02_pod_rear_m8_gland.stl`, `03_pod_bulkhead_partition.stl`, `04_pod_guide_grooves.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `07_pod_slide_dock_core.stl`, `011_gopro_hirth_lock.stl` (Radial Hirth lock), `dummy_m8_connector.stl`.
+- **`01_main_box/components/`**: `000_monocoque_tub.stl`, `010_slide_tray.stl`, `020_slide_lid.stl`, `03_pcb_standoffs.stl`, `04_mounting_ears.stl`, `dummy_main_pcb.stl`, `dummy_lipo_battery.stl`.
+- **`02_pod_base/components/`**: `002_pod_housing_base.stl`, `011_pod_slide_tray.stl`, `021_pod_slide_lid.stl`, `012_universal_actuator_slide_bracket.stl`, `05_pod_strap_hooks.stl`, `06_fender_curved_saddle.stl`, `011_gopro_hirth_lock.stl` (Radial Hirth lock).
 - **`03_pod_cartridges/components/`**: `dummy_adapter_pcb.stl`, `cartridge_insert_omm_ucs.stl`.
 - **`04_front_node/components/`**:
-  - `01_front_node_base_tub.stl`: Monolithic solid base tub with hollowed inner chamber (CSG base cube).
-  - `02_pcb_standoffs.stl`: 4x M2.5 threaded boss standoffs for PCBA05.
+  - `001_front_node_monocoque_tub.stl`: Monolithic rounded monocoque base body with C-groove guide rails.
+  - `02_pcb_standoffs.stl`: 4x M2.5 threaded boss standoffs for PCBA 05.
   - `03_mounting_ears.stl`: 2x M4/M5 silentblock flange mounting ears.
-  - `dummy_front_node_pcb.stl`: 3D inspection dummy of PCBA05 with component envelope heights.
+  - `dummy_front_node_pcb.stl`: 3D inspection dummy of PCBA 05 with component envelope heights.
 
 ---
 

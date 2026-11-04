@@ -130,7 +130,7 @@ Das System exponiert standardkonforme Bluetooth SIG Services sowie proprietäre 
 
 ## 4. Universal Group Split Fallback Engine (`group_split_rescue_engine.cpp`)
 
-Bei Touren in Bergregionen oder dichtem Wald reißen 2.4 GHz Intercom-Verbindungen (Sena Mesh / Cardo DMC) ab ca. $800\dots 1200\,\text{m}$ Distanz ab, wenn Sichtkontakt verloren geht. Die in v8.5 / v9.0 integrierte **Group Split Fallback Engine** schützt Gruppen vor dem Auseinanderreißen:
+Bei Touren in Bergregionen oder dichtem Wald reißen 2.4 GHz Intercom-Verbindungen (Sena Mesh / Cardo DMC) ab ca. $800\dots 1200\,\text{m}$ Distanz ab, wenn Sichtkontakt verloren geht. Die in v10.0 integrierte **Group Split Fallback Engine** schützt Gruppen vor dem Auseinanderreißen:
 
 ```
                GROUP SPLIT FALLBACK ENGINE ZUSTANDSAUTOMAT

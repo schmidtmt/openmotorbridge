@@ -1,6 +1,6 @@
 # 06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync
 
-This document specifies the storage and telemetry subsystem of OpenMotorBridge v8.0: the 4-bit high-speed SDIO bus, the GDPR/BGH-compliant rolling ringbuffer with cryptographic signatures, the automated TLS-secured WebDAV cloud upload, and the **low-power USB Mass Storage Class (MSC) mode** for direct PC access.
+This document specifies the storage and telemetry subsystem of OpenMotorBridge v10.0 Standardized Node Architecture: the 4-bit high-speed SDIO bus, the GDPR/BGH-compliant rolling ringbuffer with cryptographic signatures, the automated TLS-secured WebDAV cloud upload, and the **low-power USB Mass Storage Class (MSC) mode** for direct PC access.
 
 ---
 

@@ -1,6 +1,6 @@
 # 02 - Intercom Matrix, PTT Control & Dynamic Pod Profiles
 
-This document specifies the universal **Intercom Routing Matrix**, the ultra-low-latency **Handlebar PTT Control** (< 0.5 ms), and the class-based **Hardware Profile System** of OpenMotorBridge v8.5 / v9.0 Clean Architecture based on v10.0 4-Wire Bus Pod Identification (`USB_DESC_POD_ANNOUNCE`), staggered power sequencing, and the LittleFS profile engine.
+This document specifies the universal **Intercom Routing Matrix**, the ultra-low-latency **Handlebar PTT Control** (< 0.5 ms), and the class-based **Hardware Profile System** of OpenMotorBridge v10.0 Standardized Node Architecture based on v10.0 4-Wire Bus Pod Identification (`USB_DESC_POD_ANNOUNCE`), staggered power sequencing, and the LittleFS profile engine.
 
 ---
 
@@ -206,7 +206,7 @@ All supported intercom and two-way radio pods are categorized into clearly segre
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  CLASS-BASED HARDWARE PROFILE MATRIX (v9.6 REVISED)                     |
+|                  CLASS-BASED HARDWARE PROFILE MATRIX (v10.0 STANDARD)                   |
 +----------+-------------------------------------+-----------------------+----------------+
 | Class    | Device Families                     | Radio Protocol        | DLE Score Bonus|
 +----------+-------------------------------------+-----------------------+----------------+

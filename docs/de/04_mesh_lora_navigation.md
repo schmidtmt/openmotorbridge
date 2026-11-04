@@ -1,6 +1,6 @@
 # 04 - LoRa 868MHz Schwarm-Backbone, Link-State-Bridging & Zero-Touch Gruppen-Lifecycle
 
-Dieses Dokument spezifiziert das fahrzeugübergreifende Weitbereichs- und Schwarm-Backbone der OpenMotorBridge v9.6 Clean Architecture: das **3-Kanal LoRa 868 MHz Funknetzwerk**, den **Zero-Touch Gruppen-Lifecycle** (selbstorganisierende Gruppenbildung ohne Tastendruck), den **schleifenfreien Link-State Audio Bridging Graph** (Precomputed Routing-Matrizen, First-Receiver-Wins Schiedsverfahren, Do-Not-Translate Flags) sowie die taktische **LoRa Voice Fallback Engine** bei Kolonnensplits.
+Dieses Dokument spezifiziert das fahrzeugübergreifende Weitbereichs- und Schwarm-Backbone der OpenMotorBridge v10.0 Standardized Node Architecture: das **3-Kanal LoRa 868 MHz Funknetzwerk**, den **Zero-Touch Gruppen-Lifecycle** (selbstorganisierende Gruppenbildung ohne Tastendruck), den **schleifenfreien Link-State Audio Bridging Graph** (Precomputed Routing-Matrizen, First-Receiver-Wins Schiedsverfahren, Do-Not-Translate Flags) sowie die taktische **LoRa Voice Fallback Engine** bei Kolonnensplits.
 
 > [!NOTE]
 > * Das optionale **OpenMotorMesh 2.4 GHz HD-Audio Kassetten-Modul** (UCS-kompatibles OEM-Modul mit eigenem Mesh 3.0 / ESP-NOW) wird ausführlich im eigenständigen Dokument [04b - OMM 2.4 GHz Intercom & OEM-Kassette](04b_omm_intercom_module.md) beschrieben.
@@ -180,7 +180,7 @@ Sind in einer Gruppe unterschiedliche Headset-Ökosysteme vertreten (z. B. Fahre
 ```
 
 ### 3.1 Entkopplung vom klassischen DLE & Precomputed Routing Matrizen
-* In v9.6 Clean Architecture ist OMM 2.4 GHz eine optionale Wechselkassette. Die Brücken-Entscheidung darf daher **nicht von einem zentralen OMM-Leader abhängen**.
+* In der v10.0 Architektur ist OMM 2.4 GHz (`PCBA 09`) ein optionales Pod-Modul. Die Brücken-Entscheidung darf daher **nicht von einem zentralen OMM-Leader abhängen**.
 * Jeder Knoten ermittelt autonom seine angebundenen Kassetten-Klassen (Sena, Cardo, OMM 2.4, Midland) und berechnet daraus seinen **Capability-Score**:
   $$\text{Score}_{\text{Bridge}} = S_{\text{HW\_Kombi}} + S_{\text{RSSI}} + S_{\text{PWR}} + S_{\text{HYST}}$$
 * Im Speicher jedes ESP32-S3 liegt eine **offline vorberechnete Link-State Matrix**, die für jede denkbare Gruppenkonstellation vorab festlegt, welche Knoten als primäre und sekundäre Brücken fungieren.

@@ -1,4 +1,4 @@
-# OpenMotorBridge (v8.0) - Universelle Motorrad-Intercom- & Telemetrie-Bridge
+# OpenMotorBridge (v10.0) - Universelle Motorrad-Intercom- & Telemetrie-Bridge
 
 <p align="center">
   <img src="docs/assets/openmotorbridge_logo.svg" alt="OpenMotorBridge Logo" width="220"/>
@@ -35,19 +35,19 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
    *OpenMotorMesh (OMM), Dynamic Leader Election (DLE), 868 MHz LoRa Fallback & 10 Hz Multi-GNSS.*
 
 5. [**05 - Stromversorgung, USV-Akkusystem & Power-Gate**](docs/de/05_power_management_ups.md)  
-   *LM5164-Q1 72V Buck, BQ24075 USV, Front-Node LMR36015 / TPS2051B Power-Gate & 1-Klick CarPlay Kaltstart.*
+   *LM5164-Q1 72V Buck, BQ24075 USV, TPS25921 Quad-eFuse, Front-Node TPS54302 / SW3526 30W PD & 1-Klick CarPlay Kaltstart.*
 
 6. [**06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync**](docs/de/06_telemetry_blackbox_webdav.md)  
    *4-Bit High-Speed SDIO, BGH- und DSGVO-konformer Ringspeicher, ECDSA SHA-256 & automatischer Cloud-Sync.*
 
-7. [**07 - Hardware-Architektur & Platinen-Pinouts (Alle 8 PCBAs)**](docs/de/07_pcba_hardware_pinouts.md)  
-   *Alle 8 Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen (PCBA 01 bis 08 inklusive ESP32-C5 V2X Radar Sub-MCU).*
+7. [**07 - Hardware-Architektur & Platinen-Pinouts (Alle 10 PCBAs)**](docs/de/07_pcba_hardware_pinouts.md)  
+   *Alle 10 aktiven Leiterplatten im Detail: Lagenaufbau, Impedanzen, Net-Klassen, Funktionszonen und Pinout-Tabellen (`PCBA 01`, `03`, `05`, `05B`, `05C`, `05D`, `07`, `08`, `09`, `10`).*
 
 8. [**08 - Mechanische Gehäuse, CAD & Referenz-Montagekits**](docs/de/08_enclosures_mechanics_cad.md)  
-   *Universelle Pods & Kassetten, 4-in-1 Front-Knoten, Radar 2.0 Flügel-Gehäuse mit Garmin-Bajonett, Durch-die-Verkleidung 15W Qi Cam-Dock, Sonnenblenden-Clip für Autokolonnen sowie lochfreie seitliche MagSafe-Kofferintegration.*
+   *Schraubenlose Dual-Rail Slide-In Monocoques (Typ A & B), Under-Perch Mirror-Pod (`PCBA 05C`), 5-Port Handschuhfach-Hub (`PCBA 05B`), Sensor-Puck (`PCBA 05D`), Radar 2.0 Flügel-Gehäuse mit Garmin-Bajonett sowie 4-Pin IP67 Magnet-Abreißkupplungen.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
-   *Multi-Core ESP32-S3 (Main & Front), Heck-Co-Prozessor, ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
+   *Multi-Core ESP32-S31 (Main) & ESP32-P4 + ESP32-E22 (Front), Pod-Co-Prozessoren (ESP32-C6), ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
 10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
     *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot), Begleitfahrzeug- & Kolonnen-Modi, Smart-Keyfob Pager & 4-stufiger GPX-Export.*
@@ -64,11 +64,11 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 14. [**14 - EMV-Härtung, Schirmung & ESD-Schutz**](docs/de/14_emv_rf_hardening.md)  
     *Kfz-Transienten nach ISO 7637-2, 2.4 GHz vs 868 MHz Entkopplung, IPC-CC-830B Schutzlack & ISO 16750-3.*
 
-15. [**15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 8 PCBAs)**](docs/de/15_bom_manufacturing.md)  
-    *Komplette Bauteilliste für alle 8 PCBAs, JLCPCB SMT-Bestellcheckliste, Kabelbaum-Pigtail & COTS-Einkaufsliste.*
+15. [**15 - Stücklisten (BOM) & SMT-Fertigungsdaten (Alle 10 PCBAs)**](docs/de/15_bom_manufacturing.md)  
+    *Komplette Bauteilliste für alle 10 aktiven PCBAs, JLCPCB SMT-Bestellcheckliste, Zwei-Kabel-Backbone & COTS-Einkaufsliste.*
 
 16. [**16 - Bauanleitung, Verkabelung & Fahrzeug-Installation**](docs/de/16_build_instructions_assembly.md)  
-    *Schritt-für-Schritt Aufbau, 3D-Druck (FDM vs. MJF), Front-Node Montage, seitliche Koffer-Durchführung (Boden 100% lochfrei), Begleitfahrzeug-Sonnenblendenclip, Smart-Keyfob Zusammenbau & Inbetriebnahme.*
+    *Schritt-für-Schritt Aufbau der schraubenlosen v10 Slide-In Monocoques, 3D-Druck (FDM vs. MJF), Front-Node & Handschuhfach-Hub Montage, seitliche 4-Pin Magnet-Koffer-Durchführung, Smart-Keyfob Zusammenbau & Inbetriebnahme.*
 
 17. [**17 - Automotive-Standards & Normen-Referenzen**](docs/de/17_standards_references.md)  
     *Industrienormen: ISO 7637-2, ISO 16750, ECE R10, RED 2014/53/EU, IEC 61672-1 Class 1 und Bluetooth SIG.*
@@ -82,10 +82,10 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 
 * **`docs/de/`**: Sämtliche technische Spezifikationen und Designdokumente auf Deutsch.
 * **`docs/en/`**: Vollständige technische Spezifikationen auf Englisch.
-* **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S3, PCBA 01).
-* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-S3, PCBA 05).
-* **`firmware/smart_cartridge/`**: ESP-IDF / C++ Quellcode für Smart Cartridges Bucht 1 & 2 (ESP32-C6, PCBA 03).
-* **`firmware/radar_submcu/`**: ESP-IDF / C++ Quellcode für Heck-Radar 2.0 Sub-MCU & Wings (ESP32-C5/C6, PCBA 08).
+* **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S31, PCBA 01).
+* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-P4 + ESP32-E22, PCBA 05).
+* **`firmware/smart_cartridge/`**: ESP-IDF / C++ Quellcode für die Koffer-Pod-Gateways Pod 1 & 2 (ESP32-C6, PCBA 03).
+* **`firmware/radar_submcu/`**: ESP-IDF / C++ Quellcode für Heck-Radar 2.0 Sub-MCU & Halo-Wings (ESP32-C5, PCBA 08).
 * **`webapp_pwa/`**: Offlinefähiges WebBLE Dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).
 * **`hardware/`**: KiCad Schaltpläne, Gerber-Dateien und 3D-Modelle für das Gehäuse.
 * **`tools/audio_testbench/`**: **Interaktives Live Audio DSP Studio & Echtzeit-Simulator** (`python3 tools/audio_testbench/server.py` $\rightarrow$ Web-Audio Testbench mit Live-Mic, Space-PTT, Tacho & Ducking).

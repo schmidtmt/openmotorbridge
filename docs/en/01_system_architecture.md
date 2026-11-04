@@ -94,23 +94,23 @@ OpenMotorBridge v10.0 defines the platform across **standardized functional node
    * **Left Mirror Pod:** Tactile thumb button (Factory default: PTT intercom/radio & voice assistant) + left directed amber blind-spot warning LED (BSD) aimed at left mirror reflection.
    * **Right Mirror Pod:** Tactile thumb button (Factory default: Short-press: Highlight Tag / Bookmark for Insta360/GoPro/DJI via BLE; Long-press: Video Record Start/Stop or SOS) + right directed amber blind-spot warning LED (BSD) aimed at right mirror reflection.
    * **100% Software-Defined Button Mapping (Freely Remappable via PWA):** The physical switches are software-defined and freely configurable (short-press, double-click, long-press for PTT, hazard pins, cam tags, garage doors via BLE).
-   * **Safety Advantage:** True bilateral blind-spot detection directly in the rider's peripheral mirror glance angle. 100% symmetrical cockpit ergonomics with identical internal electronics (`PCBA 05B`).
-6. **4-Port Glovebox Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Located in the right fairing glove box of Touring baggers (Road Glide, Street Glide, CVO, CVO ST). Powered from Front Node (`PCBA 05`) via a combined high-power & USB 2.0 cable. Taps the OEM Harley USB-C port to head unit (Skyline OS / Boom! Box) and injects regulated **30W USB-PD** (thermally safe for closed compartments) for phone charging plus **10W switched dongle power** (Wireless CarPlay / Android Auto with thermal protection gating). 1x free media USB 2.0 port for flash drives and dealer updates. **Harley Headset Emulation via USB:** High-speed data pair connects Front Node directly to Port 4 for OEM head unit; emulates MFi / USB Audio Class headset, unlocks Apple CarPlay natively, and routes helmet mic audio digitally without ground loops. All devices connected in the compartment remain 100% inside the pocket (Action-Cam and Navi connect directly to Front Node PCBA 05 - zero pass-through routing!).
+   * **Safety Advantage:** True bilateral blind-spot detection directly in the rider's peripheral mirror glance angle. 100% symmetrical cockpit ergonomics with identical internal Z-stacked electronics (`PCBA 05C`, $18.25 \times 14.0\,\text{mm}$).
+6. **4-Port Glovebox Media & Power-Injection Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`):** Located in the right fairing glove box of Touring baggers (Road Glide, Street Glide, CVO, CVO ST). Powered from Front Node (`PCBA 05`) via a combined high-power & USB 2.0 cable (`J2 FRONT_NODE`). Taps the OEM Harley USB-C port to head unit (`J1 SKYLINE_HOST`) and injects on its south edge regulated **30W USB-PD** (`J3 PHONE_CHARGE`), **10W switched dongle power** (`J4 DONGLE`), plus a free **Media USB 2.0 port** (`J5 MEDIA`). **Harley Headset Emulation via USB:** High-speed data pair connects Front Node directly to the OEM head unit; emulates MFi / USB Audio Class headset, unlocks Apple CarPlay natively, and routes helmet mic audio digitally without ground loops. All devices connected in the compartment remain 100% inside the pocket (Action-Cam and Navi connect directly to Front Node PCBA 05 - zero pass-through routing!).
 7. **Radar 2.0 Sub-MCU & Rear Warning Wings (PCBA 08 at Rear):** Autonomous 77-GHz rear radar (Wheeltec MR20), fed via branch 4 of the 16-pin periphery harness; 36x strobe warning LEDs, downward drip-loop, and roost deflector. Optional under-fender mount for cruiser/bobber builds.
 
 ```
                      THE STANDARDIZED FUNCTIONAL NODES (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. FRONT NODE (At Handlebar Riser): SAM-M10Q GNSS, Airflow Sensors,         |
-|    Knowles Wind MEMS, Qi/USB-PD Accessory Power, Riser Bar Clamp            |
+| 1. FRONT NODE (At Handlebar Riser): PCBA 05 (ESP32-P4 + E22) & PCBA 05D     |
+|    Puck (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind MEMS, 30W USB-PD     |
 +-----------------------------------------------------------------------------+
-| 2. SYMMETRICAL DUAL UNDER-PERCH MIRROR PODS (Left & Right):                 |
-|    * Left:  Tactile Button (Default: PTT), Left Blind-Spot Alert LED (BSD)   |
-|    * Right: Tactile Button (Default: Cam-Tag), Right Blind-Spot Alert LED    |
+| 2. SYMMETRICAL DUAL UNDER-PERCH MIRROR PODS (PCBA 05C Left & Right):        |
+|    * Left:  Tactile Button (Default: PTT), Left Blind-Spot LEDs (2x Amber)  |
+|    * Right: Tactile Button (Default: Cam-Tag), Right Blind-Spot LEDs        |
 |    * 100% Software-Defined: Freely remappable via PWA (PTT/Cam/Voice/SOS)    |
 +-----------------------------------------------------------------------------+
-| 3. GLOVE BOX HUB (Right Box): 2-Port USB Hub, bottom OEM grommet entry,     |
-|    stable Ottocast CarPlay/AA bypass, 1x free USB charging port             |
+| 3. GLOVE BOX HUB (PCBA 05B Right): 4-Port Hub with 5x USB-C Dual-Edge       |
+|    (North: Front-Node & Skyline Host | South: 30W Phone, Dongle, Media)     |
 +-----------------------------------------------------------------------------+
 | 4. CENTRAL BOX (Under Seat/Batt): ESP32-S31 AI Host, QCC3084 Audio SoC,     |
 |    SX1262 LoRa 868MHz, Multi-Port USB-PD Engine, UPS, Two-Cable Connection  |
@@ -164,31 +164,6 @@ During the initial concept phase, an in-depth engineering evaluation analyzed wh
 2. **Harness Reliability Across the Steering Head:**
    * Every copper conductor traversing the rotating steering head suffers millions of bending cycles over a motorcycle's operational life.
    * By segregating cockpit, USB display, and PTT functions into the **Front Node (PCBA 05)** connected over the ruggedized **4-wire Automotive Backbone cable** pulled through the Harley frame wire caddy without tank removal, zero fragile data signal wires cross the steering axis.
-3. **Conclusion:** Maximum signal integrity, zero thermal hot-spots, superior long-term mechanical reliability, and unmatched installation flexibility across all motorcycle categories.k.stl)) on dashboard with 12V cigarette lighter PD adapter; autonomous Bluetooth OBD2 telemetry (ELM327 / vGate) coupled directly to Central Box; PWA dashboard on iPad/tablet for live tracking of all group bikes without cellular connectivity.
->
-> Riders and support crews are encouraged to replicate these kits, adapt them for other vehicle models, or design custom brackets based on our open CAD/STEP dimensional envelopes!
-
-### 2.1 Whitepaper Design Rationale: Decentralized Satellite Topology vs. Monolithic Single-Box
-
-During the initial concept phase, an in-depth engineering evaluation analyzed whether the entire system should be housed within a single, large central enclosure (e.g. under the seat or behind the front fairing). The monolithic approach was unanimously rejected after electromagnetic simulation and physical prototyping:
-
-#### Evaluation Matrix: Monolithic Single-Box vs. OpenMotorBridge Decentralized Satellite Architecture
-
-| Evaluation Metric | Option A: Monolithic Single-Box | Option B: Handlebar/Cockpit-Only Box | **Option C: OMB Decentralized Satellites (Selected)** |
-| :--- | :--- | :--- | :--- |
-| **RF Self-Interference (De-Sensing)** | **Critical:** 2.4 GHz BLE, Wi-Fi, 868 MHz LoRa, GNSS L1/L5 & 72V buck converter in extreme proximity | **Critical:** Severe cross-talk into cockpit TFT and motorcycle radio antenna | **Optimal (> 45 dB Isolation):** GNSS on Front Node (windshield line), LoRa on Central Box (under seat), Intercoms on lateral flanks |
-| **Harness Bundle Diameter** | **Bulky:** 26+ discrete wire conductors routed through the motorcycle chassis | **Poor:** 18 conductors routed across the pivoting steering head (harness fatigue risk) | **Ultra-Slim:** 4-wire Automotive Backbone routed through frame caddy without tank removal (< 0.2 ms) |
-| **Thermal Dissipation** | **Hot-Spot (> 18 W):** 72V DC/DC + audio power amplifiers + battery charging under seat | **Thermal Overheating (> 85 °C):** Trapped heat accumulation directly behind headlight nacelle | **Evenly Distributed:** Max. 3-4 W per enclosure; passive convection cooling with zero hot-spots |
-| **GNSS Zenith View & Radar** | **Obstructed:** Seat bench and rider's body block satellites & rear radar aperture | **Poor:** Rear blind-spot radar from handlebars is physically impossible | **Ideal:** Front Node SAM-M10Q has unobstructed 360° sky view, rear radar on Peitsche 5 sits clear at tail |
-| **Dynamic Wind Sampling (AGC)** | **Physically impossible:** Zero dynamic ram-air pressure underneath the seat | **Feasible:** Wind pressure measurement directly at handlebar | **Excellent:** Knowles I2S MEMS positioned directly at windshield line in Front Node |
-
-1. **Physics of RF Coexistence (Mitigating Receiver De-Sensitization):**
-   * GNSS satellite signals reach the ground at ultra-low power levels of approximately **$-130\,\text{dBm}$ to $-160\,\text{dBm}$**.
-   * Placing a high-voltage switching regulator (LM5164-Q1 with fast switching edges), an 868 MHz LoRa transmitter (+22 dBm / 160 mW), and dual 2.4 GHz mesh radios inside the same metallic chassis within inches of each other lifts the wideband thermal noise floor (*Noise Floor Lift*). The GNSS receiver suffers cycle slips, losing carrier phase lock and degrading precision.
-   * Physical spatial separation (Front Node SAM-M10Q in cockpit nacelle, Central Box under seat, Pods 1 & 2 on lateral flanks) naturally enforces **$> 45\,\text{dB}$ of free-space path loss** between RF stages.
-2. **Harness Reliability Across the Steering Head:**
-   * Every copper conductor traversing the rotating steering head suffers millions of bending cycles over a motorcycle's operational life.
-   * By segregating cockpit, USB display, and PTT functions into the **Front Node (PCBA 05)** connected over the ruggedized **4-wire Automotive Backbone cable** pulled through the Harley frame wire caddy without tank removal, zero fragile data signal wires cross the steering axis.
 3. **Conclusion:** Maximum signal integrity, zero thermal hot-spots, superior long-term mechanical reliability, and unmatched installation flexibility across all motorcycle categories.
 
 ### 2.2 Vehicle Mounting (Crash Bars, Frame Tubes, Luggage Racks)
@@ -207,7 +182,7 @@ During the initial concept phase, an in-depth engineering evaluation analyzed wh
 
 ### 2.4 Universal Off-the-Shelf OEM Adapter Interfacing
 The universal monocoque pods ($150 \times 70 \times 38\,\text{mm}$ with tool-free slide-in lid, dry-flap, and $124 \times 53 \times 28\,\text{mm}$ interior cavity) accommodate all commercial off-the-shelf OEM adapters directly in the upper cradle:
-* **Class S (Direct Pod Cradle * OMB Reference):** e.g. Sena SPIDER X Slim (primary recommendation), Cardo Packtalk Edge (Air-Mount), OMM UCS 2.4 GHz - 100% factory-unopened original device seated in a PA12-MJF form-fit cradle with 3-point EPDM damping against $20\,\text{g}$ shock/vibration, directly interfaced to PCBA 03 (USB-PD charging up to 30W, USB Audio Class, direct electrical PTT keying or BLE control), zero pogo pins, zero soldering, 100% preservation of warranty and IP67 weatherproofing. Brittle swap cartridges and solenoids are completely eliminated.
+* **Class S (Direct Pod Cradle * OMB Reference):** e.g. Sena SPIDER X Slim (primary recommendation), Cardo Packtalk Edge (Air-Mount), OMM UCS 2.4 GHz - 100% factory-unopened original device seated in the universal TPU elastomer bed on `011_pod_slide_tray` against $20\,\text{g}$ shock/vibration, directly interfaced to `PCBA 03` (USB-PD charging up to 30W, USB Audio Class, direct electrical PTT keying or BLE control plus 2x mechatronic cold-start solenoids on `012_universal_actuator_slide_bracket` for automated KL15 wake-up), zero pogo pins, zero soldering on the headset, 100% preservation of warranty and IP67 weatherproofing. Model-specific rigid plastic swap cartridges are completely eliminated.
 * **Class A (Wireless Bridges & USB Power):** e.g. Sena +Mesh (B2M-01), Sena MeshPort Blue/Red - powered via internal USB-C port, wireless audio to helmet.
 * **Class B (Pogo-Pin Cradles):** e.g. Sena 50S/60S/30K/20S EVO - analog audio via ES8388 codec on PCBA 03 and PTT keying via AO3400A MOSFETs.
 * **Class C (Magnetic Air-Mount):** e.g. Cardo Packtalk Edge / Pro - tool-free magnetic docking via 2x N52 neodymium magnets.

@@ -66,29 +66,32 @@ Ein vollständiges OpenMotorBridge-Fahrzeugkit der Generation v10.0 verzichtet v
 Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert in **[Kapitel 15: Stücklisten & SMT-Fertigungsdaten](15_bom_manufacturing.md)** aufgeführt. Vor Montagebeginn sicherstellen, dass folgende Baugruppen bereitliegen:
 
 * [ ] **3D-Druckteile (MJF PA12 schwarz oder FDM ASA/PET-CF):**
-  * **1x Main Box:** Unterwanne mit Dämpferdomen, Zwischenboden mit $70 \times 10\,\text{mm}$ Kabelbucht, schwenkbare Akkubrücke mit Rastfeder ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)), Gehäusedeckel ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)).
-  * **2x Koffer-Pods v10.0:** Pod-Wannen für Koffer-Innenmontage, 2x Slide-in Deckel mit integrierter Neodym-Riegelaufnahme, 2x Spritzschutz-Zwischendeckel (Dry-Flap mit Dichtlippe), 2x USB-Ladeport-Aufnahmerahmen.
+  * **1x Main Box (v10 Dual-Rail Monocoque):** Monolithische Monocoque-Wanne mit Dämpferdomen ([`000_monocoque_tub.stl`](../../hardware/cad/stl/01_main_box/000_monocoque_tub.stl)), einschiebbarer Zwischenboden mit LiPo-Bett und Antennennestern ([`010_slide_tray.stl`](../../hardware/cad/stl/01_main_box/010_slide_tray.stl)), 100 % kabelfreier L-Schiebedeckel mit Slam-to-Shut Heckwand ([`020_slide_lid.stl`](../../hardware/cad/stl/01_main_box/020_slide_lid.stl)).
+  * **2x Koffer-Pods v10.0:** Monocoque Pod-Wannen ([`002_pod_housing_base.stl`](../../hardware/cad/stl/02_pod_base/002_pod_housing_base.stl)), 2x einschiebbarer Zwischendeckel / Dry-Flap Tray ([`011_pod_slide_tray.stl`](../../hardware/cad/stl/02_pod_base/011_pod_slide_tray.stl)), 2x L-Slide-in Deckel mit integrierter Neodym-Riegelaufnahme ([`021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl)).
   * **2x Universelle Aktuator-Schlittenschiene:** ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) mit stufenloser 15–85 mm Schlittenführung für je 2x Mini-Hubmagnete im Pod-Boden.
-  * **1x Front-Knoten Riser-Gehäuse:** Kompakte Unterwanne mit Riser- / Triple-Tree Klemmschelle, Gehäusedeckel mit O-Ring-Nut.
-  * **1x Modulares Schnapp-Sensor-Puck:** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) für SAM-M10Q GNSS, TMP117, OPT3001 und Knowles MEMS.
-  * **2x Symmetrische Under-Perch Spiegel-Pods (Links & Rechts):** Formschöne Halterungen zur Montage unter beiden Spiegelschrauben ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) mit Führung für taktilen Taster (Links: PTT; Rechts: Cam-Highlight) und LED-Linsentrichter für bilaterale Totwinkel-Warnanzeige (BSD).
-  * **1x Handschuhfach 4-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für rechtes Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, OEM Upstream).
-  * **1x Heck-Radar Halterung:** MR20 Radar-Gehäuse mit Hirth-Neigungsverstellung, Kennzeichenträger und integriertem Schmutzfänger (Roost-Deflector).
-* [ ] **Vollautomatisch bestückte Platinen (SMT-gefertigt):**
-  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S3-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertikalen SMD-Steckverbindern (Bordnetz `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Peripherie-Bus `J6` Molex Picoflex 1.27mm 16P, USV `J5` 4P, Status-LED `J4` 3P, Reserve `J7` 4P), Dual-Power Input (12V Bordnetz & 5V USB-C Service-Port `J3` mit LM66100 Ideal-Diode OR-ing) und DM3D MicroSD-Slot `J2`. *(DW3110 UWB entfällt komplett!)*
-  * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit 30W USB-PD Sink/Buck-Regler, Koffer-USB-C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland), PTT-Tastung und `J_ACT` 4-Pin Header mit Dual-AO3400A MOSFETs für 2,0 s Kaltstart-Tastendruck.
-  * **1x PCBA 05 (Front-Knoten Riser-Hub):** Kompakt-Platine mit 60W USB-PD Engine (Southchip SC8721/SC8102), `J_SENSOR_EXT` 6-Pin Port für das Schnapp-Sensor-Puck und Zubehörspeisung (27W Phone Fast Charge, 15W dediziertes Motorrad-GPS Nav, 10W Cam-Lead).
-  * **2x PCBA 05B (All-in-One Under-Perch Platine):** Baugleiche Mini-Platinen für linken und rechten Spiegelfuß mit hochpräzisem Mikrotaster (Links: PTT; Rechts: Cam-Highlight) und ultraheller Amber-LED (BSD).
-  * **1x PCBA 08 (Heck-Radar Sub-MCU):** 77 GHz Radar-Controller mit 36x Strobe-Warn-LEDs.
-* [ ] **V4A Edelstahl-Normteile, Magnete & Aktuatoren (100 % lötfrei):**
+  * **1x Front-Knoten Riser-Gehäuse (v10 Dual-Rail Monocoque):** Monocoque-Unterwanne ([`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl)) mit Riser- / Triple-Tree Klemmschelle, einschiebbarer Zwischenboden ([`010_front_node_slide_tray.stl`](../../hardware/cad/stl/04_front_node/010_front_node_slide_tray.stl)) und L-Schiebedeckel ([`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl)).
+  * **1x Modulares Schnapp-Sensor-Puck:** ([`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) / [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl)) für `PCBA 05D` (SAM-M10Q GNSS, TMP117, OPT3001 und Knowles MEMS).
+  * **2x Symmetrische Under-Perch Spiegel-Pods (Links & Rechts):** Formschöne Halterungen zur Montage unter beiden Spiegelschrauben ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl)) mit Führung für taktilen Taster (`PCBA 05C`, Links: PTT; Rechts: Cam-Highlight) und LED-Linsentrichter für bilaterale Totwinkel-Warnanzeige (BSD).
+  * **1x Handschuhfach 4-Port Hub-Gehäuse:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) für `PCBA 05B` im rechten Handschuhfach der Harley Touring (30W Phone, 10W Dongle, freier Port, OEM Upstream).
+  * **1x Heck-Radar Halterung:** MR20 Radar-Gehäuse ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) mit Hirth-Neigungsverstellung, Kennzeichenträger und integriertem Schmutzfänger (Roost-Deflector).
+* [ ] **Vollautomatisch bestückte Platinen (SMT-gefertigt, alle 10 aktiven PCBAs):**
+  * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertikalen SMD-Steckverbindern (Bordnetz `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Peripherie-Bus `J6` Molex Picoflex 1.27mm 16P, USV `J5` 4P, Status-LED `J4` 3P, Reserve `J7` 4P), Dual-Power Input (12V Bordnetz & 5V USB-C Service-Port `J3` mit LM66100 Ideal-Diode OR-ing) und DM3D MicroSD-Slot `J2`. *(DW3110 UWB entfällt komplett!)*
+  * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit ESP32-C6-WROOM-1, 30W USB-PD Sink/Buck-Regler, Koffer-USB-C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland), PTT-Tastung und `J_ACT` Header mit AO3400A MOSFETs für 2,0 s Kaltstart-Tastendruck.
+  * **1x PCBA 05 (Front-Knoten Riser-Hub):** 4-Layer Kompakt-Platine ($82 \times 50\,\text{mm}$) mit ESP32-P4-NR16 + ESP32-E22 Co-Prozessor, 60W USB-PD Engine (TPS54302 + SW3526), `J4` 6-Pin Port für den Sensor-Puck und Zubehörspeisung (30W Phone Fast Charge, 15W dediziertes Motorrad-GPS Nav, 10W Cam-Lead).
+  * **1x PCBA 05B (Handschuhfach 4-Port Media- & Power-Injection Hub):** 4-Layer Platine ($50 \times 20\,\text{mm}$) mit USB2514B-AEZC Hub, TPS25921L eFuses und 5x USB-C Buchsen (`J1..J5`).
+  * **2x PCBA 05C (All-in-One Under-Perch Spiegel-Pod Platine):** Baugleiche 2-Layer Mini-Platinen ($18{,}25 \times 14{,}0\,\text{mm}$) für linken und rechten Spiegelfuß mit hochpräzisem Mikrotaster (Links: PTT; Rechts: Cam-Highlight) und ultraheller Amber-LED (BSD).
+  * **1x PCBA 05D (Environmental Sensor-Puck):** 4-Layer Platine ($34 \times 34\,\text{mm}$) für SAM-M10Q GNSS, TMP117, OPT3001 und ICS-43434 MEMS-Mikrofon.
+  * **1x PCBA 07 (Smart-Keyfob & LoRa Pager):** 4-Layer Platine ($46 \times 26\,\text{mm}$) mit nRF52840, SX1262 LoRa, BQ51050B Qi-Empfänger und DRV2605L Haptik-Treiber.
+  * **1x PCBA 08 (Heck-Radar Sub-MCU):** 4-Layer 77 GHz Radar-Controller ($68 \times 28\,\text{mm}$) mit ESP32-C5-WROOM-1, TPS54302 und 36x Strobe-Warn-LEDs.
+  * **Optional 1x PCBA 09 (OMM 2.4 GHz Transceiver) / 1x PCBA 10 (Midland PMR446 Bridge):** 4-Layer Funk-Erweiterungsplatinen ($56 \times 32\,\text{mm}$).
+* [ ] **V4A Edelstahl-Normteile, Magnete & Aktuatoren (100 % lötfrei & schraubenlose Deckel):**
   * **4x Mini-Hubmagnete:** JF-0530B (12V DC, 300 mA, 10 mm Hub) mit aufgesteckten weichen Shore A50 Silikonkappen (2x pro Pod).
   * 4x DIN 912 V4A M2.5 x 8 mm Schrauben für die Aktuator-Schlittenklemmung.
-  * 8x DIN 934 / DIN 985 M3 Edelstahlmuttern (Gehäuse-Mutterntaschen)
+  * 8x DIN 934 / DIN 985 M2.5 / M3 Edelstahlmuttern (Platinen-Mutterntaschen)
   * 6x DIN 934 M4 Muttern (Radar- & Riser-Klemmung)
-  * 4x M3 x 40 mm Schrauben (Zentralbox), 4x M3 x 20 mm Schrauben (Front-Knoten)
-  * 8x M2.5 x 6 mm Platinenschrauben (Zentralbox & Front-Node)
-  * 4x N52 Neodym-Magnete ($\varnothing 8 \times 3\,\text{mm}$) für die Kofferdeckel-Verriegelung
-  * 1x OMB Smart Keyfob mit integriertem N52 Entriegelungs-Gegenmagneten
+  * 8x M2.5 x 6 mm Platinenschrauben (Zentralbox & Front-Node; Gehäusedeckel selbst sind 100 % schraubenlos!)
+  * 4x N52 Neodym-Magnete ($\varnothing 6 \times 2\,\text{mm}$ / $\varnothing 8 \times 3\,\text{mm}$) für die L-Slide-in Deckelverriegelung
+  * 1x OMB Smart Keyfob (`PCBA 07`) mit integriertem N52 Entriegelungs-Gegenmagneten
 * [ ] **Dichtungen, Pufferakku & Antennen:**
   * Silikon-Rundschnur Ø 1,5 mm Shore 40A ($40\,\text{cm}$ Main Box, $25\,\text{cm}$ Front-Knoten)
   * 2x Silikon-Profildichtungen für die Koffer-Slide-in-Deckel
@@ -110,22 +113,21 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ## 3. Montage der Baugruppen (Schritt-für-Schritt)
 
-### Schritt 1: Zentralbox (Main Box) montieren
-1. **Muttern einlegen:** 4x DIN 934 M3 Edelstahlmuttern von unten in die formschlüssigen Sechskant-Mutterntaschen der Unterwanne ([`main_box_lower_case.stl`](../../hardware/cad/stl/01_main_box/main_box_lower_case.stl)) eindrücken.
+### Schritt 1: Zentralbox (Main Box v10 Dual-Rail Monocoque) montieren
+1. **Muttern einlegen:** 4x DIN 934 M2.5/M3 Edelstahlmuttern von unten in die formschlüssigen Sechskant-Mutterntaschen der Monocoque-Wanne ([`000_monocoque_tub.stl`](../../hardware/cad/stl/01_main_box/000_monocoque_tub.stl)) eindrücken.
 2. **Hauptplatine einsetzen:**
-   * Fertig bestückte `PCBA 01` (mit ESP32-S3-WROOM-1U, Microchip USB2517I Hub, Qualcomm QCC3084 und Quad-eFuse) auf die Dämpferdome setzen.
+   * Fertig bestückte `PCBA 01` (mit ESP32-S31-WROOM-1U, Microchip USB2517I Hub, Qualcomm QCC3084 und Quad-eFuse) von oben auf die integrierten Dome setzen.
    * Platine mit 4x M2.5 $\times 6\,\text{mm}$ Schrauben handfest fixieren.
-3. **Kabelstränge vorverlegen & Zwischenboden aufsetzen:**
-   * Interne Silikon-Kabelpeitschen vom Gehäuseflansch an die vertikalen Header auf `PCBA 01` anstecken: Bordnetz/CAN an `J1` (Molex Micro-Lock Plus 6P) und 4-Kanal Peripherie-Bus an `J6` (Molex Picoflex 16P). USV-Kabel an `J5` (Micro-Lock Plus 4P) vorverlegen.
-   * U.FL-Koaxialkabel der LoRa-Antenne (`ANT1`, FXP895) und der Wi-Fi-Antenne anstecken.
-   * Zwischenboden ([`main_box_mid_tray.stl`](../../hardware/cad/stl/01_main_box/main_box_mid_tray.stl)) aufsetzen. Alle Leitungen gleiten quetschfrei durch die $70 \times 10\,\text{mm}$ Kabelbucht in die obere Kammer.
-4. **2.200 mAh LiPo-Akku & schwenkbare Akkubrücke montieren:**
-   * Den 2.200 mAh LiPo-Flachakku in die Wanne des Zwischenbodens einlegen und Molex Micro-Lock Plus 4P Stecker an `J5` anstecken.
-   * Beide Flexantennen (Taoglas FXP895 LoRa und Taoglas FXP73 2.4 GHz) in die vorgesehenen Antennentaschen der Akkubrücke ([`main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl)) einkleben.
-   * Akkubrücke mit ihren beiden Einhängenocken links einstecken, umlegen und mit dem elastischen Schnapphaken rechts verriegeln. Der Akku sitzt bis $20\,\text{g}$ vibrationsfest.
-5. **Gehäusedeckel & Dichtung:**
-   * Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett benetzen und in die umlaufende Deckelnut einlegen.
-   * Gehäusedeckel ([`main_box_lid.stl`](../../hardware/cad/stl/01_main_box/main_box_lid.stl)) aufsetzen und mit 4x M3 $\times 40\,\text{mm}$ V4A-Schrauben über Kreuz anziehen. Der Deckel ist zu 100 % kabelfrei.
+3. **Kabelstränge vorverlegen & Zwischenboden einschieben (Rail 1 bei $Z = 18{,}0\,\text{mm}$):**
+   * Interne Silikon-Kabelpeitschen von der vorderen Stirnwand an die vertikalen Header auf `PCBA 01` anstecken: Bordnetz/CAN an `J1` (Molex Micro-Lock Plus 6P) und 4-Kanal Peripherie-Bus an `J6` (Molex Picoflex 16P). USV-Kabel an `J5`/`J7` vorverlegen.
+   * U.FL-Koaxialkabel der LoRa-Antenne (`ANT1`, FXP895) und der Wi-Fi-Antenne (`FXP73`) anstecken.
+   * Den Zwischenboden ([`010_slide_tray.stl`](../../hardware/cad/stl/01_main_box/010_slide_tray.stl)) horizontal von hinten in die unteren C-Führungsnuten (Rail 1) einschieben. Alle Leitungen gleiten quetschfrei durch die vordere Kabelbucht und die Kabeldurchführungen in die obere Kammer.
+4. **2.200 mAh LiPo-Akku & Flex-Antennen auf dem Zwischenboden montieren:**
+   * Den 2.200 mAh LiPo-Flachakku auf dem $1{,}0\,\text{mm}$ EPDM-Moosgummipad in die ausgeformte Akkutasche des Zwischenbodens einlegen, mit dem EPDM-Spannband sichern und den Stecker anstecken.
+   * Beide Flexantennen (Taoglas FXP895 LoRa und Taoglas FXP73 2.4 GHz) in die vertieften Klebenester auf der Oberseite des Zwischenbodens (`010_slide_tray.stl`) einkleben.
+5. **L-Schiebedeckel einschieben (Rail 2 bei $Z = 33{,}0\,\text{mm}$, 100 % schraubenlos):**
+   * Silikon-Rundschnur (Ø 1,5 mm, $40\,\text{cm}$) dünn mit Silikonfett benetzen und in die Dichtnut einlegen.
+   * Den L-Schiebedeckel ([`020_slide_lid.stl`](../../hardware/cad/stl/01_main_box/020_slide_lid.stl)) von hinten in die oberen C-Führungsnuten (Rail 2) einschieben, bis die 15°-Keilnase vorne einspurt und die beiden Slam-to-Shut PA12-Schnappriegel der integrierten Heckwand hörbar in die untere Wannenschwelle einrasten. Der Deckel ist zu 100 % kabelfrei und kommt ohne eine einzige Schraube aus.
 
 ---
 
@@ -174,11 +176,11 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 
 ### Schritt 4: Front-Knoten am Riser, Modulares Sensor-Puck & Symmetrische Dual Under-Perch Spiegel-Pods montieren
 1. **Front-Knoten Riser-Montage & Modulares Sensor-Puck:**
-   * Der Front-Knoten (`PCBA 05`) mit integrierter **60W USB-PD Engine** (Southchip SC8721/SC8102) wird im kompakten Gehäuse direkt am Lenker-Riser oder der oberen Gabelbrücke montiert (mittels beiliegender Riser-Klemmschelle).
-   * **Modulares Schnapp-Sensor-Puck ("Körbchen"):** Das hermetische Sensor-Puck ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl)) wird formschlüssig von oben auf den Front-Knoten aufgeklickt. Es kontaktiert über `J_SENSOR_EXT` (6-Pin JST-SH) und beherbergt u-blox SAM-M10Q GNSS, TI TMP117 Präzisionsthermometer, TI OPT3001 Umgebungslichtsensor und das Knowles MEMS Fahrtwind-Mikrofon. (Im Pkw/Van lässt sich das Körbchen mit einem Klick lösen und über ein 1,5 m Kabel im Scheibenkeil platzieren!).
-2. **Symmetrische Dual Under-Perch Spiegel-Pods montieren (Links & Rechts):**
+   * Der Front-Knoten (`PCBA 05`) mit **ESP32-P4-NR16 + ESP32-E22** und integrierter **60W USB-PD Engine** (TPS54302 + SW3526) wird im kompakten Dual-Rail Monocoque-Gehäuse (`001_front_node_monocoque_tub.stl`) direkt am Lenker-Riser oder der oberen Gabelbrücke montiert (mittels beiliegender Riser-Klemmschelle).
+   * **Modulares Schnapp-Sensor-Puck ("Körbchen", `PCBA 05D`):** Das hermetische Sensor-Puck ([`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) / [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl)) wird formschlüssig von oben auf den Front-Knoten aufgeklickt. Es kontaktiert über `J4` (6-Pin JST-SH) und beherbergt u-blox SAM-M10Q GNSS, TI TMP117 Präzisionsthermometer, TI OPT3001 Umgebungslichtsensor und das ICS-43434 / Knowles MEMS Fahrtwind-Mikrofon. (Im Pkw/Van lässt sich das Körbchen mit einem Klick lösen und über ein 1,5 m Kabel im Scheibenkeil platzieren!).
+2. **Symmetrische Dual Under-Perch Spiegel-Pods montieren (Links & Rechts, `PCBA 05C`):**
    * Die linke und rechte Spiegelschraube unter den beiden Lenkerarmaturen kurz lösen.
-   * Die beiden ergonomischen Spiegel-Pods ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/04_front_node/under_perch_mirror_pod.stl)) formschlüssig unter die Spiegelfüße stecken und die Schrauben mit $15\,\text{Nm}$ vorschriftsmäßig festziehen.
+   * Die beiden ergonomischen Spiegel-Pods ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl)) formschlüssig unter die Spiegelfüße stecken und die Schrauben mit $15\,\text{Nm}$ vorschriftsmäßig festziehen.
    * **Symmetrische Ergonomie & Sicherheitsgewinn:**
      * **Linker Pod:** Taktiler PTT-Taster liegt perfekt am linken Daumen (Intercom-Funk & Sprachassistent); Amber-LED strahlt blendfrei in den linken Rückspiegel (Überholverkehr links).
      * **Rechter Pod:** Taktiler Action-Cam-Tag Taster am rechten Daumen setzt sofortige Highlights/Bookmarks im Video; Amber-LED strahlt in den rechten Rückspiegel (Verkehr rechts beim Einscheren).

@@ -12,7 +12,7 @@ Both assemblies share the standardized **ECE 22.06 UCS form factor** ($68.0 \tim
 
 ## 1. Module Concept, ECE 22.06 UCS Form Factor & Subsystem Decoupling
 
-To prevent architectural confusion between motorcycle carrier mechatronics and intercom modules, OpenMotorBridge v9.6 strictly decouples **two physical functional tiers**:
+To prevent architectural confusion between motorcycle carrier mechatronics and intercom modules, OpenMotorBridge v10.0 strictly decouples **two physical functional tiers**:
 
 ```
 +---------------------------------------------------------------------------------------------------+
@@ -182,7 +182,7 @@ Beyond its 2.4 GHz IEEE 802.15.4 mesh engine, the ESP32-C6 features a complete B
 > 
 > When a single chip handles both real-time voice mesh (Opus frames every 10–20 ms) and BLE (companion phone PWA, telemetry, scanning), the internal coexistence arbiter forces antenna time-slicing. In real-world mesh networks, this produces **micro-jitter, buffer under-runs, and audio clicks/dropouts**.
 
-To eliminate this bottleneck completely, OpenMotorBridge v9.6 implements an uncompromising **Dual-Engine Architecture** across both modules (`PCBA 09` and `PCBA 10`):
+To eliminate this bottleneck completely, OpenMotorBridge v10.0 implements an uncompromising **Dual-Engine Architecture** across both modules (`PCBA 09` and `PCBA 10`):
 
 ```
 +---------------------------------------------------------------------------------------------------+
