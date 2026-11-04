@@ -55,6 +55,30 @@ BOARDS = {
             "firmware/front_node/src/front_node_config.h"
         ]
     },
+    "PCBA 05B": {
+        "name": "Glovebox Media & Power-Injection Hub (50 x 20 mm)",
+        "pcb": "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb",
+        "sch": "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch",
+        "mcu_ref": "U1",
+        "mcu_type": "USB2514Bi-AEZG",
+        "fw_headers": []
+    },
+    "PCBA 05C": {
+        "name": "Ultra-Compact Under-Perch Mirror Pod (18.25 x 14.0 mm)",
+        "pcb": "hardware/kicad_mirror_pod/openmotorbridge_mirror_pod.kicad_pcb",
+        "sch": "hardware/kicad_mirror_pod/openmotorbridge_mirror_pod.kicad_sch",
+        "mcu_ref": "SW1",
+        "mcu_type": "PASSIVE_POD",
+        "fw_headers": []
+    },
+    "PCBA 05D": {
+        "name": "Modular Environmental & GNSS Sensor Puck (34 x 34 mm)",
+        "pcb": "hardware/kicad_sensor_puck/openmotorbridge_sensor_puck.kicad_pcb",
+        "sch": "hardware/kicad_sensor_puck/openmotorbridge_sensor_puck.kicad_sch",
+        "mcu_ref": "U1",
+        "mcu_type": "SAM-M10Q",
+        "fw_headers": []
+    },
     "PCBA 07": {
         "name": "2-in-1 LoRa Smart-Keyfob",
         "pcb": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",

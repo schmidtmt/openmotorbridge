@@ -522,7 +522,7 @@ In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks
     - AUX 12V (auxiliary lights)                      * USB 2.0 Host Pass-Through (Skyline)
     - NAV 12V (Garmin / Chigee AIO-5)                 * USB 2.0 Media Pass-Through (Sticks)
     - CAM 5V (filtered action cam)                    * Integrated passive cooling louvers
-    - CKPT 1 & 2 (mirror pods / disp)                 * Compact dimensions: 72 x 46 x 22 mm
+    - CKPT 1 & 2 (mirror pods / disp)                 * Compact dimensions: 55 x 25 x 18 mm (PCB 50 x 20 mm)
   * External box OBSOLETE & ELIMINATED!               * Dovetail coupler ELIMINATED!
 ```
 
@@ -531,8 +531,8 @@ In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks
    - An external vehicle breakout box with open JST connectors in the spray zone is **completely obsolete**. This saves precious cavity volume behind fairings, eliminates contact resistance, and prevents moisture ingress during monsoon rides.
 
 2. **Evolution of the Cockpit Satellite into the Glovebox Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
-   - The former cockpit distributor has evolved into the specialized, compact **4-Port Glovebox Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)), tailored for the right glovebox (Media Compartment) of modern touring baggers (Road Glide, Street Glide, CVO, CVO ST 2024+).
-   - **Outer Dimensions:** Ultra-compact $72.0 \times 46.0 \times 22.0\,\text{mm}$ (HP MJF PA12), secured tool-free via an integrated 3M Dual-Lock channel on the compartment floor.
+   - The former cockpit distributor has evolved into the specialized, compact **Glovebox Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)), tailored for the right glovebox (Media Compartment) of modern touring baggers (Road Glide, Street Glide, CVO, CVO ST 2024+).
+   - **Outer Dimensions:** Ultra-compact $55.0 \times 25.0 \times 18.0\,\text{mm}$ (HP MJF PA12 housing the $50.0 \times 20.0\,\text{mm}$ opposing dual-edge USB-C `PCBA 05B`), secured tool-free via an integrated 3M Dual-Lock channel on the compartment floor.
    - **Functional Interfaces:**
      - **Upstream Host:** Plugs into OEM Harley USB-C socket connected to the head unit (Skyline OS / Boom! Box GTS).
      - **12V DC Supply:** Fed via 6-pin harness directly from Front Node (`J4` on `PCBA 05`).
@@ -730,7 +730,7 @@ For all Harley-Davidson cockpit concepts, robust, vibration-isolated solutions a
    * **Automated BLE Shutter:** Starts and stops recording automatically on ignition ON/OFF and marks video highlight tags on double-clicking the right under-perch switch.
 
 3. **4-Port Glovebox Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
-   * Compact enclosure ($72 \times 46 \times 22\,\text{mm}$) tailored for right media compartment of Touring baggers.
+   * Ultra-compact enclosure ($55 \times 25 \times 18\,\text{mm}$, PCB $50 \times 20\,\text{mm}$) tailored for right media compartment of Touring baggers.
    * Powered from Front Node (`PCBA 05`) via a combined High-Power & USB 2.0 High-Speed cable.
    * Taps the OEM Harley USB-C port to head unit (Skyline OS / Boom! Box GTS).
    * Provides:
@@ -1242,7 +1242,7 @@ The **Symmetrical Dual Under-Perch Mirror Pods** ([`under_perch_mirror_pod.scad`
 
 * **Mechanical & Electrical Economy:**
   * **0 mm Straight Handlebar Space:** Consumes zero millimeter of straight handlebar tube, leaving upper master cylinder clamps **100% free for valved exhaust switches (Dr. Jekill & Mr. Hyde / KessTech)**.
-  * **Universal Bilateral-Symmetric PCBA (`PCBA 05C`):** Thanks to the 100% bilaterally symmetric layout along the central $Y=0$ axis with short-edge JST-GH connector, central single M2 screw boss, and dual LEDs, **both left and right pods deploy the exact same un-modified PCB** without needing separate left/right layouts.
+  * **Universal Bilateral-Symmetric PCBA (`PCBA 05C`, $18.25 \times 14.0\,\text{mm}$ Z-Stacked):** Thanks to the 100% bilaterally symmetric Z-stacked layout along the central $Y=7.0\,\text{mm}$ axis with short-edge JST-GH connector (`J1` on `F.Cu`), bottom-side Omron B3SL-1002P tactile switch (`SW1` on `B.Cu`), central single M2 screw boss (`H1` at $X=15.0\,\text{mm}$), and dual 1206 LEDs (`LED1`, `LED2` at $X=15.0\,\text{mm}$), **both left and right $23.05 \times 18.8 \times 11.2\,\text{mm}$ pods deploy the exact same un-modified PCB** without needing separate left/right layouts.
   * **Universal Mounting:** Clamps directly beneath mirror perch threads (M8 / M10 / M12 or Harley Torx bolt).
   * **Automotive Integration (Reference Kit 5 - Chase Van):** Handlebar brackets are omitted; a discrete switch rests on the center console or shift lever, with primary voice handled handsfree via CarPlay or headset.
 
@@ -1253,7 +1253,7 @@ The functions of both physical tactile thumb buttons are **100% software-defined
 Via the local **OMB PWA Dashboard**, each button (Left and Right completely independent) can be freely customized and mapped across multiple gesture triggers.
 
 * **Hardware Layer (Zero-Hardcoding):**
-  * `PCBA 05B` incorporates a high-reliability, IP67-sealed tactile microswitch (`SW1`) with crisp tactile feedback ($300\,\text{g}$ actuation force, ensuring positive actuation even with heavy leather winter gloves).
+  * `PCBA 05C` incorporates a high-reliability, IP67-sealed tactile microswitch (`SW1` on `B.Cu`) with crisp tactile feedback ($300\,\text{g}$ actuation force, ensuring positive actuation even with heavy leather winter gloves).
   * The switch operates as an active-low input pulling to GND, protected by an onboard 100 nF RC debounce filter and a bidirectional TVS diode against electrostatic discharge (ESD).
   * The signal travels via the 4-pin JST-GH harness directly to interrupt-capable GPIOs on the Front Node MCU (`PCBA 05`).
 

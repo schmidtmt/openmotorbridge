@@ -27,13 +27,13 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (Cockpit Riser Hub & Media)   | (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
 |       | 4-Draht Bus (Zero Tank-Heben!)|               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05B**| **Handschuhfach-Hub**         | 76 x 20 mm    | 2 Lagen | Microchip USB2514Bi,  |
-|       | (4-Port Media & Power-Inject) | (2x M2.5)     | (ENIG)  | AP2112K-3.3, 5x USB-C |
-|       | Harley Skyline OS Upstream    | 100% SMT      |         | 15W Phone Fast-Charge |
+| **PCBA 05B**| **Handschuhfach-Hub**         | 50 x 20 mm    | 2 Lagen | Microchip USB2514Bi,  |
+|       | (4-Port Media & Power-Inject) | (2x M2.5)     | (ENIG)  | 5x USB-C (2N / 3S),   |
+|       | Harley Skyline OS Upstream    | 2-seitig SMT  |         | 15W Phone Fast-Charge |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05C**| **Symmetrischer Spiegel-Pod** | 32 x 14 mm    | 2 Lagen | Bernstein BSD LED,   |
-|       | (2x identisch für Links/Rechts| (M8/M10 Flansch)| (ENIG) | IP67 Taktiltaster,   |
-|       | 100% Software-Defined Gesten) | 100% SMT      |         | TVS ESD, JST-GH 4P   |
+| **PCBA 05C**| **Symmetrischer Spiegel-Pod** | 18.25 x 14 mm | 2 Lagen | 2x Bernstein BSD LED, |
+|       | (2x identisch für Links/Rechts| (M8/M10 Flansch)| (ENIG) | IP67 Taktiltaster (B),|
+|       | 100% Software-Defined Gesten) | 2-seitig SMT  |         | TVS ESD, JST-GH 4P   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05D**| **Umwelt- & GNSS-Sensor-Puck**| 34 x 34 mm    | 4 Lagen | u-blox SAM-M10Q,     |
 |       | (Schnappkorb für Front-Node)  | (Schnapprast) | (ENIG)  | TMP117, OPT3001,     |
@@ -675,30 +675,30 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 ### 7.2 PCBA 05B: Handschuhfach-Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
 
 ![PCBA 05B Handschuhfach-Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
-*Abbildung 7.5c: KiCad 3D-Render des Handschuhfach-Hubs (PCBA 05B, 76.0 x 20.0 mm). Aktiver 4-Port Automotive USB 2.0 High-Speed Hub (Microchip USB2514Bi) mit 5x USB-C Buchsen für Harley-Davidson Skyline OS / Boom! Box GTS.*
+*Abbildung 7.5c: KiCad 3D-Render des kompakten Handschuhfach-Hubs (PCBA 05B, 50,0 x 20,0 mm). Aktiver 4-Port Automotive USB 2.0 High-Speed Hub (Microchip USB2514Bi) mit gegenüberliegenden USB-C Reihen (2x Nordkante: FRONT / HOST, 3x Südkante: PHONE 15W / DONGLE / MEDIA) und rückseitiger CC-Beschaltung für Harley-Davidson Skyline OS / Boom! Box GTS.*
 
 ![PCBA 05B Handschuhfach-Hub Draufsicht](../images/pcba/pcba05b_cockpit_breakout_top.png)
-*Abbildung 7.5d: Bestückungs-Draufsicht PCBA 05B mit 5x USB-C Buchsen (12 mm Raster), CC-Beschaltung und Microchip USB2514Bi Controller.*
+*Abbildung 7.5d: Bestückungs-Draufsicht PCBA 05B (50,0 x 20,0 mm) mit 5x USB-C Buchsen, M2.5 Befestigungsbohrungen (H1/H2 im 42 mm Abstand) und Microchip USB2514Bi Controller.*
 
 ---
 
-### 7.3 PCBA 05C: Bilateral-Symmetrischer Universal Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
+### 7.3 PCBA 05C: Ultra-Kompakter Bilateral-Symmetrischer Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
 
 ![PCBA 05C Spiegel-Pod 3D](../images/pcba/pcba05c_mirror_pod_3d.png)
-*Abbildung 7.5e: 3D-CAD-Ansicht des bilateral-symmetrischen Under-Perch Spiegel-Pods (PCBA 05C, 32 x 14 mm) mit dualen Bernstein BSD Totwinkel-Warn-LEDs (LED1/LED2 ober- und unterhalb der zentralen M2-Befestigung), IP67-versiegeltem Kurzhubtaster (Omron B3SL-1002P) an der Außenkante und horizontalem JST-GH 4-Pin SMD-Steckverbinder an der Stirnseite.*
+*Abbildung 7.5e: 3D-CAD-Ansicht des ultra-kompakten, bilateral-symmetrischen Under-Perch Spiegel-Pods (PCBA 05C, 18,25 x 14,0 mm, Z-Stacking beidseitig SMT) mit dualen Bernstein BSD Totwinkel-Warn-LEDs (LED1/LED2 ober- und unterhalb der M2-Befestigung bei X=15,0 mm), unterseitigem IP67-Kurzhubtaster (Omron B3SL-1002P auf B.Cu bei X=9,0 mm) und horizontalem JST-GH 4-Pin SMD-Steckverbinder an der Stirnseite (X=3,5 mm).*
 
 ![PCBA 05C Spiegel-Pod Draufsicht](../images/pcba/pcba05c_mirror_pod_top.png)
 *Abbildung 7.5f: Bestückungs-Draufsicht PCBA 05C mit TVS-Diode D1, Entprellkondensator C1 und getrennten Vorwiderständen R1/R2 für maximale Redundanz und Sonnenlicht-Sichtbarkeit.*
 
 #### 7.3.1 Technische Platinen-Kenndaten & Bestückung
-* **Abmessungen:** 32,0 x 14,0 mm, 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
-* **Bilateral-Symmetrisches Universal-Design:** Die Platine ist entlang der Mittellinie ($Y = 7{,}0\,\text{mm}$) zu 100 % achsensymmetrisch konstruiert. Dadurch wird **nur noch ein einziger Platinentyp für beide Lenkerseiten (Links & Rechts)** gefertigt. Beim Spiegeln des Gehäuses (`mirror([0, 1, 0])`) bleiben Stirnseiten-Stecker, zentraler M2-Schraubdom und Daumentaster exakt auf $Y=0$, während die beiden synchronen LEDs lediglich ihre Plätze ober- und unterhalb des Schraublochs tauschen.
-* **Bauform:** 100 % SMD, Formfaktor passgenau für [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
+* **Abmessungen:** 18,25 x 14,0 mm (43 % kürzer durch Z-Stacking), 2 Lagen FR4 High-TG150 (1,6 mm, ENIG-Goldfinish).
+* **Bilateral-Symmetrisches Universal-Design:** Die Platine ist entlang der Mittellinie ($Y = 7{,}0\,\text{mm}$) zu 100 % achsensymmetrisch konstruiert. Dadurch wird **nur noch ein einziger Platinentyp für beide Lenkerseiten (Links & Rechts)** gefertigt. Beim Spiegeln des Gehäuses (`mirror([0, 1, 0])`) bleiben Stirnseiten-Stecker, zentraler M2-Schraubdom und unterseitiger Daumentaster exakt auf $Y=0$, während die beiden synchronen LEDs lediglich ihre Plätze ober- und unterhalb des Schraublochs tauschen.
+* **Bauform:** Beidseitiges Z-Stacking SMT (`F.Cu` & `B.Cu`), Formfaktor passgenau für [`under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad).
 * **Bestückung:**
-  * **Duale `LED1` & `LED2` (Bernstein BSD Totwinkel-Warn-LEDs):** Zwei Hochleistungs-SMD-LEDs (1206, 590 nm Amber, 120° Abstrahlwinkel), symmetrisch oberhalb ($Y = 11{,}2\,\text{mm}$) und unterhalb ($Y = 2{,}8\,\text{mm}$) des zentralen M2-Schraublochs. Strahlen gemeinsam durch den $38^\circ$-Stadion-Diffusortrichter im Gehäusedeckel für doppelte Leuchtkraft bei direkter Sonneneinstrahlung.
-  * **`SW1` (Taktiler Daumen-Mikrotaster):** IP67-versiegelter Kurzhub-Mikrotaster (Omron B3SL-1002P, $X = 26{,}5\,\text{mm}, Y = 7{,}0\,\text{mm}$) mit spürbarem 300g Druckpunkt für zuverlässige Bedienung mit Winterhandschuhen.
-  * **Entprellung & ESD-Schutz:** 100 nF RC-Glied zur Hardware-Entprellung und bidirektionale TVS-Diode (`D1`, PESD5V0S1BL) gegen elektrostatische Entladungen.
-  * **Steckverbinder (`J1`):** 4-polige JST-GH SMD Buchse (`SM04B-GHS-TB`, 1.25 mm Raster) stirnseitig bei $X = 5{,}25\,\text{mm}, Y = 7{,}0\,\text{mm}$ (Kabel führt axial am Lenkerrohr entlang).
+  * **Duale `LED1` & `LED2` (Bernstein BSD Totwinkel-Warn-LEDs auf `F.Cu`):** Zwei Hochleistungs-SMD-LEDs (1206, 590 nm Amber, 120° Abstrahlwinkel), symmetrisch oberhalb ($X = 15{,}0\,\text{mm}, Y = 11{,}2\,\text{mm}$) und unterhalb ($X = 15{,}0\,\text{mm}, Y = 2{,}8\,\text{mm}$) des M2-Schraublochs (`H1` bei $X = 15{,}0\,\text{mm}, Y = 7{,}0\,\text{mm}$). Strahlen gemeinsam durch den $38^\circ$-Stadion-Diffusortrichter im Gehäusedeckel für doppelte Leuchtkraft bei direkter Sonneneinstrahlung.
+  * **`SW1` (Taktiler Daumen-Mikrotaster auf `B.Cu`):** IP67-versiegelter Kurzhub-Mikrotaster (Omron B3SL-1002P, mittig auf der Platinenunterseite bei $X = 9{,}0\,\text{mm}, Y = 7{,}0\,\text{mm}$) mit spürbarem 300g Druckpunkt für zuverlässige Bedienung mit Winterhandschuhen.
+  * **Entprellung & ESD-Schutz:** 100 nF RC-Glied (`C1` bei $X = 9{,}0\,\text{mm}, Y = 12{,}0\,\text{mm}$) zur Hardware-Entprellung und bidirektionale TVS-Diode (`D1`, PESD5V0S1BL bei $X = 9{,}0\,\text{mm}, Y = 2{,}0\,\text{mm}$) gegen elektrostatische Entladungen.
+  * **Steckverbinder (`J1`):** 4-polige JST-GH SMD Buchse (`SM04B-GHS-TB`, 1.25 mm Raster) stirnseitig bei $X = 3{,}50\,\text{mm}, Y = 7{,}0\,\text{mm}$ (Kabel führt axial am Lenkerrohr entlang).
 
 #### 7.3.2 Pinbelegung des Spiegel-Pod Headers (`J1` / 4-Pin JST-GH)
 

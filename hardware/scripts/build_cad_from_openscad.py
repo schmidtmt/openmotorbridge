@@ -82,6 +82,7 @@ STL_TARGETS: List[Tuple] = [
     ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
     ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_block.stl"),
     ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_clamp.stl", ["-D", 'part="clamp"']),
+    ("04_front_node/glovebox_power_injection_hub.scad", "04_front_node/glovebox_power_injection_hub.stl"),
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_block.stl"),
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_lid.stl", ["-D", 'part="lid"']),
 
@@ -521,7 +522,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/under_perch_mirror_pod.scad",
         os.path.join(CAD_IMG_DIR, "under_perch_switch_bracket_cad.png"),
-        "0,0,10,55,0,25,120",
+        "0,5,8,55,0,140,125",
         "Tomorrow"
     ),
     (
@@ -560,7 +561,7 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "04_front_node/glovebox_power_injection_hub.scad",
         os.path.join(CAD_IMG_DIR, "glovebox_power_injection_hub_cad.png"),
-        "36,23,11,55,0,320,170",
+        "27.5,12.5,8,55,0,320,135",
         "Tomorrow"
     ),
 ]

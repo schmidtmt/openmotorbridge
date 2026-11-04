@@ -562,7 +562,7 @@ In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satelli
     - AUX 12V (Zusatzscheinwerfer)                    * USB 2.0 Host Pass-Through (Skyline)
     - NAV 12V (Garmin / Chigee AIO-5)                 * USB 2.0 Media Pass-Through (Sticks)
     - CAM 5V (Action-Cam entstört)                    * Integrierte thermische Louvers
-    - CKPT 1 & 2 (Spiegel-Pods / Disp)                * Kompakte Maße: 72 x 46 x 22 mm
+    - CKPT 1 & 2 (Spiegel-Pods / Disp)                * Kompakte Maße: 55 x 25 x 18 mm (PCB 50 x 20 mm)
   * Externe Box ERSATZLOS ENTFALLEN!                  * Dovetail-Verbinder ENTFALLEN!
 ```
 
@@ -571,8 +571,8 @@ In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satelli
    - Ein separater Fahrzeug-Satellitenblock mit offenen JST-Steckern im Spritzwasserbereich ist **vollständig entfallen**. Das spart wertvollen Bauraum hinter Verkleidungen, eliminiert unnötige Übergangswiderstände und senkt die Fehleranfälligkeit bei Starkregen.
 
 2. **Aufgehen des Cockpit-Satelliten im Handschuhfach-Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
-   - Der vormalige Cockpit-Verteiler ist als spezialisierter, kompakter **4-Port Handschuhfach Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) für das rechte Handschuhfach (Media Compartment) moderner Touring-Bagger (Road Glide, Street Glide, CVO, CVO ST 2024+) aufgegangen.
-   - **Abmessungen:** Schlanke $72{,}0 \times 46{,}0 \times 22{,}0\,\text{mm}$ (HP MJF PA12), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
+   - Der vormalige Cockpit-Verteiler ist als spezialisierter, kompakter **Handschuhfach Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) für das rechte Handschuhfach (Media Compartment) moderner Touring-Bagger (Road Glide, Street Glide, CVO, CVO ST 2024+) aufgegangen.
+   - **Abmessungen:** Ultrakompakte $55{,}0 \times 25{,}0 \times 18{,}0\,\text{mm}$ (HP MJF PA12 für die $50{,}0 \times 20{,}0\,\text{mm}$ Dual-Edge USB-C Platine `PCBA 05B`), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
    - **Funktionale Schnittstellen:**
      - **Upstream Host:** Verbindet sich mit der werksseitigen Harley USB-C Buchse der Head Unit (Skyline OS / Boom! Box GTS).
      - **12V DC Speisung:** Gespeist über die 6-polige Verbindung vom Front-Node (`J4` an `PCBA 05`).
@@ -770,7 +770,7 @@ Für alle Harley-Davidson Cockpit-Konzepte stehen robuste, vibrationsentkoppelte
    * **Automatischer BLE-Shutter:** Startet und stoppt die Kameraaufzeichnung automatisch bei Zündung EIN/AUS und setzt Video-Bookmarks per Doppelklick am rechten Under-Perch Taster.
 
 3. **4-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):**
-   * Kompaktes Gehäuse ($72 \times 46 \times 22\,\text{mm}$) für das rechte Medienfach von Touring-Baggern.
+   * Ultrakompaktes Gehäuse ($55 \times 25 \times 18\,\text{mm}$, Platine $50 \times 20\,\text{mm}$) für das rechte Medienfach von Touring-Baggern.
    * Gespeist vom Front-Node (`PCBA 05`) über ein kombiniertes High-Power & USB 2.0 High-Speed Kabel.
    * Tappt den werksseitigen OEM USB-C Port zur Head Unit (Skyline OS / Boom! Box GTS).
    * Bietet:
@@ -1471,7 +1471,7 @@ Die **symmetrischen Dual Under-Perch Spiegel-Pods** ([`under_perch_mirror_pod.sc
 
 * **Mechanische & Elektronische Vorteile:**
   * **0 mm Lenkerrohr-Bedarf:** Verbraucht keinen Millimeter auf dem geraden Lenkerrohr. Die oberen Armaturenklemmen bleiben zu **100 % frei für Zusatzschalter (z. B. Klappenauspuff)**.
-  * **Echte baugleiche Universal-Platine (`PCBA 05C`):** Durch das konsequent bilateral-symmetrische Design entlang der Mittellinie ($Y=0$) mit stirnseitigem JST-GH Stecker, zentralem M2-Schraubdom und oberhalb/unterhalb angeordneten LEDs nutzen beide Gehäuse (Links und Rechts) **exakt dieselbe, unmodifizierte Platine**.
+  * **Echte baugleiche Universal-Platine (`PCBA 05C`, $18{,}25 \times 14{,}0\,\text{mm}$ Z-Stacked):** Durch das konsequent bilateral-symmetrische Z-Stacked-Design entlang der Mittellinie ($Y=7{,}0\,\text{mm}$) mit stirnseitigem JST-GH Stecker (`J1` auf `F.Cu`), unterseitigem Omron B3SL-1002P Taster (`SW1` auf `B.Cu`), zentralem M2-Schraubdom (`H1` bei $X=15{,}0\,\text{mm}$) und oberhalb/unterhalb angeordneten 1206-LEDs (`LED1`, `LED2` bei $X=15{,}0\,\text{mm}$) nutzen beide $23{,}05 \times 18{,}8 \times 11{,}2\,\text{mm}$ Gehäuse (Links und Rechts) **exakt dieselbe, unmodifizierte Platine**.
   * **Universelle Befestigung:** Klemmung direkt unter dem Spiegelgewinde (M8 / M10 / M12 oder Harley-Torx-Schraube).
   * **Pkw-Integration (Reference Kit 5 - Chase Van):** Im Begleitfahrzeug entfällt die Lenkermontage. Ein optionaler Taster ruht in der Mittelkonsole/Schalthebel, während die Sprachsteuerung primär drahtlos über CarPlay oder Headset erfolgt.
 

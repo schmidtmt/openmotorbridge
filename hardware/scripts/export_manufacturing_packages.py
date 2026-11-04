@@ -57,6 +57,30 @@ BOARDS = [
         "is_4layer": True
     },
     {
+        "name": "05b_cockpit_breakout_pcba",
+        "title": "OpenMotorBridge Glovebox Media & Power-Injection Hub PCB (PCBA 05B)",
+        "sch": os.path.join(BASE_DIR, "kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": False
+    },
+    {
+        "name": "05c_mirror_pod_pcba",
+        "title": "OpenMotorBridge Ultra-Compact Under-Perch Mirror Pod PCB (PCBA 05C)",
+        "sch": os.path.join(BASE_DIR, "kicad_mirror_pod/openmotorbridge_mirror_pod.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_mirror_pod/openmotorbridge_mirror_pod.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": False
+    },
+    {
+        "name": "05d_sensor_puck_pcba",
+        "title": "OpenMotorBridge Modular Environmental & GNSS Sensor Puck PCB (PCBA 05D)",
+        "sch": os.path.join(BASE_DIR, "kicad_sensor_puck/openmotorbridge_sensor_puck.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "kicad_sensor_puck/openmotorbridge_sensor_puck.kicad_pcb"),
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
+    },
+    {
         "name": "06_magsafe_dock_pcba",
         "title": "OpenMotorBridge MagSafe Frame Dock Adapter PCB",
         "sch": os.path.join(BASE_DIR, "kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_sch"),
@@ -168,13 +192,52 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
                 "BTN_MODE": "C318884",
                 "BTN_CH_UP": "C318884",
                 "BTN_CH_DOWN": "C318884",
+                "USB2514Bi-AEZG": "C16251",
+                "FRONT_NODE": "C2765186",
+                "SKYLINE_HOST": "C2765186",
+                "PHONE_CHARGE": "C2765186",
+                "DONGLE": "C2765186",
+                "MEDIA": "C2765186",
+                "5.1k": "C23186",
+                "12.0k_1%": "C22790",
+                "12.0k": "C22790",
+                "56k": "C25812",
+                "10k": "C25804",
+                "4.7k": "C23162",
+                "18pF": "C1647",
+                "12pF": "C1644",
+                "100nF": "C14663",
+                "0.1uF": "C14663",
+                "1uF": "C15849",
+                "4.7uF": "C19666",
+                "10uF": "C15850",
+                "SM04B-GHS-TB": "C2897370",
+                "JST_GH_4P_POD": "C2897370",
+                "Omron_B3SL-1002P": "C223874",
+                "PTT_CAM_SW": "C223874",
+                "BSD_AMBER_1": "C2843590",
+                "BSD_AMBER_2": "C2843590",
+                "AMBER_590NM": "C2843590",
+                "150R": "C22808",
+                "PESD5V0S1BL": "C19257",
+                "u-blox_SAM-M10Q": "C5141445",
+                "SAM-M10Q": "C5141445",
+                "TMP117": "C2843535",
+                "TMP117AIDRVR": "C2843535",
+                "OPT3001": "C70268",
+                "OPT3001DNPR": "C70268",
+                "SPH0645LM4H": "C544577",
+                "SM06B-GHS-TB": "C2897372",
+                "JST_GH_06P_SENSOR_IN": "C2897372",
+                "SM04B-SRSS-TB": "C160402",
+                "JST_SH_06P_EXP_OUT": "C136657",
             }
             if val in known_lcsc:
                 lcsc = known_lcsc[val]
             elif ref in known_lcsc:
                 lcsc = known_lcsc[ref]
 
-        if ref and not ref.startswith("#") and not ref.startswith("G***") and not (ref.startswith("H") and "MountingHole" in val):
+        if ref and not ref.startswith("#") and not ref.startswith("G***") and not (ref.startswith("H") and ("MountingHole" in val or "MountingHole" in footprint_name)):
             components.append({
                 "Designator": ref,
                 "Comment": val,
@@ -341,7 +404,9 @@ def package_3d_print_stls():
             "front_node_lower_tub.stl",
             "front_node_upper_lid.stl",
             "front_node_cable_glands_tpu.stl",
-            "front_node_usbc_cap_tpu.stl"
+            "front_node_usbc_cap_tpu.stl",
+            "glovebox_power_injection_hub.stl",
+            "sensor_puck_environmental.stl"
         ]:
             p = os.path.join(src_stl_base, "04_front_node", f)
             if os.path.exists(p):
@@ -367,7 +432,12 @@ def package_3d_print_stls():
         for f in [
             "radar_mr20_housing.stl",
             "car_sun_visor_pod_clip.stl",
-            "adventure_rack_radar_mount.stl"
+            "adventure_rack_radar_mount.stl",
+            "under_perch_mirror_pod_base_left.stl",
+            "under_perch_mirror_pod_base_right.stl",
+            "under_perch_mirror_pod_cover.stl",
+            "under_perch_mirror_pod_button.stl",
+            "under_perch_mirror_pod_lens.stl"
         ]:
             p = os.path.join(src_stl_base, "05_accessories", f)
             if os.path.exists(p):

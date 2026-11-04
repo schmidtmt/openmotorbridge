@@ -1,6 +1,6 @@
 # 15 - Bill of Materials (BOM), COTS Sourcing & SMT Manufacturing (All 7 PCBAs)
 
-This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all 7 active printed circuit board assemblies (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 07`, `PCBA 08`, `PCBA 09`, `PCBA 10` - `PCBA 02`, `PCBA 04` and `PCBA 06` are retired without replacement) at JLCPCB / Eurocircuits, all mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
+This document serves as the master reference (Single Source of Truth) for the complete Bill of Materials (BOM), manufacturing specifications for all active printed circuit board assemblies (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05B`, `PCBA 05C`, `PCBA 05D`, `PCBA 07`, `PCBA 08`, `PCBA 09`, `PCBA 10` - `PCBA 02`, `PCBA 04` and `PCBA 06` are retired without replacement) at JLCPCB / Eurocircuits, all mechanical 3D printed components, COTS procurement lists, and a comprehensive cost and ordering strategy (Solo builder vs. Community group buy).
 
 ---
 
@@ -95,21 +95,53 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Storage Inductor for SC8721/SC8102 60W USB-PD Fast-Charge Buck-Boost |
 | **J_BUS** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | 4-Wire Automotive Backbone (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) to Central Box (Branch 1, 60W) |
 | **J_SENSOR_EXT**| BM06B-SRSS-TB | JST | 6-Pin 1.0mm SMD Vert. | `C160403` | Modular Snap-On Sensor Puck Interface (GNSS, Temp, Light, MEMS I2C/I2S) |
-| **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Left Mirror Pod Interface (PCBA 05B: BSD LED, PTT / gesture switch) |
-| **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Right Mirror Pod Interface (PCBA 05B: BSD LED, Hazard / Cam-Tag switch) |
+| **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Left Mirror Pod Interface (`PCBA 05C`: BSD LED, PTT / gesture switch) |
+| **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Right Mirror Pod Interface (`PCBA 05C`: BSD LED, Hazard / Cam-Tag switch) |
 | **J7** | TYPE-C-31-M-12 | Korean Hro | SMD Hybrid IP67 | `C2765186` | ESP32-S3 Service & Flash Port (Flank) with TPU Sealing Plug |
 
 ---
 
-## 5.1 PCBA 05B: Symmetrical Under-Perch Mirror Pod (`openmotorbridge_mirror_pod`, 2-Layer FR4 TG150, 24 x 18 mm)
-> **Quantity Note:** The module is 100% symmetrical and fitted **2x per motorcycle** (Left under clutch perch nut, Right under brake perch nut).
+## 5.1 PCBA 05B: Glovebox Media & Power-Injection Hub (`openmotorbridge_cockpit_breakout`, 2-Layer FR4 TG150, 50 x 20 mm, 2-Sided SMT)
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **SW1** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm IP67 | C318884 | Tactile gold-contact sealed switch for 5-gesture engine (PTT, Cam-Tag, Hazard pin) |
-| **LED1-2** | Osram Amber SMD LED | ams OSRAM | SMD 0805 | C2843590 | 2x ultra-bright amber blind-spot alert LEDs (BSD), aimed at mirror glass |
-| **D1** | ESD5Z5.0T1G | ON Semi | SOD-323 | C2834585 | TVS diode for ESD protection on switch contact line |
-| **J1** | SM04B-SRSS-TB | JST | 4-Pin 1.0mm SMD Horiz. | C160402 | Connection to Front Node (`PTT_SIG`, `LED_BSD`, `VCC_3V3`, `GND`) |
+| **U1** | USB2514Bi-AEZG / USB2514B | Microchip | QFN-36 (6x6mm) | `C16251` | Industrial 4-Port High-Speed USB 2.0 Hub Controller (-40°C...+85°C) |
+| **J1..J5** | TYPE-C-31-M-12 | Korean HRO | USB-C 16-Pin SMD | `C2765186` | 5x Opposing Dual-Edge USB-C Ports (North: `J2` FRONT_NODE, `J1` SKYLINE_HOST; South: `J3` PHONE_CHARGE, `J4` DONGLE, `J5` MEDIA) |
+| **R1..R10** | 5.1k 1% | Yageo / Uni-Royal | SMD 0603 (B.Cu) | `C23186` | 10x USB-C CC1/CC2 Pull-Down Resistors for `J1..J5` |
+| **R_RBIAS** | 12.0k 1% | Yageo / Uni-Royal | SMD 0603 | `C22790` | Reference Bias Resistor for `USB2514Bi` |
+| **R_RST** | 10k 1% | Yageo / Uni-Royal | SMD 0603 | `C25804` | Pull-Up Resistor for `RESET_N` |
+| **C_XTAL1, C_XTAL2** | 18pF 50V C0G | Murata / Yageo | SMD 0603 | `C1647` | Crystal Load Capacitors |
+| **C_RST, C_VDD18** | 100nF 50V X7R | Yageo / Samsung | SMD 0603 | `C14663` | Ceramic Decoupling Capacitors (`RESET_N` & `VDD18` Core) |
+| **C_IN1, C_OUT1** | 10µF 25V X5R | Samsung / Murata | SMD 0805 (`C_IN1` B.Cu) | `C15850` | Bulk Decoupling Capacitors on `VBUS_5V` & `VDD33` |
+| **H1, H2** | MountingHole_Pad | M2.5 (Ø 2.7 mm) | SMD/THT Pad Ø 5.0 mm | Hardware | 2x Grounded M2.5 Mounting Holes (42.0 mm center pitch) |
+
+---
+
+## 5.2 PCBA 05C: Ultra-Compact Symmetrical Under-Perch Mirror Pod (`openmotorbridge_mirror_pod`, 2-Layer FR4 TG150, 18.25 x 14.0 mm, 2-Sided Z-Stacked SMT)
+> **Quantity Note:** The module is 100% bilaterally symmetrical along its horizontal centerline ($Y = 7.0\,\text{mm}$) and fitted **2x per motorcycle** (Left under clutch perch nut, Right under brake perch nut).
+
+| Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **SW1** | B3SL-1002P | Omron | SMD 6.2x6.5mm IP67 (`B.Cu`) | `C223874` | Tactile gold-contact sealed switch on `B.Cu` for 5-gesture engine (PTT, Cam-Tag, Hazard pin) |
+| **LED1, LED2** | Osram Amber SMD LED | ams OSRAM | SMD 1206 (`F.Cu`) | `C2843590` | 2x Ultra-bright amber blind-spot alert LEDs (BSD), aimed at mirror glass |
+| **R1, R2** | 150R 1% | Yageo / Uni-Royal | SMD 0603 (`F.Cu`) | `C22808` | 2x Current-limiting resistors for `LED1` & `LED2` |
+| **C1** | 100nF 50V X7R | Yageo / Samsung | SMD 0603 (`F.Cu`) | `C14663` | Hardware RC debounce capacitor for `SW1` |
+| **D1** | PESD5V0S1BL | Nexperia | SOD-882 (`F.Cu`) | `C19257` | Bidirectional TVS diode for ESD protection on switch contact line |
+| **J1** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD Horiz. (`F.Cu`) | `C2897370` | Connection to Front Node (`VCC_3V3`, `LED_CTRL`, `BTN_SIG`, `GND`) |
+| **H1** | MountingHole_Pad | M2 (Ø 2.2 mm) | SMD/THT Pad Ø 4.2 mm | Hardware | Central M2 screw boss ($X = 15.0\,\text{mm}, Y = 7.0\,\text{mm}$) between `LED1` and `LED2` |
+
+---
+
+## 5.3 PCBA 05D: Modular Environmental & GNSS Sensor Puck (`openmotorbridge_sensor_puck`, 4-Layer FR4 TG150, 34 x 34 mm)
+
+| Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **U1** | SAM-M10Q | u-blox | SMD Module (15.5x15.5mm) | `C5141445` | Ultra-low-power 10 Hz Multi-GNSS receiver with integrated ceramic patch antenna |
+| **U2** | TMP117AIDRVR | Texas Instruments | WSON-6 (2x2mm) | `C2843535` | ±0.1°C high-precision digital I2C temperature sensor with thermal isolation moat |
+| **U3** | OPT3001DNPR | Texas Instruments | USON-6 (2x2mm) | `C70268` | Digital ambient light sensor (0.01 lux to 83k lux) for automatic display dimming |
+| **MIC1** | SPH0645LM4H-B | Knowles | LGA-6 (3.5x2.65mm) | `C544577` | Digital 24-bit I2S MEMS microphone (Bottom-Port) for wind-noise DSP |
+| **J1** | SM06B-GHS-TB | JST | 6-Pin 1.25mm SMD Horiz. | `C2897372` | 6-Pin primary interface to Front Node (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TX`, `GNSS_RX`) |
+| **J2** | SM04B-SRSS-TB | JST | 4-Pin 1.0mm SMD Horiz. | `C160402` | 4-Pin I2S microphone header (`I2S_BCLK`, `I2S_WS`, `I2S_SD`, `GND`) |
 
 ---
 
@@ -214,7 +246,9 @@ All manufacturing packages reside in the repository under `hardware/production_p
 | **PCBA 01: Central Box** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (LM5050-Q1 on B.Cu) |
 | **PCBA 03: Universal Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, Single-Sided SMT (Top; Order 2x per vehicle) |
 | **PCBA 05: Front Node** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG (Gold), 1.6 mm, TG150, 2-sided SMT (LM5050-Q1 on B.Cu) |
-| **PCBA 05B: Mirror Pod** | `05b_mirror_pod_pcba_gerbers_jlcpcb.zip` | `05b_mirror_pod_pcba_bom_jlcpcb.csv` | `05b_mirror_pod_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG, 1.6 mm, TG150, SMT Top (2x per bike for Left & Right, BSD LED + Button) |
+| **PCBA 05B: Glovebox Hub** | `05b_cockpit_breakout_pcba_gerbers_jlcpcb.zip` | `05b_cockpit_breakout_pcba_bom_jlcpcb.csv` | `05b_cockpit_breakout_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG, 1.6 mm, TG150, 50 x 20 mm, 2-sided SMT (5x USB-C Dual-Edge + USB2514Bi) |
+| **PCBA 05C: Mirror Pod** | `05c_mirror_pod_pcba_gerbers_jlcpcb.zip` | `05c_mirror_pod_pcba_bom_jlcpcb.csv` | `05c_mirror_pod_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG, 1.6 mm, TG150, 18.25 x 14.0 mm, 2-sided Z-Stacked SMT (2x per bike, SW1 on B.Cu) |
+| **PCBA 05D: Sensor Puck** | `05d_sensor_puck_pcba_gerbers_jlcpcb.zip` | `05d_sensor_puck_pcba_bom_jlcpcb.csv` | `05d_sensor_puck_pcba_cpl_jlcpcb.csv` | **4 Layers** | ENIG, 1.6 mm, TG150, 34 x 34 mm, Single-Sided SMT Top (SAM-M10Q, TMP117, OPT3001, SPH0645) |
 | **PCBA 06: MagSafe Dock** | - | - | - | - | *Purged in v10.0* (replaced by COTS 4-Pin IP67 magnetic breakaway coupling) |
 | **PCBA 07: Smart-Keyfob** | `07_smart_keyfob_pcba_gerbers_jlcpcb.zip` | `07_smart_keyfob_pcba_bom_jlcpcb.csv` | `07_smart_keyfob_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.0 mm, 2-sided SMT |
 | **PCBA 08: Radar 2.0 Sub-MCU** | `08_radar_submcu_pcba_gerbers_jlcpcb.zip` | `08_radar_submcu_pcba_bom_jlcpcb.csv` | `08_radar_submcu_pcba_cpl_jlcpcb.csv` | **2 Layers** | ENIG (Gold), 1.2 mm, TG150, SMT Top (2x U.FL, 90° pin header) |

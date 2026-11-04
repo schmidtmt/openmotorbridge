@@ -349,7 +349,7 @@ def create_schematic_file():
 
 def build_pcb():
     board = pcbnew.BOARD()
-    W, H = 76.0, 20.0
+    X0, W, H = 26.0, 50.0, 20.0
 
     net_names = [
         "", "GND", "VCC_5V", "+3V3", "+1V8", "VBUS_HOST_SENSE",
@@ -367,10 +367,10 @@ def build_pcb():
         board.Add(net)
         net_map[nname] = net
 
-    # Edge.Cuts with 1.0mm chamfers
+    # Edge.Cuts: 50.0 x 20.0 mm (X = 26.0..76.0, Y = 0.0..20.0) with 1.0mm chamfers
     pts = [
-        (1.0, 0.0), (W - 1.0, 0.0), (W, 1.0), (W, H - 1.0),
-        (W - 1.0, H), (1.0, H), (0.0, H - 1.0), (0.0, 1.0), (1.0, 0.0)
+        (X0 + 1.0, 0.0), (X0 + W - 1.0, 0.0), (X0 + W, 1.0), (X0 + W, H - 1.0),
+        (X0 + W - 1.0, H), (X0 + 1.0, H), (X0, H - 1.0), (X0, 1.0), (X0 + 1.0, 0.0)
     ]
     for i in range(len(pts) - 1):
         seg = pcbnew.PCB_SHAPE(board)
@@ -381,18 +381,21 @@ def build_pcb():
         seg.SetLayer(pcbnew.Edge_Cuts)
         board.Add(seg)
 
-    def place_fp(lib_folder, fp_name, ref, val, x, y, rot_deg, pin_nets, model_3d=None):
+    def place_fp(lib_folder, fp_name, ref, val, x, y, rot_deg, pin_nets, layer=pcbnew.F_Cu, model_3d=None):
         lib_path = os.path.join(KICAD_FP_DIR, lib_folder)
         fp = pcbnew.FootprintLoad(lib_path, fp_name)
         if fp is None:
             raise RuntimeError(f"Could not load footprint {fp_name} from {lib_path}")
         fp.SetReference(ref)
         fp.SetValue(val)
-        fp.SetLayer(pcbnew.F_Cu)
         fp.SetPosition(pcbnew.VECTOR2I(to_nm(x), to_nm(y)))
         fp.SetOrientationDegrees(rot_deg)
-        fp.Reference().SetVisible(True)
+        fp.Reference().SetVisible(False)
         fp.Value().SetVisible(False)
+
+        board.Add(fp)
+        if layer == pcbnew.B_Cu:
+            fp.Flip(fp.GetPosition(), False)
 
         if model_3d:
             models = fp.Models()
@@ -408,14 +411,15 @@ def build_pcb():
             elif pnum == "" or pnum == "0":
                 pad.SetNet(net_map["GND"])
 
-        board.Add(fp)
         return fp
 
-    # Mounting Holes
-    place_fp("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad", "H1", "M2.5", 4.0, 16.0, 0, {"1": "GND"})
+    # Mounting Holes (M2.5 at X = 30.0 and 72.0, Y = 16.0)
+    place_fp("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad", "H1", "M2.5", 30.0, 16.0, 0, {"1": "GND"})
     place_fp("MountingHole.pretty", "MountingHole_2.7mm_M2.5_Pad", "H2", "M2.5", 72.0, 16.0, 0, {"1": "GND"})
 
-    # 5x USB-C Receptacles in a row at Y = 4.55 mm
+    # 5x USB-C Receptacles:
+    # North edge (Y = 15.70 mm, rot = 0°): J2 (FRONT_NODE, X=39.68) & J1 (SKYLINE_HOST, X=53.18)
+    # South edge (Y = 4.55 mm, rot = 180°): J3 (PHONE_CHARGE, X=33.82), J4 (DONGLE, X=45.82), J5 (MEDIA, X=57.82)
     usbc_3d = "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal.step"
     def usbc_pins(vbus, dp, dm, cc1, cc2):
         return {
@@ -426,12 +430,12 @@ def build_pcb():
         }
 
     place_fp("Connector_USB.pretty", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "J1", "SKYLINE_HOST",
-             9.82, 4.55, 180,
+             53.18, 15.70, 0,
              usbc_pins("VBUS_HOST_SENSE", "USB_UP_DP", "USB_UP_DM", "NET_J1_CC1", "NET_J1_CC2"),
              model_3d=usbc_3d)
 
     place_fp("Connector_USB.pretty", "USB_C_Receptacle_HRO_TYPE-C-31-M-12", "J2", "FRONT_NODE",
-             21.82, 4.55, 180,
+             39.68, 15.70, 0,
              usbc_pins("VCC_5V", "USB_DN3_DP", "USB_DN3_DM", "NET_J2_CC1", "NET_J2_CC2"),
              model_3d=usbc_3d)
 
@@ -450,7 +454,7 @@ def build_pcb():
              usbc_pins("VCC_5V", "USB_DN2_DP", "USB_DN2_DM", "NET_J5_CC1", "NET_J5_CC2"),
              model_3d=usbc_3d)
 
-    # U1: Microchip USB2514B Automotive 4-Port Hub Controller (rot = 180° so Upstream faces West, Downstream faces East)
+    # U1: Microchip USB2514B Automotive 4-Port Hub Controller at (69.25, 6.4125), rot = 0°
     u1_pins = {
         "1": "USB_DN1_DM", "2": "USB_DN1_DP",
         "3": "USB_DN2_DM", "4": "USB_DN2_DP",
@@ -464,46 +468,37 @@ def build_pcb():
         "20": "USB_UP_DM", "21": "USB_UP_DP",
         "22": "+3V3", "23": "GND", "24": "VBUS_HOST_SENSE", "25": "GND",
         "26": "GND", "27": "GND", "28": "GND",
-        "29": "+3V3", "30": "+3V3", "31": "+1V8", "32": "+3V3",
+        "29": "+3V3", "30": "+3V3", "31": "+1V8", "31": "+1V8", "32": "+3V3",
         "33": "RESET_N", "34": "GND", "35": "+3V3", "36": "RBIAS", "37": "GND"
     }
     qfn_3d = "${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/Texas_RHH0036C_VQFN-36-1EP_6x6mm_P0.5mm_EP4.4x4.4mm.step"
     place_fp("Package_DFN_QFN.pretty", "QFN-36-1EP_6x6mm_P0.5mm_EP4.1x4.1mm", "U1", "USB2514Bi-AEZG",
-             38.0, 15.0, 180, u1_pins, model_3d=qfn_3d)
+             69.25, 6.4125, 0, u1_pins, model_3d=qfn_3d)
 
+    # Top-side Passives (F.Cu)
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_XTAL1", "12pF", 65.75, 16.20, -90, {"1": "XTAL_IN", "2": "GND"})
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_XTAL2", "12pF", 60.50, 16.275, -90, {"1": "XTAL_OUT", "2": "GND"})
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R_RBIAS", "12.0k", 74.75, 2.825, -90, {"1": "RBIAS", "2": "GND"})
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R_RST", "10k", 62.25, 16.275, -90, {"1": "RESET_N", "2": "+3V3"})
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_RST", "100nF", 64.00, 16.225, -90, {"1": "RESET_N", "2": "GND"})
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_VDD18", "1uF", 70.725, 1.00, 0, {"1": "+1V8", "2": "GND"})
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_OUT1", "10uF", 67.50, 16.225, -90, {"1": "+3V3", "2": "GND"})
 
-    # Passives (0603) - All placed well clear of U1 QFN-36 footprint (X=35..41, Y=12..18)
-    # Crystal Caps (West of U1 at X = 26.5 and 31.5, Y = 17.5)
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_XTAL1", "12pF", 26.5, 17.5, 0, {"1": "XTAL_IN", "2": "GND"})
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_XTAL2", "12pF", 31.5, 17.5, 0, {"1": "XTAL_OUT", "2": "GND"})
-
-    # Core & Reset Caps / Resistors (East of U1 at X = 44.5..48.0)
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R_RBIAS", "12.0k", 44.5, 17.5, 0, {"1": "RBIAS", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R_RST", "10k", 44.5, 14.8, 0, {"1": "RESET_N", "2": "+3V3"})
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_RST", "100nF", 44.5, 12.0, 0, {"1": "RESET_N", "2": "GND"})
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_VDD18", "1uF", 48.0, 17.5, 0, {"1": "+1V8", "2": "GND"})
-
-    # LDO Caps (East of U2 at X = 54.0)
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_IN1", "10uF", 54.0, 12.8, 90, {"1": "VCC_5V", "2": "GND"})
-    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_OUT1", "10uF", 54.0, 17.2, 90, {"1": "+3V3", "2": "GND"})
-
-    # CC Resistors for J1, J2, J3, J4, J5 (Well clear of U1 and USB-C connectors)
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R1", "5.1k", 8.0, 11.5, 90, {"1": "NET_J1_CC1", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R2", "5.1k", 11.5, 11.5, 90, {"1": "NET_J1_CC2", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R3", "5.1k", 20.0, 11.5, 90, {"1": "NET_J2_CC1", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R4", "5.1k", 23.5, 11.5, 90, {"1": "NET_J2_CC2", "2": "GND"})
-
-    # J3 (Phone): 56k pull-ups to VCC_5V for 15W Type-C native charging (at X = 30.5 and X = 32.5, Y = 11.5)
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R5", "56k", 30.5, 11.5, 90, {"1": "NET_J3_CC1", "2": "VCC_5V"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R6", "56k", 32.5, 11.5, 90, {"1": "NET_J3_CC2", "2": "VCC_5V"})
-
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R7", "5.1k", 48.0, 11.5, 90, {"1": "NET_J4_CC1", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R8", "5.1k", 51.5, 11.5, 90, {"1": "NET_J4_CC2", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R9", "5.1k", 56.0, 11.5, 90, {"1": "NET_J5_CC1", "2": "GND"})
-    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R10", "5.1k", 59.5, 11.5, 90, {"1": "NET_J5_CC2", "2": "GND"})
+    # Bottom-side Passives (B.Cu)
+    place_fp("Capacitor_SMD.pretty", "C_0603_1608Metric", "C_IN1", "10uF", 51.75, 4.925, 90, {"1": "VCC_5V", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R1", "5.1k", 55.00, 15.675, -90, {"1": "NET_J1_CC1", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R2", "5.1k", 51.50, 15.675, -90, {"1": "NET_J1_CC2", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R3", "5.1k", 37.75, 15.925, -90, {"1": "NET_J2_CC1", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R4", "5.1k", 41.25, 15.925, -90, {"1": "NET_J2_CC2", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R5", "56k", 32.25, 4.925, -90, {"1": "NET_J3_CC1", "2": "VCC_5V"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R6", "56k", 35.75, 5.000, -90, {"1": "NET_J3_CC2", "2": "VCC_5V"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R7", "5.1k", 44.25, 4.925, 90, {"1": "NET_J4_CC1", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R8", "5.1k", 47.75, 4.925, 90, {"1": "NET_J4_CC2", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R9", "5.1k", 56.00, 4.925, 90, {"1": "NET_J5_CC1", "2": "GND"}, layer=pcbnew.B_Cu)
+    place_fp("Resistor_SMD.pretty", "R_0603_1608Metric", "R10", "5.1k", 59.50, 4.925, 90, {"1": "NET_J5_CC2", "2": "GND"}, layer=pcbnew.B_Cu)
 
     # Silkscreen Markings
-    def add_silk(text, x, y, size=0.8, layer=pcbnew.F_SilkS, mirror=False):
+    def add_silk(text, x, y, size=0.55, layer=pcbnew.F_SilkS, mirror=False):
         txt = pcbnew.PCB_TEXT(board)
         txt.SetText(text)
         txt.SetPosition(pcbnew.VECTOR2I(to_nm(x), to_nm(y)))
@@ -514,14 +509,14 @@ def build_pcb():
             txt.SetMirrored(True)
         board.Add(txt)
 
-    add_silk("PCBA 05B // GLOVEBOX MEDIA & POWER-INJECTION HUB", 38.0, 1.3, 0.75)
-    add_silk("HOST", 9.82, 10.0, 0.55)
-    add_silk("FRONT", 21.82, 10.0, 0.55)
+    add_silk("PCBA 05B // HUB", 65.0, 18.8, 0.55)
+    add_silk("HOST", 53.18, 17.175, 0.55)
+    add_silk("FRONT", 39.57, 14.425, 0.55)
     add_silk("PHONE 15W", 33.82, 10.0, 0.55)
     add_silk("DONGLE", 45.82, 10.0, 0.55)
     add_silk("MEDIA", 57.82, 10.0, 0.55)
-    add_silk("OPENMOTORBRIDGE v10.0 // MJF PA12 GLOVEBOX", 38.0, 7.5, 0.85, pcbnew.B_SilkS, True)
-    add_silk("HARLEY SKYLINE OS // 4-PORT USB2514B HUB", 38.0, 10.5, 0.65, pcbnew.B_SilkS, True)
+    add_silk("OPENMOTORBRIDGE v10.0", 68.5, 12.5, 0.55, pcbnew.B_SilkS, True)
+    add_silk("SKYLINE OS // USB2514B", 68.5, 11.0, 0.55, pcbnew.B_SilkS, True)
 
     # Ground Planes (Zones) on F.Cu and B.Cu
     gnd_net = net_map["GND"]
@@ -537,10 +532,10 @@ def build_pcb():
 
         poly = zone.Outline()
         poly.NewOutline()
-        poly.Append(to_nm(0.0), to_nm(0.0))
-        poly.Append(to_nm(W), to_nm(0.0))
-        poly.Append(to_nm(W), to_nm(H))
-        poly.Append(to_nm(0.0), to_nm(H))
+        poly.Append(to_nm(X0), to_nm(0.0))
+        poly.Append(to_nm(X0 + W), to_nm(0.0))
+        poly.Append(to_nm(X0 + W), to_nm(H))
+        poly.Append(to_nm(X0), to_nm(H))
 
         board.Add(zone)
 
