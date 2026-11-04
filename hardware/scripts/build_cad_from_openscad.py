@@ -139,6 +139,8 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/smart_keyfob_pager.scad", "05_accessories/smart_keyfob_silicone_keypad.stl", ["-D", 'part="keypad"']),
 
     # 12. Cockpit Accessories (Under-Perch Mirror Pod & Legacy Schellen-Pod)
+    ("05_accessories/under_perch_mirror_pod.scad", "05_accessories/under_perch_mirror_pod.stl", ["-D", 'part="assembly"']),
+    ("05_accessories/under_perch_mirror_pod.scad", "05_accessories/under_perch_mirror_pod_base.stl", ["-D", 'part="base"']),
     ("05_accessories/under_perch_mirror_pod.scad", "05_accessories/under_perch_mirror_pod_base_left.stl", ["-D", 'part="base"', "-D", 'side="left"']),
     ("05_accessories/under_perch_mirror_pod.scad", "05_accessories/under_perch_mirror_pod_base_right.stl", ["-D", 'part="base"', "-D", 'side="right"']),
     ("05_accessories/under_perch_mirror_pod.scad", "05_accessories/under_perch_mirror_pod_cover.stl", ["-D", 'part="cover"']),
@@ -522,8 +524,9 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "05_accessories/under_perch_mirror_pod.scad",
         os.path.join(CAD_IMG_DIR, "under_perch_switch_bracket_cad.png"),
-        "0,5,8,55,0,140,125",
-        "Tomorrow"
+        "-3,0,8,64,0,48,110",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
     ),
     (
         "05_accessories/bsd_mirror_indicator_pod.scad",
