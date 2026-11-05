@@ -169,5 +169,12 @@ module sensor_puck_environmental_assembly() {
             sensor_puck_cap();
 }
 
-// Standalone execution preview
-sensor_puck_environmental_assembly();
+// Standalone execution preview / part selector ("assembly" | "bottom" | "top")
+part = "assembly";
+if (part == "bottom" || part == "cradle") {
+    sensor_puck_cradle();
+} else if (part == "top" || part == "cap") {
+    sensor_puck_cap();
+} else {
+    sensor_puck_environmental_assembly();
+}

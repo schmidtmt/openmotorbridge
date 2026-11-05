@@ -18,6 +18,7 @@ MAIN_BOX_MID_H        = 15.0;  // Reference mid tray height (mm)
 MAIN_BOX_LID_H        = 6.0;   // L-Slide lid top thickness (mm)
 MAIN_BOX_WALL         = 2.5;   // Nominal wall thickness in PA12 (mm)
 MAIN_BOX_CORNER_R     = 3.5;   // Vertical corner fillet radius (mm)
+MAIN_BOX_CORNER_POST  = 8.0;   // Corner clamping post footprint (8.0 x 8.0 mm)
 
 // Dual-Rail Slide-In Guide Heights:
 MAIN_BOX_RAIL1_Z      = 18.0;  // Rail 1 center height: Slide-In Zwischenboden (mm)

@@ -259,9 +259,8 @@ All main enclosures (Central Box, Saddlebag Pods, Front Node) utilize the **scre
 | **Pod Slide-In Lid** | [`021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl) | **2** | MJF PA12 / ASA | Tool-free L-profile front lid with 1.5 mm seal groove & 4-pin bus entry |
 | **Universal Actuator Slide Bracket**| [`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl) | **2** | MJF PA12 / ASA | Continuously adjustable 15–85 mm slide guide for 2x mini solenoids (`JF-0530B`) for cold-start |
 | **Under-Perch Mirror Pod Housing**| [`under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl) | **2 Sets** | MJF PA12 + Clear Resin | 4-piece, 100% Left/Right-identical mirror stem housing (`base`, `cover`, 45° thumb rocker `button`, angled TIR prism `lens`) for `PCBA 05C` ($18.25 \times 14.0\,\text{mm}$) |
-| **Front Node Monocoque Tub** | [`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl) | **1** | MJF PA12 / ASA | Screwless cockpit monocoque tub (Type A) with AMPS hole pattern |
-| **Front Node Slide-In Tray** | [`010_front_node_slide_tray.stl`](../../hardware/cad/stl/04_front_node/010_front_node_slide_tray.stl) | **1** | MJF PA12 / ASA | Tool-less internal slide-in tray for `PCBA 05` |
-| **Front Node Slide-In Lid** | [`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl) | **1** | MJF PA12 / ASA | L-profile front lid with Knowles MEMS acoustic inlet port & O-ring sealing groove |
+| **Front Node Monocoque Tub** | [`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl) | **1** | MJF PA12 / ASA | Screwless cockpit monocoque tub (Type A, $98 \times 58 \times 22\,\text{mm}$) with 4-in-1 floor (AMPS, silentblocks), 4x M2.5 standoffs for `PCBA 05` & Knowles MEMS acoustic vent |
+| **Front Node L-Slide Lid** | [`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl) | **1** | MJF PA12 / ASA | L-profile slide lid with wedge lock, Slam-to-Shut latches, 2x2 MIMO antenna clips & Sensor Puck snap dock |
 | **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Flexible split sealing comb for front USB and signal wiring |
 | **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastic dust cap with retention tether for service port |
 | **Modular Sensor Puck Enclosure**| [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) | **1 Set** | MJF PA12 / ASA | 2-piece enclosure (`sensor_puck_top.stl` & `sensor_puck_bottom.stl`) for `PCBA 05D` ($34 \times 34\,\text{mm}$) |
@@ -276,7 +275,7 @@ All main enclosures (Central Box, Saddlebag Pods, Front Node) utilize the **scre
 | **OMM UCS Enclosure Top Shell**| [`omm_ucs_top_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_top_shell.stl) | *Opt. (1..2)*| MJF PA12 / ABS | Autonomous OMM UCS top shell for `PCBA 09` / `PCBA 10` with 4x DIN 934 M2 captive nut pockets |
 | **OMM UCS Enclosure Bottom Shell**| [`omm_ucs_bottom_shell.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_bottom_shell.stl) | *Opt. (1..2)*| MJF PA12 / ABS | Autonomous OMM UCS bottom shell with ECE 22.06 snap lugs, seal groove & SMA bulkhead |
 | **OMM UCS Silicone Keypad**| [`omm_ucs_silicone_keypad.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_silicone_keypad.stl) | *Opt. (1..2)*| Shore 50A Silicone| Seamless 100% waterproof 4-button switch pad with diffuse LED dome |
-| **OMM UCS Helmet Cradle**| [`omm_ucs_helmet_cradle.stl`](../../hardware/cad/stl/03_pod_cartridges/omm_ucs_helmet_cradle.stl) | *Opt. (1..2)*| MJF PA12 / ASA | ECE 22.06 UCS helmet adapter cradle for 3M VHB R130 mounting |
+| **OMM UCS Cartridge/Helmet Cradle**| [`cartridge_insert_omm_ucs.stl`](../../hardware/cad/stl/03_pod_cartridges/cartridge_insert_omm_ucs.stl) | *Opt. (1..2)*| MJF PA12 / ASA | Form-fitted ECE 22.06 UCS cradle & cartridge adapter plate |
 
 ### 10.3 Vehicle-Specific Mounting Kits (3D Printed Parts)
 * **Kit 1: BMW R1250 / R1300 GS (Standard / Vario Panniers):**
@@ -461,7 +460,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 3. **IP67 Antenna Feedthrough (Bulkhead with O-Ring):**
    * **Seal:** UV- and ozone-resistant EPDM / Silicone O-ring (Shore 60A, $\varnothing 6.0 \times 1.0\,\text{mm}$).
    * **Fastening:** A4 / 316 stainless steel hex nut with internal star lockwasher for vibration-proof retention.
-   * **Fitment:** Seats inside the $5.0 \times 4.0\,\text{mm}$ cutout at the $+X$ flank of the OMM UCS enclosure ([`omm_ucs_bottom_shell.scad`](../../hardware/cad/scad/03_pod_pods/parts/omm_ucs_module.scad)) to maintain IP67 water and dust sealing.
+   * **Fitment:** Seats inside the $5.0 \times 4.0\,\text{mm}$ cutout at the $+X$ flank of the OMM UCS enclosure ([`omm_ucs_module.scad`](../../hardware/cad/scad/03_pod_cartridges/parts/omm_ucs_module.scad)) to maintain IP67 water and dust sealing.
 
 4. **Compact Helmet Stubby Antennas (COTS Stubby Antennas):**
    * **Stubby Antenna 1 (OMM 2.4 GHz HD-Mesh, PCBA 09):**

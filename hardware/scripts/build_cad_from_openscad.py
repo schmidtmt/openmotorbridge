@@ -28,18 +28,28 @@ if not os.path.exists(OPENSCAD_BIN):
 
 # List of Master Production STL Targets (Source SCAD -> Target Relative STL)
 STL_TARGETS: List[Tuple] = [
-    # 1. Main Box
+    # 1. Main Box (v10.0 Monocoque Type A + Legacy Aliases)
+    ("01_main_box/00_lower_deck.scad", "01_main_box/000_monocoque_tub.stl"),
+    ("01_main_box/01_upper_deck.scad", "01_main_box/010_slide_tray.stl"),
+    ("01_main_box/02_colsure.scad", "01_main_box/020_slide_lid.stl"),
     ("01_main_box/00_lower_deck.scad", "01_main_box/main_box_lower_case.stl"),
     ("01_main_box/01_upper_deck.scad", "01_main_box/main_box_mid_tray.stl"),
     ("01_main_box/02_colsure.scad", "01_main_box/main_box_lid.stl"),
     ("01_main_box/parts/013_battery_antenna_bridge.scad", "01_main_box/main_box_battery_bridge.stl"),
     
-    # 2. Satellite Pod Base (v10.0 Monocoque Architecture)
+    # 2. Satellite Pod Base (v10.0 Monocoque Type B + Aliases)
     ("02_pod_base/pod_base_housing.scad", "02_pod_base/pod_base_housing.stl"),
+    ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/002_pod_housing_base.stl"),
+    ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/015_pod_monocoque_tub.stl"),
     ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/pod_monocoque_tub.stl"),
-    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/pod_slide_lid.stl"),
+    ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/011_pod_slide_tray.stl"),
     ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/pod_dry_flap.stl"),
+    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/021_pod_slide_lid.stl"),
+    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/013_pod_slide_lid.stl"),
+    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/pod_slide_lid.stl"),
+    ("02_pod_base/parts/012_universal_actuator_slide_bracket.scad", "02_pod_base/012_universal_actuator_slide_bracket.stl"),
     ("02_pod_base/parts/012_universal_actuator_slide_bracket.scad", "02_pod_base/universal_actuator_slide_bracket.stl"),
+    ("02_pod_base/parts/010_saddlebag_hole_grommet_split.scad", "02_pod_base/010_saddlebag_hole_grommet_split.stl", ["-D", 'part="print_plate"']),
     
     # 3. Pod Cartridges & Modular Inserts
     ("03_pod_cartridges/00_base_sled.scad", "03_pod_cartridges/cartridge_base_sled.stl"),
@@ -48,11 +58,15 @@ STL_TARGETS: List[Tuple] = [
     ("03_pod_cartridges/parts/03_insert_blindkassette.scad", "03_pod_cartridges/cartridge_insert_blindkassette.stl"),
     ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
     ("03_pod_cartridges/parts/06_insert_omm_ucs.scad", "03_pod_cartridges/cartridge_insert_omm_ucs.stl"),
+    ("03_pod_cartridges/parts/06_insert_omm_ucs.scad", "03_pod_cartridges/components/cartridge_insert_omm_ucs.stl"),
     ("03_pod_cartridges/parts/omm_ucs_top_shell.scad", "03_pod_cartridges/omm_ucs_top_shell.stl"),
     ("03_pod_cartridges/parts/omm_ucs_bottom_shell.scad", "03_pod_cartridges/omm_ucs_bottom_shell.stl"),
     ("03_pod_cartridges/parts/omm_ucs_silicone_keypad.scad", "03_pod_cartridges/omm_ucs_silicone_keypad.stl"),
     
     # 4. Modular Components (Main Box)
+    ("01_main_box/parts/000_monocoque_tub.scad", "01_main_box/components/000_monocoque_tub.stl"),
+    ("01_main_box/parts/010_slide_tray.scad", "01_main_box/components/010_slide_tray.stl"),
+    ("01_main_box/parts/020_slide_lid.scad", "01_main_box/components/020_slide_lid.stl"),
     ("01_main_box/parts/000_lower_base.scad", "01_main_box/components/01_lower_tub_empty.stl"),
     ("01_main_box/parts/001_lower_screws_enclosure.scad", "01_main_box/components/02_corner_screws_enclosure.stl"),
     ("01_main_box/parts/002_pcb_standoffs.scad", "01_main_box/components/03_pcb_standoffs.stl"),
@@ -61,21 +75,33 @@ STL_TARGETS: List[Tuple] = [
     ("01_main_box/parts/010_mid_tray_frame.scad", "01_main_box/components/06_mid_tray_frame.stl"),
     ("01_main_box/parts/011_mid_partition_floor.scad", "01_main_box/components/07_mid_partition_floor.stl"),
     ("01_main_box/parts/020_lid_plate.scad", "01_main_box/components/08_lid_plate.stl"),
+    ("01_main_box/parts/013_battery_antenna_bridge.scad", "01_main_box/components/09_battery_antenna_bridge.stl"),
     
     # 5. Modular Components (Pod Base)
+    ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/components/002_pod_housing_base.stl"),
+    ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/components/011_pod_slide_tray.stl"),
+    ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/components/021_pod_slide_lid.stl"),
+    ("02_pod_base/parts/012_universal_actuator_slide_bracket.scad", "02_pod_base/components/012_universal_actuator_slide_bracket.stl"),
     ("02_pod_base/parts/000_pod_tunnel_base.scad", "02_pod_base/components/01_pod_tunnel_base.stl"),
     ("02_pod_base/parts/001_pod_rear_m8_gland.scad", "02_pod_base/components/02_pod_rear_m8_gland.stl"),
     ("02_pod_base/parts/002_pod_bulkhead_partition.scad", "02_pod_base/components/03_pod_bulkhead_partition.stl"),
     ("02_pod_base/parts/003_pod_guide_grooves.scad", "02_pod_base/components/04_pod_guide_grooves.stl"),
     ("02_pod_base/parts/005_pod_strap_hooks.scad", "02_pod_base/components/05_pod_strap_hooks.stl"),
+    ("02_pod_base/parts/008_pod_base_usbc_cap_tpu.scad", "02_pod_base/components/008_pod_base_usbc_cap_tpu.stl"),
+    ("02_pod_base/parts/016_fob_magnetic_lock_mechanism.scad", "02_pod_base/components/016_fob_magnetic_lock_mechanism.stl"),
     
-    # 6. Dummies
+    # 6. Dummies (00_common/dummies -> components/)
     ("00_common/dummies/dummy_main_pcb.scad", "01_main_box/components/dummy_main_pcb.stl"),
     ("00_common/dummies/dummy_lipo_battery.scad", "01_main_box/components/dummy_lipo_battery.stl"),
     ("00_common/dummies/dummy_adapter_pcb.scad", "03_pod_cartridges/components/dummy_adapter_pcb.stl"),
+    ("00_common/dummies/dummy_omm_transceiver_pcb.scad", "03_pod_cartridges/components/dummy_omm_transceiver_pcb.stl"),
+    ("00_common/dummies/dummy_omm_ucs_pcb.scad", "03_pod_cartridges/components/dummy_omm_ucs_pcb.stl"),
+    ("00_common/dummies/dummy_omm446_ucs_pcb.scad", "03_pod_cartridges/components/dummy_omm446_ucs_pcb.stl"),
     ("00_common/dummies/dummy_m8_connector.scad", "02_pod_base/components/dummy_m8_connector.stl"),
     
-    # 7. Universal Front Node (Production Parts)
+    # 7. Universal Front Node (Production Parts + v10.0 Monocoque Aliases)
+    ("04_front_node/00_front_node_tub.scad", "04_front_node/001_front_node_monocoque_tub.stl"),
+    ("04_front_node/01_front_node_lid.scad", "04_front_node/020_front_node_slide_lid.stl"),
     ("04_front_node/00_front_node_tub.scad", "04_front_node/front_node_lower_tub.stl"),
     ("04_front_node/01_front_node_lid.scad", "04_front_node/front_node_upper_lid.stl"),
     ("04_front_node/02_front_node_cable_glands.scad", "04_front_node/front_node_cable_glands_tpu.stl"),
@@ -85,11 +111,16 @@ STL_TARGETS: List[Tuple] = [
     ("04_front_node/glovebox_power_injection_hub.scad", "04_front_node/glovebox_power_injection_hub.stl"),
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_block.stl"),
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_lid.stl", ["-D", 'part="lid"']),
+    ("04_front_node/parts/sensor_puck_environmental.scad", "04_front_node/sensor_puck_environmental.stl", ["-D", 'part="assembly"']),
+    ("04_front_node/parts/sensor_puck_environmental.scad", "05_accessories/sensor_puck_bottom.stl", ["-D", 'part="bottom"']),
+    ("04_front_node/parts/sensor_puck_environmental.scad", "05_accessories/sensor_puck_top.stl", ["-D", 'part="top"']),
 
     # 7b. Modular Components & Mounts (Front Node)
+    ("04_front_node/parts/000_front_node_base_tub.scad", "04_front_node/components/001_front_node_monocoque_tub.stl"),
     ("04_front_node/parts/000_front_node_base_tub.scad", "04_front_node/components/01_front_node_base_tub.stl"),
     ("04_front_node/parts/001_pcb_standoffs.scad", "04_front_node/components/02_pcb_standoffs.stl"),
     ("04_front_node/parts/004_mounting_system.scad", "04_front_node/components/03_mounting_ears.stl"),
+    ("04_front_node/parts/005_cable_combs.scad", "04_front_node/components/04_cable_combs.stl"),
     ("04_front_node/parts/006_dummy_front_node_pcb.scad", "04_front_node/components/dummy_front_node_pcb.stl"),
     ("04_front_node/front_node_fairing_tube_clamp.scad", "04_front_node/front_node_fairing_tube_clamp_base.stl", ["-D", 'part="base"']),
     ("04_front_node/front_node_fairing_tube_clamp.scad", "04_front_node/front_node_fairing_tube_clamp_cap.stl", ["-D", 'part="cap"']),
@@ -113,11 +144,13 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/parts/010_saddlebag_hole_grommet_split.scad", "02_pod_base/components/010_saddlebag_hole_grommet_split.stl", ["-D", 'part="print_plate"']),
 
     # 9b. Stationary COTS 2-Pin Magnetic Frame Dock (Pure-DC COTS Breakaway Mount, No PCB)
+    ("02_pod_base/parts/cots_magnetic_frame_dock.scad", "02_pod_base/cots_magnetic_frame_dock.stl"),
     ("02_pod_base/parts/cots_magnetic_frame_dock.scad", "02_pod_base/components/cots_magnetic_frame_dock_body.stl", ["-D", 'part="body"']),
     ("02_pod_base/parts/cots_magnetic_frame_dock.scad", "02_pod_base/components/cots_magnetic_frame_clamp.stl", ["-D", 'part="clamp"']),
 
     # 10. Adventure-Kit (BMW GS / GSA, KTM, Africa Twin)
     ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_base.stl", ["-D", 'part="base"']),
+    ("02_pod_base/adventure_pannier_rack_clamp.scad", "02_pod_base/adventure_pannier_rack_clamp_cap.stl", ["-D", 'part="cap"']),
     ("02_pod_base/adventure_gsa_cage_dock.scad", "02_pod_base/adventure_gsa_cage_dock_body.stl", ["-D", 'part="body"']),
     ("02_pod_base/adventure_gsa_cage_dock.scad", "02_pod_base/adventure_gsa_clamp_cap.stl", ["-D", 'part="cap"']),
     ("02_pod_base/adventure_transition_dock.scad", "02_pod_base/adventure_transition_dock_base.stl", ["-D", 'part="base"']),
