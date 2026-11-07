@@ -9117,8 +9117,8 @@ function calculateSingleBikeBom(bikeConfig) {
     };
 
     const numPods = bikeModel === 'car-support' ? Math.min(2, totalCartridges) : 2;
-    const numCartridgePcba = totalActiveCartridges;
-    const numSmart = numCartridgePcba;
+    const numCartridgePcba = Math.min(numPods, totalActiveCartridges);
+    const numSmart = totalActiveCartridges;
 
     // Build active assemblies dictionary for SSOT BOM calculation
     const activeAssemblies = {};
@@ -9126,14 +9126,12 @@ function calculateSingleBikeBom(bikeConfig) {
     // 1. Central Main Box
     activeAssemblies['assembly_main_box'] = 1;
 
-    // 2. Satellite Pods & Cartridge Sleds
+    // 2. Satellite Pods & Active Pod Electronics (PCBA 03 & Dry-Flap, max 1 per physical Pod!)
     if (numPods > 0) {
         activeAssemblies['assembly_pod_base'] = numPods;
     }
-    // Only ACTIVE cartridges get the smart cartridge carrier (with PCBA 03, latch, pins, springs)!
-    // Blind cartridges are purely 3D printed blanks (assembly_inlay_blind) without electronics.
-    if (totalActiveCartridges > 0) {
-        activeAssemblies['assembly_cartridge_carrier'] = totalActiveCartridges;
+    if (numCartridgePcba > 0) {
+        activeAssemblies['assembly_cartridge_carrier'] = numCartridgePcba;
     }
 
     // 3. Gateway Inlays
