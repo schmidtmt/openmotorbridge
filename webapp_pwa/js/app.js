@@ -8619,6 +8619,10 @@ function getBikeCartridges(bike) {
             bike.cartridges[bike.slot2] = (bike.cartridges[bike.slot2] || 0) + 1;
         }
     }
+    if (bike.cartridges['omm446'] > 0) {
+        bike.cartridges['omm-ucs'] = (bike.cartridges['omm-ucs'] || 0) + bike.cartridges['omm446'];
+        bike.cartridges['omm446'] = 0;
+    }
     return bike.cartridges;
 }
 
@@ -8645,8 +8649,8 @@ function formatCartridgeSummary(bike, bom) {
         'sena-spider-x': 'Sena SPIDER X',
         'sena-50s': 'Sena 50S',
         'cardo-edge': 'Cardo Edge',
-        'omm-ucs': 'OMM 2.4 (PCBA 09)',
-        'omm446': 'OMM 446 (PCBA 10)',
+        'omm-ucs': 'OMM Tri-Band (PCBA 09/10)',
+        'omm446': 'OMM Tri-Band (PCBA 09/10)',
         'pmr446': 'PMR446 Funk',
         'blind': isDe ? 'Blindkassette' : 'Blank'
     };
@@ -9106,8 +9110,8 @@ function calculateSingleBikeBom(bikeConfig) {
         'sena-spider-x': 'Sena SPIDER X Slim',
         'sena-50s': 'Sena 50S / 60S',
         'cardo-edge': 'Cardo Packtalk Edge',
-        'omm-ucs': isDe ? 'OMM 2.4 GHz Dual-Engine Modul (PCBA 09)' : 'OMM 2.4 GHz Dual-Engine Module (PCBA 09)',
-        'omm446': isDe ? 'OMM 446 MHz PMR/DMR Modul (PCBA 10)' : 'OMM 446 MHz PMR/DMR Module (PCBA 10)',
+        'omm-ucs': isDe ? 'OMM Universal Tri-Band UCS Modul (PCBA 09/10)' : 'OMM Universal Tri-Band UCS Module (PCBA 09/10)',
+        'omm446': isDe ? 'OMM Universal Tri-Band UCS Modul (PCBA 09/10)' : 'OMM Universal Tri-Band UCS Module (PCBA 09/10)',
         'pmr446': isDe ? 'PMR446 Funk / COTS (Analog)' : 'PMR446 Radio / COTS (Analog)',
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
@@ -9328,14 +9332,12 @@ function renderSingleBuilder() {
 
     if (subEl) {
         const addonList = [];
-        if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten' : 'Front Node');
-        if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM 2.4 Helm-Kit' : 'OMM 2.4 Helmet Kit');
-        if (active.addons?.omm446HelmetKit) addonList.push(isDe ? 'OMM 446 Helm-Kit' : 'OMM 446 Helmet Kit');
-        if (active.addons?.tmp117Sensor) addonList.push(isDe ? 'TMP117 Eiswarner' : 'TMP117 Ice Sensor');
+        if (active.addons?.frontNode) addonList.push(isDe ? 'Front-Knoten & Sensor-Puck' : 'Front Node & Sensor Puck');
+        if (active.addons?.ommHelmetKit) addonList.push(isDe ? 'OMM Tri-Band Helm-Kit' : 'OMM Tri-Band Helmet Kit');
+        if (active.addons?.omm446HelmetKit) addonList.push(isDe ? '2. OMM Tri-Band Helm-Kit' : '2nd OMM Tri-Band Helmet Kit');
         if (active.addons?.radar2) addonList.push(isDe ? 'Radar 2.0 Sub-MCU' : 'Radar 2.0 Sub-MCU');
-        if (active.addons?.bsdMirrors) addonList.push(isDe ? 'BSD Spiegel-LEDs' : 'BSD Mirror LEDs');
-        if (active.addons?.actionCamDock) addonList.push(isDe ? 'Actioncam-Dock' : 'Actioncam Dock');
-        if (active.addons?.handlebarControls) addonList.push(isDe ? 'Lenkertaster' : 'Handlebar Buttons');
+        if (active.addons?.actionCamDock) addonList.push(isDe ? '5-Port Handschuhfach-Hub' : '5-Port Glovebox Hub');
+        if (active.addons?.handlebarControls || active.addons?.bsdMirrors) addonList.push(isDe ? 'Under-Perch Spiegel-Pods' : 'Under-Perch Mirror Pods');
         if (active.addons?.keyfob) addonList.push('Smart-Keyfob');
         const addonTxt = addonList.length > 0 ? ` + ${addonList.join(' + ')}` : '';
         const cartSummary = formatCartridgeSummary(active, bom);
@@ -9552,21 +9554,12 @@ function renderSingleBuilder() {
                         <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
                         <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
                     </ol>`;
-                } else if (cartKey === 'omm-ucs') {
+                } else if (cartKey === 'omm-ucs' || cartKey === 'omm446') {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'PCBA 09 (Dual-Engine: ESP32-C6 Host + ESP32-PICO BT Classic Co-Prozessor) mit 50 mm Micro-Koaxial-Pigtail, wasserdichter IP67 SMA-Durchführung und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 09 (Dual-Engine: ESP32-C6 host + ESP32-PICO BT Classic co-processor) with 50 mm micro-coax pigtail, IP67 SMA bulkhead, and 600 mAh LiPo battery.'}</li>
-                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
-                        <li>${isDe ? 'Im Kassetten-Schlitten führt das Koaxialkabel zur frontseitigen SMA-Bulkhead-Buchse (für fahrzeugfeste Außenantenne am Heck/Rahmen) oder strahlt im geschlossenen Schlitten verlustfrei durch das PA12-Gehäuse ab.' : 'In the cartridge sled, the coax cable connects to the front SMA bulkhead (for external bike antenna at tail/rack) or radiates cleanly through the PA12 shell.'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme unterbrechungsfrei in < 10 µs auf Akkubetrieb um. Dual-Engine ermöglicht simultane Wi-Fi 6 Mesh &amp; Bluetooth Classic Verbindung!' : 'Connect internal USB-C port: Module charges automatically in pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to battery mode in < 10 µs on removal. Dual-Engine architecture enables simultaneous Wi-Fi 6 mesh &amp; Bluetooth Classic connection!'}</li>
-                    </ol>`;
-                } else if (cartKey === 'omm446') {
-                    bodyHtml = `
-                    <ol>
-                        <li>${isDe ? 'PCBA 10 (NiceRF SA818-DMR Transceiver &amp; ESP32-C6 Host + ESP32-PICO BT Bridge) mit 50 mm Koaxialkabel von J_RF, IP67 SMA-Durchführung und 600 mAh LiPo-Akku vorbereiten.' : 'Prepare PCBA 10 (NiceRF SA818-DMR transceiver &amp; ESP32-C6 host + ESP32-PICO BT bridge) with 50 mm coax cable from J_RF, IP67 SMA bulkhead, and 600 mAh LiPo battery.'}</li>
-                        <li>${isDe ? 'Platine und Akku in das Kassetten-Inlay (<code>cartridge_insert_omm446_ucs.stl</code>) einsetzen und mit 4x M2x8 mm Schrauben sichern.' : 'Place PCB and battery into cartridge inlay (<code>cartridge_insert_omm446_ucs.stl</code>) and secure with 4x M2x8 mm screws.'}</li>
-                        <li>${isDe ? 'Koaxialkabel zur Kassetten-Stirnseite führen für fahrzeugfeste Außenantenne (0.5W High-Power Bike-Modus, 3–6 km Reichweite).' : 'Route coax cable to cartridge faceplate for external bike antenna (0.5W high-power bike mode, 3–6 km range).'}</li>
-                        <li>${isDe ? 'USB-C Schnittstelle intern anstecken: Lädt im Pod automatisch über 5V Bordnetz (TI BQ24075) mit nahtloser USV. Digitale DMR Tier I &amp; Analog FM Steuerung via ESP32-C6 AT-Kommandos; Bluetooth Bridge bindet Helme und Smartphones drahtlos an!' : 'Connect internal USB-C port: Charges in pod automatically via 5V bike power (TI BQ24075) with seamless UPS. Digital DMR Tier I &amp; Analog FM control via ESP32-C6 AT commands; Bluetooth bridge links helmets &amp; phones wirelessly!'}</li>
+                        <li>${isDe ? 'PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) mit 2x 50 mm Micro-Koaxial-Pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) und 1000 mAh LiPo-Akku (an <code>BAT1</code> unter <code>J1</code>) bestücken.' : 'Equip PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) with 2x 50 mm micro-coax pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) and 1000 mAh LiPo battery (at <code>BAT1</code> beneath <code>J1</code>).'}</li>
+                        <li>${isDe ? 'Beide Stummelantennen (38 mm 2.4 GHz &amp; 48 mm 446 MHz Helical) auf die rückseitigen Twin-SMA-Buchsen schrauben (oder den 446-MHz-Port im Pod mit dem 5V Bi-Directional RF Booster verbinden) und das Modul in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einklicken.' : 'Thread both stubby antennas (38 mm 2.4 GHz &amp; 48 mm 446 MHz helical) onto the rear Twin-SMA ports (or connect the 446 MHz port in the pod to the 5V bi-directional RF booster) and snap the module into the cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>).'}</li>
+                        <li>${isDe ? '90° USB-C Kabel (<code>J_AUDIO_PWR</code>) anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme für den Helmeinsatz unterbrechungsfrei auf den 1000-mAh-Akku um. Alle Betriebsarten (OMM 2.4G, BT-Mesh, PMR446, DMR Tier I &amp; Kombi-Modi) werden rein per Software umgeschaltet!' : 'Connect 90° USB-C cable (<code>J_AUDIO_PWR</code>): The module charges automatically in the pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to the 1000 mAh battery when removed for helmet use. All radio modes (OMM 2.4G, BT Mesh, PMR446, DMR Tier I &amp; combo modes) switch 100% in software!'}</li>
                     </ol>`;
                 } else if (cartKey === 'pmr446') {
                     bodyHtml = `
@@ -9644,38 +9637,35 @@ function renderSingleBuilder() {
         `;
     }
 
-    // Step 6b: Cockpit Addons (BSD Mirrors, Actioncam Dock, Handlebar Controls)
+    // Step 6b: Cockpit Addons (5-Port Glovebox Hub & Symmetrical Under-Perch Mirror Pods)
     if (active.addons?.bsdMirrors || active.addons?.actionCamDock || active.addons?.handlebarControls) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
-                    <span class="builder-step-name">${isDe ? '6b. Cockpit-Zusatzmodule montieren' : '6b. Assemble Cockpit Accessories'}</span>
-                    <span class="builder-pill-verified">✓ BSD · Cam-Dock · Lenkertaster</span>
+                    <span class="builder-step-name">${isDe ? '6b. Cockpit-Zusatzmodule montieren (Handschuhfach-Hub & Under-Perch Spiegel-Pods)' : '6b. Assemble Cockpit Accessories (Glovebox Hub & Under-Perch Mirror Pods)'}</span>
+                    <span class="builder-pill-verified">✓ 5-Port USB-C Hub · BSD + Smart-PTT</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        ${active.addons?.bsdMirrors ? `<li>${isDe ? '<strong>BSD Totwinkel-Spiegelanzeigen:</strong> Klemmschellen (<code>bsd_mirror_lower_clamp.stl</code>) an beiden Spiegelarmen (Ø 10-14 mm) anbringen. Gehäuse (<code>bsd_mirror_upper_pod.stl</code>) mit Fresnel-Linsen (<code>bsd_mirror_lens.stl</code>) aufstecken und 3-Pin JST-PH Kabel an Port J9 des Front-Nodes anschließen (Bernstein bei rückwärtigem Verkehr, 8 Hz Warnblitz bei gefährlicher Annäherung).' : '<strong>BSD Blind Spot Mirror Pods:</strong> Clamp bases (<code>bsd_mirror_lower_clamp.stl</code>) to mirror stems (Ø 10-14 mm). Mount upper pods (<code>bsd_mirror_upper_pod.stl</code>) with Fresnel lenses (<code>bsd_mirror_lens.stl</code>) and connect 3-pin JST-PH to Front Node port J9.'}</li>` : ''}
-                        ${active.addons?.actionCamDock ? `<li>${isDe ? '<strong>Actioncam USB-C Dauerstromversorgung:</strong> USB-C Ladekabel vom Front-Node (Port J8 / 60W Power-Engine) zur Action-Cam am Lenker/Verkleidung verlegen. Schaltet bei Zündung-Aus automatisch per BLE-Kommando die Aufnahme ab.' : '<strong>Actioncam USB-C Power Feed:</strong> Route weather-sealed USB-C cable from Front Node (Port J8 / 60W power engine) to action cam on handlebar/fairing. Automatically stops recording via BLE command on ignition off.'}</li>` : ''}
-                        ${active.addons?.handlebarControls ? `<li>${isDe ? '<strong>Lenker-Taster (Smart PTT / Multi-Aktion):</strong> Under-Perch Konsole (<code>under_perch_switch_bracket.stl</code>) unter die linke Kupplungsarmatur (oder per <code>under_perch_mirror_plate.stl</code> unter den Spiegelschaft) schrauben. 1x IP67 Mikrotaster einsetzen und 2-poliges PUR-Kabel an Port J6 des Cockpit-Satelliten stecken. Multi-Aktions-Steuerung: Halten = Intercom PTT, 2x Klick = Video-Bookmark, 3x Klick = Siri/Voice (latenzfrei < 1.8 ms).' : '<strong>Handlebar Smart-PTT Switch:</strong> Bolt under-perch bracket (<code>under_perch_switch_bracket.stl</code>) beneath clutch clamp (or mirror plate <code>under_perch_mirror_plate.stl</code>). Fit 1x IP67 micro-switch and connect 2-pin PUR cable to Cockpit Satellite port J6. Multi-action control: Hold = Intercom PTT, 2x Click = Video bookmark, 3x Click = Siri/Voice (latency < 1.8 ms).'}</li>` : ''}
+                        ${active.addons?.actionCamDock ? `<li>${isDe ? '<strong>5-Port Handschuhfach Media- &amp; Power-Injection Hub (PCBA 05B):</strong> 2x M2.5 Muttern in die Taschen von <code>glovebox_power_injection_hub.stl</code> einlegen, PCBA 05B mit 2x M2.5x6 mm Schrauben befestigen und per USB-C Kabel mit Port <code>J7</code> des Front-Nodes verbinden (stellt Ports für Skyline OS Host, 30W Smartphone-PD, CP2AA-Dongle, USB-Stick &amp; Actioncam bereit).' : '<strong>5-Port Glovebox Media &amp; Power-Injection Hub (PCBA 05B):</strong> Seat 2x M2.5 nuts into <code>glovebox_power_injection_hub.stl</code>, fasten PCBA 05B with 2x M2.5x6 mm screws, and link via USB-C cable to Front Node port <code>J7</code> (provides ports for Skyline OS host, 30W phone PD, CP2AA dongle, media stick &amp; action cam).'}</li>` : ''}
+                        ${(active.addons?.handlebarControls || active.addons?.bsdMirrors) ? `<li>${isDe ? '<strong>Symmetrische Dual Under-Perch Spiegel-Pods (Links &amp; Rechts, PCBA 05C):</strong> Jeweils 1x PCBA 05C, 45° PTT-Schaltwippe und abgeknicktes TIR-Optikprisma in die symmetrischen Spiegelarm-Gehäuse (<code>under_perch_mirror_pod.stl</code>) einsetzen und mit 1x M2x8 mm Schraube im Zentraldom <code>H1</code> sichern. Beide Pods formschlüssig unter der linken und rechten Spiegelschraube (M8/M10) verschrauben und über die 4-Pin JST-GH PUR-Kabel an <code>J_POD_L</code> und <code>J_POD_R</code> des Front-Nodes anstecken (38° StVZO Totwinkel-Warnung + 5-Gesten Smart-PTT).' : '<strong>Symmetrical Dual Under-Perch Mirror Pods (Left &amp; Right, PCBA 05C):</strong> Seat 1x PCBA 05C, 45° PTT thumb rocker, and angled TIR prism into each symmetrical pod housing (<code>under_perch_mirror_pod.stl</code>) and secure with 1x M2x8 mm screw through central boss <code>H1</code>. Mount beneath left and right mirror bolts (M8/M10) and plug 4-pin JST-GH PUR cables into <code>J_POD_L</code> and <code>J_POD_R</code> on Front Node (38° StVZO blind-spot alert + 5-gesture Smart-PTT).'}</li>` : ''}
                     </ol>
                 </div>
             </div>
         `;
     }
 
-    // Step 6c: OMM Helmet Kits & TMP117 Stealth Sensor (if active)
-    if (active.addons?.ommHelmetKit || active.addons?.omm446HelmetKit || active.addons?.tmp117Sensor) {
+    // Step 6c: OMM Universal Tri-Band Helmet UCS Kits (if active)
+    if (active.addons?.ommHelmetKit || active.addons?.omm446HelmetKit) {
         instructionsHtml += `
             <div class="builder-instruction-step">
                 <div class="builder-step-headline">
-                    <span class="builder-step-name">${isDe ? '6c. OMM Helm UCS Headset-Kits & TMP117 Gabelfuß-Sensor' : '6c. Assemble OMM Helmet UCS Kits & TMP117 Fork Sensor'}</span>
-                    <span class="builder-pill-verified">✓ ECE 22.06 UCS · ±0.1°C NIST</span>
+                    <span class="builder-step-name">${isDe ? '6c. OMM Universal Tri-Band Helm UCS Headset-Kit (PCBA 09/10)' : '6c. Assemble OMM Universal Tri-Band Helmet UCS Kit (PCBA 09/10)'}</span>
+                    <span class="builder-pill-verified">✓ ECE 22.06 UCS · Twin-Stubby 2.4G + 446M</span>
                 </div>
                 <div class="builder-instructions-body">
                     <ol>
-                        ${active.addons?.ommHelmetKit ? `<li>${isDe ? '<strong>OMM 2.4 GHz Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte (<code>omm_ucs_silicone_keypad.stl</code>) einlegen. 50 mm Micro-Koaxial-Pigtail auf den U.FL-Port von PCBA 09 klicken und wasserdichte IP67 SMA-Durchführung mit EPDM-O-Ring und V4A-Mutter in die Flankenaussparung schrauben. 600 mAh LiPo-Akku und Platine einsetzen. 6-Pin JST-SH Helm-Audio &amp; PTT-Kabelbaum (<code>J_HELMET</code>) unterseitig anstecken und durch den Bodenschacht führen. Unterschale mit Silikondichtung aufsetzen und 4x M2x8 mm Schrauben über Kreuz festziehen. 38 mm Rubber-Duck Stummelantenne aufschrauben (flatter- &amp; pfeiffrei). Helmsockel (<code>omm_ucs_helmet_cradle.stl</code>) mit 3M VHB R130 am Helm verkleben, Modul einklinken und 3.5mm Lautsprecher, Mikrofon &amp; PTT anstecken (reine 0V DC Signalführung, brummfrei!).' : '<strong>OMM 2.4 GHz Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm_ucs_top_shell.stl</code>). Place 4-button silicone keypad (<code>omm_ucs_silicone_keypad.stl</code>). Snap 50 mm micro-coax pigtail onto U.FL port of PCBA 09 and fasten IP67 SMA bulkhead with EPDM O-ring and stainless nut in flank cutout. Install 600 mAh LiPo battery and PCB. Connect 6-pin JST-SH helmet audio &amp; PTT harness (<code>J_HELMET</code>) on bottom and route through bottom slot. Assemble lower shell with silicone gasket and tighten 4x M2x8 mm screws crosswise. Thread on 38 mm Rubber-Duck stubby antenna (zero buffeting). Mount helmet cradle (<code>omm_ucs_helmet_cradle.stl</code>) with 3M VHB R130, snap module in, and connect 3.5mm speakers, mic &amp; PTT (pure 0V DC audio, hum-free!).'}</li>` : ''}
-                        ${active.addons?.omm446HelmetKit ? `<li>${isDe ? '<strong>OMM 446 MHz Helm UCS Headset (ECE 22.06):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm446_ucs_top_shell.stl</code>) einpressen. 4-Tasten Silikon-Schaltmatte einlegen. 50 mm Micro-Koaxial-Pigtail auf U.FL-Buchse <code>J_RF</code> auf PCBA 10 klicken und IP67 SMA-Durchführung mit EPDM-O-Ring und V4A-Mutter verschrauben. 600 mAh LiPo-Akku und Platine einbauen. 6-Pin JST-SH Helm-Audio &amp; PTT-Kabelbaum (<code>J_HELMET</code>) unterseitig anstecken und durch den Bodenschacht führen. Unterschale mit Dichtung aufsetzen und mit 4x M2x8 mm Schrauben verschrauben. 48 mm Helical-Stummelantenne aufschrauben (1.5–2.5 km Reichweite, SAR-konform 0.2W ERP). Helmsockel mit 3M VHB am Helm verkleben, Modul einklinken und Helmlautsprecher, Mikrofon &amp; PTT anstecken.' : '<strong>OMM 446 MHz Helmet UCS Headset (ECE 22.06):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm446_ucs_top_shell.stl</code>). Place 4-button silicone keypad. Snap 50 mm micro-coax pigtail onto U.FL receptacle <code>J_RF</code> on PCBA 10 and secure IP67 SMA bulkhead with EPDM O-ring and stainless nut. Install 600 mAh LiPo and PCB. Connect 6-pin JST-SH helmet audio &amp; PTT harness (<code>J_HELMET</code>) on bottom and route through bottom slot. Assemble lower shell with gasket and tighten 4x M2x8 mm screws. Thread on 48 mm helical stubby antenna (1.5–2.5 km range, SAR-compliant 0.2W ERP). Mount cradle with 3M VHB, click module in, and connect speakers, mic &amp; PTT.'}</li>` : ''}
-                        ${active.addons?.tmp117Sensor ? `<li>${isDe ? '<strong>TMP117 Stealth Gabelfuß-Sensor:</strong> TI TMP117 I2C-Sensorplatine in die mattschwarze Halterung (<code>tmp117_stealth_fork_mount.stl</code>) einklicken. Am Gabelfuß oder an der Kotflügel-Innenseite im Fahrtwind montieren (geschützt vor Kühler- und Motorabwärme). Das 4-Pin Qwiic-Kabel entlang der Bremsleitung vibrationssicher mit Kabelbindern verlegen und an Port <code>J12</code> am Front-Node anstecken für laborgenaue Fahrbahn-Eiswarnung (±0.1°C).' : '<strong>TMP117 Stealth Fork Sensor:</strong> Snap TI TMP117 I2C sensor board into matte black mount (<code>tmp117_stealth_fork_mount.stl</code>). Mount to fork foot or inner fender directly in airflow (shielded from radiator & engine heat). Route 4-pin Qwiic cable along brake line with zip-ties and plug into Port <code>J12</code> on Front Node for laboratory-precision black ice detection (±0.1°C).'}</li>` : ''}
+                        <li>${isDe ? '<strong>OMM Universal Tri-Band UCS Headset (ECE 22.06, 68x36x16 mm):</strong> 4x M2 Muttern in die Sechskanttaschen der Oberschale (<code>omm_ucs_top_shell.stl</code>) einpressen und 4-Tasten Silikon-Schaltmatte (<code>omm_ucs_silicone_keypad.stl</code>) einlegen. 2x 50 mm Micro-Koaxial-Pigtails auf die U.FL-Ports <code>J_RF_24G</code> und <code>J_RF</code> von PCBA 09/10 klicken und die beiden wasserdichten IP67 Twin-SMA-Durchführungen (<code>SMA_24G</code> &amp; <code>SMA_446</code>, 14 mm Rastermaß) in der Rückwand verschrauben. Den 1000-mAh-LiPo-Akku (Typ 603040) im Bodenfach einlegen und an <code>BAT1</code> (direkt unter dem USB-C-Port <code>J1</code>) anstecken. Unterschale mit 0.8 mm Silikondichtung aufsetzen und mit 4x M2x8 mm Schrauben verschrauben. Beide Stummelantennen (38 mm 2.4 GHz + 48 mm 446 MHz Helical) aufschrauben. Den UCS-Helmsockel (<code>omm_ucs_helmet_cradle.stl</code> mit 24 mm Heckfreischnitt für beide Stummelantennen) per 3M VHB R130 oder 2x M2.5 Klemmschelle am Helm befestigen, 6-Pin JST-SH Helm-Audio-/PTT-Kabelbaum (<code>J_HELMET</code>) unten einstecken und Modul einrasten!' : '<strong>OMM Universal Tri-Band UCS Headset (ECE 22.06, 68x36x16 mm):</strong> Press 4x M2 nuts into hex pockets of upper shell (<code>omm_ucs_top_shell.stl</code>) and insert 4-button silicone keypad (<code>omm_ucs_silicone_keypad.stl</code>). Snap 2x 50 mm micro-coax pigtails onto U.FL ports <code>J_RF_24G</code> and <code>J_RF</code> of PCBA 09/10 and fasten both IP67 Twin-SMA bulkheads (<code>SMA_24G</code> &amp; <code>SMA_446</code>, 14 mm pitch) in the rear wall. Seat 1000 mAh LiPo battery (type 603040) in bottom bay and plug into <code>BAT1</code> (directly beneath USB-C port <code>J1</code>). Fit lower shell with 0.8 mm silicone seal and tighten 4x M2x8 mm screws. Thread on both stubby antennas (38 mm 2.4 GHz + 48 mm 446 MHz helical). Mount UCS helmet cradle (<code>omm_ucs_helmet_cradle.stl</code> with 24 mm rear cutout for both stubby antennas) via 3M VHB R130 or 2x M2.5 rim clamp, plug in 6-pin JST-SH helmet audio/PTT harness (<code>J_HELMET</code>) from below, and snap module in!'}</li>
                     </ol>
                 </div>
             </div>
@@ -9876,14 +9866,12 @@ function renderGroupBuilder() {
         cardsGrid.innerHTML = allBoms.map(({ bike, index, bom }) => {
             const isActive = index === fleetState.activeBikeIndex;
             const addonBadges = [];
-            if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Cockpit Front-Node</span>`);
-            if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM 2.4 Helm-Kit</span>`);
-            if (bike.addons?.omm446HelmetKit) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">OMM 446 Helm-Kit</span>`);
-            if (bike.addons?.tmp117Sensor) addonBadges.push(`<span class="card-badge badge-green" style="font-size: 0.7rem;">TMP117 Gabelfuß</span>`);
+            if (bike.addons?.frontNode) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Front-Node &amp; Puck</span>`);
+            if (bike.addons?.ommHelmetKit) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">OMM Tri-Band Helm-Kit</span>`);
+            if (bike.addons?.omm446HelmetKit) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">2. OMM Helm-Kit</span>`);
             if (bike.addons?.radar2) addonBadges.push(`<span class="card-badge badge-red" style="font-size: 0.7rem;">Radar 2.0 (77 GHz)</span>`);
-            if (bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-yellow" style="font-size: 0.7rem;">BSD Spiegel-LEDs</span>`);
-            if (bike.addons?.actionCamDock) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">Actioncam-Dock</span>`);
-            if (bike.addons?.handlebarControls) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Lenkertaster</span>`);
+            if (bike.addons?.actionCamDock) addonBadges.push(`<span class="card-badge badge-purple" style="font-size: 0.7rem;">5-Port USB-C Hub</span>`);
+            if (bike.addons?.handlebarControls || bike.addons?.bsdMirrors) addonBadges.push(`<span class="card-badge badge-blue" style="font-size: 0.7rem;">Spiegel-Pods (BSD+PTT)</span>`);
             if (bike.addons?.keyfob) addonBadges.push(`<span class="card-badge badge-orange" style="font-size: 0.7rem;">Smart-Keyfob</span>`);
 
             return `
@@ -9924,12 +9912,14 @@ function renderGroupBuilder() {
     const tbodyPcba = document.getElementById('builder-group-tbody-pcba');
     const masterPcbas = [
         { id: 'kicad_main_box', code: 'PCBA 01', name: isDe ? 'Zentralbox Hauptplatine' : 'Central Main Box', desc: isDe ? 'ESP32-S3, Codec, USV, LoRa SX1262' : 'ESP32-S3, Codec, UPS, LoRa SX1262' },
-        { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'ESP32-C6, DW3110 UWB, Aktuatoren, Pogo-Pins' : 'ESP32-C6, DW3110 UWB, Actuators, Pogo pins' },
+        { id: 'kicad_cartridge', code: 'PCBA 03', name: isDe ? 'Smart Kassettenplatine' : 'Smart Modular Cartridge', desc: isDe ? 'ESP32-C6, DW3110 UWB, 2x JF-0530B, Pogo-Pins' : 'ESP32-C6, DW3110 UWB, 2x JF-0530B, Pogo pins' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: isDe ? 'Universal Front-Knoten' : 'Universal Front Node', desc: isDe ? 'ESP32-S3, USB Hub, SAM-M10Q GNSS, 20W PD' : 'ESP32-S3, USB Hub, SAM-M10Q GNSS, PD' },
+        { id: 'kicad_cockpit_breakout', code: 'PCBA 05B', name: isDe ? 'Cockpit Taster & Status-LED Platine' : 'Cockpit Button & LED Board', desc: isDe ? 'IP67 Taster + 3x WS2812B-2020 Status-LEDs' : 'IP67 Button + 3x WS2812B-2020 Status LEDs' },
+        { id: 'kicad_mirror_pod', code: 'PCBA 05C', name: isDe ? 'BSD Spiegel-Warnanzeige (2x)' : 'BSD Mirror Warning Pod (2x)', desc: isDe ? '3x PLCC-2 Amber LEDs (3528) je Spiegelarm' : '3x PLCC-2 Amber LEDs (3528) per mirror arm' },
+        { id: 'kicad_sensor_puck', code: 'PCBA 05D', name: isDe ? 'TMP117 Stealth Gabelfuß-Sensor' : 'TMP117 Stealth Fork Sensor', desc: isDe ? 'TI TMP117AIDRVR (±0.1°C NIST) I2C Breakout' : 'TI TMP117AIDRVR (±0.1°C NIST) I2C Breakout' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: isDe ? 'Smart-Keyfob Platine' : 'Smart Keyfob', desc: isDe ? 'nRF52840 (DW3000 UWB), BLE Tracker, LRA Haptik' : 'nRF52840 (DW3000 UWB), BLE Tracker, LRA Haptic' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: isDe ? 'Radar 2.0 Sub-MCU Platine' : 'Radar 2.0 Sub-MCU Board', desc: isDe ? 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' : 'Wheeltec 77 GHz mmWave, 36x Halo RGB LEDs, UWB' },
-        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: isDe ? 'OMM 2.4 GHz UCS Intercom' : 'OMM 2.4 GHz UCS Intercom', desc: isDe ? 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' : 'Dual-Engine: ESP32-C6 + ESP32-PICO BT Classic, BQ24075 PMIC, ES8388 Codec' },
-        { id: 'kicad_omm446_intercom', code: 'PCBA 10', name: isDe ? 'OMM 446 MHz PMR/DMR Intercom' : 'OMM 446 MHz PMR/DMR Intercom', desc: isDe ? 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' : 'Dual-Engine: NiceRF SA818-DMR, ESP32-C6 Host, ESP32-PICO BT, ES8388 Codec' }
+        { id: 'kicad_omm446_intercom', code: 'PCBA 09/10', name: isDe ? 'OMM Universal Tri-Band UCS Intercom' : 'OMM Universal Tri-Band UCS Intercom', desc: isDe ? 'Tri-Band: ESP32-C6 + ESP32-PICO BT + SA818-U, ES8388, BQ24075' : 'Tri-Band: ESP32-C6 + ESP32-PICO BT + SA818-U, ES8388, BQ24075' }
     ];
 
     let activeDesignsCount = 0;
@@ -10193,10 +10183,12 @@ function exportGroupBomCsv() {
         { id: 'kicad_main_box', code: 'PCBA 01', name: 'Zentralbox Hauptplatine' },
         { id: 'kicad_cartridge', code: 'PCBA 03', name: 'Smart Kassettenplatine' },
         { id: 'kicad_front_node', code: 'PCBA 05', name: 'Universal Front-Knoten' },
+        { id: 'kicad_cockpit_breakout', code: 'PCBA 05B', name: 'Cockpit Taster & Status-LED Platine' },
+        { id: 'kicad_mirror_pod', code: 'PCBA 05C', name: 'BSD Spiegel-Warnanzeige (2x)' },
+        { id: 'kicad_sensor_puck', code: 'PCBA 05D', name: 'TMP117 Stealth Gabelfuß-Sensor' },
         { id: 'kicad_smart_keyfob', code: 'PCBA 07', name: 'Smart-Keyfob Platine' },
         { id: 'kicad_radar_submcu', code: 'PCBA 08', name: 'Radar 2.0 Sub-MCU Platine' },
-        { id: 'kicad_omm_intercom', code: 'PCBA 09', name: 'OMM 2.4 GHz UCS Intercom Platine (Dual-Engine)' },
-        { id: 'kicad_omm446_intercom', code: 'PCBA 10', name: 'OMM 446 MHz PMR/DMR Intercom Platine (Dual-Engine)' }
+        { id: 'kicad_omm446_intercom', code: 'PCBA 09/10', name: 'OMM Universal Tri-Band UCS Intercom Platine (2.4G / BT / 446M)' }
     ];
 
     masterPcbas.forEach(p => {
@@ -10299,9 +10291,10 @@ function exportGroupBomCsv() {
 
     // 4. Per Bike Details
     csv += '4. EINZELAUFSCHLÜSSELUNG NACH MOTORRAD\n';
-    csv += 'Fahrer;Motorrad_Modell;Kassetten;Front_Node;Radar_2_0;OMM24_Helm_Kit;OMM446_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
+    csv += 'Fahrer;Motorrad_Modell;Kassetten;Front_Node;Radar_2_0;OMM_TriBand_Helm_Kit;TMP117_Sensor;Keyfob;Fertigung;Einzelkosten_ca\n';
     allBoms.forEach(({ bike, bom }) => {
-        csv += `"${bike.name}";"${bom.bikeName}";"${formatCartridgeSummary(bike, bom)}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${bike.addons?.ommHelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.omm446HelmetKit ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
+        const hasOmmHelmet = Boolean(bike.addons?.ommHelmetKit || bike.addons?.omm446HelmetKit);
+        csv += `"${bike.name}";"${bom.bikeName}";"${formatCartridgeSummary(bike, bom)}";"${bike.addons?.frontNode ? 'Ja' : 'Nein'}";"${bike.addons?.radar2 ? 'Ja' : 'Nein'}";"${hasOmmHelmet ? 'Ja' : 'Nein'}";"${bike.addons?.tmp117Sensor ? 'Ja' : 'Nein'}";"${bike.addons?.keyfob ? 'Ja' : 'Nein'}";"${bike.manufacturing}";"${bom.costMin} - ${bom.costMax} EUR"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -10462,16 +10455,12 @@ function setupSmokeTestUi() {
         logSmoke(state.lang === 'de' ? 'Check 2: Lese UWB Kassetten-IDs (ESP32-C6 / DW3110) & Pogo-Pins...' : 'Check 2: Reading UWB Cartridge IDs (ESP32-C6 / DW3110) & Pogo-Pins...', 'info');
         await new Promise(r => setTimeout(r, 550));
         logSmoke(state.lang === 'de' ? `✓ Slot 1 UWB ID: ESP32-C6 [${builderState.slot1.toUpperCase()}] erkannt.` : `✓ Slot 1 UWB ID: ESP32-C6 [${builderState.slot1.toUpperCase()}] detected.`, 'ok');
-        if (builderState.slot1 === 'omm-ucs') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, 2.4 GHz RF (RSSI -36 dBm) OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, 2.4 GHz RF (RSSI -36 dBm) OK.', 'ok');
-        } else if (builderState.slot1 === 'omm446') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 446 MHz PMR/DMR Modul (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS aktiv, ES8388 Audio OK.' : '  ↪ OMM 446 MHz PMR/DMR Module (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS active, ES8388 audio OK.', 'ok');
+        if (builderState.slot1 === 'omm-ucs' || builderState.slot1 === 'omm446') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM Universal Tri-Band UCS Modul (PCBA 09/10: ESP32-C6 + ESP32-PICO BT + SA818-U 446M): BQ24075 PMIC 500mA Fast-Charge, Twin-SMA RF (RSSI -36 dBm) & ES8388 Audio OK.' : '  ↪ OMM Universal Tri-Band UCS Module (PCBA 09/10: ESP32-C6 + ESP32-PICO BT + SA818-U 446M): BQ24075 PMIC 500mA fast-charge, Twin-SMA RF (RSSI -36 dBm) & ES8388 audio OK.', 'ok');
         }
         logSmoke(state.lang === 'de' ? `✓ Slot 2 UWB ID: ESP32-C6 [${builderState.slot2.toUpperCase()}] erkannt.` : `✓ Slot 2 UWB ID: ESP32-C6 [${builderState.slot2.toUpperCase()}] detected.`, 'ok');
-        if (builderState.slot2 === 'omm-ucs') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 2.4 GHz Dual-Engine Modul (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA Fast-Charge, 2.4 GHz RF (RSSI -36 dBm) OK.' : '  ↪ OMM 2.4 GHz Dual-Engine Module (PCBA 09 ESP32-C6 + ESP32-PICO BT): BQ24075 PMIC 500mA fast-charge, 2.4 GHz RF (RSSI -36 dBm) OK.', 'ok');
-        } else if (builderState.slot2 === 'omm446') {
-            logSmoke(state.lang === 'de' ? '  ↪ OMM 446 MHz PMR/DMR Modul (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS aktiv, ES8388 Audio OK.' : '  ↪ OMM 446 MHz PMR/DMR Module (PCBA 10 NiceRF SA818 + ESP32-C6 + ESP32-PICO BT): 0.5W RF OK, CTCSS/DCS active, ES8388 audio OK.', 'ok');
+        if (builderState.slot2 === 'omm-ucs' || builderState.slot2 === 'omm446') {
+            logSmoke(state.lang === 'de' ? '  ↪ OMM Universal Tri-Band UCS Modul (PCBA 09/10: ESP32-C6 + ESP32-PICO BT + SA818-U 446M): BQ24075 PMIC 500mA Fast-Charge, Twin-SMA RF (RSSI -36 dBm) & ES8388 Audio OK.' : '  ↪ OMM Universal Tri-Band UCS Module (PCBA 09/10: ESP32-C6 + ESP32-PICO BT + SA818-U 446M): BQ24075 PMIC 500mA fast-charge, Twin-SMA RF (RSSI -36 dBm) & ES8388 audio OK.', 'ok');
         }
         logSmoke(state.lang === 'de' ? 'Führe Aktuator-Klickfolge 1-4 aus...' : 'Executing actuator click sequence 1-4...', 'info');
         await triggerActuatorAnimation();
@@ -10514,11 +10503,8 @@ function setupSmokeTestUi() {
             logSmoke(state.lang === 'de' ? 'ℹ Radar 2.0 nicht in Konfiguration (Heck bleibt 100% sauber und werksoriginal).' : 'ℹ Radar 2.0 not in config (Tail remains 100% clean and factory original).', 'info');
         }
 
-        if (builderState.addons.ommHelmetKit) {
-            logSmoke(state.lang === 'de' ? '✓ OMM 2.4 GHz Helm UCS Headset (PCBA 09 Dual-Engine): ESP32-C6 + ESP32-PICO BT, ES8388 Stereo Codec I2S aktiv, 4-Tasten Haptik OK, 600 mAh LiPo: 4.16 V (97%).' : '✓ OMM 2.4 GHz Helmet UCS Headset (PCBA 09 Dual-Engine): ESP32-C6 + ESP32-PICO BT, ES8388 Stereo Codec I2S active, 4-button tactile OK, 600 mAh LiPo: 4.16 V (97%).', 'ok');
-        }
-        if (builderState.addons.omm446HelmetKit) {
-            logSmoke(state.lang === 'de' ? '✓ OMM 446 MHz Helm UCS Headset (PCBA 10 Dual-Engine): NiceRF SA818-DMR 0.2W SAR-Safe, Helical-Antenne SWR 1.15, 600 mAh LiPo: 4.15 V (96%).' : '✓ OMM 446 MHz Helmet UCS Headset (PCBA 10 Dual-Engine): NiceRF SA818-DMR 0.2W SAR-safe, helical antenna SWR 1.15, 600 mAh LiPo: 4.15 V (96%).', 'ok');
+        if (builderState.addons.ommHelmetKit || builderState.addons.omm446HelmetKit) {
+            logSmoke(state.lang === 'de' ? '✓ OMM Universal Tri-Band Helm UCS Headset (PCBA 09/10): ESP32-C6 + ESP32-PICO BT + SA818-U (0.2W SAR-Safe), ES8388 Stereo Codec I2S aktiv, Twin-Stubby SWR 1.15, 1000 mAh LiPo: 4.16 V (97%).' : '✓ OMM Universal Tri-Band Helmet UCS Headset (PCBA 09/10): ESP32-C6 + ESP32-PICO BT + SA818-U (0.2W SAR-safe), ES8388 Stereo Codec I2S active, Twin-Stubby SWR 1.15, 1000 mAh LiPo: 4.16 V (97%).', 'ok');
         }
 
         logSmoke('==================================================', 'info');
