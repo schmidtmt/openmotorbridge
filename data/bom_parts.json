@@ -2,16 +2,16 @@
   "_meta": {
     "version": "10.0.0",
     "description": "OpenMotorBridge Single Source of Truth Parts Catalog",
-    "generated_at": "2026-10-09"
+    "generated_at": "2026-11-07"
   },
   "parts": {
-    "fastener_din912_m3_40": {
+    "fastener_din7985_m2_6": {
       "type": "fastener",
       "name": {
-        "de": "M3 Gehäuseschraube (Main Box)",
-        "en": "M3 Enclosure Screw (Main Box)"
+        "de": "M2 Kassetten-Platinenschraube",
+        "en": "M2 Cartridge PCB Screw"
       },
-      "spec": "DIN 912 V4A M3 x 40 mm",
+      "spec": "DIN 7985 / DIN 912 V4A M2 x 6 mm",
       "source": "Normteil / Amazon",
       "unit": "Stk.",
       "cost_eur": [
@@ -19,19 +19,19 @@
         0.08
       ],
       "desc": {
-        "de": "Zentralbox-Gehäuseverschraubung (greift von oben in Nut-Pockets der Bodenwanne)",
-        "en": "Central box enclosure fastener (threads from top into bottom tub nut pockets)"
+        "de": "Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen)",
+        "en": "Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated)"
       },
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
     },
-    "fastener_din912_m3_20": {
+    "fastener_din7991_m2_6": {
       "type": "fastener",
       "name": {
-        "de": "M3 Front-Schraube (Front-Node)",
-        "en": "M3 Front Screw (Front Node)"
+        "de": "M2 Halteplattenschraube (Senkkopf)",
+        "en": "M2 Retainer Plate Screw (Countersunk)"
       },
-      "spec": "DIN 912 V4A M3 x 20 mm",
+      "spec": "DIN 7991 V4A M2 x 6 mm",
       "source": "Normteil / Amazon",
       "unit": "Stk.",
       "cost_eur": [
@@ -39,8 +39,48 @@
         0.08
       ],
       "desc": {
-        "de": "Front-Node Gehäusedeckel-Verschraubung in Nut-Pockets",
-        "en": "Front Node enclosure lid fastener into captive nut pockets"
+        "de": "Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette)",
+        "en": "Retaining actuator clamping bridge plates (4x per gateway cartridge)"
+      },
+      "pkg_qty": 50,
+      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
+    },
+    "fastener_din912_m25_6": {
+      "type": "fastener",
+      "name": {
+        "de": "M2.5 Platinenschraube",
+        "en": "M2.5 PCB Mounting Screw"
+      },
+      "spec": "DIN 912 V4A M2.5 x 6 mm",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.04,
+        0.08
+      ],
+      "desc": {
+        "de": "Befestigung der Platinen & Klemmen (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B Handschuhfach-Hub, 2x OMM Helm-Klemmschelle)",
+        "en": "Fastening boards & clamps (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B glovebox hub, 2x OMM helmet rim clamp)"
+      },
+      "pkg_qty": 50,
+      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
+    },
+    "fastener_din912_m2_8": {
+      "type": "fastener",
+      "name": {
+        "de": "M2 UCS Modul-Schraube",
+        "en": "M2 UCS Module Screw"
+      },
+      "spec": "DIN 912 V4A M2 x 8 mm",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.04,
+        0.08
+      ],
+      "desc": {
+        "de": "Verschraubung OMM UCS Gehäuseschalen (4x pro Modul) sowie Zentraldom H1 der Under-Perch Spiegel-Pods (1x pro Pod)",
+        "en": "Fastening OMM UCS housing shells (4x per module) and central boss H1 of under-perch mirror pods (1x per pod)"
       },
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
@@ -64,46 +104,6 @@
       },
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_din934_m3": {
-      "type": "fastener",
-      "name": {
-        "de": "M3 Edelstahlmutter (Captive)",
-        "en": "M3 Stainless Nut (Captive)"
-      },
-      "spec": "DIN 934 / DIN 985 M3 V4A",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.03,
-        0.06
-      ],
-      "desc": {
-        "de": "Unverlierbar in Nut-Pockets eingelegt (Zentralbox, Front-Node, Rahmendock – kein Lötkolben nötig!)",
-        "en": "Captive in nut pockets (Central Box, Front Node, frame dock – zero heat-set inserts!)"
-      },
-      "pkg_qty": 100,
-      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
-    },
-    "fastener_din934_m4": {
-      "type": "fastener",
-      "name": {
-        "de": "M4 Edelstahlmutter (AMPS & Radar)",
-        "en": "M4 Stainless Nut (AMPS & Radar)"
-      },
-      "spec": "DIN 934 M4 V4A",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.03,
-        0.06
-      ],
-      "desc": {
-        "de": "4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand",
-        "en": "4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing"
-      },
-      "pkg_qty": 100,
-      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
     },
     "fastener_din912_m4_12": {
       "type": "fastener",
@@ -145,6 +145,86 @@
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
     },
+    "fastener_din934_m2": {
+      "type": "fastener",
+      "name": {
+        "de": "M2 Edelstahlmutter (Captive UCS)",
+        "en": "M2 Stainless Nut (Captive UCS)"
+      },
+      "spec": "DIN 934 M2 V4A",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.03,
+        0.06
+      ],
+      "desc": {
+        "de": "Formschlüssig eingelegt in OMM UCS Oberschale (4x), Pod Slide-Tray PCBA 03 (4x) & Under-Perch Spiegel-Pods (1x pro Pod)",
+        "en": "Captive in OMM UCS upper shell (4x), pod slide tray PCBA 03 (4x) & under-perch mirror pods (1x per pod)"
+      },
+      "pkg_qty": 100,
+      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
+    },
+    "fastener_din934_m25": {
+      "type": "fastener",
+      "name": {
+        "de": "M2.5 Edelstahlmutter (Captive)",
+        "en": "M2.5 Stainless Nut (Captive)"
+      },
+      "spec": "DIN 934 M2.5 V4A",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.03,
+        0.06
+      ],
+      "desc": {
+        "de": "Formschlüssig eingelegt in Sechskanttaschen (4x PCBA 01 Slide-Tray, 4x PCBA 05 Front-Node, 2x PCBA 05B Hub, 4x Aktuator-Schlittenbrücke)",
+        "en": "Captive in hex nut pockets (4x PCBA 01 slide tray, 4x PCBA 05 Front Node, 2x PCBA 05B hub, 4x actuator slide bracket)"
+      },
+      "pkg_qty": 100,
+      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
+    },
+    "fastener_din934_m3": {
+      "type": "fastener",
+      "name": {
+        "de": "M3 Edelstahlmutter (Captive)",
+        "en": "M3 Stainless Nut (Captive)"
+      },
+      "spec": "DIN 934 / DIN 985 M3 V4A",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.03,
+        0.06
+      ],
+      "desc": {
+        "de": "Unverlierbar in Sechskant-Taschen eingelegt (Harley Magnet-Rahmendock & BMW GS Transition-Dock – 100 % ohne Einschmelzmuttern)",
+        "en": "Captive in hex pockets (Harley magnetic frame dock & BMW GS transition dock – 100% zero heat-set inserts)"
+      },
+      "pkg_qty": 100,
+      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
+    },
+    "fastener_din934_m4": {
+      "type": "fastener",
+      "name": {
+        "de": "M4 Edelstahlmutter (AMPS & Radar)",
+        "en": "M4 Stainless Nut (AMPS & Radar)"
+      },
+      "spec": "DIN 934 M4 V4A",
+      "source": "Normteil / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.03,
+        0.06
+      ],
+      "desc": {
+        "de": "4x Zentralbox M4-Silentblöcke, 4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand",
+        "en": "4x Central Box M4 silentblocks, 4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing"
+      },
+      "pkg_qty": 100,
+      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
+    },
     "fastener_din934_m5": {
       "type": "fastener",
       "name": {
@@ -165,185 +245,25 @@
       "pkg_qty": 100,
       "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
     },
-    "fastener_din912_m25_6": {
+    "fastener_keyring_eyelet_v4a": {
       "type": "fastener",
       "name": {
-        "de": "M2.5 Platinenschraube",
-        "en": "M2.5 PCB Mounting Screw"
+        "de": "Edelstahl-Hülse Schlüsselring (Keyfob)",
+        "en": "Stainless Steel Lanyard Bushing (Keyfob)"
       },
-      "spec": "DIN 912 V4A M2.5 x 6 mm",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.04,
-        0.08
-      ],
-      "desc": {
-        "de": "Befestigung der Hauptplatinen (4x Zentralbox PCBA 01, 4x Front-Node PCBA 05)",
-        "en": "Fastening main controller boards (4x Central Box PCBA 01, 4x Front Node PCBA 05)"
-      },
-      "pkg_qty": 50,
-      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_din7985_m2_6": {
-      "type": "fastener",
-      "name": {
-        "de": "M2 Kassetten-Platinenschraube",
-        "en": "M2 Cartridge PCB Screw"
-      },
-      "spec": "DIN 7985 / DIN 912 V4A M2 x 6 mm",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.04,
-        0.08
-      ],
-      "desc": {
-        "de": "Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen)",
-        "en": "Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated)"
-      },
-      "pkg_qty": 50,
-      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_din7991_m2_6": {
-      "type": "fastener",
-      "name": {
-        "de": "M2 Halteplattenschraube (Senkkopf)",
-        "en": "M2 Retainer Plate Screw (Countersunk)"
-      },
-      "spec": "DIN 7991 V4A M2 x 6 mm",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.04,
-        0.08
-      ],
-      "desc": {
-        "de": "Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette)",
-        "en": "Retaining actuator clamping bridge plates (4x per gateway cartridge)"
-      },
-      "pkg_qty": 50,
-      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_din912_m2_8": {
-      "type": "fastener",
-      "name": {
-        "de": "M2 UCS Modul-Schraube",
-        "en": "M2 UCS Module Screw"
-      },
-      "spec": "DIN 912 V4A M2 x 8 mm",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.04,
-        0.08
-      ],
-      "desc": {
-        "de": "Verschraubung OMM UCS Gehäuseschalen (4x pro Modul, greift in M2 Muttern)",
-        "en": "Fastening OMM UCS housing shells (4x per module, threads into M2 captive nuts)"
-      },
-      "pkg_qty": 50,
-      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_din934_m2": {
-      "type": "fastener",
-      "name": {
-        "de": "M2 Edelstahlmutter (Captive UCS)",
-        "en": "M2 Stainless Nut (Captive UCS)"
-      },
-      "spec": "DIN 934 M2 V4A",
-      "source": "Normteil / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.03,
-        0.06
-      ],
-      "desc": {
-        "de": "Formschlüssig in Oberschale des OMM UCS Moduls eingelegt (4x pro Modul)",
-        "en": "Captive nuts in upper shell pockets of OMM UCS module (4x per module)"
-      },
-      "pkg_qty": 100,
-      "pkg_name": "100er Pack Muttern V4A (Amazon / Normteil)"
-    },
-    "fastener_pin_din7_m2_8": {
-      "type": "fastener",
-      "name": {
-        "de": "M2 Schwenkachse Wippe",
-        "en": "M2 Rocker Pivot Pin"
-      },
-      "spec": "DIN 7 V4A Zylinderstift M2 x 8 mm",
+      "spec": "316L V4A Ø 8.5 x 4.5 mm, L = 13 mm",
       "source": "Normteil / Misumi",
       "unit": "Stk.",
       "cost_eur": [
-        0.2,
-        0.4
+        0.4,
+        0.8
       ],
       "desc": {
-        "de": "Präzisions-Drehachse für magnetische Kassetten-Rastwippe im Schlitten",
-        "en": "Precision pivot axle for magnetic cartridge locking rocker inside sled"
+        "de": "Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse",
+        "en": "Press-fit stainless bushing inside solid block of keyfob lanyard eyelet"
       },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack Zylinderstifte (Normteil / Misumi)"
-    },
-    "fastener_pin_din6325_6_8": {
-      "type": "fastener",
-      "name": {
-        "de": "Magnetanker Stahlstift (Kassette)",
-        "en": "Steel Armature Pin (Cartridge)"
-      },
-      "spec": "DIN 6325 gehärteter Passstift Ø 6 x 8 mm",
-      "source": "Normteil / Misumi",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.6,
-        1.2
-      ],
-      "desc": {
-        "de": "Ferromagnetischer Stahlanker im Hebelarm der Kassetten-Wippe (reagiert auf N52 Magnetschlüssel)",
-        "en": "Ferromagnetic steel armature inside rocker lever (actuated by N52 magnetic key)"
-      },
-      "pkg_qty": 5,
-      "pkg_name": "5er Pack Magnete (Supermagnete)"
-    },
-    "fastener_spring_latch_return": {
-      "type": "fastener",
-      "name": {
-        "de": "Wippen-Rückstellfeder",
-        "en": "Rocker Return Spring"
-      },
-      "spec": "Edelstahl V4A Ø 3.5 mm, L0 = 10 mm",
-      "source": "Gutekunst / Web",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.35,
-        0.65
-      ],
-      "desc": {
-        "de": "Hält die Verriegelungskralle der Kassettenwippe mit 2.5 N Vorspannung geschlossen",
-        "en": "Keeps cartridge locking claw securely engaged with 2.5 N preload"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack Federn (Gutekunst / Web)"
-    },
-    "fastener_spring_ejector_bulkhead": {
-      "type": "fastener",
-      "name": {
-        "de": "Auswerfer-Druckfeder (Schottwand)",
-        "en": "Ejector Spring (Bulkhead)"
-      },
-      "spec": "Edelstahl V4A D = 4.5 mm, L0 = 15 mm",
-      "source": "Gutekunst / Web",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.35,
-        0.65
-      ],
-      "desc": {
-        "de": "Auto-Eject Federn in der Schottwand (2x pro Pod, schiebt Kassette 25 mm heraus)",
-        "en": "Auto-eject springs inside pod bulkhead (2x per pod, ejects cartridge 25 mm upon unlock)"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack Federn (Gutekunst / Web)"
+      "pkg_qty": 1,
+      "pkg_name": "Edelstahl-Buchse DIN 316L"
     },
     "fastener_silentblock_m4": {
       "type": "fastener",
@@ -361,26 +281,6 @@
       "desc": {
         "de": "Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz)",
         "en": "Vibration-decoupled 4-point mounting of Central Box on bike frame (damps 10-100 Hz)"
-      },
-      "pkg_qty": 50,
-      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_tape_3m_vhb_r130": {
-      "type": "fastener",
-      "name": {
-        "de": "3M VHB R130 Klebepad",
-        "en": "3M VHB R130 Adhesive Pad"
-      },
-      "spec": "3M VHB R130 Hochleistungs-Klebepad passgenau",
-      "source": "3M / COTS",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.04,
-        0.08
-      ],
-      "desc": {
-        "de": "Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels",
-        "en": "Vibration-proof & weatherproof ECE 22.06 helmet mounting for OMM UCS cradle"
       },
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
@@ -405,6 +305,26 @@
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
     },
+    "fastener_tape_3m_vhb_r130": {
+      "type": "fastener",
+      "name": {
+        "de": "3M VHB R130 Klebepad",
+        "en": "3M VHB R130 Adhesive Pad"
+      },
+      "spec": "3M VHB R130 Hochleistungs-Klebepad passgenau",
+      "source": "3M / COTS",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.04,
+        0.08
+      ],
+      "desc": {
+        "de": "Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels",
+        "en": "Vibration-proof & weatherproof ECE 22.06 helmet mounting for OMM UCS cradle"
+      },
+      "pkg_qty": 50,
+      "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
+    },
     "tool_n52_key": {
       "type": "fastener",
       "name": {
@@ -424,46 +344,6 @@
       },
       "pkg_qty": 50,
       "pkg_name": "50er Pack Schrauben V4A (Amazon / Normteil)"
-    },
-    "fastener_keyring_eyelet_v4a": {
-      "type": "fastener",
-      "name": {
-        "de": "Edelstahl-Hülse Schlüsselring (Keyfob)",
-        "en": "Stainless Steel Lanyard Bushing (Keyfob)"
-      },
-      "spec": "316L V4A Ø 8.5 x 4.5 mm, L = 13 mm",
-      "source": "Normteil / Misumi",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.8
-      ],
-      "desc": {
-        "de": "Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse",
-        "en": "Press-fit stainless bushing inside solid block of keyfob lanyard eyelet"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Edelstahl-Buchse DIN 316L"
-    },
-    "seal_silicone_cord_15": {
-      "type": "seal",
-      "name": {
-        "de": "Silikon-Dichtschnur Ø 1.5 mm",
-        "en": "Silicone Sealing Cord Ø 1.5 mm"
-      },
-      "spec": "Silikon-Rundschnur Ø 1.5 mm Shore 40A",
-      "source": "O-Ring-Shop / Amazon",
-      "unit": "m",
-      "cost_eur": [
-        1.2,
-        2.0
-      ],
-      "desc": {
-        "de": "Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67",
-        "en": "Continuous sealing cord for Central Box (40 cm) & Front Node (30 cm) groove for IP67"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Meterware (O-Ring-Shop)"
     },
     "seal_silicone_cord_08": {
       "type": "seal",
@@ -485,25 +365,25 @@
       "pkg_qty": 1,
       "pkg_name": "Meterware (O-Ring-Shop)"
     },
-    "seal_mouth_gasket_cartridge": {
+    "seal_silicone_cord_15": {
       "type": "seal",
       "name": {
-        "de": "Kassetten-Flanschdichtung (Mundloch)",
-        "en": "Cartridge Flange Mouth Gasket"
+        "de": "Silikon-Dichtschnur Ø 1.5 mm",
+        "en": "Silicone Sealing Cord Ø 1.5 mm"
       },
-      "spec": "Silikon-Formdichtung Shore 40A (54 x 18 mm)",
-      "source": "Sonderfertigung / Silikon",
-      "unit": "Stk.",
+      "spec": "Silikon-Rundschnur Ø 1.5 mm Shore 40A",
+      "source": "O-Ring-Shop / Amazon",
+      "unit": "m",
       "cost_eur": [
-        0.8,
-        1.5
+        1.2,
+        2.0
       ],
       "desc": {
-        "de": "Stirnseitige Mundloch-Abdichtung an Pod 1 und Pod 2 gegen Spritzwasser und Gischt",
-        "en": "Front mouth-opening seal on Pod 1 and Pod 2 against road spray and rain"
+        "de": "Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67",
+        "en": "Continuous sealing cord for Central Box (40 cm) & Front Node (30 cm) groove for IP67"
       },
-      "pkg_qty": 5,
-      "pkg_name": "5er Formdichtungs-Set"
+      "pkg_qty": 1,
+      "pkg_name": "Meterware (O-Ring-Shop)"
     },
     "seal_vent_gore_eptfe": {
       "type": "seal",
@@ -525,33 +405,13 @@
       "pkg_qty": 5,
       "pkg_name": "5er Membran-Patch Set"
     },
-    "seal_gland_m8_ip68": {
-      "type": "seal",
-      "name": {
-        "de": "M8 IP68 Kabelverschraubung",
-        "en": "M8 IP68 Cable Gland"
-      },
-      "spec": "M8 x 1.25 Messing vernickelt / PA66 mit EPDM-Dichtung",
-      "source": "Skintop / Lapp / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "Spritzwasserdichte Gehäuseboden-Durchführung für 2-poliges FLRY-B DC-Kabel",
-        "en": "Waterproof enclosure bottom feed-through for 2-wire FLRY-B DC power cable"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Dichtungs-Set"
-    },
-    "part3d_main_box_lower_case": {
+    "part3d_car_dashboard_dock": {
       "type": "part_3d",
       "name": {
-        "de": "Main Box Monocoque-Wanne (Typ A)",
-        "en": "Main Box Monocoque Tub (Type A)"
+        "de": "PKW Armaturenbrett Doppelaufnahme (Optional)",
+        "en": "Support-Car Dashboard Dock (Optional)"
       },
-      "spec": "PA12-SLS / ASA (Schraubenloses Dual-Rail Monocoque, 140x70x35 mm)",
+      "spec": "PA12-SLS (Optionale Keil-Aufnahme)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
@@ -559,99 +419,33 @@
         4.8
       ],
       "desc": {
-        "de": "Hermetische Monocoque-Außenwanne mit Schwalbenschwanz-Schienen & Rastzunge",
-        "en": "Hermetic monocoque outer tub with dovetail rails & snap latch"
+        "de": "Optionale Armaturenbrett-Ablageaufnahme für Front-Knoten & Zentralbox (Standard: Unter-Sitz-Montage)",
+        "en": "Optional dashboard shelf dock for Front Node & Central Box (Standard: Under-seat mounting)"
       },
-      "file": "000_monocoque_tub.stl",
-      "group": "Main Box",
+      "file": "car_dashboard_wedge_dock.stl",
+      "group": "PKW-Kit",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_main_box_mid_tray": {
+    "part3d_car_sun_visor_clip": {
       "type": "part_3d",
       "name": {
-        "de": "Main Box Einschub-Schublade (Slide-Tray)",
-        "en": "Main Box Slide-In Tray"
+        "de": "PKW Sonnenblenden-Clip (Pod)",
+        "en": "Sun Visor Pod Clip"
       },
-      "spec": "PA12-SLS / ASA (Aufnahme für PCBA 01 & 2.200 mAh USV-LiPo)",
+      "spec": "PA12-SLS (Elastische Federspange)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
-        1.8,
-        3.2
+        0.8,
+        1.6
       ],
       "desc": {
-        "de": "Werkzeugloser Inneneinschub für PCBA 01, LiPo-USV & Antennen",
-        "en": "Tool-less slide-in tray for PCBA 01, LiPo UPS & antennas"
+        "de": "Universal Sonnenblenden-Clips für Kassetten-Pods im Support-Van",
+        "en": "Universal sun visor clips for cartridge pods in support vehicle"
       },
-      "file": "010_slide_tray.stl",
-      "group": "Main Box",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_main_box_battery_bridge": {
-      "type": "part_3d",
-      "name": {
-        "de": "Main Box Akkubrücke & Antennenträger",
-        "en": "Main Box Battery Bridge & Antenna Carrier"
-      },
-      "spec": "PA12-SLS / MJF, schwenkbare RC-Schnappbrücke, C-Clip Zugsicherung & Schutzblende",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        2.5
-      ],
-      "desc": {
-        "de": "Schwenkbare Akkubrücke für vibrationsfesten Halt des 2.200 mAh LiPo sowie geschützte Aufnahme der Taoglas FXP895 LoRa & FXP73 2.4 GHz Antennen",
-        "en": "Hinged battery bridge for vibration-proof retention of 2200 mAh LiPo and protected housing of Taoglas FXP895 LoRa & FXP73 2.4 GHz antennas"
-      },
-      "file": "main_box_battery_bridge.stl",
-      "group": "Main Box",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_main_box_lid": {
-      "type": "part_3d",
-      "name": {
-        "de": "Main Box Einschub-Deckel (Slide-Lid)",
-        "en": "Main Box Slide-In Lid"
-      },
-      "spec": "PA12-SLS / ASA (L-Profil Stirndeckel mit Gore-Vent & 1.5 mm Dichtnut)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.8,
-        3.2
-      ],
-      "desc": {
-        "de": "Schraubenloser L-Stirndeckel mit Kompressions-O-Ring-Dichtung & Gore-Membran",
-        "en": "Screwless L-profile front lid with compression O-ring seal & Gore vent"
-      },
-      "file": "020_slide_lid.stl",
-      "group": "Main Box",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_pod_base_housing": {
-      "type": "part_3d",
-      "name": {
-        "de": "Pod Monocoque-Wanne (Typ B)",
-        "en": "Pod Monocoque Tub (Type B)"
-      },
-      "spec": "PA12-SLS / ASA (Schraubenloser Koffer-Pod Monocoque, 150x70x38 mm)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.8,
-        3.2
-      ],
-      "desc": {
-        "de": "Hermetische Koffer-Pod Monocoque-Wanne für Pod 1 & Pod 2",
-        "en": "Hermetic saddlebag pod monocoque tub for Pod 1 & Pod 2"
-      },
-      "file": "002_pod_housing_base.stl",
-      "group": "Pod Base",
+      "file": "car_sun_visor_pod_clip.stl",
+      "group": "PKW-Kit",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -674,6 +468,116 @@
       },
       "file": "011_pod_slide_tray.stl",
       "group": "Cartridge",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_cartridge_insert_blind": {
+      "type": "part_3d",
+      "name": {
+        "de": "Kassetten-Inlay Blindkassette (Dry Box)",
+        "en": "Blank Cartridge Inlay (Dry Box)"
+      },
+      "spec": "PA12-SLS (Hermetisch geschlossener Hohlraum)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Wasserdichte Blindkassette / Dry Box für Notfallgeld oder Werkzeug",
+        "en": "Hermetic blank cartridge / dry box for emergency cash or tools"
+      },
+      "file": "cartridge_insert_blindkassette.stl",
+      "group": "Gateway Inlay",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_cartridge_insert_cardo": {
+      "type": "part_3d",
+      "name": {
+        "de": "Kassetten-Inlay Cardo Packtalk Edge",
+        "en": "Cartridge Inlay Cardo Packtalk Edge"
+      },
+      "spec": "PA12-SLS (Formschlüssiges Air-Mount Nest)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking",
+        "en": "Mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking"
+      },
+      "file": "cartridge_insert_cardo.stl",
+      "group": "Gateway Inlay",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_cartridge_insert_omm_ucs": {
+      "type": "part_3d",
+      "name": {
+        "de": "Kassetten-Inlay OMM Universal Tri-Band UCS",
+        "en": "Cartridge Inlay OMM Universal Tri-Band UCS"
+      },
+      "spec": "PA12-SLS (Universal-Schlitten für PCBA 09/10 mit Twin-Stubby-Freiraum & 5V-Booster-Bett 48x53mm)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Universelles Pod-Inlay für das OMM Tri-Band UCS Modul (PCBA 09/10) mit Twin-SMA-Freiraum & 5V Bi-Directional Booster-Kammer",
+        "en": "Universal pod inlay for OMM Tri-Band UCS module (PCBA 09/10) with Twin-SMA clearance & 5V bi-directional booster bay"
+      },
+      "file": "cartridge_insert_omm_ucs.stl",
+      "group": "Gateway Inlay",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_cartridge_insert_pmr": {
+      "type": "part_3d",
+      "name": {
+        "de": "Kassetten-Inlay Universal PMR446",
+        "en": "Cartridge Inlay Universal PMR446"
+      },
+      "spec": "PA12-SLS (Kabeldurchführung & Klemmschiene)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Universelles COTS Funkgeräte-Inlay mit Doppelklinken-Führung",
+        "en": "Universal COTS radio inlay with dual-jack routing"
+      },
+      "file": "cartridge_antenna_bracket_omm.stl",
+      "group": "Gateway Inlay",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_cartridge_insert_sena": {
+      "type": "part_3d",
+      "name": {
+        "de": "Kassetten-Inlay Sena SPIDER X / 50S",
+        "en": "Cartridge Inlay Sena SPIDER X / 50S"
+      },
+      "spec": "PA12-SLS (Formschlüssiges Nest mit Aktuatorkanälen)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Aufnahmebett für Sena SPIDER X Slim & 50S Headset-Module",
+        "en": "Mounting bed for Sena SPIDER X Slim & 50S headset modules"
+      },
+      "file": "cartridge_insert_sena.stl",
+      "group": "Gateway Inlay",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -721,35 +625,35 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_cartridge_insert_sena": {
+    "part3d_front_node_cable_glands_tpu": {
       "type": "part_3d",
       "name": {
-        "de": "Kassetten-Inlay Sena SPIDER X / 50S",
-        "en": "Cartridge Inlay Sena SPIDER X / 50S"
+        "de": "Front-Node TPU-Knickschutztüllen (Paar)",
+        "en": "Front Node TPU Cable Gland Boots (Pair)"
       },
-      "spec": "PA12-SLS (Formschlüssiges Nest mit Aktuatorkanälen)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
+      "spec": "TPU Shore 95A (Formschlüssige Knickschutztüllen für Ø 6.0 mm Rundkabel)",
+      "source": "3D-Druck (TPU 95A)",
+      "unit": "Paar",
       "cost_eur": [
-        0.9,
-        1.8
+        0.5,
+        1.0
       ],
       "desc": {
-        "de": "Aufnahmebett für Sena SPIDER X Slim & 50S Headset-Module",
-        "en": "Mounting bed for Sena SPIDER X Slim & 50S headset modules"
+        "de": "Hermetische Dichtmanschetten für die 2 Rundkabel-Auslässe ins Cockpit & Fahrzeug",
+        "en": "Hermetic sealing boots for the 2 round cable exits to cockpit & vehicle"
       },
-      "file": "cartridge_insert_sena.stl",
-      "group": "Gateway Inlay",
+      "file": "front_node_cable_glands_tpu.stl",
+      "group": "Front-Node",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_cartridge_insert_cardo": {
+    "part3d_front_node_fairing_clamp": {
       "type": "part_3d",
       "name": {
-        "de": "Kassetten-Inlay Cardo Packtalk Edge",
-        "en": "Cartridge Inlay Cardo Packtalk Edge"
+        "de": "Front-Node Verkleidungs-Rohrschelle",
+        "en": "Front Node Fairing Tube Clamp"
       },
-      "spec": "PA12-SLS (Formschlüssiges Air-Mount Nest)",
+      "spec": "PA12-SLS (Ø 12-22 mm Klemmbereich, AMPS)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
@@ -757,99 +661,11 @@
         1.8
       ],
       "desc": {
-        "de": "Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking",
-        "en": "Mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking"
+        "de": "Universal Verkleidungs-Rohrschelle für Navibügel & Cockpitstreben",
+        "en": "Universal Fairing Tube Clamp for GPS bars & cockpit stays"
       },
-      "file": "cartridge_insert_cardo.stl",
-      "group": "Gateway Inlay",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_cartridge_insert_omm_ucs": {
-      "type": "part_3d",
-      "name": {
-        "de": "Kassetten-Inlay OMM 2.4 GHz UCS",
-        "en": "Cartridge Inlay OMM 2.4 GHz UCS"
-      },
-      "spec": "PA12-SLS (Hintere Booster-Kammer 48x53mm)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Inlay für OMM 2.4G PCBA 09 mit Antennenführung & 5V-Booster-Bett",
-        "en": "Inlay for OMM 2.4G PCBA 09 with antenna channel & 5V booster bay"
-      },
-      "file": "cartridge_insert_omm_ucs.stl",
-      "group": "Gateway Inlay",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_cartridge_insert_omm446_ucs": {
-      "type": "part_3d",
-      "name": {
-        "de": "Kassetten-Inlay OMM 446 MHz UCS",
-        "en": "Cartridge Inlay OMM 446 MHz UCS"
-      },
-      "spec": "PA12-SLS (Wendelantennen-Schacht & Booster-Bett)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Inlay für OMM 446 PCBA 10 mit Wendelantennen-Kanal & 5V-Booster-Bett",
-        "en": "Inlay for OMM 446 PCBA 10 with helical antenna channel & 5V booster bay"
-      },
-      "file": "cartridge_insert_omm446_ucs.stl",
-      "group": "Gateway Inlay",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_cartridge_insert_pmr": {
-      "type": "part_3d",
-      "name": {
-        "de": "Kassetten-Inlay Universal PMR446",
-        "en": "Cartridge Inlay Universal PMR446"
-      },
-      "spec": "PA12-SLS (Kabeldurchführung & Klemmschiene)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Universelles COTS Funkgeräte-Inlay mit Doppelklinken-Führung",
-        "en": "Universal COTS radio inlay with dual-jack routing"
-      },
-      "file": "cartridge_insert_pmr.stl",
-      "group": "Gateway Inlay",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_cartridge_insert_blind": {
-      "type": "part_3d",
-      "name": {
-        "de": "Kassetten-Inlay Blindkassette (Dry Box)",
-        "en": "Blank Cartridge Inlay (Dry Box)"
-      },
-      "spec": "PA12-SLS (Hermetisch geschlossener Hohlraum)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Wasserdichte Blindkassette / Dry Box für Notfallgeld oder Werkzeug",
-        "en": "Hermetic blank cartridge / dry box for emergency cash or tools"
-      },
-      "file": "cartridge_insert_blindkassette.stl",
-      "group": "Gateway Inlay",
+      "file": "front_node_fairing_tube_clamp.stl",
+      "group": "Front-Node",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -897,28 +713,6 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_front_node_cable_glands_tpu": {
-      "type": "part_3d",
-      "name": {
-        "de": "Front-Node TPU-Knickschutztüllen (Paar)",
-        "en": "Front Node TPU Cable Gland Boots (Pair)"
-      },
-      "spec": "TPU Shore 95A (Formschlüssige Knickschutztüllen für Ø 6.0 mm Rundkabel)",
-      "source": "3D-Druck (TPU 95A)",
-      "unit": "Paar",
-      "cost_eur": [
-        0.5,
-        1.0
-      ],
-      "desc": {
-        "de": "Hermetische Dichtmanschetten für die 2 Rundkabel-Auslässe ins Cockpit & Fahrzeug",
-        "en": "Hermetic sealing boots for the 2 round cable exits to cockpit & vehicle"
-      },
-      "file": "front_node_cable_glands_tpu.stl",
-      "group": "Front-Node",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
     "part3d_front_node_usbc_cap_tpu": {
       "type": "part_3d",
       "name": {
@@ -941,13 +735,79 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_front_node_fairing_clamp": {
+    "part3d_glovebox_hub": {
       "type": "part_3d",
       "name": {
-        "de": "Front-Node Verkleidungs-Rohrschelle",
-        "en": "Front Node Fairing Tube Clamp"
+        "de": "5-Port Handschuhfach Media & Power-Injection Hub Gehäuse",
+        "en": "5-Port Glovebox Media & Power-Injection Hub Enclosure"
       },
-      "spec": "PA12-SLS (Ø 12-22 mm Klemmbereich, AMPS)",
+      "spec": "PA12-SLS (50x20 mm für PCBA 05B mit 5x USB-C Dual-Edge J1..J5)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        2.2,
+        4.5
+      ],
+      "desc": {
+        "de": "Kompaktes 5-Port Power-Injection Hubgehäuse für PCBA 05B (J1 Skyline Host, J2 Front-Node 30W PD, J3 Phone, J4 Dongle, J5 Media)",
+        "en": "Compact 5-port power-injection hub enclosure for PCBA 05B (J1 Skyline Host, J2 Front Node 30W PD, J3 Phone, J4 Dongle, J5 Media)"
+      },
+      "file": "glovebox_power_injection_hub.stl",
+      "group": "Cockpit-Hub",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_gs_adventure_rack_tail": {
+      "type": "part_3d",
+      "name": {
+        "de": "BMW GS/GSA Heck-Balkon",
+        "en": "BMW GS/GSA Tail Mount Balcony"
+      },
+      "spec": "PA12-SLS (45°-Finne für Alutopcase)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.4,
+        0.9
+      ],
+      "desc": {
+        "de": "Gepäckbrücken-Ausleger hinter Topcase für Radar 2.0 & Garmin Varia",
+        "en": "Luggage rack cantilever behind topcase for Radar 2.0 & Garmin Varia"
+      },
+      "file": "adventure_rack_tail_mount.stl",
+      "group": "Bike-Kit (GS)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_gs_gopro_hirth_lock": {
+      "type": "part_3d",
+      "name": {
+        "de": "GoPro-Hirth Formschluss-Gelenk",
+        "en": "GoPro Hirth Gear Lock Joint"
+      },
+      "spec": "PA12-SLS (36-Zahn Hirth-Verzahnung)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.4,
+        0.9
+      ],
+      "desc": {
+        "de": "36-Zahn Hirth-Formschluss-Gelenk für vibrationsfeste Ausrichtung",
+        "en": "36-tooth Hirth gear lock joint for vibration-proof alignment"
+      },
+      "file": "011_gopro_hirth_lock.stl",
+      "group": "Bike-Kit (GS)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_gs_radar_varia_dock": {
+      "type": "part_3d",
+      "name": {
+        "de": "Garmin Varia Quarter-Turn Dock",
+        "en": "Garmin Varia Quarter-Turn Dock"
+      },
+      "spec": "PA12-SLS (Formschlüssige 90°-Rastung)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
@@ -955,77 +815,253 @@
         1.8
       ],
       "desc": {
-        "de": "Universal Verkleidungs-Rohrschelle für Navibügel & Cockpitstreben",
-        "en": "Universal Fairing Tube Clamp for GPS bars & cockpit stays"
+        "de": "Quarter-Turn Schnellwechsel-Dock für Garmin Varia Radar",
+        "en": "Quarter-turn quick-release dock for Garmin Varia radar"
       },
-      "file": "front_node_fairing_tube_clamp.stl",
-      "group": "Front-Node",
+      "file": "radar_varia_gopro_lock_dock.stl",
+      "group": "Bike-Kit (GS)",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_cockpit_breakout_block": {
+    "part3d_gs_transition_dock": {
       "type": "part_3d",
       "name": {
-        "de": "Front-Node Einschub-Schublade (Slide-Tray)",
-        "en": "Front Node Slide-In Tray"
+        "de": "BMW GS Transition-Dock",
+        "en": "BMW GS Transition Dock"
       },
-      "spec": "PA12-SLS / ASA (Aufnahme für PCBA 05 im Monocoque)",
-      "source": "3D-Druck (MJF PA12 / ASA)",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.0,
-        4.0
-      ],
-      "desc": {
-        "de": "Werkzeugloser Inneneinschub für PCBA 05",
-        "en": "Tool-less slide-in tray for PCBA 05"
-      },
-      "file": "010_front_node_slide_tray.stl",
-      "group": "Front-Node",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_vehicle_breakout_block": {
-      "type": "part_3d",
-      "name": {
-        "de": "Sensor-Puck Gehäuse (Ober- & Unterschale)",
-        "en": "Sensor Puck Enclosure (Top & Bottom Shell)"
-      },
-      "spec": "PA12-SLS / ASA (38x38x14 mm für PCBA 05D mit OPT3001 Lichtdom)",
-      "source": "3D-Druck (MJF PA12 / ASA)",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.8,
-        3.5
-      ],
-      "desc": {
-        "de": "Wetterfestes Kleingehäuse für PCBA 05D (SAM-M10Q GNSS, TMP117 & OPT3001)",
-        "en": "Weatherproof compact housing for PCBA 05D (SAM-M10Q GNSS, TMP117 & OPT3001)"
-      },
-      "file": "sensor_puck_top.stl",
-      "group": "Front-Node",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_omm_ucs_top_shell": {
-      "type": "part_3d",
-      "name": {
-        "de": "OMM UCS Gehäuse-Oberschale",
-        "en": "OMM UCS Upper Shell"
-      },
-      "spec": "PA12-SLS (M2 Captive Nut Pockets, ECE 22.06)",
+      "spec": "PA12-SLS (Sitzbank-Bügelfalte Ø 28 mm)",
       "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Sitzbank-Bügelfalte Transition-Docks für BMW GS (Vario-Koffer kompatibel)",
+        "en": "Seat crease transition docks for BMW GS (Vario luggage compatible)"
+      },
+      "file": "adventure_transition_dock.stl",
+      "group": "Bike-Kit (GS)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_gsa_pannier_clamp_base": {
+      "type": "part_3d",
+      "name": {
+        "de": "BMW GSA Rohrklemmschellen-Basis",
+        "en": "BMW GSA Pannier Rack Clamp Base"
+      },
+      "spec": "PA12-SLS (Ø 18 mm Rohrträger)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen-Unterteil für BMW GSA",
+        "en": "Ø 18 mm stainless pannier rack clamp base for BMW GSA"
+      },
+      "file": "adventure_pannier_rack_clamp_base.stl",
+      "group": "Bike-Kit (GSA)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_gsa_pannier_clamp_cap": {
+      "type": "part_3d",
+      "name": {
+        "de": "BMW GSA Rohrklemmschellen-Kappe",
+        "en": "BMW GSA Pannier Rack Clamp Cap"
+      },
+      "spec": "PA12-SLS (M5 Stopmutter-Tasche)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Ø 18 mm Rohrträger-Klemmschellen-Kappe mit unverlierbarer M5 Mutter",
+        "en": "Ø 18 mm pannier rack clamp cap with captive M5 lock nut pocket"
+      },
+      "file": "adventure_pannier_rack_clamp_cap.stl",
+      "group": "Bike-Kit (GSA)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_hd_frame_clamp": {
+      "type": "part_3d",
+      "name": {
+        "de": "Harley Rahmenrohr-Klemmschelle",
+        "en": "Harley Frame Tube Clamp"
+      },
+      "spec": "PA12-SLS (M3 Schraublaschen)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Rahmenrohr-Klemmschelle für Magnetdock am Harley-Hauptrahmen",
+        "en": "Frame tube clamp for magnetic dock on Harley main frame"
+      },
+      "file": "cots_magnetic_frame_clamp.stl",
+      "group": "Koffer-Docking",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_hd_frame_dock_body": {
+      "type": "part_3d",
+      "name": {
+        "de": "Harley Magnetdock Gehäusekörper",
+        "en": "Harley Magnetic Dock Body"
+      },
+      "spec": "PA12-SLS (Ø 26 mm Rahmenrohr-Sattel)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "COTS Magnet-Rahmendock für Ø 26 mm Rahmenrohr unter der Sitzbank",
+        "en": "COTS magnetic frame dock for Ø 26 mm frame tube under the seat"
+      },
+      "file": "cots_magnetic_frame_dock_body.stl",
+      "group": "Koffer-Docking",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_hd_grommet_split": {
+      "type": "part_3d",
+      "name": {
+        "de": "Harley Koffer-Durchführung geteilt",
+        "en": "Harley Split Saddlebag Grommet"
+      },
+      "spec": "TPU Shore 95A (Geteilte 12 mm Durchführung)",
+      "source": "3D-Druck (TPU 95A)",
       "unit": "Stk.",
       "cost_eur": [
         0.8,
         1.6
       ],
       "desc": {
-        "de": "ECE 22.06 Gehäuse-Oberschale mit M2 Mutterntaschen für PCBA 09 / 10",
-        "en": "ECE 22.06 upper shell with M2 nut pockets for PCBA 09 / 10"
+        "de": "Geteilte 12 mm Koffer-Seitendurchführung neben Werksbefestigung",
+        "en": "Split 12 mm saddlebag pass-through beside factory mount"
       },
-      "file": "omm_ucs_top_shell.stl",
-      "group": "OMM UCS Helm",
+      "file": "010_saddlebag_hole_grommet_split.stl",
+      "group": "Koffer-Docking",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_hd_radar_license_bracket": {
+      "type": "part_3d",
+      "name": {
+        "de": "Harley Kennzeichenträger Radarhalter",
+        "en": "Harley License Plate Radar Mount"
+      },
+      "spec": "PA12-SLS (Entkoppelte Schwingungsdämpfung)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "Entkoppelter Kennzeichen-Radarhalter für zentrales Heckradar",
+        "en": "Decoupled license plate radar mount for centered rear radar"
+      },
+      "file": "radar_license_plate_bracket.stl",
+      "group": "Bike-Kit (HD)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_hd_saddlebag_lid_dock": {
+      "type": "part_3d",
+      "name": {
+        "de": "Harley Kofferdeckel-Dockingplatte",
+        "en": "Harley Saddlebag Lid Dock"
+      },
+      "spec": "PA12-SLS (Formschlüssige Kofferwölbung)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.2
+      ],
+      "desc": {
+        "de": "Kofferdeckel-Montagedocks für Pod 1 & Pod 2 an Touring & CVO ST",
+        "en": "Saddlebag lid docks for Pod 1 & Pod 2 on Touring & CVO ST"
+      },
+      "file": "saddlebag_lid_dock.stl",
+      "group": "Bike-Kit (HD)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_main_box_lid": {
+      "type": "part_3d",
+      "name": {
+        "de": "Main Box Einschub-Deckel (Slide-Lid)",
+        "en": "Main Box Slide-In Lid"
+      },
+      "spec": "PA12-SLS / ASA (L-Profil Stirndeckel mit Gore-Vent & 1.5 mm Dichtnut)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.2
+      ],
+      "desc": {
+        "de": "Schraubenloser L-Stirndeckel mit Kompressions-O-Ring-Dichtung & Gore-Membran",
+        "en": "Screwless L-profile front lid with compression O-ring seal & Gore vent"
+      },
+      "file": "020_slide_lid.stl",
+      "group": "Main Box",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_main_box_lower_case": {
+      "type": "part_3d",
+      "name": {
+        "de": "Main Box Monocoque-Wanne (Typ A)",
+        "en": "Main Box Monocoque Tub (Type A)"
+      },
+      "spec": "PA12-SLS / ASA (Schraubenloses Dual-Rail Monocoque, 140x70x35 mm)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        2.8,
+        4.8
+      ],
+      "desc": {
+        "de": "Hermetische Monocoque-Außenwanne mit Schwalbenschwanz-Schienen & Rastzunge",
+        "en": "Hermetic monocoque outer tub with dovetail rails & snap latch"
+      },
+      "file": "000_monocoque_tub.stl",
+      "group": "Main Box",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_main_box_mid_tray": {
+      "type": "part_3d",
+      "name": {
+        "de": "Main Box Einschub-Schublade (Slide-Tray)",
+        "en": "Main Box Slide-In Tray"
+      },
+      "spec": "PA12-SLS / ASA (Aufnahme für PCBA 01 & 2.200 mAh USV-LiPo)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.2
+      ],
+      "desc": {
+        "de": "Werkzeugloser Inneneinschub für PCBA 01, LiPo-USV & Antennen",
+        "en": "Tool-less slide-in tray for PCBA 01, LiPo UPS & antennas"
+      },
+      "file": "010_slide_tray.stl",
+      "group": "Main Box",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -1035,7 +1071,7 @@
         "de": "OMM UCS Gehäuse-Unterschale",
         "en": "OMM UCS Lower Shell"
       },
-      "spec": "PA12-SLS (Dichtnut Ø 0.8 mm & USB-C Ausschnitt)",
+      "spec": "PA12-SLS (Dichtnut Ø 0.8 mm, USB-C Port, J_HELMET Durchbruch & 2x Twin-SMA D-Cut)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
@@ -1043,10 +1079,32 @@
         1.6
       ],
       "desc": {
-        "de": "ECE 22.06 Gehäuse-Unterschale mit Dichtnut & SMA-D-Cut Durchführung",
-        "en": "ECE 22.06 lower shell with seal groove & SMA D-cut bulkhead port"
+        "de": "ECE 22.06 Gehäuse-Unterschale mit 0.8 mm Dichtnut, J_HELMET-Bodenfenster & 2x IP67 Twin-SMA D-Cut Durchführungen (SMA_24G & SMA_446)",
+        "en": "ECE 22.06 lower shell with 0.8 mm seal groove, J_HELMET bottom slot & 2x IP67 Twin-SMA D-cut bulkheads (SMA_24G & SMA_446)"
       },
       "file": "omm_ucs_bottom_shell.stl",
+      "group": "OMM UCS Helm",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_omm_ucs_helmet_cradle": {
+      "type": "part_3d",
+      "name": {
+        "de": "OMM UCS Helm-Klemmsockel",
+        "en": "OMM UCS Helmet Cradle"
+      },
+      "spec": "PA12-SLS (74x42x7 mm, R135 Helmwölbung, J_HELMET Kabelkanal & 24 mm Twin-Stubby Freischnitt)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "ECE 22.06 UCS Helm-Klemmsockel mit Snap-Fit Rastkrallen, 3M VHB Klebebett & 24 mm Heckfreischnitt für beide Stummelantennen",
+        "en": "ECE 22.06 UCS helmet cradle with snap-fit latches, 3M VHB recess & 24 mm rear cutout for twin stubby antennas"
+      },
+      "file": "omm_ucs_helmet_cradle.stl",
       "group": "OMM UCS Helm",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
@@ -1073,25 +1131,47 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_omm_ucs_helmet_cradle": {
+    "part3d_omm_ucs_top_shell": {
       "type": "part_3d",
       "name": {
-        "de": "OMM UCS Helm-Klemmsockel",
-        "en": "OMM UCS Helmet Cradle"
+        "de": "OMM UCS Gehäuse-Oberschale",
+        "en": "OMM UCS Upper Shell"
       },
-      "spec": "PA12-SLS (R130 Wölbungsbett & Schnellverschluss)",
+      "spec": "PA12-SLS (M2 Captive Nut Pockets, ECE 22.06)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
-        0.9,
-        1.8
+        0.8,
+        1.6
       ],
       "desc": {
-        "de": "ECE 22.06 UCS Helm-Klemmsockel & 3M VHB R130 Adapter",
-        "en": "ECE 22.06 UCS helmet cradle & 3M VHB R130 adapter"
+        "de": "ECE 22.06 Gehäuse-Oberschale (68x36x16mm) mit 4x M2 Mutterntaschen für das universelle OMM Tri-Band Modul (PCBA 09/10)",
+        "en": "ECE 22.06 upper shell (68x36x16mm) with 4x M2 nut pockets for universal OMM Tri-Band module (PCBA 09/10)"
       },
-      "file": "omm_ucs_helmet_cradle.stl",
+      "file": "omm_ucs_top_shell.stl",
       "group": "OMM UCS Helm",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_pod_base_housing": {
+      "type": "part_3d",
+      "name": {
+        "de": "Pod Monocoque-Wanne (Typ B)",
+        "en": "Pod Monocoque Tub (Type B)"
+      },
+      "spec": "PA12-SLS / ASA (Schraubenloser Koffer-Pod Monocoque, 150x70x38 mm)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.2
+      ],
+      "desc": {
+        "de": "Hermetische Koffer-Pod Monocoque-Wanne für Pod 1 & Pod 2",
+        "en": "Hermetic saddlebag pod monocoque tub for Pod 1 & Pod 2"
+      },
+      "file": "002_pod_housing_base.stl",
+      "group": "Pod Base",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -1161,138 +1241,6 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_bsd_mirror_upper_pod": {
-      "type": "part_3d",
-      "name": {
-        "de": "BSD-Spiegel Warnanzeige-Oberteil",
-        "en": "BSD Mirror Upper Pod"
-      },
-      "spec": "PA12-SLS (Aerodynamische Spiegelarm-Kapsel)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.8,
-        1.6
-      ],
-      "desc": {
-        "de": "Spiegelarm-Warnanzeigengehäuse für Totwinkel-LEDs",
-        "en": "Mirror arm alert pod housing for blind spot alert LEDs"
-      },
-      "file": "bsd_mirror_upper_pod.stl",
-      "group": "BSD-Spiegel",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_bsd_mirror_lower_clamp": {
-      "type": "part_3d",
-      "name": {
-        "de": "BSD-Spiegel Klemmschelle",
-        "en": "BSD Mirror Lower Clamp"
-      },
-      "spec": "PA12-SLS (Ø 10-14 mm Spiegelarme)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Spiegelarm-Klemmschellen-Unterteil",
-        "en": "Mirror stem clamp base"
-      },
-      "file": "bsd_mirror_lower_clamp.stl",
-      "group": "BSD-Spiegel",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_bsd_mirror_lens": {
-      "type": "part_3d",
-      "name": {
-        "de": "BSD-Spiegel Fresnel-Diffusorlinse",
-        "en": "BSD Mirror Fresnel Lens"
-      },
-      "spec": "Transparenter Resin-Druck (Bernstein-Diffusor)",
-      "source": "3D-Druck (Resin)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "Fresnel-Diffusorlinsen für bernsteinfarbene Totwinkel-Warn-LEDs",
-        "en": "Fresnel diffuser lenses for amber blind spot warning LEDs"
-      },
-      "file": "bsd_mirror_lens.stl",
-      "group": "BSD-Spiegel",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_glovebox_hub": {
-      "type": "part_3d",
-      "name": {
-        "de": "4-Port Handschuhfach Media & Power-Injection Hub",
-        "en": "4-Port Glovebox Media & Power-Injection Hub"
-      },
-      "spec": "PA12-SLS (Harley Touring Handschuhfach)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.2,
-        4.5
-      ],
-      "desc": {
-        "de": "Kompaktes 4-Port Power-Injection Hubgehäuse (30W USB-PD + 10W Dongle + Media + Upstream) für rechtes Medienfach",
-        "en": "Compact 4-port power-injection hub enclosure (30W USB-PD + 10W dongle + media + upstream) for right media compartment"
-      },
-      "file": "glovebox_power_injection_hub.stl",
-      "group": "Cockpit-Hub",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_under_perch_switch": {
-      "type": "part_3d",
-      "name": {
-        "de": "Under-Perch Mirror-Pod Gehäuse-Set (5-teilig)",
-        "en": "Under-Perch Mirror Pod Housing Set (5-piece)"
-      },
-      "spec": "PA12-CF / SLS + Transparent Resin (Base L/R, Cover, PTT-Drücker, BSD-Linse)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Aerodynamisches Spiegelarm-Gehäuse unter der Armatur für PCBA 05C (18.25x14.0 mm Z-Stacked)",
-        "en": "Aerodynamic mirror stem pod under perch for PCBA 05C (18.25x14.0 mm Z-stacked)"
-      },
-      "file": "under_perch_mirror_pod_cover.stl",
-      "group": "Lenkertaster",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_under_perch_mirror_plate": {
-      "type": "part_3d",
-      "name": {
-        "de": "Under-Perch Spiegelschaft-Adapterplatte (M8/M10)",
-        "en": "Under-Perch Mirror Stem Adapter Plate (M8/M10)"
-      },
-      "spec": "PA12-CF / V4A 2.5 mm (M8/M10 Spiegelschaft)",
-      "source": "3D-Druck (PA12-SLS) / Laserzuschnitt",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.5,
-        1.2
-      ],
-      "desc": {
-        "de": "Adapterplatte zur Befestigung des Under-Perch Tasterhalters unter der Spiegel-Kontermutter",
-        "en": "Adapter plate to mount under-perch switch bracket under mirror stem locknut"
-      },
-      "file": "under_perch_mirror_plate.stl",
-      "group": "Lenkertaster",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
     "part3d_smart_keyfob_lower": {
       "type": "part_3d",
       "name": {
@@ -1311,50 +1259,6 @@
         "en": "Keyfob tub with LRA damping bed for PCBA 07"
       },
       "file": "smart_keyfob_lower_shell.stl",
-      "group": "Smart-Keyfob",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_smart_keyfob_upper": {
-      "type": "part_3d",
-      "name": {
-        "de": "Smart-Keyfob Deckel",
-        "en": "Smart Keyfob Upper Lid"
-      },
-      "spec": "PA12-SLS (3 Tastenfelder)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.8,
-        1.6
-      ],
-      "desc": {
-        "de": "Keyfob Deckel mit 3 Tastenfeldern & Öse",
-        "en": "Keyfob lid with 3 button keypads & eyelet"
-      },
-      "file": "smart_keyfob_upper_shell.stl",
-      "group": "Smart-Keyfob",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_smart_keyfob_tpu_rim": {
-      "type": "part_3d",
-      "name": {
-        "de": "Smart-Keyfob TPU Bumper",
-        "en": "Smart Keyfob TPU Bumper"
-      },
-      "spec": "TPU Shore 95A (Umlaufender Stoßschutz)",
-      "source": "3D-Druck (TPU 95A)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "Keyfob Elastischer Bumper-Schutzring gegen Stürze",
-        "en": "Keyfob elastomeric bumper rim against drop shocks"
-      },
-      "file": "smart_keyfob_tpu_rim.stl",
       "group": "Smart-Keyfob",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
@@ -1381,299 +1285,35 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_tmp117_stealth_mount": {
+    "part3d_smart_keyfob_tpu_rim": {
       "type": "part_3d",
       "name": {
-        "de": "TMP117 Stealth-Gabelfußhalter",
-        "en": "TMP117 Stealth Fork Mount"
+        "de": "Smart-Keyfob TPU Bumper",
+        "en": "Smart Keyfob TPU Bumper"
       },
-      "spec": "PA12-SLS (Mattschwarz, aerodynamisch)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "Gabelfuß-/Kotflügel-Halterung für TI TMP117 Eiswarn-Sensor",
-        "en": "Fork foot/fender mount for TI TMP117 black ice warning probe"
-      },
-      "file": "tmp117_stealth_fork_mount.stl",
-      "group": "Stealth-Sensor",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gs_transition_dock": {
-      "type": "part_3d",
-      "name": {
-        "de": "BMW GS Transition-Dock",
-        "en": "BMW GS Transition Dock"
-      },
-      "spec": "PA12-SLS (Sitzbank-Bügelfalte Ø 28 mm)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Sitzbank-Bügelfalte Transition-Docks für BMW GS (Vario-Koffer kompatibel)",
-        "en": "Seat crease transition docks for BMW GS (Vario luggage compatible)"
-      },
-      "file": "adventure_transition_dock.stl",
-      "group": "Bike-Kit (GS)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gs_adventure_rack_tail": {
-      "type": "part_3d",
-      "name": {
-        "de": "BMW GS/GSA Heck-Balkon",
-        "en": "BMW GS/GSA Tail Mount Balcony"
-      },
-      "spec": "PA12-SLS (45°-Finne für Alutopcase)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "Gepäckbrücken-Ausleger hinter Topcase für Radar 2.0 & Garmin Varia",
-        "en": "Luggage rack cantilever behind topcase for Radar 2.0 & Garmin Varia"
-      },
-      "file": "adventure_rack_tail_mount.stl",
-      "group": "Bike-Kit (GS)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gs_radar_varia_dock": {
-      "type": "part_3d",
-      "name": {
-        "de": "Garmin Varia Quarter-Turn Dock",
-        "en": "Garmin Varia Quarter-Turn Dock"
-      },
-      "spec": "PA12-SLS (Formschlüssige 90°-Rastung)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Quarter-Turn Schnellwechsel-Dock für Garmin Varia Radar",
-        "en": "Quarter-turn quick-release dock for Garmin Varia radar"
-      },
-      "file": "radar_varia_gopro_lock_dock.stl",
-      "group": "Bike-Kit (GS)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gs_gopro_hirth_lock": {
-      "type": "part_3d",
-      "name": {
-        "de": "GoPro-Hirth Formschluss-Gelenk",
-        "en": "GoPro Hirth Gear Lock Joint"
-      },
-      "spec": "PA12-SLS (36-Zahn Hirth-Verzahnung)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.4,
-        0.9
-      ],
-      "desc": {
-        "de": "36-Zahn Hirth-Formschluss-Gelenk für vibrationsfeste Ausrichtung",
-        "en": "36-tooth Hirth gear lock joint for vibration-proof alignment"
-      },
-      "file": "011_gopro_hirth_lock.stl",
-      "group": "Bike-Kit (GS)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gsa_pannier_clamp_base": {
-      "type": "part_3d",
-      "name": {
-        "de": "BMW GSA Rohrklemmschellen-Basis",
-        "en": "BMW GSA Pannier Rack Clamp Base"
-      },
-      "spec": "PA12-SLS (Ø 18 mm Rohrträger)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Ø 18 mm Edelstahl-Rohrträger-Klemmschellen-Unterteil für BMW GSA",
-        "en": "Ø 18 mm stainless pannier rack clamp base for BMW GSA"
-      },
-      "file": "adventure_pannier_rack_clamp_base.stl",
-      "group": "Bike-Kit (GSA)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_gsa_pannier_clamp_cap": {
-      "type": "part_3d",
-      "name": {
-        "de": "BMW GSA Rohrklemmschellen-Kappe",
-        "en": "BMW GSA Pannier Rack Clamp Cap"
-      },
-      "spec": "PA12-SLS (M5 Stopmutter-Tasche)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Ø 18 mm Rohrträger-Klemmschellen-Kappe mit unverlierbarer M5 Mutter",
-        "en": "Ø 18 mm pannier rack clamp cap with captive M5 lock nut pocket"
-      },
-      "file": "adventure_pannier_rack_clamp_cap.stl",
-      "group": "Bike-Kit (GSA)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_hd_saddlebag_lid_dock": {
-      "type": "part_3d",
-      "name": {
-        "de": "Harley Kofferdeckel-Dockingplatte",
-        "en": "Harley Saddlebag Lid Dock"
-      },
-      "spec": "PA12-SLS (Formschlüssige Kofferwölbung)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.8,
-        3.2
-      ],
-      "desc": {
-        "de": "Kofferdeckel-Montagedocks für Pod 1 & Pod 2 an Touring & CVO ST",
-        "en": "Saddlebag lid docks for Pod 1 & Pod 2 on Touring & CVO ST"
-      },
-      "file": "saddlebag_lid_dock.stl",
-      "group": "Bike-Kit (HD)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_hd_radar_license_bracket": {
-      "type": "part_3d",
-      "name": {
-        "de": "Harley Kennzeichenträger Radarhalter",
-        "en": "Harley License Plate Radar Mount"
-      },
-      "spec": "PA12-SLS (Entkoppelte Schwingungsdämpfung)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Entkoppelter Kennzeichen-Radarhalter für zentrales Heckradar",
-        "en": "Decoupled license plate radar mount for centered rear radar"
-      },
-      "file": "radar_license_plate_bracket.stl",
-      "group": "Bike-Kit (HD)",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_hd_frame_dock_body": {
-      "type": "part_3d",
-      "name": {
-        "de": "Harley Magnetdock Gehäusekörper",
-        "en": "Harley Magnetic Dock Body"
-      },
-      "spec": "PA12-SLS (Ø 26 mm Rahmenrohr-Sattel)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "COTS Magnet-Rahmendock für Ø 26 mm Rahmenrohr unter der Sitzbank",
-        "en": "COTS magnetic frame dock for Ø 26 mm frame tube under the seat"
-      },
-      "file": "cots_magnetic_frame_dock_body.stl",
-      "group": "Koffer-Docking",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_hd_frame_clamp": {
-      "type": "part_3d",
-      "name": {
-        "de": "Harley Rahmenrohr-Klemmschelle",
-        "en": "Harley Frame Tube Clamp"
-      },
-      "spec": "PA12-SLS (M3 Schraublaschen)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.9,
-        1.8
-      ],
-      "desc": {
-        "de": "Rahmenrohr-Klemmschelle für Magnetdock am Harley-Hauptrahmen",
-        "en": "Frame tube clamp for magnetic dock on Harley main frame"
-      },
-      "file": "cots_magnetic_frame_clamp.stl",
-      "group": "Koffer-Docking",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_hd_grommet_split": {
-      "type": "part_3d",
-      "name": {
-        "de": "Harley Koffer-Durchführung geteilt",
-        "en": "Harley Split Saddlebag Grommet"
-      },
-      "spec": "TPU Shore 95A (Geteilte 12 mm Durchführung)",
+      "spec": "TPU Shore 95A (Umlaufender Stoßschutz)",
       "source": "3D-Druck (TPU 95A)",
       "unit": "Stk.",
       "cost_eur": [
-        0.8,
-        1.6
+        0.4,
+        0.9
       ],
       "desc": {
-        "de": "Geteilte 12 mm Koffer-Seitendurchführung neben Werksbefestigung",
-        "en": "Split 12 mm saddlebag pass-through beside factory mount"
+        "de": "Keyfob Elastischer Bumper-Schutzring gegen Stürze",
+        "en": "Keyfob elastomeric bumper rim against drop shocks"
       },
-      "file": "010_saddlebag_hole_grommet_split.stl",
-      "group": "Koffer-Docking",
+      "file": "smart_keyfob_tpu_rim.stl",
+      "group": "Smart-Keyfob",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
-    "part3d_car_dashboard_dock": {
+    "part3d_smart_keyfob_upper": {
       "type": "part_3d",
       "name": {
-        "de": "PKW Armaturenbrett Doppelaufnahme (Optional)",
-        "en": "Support-Car Dashboard Dock (Optional)"
+        "de": "Smart-Keyfob Deckel",
+        "en": "Smart Keyfob Upper Lid"
       },
-      "spec": "PA12-SLS (Optionale Keil-Aufnahme)",
-      "source": "3D-Druck (PA12-SLS)",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.8,
-        4.8
-      ],
-      "desc": {
-        "de": "Optionale Armaturenbrett-Ablageaufnahme für Front-Knoten & Zentralbox (Standard: Unter-Sitz-Montage)",
-        "en": "Optional dashboard shelf dock for Front Node & Central Box (Standard: Under-seat mounting)"
-      },
-      "file": "car_dashboard_wedge_dock.stl",
-      "group": "PKW-Kit",
-      "pkg_qty": 1,
-      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
-    },
-    "part3d_car_sun_visor_clip": {
-      "type": "part_3d",
-      "name": {
-        "de": "PKW Sonnenblenden-Clip (Pod)",
-        "en": "Sun Visor Pod Clip"
-      },
-      "spec": "PA12-SLS (Elastische Federspange)",
+      "spec": "PA12-SLS (3 Tastenfelder)",
       "source": "3D-Druck (PA12-SLS)",
       "unit": "Stk.",
       "cost_eur": [
@@ -1681,11 +1321,33 @@
         1.6
       ],
       "desc": {
-        "de": "Universal Sonnenblenden-Clips für Kassetten-Pods im Support-Van",
-        "en": "Universal sun visor clips for cartridge pods in support vehicle"
+        "de": "Keyfob Deckel mit 3 Tastenfeldern & Öse",
+        "en": "Keyfob lid with 3 button keypads & eyelet"
       },
-      "file": "car_sun_visor_pod_clip.stl",
-      "group": "PKW-Kit",
+      "file": "smart_keyfob_upper_shell.stl",
+      "group": "Smart-Keyfob",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_under_perch_switch": {
+      "type": "part_3d",
+      "name": {
+        "de": "Symmetrisches Under-Perch Spiegel-Pod Gehäuse-Set (4-teilig)",
+        "en": "Symmetrical Under-Perch Mirror Pod Housing Set (4-piece)"
+      },
+      "spec": "PA12-CF / SLS + Transparent Resin (100% symmetrisch L/R: Basis, Deckel, 45° PTT-Wippe, TIR-Prisma)",
+      "source": "3D-Druck (PA12-SLS)",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.9,
+        1.8
+      ],
+      "desc": {
+        "de": "100 % symmetrisches Spiegelarm-Gehäuse unter der Spiegelschraube (M8/M10) für PCBA 05C (38° StVZO BSD-Warnprisma & 45° Daumen-Schaltwippe)",
+        "en": "100% symmetrical mirror stem pod under mirror bolt (M8/M10) for PCBA 05C (38° StVZO BSD warning prism & 45° thumb rocker)"
+      },
+      "file": "under_perch_mirror_pod.stl",
+      "group": "Lenkertaster",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -1708,6 +1370,28 @@
       },
       "file": "radar_center_underfender_mount.stl",
       "group": "Bike-Kit (Universal)",
+      "pkg_qty": 1,
+      "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
+    },
+    "part3d_vehicle_breakout_block": {
+      "type": "part_3d",
+      "name": {
+        "de": "Sensor-Puck Snap-On Gehäuse (Ober- & Unterschale)",
+        "en": "Sensor Puck Snap-On Enclosure (Top & Bottom Shell)"
+      },
+      "spec": "PA12-SLS / ASA (44x44x15 mm für PCBA 05D mit Gore-Tex Schlitzen & OPT3001 Lichtdom)",
+      "source": "3D-Druck (MJF PA12 / ASA)",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.5
+      ],
+      "desc": {
+        "de": "Wetterfestes Kleingehäuse für PCBA 05D (SAM-M10Q GNSS, TMP117 & OPT3001)",
+        "en": "Weatherproof compact housing for PCBA 05D (SAM-M10Q GNSS, TMP117 & OPT3001)"
+      },
+      "file": "sensor_puck_environmental.stl",
+      "group": "Front-Node",
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
@@ -1795,6 +1479,48 @@
       "pkg_qty": 5,
       "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
     },
+    "pcba_05c": {
+      "type": "pcba",
+      "name": {
+        "de": "PCBA 05C: Under-Perch Mirror-Pod (BSD & Smart-PTT)",
+        "en": "PCBA 05C: Under-Perch Mirror Pod (BSD & Smart-PTT)"
+      },
+      "spec": "18.25x14.0 mm 2-Layer Z-Stacked PCB mit 2x 590nm Amber BSD-LEDs (F.Cu), Omron B3SL-1002P IP67 Taster (B.Cu) & 4-Pin JST-GH",
+      "source": "JLCPCB / SMT",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.8,
+        3.2
+      ],
+      "desc": {
+        "de": "Ultrakompakte Z-gestapelte Spiegelarm-Platine für Totwinkel-Warn-LEDs und Multi-Aktions Smart-PTT Taster",
+        "en": "Ultra-compact Z-stacked mirror stem PCB for blind-spot warning LEDs and multi-action Smart-PTT button"
+      },
+      "id_kicad": "kicad_mirror_pod",
+      "pkg_qty": 5,
+      "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+    },
+    "pcba_05d": {
+      "type": "pcba",
+      "name": {
+        "de": "PCBA 05D: Sensor-Puck (GNSS, Klima & Licht)",
+        "en": "PCBA 05D: Sensor Puck (GNSS, Climate & Light)"
+      },
+      "spec": "34.0x34.0 mm 4-Layer PCB mit u-blox SAM-M10Q 10Hz GNSS, TI TMP117 (±0.1°C), TI OPT3001 & 6-Pin JST-GH/SH",
+      "source": "JLCPCB / SMT",
+      "unit": "Stk.",
+      "cost_eur": [
+        16.0,
+        24.0
+      ],
+      "desc": {
+        "de": "Ausgelagerter Sensor-Satellit mit freier Zenit-Sicht für 10 Hz Multi-GNSS, Glättewarnung & Tag/Nacht-Automatik",
+        "en": "External sensor satellite with clear zenith view for 10 Hz Multi-GNSS, black-ice alert & day/night auto-dimming"
+      },
+      "id_kicad": "kicad_sensor_puck",
+      "pkg_qty": 5,
+      "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+    },
     "pcba_07": {
       "type": "pcba",
       "name": {
@@ -1858,66 +1584,25 @@
       "pkg_qty": 5,
       "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
     },
-    "pcba_10": {
-      "type": "pcba",
-      "name": {
-        "de": "PCBA 09/10: OMM Universal Tri-Band UCS Transceiver (2.4G / BT / 446M)",
-        "en": "PCBA 09/10: OMM Universal Tri-Band UCS Transceiver (2.4G / BT / 446M)"
-      },
-      "spec": "60.0x30.0 mm 4-Layer, SA818-DMR (446M), ESP32-C6 (2.4G Mesh), ESP32-PICO-V3-02 (BT Bridge), ES8388 Codec, BQ24075, BAT1 unter USB-C",
-      "source": "JLCPCB / SMT",
-      "unit": "Stk.",
-      "cost_eur": [
-        14.0,
-        19.5
-      ],
-      "desc": {
-        "de": "Universelle OpenMotorMesh Tri-Band Platine (OMM 2.4 GHz Mesh, BT-Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100 % Software-Umschaltung & Kombi-Modi)",
-        "en": "Universal OpenMotorMesh Tri-Band PCB (OMM 2.4 GHz Mesh, BT Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100% software mode switching & combo modes)"
-      },
-      "id_kicad": "kicad_omm446_intercom",
-      "pkg_qty": 5,
-      "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
-    },
-    "cots_battery_usv_lipo": {
+    "cots_actuator_solenoid_5v": {
       "type": "cots_electronic",
       "name": {
-        "de": "Pufferakku (LiPo USV 2.200 mAh)",
-        "en": "Buffer Battery (LiPo UPS 2,200 mAh)"
+        "de": "5V DC Miniatur-Hubmagnet (JF-0530B Kaltstart)",
+        "en": "5V DC Miniature Solenoid (JF-0530B Cold-Start)"
       },
-      "spec": "1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit",
-      "source": "EEMB / Enerpower",
+      "spec": "JF-0530B / Ø 6.5 x 12 mm, Hub 2.0 mm, mit TPU-Dämpfungsspitze",
+      "source": "Solenoid / Web",
       "unit": "Stk.",
       "cost_eur": [
-        5.5,
-        8.5
+        1.2,
+        1.8
       ],
       "desc": {
-        "de": "Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart",
-        "en": "Seamless UPS reserve in Central Box during engine cranking & ignition off"
+        "de": "Mechatronische Kaltstart-Drücker auf Universal-Schlittenschiene zum Aufwecken von Sena/Cardo (2x pro Pod)",
+        "en": "Mechatronic cold-start pushers on universal slide rail to wake Sena/Cardo units (2x per pod)"
       },
-      "pkg_qty": 1,
-      "pkg_name": "1S LiPo Akku (EEMB / Web)"
-    },
-    "cots_battery_omm_lipo_600": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "1S LiPo Pouch-Akku 1000 mAh (OMM)",
-        "en": "1S LiPo Pouch Battery 1000 mAh (OMM)"
-      },
-      "spec": "3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH",
-      "source": "EEMB / Web",
-      "unit": "Stk.",
-      "cost_eur": [
-        3.8,
-        5.8
-      ],
-      "desc": {
-        "de": "Integrierter 1000-mAh-Akku für das universelle OMM Tri-Band UCS Modul (13-18 h Standalone-Betrieb am Helm, sitzt frei zwischen BAT1 und J_HELMET)",
-        "en": "Internal 1000 mAh battery for universal OMM Tri-Band UCS module (13-18 h standalone helmet runtime, sits cleanly between BAT1 and J_HELMET)"
-      },
-      "pkg_qty": 2,
-      "pkg_name": "2er Pack LiPo Pouch (EEMB)"
+      "pkg_qty": 10,
+      "pkg_name": "10er Pack Mini-Hubmagnete (AliExpress / Web)"
     },
     "cots_battery_keyfob_lipo_200": {
       "type": "cots_electronic",
@@ -1939,105 +1624,45 @@
       "pkg_qty": 1,
       "pkg_name": "1S LiPo Pouch (EEMB)"
     },
-    "cots_qi_coil_24mm": {
+    "cots_battery_omm_lipo_600": {
       "type": "cots_electronic",
       "name": {
-        "de": "Qi Induktions-Empfängerspule Ø 24 mm",
-        "en": "Qi Inductive Receiver Coil Ø 24 mm"
+        "de": "1S LiPo Pouch-Akku 1000 mAh (OMM)",
+        "en": "1S LiPo Pouch Battery 1000 mAh (OMM)"
       },
-      "spec": "Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin",
-      "source": "Sunlord / Web",
+      "spec": "3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH",
+      "source": "EEMB / Web",
       "unit": "Stk.",
       "cost_eur": [
-        1.2,
-        2.2
+        3.8,
+        5.8
       ],
       "desc": {
-        "de": "Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt)",
-        "en": "Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection)"
+        "de": "Integrierter 1000-mAh-Akku für das universelle OMM Tri-Band UCS Modul (13-18 h Standalone-Betrieb am Helm, sitzt frei zwischen BAT1 und J_HELMET)",
+        "en": "Internal 1000 mAh battery for universal OMM Tri-Band UCS module (13-18 h standalone helmet runtime, sits cleanly between BAT1 and J_HELMET)"
+      },
+      "pkg_qty": 2,
+      "pkg_name": "2er Pack LiPo Pouch (EEMB)"
+    },
+    "cots_battery_usv_lipo": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "Pufferakku (LiPo USV 2.200 mAh)",
+        "en": "Buffer Battery (LiPo UPS 2,200 mAh)"
+      },
+      "spec": "1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit",
+      "source": "EEMB / Enerpower",
+      "unit": "Stk.",
+      "cost_eur": [
+        5.5,
+        8.5
+      ],
+      "desc": {
+        "de": "Notstrom-Pufferung in der Zentralbox bei Zündungsaus & Motorstart",
+        "en": "Seamless UPS reserve in Central Box during engine cranking & ignition off"
       },
       "pkg_qty": 1,
-      "pkg_name": "Qi Empfängerspule (Sunlord / AliExpress)"
-    },
-    "cots_module_sam_m10q": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "u-blox SAM-M10Q Multi-GNSS Modul",
-        "en": "u-blox SAM-M10Q Multi-GNSS Module"
-      },
-      "spec": "15x15 mm Keramik-Patchantenne, Qwiic I2C",
-      "source": "SparkFun / u-blox",
-      "unit": "Stk.",
-      "cost_eur": [
-        19.0,
-        32.0
-      ],
-      "desc": {
-        "de": "Satellitenortung am 5-Port Fahrzeug-Satelliten mit freier Sicht zum Zenit",
-        "en": "Satellite navigation on 5-port Vehicle Satellite with clear zenith view"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS GNSS-Modul (SparkFun / u-blox)"
-    },
-    "cots_sensor_tmp117": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "TI TMP117 Temperatursensor",
-        "en": "TI TMP117 Temperature Sensor"
-      },
-      "spec": "Digitaler NIST I2C Sensor (±0.1°C) SparkFun Qwiic Breakout IP67",
-      "source": "SparkFun / Adafruit",
-      "unit": "Stk.",
-      "cost_eur": [
-        6.5,
-        12.5
-      ],
-      "desc": {
-        "de": "Präzisions-Eiswarner am Gabelfuß / Kaltlufteinlass",
-        "en": "Precision black ice warning probe on fork foot / cold air scoop"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS Einzelteil"
-    },
-    "cots_radar_mr20": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "Wheeltec MR20 77-GHz mmWave Radar",
-        "en": "Wheeltec MR20 77-GHz mmWave Radar"
-      },
-      "spec": "77-GHz FMCW Automotive Radar (150 m Reichweite)",
-      "source": "Wheeltec / DE-Distributor",
-      "unit": "Stk.",
-      "cost_eur": [
-        65.0,
-        110.0
-      ],
-      "desc": {
-        "de": "Automotive Millimeterwellen-Radar für Totwinkelerkennung & Kollisionswarnung",
-        "en": "Automotive mmWave radar for blind spot detection & forward/rear collision alert"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS Radarmodul (Wheeltec)"
-    },
-    "cots_actuator_solenoid_5v": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "5V DC Miniatur-Hubmagnet (JF-0530B Kaltstart)",
-        "en": "5V DC Miniature Solenoid (JF-0530B Cold-Start)"
-      },
-      "spec": "JF-0530B / Ø 6.5 x 12 mm, Hub 2.0 mm, mit TPU-Dämpfungsspitze",
-      "source": "Solenoid / Web",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        1.8
-      ],
-      "desc": {
-        "de": "Mechatronische Kaltstart-Drücker auf Universal-Schlittenschiene zum Aufwecken von Sena/Cardo (2x pro Pod)",
-        "en": "Mechatronic cold-start pushers on universal slide rail to wake Sena/Cardo units (2x per pod)"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack Mini-Hubmagnete (AliExpress / Web)"
+      "pkg_name": "1S LiPo Akku (EEMB / Web)"
     },
     "cots_omm_booster_5v": {
       "type": "cots_electronic",
@@ -2055,26 +1680,6 @@
       "desc": {
         "de": "Festeinbau-Booster im Kassetten-Inlay für max. Reichweite im geschlossenen Pod",
         "en": "Fixed-mount booster inside cartridge sled for maximum range in sealed pod"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS Einzelteil"
-    },
-    "cots_pogo_magnetic_2pin": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "4-Pin Magnet-Pogo Abreißkupplung (IP67)",
-        "en": "4-Pin Magnetic Pogo Breakaway Coupler (IP67)"
-      },
-      "spec": "IP67 4-Pol Magnetstecker + Buchse (VCC_BUS 5A, GND, USB_D+, USB_D-, 15 N Abreißkraft)",
-      "source": "HytePro / Amazon",
-      "unit": "Set",
-      "cost_eur": [
-        2.5,
-        4.5
-      ],
-      "desc": {
-        "de": "4-polige Koffer-Trennstelle für 30W USB-PD & USB 2.0 Daten (automatische Abreißung beim Kofferabnehmen)",
-        "en": "4-pin pannier breakaway coupler for 30W USB-PD & USB 2.0 data (auto-disconnect upon bag removal)"
       },
       "pkg_qty": 1,
       "pkg_name": "COTS Einzelteil"
@@ -2099,6 +1704,86 @@
       "pkg_qty": 1,
       "pkg_name": "Laserzuschnitt / Taster-Set"
     },
+    "cots_pod_dc_blade_plug": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "4-Pin IP67 Pod-Gehäusedurchführung (J_BUS Bulkhead)",
+        "en": "4-Pin IP67 Pod Bulkhead Feed-Through (J_BUS)"
+      },
+      "spec": "4-Pin Automotive Magnetkupplung (VCC_BUS, GND, USB_D-, USB_D+) mit EPDM-Flanschdichtung",
+      "source": "COTS Automotive / Web",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.2,
+        2.5
+      ],
+      "desc": {
+        "de": "Werkzeuglose 4-Pin IP67 Bus-Durchführung für Pod 1 & Pod 2 (30W USB-PD + USB 2.0 Daten)",
+        "en": "Tool-free 4-pin IP67 bus feed-through for Pod 1 & Pod 2 (30W USB-PD + USB 2.0 data)"
+      },
+      "pkg_qty": 2,
+      "pkg_name": "2er Set Automotive IP67 Blade Stecker"
+    },
+    "cots_pogo_magnetic_2pin": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "4-Pin Magnet-Pogo Abreißkupplung (IP67)",
+        "en": "4-Pin Magnetic Pogo Breakaway Coupler (IP67)"
+      },
+      "spec": "IP67 4-Pol Magnetstecker + Buchse (VCC_BUS 5A, GND, USB_D+, USB_D-, 15 N Abreißkraft)",
+      "source": "HytePro / Amazon",
+      "unit": "Set",
+      "cost_eur": [
+        2.5,
+        4.5
+      ],
+      "desc": {
+        "de": "4-polige Koffer-Trennstelle für 30W USB-PD & USB 2.0 Daten (automatische Abreißung beim Kofferabnehmen)",
+        "en": "4-pin pannier breakaway coupler for 30W USB-PD & USB 2.0 data (auto-disconnect upon bag removal)"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS Einzelteil"
+    },
+    "cots_qi_coil_24mm": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "Qi Induktions-Empfängerspule Ø 24 mm",
+        "en": "Qi Inductive Receiver Coil Ø 24 mm"
+      },
+      "spec": "Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin",
+      "source": "Sunlord / Web",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.2,
+        2.2
+      ],
+      "desc": {
+        "de": "Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt)",
+        "en": "Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection)"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Qi Empfängerspule (Sunlord / AliExpress)"
+    },
+    "cots_radar_mr20": {
+      "type": "cots_electronic",
+      "name": {
+        "de": "Wheeltec MR20 77-GHz mmWave Radar",
+        "en": "Wheeltec MR20 77-GHz mmWave Radar"
+      },
+      "spec": "77-GHz FMCW Automotive Radar (150 m Reichweite)",
+      "source": "Wheeltec / DE-Distributor",
+      "unit": "Stk.",
+      "cost_eur": [
+        65.0,
+        110.0
+      ],
+      "desc": {
+        "de": "Automotive Millimeterwellen-Radar für Totwinkelerkennung & Kollisionswarnung",
+        "en": "Automotive mmWave radar for blind spot detection & forward/rear collision alert"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS Radarmodul (Wheeltec)"
+    },
     "cots_speakers_and_mic_kit": {
       "type": "cots_electronic",
       "name": {
@@ -2119,45 +1804,25 @@
       "pkg_qty": 1,
       "pkg_name": "COTS Einzelteil"
     },
-    "cots_under_perch_tactile_switch": {
-      "type": "cots_electronic",
+    "antenna_fxp524_v2x": {
+      "type": "antenna",
       "name": {
-        "de": "IP67 Smart-PTT Mikrotaster mit PUR-Kabel",
-        "en": "IP67 Smart-PTT Tactile Switch with PUR Cable"
+        "de": "Taoglas FXP524 V2X Flexantenne",
+        "en": "Taoglas FXP524 V2X Flex Antenna"
       },
-      "spec": "M7x0.75 Gewinde, IP67 wasserdicht, 50 cm 2-adriges geschirmtes PUR-Kabel mit 2-Pin JST-GH Stecker",
-      "source": "COTS / Web",
+      "spec": "5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm)",
+      "source": "Taoglas / Mouser",
       "unit": "Stk.",
       "cost_eur": [
         2.2,
-        4.5
+        4.0
       ],
       "desc": {
-        "de": "Wasserdichter Mikrotaster für Under-Perch Halterung, direkter Anschluss an Port J6 des Cockpit-Satelliten (Multi-Aktions Smart-PTT: Halten = Funk, 2x = Cam-Bookmark, 3x = Siri)",
-        "en": "Waterproof micro-switch for under-perch bracket, plugs directly into Cockpit Satellite Port J6 (multi-action smart PTT: hold = intercom, 2x = cam bookmark, 3x = Siri)"
+        "de": "Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08",
+        "en": "Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08"
       },
       "pkg_qty": 1,
-      "pkg_name": "COTS Einzelteil"
-    },
-    "cots_pod_dc_blade_plug": {
-      "type": "cots_electronic",
-      "name": {
-        "de": "4-Pin IP67 Magnet-Abreißkupplung (Pod-Bus)",
-        "en": "4-Pin IP67 Magnetic Breakaway Coupler (Pod Bus)"
-      },
-      "spec": "4-Pin Automotive Magnetkupplung (VCC_BUS, GND, USB_D-, USB_D+) mit EPDM-Flanschdichtung",
-      "source": "COTS Automotive / Web",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        2.5
-      ],
-      "desc": {
-        "de": "Werkzeuglose 4-Pin IP67 Bus-Durchführung für Pod 1 & Pod 2 (30W USB-PD + USB 2.0 Daten)",
-        "en": "Tool-free 4-pin IP67 bus feed-through for Pod 1 & Pod 2 (30W USB-PD + USB 2.0 data)"
-      },
-      "pkg_qty": 2,
-      "pkg_name": "2er Set Automotive IP67 Blade Stecker"
+      "pkg_name": "Taoglas COTS Antenne (Mouser)"
     },
     "antenna_fxp895_lora": {
       "type": "antenna",
@@ -2199,46 +1864,6 @@
       "pkg_qty": 1,
       "pkg_name": "COTS 868 MHz Magnetfußantenne"
     },
-    "antenna_fxuwb10_uwb": {
-      "type": "antenna",
-      "name": {
-        "de": "Taoglas FXUWB10 UWB Flexantenne",
-        "en": "Taoglas FXUWB10 UWB Flex Antenna"
-      },
-      "spec": "6.5 GHz Ch. 5 Flex-Patch mit 20 mm U.FL Koaxialkabel",
-      "source": "Taoglas / Mouser",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.2,
-        4.0
-      ],
-      "desc": {
-        "de": "Drahtloses UWB 6.5 GHz Backbone (Zentralbox, Front-Node, Kassetten, Radar)",
-        "en": "Wireless UWB 6.5 GHz backbone (Central Box, Front Node, Cartridges, Radar)"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Taoglas COTS Antenne (Mouser)"
-    },
-    "antenna_fxp524_v2x": {
-      "type": "antenna",
-      "name": {
-        "de": "Taoglas FXP524 V2X Flexantenne",
-        "en": "Taoglas FXP524 V2X Flex Antenna"
-      },
-      "spec": "5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm)",
-      "source": "Taoglas / Mouser",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.2,
-        4.0
-      ],
-      "desc": {
-        "de": "Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08",
-        "en": "Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Taoglas COTS Antenne (Mouser)"
-    },
     "antenna_omm_stubby_24g": {
       "type": "antenna",
       "name": {
@@ -2253,8 +1878,8 @@
         4.0
       ],
       "desc": {
-        "de": "Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei)",
-        "en": "Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise)"
+        "de": "Kompakte 38 mm 2.4 GHz Stummelantenne (SMA-Male) für SMA_24G am OMM Tri-Band UCS Modul (flatter- & pfeiffrei am Helm und im Pod)",
+        "en": "Compact 38 mm 2.4 GHz stubby antenna (SMA-Male) for SMA_24G on OMM Tri-Band UCS module (buffet-free on helmet and in pod)"
       },
       "pkg_qty": 1,
       "pkg_name": "Taoglas COTS Antenne (Mouser)"
@@ -2273,8 +1898,8 @@
         4.0
       ],
       "desc": {
-        "de": "Kompakte gewickelte Wendelantenne für PCBA 10 (1.5-2.5 km Reichweite)",
-        "en": "Compact helical stubby antenna for PCBA 10 (1.5-2.5 km range)"
+        "de": "Kompakte 48 mm 446 MHz Helical-Stummelantenne (SMA-Male) für SMA_446 am OMM Tri-Band UCS Modul (PMR446 & DMR Tier I)",
+        "en": "Compact 48 mm 446 MHz helical stubby antenna (SMA-Male) for SMA_446 on OMM Tri-Band UCS module (PMR446 & DMR Tier I)"
       },
       "pkg_qty": 1,
       "pkg_name": "Taoglas COTS Antenne (Mouser)"
@@ -2293,11 +1918,171 @@
         4.0
       ],
       "desc": {
-        "de": "Interne Antenne im Längsschacht des Kassetten-Schlittens für Pod-Betrieb",
-        "en": "Internal antenna along cartridge sled cavity for sealed pod operation"
+        "de": "Interne 2.4/5 GHz FPC Klebeantenne im Gehäusedeckel der Zentralbox (PCBA 01) und des Front-Knotens (2x2 MIMO auf PCBA 05)",
+        "en": "Internal 2.4/5 GHz FPC adhesive antenna in Central Box lid (PCBA 01) and Front Node lid (2x2 MIMO on PCBA 05)"
       },
       "pkg_qty": 1,
       "pkg_name": "Taoglas COTS Antenne (Mouser)"
+    },
+    "cable_adapter_jwpf_bmw_can_splitter": {
+      "type": "cable",
+      "name": {
+        "de": "BMW CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
+        "en": "BMW CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
+      },
+      "spec": "JST-JWPF 03R-JWPF-VSLE-S auf BMW Navigationsvorbereitung / TFT Y-Abzweig, 25 cm",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        6.0,
+        12.0
+      ],
+      "desc": {
+        "de": "Zerstörungsfreier Abgriff des BMW K2x/K5x/K6x Fahrzeug-CAN-Busses an der Vorbereitung Navigationssystem",
+        "en": "Non-destructive tap of BMW K2x/K5x/K6x vehicle CAN bus at navigation preparation cradle"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Y-Splitter Adapterkabel"
+    },
+    "cable_adapter_jwpf_bmw_cartool": {
+      "type": "cable",
+      "name": {
+        "de": "BMW Cartool Adapterkabel (JST-JWPF 2-Pin)",
+        "en": "BMW Cartool Adapter Cable (JST-JWPF 2-Pin)"
+      },
+      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf BMW 3-Pin Cartool-Stecker (BMW 83300413585), 20 cm",
+      "source": "BMW / COTS / Amazon",
+      "unit": "Stk.",
+      "cost_eur": [
+        4.5,
+        9.0
+      ],
+      "desc": {
+        "de": "Optionales Plug-and-play Zündungsplus (KL15) Adapterkabel am Lenkkopf (nur für Standalone-Cockpitbetrieb ohne Zentralbox)",
+        "en": "Optional plug-and-play switched ignition (KL15) adapter at headstock (standalone cockpit mode only without central box)"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Konfektioniertes Adapterkabel"
+    },
+    "cable_adapter_jwpf_deutsch_dt2_aux": {
+      "type": "cable",
+      "name": {
+        "de": "Zusatzscheinwerfer Adapterkabel (JST-JWPF auf Deutsch DT-2S)",
+        "en": "Aux Light Adapter Cable (JST-JWPF to Deutsch DT-2S)"
+      },
+      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Deutsch DT-2S 2-Pin Buchse mit Verriegelungskeil (IP68), 30 cm",
+      "source": "Deutsch / TE Connectivity",
+      "unit": "Stk.",
+      "cost_eur": [
+        3.8,
+        7.5
+      ],
+      "desc": {
+        "de": "Direktanschluss für Denali D3/D7, Baja Designs, Wunderlich Zusatzscheinwerfer oder 12V Aktivcradle via TPS1H100",
+        "en": "Direct plug-in for Denali D3/D7, Baja Designs, Wunderlich auxiliary lights or 12V active cradle via TPS1H100"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Wasserdichtes Adapterkabel"
+    },
+    "cable_adapter_jwpf_hd_can_splitter": {
+      "type": "cable",
+      "name": {
+        "de": "Harley CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
+        "en": "Harley CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
+      },
+      "spec": "JST-JWPF 03R-JWPF-VSLE-S auf Molex MX150 4-Pin CAN Y-Abzweig am Tacho / Diagnosestecker, 25 cm",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        6.5,
+        12.5
+      ],
+      "desc": {
+        "de": "Zerstörungsfreier Abgriff des HD-LAN / CAN-Busses hinter der Verkleidung oder am Lenkkopf",
+        "en": "Non-destructive tap of HD-LAN / CAN bus behind fairing or steering neck"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Y-Splitter Adapterkabel"
+    },
+    "cable_adapter_jwpf_hd_fairing_aux": {
+      "type": "cable",
+      "name": {
+        "de": "Harley Fairing Aux Adapterkabel (JST-JWPF 2-Pin)",
+        "en": "Harley Fairing Aux Adapter Cable (JST-JWPF 2-Pin)"
+      },
+      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Molex MX150 / Deutsch DT 2-Pin Verkleidungs-Zubehörbuchse, 25 cm",
+      "source": "Harley / COTS",
+      "unit": "Stk.",
+      "cost_eur": [
+        5.0,
+        10.0
+      ],
+      "desc": {
+        "de": "Zündungsplus-Speisung (KL15) am OEM-Zubehörstecker unter Sharknose/Batwing Verkleidung von Touring & CVO ST",
+        "en": "Switched ignition (KL15) power feed from OEM fairing accessory plug on Touring & CVO ST"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Konfektioniertes Adapterkabel"
+    },
+    "cable_adapter_jwpf_universal_pigtail": {
+      "type": "cable",
+      "name": {
+        "de": "Universal Pigtail Adapterset (JST-JWPF auf offene Enden)",
+        "en": "Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)"
+      },
+      "spec": "JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen",
+      "source": "Posi-Products / COTS",
+      "unit": "Set",
+      "cost_eur": [
+        4.0,
+        8.0
+      ],
+      "desc": {
+        "de": "Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen",
+        "en": "For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Pigtail & Posi-Tap Set"
+    },
+    "cable_cockpit_breakout_75cm_car": {
+      "type": "cable",
+      "name": {
+        "de": "Cockpit-Schleppketten-Verlängerungskabel 75 cm (Pkw-Kit)",
+        "en": "Cockpit Drag-Chain Extension Cable 75 cm (Car Kit)"
+      },
+      "spec": "Hochflexibles geschirmtes USB-C & Sensor-Puck Schleppkettenkabel (75 cm)",
+      "source": "COTS Industrieware",
+      "unit": "Stk.",
+      "cost_eur": [
+        4.5,
+        8.5
+      ],
+      "desc": {
+        "de": "Verbindet den Front-Node unterm Fahrersitz mit dem 5-Port Hub (PCBA 05B) in der Mittelkonsole und dem Sensor-Puck (PCBA 05D) auf dem Armaturenbrett",
+        "en": "Connects Front Node under driver seat to 5-Port Hub (PCBA 05B) in center console and Sensor Puck (PCBA 05D) on dashboard"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS 16-Pin Drag-Chain Harness"
+    },
+    "cable_cots_usbc_phone": {
+      "type": "cable",
+      "name": {
+        "de": "COTS USB-C Smartphone-Kabel",
+        "en": "COTS USB-C Smartphone Cable"
+      },
+      "spec": "Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten)",
+      "source": "Amazon / COTS",
+      "unit": "Stk.",
+      "cost_eur": [
+        2.5,
+        5.0
+      ],
+      "desc": {
+        "de": "Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung",
+        "en": "Connection from Cockpit Satellite to smartphone with strain relief"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Handelsübliches COTS USB-C Kabel"
     },
     "cable_dtm12_main_harness": {
       "type": "cable",
@@ -2339,226 +2124,6 @@
       "pkg_qty": 5,
       "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
     },
-    "cable_pure_dc_jwpf": {
-      "type": "cable",
-      "name": {
-        "de": "4-Ader Automotive Pod-Zuleitung (PUR)",
-        "en": "4-Wire Automotive Pod Cable (PUR)"
-      },
-      "spec": "2x 0.5 mm² (Power) + 2x AWG24 Twisted-Pair (USB 2.0 D+/D-) auf 4-Pin JST-GH (J_BUS)",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        2.2
-      ],
-      "desc": {
-        "de": "4-Draht Automotive-Zuleitung von Strang 2/3 zu Pod 1 & 2 (VCC_BUS, GND, USB_D+, USB_D-)",
-        "en": "4-wire automotive cable from Branch 2/3 to Pod 1 & 2 (VCC_BUS, GND, USB_D+, USB_D-)"
-      },
-      "pkg_qty": 5,
-      "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
-    },
-    "cable_radar_dc_jwpf": {
-      "type": "cable",
-      "name": {
-        "de": "Radar 4-Ader Bus-Zuleitung (PUR)",
-        "en": "Radar 4-Wire Bus Cable (PUR)"
-      },
-      "spec": "4x 0.34 mm² (AWG22) mit 4-Pin JST-GH Stecker auf PCBA 08 J1",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        2.2
-      ],
-      "desc": {
-        "de": "4-Draht Anbindung für Heck-Radar PCBA 08 (12V_RADAR, GND, CAN/UART) an Strang 4",
-        "en": "4-wire link for rear radar PCBA 08 (12V_RADAR, GND, CAN/UART) on Branch 4"
-      },
-      "pkg_qty": 5,
-      "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
-    },
-    "cable_front_node_12v": {
-      "type": "cable",
-      "name": {
-        "de": "Front-Node 12V Anschlusskabel",
-        "en": "Front Node 12V Power Cable"
-      },
-      "spec": "2-Pin JST-PH Litzenkabel mit Posi-Tap Abzweigverbindern",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.6,
-        1.2
-      ],
-      "desc": {
-        "de": "Lokale 12V-Cockpit-Versorgung (Standlicht/Navistecker)",
-        "en": "Local 12V cockpit tap (parking light / GPS auxiliary plug)"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
-    },
-    "cable_support_car_12v_y": {
-      "type": "cable",
-      "name": {
-        "de": "12V Y-Adapterkabel (Support-Car)",
-        "en": "12V Y-Adapter Cable (Support Car)"
-      },
-      "spec": "12V Kfz-Zigarettenanzünder (5A) auf JST-JWPF 2P + Deutsch DTM-12",
-      "source": "Eigenbau / COTS",
-      "unit": "Stk.",
-      "cost_eur": [
-        8.5,
-        13.5
-      ],
-      "desc": {
-        "de": "Parallele 12V Speisung für Front-Node & Zentralbox im Begleitfahrzeug",
-        "en": "Parallel 12V supply for Front Node & Central Box in support vehicle"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS Kabelbaum (Deutsch / MTA)"
-    },
-    "cable_cockpit_breakout_75cm_car": {
-      "type": "cable",
-      "name": {
-        "de": "Cockpit-Schleppkettenkabel 75 cm (Pkw-Kit)",
-        "en": "Cockpit Drag-Chain Cable 75 cm (Car Kit)"
-      },
-      "spec": "16-poliges geschirmtes Schleppkettenkabel (AWG26/28, hochflexibel) mit Dual-Row 2.0 mm Buchsen",
-      "source": "COTS Industrieware",
-      "unit": "Stk.",
-      "cost_eur": [
-        4.5,
-        8.5
-      ],
-      "desc": {
-        "de": "Verbindet Front-Node unterm Fahrersitz mit Cockpit-Satellit in Mittelkonsole; gleicht 25 cm Sitzlängsverstellung und Sitzbreite vollkommen aus",
-        "en": "Connects Front Node under driver seat to Cockpit Satellite in center console; compensates for 25 cm seat slide travel and seat width"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS 16-Pin Drag-Chain Harness"
-    },
-    "cable_sma_pigtail_central_box": {
-      "type": "cable",
-      "name": {
-        "de": "IP67 SMA-Buchse auf IPEX/U.FL Pigtail",
-        "en": "IP67 SMA Female to IPEX/U.FL Pigtail"
-      },
-      "spec": "RG-178 / 1.13 mm Pigtail (100 mm) mit O-Ring-Dichtung für Rückwand-Knockout",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.2,
-        2.5
-      ],
-      "desc": {
-        "de": "Wasserdichte SMA-Gehäusedurchführung an der Rückseite der Zentralbox für externe 868 MHz Antenne",
-        "en": "Waterproof SMA bulkhead pass-through at rear of Central Box for external 868 MHz antenna"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS SMA Bulkhead Pigtail"
-    },
-    "cable_obd2_flat_jwpf_3p": {
-      "type": "cable",
-      "name": {
-        "de": "OBD2 90° Flachband-Direktkabel (Pkw-Kit)",
-        "en": "OBD2 90° Flat Direct Cable (Car Kit)"
-      },
-      "spec": "Ultraflacher 90° OBD2-Stecker auf JST-JWPF 3-Pin (0.8 m hochflexibles Flachband)",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        4.5,
-        7.8
-      ],
-      "desc": {
-        "de": "Direkte, pedalfreie CAN-Bus Anbindung von der OBD2-Buchse zum Fahrzeug-Satelliten an der Schwellerleiste (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND)",
-        "en": "Direct pedal-safe CAN bus link from OBD2 port to Vehicle Satellite at door sill (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND)"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "COTS OBD2 Flat Cable"
-    },
-    "cable_support_car_visor_dc": {
-      "type": "cable",
-      "name": {
-        "de": "Sonnenblenden DC-Zuleitung",
-        "en": "Sun Visor DC Power Lead"
-      },
-      "spec": "2-Pin FLRY 2x0.35 mm² (1.5 m)",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.6,
-        1.2
-      ],
-      "desc": {
-        "de": "5V DC-Speisung vom Front-Node zu den Kassetten-Pods an der Sonnenblende",
-        "en": "5V DC power feed from Front Node to visor pods in support vehicle"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
-    },
-    "cable_usbc_carplay_data": {
-      "type": "cable",
-      "name": {
-        "de": "USB-C CarPlay Datenkabel",
-        "en": "USB-C CarPlay Data Cable"
-      },
-      "spec": "USB-C auf USB-A/C Datenkabel (1.0 m geschirmt)",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.4,
-        4.2
-      ],
-      "desc": {
-        "de": "Kabelgebundene Head-Unit Audio- & Display-Bridge (Apple CarPlay / Android Auto)",
-        "en": "Wired head unit audio & display bridge (Apple CarPlay / Android Auto)"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Einzelkabel (Amazon / COTS)"
-    },
-    "cable_qwiic_100mm": {
-      "type": "cable",
-      "name": {
-        "de": "Qwiic Sensorkabel (100 mm)",
-        "en": "Qwiic Sensor Cable (100 mm)"
-      },
-      "spec": "4-Pin JST-SH Buchse zu Buchse (100 mm Silikonlitze)",
-      "source": "SparkFun / Adafruit",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.5,
-        1.0
-      ],
-      "desc": {
-        "de": "Verbindung vom 5-Port Fahrzeug-Satelliten zum SAM-M10Q GNSS-Modul",
-        "en": "Link from 5-port Vehicle Satellite to SAM-M10Q GNSS module"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Kabelsortiment"
-    },
-    "cable_qwiic_1000mm": {
-      "type": "cable",
-      "name": {
-        "de": "Qwiic I2C Sensorkabel (1.0 m)",
-        "en": "Qwiic I2C Sensor Cable (1.0 m)"
-      },
-      "spec": "4-Pin JST-SH auf JST-SH Silikonkabel geschirmt (1.0 m)",
-      "source": "SparkFun / Adafruit",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.5,
-        1.0
-      ],
-      "desc": {
-        "de": "Verbindung Gabelfuß-Sensor TMP117 zum 5-Port Fahrzeug-Satelliten",
-        "en": "Link from fork foot sensor TMP117 to 5-port Vehicle Satellite"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Kabelsortiment"
-    },
     "cable_j_act_solenoid_harness": {
       "type": "cable",
       "name": {
@@ -2575,26 +2140,6 @@
       "desc": {
         "de": "Verbindet PCBA 03 J_ACT mit den 2 Kaltstart-Hubmagneten auf der Universal-Schlittenschiene",
         "en": "Connects PCBA 03 J_ACT to the 2 cold-start solenoids on the universal slide bracket"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
-    },
-    "cable_j_audio_pwr_sena_spider": {
-      "type": "cable",
-      "name": {
-        "de": "J_AUDIO_PWR Kabel Sena SPIDER X",
-        "en": "J_AUDIO_PWR Cable Sena SPIDER X"
-      },
-      "spec": "8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm)",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.6,
-        1.2
-      ],
-      "desc": {
-        "de": "Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins)",
-        "en": "Direct-DC power (3.85V) & stereo audio with Kelvin grounding plugged straight from top (zero pogo-pins)"
       },
       "pkg_qty": 10,
       "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
@@ -2659,125 +2204,25 @@
       "pkg_qty": 1,
       "pkg_name": "Einzelkabel (Amazon / COTS)"
     },
-    "cable_omm_helmet_audio_j_helmet": {
+    "cable_j_audio_pwr_sena_spider": {
       "type": "cable",
       "name": {
-        "de": "OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)",
-        "en": "OMM Helmet Audio & PTT Harness (J_HELMET)"
+        "de": "J_AUDIO_PWR Kabel Sena SPIDER X",
+        "en": "J_AUDIO_PWR Cable Sena SPIDER X"
       },
-      "spec": "6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm)",
+      "spec": "8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm)",
       "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        0.5,
-        1.0
+        0.6,
+        1.2
       ],
       "desc": {
-        "de": "Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale)",
-        "en": "Hum-free headset & mic harness for helmet interior (pure 0V DC signals)"
+        "de": "Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins)",
+        "en": "Direct-DC power (3.85V) & stereo audio with Kelvin grounding plugged straight from top (zero pogo-pins)"
       },
       "pkg_qty": 10,
-      "pkg_name": "10er Kabelsortiment"
-    },
-    "cable_rf_coax_pigtail_50mm": {
-      "type": "cable",
-      "name": {
-        "de": "RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)",
-        "en": "RF Micro-Coax Pigtail (U.FL to SMA IP67)"
-      },
-      "spec": "50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        0.5,
-        1.0
-      ],
-      "desc": {
-        "de": "Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module",
-        "en": "Watertight enclosure bulkhead feed-through for OMM UCS antenna"
-      },
-      "pkg_qty": 10,
-      "pkg_name": "10er Kabelsortiment"
-    },
-    "cable_cockpit_harness_16p": {
-      "type": "cable",
-      "name": {
-        "de": "Cockpit-Kabelbaum 16-polig (geschirmt)",
-        "en": "Cockpit Harness 16-Conductor (Shielded)"
-      },
-      "spec": "16-poliges geschirmtes Rundkabel (Ø 6.0 mm, 50 cm) mit 2.0 mm Verriegelungsstecker",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        3.5,
-        6.0
-      ],
-      "desc": {
-        "de": "Verbindet PCBA 05 J_COCKPIT mit dem Cockpit-Satellitenverteiler",
-        "en": "Connects PCBA 05 J_COCKPIT to Cockpit Breakout Satellite"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Konfektionierter Kabelbaum"
-    },
-    "cable_vehicle_harness_12p": {
-      "type": "cable",
-      "name": {
-        "de": "Fahrzeug-Kabelbaum 12-polig (geschirmt)",
-        "en": "Vehicle Harness 12-Conductor (Shielded)"
-      },
-      "spec": "12-poliges geschirmtes Rundkabel (Ø 6.5 mm, 40 cm) mit 2.0 mm Verriegelungsstecker",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        3.2,
-        5.2
-      ],
-      "desc": {
-        "de": "Verbindet PCBA 05 J_VEHICLE mit dem 5-Port Fahrzeug-Satellitenverteiler",
-        "en": "Connects PCBA 05 J_VEHICLE to 5-Port Vehicle Breakout Satellite"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Konfektionierter Kabelbaum"
-    },
-    "cable_cots_usbc_phone": {
-      "type": "cable",
-      "name": {
-        "de": "COTS USB-C Smartphone-Kabel",
-        "en": "COTS USB-C Smartphone Cable"
-      },
-      "spec": "Standard USB-C auf USB-C Kabel (20-30 cm, gewinkelt/geflochten)",
-      "source": "Amazon / COTS",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.5,
-        5.0
-      ],
-      "desc": {
-        "de": "Verbindung von Cockpit-Satellit zum Smartphone mit Zugentlastung",
-        "en": "Connection from Cockpit Satellite to smartphone with strain relief"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Handelsübliches COTS USB-C Kabel"
-    },
-    "cable_usbc_panel_mount_mainbox": {
-      "type": "cable",
-      "name": {
-        "de": "Zentralbox USB-C Flashing Pigtail",
-        "en": "Central Box USB-C Flashing Pigtail"
-      },
-      "spec": "IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67",
-      "source": "COTS Standard",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.4,
-        4.2
-      ],
-      "desc": {
-        "de": "CarPlay / Flashing Port an der Flanke der Zentralbox",
-        "en": "CarPlay / firmware flashing port on Central Box flank"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Einzelkabel (Amazon / COTS)"
+      "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
     },
     "cable_jst_ph_assortment": {
       "type": "cable",
@@ -2799,227 +2244,245 @@
       "pkg_qty": 10,
       "pkg_name": "10er Kabelsortiment"
     },
-    "cable_jst_jwpf_connector_set": {
+    "cable_mirror_pod_jst_gh_4p": {
       "type": "cable",
       "name": {
-        "de": "JST-JWPF 2-Pin IP67 Steckverbinder-Set",
-        "en": "JST-JWPF 2-Pin IP67 Connector Set"
+        "de": "Spiegel-Pod 4-Pin JST-GH Zuleitung (PUR)",
+        "en": "Mirror Pod 4-Pin JST-GH Lead (PUR)"
       },
-      "spec": "02R-JWPF-VSLE-S & 02T-JWPF-VSLE-S (2-Pol wasserdicht)",
-      "source": "JST / COTS",
-      "unit": "Set",
+      "spec": "4-Pin JST-GH 1.25 mm (SM04B-GHS-TB) auf geschirmtes Ø 2.8 mm PUR-Rundkabel, 60 cm",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        1.0,
+        2.0
+      ],
+      "desc": {
+        "de": "Verbindet den linken und rechten Under-Perch Spiegel-Pod (PCBA 05C J1) mit dem Front-Node (J_POD_L / J_POD_R: VCC_3V3, LED_CTRL, BTN_SIG, GND)",
+        "en": "Connects left and right under-perch mirror pods (PCBA 05C J1) to Front Node (J_POD_L / J_POD_R: VCC_3V3, LED_CTRL, BTN_SIG, GND)"
+      },
+      "pkg_qty": 5,
+      "pkg_name": "5er Pack JST-GH Konfektionskabel"
+    },
+    "cable_obd2_flat_jwpf_3p": {
+      "type": "cable",
+      "name": {
+        "de": "OBD2 90° Flachband-Direktkabel (Pkw-Kit)",
+        "en": "OBD2 90° Flat Direct Cable (Car Kit)"
+      },
+      "spec": "Ultraflacher 90° OBD2-Stecker auf JST-JWPF 3-Pin (0.8 m hochflexibles Flachband)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        4.5,
+        7.8
+      ],
+      "desc": {
+        "de": "Direkte, pedalfreie CAN-Bus Anbindung von der PKW OBD2-Buchse (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) zum 6-Pin Bordnetzstecker J1 der Zentralbox",
+        "en": "Direct pedal-safe CAN bus link from car OBD2 port (Pin 6 CAN_H, Pin 14 CAN_L, Pin 4/5 GND) to Central Box 6-pin harness J1"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS OBD2 Flat Cable"
+    },
+    "cable_omm_helmet_audio_j_helmet": {
+      "type": "cable",
+      "name": {
+        "de": "OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)",
+        "en": "OMM Helmet Audio & PTT Harness (J_HELMET)"
+      },
+      "spec": "6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.5,
+        1.0
+      ],
+      "desc": {
+        "de": "Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale)",
+        "en": "Hum-free headset & mic harness for helmet interior (pure 0V DC signals)"
+      },
+      "pkg_qty": 10,
+      "pkg_name": "10er Kabelsortiment"
+    },
+    "cable_pure_dc_jwpf": {
+      "type": "cable",
+      "name": {
+        "de": "4-Ader Automotive Pod-Zuleitung (PUR)",
+        "en": "4-Wire Automotive Pod Cable (PUR)"
+      },
+      "spec": "2x 0.5 mm² (Power) + 2x AWG24 Twisted-Pair (USB 2.0 D+/D-) auf 4-Pin JST-GH (J_BUS)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
       "cost_eur": [
         1.2,
         2.2
       ],
       "desc": {
-        "de": "Wasserdichte 12V DC Kfz-Zuleitung für Radar 2.0 Sub-MCU & Pods",
-        "en": "Watertight 12V DC automotive plug set for Radar 2.0 & pods"
+        "de": "4-Draht Automotive-Zuleitung von Strang 2/3 zu Pod 1 & 2 (VCC_BUS, GND, USB_D+, USB_D-)",
+        "en": "4-wire automotive cable from Branch 2/3 to Pod 1 & 2 (VCC_BUS, GND, USB_D+, USB_D-)"
       },
       "pkg_qty": 5,
       "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
     },
-    "cots_jwpf_socket_set_vehicle_satellite": {
-      "type": "cots",
-      "name": {
-        "de": "Fahrzeug-Satellit 5-Port JST-JWPF Buchsenset (IP67)",
-        "en": "Vehicle Satellite 5-Port JST-JWPF Socket Set (IP67)"
-      },
-      "spec": "2x 02R-JWPF-VSLE-S (2-Pol), 2x 03R-JWPF-VSLE-S (3-Pol), 1x 04R-JWPF-VSLE-S (4-Pol) samt 14x SWPR-001T-P025 Crimp-Kontakten",
-      "source": "JST / COTS",
-      "unit": "Set",
-      "cost_eur": [
-        3.5,
-        5.5
-      ],
-      "desc": {
-        "de": "5x wasserdichte Einrastbuchsen im Fahrzeug-Satelliten für 12V IN, CAN, Mirror BSD, Aux Light & GNSS/Klima-Puck",
-        "en": "5x watertight latching sockets in vehicle satellite for 12V IN, CAN, Mirror BSD, Aux Light & GNSS/climate puck"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "5-Port Buchsenset"
-    },
-    "cable_adapter_jwpf_bmw_cartool": {
+    "cable_radar_dc_jwpf": {
       "type": "cable",
       "name": {
-        "de": "BMW Cartool Adapterkabel (JST-JWPF 2-Pin)",
-        "en": "BMW Cartool Adapter Cable (JST-JWPF 2-Pin)"
+        "de": "Radar 4-Ader Bus-Zuleitung (PUR)",
+        "en": "Radar 4-Wire Bus Cable (PUR)"
       },
-      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf BMW 3-Pin Cartool-Stecker (BMW 83300413585), 20 cm",
-      "source": "BMW / COTS / Amazon",
-      "unit": "Stk.",
-      "cost_eur": [
-        4.5,
-        9.0
-      ],
-      "desc": {
-        "de": "Optionales Plug-and-play Zündungsplus (KL15) Adapterkabel am Lenkkopf (nur für Standalone-Cockpitbetrieb ohne Zentralbox)",
-        "en": "Optional plug-and-play switched ignition (KL15) adapter at headstock (standalone cockpit mode only without central box)"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Konfektioniertes Adapterkabel"
-    },
-    "cable_adapter_jwpf_bmw_can_splitter": {
-      "type": "cable",
-      "name": {
-        "de": "BMW CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
-        "en": "BMW CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
-      },
-      "spec": "JST-JWPF 03R-JWPF-VSLE-S auf BMW Navigationsvorbereitung / TFT Y-Abzweig, 25 cm",
+      "spec": "4x 0.34 mm² (AWG22) mit 4-Pin JST-GH Stecker auf PCBA 08 J1",
       "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        6.0,
-        12.0
+        1.2,
+        2.2
       ],
       "desc": {
-        "de": "Zerstörungsfreier Abgriff des BMW K2x/K5x/K6x Fahrzeug-CAN-Busses an der Vorbereitung Navigationssystem",
-        "en": "Non-destructive tap of BMW K2x/K5x/K6x vehicle CAN bus at navigation preparation cradle"
+        "de": "4-Draht Anbindung für Heck-Radar PCBA 08 (12V_RADAR, GND, CAN/UART) an Strang 4",
+        "en": "4-wire link for rear radar PCBA 08 (12V_RADAR, GND, CAN/UART) on Branch 4"
       },
-      "pkg_qty": 1,
-      "pkg_name": "Y-Splitter Adapterkabel"
+      "pkg_qty": 5,
+      "pkg_name": "5er Steckverbinder-Set (JST / MTA)"
     },
-    "cable_adapter_jwpf_hd_fairing_aux": {
+    "cable_rf_coax_pigtail_50mm": {
       "type": "cable",
       "name": {
-        "de": "Harley Fairing Aux Adapterkabel (JST-JWPF 2-Pin)",
-        "en": "Harley Fairing Aux Adapter Cable (JST-JWPF 2-Pin)"
+        "de": "RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)",
+        "en": "RF Micro-Coax Pigtail (U.FL to SMA IP67)"
       },
-      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Molex MX150 / Deutsch DT 2-Pin Verkleidungs-Zubehörbuchse, 25 cm",
-      "source": "Harley / COTS",
-      "unit": "Stk.",
-      "cost_eur": [
-        5.0,
-        10.0
-      ],
-      "desc": {
-        "de": "Zündungsplus-Speisung (KL15) am OEM-Zubehörstecker unter Sharknose/Batwing Verkleidung von Touring & CVO ST",
-        "en": "Switched ignition (KL15) power feed from OEM fairing accessory plug on Touring & CVO ST"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Konfektioniertes Adapterkabel"
-    },
-    "cable_adapter_jwpf_hd_can_splitter": {
-      "type": "cable",
-      "name": {
-        "de": "Harley CAN-Bus Y-Splitter Adapterkabel (JST-JWPF 3-Pin)",
-        "en": "Harley CAN Bus Y-Splitter Adapter Cable (JST-JWPF 3-Pin)"
-      },
-      "spec": "JST-JWPF 03R-JWPF-VSLE-S auf Molex MX150 4-Pin CAN Y-Abzweig am Tacho / Diagnosestecker, 25 cm",
+      "spec": "50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter",
       "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        6.5,
-        12.5
+        0.5,
+        1.0
       ],
       "desc": {
-        "de": "Zerstörungsfreier Abgriff des HD-LAN / CAN-Busses hinter der Verkleidung oder am Lenkkopf",
-        "en": "Non-destructive tap of HD-LAN / CAN bus behind fairing or steering neck"
+        "de": "Wasserdichte IP67 U.FL-auf-SMA-Bulkhead Durchführung für die Dual-SMA-Ports (SMA_24G & SMA_446) des OMM Tri-Band UCS Moduls (2x pro Modul)",
+        "en": "Watertight IP67 U.FL-to-SMA bulkhead feed-through for dual SMA ports (SMA_24G & SMA_446) of OMM Tri-Band UCS module (2x per module)"
       },
-      "pkg_qty": 1,
-      "pkg_name": "Y-Splitter Adapterkabel"
+      "pkg_qty": 10,
+      "pkg_name": "10er Kabelsortiment"
     },
-    "cable_adapter_jwpf_deutsch_dt2_aux": {
+    "cable_sensor_puck_jst_gh_6p": {
       "type": "cable",
       "name": {
-        "de": "Zusatzscheinwerfer Adapterkabel (JST-JWPF auf Deutsch DT-2S)",
-        "en": "Aux Light Adapter Cable (JST-JWPF to Deutsch DT-2S)"
+        "de": "Sensor-Puck 6-Pin JST-GH Anschlusskabel",
+        "en": "Sensor Puck 6-Pin JST-GH Link Cable"
       },
-      "spec": "JST-JWPF 02R-JWPF-VSLE-S auf Deutsch DT-2S 2-Pin Buchse mit Verriegelungskeil (IP68), 30 cm",
-      "source": "Deutsch / TE Connectivity",
+      "spec": "6-Pin JST-GH 1.25 mm (SM06B-GHS-TB) geschirmte Silikon-/PUR-Leitung, 25 cm",
+      "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        3.8,
-        7.5
+        1.2,
+        2.4
       ],
       "desc": {
-        "de": "Direktanschluss für Denali D3/D7, Baja Designs, Wunderlich Zusatzscheinwerfer oder 12V Aktivcradle via TPS1H100",
-        "en": "Direct plug-in for Denali D3/D7, Baja Designs, Wunderlich auxiliary lights or 12V active cradle via TPS1H100"
+        "de": "Direkte 6-polige Verbindung vom Front-Node (J_SENSOR_EXT) zum ausgelagerten Sensor-Puck PCBA 05D (3V3, GND, I2C_SDA, I2C_SCL, GNSS_TX, GNSS_RX)",
+        "en": "Direct 6-pin link from Front Node (J_SENSOR_EXT) to external Sensor Puck PCBA 05D (3V3, GND, I2C_SDA, I2C_SCL, GNSS_TX, GNSS_RX)"
       },
-      "pkg_qty": 1,
-      "pkg_name": "Wasserdichtes Adapterkabel"
-    },
-    "cable_adapter_jwpf_qwiic_sh": {
-      "type": "cable",
-      "name": {
-        "de": "Sensor-Puck Adapterkabel (JST-JWPF auf Qwiic JST-SH)",
-        "en": "Sensor Puck Adapter Cable (JST-JWPF to Qwiic JST-SH)"
-      },
-      "spec": "JST-JWPF 04R-JWPF-VSLE-S auf 4-Pin JST-SH 1.0 mm (Qwiic/STEMMA QT), 25 cm",
-      "source": "SparkFun / Adafruit / COTS",
-      "unit": "Stk.",
-      "cost_eur": [
-        2.5,
-        4.5
-      ],
-      "desc": {
-        "de": "Wasserdichte I2C-Verbindung vom Fahrzeug-Satelliten zum SAM-M10Q GNSS & TMP117 Klimapuck im Schnabel",
-        "en": "Watertight I2C connection from vehicle satellite to SAM-M10Q GNSS & TMP117 climate puck in beak"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Adapterkabel"
-    },
-    "cable_adapter_jwpf_universal_pigtail": {
-      "type": "cable",
-      "name": {
-        "de": "Universal Pigtail Adapterset (JST-JWPF auf offene Enden)",
-        "en": "Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)"
-      },
-      "spec": "JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen",
-      "source": "Posi-Products / COTS",
-      "unit": "Set",
-      "cost_eur": [
-        4.0,
-        8.0
-      ],
-      "desc": {
-        "de": "Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen",
-        "en": "For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors"
-      },
-      "pkg_qty": 1,
-      "pkg_name": "Pigtail & Posi-Tap Set"
-    },
-    "pcba_05c": {
-      "type": "pcba",
-      "name": {
-        "de": "PCBA 05C: Under-Perch Mirror-Pod (BSD & Smart-PTT)",
-        "en": "PCBA 05C: Under-Perch Mirror Pod (BSD & Smart-PTT)"
-      },
-      "spec": "18.25x14.0 mm 2-Layer Z-Stacked PCB mit 2x 590nm Amber BSD-LEDs (F.Cu), Omron B3SL-1002P IP67 Taster (B.Cu) & 4-Pin JST-GH",
-      "source": "JLCPCB / SMT",
-      "unit": "Stk.",
-      "cost_eur": [
-        1.8,
-        3.2
-      ],
-      "desc": {
-        "de": "Ultrakompakte Z-gestapelte Spiegelarm-Platine für Totwinkel-Warn-LEDs und Multi-Aktions Smart-PTT Taster",
-        "en": "Ultra-compact Z-stacked mirror stem PCB for blind-spot warning LEDs and multi-action Smart-PTT button"
-      },
-      "id_kicad": "kicad_mirror_pod",
       "pkg_qty": 5,
-      "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+      "pkg_name": "5er Pack JST-GH Konfektionskabel"
     },
-    "pcba_05d": {
-      "type": "pcba",
+    "cable_sma_pigtail_central_box": {
+      "type": "cable",
       "name": {
-        "de": "PCBA 05D: Sensor-Puck (GNSS, Klima & Licht)",
-        "en": "PCBA 05D: Sensor Puck (GNSS, Climate & Light)"
+        "de": "IP67 SMA-Buchse auf IPEX/U.FL Pigtail",
+        "en": "IP67 SMA Female to IPEX/U.FL Pigtail"
       },
-      "spec": "34.0x34.0 mm 4-Layer PCB mit u-blox SAM-M10Q 10Hz GNSS, TI TMP117 (±0.1°C), TI OPT3001 & 6-Pin JST-GH/SH",
-      "source": "JLCPCB / SMT",
+      "spec": "RG-178 / 1.13 mm Pigtail (100 mm) mit O-Ring-Dichtung für Rückwand-Knockout",
+      "source": "COTS Standard",
       "unit": "Stk.",
       "cost_eur": [
-        16.0,
-        24.0
+        1.2,
+        2.5
       ],
       "desc": {
-        "de": "Ausgelagerter Sensor-Satellit mit freier Zenit-Sicht für 10 Hz Multi-GNSS, Glättewarnung & Tag/Nacht-Automatik",
-        "en": "External sensor satellite with clear zenith view for 10 Hz Multi-GNSS, black-ice alert & day/night auto-dimming"
+        "de": "Wasserdichte SMA-Gehäusedurchführung an der Rückseite der Zentralbox für externe 868 MHz Antenne",
+        "en": "Waterproof SMA bulkhead pass-through at rear of Central Box for external 868 MHz antenna"
       },
-      "id_kicad": "kicad_sensor_puck",
-      "pkg_qty": 5,
-      "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+      "pkg_qty": 1,
+      "pkg_name": "COTS SMA Bulkhead Pigtail"
+    },
+    "cable_support_car_12v_y": {
+      "type": "cable",
+      "name": {
+        "de": "12V Y-Adapterkabel (Support-Car)",
+        "en": "12V Y-Adapter Cable (Support Car)"
+      },
+      "spec": "12V Kfz-Zigarettenanzünder (5A) auf JST-JWPF 2P + Deutsch DTM-12",
+      "source": "Eigenbau / COTS",
+      "unit": "Stk.",
+      "cost_eur": [
+        8.5,
+        13.5
+      ],
+      "desc": {
+        "de": "Parallele 12V Speisung für Front-Node & Zentralbox im Begleitfahrzeug",
+        "en": "Parallel 12V supply for Front Node & Central Box in support vehicle"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "COTS Kabelbaum (Deutsch / MTA)"
+    },
+    "cable_support_car_visor_dc": {
+      "type": "cable",
+      "name": {
+        "de": "Sonnenblenden DC-Zuleitung",
+        "en": "Sun Visor DC Power Lead"
+      },
+      "spec": "2-Pin FLRY 2x0.35 mm² (1.5 m)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.6,
+        1.2
+      ],
+      "desc": {
+        "de": "5V DC-Speisung vom Front-Node zu den Kassetten-Pods an der Sonnenblende",
+        "en": "5V DC power feed from Front Node to visor pods in support vehicle"
+      },
+      "pkg_qty": 10,
+      "pkg_name": "10er Pack JST-Litzenkabel (Adafruit / COTS)"
+    },
+    "cable_usbc_carplay_data": {
+      "type": "cable",
+      "name": {
+        "de": "USB-C CarPlay Datenkabel",
+        "en": "USB-C CarPlay Data Cable"
+      },
+      "spec": "USB-C auf USB-A/C Datenkabel (1.0 m geschirmt)",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        2.4,
+        4.2
+      ],
+      "desc": {
+        "de": "Kabelgebundene Head-Unit Audio- & Display-Bridge (Apple CarPlay / Android Auto)",
+        "en": "Wired head unit audio & display bridge (Apple CarPlay / Android Auto)"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Einzelkabel (Amazon / COTS)"
+    },
+    "cable_usbc_panel_mount_mainbox": {
+      "type": "cable",
+      "name": {
+        "de": "Zentralbox USB-C Flashing Pigtail",
+        "en": "Central Box USB-C Flashing Pigtail"
+      },
+      "spec": "IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67",
+      "source": "COTS Standard",
+      "unit": "Stk.",
+      "cost_eur": [
+        2.4,
+        4.2
+      ],
+      "desc": {
+        "de": "CarPlay / Flashing Port an der Flanke der Zentralbox",
+        "en": "CarPlay / firmware flashing port on Central Box flank"
+      },
+      "pkg_qty": 1,
+      "pkg_name": "Einzelkabel (Amazon / COTS)"
     }
   }
 }

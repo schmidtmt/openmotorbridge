@@ -9153,15 +9153,14 @@ function calculateSingleBikeBom(bikeConfig) {
     }
 
     // 4. Cockpit & Addon Modules
-    if (addons.frontNode) activeAssemblies['assembly_front_node'] = 1;
+    if (addons.frontNode || addons.tmp117Sensor) activeAssemblies['assembly_front_node'] = 1;
     if (addons.radar2) activeAssemblies['assembly_radar2'] = 1;
-    if (addons.bsdMirrors) activeAssemblies['assembly_bsd_mirrors'] = 1;
     if (addons.actionCamDock) activeAssemblies['assembly_actioncam_dock'] = 1;
-    if (addons.handlebarControls) activeAssemblies['assembly_handlebar_controls'] = 1;
+    if (addons.handlebarControls || addons.bsdMirrors) activeAssemblies['assembly_handlebar_controls'] = 1;
     if (addons.keyfob) activeAssemblies['assembly_keyfob'] = 1;
-    if (addons.tmp117Sensor) activeAssemblies['assembly_tmp117_sensor'] = 1;
     if (addons.ommHelmetKit) activeAssemblies['assembly_omm_helmet_kit_24g'] = 1;
     if (addons.omm446HelmetKit) activeAssemblies['assembly_omm_helmet_kit_446m'] = 1;
+    activeAssemblies['assembly_general_accessories'] = 1;
 
     // 5. Bike-Specific Mounting Kits
     if (bikeModel === 'bmw-gs') {

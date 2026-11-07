@@ -190,6 +190,7 @@ STL_TARGETS: List[Tuple] = [
     ("05_accessories/radar_mr20_housing.scad", "05_accessories/radar_mr20_radome.stl", ["-D", 'part="radome"']),
     ("05_accessories/car_sun_visor_pod3_clip.scad", "05_accessories/car_sun_visor_pod3_clip.stl", ["-D", 'part="single"']),
     ("05_accessories/car_dashboard_wedge_dock.scad", "05_accessories/car_dashboard_wedge_dock.stl"),
+    ("05_accessories/omm_ucs_headset_enclosure.scad", "05_accessories/omm_ucs_helmet_cradle.stl", ["-D", 'part="cradle"']),
     ("03_pod_cartridges/cartridge_universal_actuator_rails.scad", "03_pod_cartridges/cartridge_universal_actuator_rails.stl"),
     ("03_pod_cartridges/parts/04_antenna_bracket_omm.scad", "03_pod_cartridges/cartridge_antenna_bracket_omm.stl"),
 ]

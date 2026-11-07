@@ -34,19 +34,26 @@ def validate_integrity(parts_data, assemblies_data):
     parts = parts_data.get("parts", {})
     assemblies = assemblies_data.get("assemblies", {})
     missing_refs = []
+    used_parts = set()
 
     for asm_id, asm in assemblies.items():
         for item in asm.get("parts", []):
             part_id = item.get("part_id")
+            used_parts.add(part_id)
             if part_id not in parts:
                 missing_refs.append(f"Assembly '{asm_id}' references unknown part '{part_id}'")
+
+    unused_parts = sorted(set(parts.keys()) - used_parts)
+    if unused_parts:
+        for pid in unused_parts:
+            missing_refs.append(f"Part '{pid}' in bom_parts.json is unused (not referenced by any assembly)")
 
     if missing_refs:
         print("[ERROR] Integrity check failed:")
         for err in missing_refs:
             print(f"  - {err}")
         sys.exit(1)
-    print(f"[OK] Integrity check passed: {len(parts)} parts, {len(assemblies)} assemblies verified.")
+    print(f"[OK] Integrity check passed: {len(parts)} parts, {len(assemblies)} assemblies verified (0 unused parts).")
 
 
 def rollup_assemblies(assemblies_data, parts_data, active_counts):
@@ -96,18 +103,21 @@ def format_qty_en(qty, unit):
 def generate_cots_markdown_table(parts_data, assemblies_data, lang="de"):
     is_de = lang == "de"
     # Reference complete motorcycle setup:
-    # 1x Main Box, 1x Front Node, 2x Pod Base, 2x Cartridge Carrier,
-    # 1x Inlay Sena, 1x Inlay Cardo, 1x OMM UCS 2.4G, 1x OMM 446M,
-    # 1x Helmet Kit 2.4G, 1x Radar 2.0, 1x General Accessories
+    # 1x Main Box, 1x Front Node (+ Sensor Puck), 1x 5-Port Glovebox Hub,
+    # 1x Pair Under-Perch Mirror Pods, 2x Pod Base, 2x Cartridge Carrier,
+    # 1x Inlay Sena, 1x Inlay Cardo, 1x Inlay OMM UCS, 2x OMM Tri-Band UCS Modules,
+    # 1x OMM Helmet Kit, 1x Radar 2.0, 1x Smart Keyfob, 1x General Accessories
     ref_counts = {
         "assembly_main_box": 1,
         "assembly_front_node": 1,
+        "assembly_actioncam_dock": 1,
+        "assembly_handlebar_controls": 1,
         "assembly_pod_base": 2,
         "assembly_cartridge_carrier": 2,
         "assembly_inlay_sena_spider": 1,
         "assembly_inlay_cardo_edge": 1,
-        "assembly_omm_ucs_module_24g": 1,
-        "assembly_omm_ucs_module_446m": 1,
+        "assembly_inlay_omm_ucs": 1,
+        "assembly_omm_ucs_module_24g": 2,
         "assembly_omm_helmet_kit_24g": 1,
         "assembly_radar2": 1,
         "assembly_keyfob": 1,

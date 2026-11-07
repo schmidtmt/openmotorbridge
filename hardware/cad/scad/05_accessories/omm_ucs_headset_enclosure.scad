@@ -135,5 +135,12 @@ module omm_ucs_headset_assembly(exploded = false) {
         omm_ucs_module_assembly(exploded = false);
 }
 
-// Standalone Render Preview
-omm_ucs_headset_assembly(exploded = true);
+// Standalone Render Preview / Part Selector
+part = "assembly";
+if (part == "cradle") {
+    omm_ucs_helmet_cradle();
+} else if (part == "clamp") {
+    omm_ucs_rim_clamp();
+} else {
+    omm_ucs_headset_assembly(exploded = true);
+}

@@ -2,7 +2,7 @@
   "_meta": {
     "version": "10.0.0",
     "description": "OpenMotorBridge Component / Assembly Recipes (SSOT)",
-    "generated_at": "2026-10-09"
+    "generated_at": "2026-11-07"
   },
   "assemblies": {
     "assembly_main_box": {
@@ -38,7 +38,15 @@
           "qty": 4
         },
         {
+          "part_id": "fastener_din934_m25",
+          "qty": 4
+        },
+        {
           "part_id": "fastener_silentblock_m4",
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m4",
           "qty": 4
         },
         {
@@ -83,16 +91,12 @@
         "en": "Universal Front Node Assembly"
       },
       "desc": {
-        "de": "Schraubenloses Cockpit-Monocoque (PCBA 05) inkl. 5-Port Handschuhfach-Hub (PCBA 05B), Under-Perch Mirror-Pods (PCBA 05C) & Sensor-Puck (PCBA 05D)",
-        "en": "Screwless cockpit monocoque (PCBA 05) incl. 5-port glovebox hub (PCBA 05B), under-perch mirror pods (PCBA 05C) & sensor puck (PCBA 05D)"
+        "de": "Schraubenloses Cockpit-Monocoque (PCBA 05, 2x2 MIMO Wi-Fi 6E & 30W USB-PD) inkl. Snap-On Umwelt- & GNSS-Sensor-Puck (PCBA 05D)",
+        "en": "Screwless cockpit monocoque (PCBA 05, 2x2 MIMO Wi-Fi 6E & 30W USB-PD) incl. snap-on environmental & GNSS sensor puck (PCBA 05D)"
       },
       "parts": [
         {
           "part_id": "part3d_front_node_lower_tub",
-          "qty": 1
-        },
-        {
-          "part_id": "part3d_cockpit_breakout_block",
           "qty": 1
         },
         {
@@ -112,10 +116,6 @@
           "qty": 1
         },
         {
-          "part_id": "part3d_glovebox_hub",
-          "qty": 1
-        },
-        {
           "part_id": "part3d_vehicle_breakout_block",
           "qty": 1
         },
@@ -124,23 +124,23 @@
           "qty": 1
         },
         {
-          "part_id": "pcba_05b",
-          "qty": 1
-        },
-        {
-          "part_id": "pcba_05c",
-          "qty": 2
-        },
-        {
           "part_id": "pcba_05d",
           "qty": 1
         },
         {
-          "part_id": "fastener_din934_m4",
-          "qty": 4
+          "part_id": "antenna_taoglas_fxp73_24g",
+          "qty": 2
         },
         {
           "part_id": "fastener_din912_m25_6",
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m25",
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m4",
           "qty": 4
         },
         {
@@ -154,6 +154,14 @@
         {
           "part_id": "seal_silicone_cord_15",
           "qty": 0.3
+        },
+        {
+          "part_id": "seal_vent_gore_eptfe",
+          "qty": 1
+        },
+        {
+          "part_id": "cable_sensor_puck_jst_gh_6p",
+          "qty": 1
         },
         {
           "part_id": "cable_cots_usbc_phone",
@@ -218,6 +226,10 @@
         {
           "part_id": "fastener_din7985_m2_6",
           "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m2",
+          "qty": 4
         }
       ]
     },
@@ -229,8 +241,8 @@
         "en": "Gateway Inlay: Sena SPIDER X Slim"
       },
       "desc": {
-        "de": "Inlay-Aufnahmebett für Sena SPIDER X Slim mit 4 Hubmagneten & Kelvin-Ground Audio/DC-Kabel",
-        "en": "Inlay mounting bed for Sena SPIDER X Slim with 4 solenoids & Kelvin-grounded audio/DC cable"
+        "de": "Inlay-Aufnahmebett für Sena mit universeller 2-Schienen Kaltstart-Aktuatorbrücke (2x JF-0530B) & Kelvin-Ground Audio/DC-Kabel",
+        "en": "Inlay mounting bed for Sena with universal 2-rail cold-start actuator bracket (2x JF-0530B) & Kelvin-grounded audio/DC cable"
       },
       "parts": [
         {
@@ -243,7 +255,11 @@
         },
         {
           "part_id": "fastener_din7991_m2_6",
-          "qty": 2
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m25",
+          "qty": 4
         },
         {
           "part_id": "cots_actuator_solenoid_5v",
@@ -267,8 +283,8 @@
         "en": "Gateway Inlay: Sena 50S / 60S"
       },
       "desc": {
-        "de": "Inlay-Aufnahmebett für Sena 50S / 60S mit 4 Hubmagneten & Kelvin-Ground Audio/DC-Kabel",
-        "en": "Inlay mounting bed for Sena 50S / 60S with 4 solenoids & Kelvin-grounded audio/DC cable"
+        "de": "Inlay-Aufnahmebett für Sena mit universeller 2-Schienen Kaltstart-Aktuatorbrücke (2x JF-0530B) & Kelvin-Ground Audio/DC-Kabel",
+        "en": "Inlay mounting bed for Sena with universal 2-rail cold-start actuator bracket (2x JF-0530B) & Kelvin-grounded audio/DC cable"
       },
       "parts": [
         {
@@ -281,7 +297,11 @@
         },
         {
           "part_id": "fastener_din7991_m2_6",
-          "qty": 2
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m25",
+          "qty": 4
         },
         {
           "part_id": "cots_actuator_solenoid_5v",
@@ -305,8 +325,8 @@
         "en": "Gateway Inlay: Cardo Packtalk Edge / Pro"
       },
       "desc": {
-        "de": "Inlay-Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking, 4 Hubmagneten & Kabel",
-        "en": "Inlay mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking, 4 solenoids & harness"
+        "de": "Inlay-Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking, universeller Kaltstart-Aktuatorbrücke (2x JF-0530B) & Kabel",
+        "en": "Inlay mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking, universal cold-start actuator bracket (2x JF-0530B) & harness"
       },
       "parts": [
         {
@@ -319,7 +339,11 @@
         },
         {
           "part_id": "fastener_din7991_m2_6",
-          "qty": 2
+          "qty": 4
+        },
+        {
+          "part_id": "fastener_din934_m25",
+          "qty": 4
         },
         {
           "part_id": "cots_actuator_solenoid_5v",
@@ -339,12 +363,12 @@
       "id": "assembly_inlay_omm_ucs",
       "category": "inlay",
       "name": {
-        "de": "Gateway Inlay: OMM 2.4 GHz UCS (PCBA 09)",
-        "en": "Gateway Inlay: OMM 2.4 GHz UCS (PCBA 09)"
+        "de": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)",
+        "en": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)"
       },
       "desc": {
-        "de": "Inlay-Schlitten für OMM 2.4G Modul mit Antennenführung, J_AUDIO_PWR Kabel & Booster-Bett",
-        "en": "Inlay sled for OMM 2.4G module with antenna routing, J_AUDIO_PWR cable & booster bay"
+        "de": "Universeller Pod-Inlay-Schlitten für das OMM Tri-Band UCS Modul mit Twin-Stubby-Freiraum, J_AUDIO_PWR Kabel & 5V Bi-Directional RF Booster",
+        "en": "Universal pod inlay sled for OMM Tri-Band UCS module with Twin-Stubby clearance, J_AUDIO_PWR cable & 5V bi-directional RF booster"
       },
       "parts": [
         {
@@ -356,7 +380,7 @@
           "qty": 1
         },
         {
-          "part_id": "antenna_taoglas_fxp73_24g",
+          "part_id": "cots_omm_booster_5v",
           "qty": 1
         }
       ]
@@ -365,20 +389,24 @@
       "id": "assembly_inlay_omm446_ucs",
       "category": "inlay",
       "name": {
-        "de": "Gateway Inlay: OMM 446 MHz UCS (PCBA 10)",
-        "en": "Gateway Inlay: OMM 446 MHz UCS (PCBA 10)"
+        "de": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)",
+        "en": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)"
       },
       "desc": {
-        "de": "Inlay-Schlitten für OMM 446 Modul mit Wendelantennen-Kanal, J_AUDIO_PWR Kabel & Booster-Bett",
-        "en": "Inlay sled for OMM 446 module with helical antenna channel, J_AUDIO_PWR cable & booster bay"
+        "de": "Universeller Pod-Inlay-Schlitten für das OMM Tri-Band UCS Modul mit Twin-Stubby-Freiraum, J_AUDIO_PWR Kabel & 5V Bi-Directional RF Booster",
+        "en": "Universal pod inlay sled for OMM Tri-Band UCS module with Twin-Stubby clearance, J_AUDIO_PWR cable & 5V bi-directional RF booster"
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_insert_omm446_ucs",
+          "part_id": "part3d_cartridge_insert_omm_ucs",
           "qty": 1
         },
         {
           "part_id": "cable_j_audio_pwr_omm",
+          "qty": 1
+        },
+        {
+          "part_id": "cots_omm_booster_5v",
           "qty": 1
         }
       ]
@@ -439,8 +467,8 @@
         "en": "OMM Universal Tri-Band UCS Module (PCBA 09/10, 2.4G/BT-Mesh/446MHz)"
       },
       "desc": {
-        "de": "Autarkes ECE 22.06 Universal Tri-Band Intercom- & Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 09/10, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
-        "en": "Autonomous ECE 22.06 universal tri-band intercom & radio module (68x36x16mm, software mode switch) with PCBA 09/10, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
+        "de": "Autarkes ECE 22.06 Universal Tri-Band Intercom- & Funkmodul (68x36x16mm, 100% Software-Mode-Switch) mit PCBA 09/10, 1000mAh LiPo, Tastmatte, Dichtung, 2x Twin-SMA-Pigtails & Dual-Stummelantennen (2.4G + 446M)",
+        "en": "Autonomous ECE 22.06 universal tri-band intercom & radio module (68x36x16mm, 100% software mode switch) with PCBA 09/10, 1000mAh LiPo, keypad, seal, 2x Twin-SMA pigtails & twin stubby antennas (2.4G + 446M)"
       },
       "parts": [
         {
@@ -478,6 +506,14 @@
         {
           "part_id": "cable_rf_coax_pigtail_50mm",
           "qty": 2
+        },
+        {
+          "part_id": "antenna_omm_stubby_24g",
+          "qty": 1
+        },
+        {
+          "part_id": "antenna_omm_stubby_446m",
+          "qty": 1
         }
       ]
     },
@@ -485,16 +521,16 @@
       "id": "assembly_omm_ucs_module_446m",
       "category": "omm_module",
       "name": {
-        "de": "OMM Universal Tri-Band PMR/DMR/Mesh Modul (PCBA 10/09)",
-        "en": "OMM Universal Tri-Band PMR/DMR/Mesh Module (PCBA 10/09)"
+        "de": "OMM Universal Tri-Band UCS Modul (PCBA 09/10, 2.4G/BT-Mesh/446MHz)",
+        "en": "OMM Universal Tri-Band UCS Module (PCBA 09/10, 2.4G/BT-Mesh/446MHz)"
       },
       "desc": {
-        "de": "Autarkes ECE 22.06 Universal Tri-Band Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 10/09, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
-        "en": "Autonomous ECE 22.06 universal tri-band radio module (68x36x16mm, software mode switch) with PCBA 10/09, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
+        "de": "Autarkes ECE 22.06 Universal Tri-Band Intercom- & Funkmodul (68x36x16mm, 100% Software-Mode-Switch) mit PCBA 09/10, 1000mAh LiPo, Tastmatte, Dichtung, 2x Twin-SMA-Pigtails & Dual-Stummelantennen (2.4G + 446M)",
+        "en": "Autonomous ECE 22.06 universal tri-band intercom & radio module (68x36x16mm, 100% software mode switch) with PCBA 09/10, 1000mAh LiPo, keypad, seal, 2x Twin-SMA pigtails & twin stubby antennas (2.4G + 446M)"
       },
       "parts": [
         {
-          "part_id": "pcba_10",
+          "part_id": "pcba_09",
           "qty": 1
         },
         {
@@ -528,6 +564,14 @@
         {
           "part_id": "cable_rf_coax_pigtail_50mm",
           "qty": 2
+        },
+        {
+          "part_id": "antenna_omm_stubby_24g",
+          "qty": 1
+        },
+        {
+          "part_id": "antenna_omm_stubby_446m",
+          "qty": 1
         }
       ]
     },
@@ -535,12 +579,12 @@
       "id": "assembly_omm_helmet_kit_24g",
       "category": "omm_helmet",
       "name": {
-        "de": "OMM Universal Tri-Band Helm-Installationskit (Twin-Stubby 2.4G & 446M)",
-        "en": "OMM Universal Tri-Band Helmet Installation Kit (Twin-Stubby 2.4G & 446M)"
+        "de": "OMM Universal Tri-Band Helm-Installationskit (ECE 22.06 UCS)",
+        "en": "OMM Universal Tri-Band Helmet Installation Kit (ECE 22.06 UCS)"
       },
       "desc": {
-        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
-        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
+        "de": "ECE 22.06 UCS Helmklemmsockel (mit 24 mm Twin-Stubby-Freischnitt), 3M VHB Klebepad, Klemmschrauben, J_HELMET Audio-/PTT-Kabelbaum & 40mm Hi-Fi Helmlautsprecher",
+        "en": "ECE 22.06 UCS helmet cradle (with 24 mm Twin-Stubby cutout), 3M VHB pad, clamp screws, J_HELMET audio/PTT harness & 40mm Hi-Fi helmet speakers"
       },
       "parts": [
         {
@@ -552,19 +596,15 @@
           "qty": 1
         },
         {
+          "part_id": "fastener_din912_m25_6",
+          "qty": 2
+        },
+        {
           "part_id": "cable_omm_helmet_audio_j_helmet",
           "qty": 1
         },
         {
           "part_id": "cots_speakers_and_mic_kit",
-          "qty": 1
-        },
-        {
-          "part_id": "antenna_omm_stubby_24g",
-          "qty": 1
-        },
-        {
-          "part_id": "antenna_omm_stubby_446m",
           "qty": 1
         }
       ]
@@ -573,12 +613,12 @@
       "id": "assembly_omm_helmet_kit_446m",
       "category": "omm_helmet",
       "name": {
-        "de": "OMM Universal Tri-Band Helm-Installationskit (PMR/DMR/Mesh Twin-Stubby)",
-        "en": "OMM Universal Tri-Band Helmet Installation Kit (PMR/DMR/Mesh Twin-Stubby)"
+        "de": "OMM Universal Tri-Band Helm-Installationskit (ECE 22.06 UCS)",
+        "en": "OMM Universal Tri-Band Helmet Installation Kit (ECE 22.06 UCS)"
       },
       "desc": {
-        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
-        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
+        "de": "ECE 22.06 UCS Helmklemmsockel (mit 24 mm Twin-Stubby-Freischnitt), 3M VHB Klebepad, Klemmschrauben, J_HELMET Audio-/PTT-Kabelbaum & 40mm Hi-Fi Helmlautsprecher",
+        "en": "ECE 22.06 UCS helmet cradle (with 24 mm Twin-Stubby cutout), 3M VHB pad, clamp screws, J_HELMET audio/PTT harness & 40mm Hi-Fi helmet speakers"
       },
       "parts": [
         {
@@ -590,19 +630,15 @@
           "qty": 1
         },
         {
+          "part_id": "fastener_din912_m25_6",
+          "qty": 2
+        },
+        {
           "part_id": "cable_omm_helmet_audio_j_helmet",
           "qty": 1
         },
         {
           "part_id": "cots_speakers_and_mic_kit",
-          "qty": 1
-        },
-        {
-          "part_id": "antenna_omm_stubby_24g",
-          "qty": 1
-        },
-        {
-          "part_id": "antenna_omm_stubby_446m",
           "qty": 1
         }
       ]
@@ -669,46 +705,36 @@
         }
       ]
     },
-    "assembly_bsd_mirrors": {
-      "id": "assembly_bsd_mirrors",
-      "category": "addon",
-      "name": {
-        "de": "BSD Spiegelarm-Warnanzeigen (Paar)",
-        "en": "BSD Mirror Arm Alert Indicators (Pair)"
-      },
-      "desc": {
-        "de": "Spiegelarm-Kapseln mit Fresnel-Linsen für bernsteinfarbene Totwinkel-Warnanzeigen",
-        "en": "Mirror stem pods with Fresnel lenses for amber blind spot warning alerts"
-      },
-      "parts": [
-        {
-          "part_id": "part3d_bsd_mirror_upper_pod",
-          "qty": 2
-        },
-        {
-          "part_id": "part3d_bsd_mirror_lower_clamp",
-          "qty": 2
-        },
-        {
-          "part_id": "part3d_bsd_mirror_lens",
-          "qty": 2
-        }
-      ]
-    },
     "assembly_actioncam_dock": {
       "id": "assembly_actioncam_dock",
       "category": "addon",
       "name": {
-        "de": "Handschuhfach 4-Port Hub & Front-Node Cam-Lead",
-        "en": "Glove Box 4-Port Hub & Front Node Cam Lead"
+        "de": "5-Port Handschuhfach Media- & Power-Injection Hub (PCBA 05B)",
+        "en": "5-Port Glovebox Media & Power-Injection Hub (PCBA 05B)"
       },
       "desc": {
-        "de": "4-Port Media- & Power-Injection Hub für Handschuhfach sowie wetterfeste 10W Power-Only Actioncam-Zuleitung direkt am Front-Node",
-        "en": "4-Port media & power-injection hub for glovebox plus weatherproof 10W power-only action cam lead directly at Front Node"
+        "de": "Aktiver 5-Port USB-C Hub (PCBA 05B) im PA12-Gehäuse für Handschuhfach / Cockpit (Skyline OS Host, 30W PD Pass-Through, CarPlay-Dongle, USB-Stick & Actioncam)",
+        "en": "Active 5-port USB-C hub (PCBA 05B) in PA12 enclosure for glovebox / cockpit (Skyline OS host, 30W PD pass-through, CarPlay dongle, media stick & action cam)"
       },
       "parts": [
         {
           "part_id": "part3d_glovebox_hub",
+          "qty": 1
+        },
+        {
+          "part_id": "pcba_05b",
+          "qty": 1
+        },
+        {
+          "part_id": "fastener_din912_m25_6",
+          "qty": 2
+        },
+        {
+          "part_id": "fastener_din934_m25",
+          "qty": 2
+        },
+        {
+          "part_id": "cable_cots_usbc_phone",
           "qty": 1
         }
       ]
@@ -717,25 +743,33 @@
       "id": "assembly_handlebar_controls",
       "category": "addon",
       "name": {
-        "de": "Under-Perch Smart-PTT Lenkertaster",
-        "en": "Under-Perch Smart-PTT Handlebar Switch"
+        "de": "Symmetrische Dual Under-Perch Spiegel-Pods (Paar L/R, PCBA 05C)",
+        "en": "Symmetrical Dual Under-Perch Mirror Pods (Pair L/R, PCBA 05C)"
       },
       "desc": {
-        "de": "Ergonomischer IP67 Mikrotaster unter der Kupplungsarmatur mit Multi-Aktions Gesten",
-        "en": "Ergonomic IP67 micro-switch under clutch perch with multi-action gestures"
+        "de": "Paar (Links & Rechts) 100 % symmetrische Spiegelarm-Pods unter den Spiegelschrauben mit PCBA 05C (38° StVZO Totwinkel-Warn-LEDs & 45° Smart-PTT Daumenwippe)",
+        "en": "Pair (left & right) 100% symmetrical mirror stem pods beneath mirror bolts with PCBA 05C (38° StVZO blind-spot warning LEDs & 45° Smart-PTT thumb rocker)"
       },
       "parts": [
         {
           "part_id": "part3d_under_perch_switch",
-          "qty": 1
+          "qty": 2
         },
         {
-          "part_id": "cots_under_perch_tactile_switch",
-          "qty": 1
+          "part_id": "pcba_05c",
+          "qty": 2
         },
         {
-          "part_id": "part3d_under_perch_mirror_plate",
-          "qty": 1
+          "part_id": "fastener_din912_m2_8",
+          "qty": 2
+        },
+        {
+          "part_id": "fastener_din934_m2",
+          "qty": 2
+        },
+        {
+          "part_id": "cable_mirror_pod_jst_gh_4p",
+          "qty": 2
         }
       ]
     },
@@ -789,32 +823,6 @@
         }
       ]
     },
-    "assembly_tmp117_sensor": {
-      "id": "assembly_tmp117_sensor",
-      "category": "addon",
-      "name": {
-        "de": "TI TMP117 Stealth-Gabelfußsensor",
-        "en": "TI TMP117 Stealth Fork Sensor"
-      },
-      "desc": {
-        "de": "NIST-Präzisions-Eiswarner mit geschirmtem 1.0 m Silikonkabel & aerodynamischem Halter",
-        "en": "NIST precision black ice warning probe with shielded 1.0 m silicone cable & aerodynamic mount"
-      },
-      "parts": [
-        {
-          "part_id": "cots_sensor_tmp117",
-          "qty": 1
-        },
-        {
-          "part_id": "part3d_tmp117_stealth_mount",
-          "qty": 1
-        },
-        {
-          "part_id": "cable_qwiic_1000mm",
-          "qty": 1
-        }
-      ]
-    },
     "assembly_bike_bmw_gs": {
       "id": "assembly_bike_bmw_gs",
       "category": "bike_kit",
@@ -832,15 +840,19 @@
           "qty": 2
         },
         {
+          "part_id": "fastener_din912_m3_16",
+          "qty": 2
+        },
+        {
+          "part_id": "fastener_din934_m3",
+          "qty": 2
+        },
+        {
           "part_id": "cable_adapter_jwpf_bmw_cartool",
           "qty": 1
         },
         {
           "part_id": "cable_adapter_jwpf_bmw_can_splitter",
-          "qty": 1
-        },
-        {
-          "part_id": "cable_adapter_jwpf_qwiic_sh",
           "qty": 1
         }
       ]
@@ -910,10 +922,6 @@
         {
           "part_id": "cable_adapter_jwpf_deutsch_dt2_aux",
           "qty": 1
-        },
-        {
-          "part_id": "cable_adapter_jwpf_qwiic_sh",
-          "qty": 1
         }
       ]
     },
@@ -968,10 +976,6 @@
         {
           "part_id": "cable_adapter_jwpf_deutsch_dt2_aux",
           "qty": 1
-        },
-        {
-          "part_id": "cable_adapter_jwpf_qwiic_sh",
-          "qty": 1
         }
       ]
     },
@@ -1006,11 +1010,19 @@
       },
       "parts": [
         {
+          "part_id": "part3d_car_dashboard_dock",
+          "qty": 1
+        },
+        {
           "part_id": "cable_cockpit_breakout_75cm_car",
           "qty": 1
         },
         {
           "part_id": "cable_support_car_12v_y",
+          "qty": 1
+        },
+        {
+          "part_id": "cable_obd2_flat_jwpf_3p",
           "qty": 1
         },
         {
@@ -1063,24 +1075,6 @@
       "parts": [
         {
           "part_id": "part3d_universal_radar_underfender",
-          "qty": 1
-        }
-      ]
-    },
-    "assembly_booster_omm_pod": {
-      "id": "assembly_booster_omm_pod",
-      "category": "booster",
-      "name": {
-        "de": "Festeinbau 5V RF Booster / LNA Upgrade",
-        "en": "Fixed-Mount 5V RF Booster / LNA Upgrade"
-      },
-      "desc": {
-        "de": "5V Bi-Directional RF Booster-Modul (+12 dB RX Gain), gespeist über Pin 1/2 von J_AUDIO_PWR",
-        "en": "5V bi-directional RF booster module (+12 dB RX gain), powered via pin 1/2 of J_AUDIO_PWR"
-      },
-      "parts": [
-        {
-          "part_id": "cots_omm_booster_5v",
           "qty": 1
         }
       ]
