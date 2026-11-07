@@ -910,20 +910,20 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 
 ---
 
-## 11. PCBA 09: OMM 2.4 GHz Autonomes Intercom-Modul (`openmotorbridge_omm_ucs`)
+## 11. PCBA 09 / 10: OMM Universal Tri-Band & 2.4 GHz Autonomes Intercom-Modul (`openmotorbridge_omm_ucs`)
 
-Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das OpenMotorMesh (OMM) 2.4 GHz Intercom-System. Sie erfüllt die mechanischen und elektrischen Spezifikationen für den autonomen Betrieb in standardisierten ECE 22.06 UCS-Helmmulden sowie als HF-Einsatz im Kassetten-Schlitten (`PCBA 03`).
+Die Platinen **`PCBA 09`** und **`PCBA 10`** nutzen dasselbe vereinheitlichte $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ Layout für das OpenMotorMesh (OMM) UCS-System ($68{,}0 \times 36{,}0 \times 16{,}0\,\text{mm}$ Gehäuse mit **1000-mAh-LiPo-Akku `Typ 603040 / 602840`**). Da jedes Bauteil von `PCBA 09` auf exakt denselben X/Y-Koordinaten sitzt wie auf `PCBA 10`, bildet `PCBA 10` die **Universal Tri-Band Einheitsplatine** (OMM 2.4 GHz Mesh + BT-Mesh/Bridge + 446 MHz Analog PMR446 & Digital DMR Tier I mit **100 % Software-Umschaltung & Kombimodi**), während `PCBA 09` derselben Platine als optionale 2.4-GHz-Bestückungsvariante (ohne `U3` / `J_RF`) entspricht.
 
 ![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Top 3D](../images/pcba/pcba09_omm_intercom_top_3d.png)
-*Abbildung 7.9a: PCBA 09 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U3), IP67 USB-C (J1) und 4-Tasten-Reihe.*
+*Abbildung 7.9a: PCBA 09 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U3/U5), IP67 USB-C (J1) und 4-Tasten-Reihe.*
 
 ![PCBA 09 OMM 2.4 GHz Intercom & UCS Modul Bottom 3D (Dual-Engine)](../images/pcba/pcba09_omm_intercom_bottom_3d.png)
-*Abbildung 7.9b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) – Dedizierter ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Prozessor (U5) und Johanson 2450AT Chipantenne (ANT1) zur CoEx-freien Funkentkopplung.*
+*Abbildung 7.9b: PCBA 09 Bottom 3D (Dual-Engine OMB Lite) – 2-Pin LiPo-Header `BAT1` direkt unterhalb von `J1` USB-C (`Local X=3.45, Y=15.05`), dedizierter ESP32-PICO-V3-02 Bluetooth Classic/BLE Co-Prozessor (U5), Johanson 2450AT Chipantenne (ANT1) und 6-Pin Helm-Header `J_HELMET` rechts außen (`Local X=57.05, Y=14.70`).*
 
 ### 11.1 Technische Platinen-Kenndaten & Lagenaufbau
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
-* **Lagenaufbau:** 2-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (1 oz), ENIG-Goldfinish (Electroless Nickel Immersion Gold).
-* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im Gehäuse.
+* **Lagenaufbau:** 2/4-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (1 oz), ENIG-Goldfinish (Electroless Nickel Immersion Gold).
+* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im $68{,}0 \times 36{,}0 \times 16{,}0\,\text{mm}$ UCS-Gehäuse.
 
 ### 11.2 Bestückung & Schaltkreis-Architektur
 
@@ -932,23 +932,23 @@ Die Platine **`PCBA 09`** ist die universelle Open-Source-Hardware für das Open
    * Unterstützt 2.4 GHz Wi-Fi 6 ($802.11\text{ax}$), IEEE 802.15.4 (deterministischer TDMA Mesh-Stack) und Bluetooth 5.3 LE / LE Audio LC3.
 2. **Power-Management & Lade-IC (`U2`):**
    * **Texas Instruments BQ24075RGTR** (QFN-16 3x3mm) mit Dynamic Power Path Management (DPPM).
-   * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen 600-mAh-LiPo-Akku in $< 10\,\mu\text{s}$ ohne MCU-Reboot. Der interne Akku dient im Kassettenbetrieb als unterbrechungsfreie Stromversorgung (USV).
+   * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen **1000-mAh-LiPo-Akku (`Typ 603040 / 602840`, $40 \times 28 \times 6{,}0\,\text{mm}$, $3{,}7\,\text{Wh}$)** in $< 10\,\mu\text{s}$ ohne MCU-Reboot (13–18 h autarke Helmlaufzeit). Der interne Akku dient im Kassettenbetrieb als unterbrechungsfreie Stromversorgung (USV).
    * Einstellbarer Ladestrom ($500\,\text{mA}$), JEITA-konforme Temperaturüberwachung über NTC-Thermistor ($10\,\text{k}\Omega$).
 3. **Audio-Frontend Stereo Codec (`U4`):**
    * **Everest Semi ES8388** (QFN-28 4x4mm): Ultra-Low-Power Stereo Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
    * Getrennte linke und rechte Kopfhörer-Treiber ($2\times 45\,\text{mW}$ @ $16\,\Omega$ / $25\,\text{mW}$ @ $32\,\Omega$) für echten Stereo-Klang (A2DP-Musik, räumliche Navigationshinweise, LE Audio).
    * Rauscharmer Differenz-Mikrofon-Vorverstärker ($+0\dots +30\,\text{dB}$ Gain) mit programmierbarer interner `MICBIAS`-Erzeugung ($2{,}0\dots 2{,}8\,\text{V}$) für Schwanenhals- und Klebemikrofone.
-4. **2.4-GHz-HF-Antennensystem & Dual-Engine:**
-   * **Host MCU (`U1`):** Nutzt direkt den werkseitig integrierten U.FL-Goldport auf dem `ESP32-C6-MINI-1U` Modul. Über ein kurzes $50\,\text{mm}$ RG-178/1.13mm Mikro-Koaxialpigtail wird das Signal zur wasserdichten IP67 SMA-Bulkhead-Durchführung an der Gehäusestirnseite geführt. (Die frühere redundante Zweitbuchse auf der Leiterplatte wurde ersatzlos gelöscht).
-   * **Helm-Default:** Im Helmbetrieb wird direkt die ultrakompakte $38\,\text{mm}$ kurze 2.4 GHz Rubber-Duck Stummelantenne aufgeschraubt (Rundstrahl-Helix, $+2{,}0\dots +2{,}5\,\text{dBi}$, null Helmbüffeln). Im Kassetten-Betrieb am Motorrad verbindet ein Koaxialkabel die SMA-Buchse mit einer fahrzeugfesten Außenantenne.
-   * **Bluetooth Co-Prozessor (`U5`):** Der `ESP32-PICO-V3-02` arbeitet auf eine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`, SMD 3216) für Nahfeld-Kopplungen zum Smartphone oder Cockpit-Display.
+4. **2.4-GHz-HF-Antennensystem & Dual-/Triple-Engine:**
+   * **Host MCU (`U1`):** Nutzt direkt den werkseitig integrierten U.FL-Goldport auf dem `ESP32-C6-MINI-1U` Modul.
+   * **Helm-Default:** Im Helmbetrieb wird die ultrakompakte Stummelantenne bzw. interne FPC-Antenne genutzt.
+   * **Bluetooth Co-Prozessor (`U5/U6`):** Der `ESP32-PICO-V3-02` arbeitet auf eine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`, SMD 3216) für Nahfeld-Kopplungen zum Smartphone, Cardo/Sena-Bridge oder Cockpit-Display.
 5. **Bedienung & Sensorik:**
    * 4x taktile IP67-Mikrotaster (`SW1` bis `SW4`, C&K KMT0 / Alps SKRK) auf `F.Cu`.
    * 1x RGB Status-LED (`D1`, WS2812B-2020) zur Einkopplung in den Gehäuse-Lichtleiter.
-6. **Schnittstellen & Steckverbinder:**
-   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) bündig an der Stirnkante mit USBLC6-2SC6 TVS-ESD-Schutzarray (Laden unterwegs via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt).
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` ($X=127{,}05, Y=99{,}70\,\text{mm}$ in KiCad, vertikaler Steckanschluss für zugentlastete Kabelführung direkt in die Helmmulde) im hinteren Gehäuseabteil gegenüber USB-C. Führt reines, brummfreies Audio ins Helminnere.
-   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` ($X=79{,}40, Y=112{,}00\,\text{mm}$) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
+6. **Schnittstellen & Symmetrische Steckverbinder-Anordnung (`B.Cu`):**
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) auf `F.Cu` bündig an der linken Stirnkante (`X=73.50, Y=100.00`) mit USBLC6-2SC6 TVS-ESD-Schutzarray (Laden unterwegs via Powerbank/Front-Node, WebUSB DFU Flashing, Kassetten-Einschubkontakt).
+   * **`BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` direkt unterhalb des USB-C Ports `J1` (`KiCad X=73.45, Y=100.05 mm` / `Local X=3.45, Y=15.05 mm`, `rot = -90°`)** zum **1S LiPo Pouch-Akku (1000 mAh `Typ 603040 / 602840`, $40 \times 28 \times 6{,}0\,\text{mm}$ mit integriertem PCM)**.
+   * **`J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` symmetrisch gegenüber am rechten Platinenrand (`KiCad X=127.05, Y=99.70 mm` / `Local X=57.05, Y=14.70 mm`, `rot = +90°`)**. Führt reines, brummfreies Audio ins Helminnere. Zwischen `BAT1` und `J_HELMET` bleibt ein **komplett freier $48{,}0 \times 30{,}0\,\text{mm}$ Zentralbereich (`Local X = 6.0 .. 54.0 mm`)** für Transceiver & 1000-mAh-Akku, sodass beide Stecker zu 100 % unverdeckt bleiben.
 
 ### 11.3 Vollständige GPIO-Pinbelegung (ESP32-C6-MINI-1U)
 
@@ -1003,58 +1003,55 @@ Der auf der Platinenunterseite (`B.Cu`) platzierte 6-polige Header `J_HELMET` (J
 
 ---
 
-## 12. PCBA 10: OMM 446 Analog & Digital PMR446 Intercom-Modul (`openmotorbridge_omm446_ucs`)
+## 12. PCBA 10: OMM Universal Tri-Band (2.4 GHz Mesh + BT-Mesh/Bridge + 446 MHz PMR/DMR) Intercom-Modul (`openmotorbridge_omm446_ucs`)
 
-Die Platine **`PCBA 10`** ist das universelle Open-Source-Hardwaremodul für den lizenzfreien Jedermannfunk im 446-MHz-Band. Es löst das Dilemma unhandlicher Handfunkgeräte (Midland G9 Pro etc. passen physisch in keine $100 \times 50 \times 30\,\text{mm}$ Kassette) und teurer, unwirtschaftlicher Teardowns (z. B. Midland D-10 DMR) vollständig:
-* **Formfaktor-Gleichheit:** Exakt identische Außenmaße ($60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$) und Montagepunkte wie das 2.4-GHz-Modul `PCBA 09`.
+Die Platine **`PCBA 10`** ist das vereinheitlichte **Universal Tri-Band Open-Source-Hardwaremodul**, das sämtliche Komponenten von `PCBA 09` (2.4 GHz OMM-Mesh auf `U1` + Bluetooth Classic/BLE Co-Prozessor auf `U6`) auf exakt denselben X/Y-Koordinaten enthält und zusätzlich den lizenzfreien Jedermannfunk im 446-MHz-Band (`U3` NiceRF SA818-DMR + `J_RF` U.FL) integriert. Damit erfolgt die Umschaltung zwischen **OMM 2.4 GHz Mesh**, **BT-Mesh / Bridge**, **446 MHz Analog PMR446**, **446 MHz Digital DMR Tier I** sowie simultanen **Kombimodi** zu **100 % rein per Software**:
+* **Formfaktor-Gleichheit:** Exakt identische Außenmaße ($60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$) und Montagepunkte wie `PCBA 09` im $68{,}0 \times 36{,}0 \times 16{,}0\,\text{mm}$ ECE 22.06 UCS-Gehäuse.
 * **Universal-Einsatz:** Passt mechanisch und elektrisch sowohl in standardisierte ECE 22.06 UCS-Helmmulden als auch in den Kassetten-Schlitten (`PCBA 03`) am Motorrad.
-* **Dual-Mode HF-Funk:** Vollwertiges Analog-FM (16 PMR446 Kanäle, CTCSS/DCS) und Digital-DMR Tier I (16 digitale Kanäle, TDMA 4FSK, glasklare Sprache ohne Rauschen).
+* **Tri-Band HF-Funk:** 2.4 GHz OMM HD-Mesh (`U1`), Bluetooth Classic HFP/A2DP/Bridge (`U6`), Analog-FM (16 PMR446 Kanäle, CTCSS/DCS) und Digital-DMR Tier I (16 digitale Kanäle, TDMA 4FSK, glasklare Sprache ohne Rauschen auf `U3`).
 
 ![PCBA 10 OMM 446 PMR446 Intercom Modul Top 3D](../images/pcba/pcba10_omm446_intercom_top_3d.png)
-*Abbildung 7.10a: PCBA 10 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U5), IP67 USB-C (J1) und 4-Tasten-Reihe.*
+*Abbildung 7.10a: PCBA 10 Top 3D (Aktuelles Routing & Placement) – ESP32-C6 Host-MCU (U1), ES8388 Audio-Codec (U4), BQ24075 PMIC (U2), ME6211 3.3V LDO (U5), IP67 USB-C (J1), U.FL Buchse (J_RF) und 4-Tasten-Reihe.*
 
 ![PCBA 10 OMM 446 PMR446 Intercom Modul Bottom 3D](../images/pcba/pcba10_omm446_intercom_bottom_3d.png)
-*Abbildung 7.10b: PCBA 10 Bottom 3D (NiceRF SA818 & Dual-Engine) – NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (U6) und Johanson 2450AT Chipantenne (ANT1).*
+*Abbildung 7.10b: PCBA 10 Bottom 3D (Universal Tri-Band: SA818-DMR & Dual-Engine) – 2-Pin LiPo-Header `BAT1` direkt unter `J1` USB-C (`Local X=3.45, Y=15.05`), NiceRF SA818-DMR Transceiver (U3), ESP32-PICO-V3-02 Bluetooth Co-Prozessor (U6), Johanson 2450AT Chipantenne (ANT1) und 6-Pin Helm-Header `J_HELMET` rechts außen (`Local X=57.05, Y=14.70`).*
 
 ### 12.1 Technische Platinen-Kenndaten & Lagenaufbau
 * **Abmessungen:** $60{,}0 \times 30{,}0 \times 1{,}0\,\text{mm}$ ($R = 2{,}5\,\text{mm}$ Kantenradius).
 * **Lagenaufbau:** 4-Lagen FR-4 High-TG150, $1{,}0\,\text{mm}$ Materialstärke, $35\,\mu\text{m}$ Cu (Außenlagen) / $17{,}5\,\mu\text{m}$ Cu (Innenlagen für GND-Shielding und Power-Planes), ENIG-Goldfinish.
-* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im 3D-Druck-Gehäuse.
+* **Befestigung:** 4x M2-Montagelöcher ($\varnothing 2{,}2\,\text{mm}$) mit $52{,}0 \times 22{,}0\,\text{mm}$ Rastermaß für formschlüssige DIN 934 M2 Mutterntaschen im $68{,}0 \times 36{,}0 \times 16{,}0\,\text{mm}$ 3D-Druck-Gehäuse.
 
 ### 12.2 Bestückung & Schaltkreis-Architektur
 
-1. **Dual-Mode Funktransceiver-Modul (`U3`):**
+1. **Dual-Mode 446-MHz-Funktransceiver-Modul (`U3`):**
    * **NiceRF SA818-DMR** (Ultrakompaktes $446\,\text{MHz}$ Transceiver-Modul mit integriertem DSP, CMX7141 Baseband und PA):
      * **Analog PMR446:** 16 Kanäle ($446{,}00625\dots 446{,}19375\,\text{MHz}$), $12{,}5\,\text{kHz}$ Kanalraster, 38 CTCSS-Subtöne und 83 DCS-Digitalcodes.
      * **Digital DMR Tier I:** ETSI TS 102 361-1 konform, 2-Slot TDMA 4FSK Modulation, Color Code 1–16, Direktmodus (DMO) ohne Repeater.
    * **Dual-Power Umschaltung (Software- & Hardware-gesteuert):**
      * **0,2 W ERP (Helm-Modus / SAR-Safe):** Aktiv bei Standalone-Betrieb in der Helmmulde. Minimiert HF-Absorption am Kopf und thermische Verlustleistung (Reichweite ca. 1,5–2,5 km).
      * **0,5 W ERP (Bike-Modus / High-Power):** Aktiv bei Erkennung des Kassetten-Schlittens via I2C/GPIO. Schöpft das gesetzliche PMR446-Limit voll aus (Reichweite ca. 3–6 km im Freifeld).
-2. **Host-Mikrocontroller & Steuer-MCU (`U1`):**
+2. **Host-Mikrocontroller, 2.4 GHz Mesh-Engine & Steuer-MCU (`U1`):**
    * **Espressif ESP32-C6-MINI-1U** (32-Bit RISC-V Single-Core @ 160 MHz):
-     * Steuert das SA818-DMR per High-Speed UART über AT-Kommandos (Frequenz, CTCSS, DMR Color Code, Squelch, RF Power).
-     * Stellt Bluetooth 5.3 LE zur Verfügung für drahtlose Konfiguration via Smartphone-App und WebBluetooth.
-     * Unterstützt WebUSB DFU Flashing über den USB-C Port.
-3. **Power-Management mit unterbrechungsfreier USV (`U2`):**
+     * Betreibt das **2.4 GHz OMM HD-Mesh** (Wi-Fi 6 / 802.15.4 TDMA) über den integrierten U.FL-Port und steuert parallel das SA818-DMR per UART über AT-Kommandos (Frequenz, CTCSS, DMR Color Code, Squelch, RF Power).
+     * Unterstützt WebUSB DFU Flashing und digitales USB-Audio über den USB-C Port.
+3. **Power-Management mit unterbrechungsfreier 1000-mAh-USV (`U2`):**
    * **Texas Instruments BQ24075RGTR** mit Dynamic Power Path Management (DPPM).
    * Ermöglicht das **Laden während des Betriebs** über USB-C (5V Bordnetz / Powerbank) bei gleichzeitig stabiler 3.3V- und PA-Speisung.
-   * Fällt die externe 5V-Versorgung ab (z. B. Zündung aus oder Kassettenwechsel), übernimmt der interne 600-mAh-LiPo-Akku unterbrechungsfrei in $< 10\,\mu\text{s}$ als USV (Pufferzeit ca. 6–8 Stunden reiner Funkempfang).
+   * Fällt die externe 5V-Versorgung ab (z. B. Zündung aus oder Kassettenwechsel), übernimmt der interne **1000-mAh-LiPo-Akku (`Typ 603040 / 602840`, $40 \times 28 \times 6{,}0\,\text{mm}$, $3{,}7\,\text{Wh}$)** unterbrechungsfrei in $< 10\,\mu\text{s}$ als USV (**13–18 Stunden** autarke Helmlaufzeit).
 4. **Audio-Frontend Stereo Codec (`U4`):**
-   * **Everest Semi ES8388**: Verarbeitet das Audio-Signal des SA818-DMR analog und digital.
-   * Stereo Headphone-Verstärker für Helm-Lautsprecher.
+   * **Everest Semi ES8388**: Verarbeitet und mischt die Audio-Signale von 2.4 GHz Mesh (`U1` I2S), Bluetooth (`U6`) und SA818-DMR (`U3` `LIN2` / `ROUT2`) vollduplex.
+   * Stereo Headphone-Verstärker für Helm-Lautsprecher (`LOUT1` / `ROUT1`).
    * Differenzieller Mikrofon-Eingang mit zuschaltbarem Windgeräuschfilter und integriertem Noise-Gate.
-5. **Antennensystem (Kompakte Wendel-Stummelantenne & externer Koax):**
-   * **Dual-Engine HF-Entkopplung:**
-     - **PMR/DMR HF-Pfad:** Der HF-Ausgang des NiceRF SA818-DMR speist über ein Tiefpass-/Bandpassfilter die U.FL-Buchse `J_RF` (`B.Cu`, $X = 110{,}5, Y = 87{,}0\,\text{mm}$). Ein paralleles Lötpad entfällt zugunsten des 100 % lötfreien Stecksystems.
-     - Ein kurzes $50\,\text{mm}$ Mikro-Koaxialpigtail (RG-178 / 1.13mm) führt von `J_RF` zur wasserdichten SMA-Bulkhead-Buchse (IP67 mit EPDM O-Ring) an der Gehäusestirnseite.
-     - **Helm-Default:** Im Helmbetrieb wird die $48\,\text{mm}$ kurze 446 MHz Wendel-Stummelantenne aufgeschraubt (ca. $0\dots +1{,}5\,\text{dBi}$, $1{,}5\dots 2{,}5\,\text{km}$ Reichweite). Im Kassettenbetrieb im Pod führt ein Koaxialkabel zur Außenantenne am Motorrad ($3\dots 6\,\text{km}$).
-     - **Bluetooth Co-Prozessor (`U6`):** Der `ESP32-PICO-V3-02` arbeitet auf seine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`) für Nahfeld-Kopplungen.
-6. **Bedienelemente & Steckverbinder:**
-   * 4x taktile Mikrotaster (`SW1` bis `SW4`): PTT (Push-to-Talk / MFB), Mode (Analog/DMR Toggle), Ch+, Ch-.
-   * 1x WS2812B-2020 RGB Status-LED (`D1`, RX Grün, TX Rot, DMR Blau, Chg Gelb).
-   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) für 5V Laden, WebUSB DFU und Kassetten-Einschub.
-   * `J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` ($X=127{,}05, Y=99{,}70\,\text{mm}$ in KiCad, vertikaler Steckanschluss für zugentlastete Kabelführung direkt in die Helmmulde) – identische Belegung und Platzierung wie PCBA 09.
-   * `BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` ($X=79{,}40, Y=112{,}00\,\text{mm}$) zum 1S LiPo Pouch-Akku (600 mAh mit integriertem PCM).
+5. **Tri-Band Antennensystem (Twin-SMA an $+X$-Stirnseite bei $Y=12{,}5\,\text{mm}$ & $Y=23{,}5\,\text{mm}$):**
+   * **2.4 GHz OMM-Mesh-Pfad (`SMA_24G` bei $Y = 12{,}5\,\text{mm}$, $Z = 10{,}5\,\text{mm}$):** Nutzt den integrierten U.FL-Port auf dem `ESP32-C6-MINI-1U` (`U1`) über ein $50\,\text{mm}$ Koax-Pigtail zur ersten IP67 SMA-Bulkhead-Buchse in der Trennebene ($38\,\text{mm}$ 2.4-GHz-Stummelantenne am Helm bzw. Pod-Antenne).
+   * **PMR/DMR 446-MHz-Pfad (`SMA_446` bei $Y = 23{,}5\,\text{mm}$, $Z = 10{,}5\,\text{mm}$):** Der HF-Ausgang des NiceRF SA818-DMR speist die U.FL-Buchse `J_RF` (`F.Cu`, $X = 110{,}2, Y = 113{,}5\,\text{mm}$). Ein zweites $50\,\text{mm}$ Koax-Pigtail führt ohne Leitungskreuzung zur zweiten IP67 SMA-Bulkhead-Buchse ($48\,\text{mm}$ 446-MHz-Stummelantenne am Helm bzw. 446-MHz-Pod-Antenne / 5V-Booster). Beide SMA-Buchsen sitzen fest in der Unterschale (100 % kabelloser Deckel beim Aufschrauben) und ragen bei $Z = 10{,}5\,\text{mm}$ frei über den UCS-Helmschachtrand ($Z = 5{,}2\,\text{mm}$) hinaus.
+   * **Bluetooth Co-Prozessor (`U6`):** Der `ESP32-PICO-V3-02` arbeitet auf seine eigene Johanson 2450AT Keramik-Chipantenne (`ANT1`) für Nahfeld-Kopplungen und Cardo/Sena-Bridge.
+6. **Bedienelemente & Symmetrische Steckverbinder-Anordnung (`B.Cu`):**
+   * 4x taktile Mikrotaster (`SW1` bis `SW4`): PTT / MFB, Mode (Software-Umschaltung 2.4G / BT / Analog PMR / DMR / Kombi), Ch+/Vol+, Ch-/Vol-.
+   * 1x WS2812B-2020 RGB Status-LED (`D1`, RX Grün, TX Rot, DMR Blau, Mesh Cyan, Chg Gelb).
+   * `J1`: Wasserdichte IP67 USB-C Buchse (16-Pin) auf `F.Cu` (`X=73.50, Y=100.00`) für 5V Laden, WebUSB DFU und Kassetten-Einschub.
+   * **`BAT1`: 2-polige JST-SH Micro-Buchse (`BM02B-SRSS-TB` Vertikal) auf `B.Cu` direkt unterhalb des USB-C Ports `J1` (`KiCad X=73.45, Y=100.05 mm` / `Local X=3.45, Y=15.05 mm`, `rot = -90°`)** zum **1S LiPo Pouch-Akku (1000 mAh `Typ 603040 / 602840`, $40 \times 28 \times 6{,}0\,\text{mm}$ mit integriertem PCM)**.
+   * **`J_HELMET`: 6-Pin JST-SH 1.0mm SMD Vertikal-Header (`BM06B-SRSS-TB`) auf `B.Cu` symmetrisch gegenüber am rechten Platinenrand (`KiCad X=127.05, Y=99.70 mm` / `Local X=57.05, Y=14.70 mm`, `rot = +90°`)** – identische Belegung und Platzierung wie PCBA 09. Beide Stecker auf `B.Cu` liegen außerhalb des $48{,}0 \times 30{,}0\,\text{mm}$ Zentralfachs (`Local X = 6.0 .. 54.0 mm`) und bleiben zu 100 % frei zugänglich.
 
 ### 12.3 Vollständige GPIO-Pinbelegung (ESP32-C6 zu SA818-DMR & Peripherie)
 

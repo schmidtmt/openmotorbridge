@@ -195,7 +195,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **`ANT1`** | 2450AT18x100 | SMD 3216 (1.2x3.2mm) | 2.45 GHz Ceramic Chip Antenna for ESP32-PICO-V3-02 Bluetooth Co-Processor (Phone / Display link) | `C2909988` |
 | **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V charging on the go via powerbank/bike, WebUSB DFU, pod dock) | `C2765186` |
 | **`J_HELMET`**| SM06B-SRSS-TB | 6-Pin JST-SH 1.0mm Horiz.| Internal Helmet Audio & PTT port on B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) | `C136657` |
-| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection on B.Cu (directly under `J1` USB-C at `Local 3.45, 15.05`) to internal 1000-mAh LiPo pouch cell (`Type 603040 / 602840`, with PCM) | `C2902341` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (Charge, Mesh channel, pairing indicator) | `C2843785` |
 | **`D2`** | USBLC6-2SC6 | SOT-23-6 | High-speed TVS diode array for USB D+/D- and VBUS ESD protection | `C7519` |
 | **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (Power, Mesh, Vol+, Vol-) | `C318884` |
@@ -217,7 +217,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **`J1`** | TYPE-C-31-M-12 | SMT/THT IP67 | Waterproof 16-Pin USB-C Receptacle (5V DC power, charging on the go, WebUSB DFU, pod dock) | `C2765186` |
 | **`J_HELMET`**| SM06B-SRSS-TB | 6-Pin JST-SH 1.0mm Horiz.| Internal Helmet Audio & PTT port on B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) | `C136657` |
 | **`J_RF`** | U.FL-R-SMT-1 | SMD U.FL Socket (B.Cu)| 50 Ohm U.FL RF connector for coax pigtail to waterproof SMA bulkhead or bike antenna | `C14899` |
-| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection to internal 600-mAh LiPo pouch cell (with PCM) | `C2902341` |
+| **`BAT1`** | BM02B-SRSS-TB | SMD 1.0mm pitch | Connection on B.Cu (directly under `J1` USB-C at `Local 3.45, 15.05`) to internal 1000-mAh LiPo pouch cell (`Type 603040 / 602840`, with PCM) | `C2902341` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB Status LED (RX Green, TX Red, DMR Blue, Charging Yellow) | `C2843785` |
 | **`D2`** | USBLC6-2SC6 | SOT-23-6 | High-speed TVS diode array for USB D+/D- and VBUS ESD protection | `C7519` |
 | **`SW1..4`** | EVQ-P2 / KMT0 | SMD 3.5x2.8mm | 4x Tactile IP67 micro-switches (PTT, Mode, Ch+, Ch-) | `C318884` |
@@ -503,8 +503,8 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Gore ePTFE Pressure Vent** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 pcs | Pressure equalization & condensation prevention in Central Box lid pocket |
 | **OMM Silicone Gasket Cord Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-flexible housing seal for OMM UCS enclosure (approx. 22 cm per module, IP67) |
 | **Silicone Sealing Cord Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 1.4 m | Continuous sealing cord for Central Box (40 cm) & Front Node (30 cm) groove for IP67 |
+| **1S LiPo Pouch Battery 1000 mAh (OMM)** | 3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH | EEMB / Web | 2 pcs | Internal 1000 mAh battery for universal OMM Tri-Band UCS module (13-18 h standalone helmet runtime, sits cleanly between BAT1 and J_HELMET) |
 | **1S LiPo Pouch Battery 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin | EEMB / Web | 1 pcs | Flat LiPo pouch for Smart Keyfob (100% solderless with JST-ACH 2P plug) |
-| **1S LiPo Pouch Battery 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 pcs | Internal battery for OMM UCS modules (12-14 h standalone helmet runtime) |
 | **4-Pin IP67 Magnetic Breakaway Coupler (Pod Bus)** | 4-Pin Automotive Magnetkupplung (VCC_BUS, GND, USB_D-, USB_D+) mit EPDM-Flanschdichtung | COTS Automotive / Web | 2 pcs | Tool-free 4-pin IP67 bus feed-through for Pod 1 & Pod 2 (30W USB-PD + USB 2.0 data) |
 | **5V DC Miniature Solenoid (JF-0530B Cold-Start)** | JF-0530B / Ø 6.5 x 12 mm, Hub 2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 4 pcs | Mechatronic cold-start pushers on universal slide rail to wake Sena/Cardo units (2x per pod) |
 | **Helmet Speakers & ECM Mic Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-play audio peripherals for OMM UCS headset inside helmet |
@@ -513,6 +513,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |
 | **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 pcs | Automotive mmWave radar for blind spot detection & forward/rear collision alert |
 | **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 pcs | Compact helmet stubby antenna for PCBA 09 (zero buffeting or wind noise) |
+| **OMM 446 MHz Stubby Antenna** | 446 MHz Helical-Stummelantenne (48 mm, SMA-Male, PMR/DMR) | COTS Standard | 1 pcs | Compact helical stubby antenna for PCBA 10 (1.5-2.5 km range) |
 | **Taoglas FXP524 V2X Flex Antenna** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 pcs | Car-to-X / ITS-G5 RF uplink for ESP32-C5 sub-MCU on PCBA 08 |
 | **Taoglas FXP73 2.4 GHz FPC Flex Antenna** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 pcs | Internal antenna along cartridge sled cavity for sealed pod operation |
 | **Taoglas FXP895 LoRa Flex Antenna** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 pcs | Long-range convoy mesh for SX1262 LoRa in Central Box lid cavity |
@@ -524,7 +525,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **J_AUDIO_PWR Cable Sena SPIDER X** | 8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 pcs | Direct-DC power (3.85V) & stereo audio with Kelvin grounding plugged straight from top (zero pogo-pins) |
 | **Automotive Fuse Holder & 2A Fuse** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 pcs | Direct battery terminal protection (KL30) |
 | **OMM Helmet Audio & PTT Harness (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 pcs | Hum-free headset & mic harness for helmet interior (pure 0V DC signals) |
-| **RF Micro-Coax Pigtail (U.FL to SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 pcs | Watertight enclosure bulkhead feed-through for OMM UCS antenna |
+| **RF Micro-Coax Pigtail (U.FL to SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 4 pcs | Watertight enclosure bulkhead feed-through for OMM UCS antenna |
 | **Radar 4-Wire Bus Cable (PUR)** | 4x 0.34 mm² (AWG22) mit 4-Pin JST-GH Stecker auf PCBA 08 J1 | COTS Standard | 1 pcs | 4-wire link for rear radar PCBA 08 (12V_RADAR, GND, CAN/UART) on Branch 4 |
 | **Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors |
 | **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |

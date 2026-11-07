@@ -199,7 +199,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`ANT1`** | 2450AT18x100 | Johanson Tech | SMD 3216 (1.2x3.2mm) | `C2909988` | 2.45 GHz Keramik-Chipantenne für ESP32-PICO-V3-02 Bluetooth Co-Prozessor (Nahfeld-Kopplung Smartphone/Display) |
 | **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Unterwegs-Laden via Powerbank/Front-Node, WebUSB DFU Flashing, Pod-Buchtkontakt) |
 | **`J_HELMET`**| SM06B-SRSS-TB | JST | 6-Pin JST-SH 1.0mm SMD Horiz. | `C136657` | Interner Helm-Audio & PTT-Port auf B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) |
-| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung auf B.Cu (direkt unter `J1` USB-C bei `Local 3.45, 15.05`) zum internen 1000-mAh-LiPo Pouch-Akku (`Typ 603040 / 602840`, mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (Ladezustand, Mesh-Kanal, Pairing-Indikator) |
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
 | **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (Power, Mesh, Vol+, Vol-) |
@@ -221,7 +221,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **`J1`** | TYPE-C-31-M-12 | Korean HRO | SMT/THT IP67 | `C2765186` | Wasserdichte 16-Pin USB-C Buchse (5V Unterwegs-Laden, WebUSB DFU, Pod-Buchtkontakt) |
 | **`J_HELMET`**| SM06B-SRSS-TB | JST | 6-Pin JST-SH 1.0mm SMD Horiz. | `C136657` | Interner Helm-Audio & PTT-Port auf B.Cu (HP_OUT_L, HP_OUT_R, AGND_SPK, MIC_IN+, AGND_MIC, BTN_PTT; 0V DC) |
 | **`J_RF`** | U.FL-R-SMT-1 | Hirose | SMD U.FL Buchse (B.Cu) | `C14899` | 50 Ohm U.FL Buchse für Koax-Pigtail zur wasserdichten SMA-Durchführung oder Bike-Außenantenne |
-| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung zum internen 600-mAh-LiPo Pouch-Akku (mit PCM) |
+| **`BAT1`** | BM02B-SRSS-TB | JST | SMD 1.0mm pitch | `C2902341` | Steckverbindung auf B.Cu (direkt unter `J1` USB-C bei `Local 3.45, 15.05`) zum internen 1000-mAh-LiPo Pouch-Akku (`Typ 603040 / 602840`, mit PCM) |
 | **`D1`** | WS2812B-2020 | Worldsemi | SMD 2020 | `C2843785` | RGB-Status-LED (RX Grün, TX Rot, DMR Blau, Chg Gelb) |
 | **`D2`** | USBLC6-2SC6 | STMicroelectronics | SOT-23-6 | `C7519` | High-Speed TVS-Diodenarray für USB D+/D- und VBUS ESD-Schutz |
 | **`SW1..4`** | EVQ-P2 / KMT0 | Panasonic / C&K | SMD 3.5x2.8mm | `C318884` | 4x taktile IP67 Mikrotaster (PTT, Mode, Ch+, Ch-) |
@@ -506,8 +506,8 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Gore ePTFE Druckausgleichs-Ventil** | Ø 12 mm selbstklebendes ePTFE Membran-Patch IP68 | Gore / COTS | 1 Stk. | Druckausgleich & Kondenswasserschutz in der Deckeltasche der Zentralbox |
 | **OMM Silikon-Profildichtung Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-elastische Gehäusedichtung für OMM UCS Gehäuse (ca. 22 cm pro Modul, IP67) |
 | **Silikon-Dichtschnur Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 1.4 m | Endlos-Dichtschnur für Gehäusenut der Zentralbox (40 cm) & Front-Node (30 cm) für IP67 |
+| **1S LiPo Pouch-Akku 1000 mAh (OMM)** | 3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH | EEMB / Web | 2 Stk. | Integrierter 1000-mAh-Akku für das universelle OMM Tri-Band UCS Modul (13-18 h Standalone-Betrieb am Helm, sitzt frei zwischen BAT1 und J_HELMET) |
 | **1S LiPo Pouch-Akku 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin | EEMB / Web | 1 Stk. | Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-ACH 2P Stecker) |
-| **1S LiPo Pouch-Akku 600 mAh (OMM)** | 3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH | EEMB / Web | 2 Stk. | Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm) |
 | **4-Pin IP67 Magnet-Abreißkupplung (Pod-Bus)** | 4-Pin Automotive Magnetkupplung (VCC_BUS, GND, USB_D-, USB_D+) mit EPDM-Flanschdichtung | COTS Automotive / Web | 2 Stk. | Werkzeuglose 4-Pin IP67 Bus-Durchführung für Pod 1 & Pod 2 (30W USB-PD + USB 2.0 Daten) |
 | **5V DC Miniatur-Hubmagnet (JF-0530B Kaltstart)** | JF-0530B / Ø 6.5 x 12 mm, Hub 2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 4 Stk. | Mechatronische Kaltstart-Drücker auf Universal-Schlittenschiene zum Aufwecken von Sena/Cardo (2x pro Pod) |
 | **Helmlautsprecher & ECM-Mikrofon Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-Play Audio-Peripherie für OMM UCS Headset am Helm |
@@ -516,6 +516,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **Qi Induktions-Empfängerspule Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 Stk. | Ultra-flache Qi-Empfängerspule für Smart-Keyfob (100 % lötfrei angesteckt) |
 | **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 Stk. | Automotive Millimeterwellen-Radar für Totwinkelerkennung & Kollisionswarnung |
 | **OMM 2.4 GHz Stummelantenne** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 1 Stk. | Kompakte Helmmontage-Antenne für PCBA 09 (völlig flatter- & pfeiffrei) |
+| **OMM 446 MHz Stummelantenne** | 446 MHz Helical-Stummelantenne (48 mm, SMA-Male, PMR/DMR) | COTS Standard | 1 Stk. | Kompakte gewickelte Wendelantenne für PCBA 10 (1.5-2.5 km Reichweite) |
 | **Taoglas FXP524 V2X Flexantenne** | 5.9 GHz Flex-Patch (+3.5 dBi) mit U.FL Buchse (50 mm) | Taoglas / Mouser | 1 Stk. | Car-to-X / ITS-G5 Funk-Uplink für ESP32-C5 Sub-MCU auf PCBA 08 |
 | **Taoglas FXP73 2.4 GHz FPC Flexantenne** | 2.4 GHz FPC Klebeantenne (+2.5 dBi) mit U.FL (50 mm) | Taoglas / Mouser | 1 Stk. | Interne Antenne im Längsschacht des Kassetten-Schlittens für Pod-Betrieb |
 | **Taoglas FXP895 LoRa Flexantenne** | 868 MHz Flex-Dipol (+2.0 dBi) U.FL (100 mm) | Taoglas / Mouser | 1 Stk. | Weitbereichs-Kolonnenfunk für SX1262 LoRa in der Deckeltasche der Zentralbox |
@@ -527,7 +528,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **J_AUDIO_PWR Kabel Sena SPIDER X** | 8-Pin JST-SH (Top-Entry) auf 3-fach Pigtail (Direct-DC, 2.5mm Mic, 3.5mm Spk, 8 cm) | COTS Standard | 1 Stk. | Direct-DC Speisung (3.85V) & Stereo-Audio mit Kelvin-Grounding direkt von oben gesteckt (null Pogo-Pins) |
 | **KFZ-Sicherungshalter & 2A Sicherung** | Wasserdichter Halter + 2A Mini-Flachsicherung | Hella / MTA | 1 Stk. | Dauerplus-Absicherung an Batteriepol (Klemme 30) |
 | **OMM Helm-Audio & PTT-Kabelbaum (J_HELMET)** | 6-Pin JST-SH 1.0mm auf 3.5mm Stereo-Klinke + 2-Pin Mic + PTT (0V DC, 12-15 cm) | COTS Standard | 1 Stk. | Brummfreier Kopfhörer- & Mikrofonkabelbaum für Helm-Innenseite (reine 0V DC Signale) |
-| **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 2 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
+| **RF Micro-Koaxial-Pigtail (U.FL zu SMA IP67)** | 50 mm low-loss RG-178 / 1.13mm mit IP67 EPDM O-Ring & V4A-Mutter | COTS Standard | 4 Stk. | Wasserdichte Gehäuse-Durchführung für Antenne der OMM UCS Module |
 | **Radar 4-Ader Bus-Zuleitung (PUR)** | 4x 0.34 mm² (AWG22) mit 4-Pin JST-GH Stecker auf PCBA 08 J1 | COTS Standard | 1 Stk. | 4-Draht Anbindung für Heck-Radar PCBA 08 (12V_RADAR, GND, CAN/UART) an Strang 4 |
 | **Universal Pigtail Adapterset (JST-JWPF auf offene Enden)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | Für Motorräder ohne vorkonfektionierte Stecker: Zerstörungsfreier Abgriff via Posi-Tap Klemmen |
 | **Zentralbox USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 Stk. | CarPlay / Flashing Port an der Flanke der Zentralbox |

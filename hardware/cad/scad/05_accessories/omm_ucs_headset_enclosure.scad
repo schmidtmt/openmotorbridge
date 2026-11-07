@@ -69,9 +69,9 @@ module omm_ucs_helmet_cradle() {
         translate([-0.5, (CRADLE_W - 14.0) / 2.0, 1.8])
             cube([4.0, 14.0, CRADLE_H + 2.0], center=false);
 
-        // Rear RF Port & SMA Antenna Collar Cutout (+X Face: allows 38 mm stubby antenna)
-        translate([CRADLE_L - 3.5, (CRADLE_W - 12.0) / 2.0, 1.8])
-            cube([4.0, 12.0, CRADLE_H + 2.0], center=false);
+        // Rear Dual-SMA RF Ports & Twin Stubby Antenna Collar Cutout (+X Face: full 24 mm width for 2.4G & 446M stubbies)
+        translate([CRADLE_L - 3.5, (CRADLE_W - 24.0) / 2.0, 1.8])
+            cube([4.0, 24.0, CRADLE_H + 2.0], center=false);
 
         // Bottom Pass-Through Opening for J_HELMET Audio Loom (Aligns with module J_HELMET slot at X = 55..64 mm)
         // Module offset in cradle is (CRADLE_L - 68.0)/2 = 3.0 mm -> X_cradle = 58.0 .. 67.0 mm

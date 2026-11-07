@@ -435,12 +435,12 @@
       "id": "assembly_omm_ucs_module_24g",
       "category": "omm_module",
       "name": {
-        "de": "OMM 2.4 GHz UCS Intercom-Modul",
-        "en": "OMM 2.4 GHz UCS Intercom Module"
+        "de": "OMM Universal Tri-Band UCS Modul (PCBA 09/10, 2.4G/BT-Mesh/446MHz)",
+        "en": "OMM Universal Tri-Band UCS Module (PCBA 09/10, 2.4G/BT-Mesh/446MHz)"
       },
       "desc": {
-        "de": "Autarkes ECE 22.06 Intercom-Modul mit PCBA 09, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
-        "en": "Autonomous ECE 22.06 intercom module with PCBA 09, LiPo 600mAh, keypad, seal & SMA bulkhead"
+        "de": "Autarkes ECE 22.06 Universal Tri-Band Intercom- & Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 09/10, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
+        "en": "Autonomous ECE 22.06 universal tri-band intercom & radio module (68x36x16mm, software mode switch) with PCBA 09/10, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
       },
       "parts": [
         {
@@ -477,7 +477,7 @@
         },
         {
           "part_id": "cable_rf_coax_pigtail_50mm",
-          "qty": 1
+          "qty": 2
         }
       ]
     },
@@ -485,12 +485,12 @@
       "id": "assembly_omm_ucs_module_446m",
       "category": "omm_module",
       "name": {
-        "de": "OMM 446 MHz PMR/DMR Modul",
-        "en": "OMM 446 MHz PMR/DMR Module"
+        "de": "OMM Universal Tri-Band PMR/DMR/Mesh Modul (PCBA 10/09)",
+        "en": "OMM Universal Tri-Band PMR/DMR/Mesh Module (PCBA 10/09)"
       },
       "desc": {
-        "de": "Autarkes ECE 22.06 Funkmodul mit PCBA 10, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
-        "en": "Autonomous ECE 22.06 radio module with PCBA 10, LiPo 600mAh, keypad, seal & SMA bulkhead"
+        "de": "Autarkes ECE 22.06 Universal Tri-Band Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 10/09, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
+        "en": "Autonomous ECE 22.06 universal tri-band radio module (68x36x16mm, software mode switch) with PCBA 10/09, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
       },
       "parts": [
         {
@@ -527,7 +527,7 @@
         },
         {
           "part_id": "cable_rf_coax_pigtail_50mm",
-          "qty": 1
+          "qty": 2
         }
       ]
     },
@@ -535,12 +535,12 @@
       "id": "assembly_omm_helmet_kit_24g",
       "category": "omm_helmet",
       "name": {
-        "de": "OMM 2.4 GHz Helm-Installationskit",
-        "en": "OMM 2.4 GHz Helmet Installation Kit"
+        "de": "OMM Universal Tri-Band Helm-Installationskit (Twin-Stubby 2.4G & 446M)",
+        "en": "OMM Universal Tri-Band Helmet Installation Kit (Twin-Stubby 2.4G & 446M)"
       },
       "desc": {
-        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 38 mm Stummelantenne",
-        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 38 mm stubby antenna"
+        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
+        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
       },
       "parts": [
         {
@@ -562,6 +562,10 @@
         {
           "part_id": "antenna_omm_stubby_24g",
           "qty": 1
+        },
+        {
+          "part_id": "antenna_omm_stubby_446m",
+          "qty": 1
         }
       ]
     },
@@ -569,12 +573,12 @@
       "id": "assembly_omm_helmet_kit_446m",
       "category": "omm_helmet",
       "name": {
-        "de": "OMM 446 MHz Helm-Installationskit",
-        "en": "OMM 446 MHz Helmet Installation Kit"
+        "de": "OMM Universal Tri-Band Helm-Installationskit (PMR/DMR/Mesh Twin-Stubby)",
+        "en": "OMM Universal Tri-Band Helmet Installation Kit (PMR/DMR/Mesh Twin-Stubby)"
       },
       "desc": {
-        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 48 mm Helical-Antenne",
-        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 48 mm helical antenna"
+        "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
+        "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
       },
       "parts": [
         {
@@ -591,6 +595,10 @@
         },
         {
           "part_id": "cots_speakers_and_mic_kit",
+          "qty": 1
+        },
+        {
+          "part_id": "antenna_omm_stubby_24g",
           "qty": 1
         },
         {

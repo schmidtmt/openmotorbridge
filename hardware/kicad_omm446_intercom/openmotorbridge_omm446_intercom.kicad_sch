@@ -539,7 +539,7 @@
 		(in_bom yes) (on_board yes) (dnp no)
 		(uuid "f0000000-0000-0000-0000-0000000001b0")
 		(property "Reference" "BAT1" (at 240.0 245.0 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "JST_2P_LiPo_600mAh" (at 240.0 248.0 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "JST_2P_LiPo_1000mAh" (at 240.0 248.0 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "JST_SH_BM02B-SRSS-TB_1x02-1MP_P1.00mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 		(pin "1" (uuid "f0000000-0000-0000-0000-0000000001b1"))
 		(pin "2" (uuid "f0000000-0000-0000-0000-0000000001b2"))

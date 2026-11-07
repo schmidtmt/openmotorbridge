@@ -1838,31 +1838,10 @@ const BOM_PARTS = {
   "pcba_09": {
     "type": "pcba",
     "name": {
-      "de": "PCBA 09: OMM 2.4 GHz UCS Intercom",
-      "en": "PCBA 09: OMM 2.4 GHz UCS Intercom"
+      "de": "PCBA 09/10: OMM Universal Tri-Band UCS Intercom (2.4G / BT / 446M)",
+      "en": "PCBA 09/10: OMM Universal Tri-Band UCS Intercom (2.4G / BT / 446M)"
     },
-    "spec": "60.0x30.0 mm 4-Layer, ESP32-C6 + ESP32-PICO-V3-02 BT Classic, ES8388 Codec, BQ24075",
-    "source": "JLCPCB / SMT",
-    "unit": "Stk.",
-    "cost_eur": [
-      11.5,
-      16.5
-    ],
-    "desc": {
-      "de": "OpenMotorMesh 2.4 GHz Dual-Engine Modul für Helm & Kassettenbetrieb",
-      "en": "OpenMotorMesh 2.4 GHz dual-engine module for helmet & cartridge operation"
-    },
-    "id_kicad": "kicad_omm_intercom",
-    "pkg_qty": 5,
-    "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
-  },
-  "pcba_10": {
-    "type": "pcba",
-    "name": {
-      "de": "PCBA 10: OMM 446 MHz PMR/DMR Transceiver",
-      "en": "PCBA 10: OMM 446 MHz PMR/DMR Transceiver"
-    },
-    "spec": "60.0x30.0 mm 4-Layer, SA818-DMR, ESP32-C6 Host, ESP32-PICO-V3-02 BT, ES8388 Codec",
+    "spec": "60.0x30.0 mm 4-Layer, ESP32-C6 (2.4G Mesh) + ESP32-PICO-V3-02 (BT Bridge) + SA818-DMR (446M PMR/DMR), ES8388 Codec, BQ24075, BAT1 unter USB-C",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1870,8 +1849,29 @@ const BOM_PARTS = {
       19.5
     ],
     "desc": {
-      "de": "OpenMotorMesh 446 MHz Weitbereichs-Funkmodul (1.5-2.5 km Reichweite)",
-      "en": "OpenMotorMesh 446 MHz long-range radio module (1.5-2.5 km range)"
+      "de": "Universelle OpenMotorMesh Tri-Band Platine (OMM 2.4 GHz Mesh, BT-Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100 % Software-Umschaltung & Kombi-Modi)",
+      "en": "Universal OpenMotorMesh Tri-Band PCB (OMM 2.4 GHz Mesh, BT Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100% software mode switching & combo modes)"
+    },
+    "id_kicad": "kicad_omm446_intercom",
+    "pkg_qty": 5,
+    "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+  },
+  "pcba_10": {
+    "type": "pcba",
+    "name": {
+      "de": "PCBA 09/10: OMM Universal Tri-Band UCS Transceiver (2.4G / BT / 446M)",
+      "en": "PCBA 09/10: OMM Universal Tri-Band UCS Transceiver (2.4G / BT / 446M)"
+    },
+    "spec": "60.0x30.0 mm 4-Layer, SA818-DMR (446M), ESP32-C6 (2.4G Mesh), ESP32-PICO-V3-02 (BT Bridge), ES8388 Codec, BQ24075, BAT1 unter USB-C",
+    "source": "JLCPCB / SMT",
+    "unit": "Stk.",
+    "cost_eur": [
+      14.0,
+      19.5
+    ],
+    "desc": {
+      "de": "Universelle OpenMotorMesh Tri-Band Platine (OMM 2.4 GHz Mesh, BT-Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100 % Software-Umschaltung & Kombi-Modi)",
+      "en": "Universal OpenMotorMesh Tri-Band PCB (OMM 2.4 GHz Mesh, BT Bridge, 446 MHz Analog PMR446 & Digital DMR Tier I – 100% software mode switching & combo modes)"
     },
     "id_kicad": "kicad_omm446_intercom",
     "pkg_qty": 5,
@@ -1900,19 +1900,19 @@ const BOM_PARTS = {
   "cots_battery_omm_lipo_600": {
     "type": "cots_electronic",
     "name": {
-      "de": "1S LiPo Pouch-Akku 600 mAh (OMM)",
-      "en": "1S LiPo Pouch Battery 600 mAh (OMM)"
+      "de": "1S LiPo Pouch-Akku 1000 mAh (OMM)",
+      "en": "1S LiPo Pouch Battery 1000 mAh (OMM)"
     },
-    "spec": "3.7V / 2.22Wh (Typ 452438) mit PCM & JST-ACH",
+    "spec": "3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH",
     "source": "EEMB / Web",
     "unit": "Stk.",
     "cost_eur": [
-      3.2,
-      5.2
+      3.8,
+      5.8
     ],
     "desc": {
-      "de": "Integrierter Akku für OMM UCS Module (12-14 h Standalone-Betrieb am Helm)",
-      "en": "Internal battery for OMM UCS modules (12-14 h standalone helmet runtime)"
+      "de": "Integrierter 1000-mAh-Akku für das universelle OMM Tri-Band UCS Modul (13-18 h Standalone-Betrieb am Helm, sitzt frei zwischen BAT1 und J_HELMET)",
+      "en": "Internal 1000 mAh battery for universal OMM Tri-Band UCS module (13-18 h standalone helmet runtime, sits cleanly between BAT1 and J_HELMET)"
     },
     "pkg_qty": 2,
     "pkg_name": "2er Pack LiPo Pouch (EEMB)"
@@ -3452,12 +3452,12 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_omm_ucs_module_24g",
     "category": "omm_module",
     "name": {
-      "de": "OMM 2.4 GHz UCS Intercom-Modul",
-      "en": "OMM 2.4 GHz UCS Intercom Module"
+      "de": "OMM Universal Tri-Band UCS Modul (PCBA 09/10, 2.4G/BT-Mesh/446MHz)",
+      "en": "OMM Universal Tri-Band UCS Module (PCBA 09/10, 2.4G/BT-Mesh/446MHz)"
     },
     "desc": {
-      "de": "Autarkes ECE 22.06 Intercom-Modul mit PCBA 09, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
-      "en": "Autonomous ECE 22.06 intercom module with PCBA 09, LiPo 600mAh, keypad, seal & SMA bulkhead"
+      "de": "Autarkes ECE 22.06 Universal Tri-Band Intercom- & Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 09/10, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
+      "en": "Autonomous ECE 22.06 universal tri-band intercom & radio module (68x36x16mm, software mode switch) with PCBA 09/10, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
     },
     "parts": [
       {
@@ -3494,7 +3494,7 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "cable_rf_coax_pigtail_50mm",
-        "qty": 1
+        "qty": 2
       }
     ]
   },
@@ -3502,12 +3502,12 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_omm_ucs_module_446m",
     "category": "omm_module",
     "name": {
-      "de": "OMM 446 MHz PMR/DMR Modul",
-      "en": "OMM 446 MHz PMR/DMR Module"
+      "de": "OMM Universal Tri-Band PMR/DMR/Mesh Modul (PCBA 10/09)",
+      "en": "OMM Universal Tri-Band PMR/DMR/Mesh Module (PCBA 10/09)"
     },
     "desc": {
-      "de": "Autarkes ECE 22.06 Funkmodul mit PCBA 10, LiPo 600mAh, Tastmatte, Dichtung & SMA-Bulkhead",
-      "en": "Autonomous ECE 22.06 radio module with PCBA 10, LiPo 600mAh, keypad, seal & SMA bulkhead"
+      "de": "Autarkes ECE 22.06 Universal Tri-Band Funkmodul (68x36x16mm, Software-Mode-Switch) mit PCBA 10/09, LiPo 1000mAh, Tastmatte, Dichtung & 2x Twin-SMA-Bulkhead",
+      "en": "Autonomous ECE 22.06 universal tri-band radio module (68x36x16mm, software mode switch) with PCBA 10/09, LiPo 1000mAh, keypad, seal & 2x Twin-SMA bulkhead"
     },
     "parts": [
       {
@@ -3544,7 +3544,7 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "cable_rf_coax_pigtail_50mm",
-        "qty": 1
+        "qty": 2
       }
     ]
   },
@@ -3552,12 +3552,12 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_omm_helmet_kit_24g",
     "category": "omm_helmet",
     "name": {
-      "de": "OMM 2.4 GHz Helm-Installationskit",
-      "en": "OMM 2.4 GHz Helmet Installation Kit"
+      "de": "OMM Universal Tri-Band Helm-Installationskit (Twin-Stubby 2.4G & 446M)",
+      "en": "OMM Universal Tri-Band Helmet Installation Kit (Twin-Stubby 2.4G & 446M)"
     },
     "desc": {
-      "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 38 mm Stummelantenne",
-      "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 38 mm stubby antenna"
+      "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
+      "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
     },
     "parts": [
       {
@@ -3579,6 +3579,10 @@ const BOM_ASSEMBLIES = {
       {
         "part_id": "antenna_omm_stubby_24g",
         "qty": 1
+      },
+      {
+        "part_id": "antenna_omm_stubby_446m",
+        "qty": 1
       }
     ]
   },
@@ -3586,12 +3590,12 @@ const BOM_ASSEMBLIES = {
     "id": "assembly_omm_helmet_kit_446m",
     "category": "omm_helmet",
     "name": {
-      "de": "OMM 446 MHz Helm-Installationskit",
-      "en": "OMM 446 MHz Helmet Installation Kit"
+      "de": "OMM Universal Tri-Band Helm-Installationskit (PMR/DMR/Mesh Twin-Stubby)",
+      "en": "OMM Universal Tri-Band Helmet Installation Kit (PMR/DMR/Mesh Twin-Stubby)"
     },
     "desc": {
-      "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & 48 mm Helical-Antenne",
-      "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & 48 mm helical antenna"
+      "de": "ECE 22.06 UCS Helmklemmsockel, 3M VHB Klebepad, J_HELMET Kabel, Hi-Fi Lautsprecher & Dual-Stummelantennen (38 mm 2.4G + 48 mm 446M)",
+      "en": "ECE 22.06 UCS helmet cradle, 3M VHB pad, J_HELMET harness, Hi-Fi speakers & twin stubby antennas (38 mm 2.4G + 48 mm 446M)"
     },
     "parts": [
       {
@@ -3608,6 +3612,10 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "cots_speakers_and_mic_kit",
+        "qty": 1
+      },
+      {
+        "part_id": "antenna_omm_stubby_24g",
         "qty": 1
       },
       {

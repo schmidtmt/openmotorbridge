@@ -42,11 +42,11 @@ module cartridge_insert_omm_ucs(
                     translate([99.0, (insert_w - 3.0 - 17.0)/2.0, 2.0])
                         cube(size=[24.0, 17.0, cradle_h + 0.1], center=false);
 
-                    // C. Coaxial Cable & USB-C Interconnect Channels
+                    // C. Coaxial Cable (Twin-SMA 2.4G & 446M) & USB-C Interconnect Channels
                     translate([2.0, (insert_w - 3.0 - 14.0)/2.0, 2.5])
                         cube(size=[34.0, 14.0, cradle_h + 0.1], center=false);
-                    translate([96.0, (insert_w - 3.0 - 6.0)/2.0, 2.5])
-                        cube(size=[6.0, 6.0, cradle_h + 0.1], center=false);
+                    translate([96.0, (insert_w - 3.0 - 24.0)/2.0, 2.5])
+                        cube(size=[6.0, 24.0, cradle_h + 0.1], center=false);
                 }
             }
 
