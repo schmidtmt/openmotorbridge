@@ -9116,7 +9116,7 @@ function calculateSingleBikeBom(bikeConfig) {
         'blind': isDe ? 'Blindkassette' : 'Blank Cartridge'
     };
 
-    const numPods = bikeModel === 'car-support' ? (totalCartridges > 0 ? 2 : 0) : 2;
+    const numPods = bikeModel === 'car-support' ? Math.min(2, totalCartridges) : 2;
     const numCartridgePcba = totalActiveCartridges;
     const numSmart = numCartridgePcba;
 
@@ -9499,25 +9499,25 @@ function renderSingleBuilder() {
         <!-- Step 2 -->
         <div class="builder-instruction-step">
             <div class="builder-step-headline">
-                <span class="builder-step-name">2. ${isDe ? 'Satelliten-Pods vorbereiten (2 Pod-Gehäuse: Pod 1 & Pod 2)' : 'Prepare Satellite Pods (2 Pods: Pod 1 & Pod 2)'}</span>
-                <span class="builder-pill-verified">✓ COTS Plug & Play</span>
+                <span class="builder-step-name">2. ${isDe ? 'Satelliten-Pods vorbereiten (v10.0 Monocoque-Gehäuse: Pod 1 & Pod 2)' : 'Prepare Satellite Pods (v10.0 Monocoque Housing: Pod 1 & Pod 2)'}</span>
+                <span class="builder-pill-verified">✓ Zweizonen-Monocoque + Slide-In Lid</span>
             </div>
             <div class="builder-parts-tag-list">
-                <span class="builder-part-tag">pod_base_housing.stl</span>
-                <span class="builder-part-tag">2-Draht DC-Federkontakte</span>
-                <span class="builder-part-tag">03_pod_bulkhead_partition.stl</span>
-                <span class="builder-part-tag">${bom.numPods * 2}x Auswerffedern</span>
+                <span class="builder-part-tag">015_pod_monocoque_tub.stl</span>
+                <span class="builder-part-tag">021_pod_slide_lid.stl</span>
+                <span class="builder-part-tag">pod_dry_flap.stl</span>
+                <span class="builder-part-tag">4-Pin IP67 Magnet-Durchführung</span>
             </div>
             <div class="builder-instructions-body">
                 <ol>
-                    <li>${isDe ? '<strong>Federkontakte einsetzen:</strong> Drücke die vergoldeten 2-Draht DC-Federkontakte in den Schachtboden ein (PCBA 02 ist ersatzlos entfallen; die Zuleitung erfolgt direkt über den wetterfesten 2-poligen Anschluss).' : '<strong>Insert spring contacts:</strong> Press gold-plated 2-wire DC spring contacts into bay base (PCBA 02 eliminated; direct weather-sealed 2-wire feed).'}</li>
-                    <li>${isDe ? '<strong>Auswerffedern einstecken:</strong> Stecke je 2 Druckfedern in die rückseitigen Federtaschen der Schottwand.' : '<strong>Insert ejector springs:</strong> Place 2 compression springs into rear pockets of bulkhead.'}</li>
-                    <li>${isDe ? '<strong>Schottwand sichern:</strong> Schottwand mit den Federn voran einschieben und mit 2x M2x8 mm Senkkopfschrauben bündig verschrauben.' : '<strong>Secure bulkhead:</strong> Push bulkhead forward and secure with 2x M2x8 mm countersunk screws.'}</li>
+                    <li>${isDe ? '<strong>4-Pin Bus-Durchführung &amp; USB-C Port B einsetzen:</strong> 4-Pin IP67 Magnetkupplung (Port A) und USB-C Ladebuchse mit TPU-Staubkappe (<code>008_pod_base_usbc_cap_tpu.stl</code>, Port B) in die Stirnwand der Monocoque-Wanne (<code>015_pod_monocoque_tub.stl</code>) einsetzen.' : '<strong>Install 4-pin bus feed-through &amp; USB-C Port B:</strong> Seat 4-pin IP67 magnetic coupler (Port A) and USB-C charging socket with TPU dust cap (<code>008_pod_base_usbc_cap_tpu.stl</code>, Port B) into front bulkhead of monocoque tub (<code>015_pod_monocoque_tub.stl</code>).'}</li>
+                    <li>${isDe ? '<strong>PCBA 03 &amp; Dry-Flap montieren:</strong> PCBA 03 auf die 4 Dämpfungsdome im vorderen Wannenboden setzen (4x M2x6 mm) und die elastische TPU-Spritzschutzklappe (<code>pod_dry_flap.stl</code>) auf die Auflagekante (Z = 14.5 mm) legen.' : '<strong>Mount PCBA 03 &amp; Dry-Flap:</strong> Fasten PCBA 03 onto the 4 damping bosses in the front floor (4x M2x6 mm) and place elastomeric TPU splash shield (<code>pod_dry_flap.stl</code>) onto the seating shelf (Z = 14.5 mm).'}</li>
+                    <li>${isDe ? '<strong>3M Dual Lock am Geräteboden:</strong> Einen Streifen 3M Dual Lock SJ3550 Pilzkopf-Klett auf den flachen hinteren Wannenboden (X = 52..144 mm) kleben – damit lassen sich Sena, Cardo und OMM jederzeit in Sekunden werkzeuglos wechseln!' : '<strong>3M Dual Lock on equipment floor:</strong> Adhere a strip of 3M Dual Lock SJ3550 onto the flat rear tub floor (X = 52..144 mm) – allowing tool-less 5-second swaps between Sena, Cardo, and OMM!'}</li>
                 </ol>
             </div>
         </div>
 
-        <!-- Step 3+: Gateway-Kassetten (Modular) -->
+        <!-- Step 3+: Pod-Bestückung (Modular) -->
         ${(() => {
             const carts = getBikeCartridges(active);
             const chosenKeys = Object.keys(carts).filter(k => carts[k] > 0);
@@ -9528,48 +9528,40 @@ function renderSingleBuilder() {
                 const qty = carts[cartKey] || 1;
                 const qtySuffix = qty > 1 ? ` (${qty}x)` : '';
                 const title = isDe ?
-                    `Gateway-Kassette: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}` :
-                    `Gateway Cartridge: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}`;
+                    `Pod-Bestückung: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}` :
+                    `Pod Fitment: ${bom.slotNames[cartKey] || cartKey}${qtySuffix}`;
 
                 let bodyHtml = '';
-                if (cartKey === 'sena-spider-x') {
+                if (cartKey === 'sena-spider-x' || cartKey === 'sena-50s') {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'PCBA 03 in den Basisschlitten einklicken.' : 'Snap PCBA 03 into base sled.'}</li>
-                        <li>${isDe ? '4x Miniatur-Hubmagnete mit TPU-Spitzen in die Führungsbrücke von <code>cartridge_insert_sena.stl</code> einlegen und mit Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature solenoids with TPU tips into guide bridge of <code>cartridge_insert_sena.stl</code> and secure with retainer plate (4x M2x6 mm).'}</li>
-                        <li>${isDe ? 'Fertiges 8-Pin JST-SH Kabel <code>J_ACT</code> an PCBA 03 stecken (kein Crimpen!).' : 'Plug pre-crimped 8-pin JST-SH cable <code>J_ACT</code> into PCBA 03 (zero crimping!).'}</li>
-                        <li>${isDe ? 'Sena SPIDER X Slim einlegen, mit Schnellspann-Niederhalter arretieren und Stromkabel anstecken.' : 'Insert Sena SPIDER X Slim, lock with clamp, and connect power cable.'}</li>
-                        <li>${isDe ? 'Stahlanker und Rückstellfeder in die Wippe (<code>cartridge_magnetic_lock_latch.stl</code>) einsetzen und mit M2 Stift im Schlitten lagern.' : 'Insert steel pin and spring into latch rocker (<code>cartridge_magnetic_lock_latch.stl</code>) and pin with M2 dowel into sled.'}</li>
-                    </ol>`;
-                } else if (cartKey === 'sena-50s') {
-                    bodyHtml = `
-                    <ol>
-                        <li>${isDe ? 'PCBA 03 in Basisschlitten einklicken, Pogo-Pin Flachkabel anstecken und Sena 50S/60S Cradle montieren.' : 'Snap PCBA 03 into sled, connect pogo-pin cable, and mount Sena 50S/60S cradle.'}</li>
-                        <li>${isDe ? 'Wippenmechanismus montieren und Silikon-Flanschdichtung aufziehen.' : 'Assemble latch mechanism and fit silicone flange seal.'}</li>
+                        <li>${isDe ? 'Auf die Unterseite der mitgelieferten <strong>Original-Sena Klebehalterung</strong> einen Streifen <strong>3M Dual Lock SJ3550</strong> kleben und die Halterung auf dem flachen Pod-Boden einkletten.' : 'Stick a strip of <strong>3M Dual Lock SJ3550</strong> onto the bottom of the factory <strong>Sena OEM surface mount cradle</strong> and click it onto the flat pod floor.'}</li>
+                        <li>${isDe ? '2x Miniatur-Hubmagnete (<code>JF-0530B</code>) in die beiden Querstreben des universellen Kaltstart-Aktuatorbügels (<code>012_universal_actuator_slide_bracket.stl</code>) einsetzen, in die seitlichen C-Nuten (Z = 21.5 mm) über den Sena-Tasten einschieben und das 8-Pin JST-SH Kabel (<code>J_ACT</code>) an PCBA 03 anstecken.' : 'Seat 2x miniature solenoids (<code>JF-0530B</code>) into the two cross-struts of the universal cold-start actuator bracket (<code>012_universal_actuator_slide_bracket.stl</code>), slide into side C-grooves (Z = 21.5 mm) over the Sena buttons, and plug 8-pin JST-SH cable (<code>J_ACT</code>) into PCBA 03.'}</li>
+                        <li>${isDe ? 'Sena-Gerät in die OEM-Halterung einklicken, <code>J_AUDIO_PWR</code> Adapterkabel anstecken und Slide-In Deckel (<code>021_pod_slide_lid.stl</code>) schließen.' : 'Snap Sena unit into OEM cradle, connect <code>J_AUDIO_PWR</code> adapter cable, and slide lid (<code>021_pod_slide_lid.stl</code>) closed.'}</li>
                     </ol>`;
                 } else if (cartKey === 'cardo-edge') {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'PCBA 03 in Basisschlitten einsetzen.' : 'Seat PCBA 03 into base sled.'}</li>
-                        <li>${isDe ? '4x Miniatur-Aktuatoren in <code>cartridge_insert_cardo.stl</code> einlegen und Halteplatte verschrauben (4x M2x6 mm).' : 'Place 4x miniature actuators into <code>cartridge_insert_cardo.stl</code> and secure retainer plate (4x M2x6 mm).'}</li>
-                        <li>${isDe ? 'Cardo Packtalk Edge Air-Mount montieren, fertiges JST-Kabel anstecken und Wippenmechanismus montieren.' : 'Mount Cardo Air-Mount, connect pre-crimped JST cable, and install latch rocker.'}</li>
+                        <li>${isDe ? 'Auf die Unterseite des mitgelieferten <strong>Original-Cardo Air-Mount</strong> einen Streifen <strong>3M Dual Lock SJ3550</strong> kleben und am flachen Pod-Boden einkletten (so bleibt der Air-Mount jederzeit gegen OMM oder Sena wechselbar!).' : 'Stick a strip of <strong>3M Dual Lock SJ3550</strong> onto the bottom of the factory <strong>Cardo OEM Air-Mount</strong> and click onto the flat pod floor (keeping it quick-swappable with OMM or Sena!).'}</li>
+                        <li>${isDe ? '2x Miniatur-Hubmagnete (<code>JF-0530B</code>) in die beiden Querstreben des universellen Kaltstart-Aktuatorbügels (<code>012_universal_actuator_slide_bracket.stl</code>) einsetzen, in die seitlichen C-Nuten (Z = 21.5 mm) über den Cardo-Tasten positionieren und <code>J_ACT</code> an PCBA 03 stecken.' : 'Seat 2x miniature solenoids (<code>JF-0530B</code>) into the universal cold-start actuator bracket (<code>012_universal_actuator_slide_bracket.stl</code>), slide into side C-grooves (Z = 21.5 mm) over Cardo buttons, and plug <code>J_ACT</code> into PCBA 03.'}</li>
+                        <li>${isDe ? 'Cardo Packtalk Edge magnetisch im Air-Mount einrasten, <code>J_AUDIO_PWR</code> Kabel anstecken und Slide-In Deckel (<code>021_pod_slide_lid.stl</code>) einschieben.' : 'Snap Cardo Packtalk Edge magnetically into Air-Mount, connect <code>J_AUDIO_PWR</code> harness, and close slide-in lid (<code>021_pod_slide_lid.stl</code>).'}</li>
                     </ol>`;
                 } else if (cartKey === 'omm-ucs' || cartKey === 'omm446') {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) mit 2x 50 mm Micro-Koaxial-Pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) und 1000 mAh LiPo-Akku (an <code>BAT1</code> unter <code>J1</code>) bestücken.' : 'Equip PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) with 2x 50 mm micro-coax pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) and 1000 mAh LiPo battery (at <code>BAT1</code> beneath <code>J1</code>).'}</li>
-                        <li>${isDe ? 'Beide Stummelantennen (38 mm 2.4 GHz &amp; 48 mm 446 MHz Helical) auf die rückseitigen Twin-SMA-Buchsen schrauben (oder den 446-MHz-Port im Pod mit dem 5V Bi-Directional RF Booster verbinden) und das Modul in das Kassetten-Inlay (<code>cartridge_insert_omm_ucs.stl</code>) einklicken.' : 'Thread both stubby antennas (38 mm 2.4 GHz &amp; 48 mm 446 MHz helical) onto the rear Twin-SMA ports (or connect the 446 MHz port in the pod to the 5V bi-directional RF booster) and snap the module into the cartridge inlay (<code>cartridge_insert_omm_ucs.stl</code>).'}</li>
-                        <li>${isDe ? '90° USB-C Kabel (<code>J_AUDIO_PWR</code>) anstecken: Das Modul lädt im Pod automatisch über das 5V Bordnetz (TI BQ24075 Power-Path) und schaltet bei Entnahme für den Helmeinsatz unterbrechungsfrei auf den 1000-mAh-Akku um. Alle Betriebsarten (OMM 2.4G, BT-Mesh, PMR446, DMR Tier I &amp; Kombi-Modi) werden rein per Software umgeschaltet!' : 'Connect 90° USB-C cable (<code>J_AUDIO_PWR</code>): The module charges automatically in the pod via 5V bike power (TI BQ24075 power-path) and switches seamlessly to the 1000 mAh battery when removed for helmet use. All radio modes (OMM 2.4G, BT Mesh, PMR446, DMR Tier I &amp; combo modes) switch 100% in software!'}</li>
+                        <li>${isDe ? 'PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) mit 2x 50 mm Micro-Koaxial-Pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) und 1000 mAh LiPo-Akku (an <code>BAT1</code> unter <code>J1</code>) im UCS-Gehäuse bestücken.' : 'Equip PCBA 09/10 (Universal Tri-Band: ESP32-C6 2.4G Mesh + ESP32-PICO BT Bridge + NiceRF SA818-DMR 446 MHz) with 2x 50 mm micro-coax pigtails (<code>J_RF_24G</code> &rarr; <code>SMA_24G</code>, <code>J_RF</code> &rarr; <code>SMA_446</code>) and 1000 mAh LiPo battery (at <code>BAT1</code> beneath <code>J1</code>) inside the UCS shell.'}</li>
+                        <li>${isDe ? 'Die flache UCS-Rastschiene (<code>omm_ucs_helmet_cradle.stl</code>) und den 5V Bi-Directional RF Booster per <strong>3M Dual Lock SJ3550</strong> auf dem flachen Pod-Boden einkletten. Dadurch kann das OMM-Modul sowohl blitzschnell aus der UCS-Schiene gezogen (für den Helmeinsatz) als auch samt Schiene gegen Cardo/Sena getauscht werden!' : 'Attach the low-profile UCS cradle (<code>omm_ucs_helmet_cradle.stl</code>) and 5V bi-directional RF booster onto the flat pod floor via <strong>3M Dual Lock SJ3550</strong>. This lets you slide the OMM module out of the UCS rail in 1 second (for helmet use) or swap the entire cradle for Cardo/Sena!'}</li>
+                        <li>${isDe ? '90° USB-C Kabel (<code>J_AUDIO_PWR</code>) anstecken: Das Modul wacht im Pod digital über USB-C auf (keine Hubmagnete nötig!), lädt automatisch über das 5V Bordnetz und schaltet bei Entnahme für den Helmeinsatz unterbrechungsfrei auf den 1000-mAh-Akku um.' : 'Connect 90° USB-C cable (<code>J_AUDIO_PWR</code>): The module wakes digitally over USB-C in the pod (no solenoids needed!), charges via 5V bike power, and switches seamlessly to the 1000 mAh battery when moved to the helmet.'}</li>
                     </ol>`;
                 } else if (cartKey === 'pmr446') {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'PMR446 Funkgerät in den Schlitten einlegen und Klinkenkabel an Header J2 anstecken.' : 'Place PMR446 radio into sled and plug audio jack into J2.'}</li>
+                        <li>${isDe ? 'PMR446 Funkgerät per 3M Dual Lock SJ3550 am flachen Pod-Boden einkletten und Doppelklinken-Adapterkabel an <code>J_AUDIO_PWR</code> von PCBA 03 anstecken.' : 'Attach PMR446 radio via 3M Dual Lock SJ3550 onto flat pod floor and plug dual-jack adapter cable into <code>J_AUDIO_PWR</code> on PCBA 03.'}</li>
                     </ol>`;
                 } else {
                     bodyHtml = `
                     <ol>
-                        <li>${isDe ? 'Blindkassette mit O-Ring in den Schlitten einsetzen - hermetisch regendichte Dry Box für Kleinteile.' : 'Insert blank cartridge with O-ring - hermetic waterproof dry box.'}</li>
+                        <li>${isDe ? 'Der unbestückte Monocoque-Pod mit Silikondichtschnur im Slide-In Deckel (<code>021_pod_slide_lid.stl</code>) dient direkt als 100% wasserdichte Dry Box für Schlüssel, Papiere oder Kleinteile.' : 'The unpopulated monocoque pod with silicone seal in the slide-in lid (<code>021_pod_slide_lid.stl</code>) serves directly as a 100% waterproof dry box for keys, papers, or tools.'}</li>
                     </ol>`;
                 }
 
@@ -9826,6 +9818,84 @@ function renderSingleBuilder() {
     instructionsContainer.innerHTML = instructionsHtml;
 }
 
+function calculateGroupOrderBudget(allBoms) {
+    const count = allBoms.length;
+    const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
+    const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
+
+    if (count <= 1) {
+        return {
+            sumMin,
+            sumMax,
+            groupMin: sumMin,
+            groupMax: sumMax,
+            savingsMin: 0,
+            savingsMax: 0,
+            perRiderMin: sumMin,
+            perRiderMax: sumMax
+        };
+    }
+
+    // Calculate true JLCPCB 5er-MOQ step-function savings vs. separate single-bike orders:
+    // Each PCBA's unit price in bom_parts.json consists of ~65% SMT component cost (scales per board)
+    // and ~35% 5er-Pack PCB + SMT stencil/setup lot fee (scales per 5er-Pack: Math.ceil(qty / 5)).
+    const pcbaNetMap = {};
+    const pcbaSeparatePacksMap = {};
+    const pcbaUnitCostMap = {};
+
+    allBoms.forEach(({ bom }) => {
+        (bom.pcbas || []).forEach(p => {
+            if (p.qty > 0) {
+                pcbaNetMap[p.id] = (pcbaNetMap[p.id] || 0) + p.qty;
+                pcbaSeparatePacksMap[p.id] = (pcbaSeparatePacksMap[p.id] || 0) + Math.ceil(p.qty / 5);
+                if (!pcbaUnitCostMap[p.id]) {
+                    pcbaUnitCostMap[p.id] = {
+                        unitMin: (p.costMin || 10) / p.qty,
+                        unitMax: (p.costMax || 12) / p.qty
+                    };
+                }
+            }
+        });
+    });
+
+    let moqSavingsMin = 0;
+    let moqSavingsMax = 0;
+    Object.keys(pcbaNetMap).forEach(id => {
+        const netQty = pcbaNetMap[id];
+        const groupPacks = Math.ceil(netQty / 5);
+        const separatePacks = pcbaSeparatePacksMap[id];
+        const savedPacks = Math.max(0, separatePacks - groupPacks);
+        const { unitMin, unitMax } = pcbaUnitCostMap[id];
+        // Each saved 5er-Pack saves the fixed 5-board PCB + SMT setup lot base (~12 EUR + 35% of 5-pack)
+        const lotFeeMin = 11 + unitMin * 5 * 0.30;
+        const lotFeeMax = 13 + unitMax * 5 * 0.30;
+        moqSavingsMin += savedPacks * lotFeeMin;
+        moqSavingsMax += savedPacks * lotFeeMax;
+    });
+
+    // Shared shipping & bulk fastener/cable pack savings (~14-18 EUR per additional vehicle)
+    const bulkShippingSavingsMin = (count - 1) * 14;
+    const bulkShippingSavingsMax = (count - 1) * 18;
+
+    const savingsMin = Math.round(moqSavingsMin + bulkShippingSavingsMin);
+    const savingsMax = Math.round(moqSavingsMax + bulkShippingSavingsMax);
+    const groupMin = Math.max(Math.round(sumMin - savingsMax), Math.round(sumMin * 0.70));
+    const groupMax = Math.max(Math.round(sumMax - savingsMin), groupMin + 25);
+    const perRiderMin = Math.round(groupMin / count);
+    const perRiderMax = Math.round(groupMax / count);
+
+    return {
+        sumMin,
+        sumMax,
+        groupMin,
+        groupMax,
+        savingsMin,
+        savingsMax,
+        perRiderMin,
+        perRiderMax
+    };
+}
+
 function renderGroupBuilder() {
     const isDe = state.lang === 'de';
     const count = fleetState.bikes.length;
@@ -9837,15 +9907,8 @@ function renderGroupBuilder() {
         summaryCountEl.textContent = `${count} ${isDe ? (count === 1 ? 'Motorrad konfiguriert' : 'Motorräder konfiguriert') : (count === 1 ? 'motorcycle configured' : 'motorcycles configured')}`;
     }
 
-    // 2. Budget & Savings Calculation
-    const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
-    const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
-    const savingsMin = (count - 1) * 35;
-    const savingsMax = (count - 1) * 60;
-    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.82));
-    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.85));
-    const perRiderMin = Math.round(groupMin / count);
-    const perRiderMax = Math.round(groupMax / count);
+    // 2. Budget & Savings Calculation (True JLCPCB 5er-MOQ Step Function)
+    const { sumMin, sumMax, groupMin, groupMax, savingsMin, savingsMax, perRiderMin, perRiderMax } = calculateGroupOrderBudget(allBoms);
 
     const totalCostEl = document.getElementById('group-total-cost');
     if (totalCostEl) totalCostEl.textContent = `~ ${groupMin} - ${groupMax} €`;
@@ -9956,7 +10019,7 @@ function renderGroupBuilder() {
                         ${isUsed ? `<span class="moq-pill">${packs}x 5er-Pack (${moqQty} Stk.)</span>` : '<span style="color: var(--text-secondary); font-size: 0.75rem;">--</span>'}
                     </td>
                     <td>
-                        ${isUsed ? (spareQty > 0 ? `<span class="spare-pill">+${spareQty} ${isDe ? 'Reserve' : 'spare'}</span>` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">0 (${isDe ? 'Exakt' : 'Exact'})</span>`) : '<span style="color: var(--text-secondary); font-size: 0.75rem;">--</span>'}
+                        ${isUsed ? (spareQty > 0 ? `<span class="spare-pill">+${spareQty} ${isDe ? 'Reserve' : 'spare'}</span>${(netQty > 5 && netQty % 5 === 1) ? `<div style="font-size: 0.68rem; color: var(--accent-orange); margin-top: 3px;">💡 ${isDe ? `Bei ${netQty - 1} Stk. reicht ${packs - 1}x 5er-Pack` : `At ${netQty - 1} pcs, ${packs - 1}x 5-pack suffices`}</div>` : ''}` : `<span style="color: var(--text-secondary); font-size: 0.75rem;">0 (${isDe ? 'Exakt' : 'Exact'})</span>`) : '<span style="color: var(--text-secondary); font-size: 0.75rem;">--</span>'}
                     </td>
                     <td>
                         ${isUsed ? `
@@ -10156,14 +10219,7 @@ function exportGroupBomCsv() {
     const count = fleetState.bikes.length;
     const allBoms = fleetState.bikes.map((b, idx) => ({ bike: b, index: idx, bom: calculateSingleBikeBom(b) }));
 
-    const sumMin = allBoms.reduce((acc, item) => acc + item.bom.costMin, 0);
-    const sumMax = allBoms.reduce((acc, item) => acc + item.bom.costMax, 0);
-    const savingsMin = (count - 1) * 65;
-    const savingsMax = (count - 1) * 95;
-    const groupMin = Math.max(sumMin - savingsMin, Math.round(sumMin * 0.72));
-    const groupMax = Math.max(sumMax - savingsMax, Math.round(sumMax * 0.75));
-    const perRiderMin = Math.round(groupMin / count);
-    const perRiderMax = Math.round(groupMax / count);
+    const { sumMin, sumMax, groupMin, groupMax, savingsMin, savingsMax, perRiderMin, perRiderMax } = calculateGroupOrderBudget(allBoms);
 
     let csv = '\uFEFF'; // UTF-8 BOM for Excel
     csv += '==================================================================\n';

@@ -489,7 +489,7 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 
 | Bauteil | Spezifikation / Typ | Bezugsquelle | Menge (Ref-Set) | Montageort & Funktion |
 | :--- | :--- | :--- | :---: | :--- |
-| **3M Dual Lock SJ3550 Klettband** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rüttelfeste, werkzeuglose Dongle- und Sensor-Montage im Cockpit & Koffer |
+| **3M Dual Lock SJ3550 Klettband** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.8 m | Rüttelfeste, werkzeuglose Dongle- und Sensor-Montage im Cockpit & Koffer |
 | **3M VHB R130 Klebepad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 Stk. | Vibrations- und wetterfeste ECE 22.06 Helmbefestigung des OMM UCS Klemmsockels |
 | **Edelstahl-Hülse Schlüsselring (Keyfob)** | 316L V4A Ø 8.5 x 4.5 mm, L = 13 mm | Normteil / Misumi | 1 Stk. | Eingepresste Edelstahl-Schutzhülse im Vollmaterial-Block der Keyfob-Öse |
 | **M2 Edelstahlmutter (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 18 Stk. | Formschlüssig eingelegt in OMM UCS Oberschale (4x), Pod Slide-Tray PCBA 03 (4x) & Under-Perch Spiegel-Pods (1x pro Pod) |

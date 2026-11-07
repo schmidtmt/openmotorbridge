@@ -186,6 +186,14 @@
           "qty": 1
         },
         {
+          "part_id": "part3d_cartridge_latch",
+          "qty": 1
+        },
+        {
+          "part_id": "part3d_pod_usbc_cap_tpu",
+          "qty": 1
+        },
+        {
           "part_id": "cots_pod_dc_blade_plug",
           "qty": 1
         },
@@ -203,24 +211,20 @@
       "id": "assembly_cartridge_carrier",
       "category": "cartridge",
       "name": {
-        "de": "Universal Koffer-Pod Einschub (Slide-Tray & PCBA 03)",
-        "en": "Universal Saddlebag Pod Insert (Slide-Tray & PCBA 03)"
+        "de": "Aktive Pod-Gateway-Elektronik (PCBA 03 & Dry-Flap)",
+        "en": "Active Pod Gateway Electronics (PCBA 03 & Dry-Flap)"
       },
       "desc": {
-        "de": "Werkzeugloser Slide-In Einschub mit universellem TPU-Elastomerbett & PCBA 03 Gateway-Platine",
-        "en": "Tool-less slide-in tray with universal TPU elastomer bed & PCBA 03 gateway board"
+        "de": "Bodenmontierte PCBA 03 Gateway-Platine (USB-PD, ES8388 Audio, Aktuatortreiber) inkl. TPU Dry-Flap Spritzschutz",
+        "en": "Floor-mounted PCBA 03 gateway board (USB-PD, ES8388 audio, actuator driver) incl. TPU dry-flap splash shield"
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_base_sled",
-          "qty": 1
-        },
-        {
-          "part_id": "part3d_cartridge_latch",
-          "qty": 1
-        },
-        {
           "part_id": "pcba_03",
+          "qty": 1
+        },
+        {
+          "part_id": "part3d_pod_dry_flap",
           "qty": 1
         },
         {
@@ -237,18 +241,14 @@
       "id": "assembly_inlay_sena_spider",
       "category": "inlay",
       "name": {
-        "de": "Gateway Inlay: Sena SPIDER X Slim",
-        "en": "Gateway Inlay: Sena SPIDER X Slim"
+        "de": "Pod-Bestückung: Sena (OEM-Halterung per 3M Dual Lock + Aktuatorbügel)",
+        "en": "Pod Fitment: Sena (OEM Cradle via 3M Dual Lock + Actuator Bracket)"
       },
       "desc": {
-        "de": "Inlay-Aufnahmebett für Sena mit universeller 2-Schienen Kaltstart-Aktuatorbrücke (2x JF-0530B) & Kelvin-Ground Audio/DC-Kabel",
-        "en": "Inlay mounting bed for Sena with universal 2-rail cold-start actuator bracket (2x JF-0530B) & Kelvin-grounded audio/DC cable"
+        "de": "Befestigung der mitgelieferten Sena OEM-Halterung per 3M Dual Lock am Pod-Boden + 2-Schienen Kaltstart-Aktuatorbügel (2x JF-0530B) & J_AUDIO_PWR Kabel",
+        "en": "Mounting of factory Sena OEM cradle via 3M Dual Lock on pod floor + 2-rail cold-start actuator bracket (2x JF-0530B) & J_AUDIO_PWR cable"
       },
       "parts": [
-        {
-          "part_id": "part3d_cartridge_insert_sena",
-          "qty": 1
-        },
         {
           "part_id": "part3d_cartridge_retainer_plate",
           "qty": 1
@@ -272,6 +272,10 @@
         {
           "part_id": "cable_j_audio_pwr_sena_spider",
           "qty": 1
+        },
+        {
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -288,10 +292,6 @@
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_insert_sena",
-          "qty": 1
-        },
-        {
           "part_id": "part3d_cartridge_retainer_plate",
           "qty": 1
         },
@@ -314,6 +314,10 @@
         {
           "part_id": "cable_j_audio_pwr_sena_spider",
           "qty": 1
+        },
+        {
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -321,18 +325,14 @@
       "id": "assembly_inlay_cardo_edge",
       "category": "inlay",
       "name": {
-        "de": "Gateway Inlay: Cardo Packtalk Edge / Pro",
-        "en": "Gateway Inlay: Cardo Packtalk Edge / Pro"
+        "de": "Pod-Bestückung: Cardo Packtalk Edge / Pro (OEM Air-Mount per 3M Dual Lock + Aktuatorbügel)",
+        "en": "Pod Fitment: Cardo Packtalk Edge / Pro (OEM Air-Mount via 3M Dual Lock + Actuator Bracket)"
       },
       "desc": {
-        "de": "Inlay-Aufnahmebett für Cardo Packtalk Edge / Pro mit Air-Mount Docking, universeller Kaltstart-Aktuatorbrücke (2x JF-0530B) & Kabel",
-        "en": "Inlay mounting bed for Cardo Packtalk Edge / Pro with Air-Mount docking, universal cold-start actuator bracket (2x JF-0530B) & harness"
+        "de": "Befestigung des mitgelieferten Cardo OEM Air-Mount per 3M Dual Lock am Pod-Boden + 2-Schienen Kaltstart-Aktuatorbügel (2x JF-0530B) & J_AUDIO_PWR Kabel",
+        "en": "Mounting of factory Cardo OEM Air-Mount via 3M Dual Lock on pod floor + 2-rail cold-start actuator bracket (2x JF-0530B) & J_AUDIO_PWR cable"
       },
       "parts": [
-        {
-          "part_id": "part3d_cartridge_insert_cardo",
-          "qty": 1
-        },
         {
           "part_id": "part3d_cartridge_retainer_plate",
           "qty": 1
@@ -356,6 +356,10 @@
         {
           "part_id": "cable_j_audio_pwr_cardo_edge",
           "qty": 1
+        },
+        {
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -363,16 +367,16 @@
       "id": "assembly_inlay_omm_ucs",
       "category": "inlay",
       "name": {
-        "de": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)",
-        "en": "Gateway Inlay: OMM Universal Tri-Band UCS (PCBA 09/10)"
+        "de": "Pod-Bestückung: OMM Universal Tri-Band UCS (UCS-Cradle per 3M Dual Lock + Booster)",
+        "en": "Pod Fitment: OMM Universal Tri-Band UCS (UCS Cradle via 3M Dual Lock + Booster)"
       },
       "desc": {
-        "de": "Universeller Pod-Inlay-Schlitten für das OMM Tri-Band UCS Modul mit Twin-Stubby-Freiraum, J_AUDIO_PWR Kabel & 5V Bi-Directional RF Booster",
-        "en": "Universal pod inlay sled for OMM Tri-Band UCS module with Twin-Stubby clearance, J_AUDIO_PWR cable & 5V bi-directional RF booster"
+        "de": "Flache UCS-Rastschiene (omm_ucs_helmet_cradle.stl) und 5V Bi-Directional RF-Booster per 3M Dual Lock schnellwechselbar am Pod-Boden + J_AUDIO_PWR Kabel",
+        "en": "Low-profile UCS cradle (omm_ucs_helmet_cradle.stl) and 5V bi-directional RF booster quick-swappable via 3M Dual Lock on pod floor + J_AUDIO_PWR cable"
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_insert_omm_ucs",
+          "part_id": "part3d_omm_ucs_helmet_cradle",
           "qty": 1
         },
         {
@@ -382,6 +386,10 @@
         {
           "part_id": "cots_omm_booster_5v",
           "qty": 1
+        },
+        {
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -398,7 +406,7 @@
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_insert_omm_ucs",
+          "part_id": "part3d_omm_ucs_helmet_cradle",
           "qty": 1
         },
         {
@@ -408,6 +416,10 @@
         {
           "part_id": "cots_omm_booster_5v",
           "qty": 1
+        },
+        {
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -424,12 +436,12 @@
       },
       "parts": [
         {
-          "part_id": "part3d_cartridge_insert_pmr",
+          "part_id": "cable_j_audio_pwr_midland_pmr",
           "qty": 1
         },
         {
-          "part_id": "cable_j_audio_pwr_midland_pmr",
-          "qty": 1
+          "part_id": "fastener_tape_3m_duallock_sj3550",
+          "qty": 0.1
         }
       ]
     },
@@ -444,20 +456,7 @@
         "de": "Hermetische Blindkassette zum Schutz freier Schächte oder als wasserdichtes Staufach",
         "en": "Hermetic blank cartridge protecting unused bays or acting as waterproof stash"
       },
-      "parts": [
-        {
-          "part_id": "part3d_cartridge_base_sled",
-          "qty": 1
-        },
-        {
-          "part_id": "part3d_cartridge_latch",
-          "qty": 1
-        },
-        {
-          "part_id": "part3d_cartridge_insert_blind",
-          "qty": 1
-        }
-      ]
+      "parts": []
     },
     "assembly_omm_ucs_module_24g": {
       "id": "assembly_omm_ucs_module_24g",

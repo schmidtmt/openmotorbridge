@@ -486,7 +486,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 
 | Component | Specification / Type | Sourcing Source | Qty (Ref-Set) | Location & Purpose |
 | :--- | :--- | :--- | :---: | :--- |
-| **3M Dual Lock SJ3550 Fastener** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.5 m | Rattle-free tool-less mounting of dongles and sensors in cockpit and luggage |
+| **3M Dual Lock SJ3550 Fastener** | Pilzkopf-Klettband selbstklebend (VHB-Kleber) | 3M / Amazon | 0.8 m | Rattle-free tool-less mounting of dongles and sensors in cockpit and luggage |
 | **3M VHB R130 Adhesive Pad** | 3M VHB R130 Hochleistungs-Klebepad passgenau | 3M / COTS | 1 pcs | Vibration-proof & weatherproof ECE 22.06 helmet mounting for OMM UCS cradle |
 | **Stainless Steel Lanyard Bushing (Keyfob)** | 316L V4A Ø 8.5 x 4.5 mm, L = 13 mm | Normteil / Misumi | 1 pcs | Press-fit stainless bushing inside solid block of keyfob lanyard eyelet |
 | **M2 Stainless Nut (Captive UCS)** | DIN 934 M2 V4A | Normteil / Amazon | 18 pcs | Captive in OMM UCS upper shell (4x), pod slide tray PCBA 03 (4x) & under-perch mirror pods (1x per pod) |
