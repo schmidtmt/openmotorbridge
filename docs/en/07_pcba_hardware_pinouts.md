@@ -109,7 +109,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Central Box Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Figure 7.1a: KiCad 3D Render of Central Box Host PCB Top (PCBA 01, 85 x 55 mm, 4 Layers) featuring ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, Quad eFuse U12, SX1262 LoRa 868 MHz, and vertical SMD connectors (J1, J6, J5, J4, J7, J3) pointing UP.*
+*Figure 7.1a: KiCad 3D Render of Central Box Host PCB Top (PCBA 01, 85 x 55 mm, 4 Layers) featuring ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, BQ24075 UPS Charger U4, Quad eFuse U12, SX1262 LoRa 868 MHz, and vertical SMD connectors (J1, J6, J5, J4, J7, J3) pointing UP.*
 
 ![PCBA 01 Central Box Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Figure 7.1b: KiCad 3D Render of Central Box Host PCB Bottom featuring Hirose DM3D MicroSD Push-Pull Slot, TI LM66100 Ideal-Diode OR-ing Circuit for Dual-Power (12V vehicle power vs. USB-C 5V Service), BMI270 6-Axis IMU, ES8388 Audio Codec, and TCAN334G CAN-FD Transceiver.*
@@ -129,7 +129,9 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
   * **Main Compute Hub (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz with 128-bit SIMD AI Engine for on-device voice/audio filtering, 16 MB Flash, 8 MB Octal-PSRAM, external U.FL RF connector) handling system management, FreeRTOS DSP audio mixing, central geometric BLE Master (handlebar controls, saddlebag OEM adapters, action cams, keyfob, TPMS), and CAN-FD management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ automotive rating) 7-Port High-Speed 480 Mbps Hub with 24.000 MHz crystal `Y2`. Interconnects Front Node, Pod 1, Pod 2, Radar, Helmet Audio, ESP32, and Service Port synchronously.
   * **Dedicated Helmet Audio SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC module ($13 \times 18\,\text{mm}$ with integrated ceramic chip antenna) for Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast broadcast, HFP 1.8 Wideband Voice, and native USB Audio Class 2.0 link to Hub `U8`.
-  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 100V buck converter (delivers `VCC_5V` from 12V–72V vehicle supply) paired with ultra-low-noise 3.3V LDO `U11` (`TPS7A0533`).
+  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 100V buck converter (delivers `VCC_5V` from 12V–72V vehicle supply).
+  * **LiPo Charger & Power-Path PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) with Dynamic Power Path Management (DPPM). Automatically charges the internal 2,200 mAh flat LiPo cell (`J5`) from `VCC_5V` (LM5164-Q1 or USB-C `J3`) at 1.0 A (`R16`), monitors cell temperature via NTC (`J5` Pin 3) and buffers starter crank voltage dips (down to 6.5V) and ignition-off rundowns seamlessly in $< 10\,\mu\text{s}$ on `VCC_SYS` (feeding the 3.3V ultra-low-noise LDO `U11` `TPS7A0533`).
+  * **System LDO (`U11`):** Texas Instruments `TPS7A0533` ultra-low-noise LDO (supplies `VCC_3V3` glitch-free from `VCC_SYS` for ESP32-S31, SX1262 LoRa, and sensors).
   * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-channel solid-state load switch providing dedicated current limiting, telemetry, and fault isolation for all 4 periphery branches (Front, Pod 1, Pod 2, Radar).
   * **Long-Range Telemetry (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) with U.FL connector `ANT1` linked to the Taoglas FXP895 antenna embedded in the lid.
   * **Status & Interface Controls:** WS2812B RGB Smart-LED `D1`, pairing tactile switch `SW1`, plus vertical connectors `J1` (Power/CAN 6P), `J6` (Periphery Bus 16P), `J5` (UPS Battery 4P), `J4` (RGB-LED 3P), `J7` (Spare USB 4P), and `J3` (USB-C 16P).
@@ -208,9 +210,9 @@ Connects the internal UPS backup cell (LiFePO4 or LiPo) to the analog voltage an
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Connected to        | Function & Protection   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Cell +)| AWG22 0.34² | Divider R12/R13     | Battery Voltage Sensing |
+|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Cell +)| AWG22 0.34² | U4 BQ24075 & R12/R13| UPS Charging & Sensing  |
 |  2  | GND_PWR        | Power Ground (Cell -)    | AWG22 0.34² | GND_PWR Plane       | Battery Negative Lead   |
-|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | Pull-Up R14 (10k)   | 10k NTC Temp Sensor     |
+|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | U4 TS & R14 (10k PU)| 10k NTC JEITA Guard     |
 |  4  | GND_PWR        | Sensor Ground (0V)       | AWG26 0.14² | GND_PWR Plane       | NTC Return Ground       |
 | MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
 | MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |

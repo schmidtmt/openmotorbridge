@@ -111,7 +111,7 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
 ## 3. PCBA 01: Zentralbox Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Zentralbox Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
+*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, BQ24075 USV-Lader U4, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
 
 ![PCBA 01 Zentralbox Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Abbildung 7.1b: KiCad 3D-Render der Zentralbox-Hauptplatine Bottom mit DM3D MicroSD-Push-Pull-Slot, TI LM66100 Ideal-Dioden-OR-ing Schaltung für Dual-Power (12V Bordnetz vs. USB-C Service), BMI270 6-Achs-IMU, ES8388 Audio-Codec und TCAN334G CAN-FD Transceiver.*
@@ -131,7 +131,9 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
   * **Hauptcontroller (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz mit 128-Bit SIMD AI Engine für On-Device Audio-Signalverarbeitung und Sprachfilterung, 16 MB Flash, 8 MB Octal-PSRAM, externe U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, zentralen geometrischen BLE-Master (Lenkertaster, OEM-Adapter, Action-Cam, Keyfob, TPMS) und CAN-FD Management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 7-Port High-Speed 480 Mbps Hub mit 24.000 MHz Quarz `Y2`. Bindet alle Peripherieknoten (Front, Pod 1, Pod 2, Radar, Helm-Audio, ESP32 und Service-Port) transparent und synchron an.
   * **Dedizierter Helm-Audio-SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC Modul ($13 \times 18\,\text{mm}$ mit integrierter Keramik-Chipantenne) für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast, HFP 1.8 Wideband Telefonie und nativen USB Audio Class 2.0 Uplink zu Hub `U8`.
-  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 100V-Buck-Converter (erzeugt `VCC_5V` aus dem 12V–72V Bordnetz) kombiniert mit dem 3.3V Ultra-Low-Noise LDO `U11` (`TPS7A0533`).
+  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 100V-Buck-Converter (erzeugt `VCC_5V` aus dem 12V–72V Bordnetz).
+  * **LiPo-Lade- & Power-Path-PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) mit Dynamic Power Path Management (DPPM). Lädt den internen 2.200-mAh-Flach-LiPo (`J5`) automatisch aus `VCC_5V` (LM5164-Q1 oder USB-C `J3`) mit 1,0 A (`R16`), überwacht die Akkutemperatur per NTC (`J5` Pin 3) und puffert Startspannungseinbrüche beim Anlassen des Motors (Cold Crank bis 6,5V) sowie Zündungsabschaltungen unterbrechungsfrei in $< 10\,\mu\text{s}$ auf der Systemspannung `VCC_SYS` (speist den 3.3V Ultra-Low-Noise LDO `U11` `TPS7A0533`).
+  * **System-LDO (`U11`):** Texas Instruments `TPS7A0533` Ultra-Low-Noise LDO (speist `VCC_3V3` unterbrechungsfrei aus `VCC_SYS` für ESP32-S31, SX1262 LoRa und Sensorik).
   * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-Kanal-Lastschalter (`TPS25921`) zur getrennten Absicherung, Strommessung und thermischen Abschaltung der 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar).
   * **Weitbereichsfunk (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL Buchse `ANT1` zur FXP895 Antenne in der Gehäusedeckeltasche.
   * **Status-Anzeige & Bedienelemente:** WS2812B RGB Smart-LED `D1`, Pairing-Hardwaretaster `SW1` sowie Vertikalstecker `J1` (Bordnetz 6P), `J6` (Peripherie 16P), `J5` (USV-Akku 4P), `J4` (RGB-LED 3P), `J7` (Reserve USB 4P) und `J3` (USB-C 16P).
@@ -202,7 +204,7 @@ Zentraler Schnittstellen-Header (Molex Picoflex `90814-0016`, 1.27mm Raster, ver
 ```
 
 #### 3.2.3 Header J5: USV-Akku & NTC-Temperaturfühler (Molex Micro-Lock Plus 1.25mm 4-Pin Vertikal)
-Verbindet den internen USV-Pufferakku (LiFePO4 oder LiPo) mit dem analogen Spannungs- und Temperaturüberwachungsnetzwerk des ESP32-S31:
+Verbindet den internen USV-Pufferakku (2.200 mAh LiPo-Flachzelle) mit dem BQ24075 Lade- & Power-Path-PMIC (`U4`) und dem analogen Spannungs- und Temperaturüberwachungsnetzwerk des ESP32-S31:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
@@ -210,9 +212,9 @@ Verbindet den internen USV-Pufferakku (LiFePO4 oder LiPo) mit dem analogen Spann
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signalname     | Signalart / Pegel        | Querschnitt | Verbunden mit       | Funktion & Schutz       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Akku +)| AWG22 0.34² | Teiler R12/R13      | Akkuspannungsmessung    |
+|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Akku +)| AWG22 0.34² | U4 BQ24075 & R12/R13| USV-Ladung & Messung    |
 |  2  | GND_PWR        | Power-Masse (Akku -)     | AWG22 0.34² | GND_PWR Masseplane  | Batterie-Masse          |
-|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | Pull-Up R14 (10k)   | 10k NTC Temperaturfühler|
+|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | U4 TS & R14 (10k PU)| 10k NTC JEITA Ladestopp |
 |  4  | GND_PWR        | Sensor-Masse (0V)        | AWG26 0.14² | GND_PWR Masseplane  | NTC-Rückleitung         |
 | MP1 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 1  |
 | MP2 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 2  |
