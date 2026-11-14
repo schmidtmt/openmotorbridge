@@ -80,7 +80,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 Das Skript validiert die systemweiten logischen Abläufe über 10 Lebenszyklus-Szenarien:
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) ODER 5V USB-C Service-Modus (`J3`) $\rightarrow$ Validierung der `LM74700-Q1` / `LM66100` Dual-Power Entkopplung $\rightarrow$ Staged Power-On Boot aller Controller $\rightarrow$ USB-Bus-Enumeration aller Knoten.
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) ODER 5V USB-C Service-Modus (`J3`) $\rightarrow$ Validierung der `LM5164-Q1` / `LM66100` Dual-Power Entkopplung $\rightarrow$ Staged Power-On Boot aller Controller $\rightarrow$ USB-Bus-Enumeration aller Knoten.
 * **Szenario 2 (Satelliten-Pod USB Handshake & Profile):** USB-Enumeration des Pods $\rightarrow$ Erkennung des Profils (Sena SPIDER X Slim, Cardo Packtalk Pro, OMM UCS, PMR446) $\rightarrow$ USB-PD Ladeverhandlung (5V/9V/12V/20V bis 30W/60W).
 * **Szenario 3 (Front Sensor Hub & 10 Hz GNSS):** SAM-M10Q 10 Hz Multi-GNSS Fix mit AssistNow A-GPS Seed $\rightarrow$ 4-Draht USB-Bus Übertragung an ADR-EKF $\rightarrow$ TI TMP117 Kaltluftstrom-Messung löst bei $\le 3{,}5^\circ\text{C}$ akustische Glatteiswarnung im Helm aus.
 * **Szenario 4 (Spiegel-Pod 5-Gesten -> USB-Bus -> Pod Keying):** Daumentaster am Spiegel-Pod $\rightarrow$ 5-Gesten Entprellung ($< 10\,\mu\text{s}$) $\rightarrow$ USB-Bus Frame $\rightarrow$ Pod schaltet PTT via OptoMOS K1 in insgesamt **$< 0{,}20\,\text{ms}$** durch.

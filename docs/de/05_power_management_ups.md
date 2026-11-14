@@ -1,24 +1,24 @@
 # 05 - Energie-Management, USV & Kfz-Bordnetzschutz
 
-Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v10.0 Standardized Node Architecture: die primären Schaltregler (Zentralbox `LM2596S-5.0` & Front-Knoten `TPS54302` + `SW3526`), die unterbrechungsfreie Stromversorgung (USV mit `BQ24075`, `TPS2115A` und **2.200 mAh Flat-LiPo**), die **Dual-Power Input Architektur (12V Bordnetz `J1` / 5V USB-C Service-Input `J3`)**, den automobilen Transienten- und Verpolschutz (ISO 7637-2 via `LM74700-Q1`), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)**, das **Apple Find My & Google Find My Device Dual-Beaconing** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
+Dieses Dokument spezifiziert das dynamische Energie- und Schutzmanagement der OpenMotorBridge v10.0 Standardized Node Architecture: die primären Schaltregler (Zentralbox `LM5164-Q1` & Front-Knoten `TPS54302` + `SW3526`), die unterbrechungsfreie Stromversorgung (USV mit `BQ24075` und **2.200 mAh Flat-LiPo**), die **Dual-Power Input Architektur (12V Bordnetz `J1` / 5V USB-C Service-Input `J3`)**, den automobilen Transienten- und Verpolschutz (ISO 7637-2 via `SMBJ33CA` und `LM66100` Ideal-Diode), das intelligente **Dongle-Powermanagement (1-Klick Kaltstart & Auto-Café Mode)**, das **Apple Find My & Google Find My Device Dual-Beaconing** sowie die mehrstufige Winterschlaf-Kaskade (< 16,5 µA).
 
 ---
 
 ## 1. Primär-Schaltregler der Baugruppen
 
-Um hohe Wirkungsgrade und thermische Reserven im geschlossenen IP67-Gehäuse zu erzielen, ist die Wandler-Topologie exakt mit den Stücklisten aus [`07_pcba_hardware_pinouts.md`](file:///Users/schmidtm/openMotorBridge/docs/de/07_pcba_hardware_pinouts.md) synchronisiert:
+Um hohe Wirkungsgrade und thermische Reserven im geschlossenen IP67-Gehäuse zu erzielen, ist die Wandler-Topologie exakt mit den Stücklisten aus [`07_pcba_hardware_pinouts.md`](07_pcba_hardware_pinouts.md) synchronisiert:
 
 ```
 +-----------------------------------------------------------------------------+
 |                    DCDC WANDLER-ARCHITEKTUR IM SYSTEM                       |
 +--------------------------------------+--------------------------------------+
-| 1. ZENTRALBOX (PCBA 01): LM2596S-5.0 | 2. FRONT-KNOTEN (PCBA 05): TPS54302  |
+| 1. ZENTRALBOX (PCBA 01): LM5164-Q1   | 2. FRONT-KNOTEN (PCBA 05): TPS54302  |
 +--------------------------------------+--------------------------------------+
-| * Eingang (via LM74700): 6.0 - 40 V  | * Eingangsspannung: 4.5 V - 28 V     |
-| * Ausgang: 5.0 V DC / 3.0 A Dauer    | * Ausgang: 5.0 V DC / 3.0 A Dauer    |
-| * nachgeschaltet: 2x AMS1117-3.3 LDO | * Zusatz-PD: SW3526 (65W Buck-Boost) |
-| * USV-Mux: BQ24075 + TPS2115A OR-ing | * USV-Schutz: SMBJ24A + AO3401A P-FET|
-| * Versorgt: S31, Hub, Audio, USV     | * Versorgt: ESP32-P4/E22, Hub, OLEDs |
+| * Eingang (via J1 DTM): 6.0 - 100 V  | * Eingangsspannung: 4.5 V - 28 V     |
+| * Ausgang: 5.0 V DC / 1.0 A Dauer    | * Ausgang: 5.0 V DC / 3.0 A Dauer    |
+| * nachgeschaltet: TPS7A0533 LDO      | * Zusatz-PD: SW3526 (65W Buck-Boost) |
+| * Dual-Input: LM66100 Ideal-Diode    | * USV-Schutz: SMBJ24A + AO3401A P-FET|
+| * Versorgt: S31, Hub, Audio, LoRa    | * Versorgt: ESP32-P4/E22, Hub, OLEDs |
 +--------------------------------------+--------------------------------------+
 ```
 
@@ -27,7 +27,7 @@ Die Speicherinduktivität $L$ der Abwärtswandler ist für lückenlosen Betrieb 
 
 $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
 
-* **Zentralbox (`PCBA 01`, `U7 LM2596S-5.0`):** Geschirmte $33\,\mu\text{H} / 47\,\mu\text{H}$ Power-Induktivität ($I_{\text{sat}} \ge 3{,}5\,\text{A}$), kombiniert mit zwei getrennten `AMS1117-3.3` LDO-Schienen (`U3` für Digital/MCU/Hub und `U15` exklusiv rauscharm für `QCC3084`/`ES8388` Audio-DSP).
+* **Zentralbox (`PCBA 01`, `U1 LM5164-Q1`):** Geschirmte $47\,\mu\text{H} / 68\,\mu\text{H}$ Power-Induktivität ($I_{\text{sat}} \ge 1{,}8\,\text{A}$), kombiniert mit dem rauscharmen Ultra-Low-IQ LDO `U11 TPS7A0533` (für `VCC_3V3` Digital/MCU/Hub und Audio-DSP).
 * **Front-Knoten (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchroner Buck, $3{,}0\,\text{A}$) für Logik, `USB2514Bi` Hub und Dual-OLEDs sowie ein dedizierter **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** für die USB-PD Fast-Charge Versorgung zum Handschuhfach-Hub (`PCBA 05B`).
 * **Eingangskapazität:** Mehrstufige 100V X7R Vielschichtkeramik (MLCC) und Elektrolyt-Puffer dämpfen Leitungsinduktivitäten des Motorrad-Kabelbaums zuverlässig.
 
@@ -39,59 +39,57 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
 
 ### 1.3 Dual-Power Input Architektur (12V Bordnetz `J1` vs. 5V USB-C Service-Input `J3`)
 
-Für Firmware-Entwicklung, **Central Bus-DFU Flashing**, PWA-Tests und Diagnose am Schreibtisch benötigt die Zentralbox (`PCBA 01`) kein externes 12V-Labornetzteil, sondern verfügt über einen rückstromgesicherten **5V USB-C Service-/Bench-Eingang (`J3`)**:
+Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`) am Schreibtisch benötigt die Zentralbox kein externes 12V-Labornetzteil, sondern verfügt über einen rückstromgesicherten **5V USB-C Service-/Bench-Eingang (`J3`)**:
 
 ```
              DUAL-INPUT POWER-ORING ARCHITEKTUR (ZENTRALBOX PCBA 01)
 +----------------------------+
-| 12V BORDNETZ (J1 DTM06-6S) |---> [F1 PPTC + D1 SMBJ33A + U1 LM74700 Ideal-Diode]
-| KL30 (Dauer) / KL15 (Zünd.)|         |
-+----------------------------+         +---> 12V_SYS ---> [U12 TPS25921 Quad eFuse] (Pods/Front/Radar)
+| 12V BORDNETZ (J1 DTM06-6S) |---> KL30_IN ---> [D2 SMBJ33CA TVS (33V Clamping)]
+| KL30 (Dauer) / KL15 (Zünd.)|        |
++----------------------------+        +---> [U12 TPS25921 Quad eFuse] ---> J6 Satelliten (12V)
+                                       |     (VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR)
+                                       v
+                                [U1 LM5164-Q1 Buck] (100V Wide-VIN Step-Down)
                                        |
                                        v
-                                [U7 LM2596S-5.0 Buck] ---> 5V_BUCK ---+
-                                                                      |
-+----------------------------+                                        v
-| 5V USB-C SERVICE PORT (J3) |---> [D3 LM66100 Ideal-Diode] -----> [U5 TPS2115A / 5V_SYS Rail]
-| (PC / Standard 5V Netzteil)|     (Zero Back-Feed Block)             * ESP32-S31 + USB2517I Hub
-+----------------------------+                                        * BQ24075 USV-Lader (U2)
++----------------------------+   VCC_5V Rail <------------------------------+
+| 5V USB-C SERVICE PORT (J3) |        |                                     |
+| (PC / Standard 5V Netzteil)|        +---> [U11 TPS7A0533 3.3V LDO]        |
++-------------+--------------+                 |                            |
+              |                                v                            |
+              +---> USBC_VBUS ---> [D3 LM66100 Ideal-Diode] ----------------+
+                                   (Reverse Current Blocking / Zero Back-Feed)
 ```
 
-* **Klare Trennung zwischen 5V Service-Input (`J3`) und 12V Hochlast-Speisung (`J1`):**
-  * **Fahrzeug- & 12V-Prüfstandsbetrieb (`J1` DTM06-6S):** Liegt 12V-Bordnetzspannung an `J1` an, versorgt `12V_SYS` über die vier `TPS25921` eFuses (`U12`) alle 12V-Hochleistungszweige (Front-Node 60W USB-PD Source via `SW3526`, Koffer-Pods 30W USB-PD Source via `SW3516H`, 12V Mechatronik-Aktuatoren und 12V Heck-Radar) sowie über `U7` (`LM2596S-5.0`) die 5V-Systemschiene und den `BQ24075` USV-Lader.
-  * **Werkbank- & Diagnosebetrieb über 5V USB-C (`J3`):** Wird die Zentralbox am Schreibtisch nur per USB-C (`J3`, 5V) mit einem PC oder Netzteil verbunden, speist die **`LM66100` Ideal-Diode (`D3`)** direkt die `5V_SYS`-Schiene (`ESP32-S31`, `USB2517I` 7-Port Hub, Audio-DSP, LoRa und USV-Lader). Dadurch lassen sich die Zentralbox sowie per USB-Bus angebundene Satelliten-Logikplatinen über das **Central Bus-DFU Gateway** flashen und diagnostizieren, ohne 12V anlegen zu müssen. (Hinweis: Die 12V-Schiene `12V_SYS` sowie die nachgeschalteten 30W/60W USB-PD Ladeausgänge `SW3516H`/`SW3526` und die 12V-Hubmagnete bleiben im reinen 5V-USB-Servicebetrieb inaktiv.)
-  * **Vollständige galvanische Rückstromsperre (Zero Back-Feed):** `LM74700-Q1` (`U1`, 12V-Pfad), `LM66100` (`D3`, 5V-USB-Pfad) und der `TPS2115A` Auto-Switch (`U5`) verhindern zuverlässig, dass 12V-Bordnetzspannung in den angeschlossenen Diagnose-Laptop rückspeist oder 5V-USB-Spannung rückwärts in den Fahrzeugkabelbaum gelangt.
+* **Klare Trennung der beiden Betriebsarten:**
+  * **1. Fahrzeug- & Prüfstands-Vollbetrieb (`J1` DTM06-6S an 12V Bordnetz):** Liegt 12V-Bordnetzspannung an `J1` an, wandelt der 100V-Synchron-Schaltregler **`U1` (`LM5164-Q1`)** die Bordspannung hocheffizient in `VCC_5V` und über den Ultra-Low-IQ-LDO **`U11` (`TPS7A0533`)** in `VCC_3V3` um. Gleichzeitig schaltet die **`TPS25921` Quad Automotive eFuse (`U12`)** die 12V-Bordspannung überwacht auf die vier Peripheriezweige an `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In dieser Betriebsart sind alle Satelliten (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Heckradar) aktiv und können von der Zentralbox über den 4-Draht USB-Backbone per **Central Bus-DFU** geflasht und betrieben werden.
+  * **2. Werkbank- & Schreibtisch-Servicebetrieb über 5V USB-C (`J3`):** Wird die Zentralbox am PC oder USB-Netzteil angeschlossen, speist die **`LM66100` Ideal-Diode (`D3`)** direkt die interne `VCC_5V`-Schiene und über `U11` die 3.3V-Logik der **Zentralbox (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-Port Hub, Audio-DSP, LoRa und IMU). Dadurch lässt sich die Zentralbox autark ohne 12V-Labornetzteil flashen, kalibrieren und diagnostizieren.
+  * **Hardware-Klarstellung zur Satellitenversorgung im Werkbankbetrieb (P01):** Auf der Platine `PCBA 01` speist der USB-C Eingang `J3` ausschließlich die interne 5V-Systemschiene der Zentralbox (`VCC_5V`). Die vier Satellitenzweige auf `J6` werden hardwareseitig direkt aus `KL30_IN` (12V) über `U12` gespeist; es existiert auf der Hauptplatine bewusst keine ungesicherte 5V-Querverbindung auf die 12V-Busleitung, um eine Überlastung des Host-PCs oder unzulässige Rückspeisungen zu verhindern. Sollen angeschlossene Satelliten an der Zentralbox auf der Werkbank betrieben oder geflasht werden, ist daher an `J1` eine 12V-Versorgung (z. B. ein einfaches 12V-Steckernetzteil am DTM-6 Gegenstecker) erforderlich, ODER der jeweilige Satellit wird an seinem eigenen lokalen Port separat mit Energie versorgt.
+  * **Vollständige galvanische Rückstromsperre (Zero Back-Feed):** Die Ideal-Diode **`D3` (`LM66100`)** sperrt den Rückstrompfad von `VCC_5V` zum USB-C Service-Port `J3` hermetisch ab. Liegt am Fahrzeug gleichzeitig 12V an, während ein Diagnose-Laptop an `J3` angeschlossen ist, verhindert `D3` zuverlässig jede Rückspeisung in das Programmiergerät.
 
 ---
 
-## 2. Dynamisches Power-Path Management & Integrierte USV
+## 2. Dynamisches Power-Management & Spannungsüberwachung
 
-- **Power-Path Controller:** Texas Instruments **BQ24075** mit automatischer Last- und Ladestromaufteilung.
-- **USV-Akkuzelle:** 2.200 mAh Wide-Temperature Single-Cell Flat-LiPo ($3{,}7\,\text{V}$ Nennspannung, $4{,}2\,\text{V}$ Ladeschluss, Entladebereich $-20\,^\circ\text{C}$ bis $+60\,^\circ\text{C}$, Typ 504068 / 503870, $68 \times 39 \times 5{,}0\,\text{mm}$).
-- **JEITA NTC-Thermomanagement (Murata 10k NTC an BQ24075 TS-Pin):**
-  - **Kältestopp ($T < 0\,^\circ\text{C}$):** Ladestrom wird in Hardware auf $0\,\text{mA}$ gestoppt (verhindert Lithium-Plating / Dendritenbildung im Winter). Das System wird normal über das Bordnetz versorgt.
-  - **Hitzestopp ($T > 45\,^\circ\text{C}$):** Ladestrom wird auf $0\,\text{mA}$ gestoppt (Schutz vor Akkublähen durch Motorabwärme unter der Sitzbank).
-- **Unterbrechungsfreies Umschalten bei Kaltstart (Cranking):**  
-  Bricht die Bordnetzspannung beim Anlassen schwerer V2-Motoren kurzzeitig auf $6{,}5\,\text{V}$ ein, schaltet der BQ24075 in $< 5\,\mu\text{s}$ ohne jeglichen Spannungseinbruch auf den internen Pufferakku um. Audio-Streams, Funk-Mesh und GNSS-Tracking laufen unterbrechungsfrei weiter!
-- **Nachlauf-Phase (Graceful Shutdown):** Ermöglicht einen Weiterbetrieb nach Zündung AUS für:
-  - Finalisierung und Flush des GPX-Dateisystems auf die MicroSD-Karte.
-  - Suche nach bekannten Heim-WLAN-SSIDs und Durchführung des WebDAV-Uploads.
-  - Geordnetes Senden von BLE-Disconnect-Events.
-
-### 2.1 Autonome Schwarmortung & Diebstahl-Laufzeit (Apple & Google Dual-Beacon)
-Wird das Motorrad abgestellt oder trennen Diebe die 12V-Starterbatterie ab, schaltet die Zentralbox auf die interne 2.200 mAh Zelle um:
-* **Interleaved Dual-Beaconing:** Der ESP32-S3 sendet alle 2,0 Sekunden abwechselnd ein Apple Find My (FMNP) und ein Google Find My Device (FMDN) BLE-Paket ($2{,}5\,\text{ms}$ Sendedauer, mittlerer Stromverbrauch ca. $15\,\mu\text{A}$).
-* **Erschütterungserkennung (Wake-on-Motion):** Die 6-Achs-IMU (LIS3DH / ICM-42688) überwacht Erschütterungen mit nur $6\,\mu\text{A}$.
-* **Laufzeitbilanz:** Bei einem Gesamtwachstrom von ca. $31\,\mu\text{A}$ ($0{,}031\,\text{mA}$) bietet die 2.200 mAh Zelle eine theoretische Standby-Dauer von über **70.000 Stunden (~8 Jahre)** bzw. real unter Berücksichtigung von Selbstentladung und Frostverlusten ($-15\,^\circ\text{C}$) eine **autarke Ortungs- und Alarmbereitschaft von 3 bis 4 Jahren** ohne jegliche externe 12V-Versorgung.
+- **Interne Spannungsregelung:** Texas Instruments **LM5164-Q1** (100V Synchronous Step-Down DC/DC Buck) für 5V und **TPS7A0533** (Ultra-Low Quiescent Current LDO) für 3.3V.
+- **Batterie- und Temperatur-Sensing (`J5`):** 4-poliger Anschluss für externe Pufferbatterie und NTC-Temperatursensor:
+  - **Spannungsteiler `R12`/`R13` (100k/100k):** Führt die Batteriespannung hochohmig an `BAT_SENSE` (`ADC1_CHANNEL_0` des ESP32-S31).
+  - **NTC-Spannungsteiler `R14` (10k):** Erfasst die Zellentemperatur an `BAT_NTC` (`ADC1_CHANNEL_2`) für thermischen Ladeschutz und Frostüberwachung.
+- **Unterbrechungsfreies Verhalten bei Kaltstart (Cranking):**
+  Bricht die Bordnetzspannung beim Anlassen schwerer V2-Motoren kurzzeitig auf $6{,}5\,\text{V}$ ein, hält der weite Eingangsspannungsbereich des LM5164-Q1 (Betrieb ab $6{,}0\,\text{V}$) zusammen mit den Pufferkondensatoren die 5V- und 3.3V-Systemschienen stabil.
+- **Nachlauf-Phase (Graceful Shutdown):** Ermöglicht einen geordneten Weiterbetrieb nach Zündung AUS für:
+  - Finalisierung und Flush des GPX-Dateisystems auf die MicroSD-Karte (`sdio_track_finalize()`).
+  - WebDAV-Upload über das Heim-WLAN oder PWA-Relay.
+  - Geordnetes Senden von BLE-Disconnect-Events vor dem Deep Sleep.
 
 ---
 
 ## 3. Kfz-Transienten-, EMV- & Verpolschutz (ISO 7637-2 & ISO 16750-2)
 
-- **Eingangssicherung:** Rückstellbare Automotive PPTC-Sicherung (`F1`) am `J1` KL30-Eingang plus dedizierte 4-Kanal-eFuses (`U12 TPS25921`) für alle externen Zweige.
-- **Überspannungs- & Spikeschutz:** Littelfuse `SMBJ33A` / `SMBJ33CA` TVS-Diode (`D1`, $33\,\text{V}$ Standoff) zum Clamping von Load-Dump-Impulsen nach ISO 16750-2.
-- **Aktiver Verpolschutz:** Texas Instruments **`LM74700-Q1`** (`U1`) Ideal-Dioden-Controller mit externem N-Kanal-MOSFET (`Q1`, $R_{\text{DS(on)}} < 10\,\text{m}\Omega$) für verlustfreien Verpol- und Rückstromschutz.
-- **Filterung:** Zweistufiger LC-PI-Filter ($10\,\mu\text{H}$ Shielded Automotive Inductor + $2 \times 10\,\mu\text{F}$ X7R 100V Keramikkondensatoren) am KL30/KL15-Eingang.
+- **Eingangssicherung & Strombegrenzung:** 4-Kanal Automotive-eFuses (**`U12 TPS25921`**) mit programmierbarer Strombegrenzung für alle externen Zweige auf `J6`.
+- **Überspannungs- & Spikeschutz:** Littelfuse **`SMBJ33CA`** bidirektionale TVS-Diode (**`D2`**, $33\,\text{V}$ Standoff-Spannung) zum Clamping von Load-Dump-Impulsen nach ISO 16750-2 / ISO 7637-2.
+- **High-Voltage Schutz:** Der zentrale Buck-Converter **`U1 LM5164-Q1`** ist für Eingangsspannungen bis $100\,\text{V}$ spezifiziert und bietet $> 45\,\text{V}$ Sicherheitsreserve über die geclampte Überspannung hinaus.
+- **Filterung:** $10\,\mu\text{F}$ 100V X7R Eingangskondensator (`C1`) am KL30-Eingang und LC-Dämpfungsnetzwerk (`L1` $47\,\mu\text{H}$ + `C2` $22\,\mu\text{F}$) für minimale Restwelligkeit auf der 5V-Schiene.
 
 ### 3.1 Zwei-Kabel-Architektur & Leistungsverteilung mit TI TPS25921 eFuse-Schutz
 Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **Zwei-Kabel-Architektur** (Kabel 1: 6-Pin Deutsch DTM `J1` für Bordnetz/CAN; Kabel 2: 16-Pin Automotive Connector `J4` für den Peripheriebus) geführt. Jeder externe Zweig ist auf `PCBA 01` hardwareseitig durch eine eigene **TI TPS25921 eFuse (`U12`, `GPIO 13..16`)** geschützt:

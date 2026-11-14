@@ -2,7 +2,7 @@
 
 *Hinweis: Sämtliche CAD-, Elektronik- und Blockschaltbilder spiegeln die standardisierte v10.0 Node-Architektur (PCBA 01 bis 10) wider.*
 
-Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): die Multi-Core-Aufteilung des **`ESP32-S31-WROOM-1U`** Hauptcontrollers auf der Zentralbox (`PCBA 01`), des **`ESP32-P4` + `ESP32-E22`** Front-Knotens (`PCBA 05`), des deterministischen **4-Draht Automotive USB 2.0 & 12V Backbones (`+12V_BUS`, `GND`, `D+`, `D-`, Latenz < 0,2 ms)** über den `USB2517I` 7-Port Hub zu allen Satelliten (Front-Node, Pod 1, Pod 2, Heckradar), der **Dual-Power Input Engine** (12V DTM `J1` via `LM74700-Q1` & 5V USB-C Service-Input `J3` via `LM66100` Ideal-Diode OR-ing), der **5-Gesten-Trigger-Engine** für die symmetrischen Under-Perch Spiegel-Pods (`PCBA 05C`), der SPIFFS/LittleFS-Profil-Engine sowie der **Dual-Bank Rollback-OTA & Central Bus-DFU Architektur**.
+Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): die Multi-Core-Aufteilung des **`ESP32-S31-WROOM-1U`** Hauptcontrollers auf der Zentralbox (`PCBA 01`), des **`ESP32-P4` + `ESP32-E22`** Front-Knotens (`PCBA 05`), des deterministischen **4-Draht Automotive USB 2.0 & 12V Backbones (`+12V_BUS`, `GND`, `D+`, `D-`, Latenz < 0,2 ms)** über den `USB2517I` 7-Port Hub zu allen Satelliten (Front-Node, Pod 1, Pod 2, Heckradar), der **Dual-Power Input Engine** (12V DTM `J1` via `LM5164-Q1` & 5V USB-C Service-Input `J3` via `LM66100` Ideal-Diode OR-ing), der **5-Gesten-Trigger-Engine** für die symmetrischen Under-Perch Spiegel-Pods (`PCBA 05C`), der SPIFFS/LittleFS-Profil-Engine sowie der **Dual-Bank Rollback-OTA & Central Bus-DFU Architektur**.
 
 ---
 
@@ -33,7 +33,7 @@ In v10.0 ist das Gesamtsystem auf einen robusten, geschirmten **4-Draht Automoti
 
 #### CORE 0 (Kommunikation, Telemetrie, 4-Draht USB-Backbone & Power-Management):
 - **Automotive USB-Backbone Host Engine (`uwb_vehicle_backbone.cpp`):** Verwaltet die USB 2.0 High-Speed Verbindung über den onboard `USB2517I-JZX` 7-Port Hub zu Front-Node (`PCBA 05`), Koffer-Pods (`PCBA 03`) und Heck-Radar (`PCBA 08`). Empfängt Lenker-PTT- und Gesten-Events ($< 0{,}15\,\text{ms}$), Knowles MEMS Schallpegelwerte, 10 Hz Multi-GNSS-Pakete und Pod-Telemetrie.
-- **Dual-Power Input Monitoring:** Überwacht das Ideal-Dioden-OR-ing zwischen 12V Bordnetz (`J1` Deutsch DTM06-6S via `LM74700-Q1`) und 5V USB-C Service-Input (`J3` via `LM66100` / `TPS2115A`). Ermöglicht Diagnose und **Central Bus-DFU Flashing** aller Knoten auf der Werkbank über ein einziges USB-C-Kabel.
+- **Dual-Power Input Monitoring:** Überwacht die 5V-Systemschienen-Generierung (12V Bordnetz `J1` Deutsch DTM06-6S via `LM5164-Q1` Buck und 5V USB-C Service-Input `J3` via `LM66100` Ideal-Diode). Ermöglicht Diagnose und Flashen der Zentralbox auf der Werkbank über ein einziges USB-C-Kabel (für das Bus-DFU Flashing der Satelliten ist 12V an `J1` oder lokale Versorgung erforderlich, da `U12` aus `KL30_IN` gespeist wird).
 - **Gestaffeltes Power-Sequencing (`power_sequencer.cpp`):** Steuert die 4-Kanal Automotive eFuses **`TI TPS25921` (`U12`, `GPIO 13..16`)** auf `PCBA 01` zur Vermeidung von Einschalt-Stromspitzen:
   - $T = 0\,\text{ms}$: Zentralbox (`PCBA 01`) und Front-Node (`PCBA 05`, `GPIO 15`) starten synchron bei Zündung EIN (`KL15`).
   - $T = 200\,\text{ms}$: Pod 1 (`GPIO 13`, +12V über eFuse mit Soft-Start-Rampe).
@@ -109,12 +109,12 @@ enum UsbBackbonePktType : uint8_t {
 
 ### 2.2 Dual-Power Input Management & Werkbank-Testing
 - **Aktiver Verpol- & Rückstromschutz (Zero Back-Feed):**
-  - **12V-Bordnetzpfad (`J1` Deutsch DTM-6):** Ein **TI `LM74700-Q1`** (`U1`) Ideal-Dioden-Controller mit externem N-Kanal-Power-MOSFET (`Q1`) schützt die Zentralbox verlustfrei vor Verpolung und transienten Spannungsspitzen.
-  - **5V-Service- & Diagnosepfad (`J3` USB-C):** Eine **TI `LM66100`** (`D3`) Ideal-Diode entkoppelt die 5V-USB-Versorgung vollständig vom 12V-Pfad und verhindert jegliche Rückspeisung in das angeschlossene Programmiergerät oder den Werkstatt-Laptop.
-- **Nahtlose Umschaltung via TI `TPS2115A` (`U5`):** Der automatische Power-Mux schaltet prioritär auf die aus dem 12V-Bordnetz über `LM2596S-5.0` (`U7`) erzeugte 5V-Systemschiene um, sobald die Zündung anliegt.
+  - **12V-Bordnetzpfad (`J1` Deutsch DTM-6):** Ein **TI `LM5164-Q1`** (`U1`) 100V-Synchron-Abwärtswandler erzeugt hocheffizient `VCC_5V` aus dem 12V-Bordnetz. Transienten werden primär durch eine `SMBJ33CA` TVS-Diode (`D2`) auf sichere Spannungen geklemmt.
+  - **5V-Service- & Diagnosepfad (`J3` USB-C):** Eine **TI `LM66100`** (`D3`) Ideal-Diode entkoppelt die 5V-USB-Versorgung (`USBC_VBUS`) vollständig vom internen `VCC_5V`-Pfad und verhindert jegliche Rückspeisung in das angeschlossene Programmiergerät oder den Werkstatt-Laptop.
+  - **3.3V-Logikschiene:** Wird nachgeschaltet über den rauscharmen Ultra-Low-IQ LDO **`U11` (`TPS7A0533`)** erzeugt.
 - **Zwei klare Betriebsarten:**
-  - **1. Fahrzeugbetrieb (12V an `J1`):** Voller Leistungsumfang. Alle vier `TPS25921` eFuse-Zweige (Front-Node 60W USB-PD via `SW3526`, Koffer-Pods 30W USB-PD via `SW3516H`, Heckradar, 12V-Hubmagnete) sowie USV-Lader `BQ24075` und Logik werden aktiv versorgt.
-  - **2. Werkbank- & Laborbetrieb (5V über `J3` USB-C):** Versorgt direkt die 5V- und 3.3V-Logik der Zentralbox (`ESP32-S31`, `USB2517I` 7-Port Hub, DSP, LoRa) sowie die Logik aller über den 4-Draht USB-Backbone angeschlossenen Satelliten (`PCBA 03`, `PCBA 05`, `PCBA 08`). Ermöglicht vollständiges Flashen aller Knoten via **Zero-Disassembly Bus-DFU**, Sensor-Kalibrierung und Systemdiagnose am Schreibtisch mit jedem handelsüblichen 5V USB-Netzteil oder PC-Port, ohne ein 12V-Labornetzteil anschließen zu müssen (12V-Aktuatormagnete und Hochleistungs-Ladeausgänge bleiben dabei sicher stromlos).
+  - **1. Fahrzeug- & Testbench-Vollbetrieb (12V an `J1`):** Voller Leistungsumfang. Alle vier `TPS25921` eFuse-Zweige (`U12` an `J6`: Front-Node 60W USB-PD via `SW3526`, Koffer-Pods 30W USB-PD via `SW3516H`, Heckradar, 12V-Hubmagnete) sowie USV-Lader `BQ24075` und Logik werden aktiv versorgt. In diesem Modus können sämtliche Satelliten-Knoten über das **Zero-Disassembly Bus-DFU** geflasht und synchron betrieben werden.
+  - **2. Werkbank- & Laborbetrieb (5V über `J3` USB-C):** Versorgt direkt die 5V- und 3.3V-Logik der Zentralbox (`ESP32-S31`, `USB2517I` 7-Port Hub, DSP, LoRa, IMU). Ermöglicht Firmware-Flashen des Hauptcontrollers, Sensorkalibrierung und Systemdiagnose am Schreibtisch mit jedem handelsüblichen 5V USB-Netzteil oder PC-Port ohne 12V-Labornetzteil. **Wichtige P01-Restriktion:** Da die Quad-eFuse `U12` direkt an `KL30_IN` (12V) angebunden ist, werden die Peripherie-Zweige an `J6` im reinen USB-C-Betrieb nicht bestromt. Um Satelliten auf der Werkbank über Bus-DFU zu flashen oder zu testen, muss entweder 12V an `J1` anliegen oder der jeweilige Satellit über seinen lokalen USB-C-Port versorgt werden.
 
 ---
 
@@ -211,9 +211,9 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über die beiden Hauptkontrol
 | **`gesture_engine_task`**| Front Node (Core 0)| **24** | 2 KB | GPIO Edge ISR       | USB TX Queue          | Verarbeitet Mirror-Pod Taster Links/Rechts, generiert 5 Gesten (< 0.15 ms). |
 | **`radar_task`**      | Central Box (Core 0) | **16** | 4 KB | CAN / UART DMA ISR  | FreeRTOS Queue        | 20 Hz Radar-Zielvektoren von Wheeltec MR20; TTC-Berechnung & Prio-1 Ducking. |
 | **`adr_ekf_task`**    | Central Box (Core 0) | **15** | 4 KB | 50 Hz Timer         | I2C / CAN-Puffer      | 15-State Kalman-Filter (SAM-M10Q GNSS + BMI270 IMU + CAN Speed). |
-| **`power_mgmt_task`** | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO / I2C Power      | Automotive eFuses, Dual-Power LM74700-Q1 / LM66100 Monitoring, gestaffelter Start. |
+| **`power_mgmt_task`** | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO / I2C Power      | Automotive eFuses (U12 TPS25921), LM5164-Q1 / LM66100 Monitoring, gestaffelter Start. |
 | **`ble_server_task`** | Central Box (Core 0) | **10** | 4 KB | Event-Driven        | NimBLE Stack          | Web-Bluetooth PWA Dashboard (GATT Services `0x180D`/`0x180A`/`0xFFE0`). |
-| **`sdio_log_task`**   | Central Box (Core 0) | **8**  | 8 KB | 10 Hz Ringpuffer    | FreeRTOS RingBuffer   | 4-Bit SDIO Blackbox-Logging mit ECDSA SHA-256 Signatur. |
+| **`sdio_log_task`**   | Central Box (Core 0) | **8**  | 8 KB | 10 Hz Ringpuffer    | FreeRTOS RingBuffer   | 4-Bit SDIO Blackbox-Logging mit HMAC-SHA-256 Integritätssiegel. |
 | **`webdav_sync_task`**| Central Box (Core 0) | **3**  | 8 KB | Nachlauf (Graceful) | LwIP TLS 1.3          | Automatischer GPX-Upload im Heim-WLAN bei Zündung AUS. |
 | **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / USB TX    | u-blox SAM-M10Q UBX-NAV-PVT Parsing, TMP117 Temp & OPT3001 Lux. |
 | **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles I2S Digitalmikrofon A-Weighting & RMS-Pegel via Xtensa DSP. |

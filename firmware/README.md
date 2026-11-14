@@ -89,14 +89,18 @@ esptool.py --chip esp32s3 -p /dev/cu.usbmodem1101 write_flash 0x5E0000 build/dat
 In v10.0 besitzt **nur die Zentralbox (`PCBA 01`)** einen von außen zugänglichen USB-C Service-Port (`J3`, abgesichert über die 5V Ideal-Diode `D3` `LM66100` und `U10` `USBLC6-2SC6`). Alle Satelliten-Knoten (`PCBA 03`, `PCBA 05`, `PCBA 08`, `PCBA 09/10`) hängen mit ihren nativen USB-D+/D--Leitungen (`GPIO 12/13` bzw. `GPIO 19/20`) direkt am internen 7-Port USB 2.0 Automotive-Hub (`U9` `USB2517I-JZX`) der Zentralbox.
 
 ### 4.1 Flashen der Zentralbox (`PCBA 01`) über USB-C Service-Port `J3`
-Bei angestecktem USB-C-Kabel an `J3` wird die 5V/3.3V-Logik der Zentralbox über `D3` (`LM66100`) direkt vom Laptop gespeist (auch ohne 12V-Bordspannung):
+Bei angestecktem USB-C-Kabel an `J3` wird die 5V/3.3V-Logik der Zentralbox über `D3` (`LM66100`) direkt vom Laptop gespeist (auch ohne 12V-Bordspannung). Dies reicht für das Flashen, Debuggen und Kalibrieren der Zentralbox (`PCBA 01`) vollständig aus:
 
 ```bash
 ./firmware/build.sh main_controller flash monitor -p /dev/cu.usbmodem1101
 ```
 
 ### 4.2 Flashen aller Satelliten-Knoten (`PCBA 03`, `05`, `08`, `09/10`) über die Zentralbox
-Kein einziges Satelliten-Gehäuse muss zum Flashen geöffnet werden (`Zero-Disassembly Bus-DFU`):
+Kein einziges Satelliten-Gehäuse muss zum Flashen geöffnet werden (`Zero-Disassembly Bus-DFU`).
+
+> [!IMPORTANT]
+> **Spannungsversorgung für Bus-DFU der Satelliten:** Die Quad-Automotive-eFuse `U12` (`TPS25921`), welche die 12V-Bus-Zweige zu den Satelliten an `J6` schaltet, wird direkt aus `KL30_IN` (12V) gespeist. Im reinen 5V-USB-C-Betrieb an `J3` sind die Satelliten an `J6` daher stromlos. Für das Flashen der Satelliten über den Bus muss daher **12V an `J1` (DTM-6)** anliegen (oder der jeweilige Satellit auf der Werkbank lokal versorgt werden).
+
 1. **Reguläres Bus-DFU (`USB_PKT_DFU_ENTER = 0x50` / `USB_PKT_DFU_CHUNK = 0x51`):**
    - [`omm_flasher.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/omm_flasher.cpp) auf der Zentralbox versetzt den Zielknoten per signiertem USB-Backbone-Befehl `0x50` in den DFU-Empfangsmodus, überträgt das Firmware-Image in 1024-Byte-Blöcken (`0x51` mit CRC32) mit 420 KB/s in dessen `ota_1`-Partition und löst nach erfolgreicher SHA-256-Prüfung den Reboot aus.
 2. **Hardware-Unbricking (eFuse Power-Cycle Recovery):**

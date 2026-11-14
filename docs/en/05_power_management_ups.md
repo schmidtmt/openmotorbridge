@@ -1,24 +1,24 @@
 # 05 - Power Management, UPS & Vehicle Electrical Protection
 
-This document specifies the dynamic power and protection management of OpenMotorBridge v10.0 Standardized Node Architecture: the primary switching regulators (Central Box `LM2596S-5.0` & Front Node `TPS54302` + `SW3526`), the uninterruptible power supply (UPS with `BQ24075`, `TPS2115A`, and **2,200 mAh Flat LiPo**), the **Dual-Power Input Architecture (12V Net `J1` / 5V USB-C Service Input `J3`)**, automotive transient and reverse-polarity protection (ISO 7637-2 via `LM74700-Q1`), intelligent **dongle power management (1-click cold reboot & Auto-Café mode)**, **Apple Find My & Google Find My Device dual-beaconing**, and the multi-stage winter hibernation cascade (< 16.5 µA).
+This document specifies the dynamic power and protection management of OpenMotorBridge v10.0 Standardized Node Architecture: the primary switching regulators (Central Box `LM5164-Q1` & Front Node `TPS54302` + `SW3526`), the uninterruptible power supply (UPS with `BQ24075` and **2,200 mAh Flat LiPo**), the **Dual-Power Input Architecture (12V Net `J1` / 5V USB-C Service Input `J3`)**, automotive transient and reverse-polarity protection (ISO 7637-2 via `SMBJ33CA` and `LM66100` ideal diode), intelligent **dongle power management (1-click cold reboot & Auto-Café mode)**, **Apple Find My & Google Find My Device dual-beaconing**, and the multi-stage winter hibernation cascade (< 16.5 µA).
 
 ---
 
 ## 1. Primary Switching Regulators of the Assemblies
 
-To achieve high efficiency and thermal headroom inside sealed IP67 enclosures, the regulator architecture is synchronized with [`07_pcba_hardware_pinouts.md`](file:///Users/schmidtm/openMotorBridge/docs/en/07_pcba_hardware_pinouts.md):
+To achieve high efficiency and thermal headroom inside sealed IP67 enclosures, the regulator architecture is synchronized with [`07_pcba_hardware_pinouts.md`](07_pcba_hardware_pinouts.md):
 
 ```
 +-----------------------------------------------------------------------------+
 |                    DCDC CONVERTER ARCHITECTURE IN THE SYSTEM                |
 +--------------------------------------+--------------------------------------+
-| 1. CENTRAL BOX (PCBA 01): LM2596S-5.0| 2. FRONT NODE (PCBA 05): TPS54302    |
+| 1. CENTRAL BOX (PCBA 01): LM5164-Q1  | 2. FRONT NODE (PCBA 05): TPS54302    |
 +--------------------------------------+--------------------------------------+
-| * Input (via LM74700): 6.0 V - 40 V  | * Input voltage: 4.5 V - 28 V        |
-| * Output: 5.0 V DC / 3.0 A Continuous| * Output: 5.0 V DC / 3.0 A Continuous|
-| * Post-reg: 2x AMS1117-3.3 LDOs      | * PD Source: SW3526 (65W Buck-Boost) |
-| * UPS Mux: BQ24075 + TPS2115A OR-ing | * Protection: SMBJ24A + AO3401A P-FET|
-| * Supplies: S31, Hub, Audio, UPS     | * Supplies: ESP32-P4/E22, Hub, OLEDs |
+| * Input (via J1 DTM): 6.0 V - 100 V  | * Input voltage: 4.5 V - 28 V        |
+| * Output: 5.0 V DC / 1.0 A Continuous| * Output: 5.0 V DC / 3.0 A Continuous|
+| * Post-reg: TPS7A0533 LDO            | * PD Source: SW3526 (65W Buck-Boost) |
+| * Dual-Input: LM66100 Ideal Diode    | * Protection: SMBJ24A + AO3401A P-FET|
+| * Supplies: S31, Hub, Audio, LoRa    | * Supplies: ESP32-P4/E22, Hub, OLEDs |
 +--------------------------------------+--------------------------------------+
 ```
 
@@ -27,7 +27,7 @@ The energy storage inductance $L$ of the buck converters is dimensioned for cont
 
 $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
 
-* **Central Box (`PCBA 01`, `U7 LM2596S-5.0`):** Shielded $33\,\mu\text{H} / 47\,\mu\text{H}$ power inductor ($I_{\text{sat}} \ge 3{,}5\,\text{A}$), feeding dual `AMS1117-3.3` LDO rails (`U3` for MCU/Hub logic and `U15` dedicated ultra-clean rail for `QCC3084`/`ES8388` Audio DSP).
+* **Central Box (`PCBA 01`, `U1 LM5164-Q1`):** Shielded $47\,\mu\text{H} / 68\,\mu\text{H}$ power inductor ($I_{\text{sat}} \ge 1{,}8\,\text{A}$), feeding ultra-low-IQ LDO `U11 TPS7A0533` (for `VCC_3V3` logic, digital hub, and audio DSP).
 * **Front Node (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchronous buck, $3{,}0\,\text{A}$) for logic, `USB2514Bi` hub, and dual OLEDs, paired with an onboard **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** supplying the Glovebox Hub (`PCBA 05B`).
 * **Input Capacitance:** Multi-stage 100V X7R multilayer ceramic capacitors (MLCC) and bulk capacitors reliably damp wiring harness inductances.
 
@@ -39,59 +39,57 @@ $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{
 
 ### 1.3 Dual-Power Input Architecture (12V Vehicle Net `J1` vs. 5V USB-C Service Input `J3`)
 
-For firmware development, **Central Bus-DFU flashing**, PWA testing, and workbench diagnostics, the Central Box (`PCBA 01`) provides a reverse-current-protected **5V USB-C Service/Bench Input (`J3`)**:
+For firmware development, configuration, and desk diagnostics of the Central Box (`PCBA 01`), the Central Box does not require a 12V bench power supply and instead provides a reverse-current-protected **5V USB-C Service/Bench Input (`J3`)**:
 
 ```
              DUAL-INPUT POWER-ORING ARCHITECTURE (CENTRAL BOX PCBA 01)
 +----------------------------+
-| 12V VEHICLE NET (J1 DTM-6) |---> [F1 PPTC + D1 SMBJ33A + U1 LM74700 Ideal-Diode]
-| KL30 (Batt) / KL15 (Ign.)  |         |
-+----------------------------+         +---> 12V_SYS ---> [U12 TPS25921 Quad eFuse] (Pods/Front/Radar)
+| 12V VEHICLE NET (J1 DTM-6) |---> KL30_IN ---> [D2 SMBJ33CA TVS (33V Clamping)]
+| KL30 (Batt) / KL15 (Ign.)  |        |
++----------------------------+        +---> [U12 TPS25921 Quad eFuse] ---> J6 Satellites (12V)
+                                       |     (VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR)
+                                       v
+                                [U1 LM5164-Q1 Buck] (100V Wide-VIN Step-Down)
                                        |
                                        v
-                                [U7 LM2596S-5.0 Buck] ---> 5V_BUCK ---+
-                                                                      |
-+----------------------------+                                        v
-| 5V USB-C SERVICE PORT (J3) |---> [D3 LM66100 Ideal-Diode] -----> [U5 TPS2115A / 5V_SYS Rail]
-| (PC / Standard 5V Supply)  |     (Zero Back-Feed Block)             * ESP32-S31 + USB2517I Hub
-+----------------------------+                                        * BQ24075 UPS Charger (U2)
++----------------------------+   VCC_5V Rail <------------------------------+
+| 5V USB-C SERVICE PORT (J3) |        |                                     |
+| (PC / Standard 5V Supply)  |        +---> [U11 TPS7A0533 3.3V LDO]        |
++-------------+--------------+                 |                            |
+              |                                v                            |
+              +---> USBC_VBUS ---> [D3 LM66100 Ideal-Diode] ----------------+
+                                   (Reverse Current Blocking / Zero Back-Feed)
 ```
 
-* **Clear Separation Between 5V Service Input (`J3`) and 12V High-Power Feed (`J1`):**
-  * **On-Bike & 12V Testbench Operation (`J1` DTM06-6S):** When 12V vehicle power is applied to `J1`, `12V_SYS` feeds all four `TPS25921` eFuse branches (`U12`) for high-power 12V loads (Front Node 60W USB-PD Source via `SW3526`, Saddlebag Pods 30W USB-PD Source via `SW3516H`, 12V mechatronic solenoids, and 12V rear radar) as well as the `LM2596S-5.0` buck (`U7`) and `BQ24075` UPS charger.
-  * **Workbench & Desk Diagnostics via 5V USB-C (`J3`):** When connected only to a laptop or 5V USB-C adapter via `J3`, the **`LM66100` Ideal Diode (`D3`)** directly powers the `5V_SYS` logic rail (`ESP32-S31`, `USB2517I` 7-port hub, Audio DSP, LoRa, and UPS charger). This enables full diagnostics and **Central Bus-DFU flashing** of the Central Box and downstream USB-bus nodes without a 12V power supply. (Note: `12V_SYS`, downstream 30W/60W USB-PD outputs `SW3516H`/`SW3526`, and 12V actuators remain unpowered during 5V-only USB service operation.)
-  * **Zero Back-Feed Isolation:** `LM74700-Q1` (`U1`, 12V path), `LM66100` (`D3`, 5V USB path), and `TPS2115A` (`U5`) strictly prevent 12V vehicle power from back-feeding into the USB-C port / PC host and prevent 5V USB power from leaking into the vehicle harness.
+* **Clear Separation of the Two Operating Modes:**
+  * **1. On-Bike & 12V Testbench Full Operation (`J1` DTM06-6S on 12V Power):** When 12V vehicle net voltage is present at `J1`, the 100V synchronous step-down regulator **`U1` (`LM5164-Q1`)** efficiently converts vehicle voltage into `VCC_5V` and via the ultra-low-IQ LDO **`U11` (`TPS7A0533`)** into `VCC_3V3`. Simultaneously, the **`TPS25921` Quad Automotive eFuse (`U12`)** switches monitored 12V power to the four peripheral branches on `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In this mode, all satellites (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Rear Radar) are energized and can be flashed and operated over the 4-wire USB backbone via **Central Bus-DFU**.
+  * **2. Workbench & Desk Diagnostics via 5V USB-C (`J3`):** When connected to a PC or standard USB charger, the **`LM66100` Ideal Diode (`D3`)** directly feeds the internal `VCC_5V` rail and via `U11` the 3.3V logic of the **Central Box (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-port hub, Audio DSP, LoRa, and IMU). This allows the Central Box alone to be flashed, calibrated, and monitored without requiring a 12V power supply.
+  * **Hardware Clarification on Satellite Powering During Workbench Mode (P01):** On `PCBA 01`, the USB-C service input `J3` exclusively powers the Central Box's internal 5V rail (`VCC_5V`). The four satellite branches on `J6` are hardware-wired directly to `KL30_IN` (12V) through `U12`; there is intentionally no unprotected 5V cross-tie onto the 12V vehicle bus line to prevent overloading the host PC or causing reverse feed. To power or flash connected satellite nodes together with the Central Box on the bench, a 12V supply at `J1` is required, OR the respective satellite must be energized individually via its local test port.
+  * **Zero Back-Feed Isolation:** The **`LM66100` Ideal Diode (`D3`)** strictly blocks reverse current from `VCC_5V` back to `J3`. When 12V vehicle power is active while a diagnostic laptop is plugged into `J3`, `D3` reliably prevents any back-feed into the programming PC.
 
 ---
 
-## 2. Dynamic Power-Path Management & Integrated UPS
+## 2. Dynamic Power Management & Voltage Monitoring
 
-- **Power-Path Controller:** Texas Instruments **BQ24075** with automatic load and charge current distribution.
-- **UPS Battery Cell:** 2,200 mAh wide-temperature single-cell flat LiPo ($3{,}7\,\text{V}$ nominal, $4{,}2\,\text{V}$ charge cutoff, operating discharge range $-20\,^\circ\text{C}$ to $+60\,^\circ\text{C}$, Type 504068 / 503870, $68 \times 39 \times 5{,}0\,\text{mm}$).
-- **JEITA NTC Thermal Management (Murata 10k NTC on BQ24075 TS Pin):**
-  - **Cold Inhibit ($T < 0\,^\circ\text{C}$):** Charging current is clamped to $0\,\text{mA}$ in hardware to prevent lithium plating and dendrite growth during winter riding. The system operates normally directly from vehicle power.
-  - **Heat Inhibit ($T > 45\,^\circ\text{C}$):** Charging stops to protect the pouch cell against gas swelling from engine heat soak under the seat.
-- **Seamless Cold-Crank Switchover ($6{,}5\,\text{V}$ Dip):**  
-  When cranking heavy high-compression engines (e.g. 1200cc Boxer or V-Twin), battery voltage momentarily dips to $6{,}5\,\text{V}$. The BQ24075 switches to internal LiPo buffering in $< 8{,}5\,\mu\text{s}$ without dropping the 5V system rail $\rightarrow$ Audio streams, mesh connectivity, and GNSS logs stay 100% uninterrupted.
+- **Internal Voltage Regulation:** Texas Instruments **LM5164-Q1** (100V Synchronous Step-Down DC/DC Buck) for 5V and **TPS7A0533** (Ultra-Low Quiescent Current LDO) for 3.3V.
+- **Battery & Temperature Sensing (`J5`):** 4-pin header for external battery monitoring and NTC thermistor:
+  - **Voltage Divider `R12`/`R13` (100k/100k):** High-impedance divider feeding battery voltage to `BAT_SENSE` (`ADC1_CHANNEL_0` on ESP32-S31).
+  - **NTC Divider `R14` (10k):** Measures pack temperature on `BAT_NTC` (`ADC1_CHANNEL_2`) for thermal charging protection.
+- **Cold-Crank Immunity ($6.5\,\text{V}$ Dip):**
+  When cranking heavy V-twin or boxer engines, the wide input range of the LM5164-Q1 (operational down to $6.0\,\text{V}$) combined with bulk decoupling maintains 5V and 3.3V logic rails without dropping out.
 - **Graceful Shutdown Run-On:** Keeps the system alive after ignition OFF for:
-  - Finalizing and flushing GPX telemetry blackbox files to the MicroSD card.
-  - Searching for authorized home Wi-Fi networks and executing TLS 1.3 WebDAV synchronization.
-  - Sending clean BLE disconnect events to paired smartphones.
-
-### 2.1 Autonomous Crowdsourced Tracking & Anti-Theft Battery Endurance (Apple & Google Dual-Beacon)
-When parked or if thieves sever the 12V motorcycle battery, the Central Box switches to the internal 2,200 mAh LiPo cell:
-* **Interleaved Dual-Beaconing:** The ESP32-S3 broadcasts alternating Apple Find My (FMNP) and Google Find My Device (FMDN) BLE advertisements every 2.0 seconds ($2{,}5\,\text{ms}$ TX burst, average current draw $\approx 15\,\mu\text{A}$).
-* **Shock Monitoring (Wake-on-Motion):** The 6-axis IMU (LIS3DH / ICM-42688) monitors physical tampering consuming only $6\,\mu\text{A}$.
-* **Battery Budget:** With total quiescent draw of $\approx 31\,\mu\text{A}$ ($0{,}031\,\text{mA}$), the 2,200 mAh cell provides a theoretical standby endurance of over **70,000 hours (~8 years)**, or practically **3 to 4 years of autonomous tracking and alarm standby** accounting for self-discharge and sub-zero winter temperatures ($-15\,^\circ\text{C}$).
+  - Finalizing and flushing GPX telemetry blackbox files to the MicroSD card (`sdio_track_finalize()`).
+  - WebDAV upload over home Wi-Fi or PWA relay.
+  - Clean BLE disconnect signaling before entering deep sleep.
 
 ---
 
 ## 3. Automotive Transient, EMC & Polarity Protection (ISO 7637-2 & ISO 16750-2)
 
-- **Overcurrent Protection:** Resettable automotive PPTC fuse (`F1`) at the `J1` KL30 input plus dedicated 4-channel eFuses (`U12 TPS25921`) for all external branches.
-- **Transient & Spike Clamping:** Littelfuse `SMBJ33A` / `SMBJ33CA` TVS diode (`D1`, $33\,\text{V}$ standoff) clamping ISO 16750-2 load dump transients.
-- **Active Reverse Polarity Protection:** Texas Instruments **`LM74700-Q1`** (`U1`) ideal-diode controller driving an external N-channel MOSFET (`Q1`, $R_{\text{DS(on)}} < 10\,\text{m}\Omega$).
-- **LC-PI Filtering:** Dual-stage LC-PI filter ($10\,\mu\text{H}$ shielded automotive inductor + $2 \times 10\,\mu\text{F}$ X7R 100V ceramic capacitors) at KL30 and KL15 inputs.
+- **Overcurrent Protection & Current Limiting:** 4-channel automotive eFuses (**`U12 TPS25921`**) with programmable current clamps for each external branch on `J6`.
+- **Transient & Spike Clamping:** Littelfuse **`SMBJ33CA`** bidirectional TVS diode (**`D2`**, $33\,\text{V}$ standoff voltage) clamping ISO 16750-2 / ISO 7637-2 load dump spikes.
+- **High-Voltage Rating:** The central buck converter **`U1 LM5164-Q1`** is rated for input transients up to $100\,\text{V}$, providing $> 45\,\text{V}$ margin above the clamped TVS voltage.
+- **Decoupling & LC Filtering:** $10\,\mu\text{F}$ 100V X7R ceramic input capacitor (`C1`) at KL30 and LC filter network (`L1` $47\,\mu\text{H}$ + `C2` $22\,\mu\text{F}$) for minimum ripple on the 5V rail.
 
 ### 3.1 Two-Cable Architecture & Power Distribution with TI TPS25921 eFuse Protection
 All peripheral connections from Central Box (`PCBA 01`) route through the **Two-Cable Architecture** (Cable 1: 6-pin Deutsch DTM `J1` for vehicle net/CAN; Cable 2: 16-pin Automotive Connector `J4` for periphery bus). Every external branch is hardware-protected on `PCBA 01` via a dedicated **TI TPS25921 eFuse (`U12`, `GPIO 13..16`)**:

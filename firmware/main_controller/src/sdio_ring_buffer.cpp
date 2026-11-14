@@ -180,14 +180,14 @@ esp_err_t sdio_track_lock_favorite(const char *tag) {
 esp_err_t sdio_track_finalize(void) {
     if (!s_current_gpx_file) return ESP_OK;
 
-    ESP_LOGI(TAG, "Finalizing & cryptographically signing GPX Tour structure...");
+    ESP_LOGI(TAG, "Finalizing & sealing GPX Tour integrity (HMAC-SHA256 seal)...");
     write_and_hash("    </trkseg>\n  </trk>\n");
 
     uint8_t digest[32];
     mbedtls_sha256_finish(&s_sha_ctx, digest);
     mbedtls_sha256_free(&s_sha_ctx);
 
-    // Derive hardware-unique key from factory eFuse MAC and sign digest via HMAC-SHA256
+    // Derive hardware-unique key from factory eFuse MAC and seal digest via HMAC-SHA256 integrity seal
     uint8_t hw_key[32] = {0};
     esp_efuse_mac_get_default(hw_key);
     for (int i = 6; i < 32; ++i) {

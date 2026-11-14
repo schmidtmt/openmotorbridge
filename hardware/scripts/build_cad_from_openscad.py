@@ -43,6 +43,7 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/015_pod_monocoque_tub.stl"),
     ("02_pod_base/parts/015_pod_monocoque_tub.scad", "02_pod_base/pod_monocoque_tub.stl"),
     ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/011_pod_slide_tray.stl"),
+    ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/014_pod_dry_flap.stl"),
     ("02_pod_base/parts/014_pod_dry_flap.scad", "02_pod_base/pod_dry_flap.stl"),
     ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/021_pod_slide_lid.stl"),
     ("02_pod_base/parts/013_pod_slide_lid.scad", "02_pod_base/013_pod_slide_lid.stl"),

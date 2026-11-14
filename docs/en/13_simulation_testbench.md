@@ -70,7 +70,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 
 The script validates system-wide logic flows across 10 lifecycle scenarios:
 
-* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) OR 5V USB-C Service Mode (`J3`) $\rightarrow$ Validation of `LM74700-Q1` / `LM66100` dual-power decoupling $\rightarrow$ Cold boot of host MCUs $\rightarrow$ 4-wire automotive USB bus enumeration.
+* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) OR 5V USB-C Service Mode (`J3`) $\rightarrow$ Validation of `LM5164-Q1` / `LM66100` dual-power decoupling $\rightarrow$ Cold boot of host MCUs $\rightarrow$ 4-wire automotive USB bus enumeration.
 * **Scenario 2A (Blank Pod):** No 1-Wire ID detected $\rightarrow$ Automatic `"disabled"` profile (Mute at $-96\,\text{dB}$ to protect against open inputs).
 * **Scenario 2B (Hot-Swap):** Insertion of Sena SPIDER X Slim / Cardo Edge cartridge on a live system $\rightarrow$ 1-Wire detection in $< 2\,\text{s}$ $\rightarrow$ Immediate profile loading and unmuting.
 * **Scenario 3:** u-blox SAM-M10Q Multi-GNSS 3D fix (22 satellites) via J12 Qwiic and precision time sync.

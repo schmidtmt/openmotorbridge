@@ -177,7 +177,7 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 1. **Typ B (Universelles Monocoque-Pod-Gehäuse):** Ein zu 100 % bilaterales Monocoque-Gehäuse ($150{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$ Außenmaß mit $141{,}0 \times 61{,}0\,\text{mm}$ durchgehendem inneren Wannenboden und $93{,}5 \times 61{,}0\,\text{mm}$ freier Gerätekammer hinter der Elektronikbucht – **über 40 % mehr Nutzvolumen** als die früheren Kassetten), das dauerhaft im Seitenkoffer, am Heckrahmen oder an Sturzbügeln montiert wird.
 2. **L-förmiger Slot-in Schiebedeckel (`013_pod_slide_lid.scad`) mit nach unten greifenden PA12-Plastikkrallen & fester unterer Rückwand (`Z = 0..14 mm`):**
-   * Der einteilige **L-förmige Schiebedeckel** ($146{,}5 \times 63{,}8\,\text{mm}$) kombiniert die horizontale Deckelplatte (geführt in den seitlichen C-Nuten bei $Z = 32{,}0\dots 35{,}2\,\text{mm}$ mit vorderem Keilanzug bei $X = 3{,}5\,\text{mm}$) monolithisch mit der oberen vertikalen **Deckelrückwand (`Heckwand`, $Z = 14{,}0\dots 38{,}0\,\text{mm}$ inkl. $3{,}5\,\text{mm}$ Tropfnase)**.
+   * Der einteilige **L-förmige Schiebedeckel** ($146{,}5 \times 60{,}5\,\text{mm}$ Deckelplatte, $64{,}9\,\text{mm}$ über Führungszungen) kombiniert die horizontale Deckelplatte (geführt in den seitlichen C-Nuten bei $Z = 32{,}0\dots 35{,}6\,\text{mm}$, Deckelplatte $Z = 32{,}3\dots 35{,}1\,\text{mm}$ mit $0{,}5\,\text{mm}$ Spiel zum Nutdach) monolithisch mit der oberen vertikalen **Deckelrückwand (`Heckwand`, $Z = 14{,}0\dots 38{,}0\,\text{mm}$ inkl. $3{,}5\,\text{mm}$ Tropfnase)**.
    * Die **untere Rückwand der Monocoque-Wanne (`015_pod_monocoque_tub.scad`) ist bis auf $Z = 14{,}0\,\text{mm}$ hochgezogen**, sodass der optionale **SMA-Antennendurchbruch ($Z = 7{,}5\,\text{mm}, Y = 35{,}0\,\text{mm}$)** dauerhaft fest in der Wanne verbleibt – eine montierte Außenantenne bewegt sich beim Aufschieben des Deckels keinen Millimeter!
    * Im Inneren der Deckelrückwand sitzt ein **100 % metallfreier PA12 U-Bügel ($52{,}0\,\text{mm}$ Spannweite)**, dessen zwei seitliche **PA12-Plastikkrallen** ($Y = 8{,}5\dots 14{,}5\,\text{mm}$ und $Y = 55{,}5\dots 61{,}5\,\text{mm}$) von der Deckelrückwand **nach unten** in die korrespondierenden Rasttaschen ($Z = 9{,}8\dots 14{,}2\,\text{mm}$) der niedrigen festen Rückwand greifen und dabei den mittleren SMA-Antennenbereich als Torbogen komplett freilassen.
 3. **Unsichtbare FOB-Magnetentriegelung (`3,2 mm` Vertikalhub):** Bei Annäherung des Smart-Keyfobs (`PCBA 07` mit N52-Neodym-Magnet) an die Außenseite der Deckelrückwand zieht das Magnetfeld die im U-Bügel eingelassene N52-Münze ($\varnothing\,6{,}0 \times 2{,}0\,\text{mm}$) um **$3{,}2\,\text{mm}$ nach oben**, hebt beide Plastikkrallen synchron aus der festen unteren Rückwand und gibt den L-Deckel zum Abziehen nach hinten ($+X$) frei – 100 % werkzeuglos, ohne sichtbare Schlösser, funktransparent und diebstahlsicher.
@@ -323,7 +323,7 @@ Das Innere des Satelliten-Pods ist modular in zwei vertikal getrennte Ebenen geg
 
 ### 4.4 Direkte Intercom-Integration & Raumgewinn (Entfall der Kassetten)
 
-Durch den vollständigen Entfall der Kassetten-Führungsschienen, Doppelwände, Ausstoßfedern und Verriegelungsriegel vergrößert sich die lichte Innenkammer auf **$143{,}0 \times 63{,}0 \times 32{,}0\,\text{mm}$** ($141{,}0 \times 61{,}0\,\text{mm}$ am Wannenboden bzw. $113{,}0 \times 61{,}0\,\text{mm}$ hinter der `PCBA 03` Elektronikbucht) – ein **Reingewinn an nutzbarem Innenvolumen von über 40 %** gegenüber dem früheren Kassettensystem!
+Durch den vollständigen Entfall der Kassetten-Führungsschienen, Doppelwände, Ausstoßfedern und Verriegelungsriegel vergrößert sich die lichte Innenkammer auf **$141{,}0 \times 61{,}0 \times 32{,}3\,\text{mm}$** (mit $93{,}5 \times 61{,}0\,\text{mm}$ lichter, planer Einbaufläche ab $X = 52{,}0\,\text{mm}$ hinter der $46{,}0 \times 61{,}0\,\text{mm}$ großen `PCBA 03` Elektronikbucht) – ein **Reingewinn an nutzbarem Innenvolumen von über 40 %** gegenüber dem früheren Kassettensystem!
 
 In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener Vorderwand) ist die enorme Geräumigkeit und die tiefliegende `PCBA 03` mit ihrem 4-adrigen Silikon-Flachbandkabel zur stirnseitigen 4-Pin Magnetkupplung (Port A) deutlich erkennbar:
 
@@ -509,8 +509,8 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 | FAHRZEUG- & ZUBEHÖR-WAND (NORDFLANKE Y = 68 mm / nach vorne/unten):                                                         |
 |  * Port 1 [ MAIN ]   (X = 35.0 mm): Oval-Port (11.0 x 5.5 mm) für J1 Backbone (4P) + J4 Hub / Lenkerlader (6P)              |
 |  * Port 2 [ DONGLE ] (X = 52.0 mm): Oval-Port (11.0 x 5.5 mm) für J_DONGLE (CarPlay/AA) - Standard: Bündiger Blindstopfen  |
-|  * Port 3 [ AUX 12V ](X = 62.0 mm): Mini-Port (6.5 x 4.5 mm) für J_AUX_LIGHT 12V geschaltet (Zusatzscheinwerfer)           |
-|  * Port 4 [ NAV 12V ](X = 70.25 mm): Mini-Port (6.5 x 4.5 mm) für J10 Navi-Power 12V (Garmin / Chigee AIO-5)                |
+|  * Port 3 [ AUX 12V ] (X = 62.0 mm): Mini-Port (6.5 x 4.5 mm) für J_AUX_LIGHT 12V geschaltet (Zusatzscheinwerfer)           |
+|  * Port 4 [ NAV 12V ] (X = 70.25 mm): Mini-Port (6.5 x 4.5 mm) für J10 Navi-Power 12V (Garmin / Chigee AIO-5)                |
 |  * Port 5 [ CAM 5V ] (X = 78.25 mm): Mini-Port (6.5 x 4.5 mm) für J8 Action-Cam 5V (GoPro / Insta360)                      |
 +-----------------------------------------------------------------------------------------------------------------------------+
 ```

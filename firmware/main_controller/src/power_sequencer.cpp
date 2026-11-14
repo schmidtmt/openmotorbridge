@@ -124,13 +124,13 @@ void power_sequencer_update_telemetry(float v_ign_volts, float v_bat_volts, floa
 
     // Dual-Power Input Detection (D3 LM66100 Ideal Diode OR-ing on J3 USB-C):
     // If v_ign_volts < 6.0V (no 12V bike battery connected) while MCU is running from 5V USB-C J3,
-    // enter Benchtop DFU / Service Mode (high-power 30W PD & Aux lights remain locked off).
+    // enter Benchtop DFU / Service Mode (PCBA 01 logic active; note that U12 satellite branches on J6 require 12V on J1).
     bool usb_only = (v_ign_volts < 6.0f && v_bat_volts < 6.0f);
     if (usb_only != s_diag.benchtop_usb_only_mode) {
         s_diag.benchtop_usb_only_mode = usb_only;
         if (usb_only) {
             s_diag.stage = POWER_STAGE_BENCHTOP_DFU;
-            ESP_LOGW(TAG, "🔌 [LM66100 DUAL-POWER] 5V USB-C Service/Benchtop Mode detected on J3 (No 12V supply). Logic & USB2517I Hub active for Bus-DFU!");
+            ESP_LOGW(TAG, "🔌 [LM66100 DUAL-POWER] 5V USB-C Service/Benchtop Mode on J3. Central Box logic & USB2517I active. (Note: U12 J6 satellite branches unpowered without 12V on J1)");
         }
     }
 
