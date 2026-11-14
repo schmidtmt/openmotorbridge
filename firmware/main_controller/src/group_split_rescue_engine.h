@@ -93,6 +93,13 @@ uint16_t group_split_get_doubt_timer_sec(void);
  */
 void group_split_update_lead_position(double lat, double lon);
 
+/**
+ * @brief Verarbeitet Human-in-the-Loop Lenker-PTT Eingaben während aktivem Doubt-Timer oder Rescue Level 2
+ *        (Doppelklick = "Alles OK / Absichtlich verlassen", Long-Press = "Technischer Stopp / Bitte warten")
+ * @return true wenn der Klick durch die Human-in-the-Loop Abfrage verarbeitet wurde
+ */
+bool group_split_handle_human_loop_ptt(uint8_t click_type);
+
 #ifdef __cplusplus
 }
 #endif

@@ -60,12 +60,13 @@ use <parts/015_pod_monocoque_tub.scad>;
 VIEW_MODE = "cutaway"; // ["cutaway", "exploded", "xray", "fob_lock"]
 
 // Exploded & Slide-in offsets
-EXP_LID_X      = (VIEW_MODE == "exploded") ? 80.0 : 0.0;  // Displaced horizontally along X to reveal rear slide-in slot!
-EXP_LID_Z      = (VIEW_MODE == "exploded") ? 75.0 : 0.0;  // Elevated high with wide, open clearance above actuator struts
-EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 28.0 : 0.0;  // Floats freely above the tub rim in open air
-EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 18.0 : 0.0;
-EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 8.0  : 0.0;
-SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 35.0 : ((VIEW_MODE == "xray") ? 38.0 : 0.0);  // Lid partially retracted along X-rails to demonstrate sliding action!
+EXP_LID_X      = (VIEW_MODE == "exploded") ? 46.0 : 0.0;  // Displaced horizontally along X to reveal rear L-lid & plastic claws!
+EXP_LID_Z      = (VIEW_MODE == "exploded") ? 36.0 : 0.0;  // Elevated with full visibility of the L-lid rear wall & claws
+EXP_BRACKET_X  = (VIEW_MODE == "exploded") ? 28.0 : 0.0;  // Horizontal slide-in offset for actuator struts along Rail 1
+EXP_BRACKET_Z  = (VIEW_MODE == "exploded") ? 18.0 : 0.0;
+EXP_FLAP_Z     = (VIEW_MODE == "exploded") ? 14.0 : 0.0;
+EXP_PCB_Z      = (VIEW_MODE == "exploded") ? 6.0  : 0.0;
+SLIDE_LID_X    = (VIEW_MODE == "cutaway")  ? 0.0  : ((VIEW_MODE == "xray") ? 22.0 : 0.0);  // Closed in cutaway to show L-wall + claws engaged; partially slid out in xray!
 
 module internal_wiring_preview() {
     // Port B USB-C internal silicone cable (from bulkhead at Z=11.5 to J_USB_OUT at X=9.5, Y=22.0)
@@ -83,7 +84,10 @@ module pod_monocoque_full_assembly() {
                 pod_monocoque_tub();
             // Cut away near longitudinal wall (Y = -10 to 22 mm) to open full view into both zones
             translate([8.0, -10.0, 10.0])
-                cube([POD_OUTER_L - 16.0, 32.0, POD_OUTER_H + 20.0]);
+                cube([POD_OUTER_L - 18.0, 32.0, POD_OUTER_H + 20.0]);
+            // Cut away front-left corner of low rear sill up to Y = 11.5 mm so the left Plastikkralle socket is sectioned
+            translate([POD_OUTER_L - 12.0, -10.0, 7.0])
+                cube([20.0, 21.5, POD_OUTER_H + 20.0]);
         }
     } else if (VIEW_MODE == "xray") {
         color([0.3, 0.45, 0.65, 0.28])
@@ -126,7 +130,7 @@ module pod_monocoque_full_assembly() {
 
     // Modular Dual Slot-In Actuator Struts with Z-Carriages (Z = 21.6 mm)
     // Strut 1 (Front Media key) and Strut 2 (Rear Intercom key)
-    translate([0, 0, EXP_BRACKET_Z]) {
+    translate([EXP_BRACKET_X, 0, EXP_BRACKET_Z]) {
         universal_actuator_slide_bracket(
             strut1_x = 76.0,
             strut2_x = 117.0,
@@ -140,24 +144,30 @@ module pod_monocoque_full_assembly() {
         );
     }
 
-    // 8. Tool-Free Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.4 mm)
-    // Firmly captured and locked from above by the solid PA12 upper retaining lip (Z = 35.2 to 38.0 mm)
+    // 8. Tool-Free L-Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.4 mm)
+    // Centered at Y = (POD_OUTER_W - 63.8)/2 = 3.1 mm, X = 3.5 mm (rear face flush at X = 150.0 mm)
+    lid_x_pos = 3.5;
+    lid_y_pos = (POD_OUTER_W - 63.8) / 2.0; // 3.1 mm (centered)
     lid_z_pos = 32.4;
 
     if (VIEW_MODE == "cutaway") {
-        difference() {
-            translate([2.0 + SLIDE_LID_X, (POD_OUTER_W - 60.5)/2.0, lid_z_pos + EXP_LID_Z]) {
+        translate([lid_x_pos + SLIDE_LID_X, lid_y_pos, lid_z_pos + EXP_LID_Z]) {
+            difference() {
                 color([0.22, 0.23, 0.25, 0.95])
-                    pod_slide_lid();
+                    pod_slide_lid_body();
+                // Cut away near front-left and rear-left corner to expose C-groove & internal U-Lock cavity
+                translate([4.5, -10.0, -30.0])
+                    cube([95.0, 34.0, 45.0]);
+                translate([135.0, -10.0, -30.0])
+                    cube([20.0, 11.5, 45.0]);
             }
-            // Cut away near corner to expose internal C-groove engagement and equipment
-            translate([-10.0, -10.0, -10.0])
-                cube([85.0, POD_OUTER_W/2.0 + 5.0, POD_OUTER_H + 50.0]);
+            // Render the bright cyan PA12 Plastikkrallen & N52 magnet intact inside the sectioned Heckwand!
+            translate([146.5 - 3.8 + 1.0, 0, 0])
+                pod_u_lock_bracket(unlocked = false);
         }
     } else {
-        translate([2.0 + SLIDE_LID_X + EXP_LID_X, (POD_OUTER_W - 60.5)/2.0, lid_z_pos + EXP_LID_Z]) {
-            color([0.22, 0.23, 0.25, (VIEW_MODE == "xray" ? 0.65 : 0.95)])
-                pod_slide_lid();
+        translate([lid_x_pos + SLIDE_LID_X + EXP_LID_X, lid_y_pos, lid_z_pos + EXP_LID_Z]) {
+            pod_slide_lid(show_internal_lock = true, unlocked = false, alpha = (VIEW_MODE == "xray" ? 0.58 : 0.95));
         }
     }
 }

@@ -1,296 +1,100 @@
-# OpenMotorBridge - Firmware Developer & Build Guide (ESP-IDF v5.2 / v5.3)
+# OpenMotorBridge - Firmware Developer & Build Guide (v10.0 Architecture / ESP-IDF v5.5)
 
-Dieses Dokument ist die verbindliche Schritt-für-Schritt-Anleitung für Software-Entwickler und Nachbauer zum Einrichten der Build-Umgebung, Kompilieren, Partitionieren und Flashen der drei Firmware-Ziele von OpenMotorBridge.
+Dieses Dokument ist die verbindliche Referenz für Software-Entwickler zum Einrichten der Build-Umgebung, Kompilieren, Partitionieren und zentralen Flashen (Zero-Disassembly Bus-DFU) aller Firmware-Ziele der **OpenMotorBridge v10.0 Hardware-Architektur**.
 
 ---
 
-## 1. Übersicht der Firmware-Ziele (Targets)
+## 1. Übersicht der Firmware-Ziele & Verbindliche Target-Matrix
 
-Das OpenMotorBridge-Gesamtsystem verteilt die Aufgaben auf drei dedizierte Mikrocontroller-Baugruppen:
+In OpenMotorBridge v10.0 sind alle Knoten im Fahrzeug über den **geschirmten 4-Draht USB 2.0 + 12V/5V Automotive-Backbone** (`USB2517I-JZX` 7-Port Hub auf `PCBA 01` und `USB2514Bi-AEZG` 4-Port Hub auf `PCBA 05`) miteinander vernetzt. Das frühere 6.5-GHz-UWB-Backbone (`DW3110`) sowie alle dedizierten UART-Flash-Header (`J_PROG`) auf den Satelliten-Platinen sind in v10.0 vollständig entfallen.
 
-```
-+---------------------------------------------------------------------------------------------------+
-| OPENMOTORBRIDGE FIRMWARE TARGET MATRIX                                                            |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| Target-Verzeichnis| MCU     | Hardware-Baugruppe    | Takt / RAM  | Hauptaufgaben                 |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `main_controller` | ESP32-S3| Zentralbox (PCBA 01)  | 240 MHz     | * Audio-DSP Matrix & EKF      |
-|                   | N16R8   | Batteriefach          | 8 MB OPI RAM| * CAN-Bus & Fahrzeugprofile   |
-|                   |         |                       | 16 MB Flash | * UWB Backbone Hub & LoRa SX  |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `front_node`      | ESP32-S3| Front-Knoten (PCBA 05)| 240 MHz     | * GNSS SAM-M10Q & Sensorik    |
-|                   | N16R8   | Cockpit / Verkleidung | 8 MB OPI RAM| * Knowles I2S Wind-AGC        |
-|                   |         |                       | 16 MB Flash | * USB-PD / Ottocast Steuerung |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `smart_cartridge` | ESP32-C6| Smart Cartridge (03)  | 160 MHz     | * 4x AO3400A Mechatronik Gate |
-|                   | RISC-V  | Bucht 1 & Bucht 2     | 512 KB SRAM | * ES8388 I2S Codec Streaming  |
-|                   |         |                       | 4 MB Flash  | * All-UWB Backbone Node       |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `radar_submcu`    | ESP32-C5| Heck-Radar (PCBA 08)  | 160 MHz     | * Wheeltec MR20 mmWave Parser |
-|                   | / C6    | Kennzeichenträger     | 512 KB SRAM | * 36x Halo RGB LED Animation  |
-|                   |         |                       | 4 MB Flash  | * UWB Ziel-Telemetrie Stream  |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `omm_module`      | ESP32-C6| OMM 2.4 GHz (PCBA 09) | 160 MHz     | * ESP-NOW Mesh Intercom       |
-|                   | RISC-V  | Helm / UCS Cartridge  | 512 KB SRAM | * Opus / ES8388 48 kHz Audio  |
-|                   |         |                       | 4 MB Flash  | * BLE CarPlay & Keypad State  |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `omm446_module`   | ESP32-C6| OMM 446 MHz (PCBA 10) | 160 MHz     | * NiceRF SA818-DMR UART/DSP   |
-|                   | RISC-V  | PMR446 / DMR Tier I/II| 512 KB SRAM | * ES8388 16 kHz Voice Stream  |
-|                   |         | Helm / UCS Cartridge  | 4 MB Flash  | * 0.2W/0.5W ERP & CTCSS Engine|
-+-------------------+---------+-----------------------+-------------+-------------------------------+
-| `smart_keyfob`    | Nordic  | Smart-Keyfob (PCBA 07)| 64 MHz      | * BLE 5.4 Remote & Key State  |
-|                   | nRF52840| Taschen-Pager / Qi    | 256 KB RAM  | * SX1262 LoRa 4,5 km Pager RX |
-|                   | ARM-M4F | Schlüsselbund         | 1 MB Flash  | * DRV2605L Haptik & Buzzer    |
-+-------------------+---------+-----------------------+-------------+-------------------------------+
+| Target-Verzeichnis | Physischer SoC / Modul (KiCad / BOM) | ESP-IDF Build-Target (`CONFIG_IDF_TARGET`) | Hardware-Baugruppe | Flash / RAM | Hauptaufgaben in v10.0 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| [`main_controller`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller) | `ESP32-S31-WROOM-1U` (Pinkompatibles Footprint zu S3-WROOM-1U) | `esp32s3` | Zentralbox (`PCBA 01`) | 8/16 MB Flash, 8 MB Octal PSRAM | USB-Backbone Root-Host (`USB2517I`), Quad-eFuse Power-Sequencer (`GPIO 13..16`), Zentraler Bus-DFU-Flasher (`0x50`/`0x51`), Audio-DSP (`ES8388` + `QCC3084`), `SX1262` LoRa (`GPIO 9..12`), CAN-FD (`SN65HVD230`), Action-Cam BLE-Client, 4-Bit SDIO Blackbox (`GPIO 33..39`) |
+| [`front_node`](file:///Users/schmidtm/openMotorBridge/firmware/front_node) | `ESP32-P4` (SoC) + `ESP32-E22` (Wi-Fi 6E / BLE 5.4 Companion) | `esp32s3` (ESP-IDF v5.5 Host-Build) | Universal Front-Node (`PCBA 05` + `05B`/`05C`/`05D`) | 4/8 MB Flash, 8 MB Octal PSRAM | USB-Backbone Node (`USB2514Bi`), Dual Under-Perch Cockpit OLEDs (`SSD1306` 128×32 via I2C `0x3C` + `TCA9548A`), 6× Lenkertaster (`PCBA 05C`), Sensor-Puck (`PCBA 05D`: `SAM-M10Q` GNSS, `TMP117`, `OPT3001`, `SPH0645` I2S), Handschuhfach-Hub (`PCBA 05B` `SW3526` 60W PD) |
+| [`smart_cartridge`](file:///Users/schmidtm/openMotorBridge/firmware/smart_cartridge) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | Satelliten-Pod Interface (`PCBA 03`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 12/13`), `ES8388` Audio-Codec, `OMM_DETECT` Auto-Sense (`GPIO 14` -> `TS5A3159DBVR` `GPIO 15`), 4× `AO3400A` Kaltstart-Aktuatortreiber (`GPIO 4/5/6/7`), `SW3516` 30W USB-PD |
+| [`radar_submcu`](file:///Users/schmidtm/openMotorBridge/firmware/radar_submcu) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | Heck-Radar & V2X Node (`PCBA 08`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 12/13`), 77 GHz MR20 mmWave UART-Parser (`GPIO 4/5`), 5.9 GHz ETSI ITS-G5 802.11p OCB V2X C-ITS Parser (`GPIO 18/19`, `0x32`), 36× `WS2812B` Halo-Wings (`GPIO 6/7`) |
+| [`omm_module`](file:///Users/schmidtm/openMotorBridge/firmware/omm_module) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | OMM 2.4 GHz / Unified UCS (`PCBA 09/10`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Audio/CDC Node (`GPIO 12/13`), `SX1262` 868 MHz LoRa + `SA868S` UHF + 2.4 GHz Mesh, `ES8388` 48 kHz Audio (`GPIO 6/7`, I2S `GPIO 4/5/8/9`) |
+| [`omm446_module`](file:///Users/schmidtm/openMotorBridge/firmware/omm446_module) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | OMM 446 MHz PMR/DMR Profil (`PCBA 10`) | 4 MB Flash, 512 KB SRAM | Dediziertes PMR446 / DMR Tier I/II Profil für die Unified Tri-Band UCS Hardware (`PCBA 10`) mit `SA868S`/`SA818` UART-Steuerung (`GPIO 20/21`, PTT `GPIO 10`, PD `GPIO 11`) |
+| [`smart_keyfob`](file:///Users/schmidtm/openMotorBridge/firmware/smart_keyfob) | `ESP32-C6` / Nordic `nRF52840` | Zephyr / C6 | 2-in-1 LoRa Smart-Keyfob (`PCBA 07`) | 4 MB / 1 MB Flash | BLE 5.4 Proximity Key, `SX1262` 868 MHz Bi-Direktionaler Alarm-Pager, Piezo/LRA Haptik, `BQ25120A` Qi-Lademanagement |
+
+---
+
+## 2. Voraussetzungen & Automatisierter Build
+
+### 2.1 One-Command Komplett-Build (Alle 6 ESP-IDF Targets)
+
+Das Repository enthält ein vollautomatisches Build-Skript ([`tools/build_firmware.sh`](file:///Users/schmidtm/openMotorBridge/tools/build_firmware.sh) bzw. [`firmware/build.sh`](file:///Users/schmidtm/openMotorBridge/firmware/build.sh)), das via [`tools/esp_env.sh`](file:///Users/schmidtm/openMotorBridge/tools/esp_env.sh) automatisch ESP-IDF (`~/esp-idf/export.sh`), CMake und Ninja lädt und das korrekte `IDF_TARGET` (`esp32s3` bzw. `esp32c6`) für jedes Verzeichnis setzt:
+
+```bash
+# Alle 6 ESP-IDF Targets nacheinander kompilieren und verifizieren:
+./firmware/build.sh all
+
+# Einzelnes Target kompilieren:
+./firmware/build.sh main_controller
+./firmware/build.sh front_node
+./firmware/build.sh smart_cartridge
+./firmware/build.sh radar_submcu
+./firmware/build.sh omm_module
+./firmware/build.sh omm446_module
 ```
 
 ---
 
-## 2. Voraussetzungen & Toolchain-Installation
+## 3. Partition Table & Storage-Architektur
 
-### 2.1 Systemanforderungen
-* **Betriebssystem:** Linux (Ubuntu 22.04 / 24.04), macOS (Apple Silicon / Intel) oder Windows 11 (WSL2 empfohlen).
-* **Python:** Python 3.10 oder neuer mit `pip` und `virtualenv`.
-* **Build-Tools:** CMake >= 3.16, Ninja-Build, Git.
-
-### 2.2 ESP-IDF v5.2 / v5.3 installieren
-
-```bash
-# 1. Arbeitsverzeichnis für ESP-IDF anlegen
-mkdir -p ~/esp && cd ~/esp
-
-# 2. ESP-IDF Repository klonen (Release v5.2 oder v5.3 LTS)
-git clone -b v5.2.2 --recursive https://github.com/espressif/esp-idf.git esp-idf-v5.2
-
-# 3. Toolchains für ESP32-S3 und ESP32-C6 / ESP32-C5 installieren
-cd ~/esp/esp-idf-v5.2
-./install.sh esp32s3,esp32c6,esp32c5
-
-# 4. Umgebungsvariablen in die aktuelle Shell laden
-. ./export.sh
-```
-
-> [!TIP]
-> Um ESP-IDF dauerhaft bequem verfügbar zu machen, empfiehlt sich ein Alias in `~/.zshrc` oder `~/.bashrc`:
-> ```bash
-> alias get_idf='. $HOME/esp/esp-idf-v5.2/export.sh'
-> ```
-
----
-
-## 3. Kompilieren der Targets
-
-> [!TIP]
-> **Automatisches Build-Skript (empfohlen):**
-> Statt Toolchains und Pfade manuell zu laden, steht ein vollständiges Automatisierungs-Skript bereit:
-> ```bash
-> # Standard-Build für den Hauptcontroller:
-> ./tools/build_firmware.sh
-> # oder direkt aus dem firmware-Verzeichnis:
-> ./firmware/build.sh
-> 
-> # Spezifisches Target kompilieren:
-> ./tools/build_firmware.sh front_node
-> ./tools/build_firmware.sh smart_cartridge
-> 
-> # Alle ESP-IDF Targets nacheinander bauen:
-> ./tools/build_firmware.sh all
-> 
-> # Flashen oder sonstige idf.py-Befehle weiterreichen:
-> ./tools/build_firmware.sh main_controller flash -p /dev/cu.usbmodem1101
-> ```
-> Das Skript bindet via `tools/esp_env.sh` automatisch `CMake.app` (`/Applications/CMake.app/Contents/bin`), Ninja (`/usr/local/bin`), Python 3.14 (`/Library/Frameworks/Python.framework/...`) und ESP-IDF (`~/esp-idf/export.sh`) ein.
-
-Manuelle Einzelschritte pro Target:
-
-```bash
-cd /path/to/openMotorBridge/firmware
-```
-
-### 3.1 Target 1: Hauptcontroller (`main_controller`)
-
-```bash
-cd main_controller
-
-# Ziel-Architektur festlegen
-idf.py set-target esp32s3
-
-# (Optional) Menü-Konfiguration inspizieren
-idf.py menuconfig
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/bootloader/bootloader.bin`
-* `build/partition_table/partition-table.bin`
-* `build/openmotorbridge_main.bin`
-
-### 3.2 Target 2: Front-Knoten (`front_node`)
-
-```bash
-cd ../front_node
-
-# Ziel-Architektur festlegen
-idf.py set-target esp32s3
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/bootloader/bootloader.bin`
-* `build/partition_table/partition-table.bin`
-* `build/openmotorbridge_front_node.bin`
-
-### 3.3 Target 3: Smart Cartridge (`smart_cartridge`)
-
-```bash
-cd ../smart_cartridge
-
-# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
-idf.py set-target esp32c6
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/openmotorbridge_smart_cartridge.bin`
-
-### 3.4 Target 4: Radar Sub-MCU (`radar_submcu`)
-
-```bash
-cd ../radar_submcu
-
-# Ziel-Architektur festlegen (ESP32-C6 oder ESP32-C5)
-idf.py set-target esp32c6
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/openmotorbridge_radar2_submcu.bin`
-
-### 3.5 Target 5: OMM 2.4 GHz Intercom-Modul (`omm_module`)
-
-```bash
-cd ../omm_module
-
-# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
-idf.py set-target esp32c6
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/openmotorbridge_omm_module.bin`
-
-### 3.6 Target 6: OMM 446 MHz PMR/DMR Transceiver (`omm446_module`)
-
-```bash
-cd ../omm446_module
-
-# Ziel-Architektur festlegen (ESP32-C6 RISC-V)
-idf.py set-target esp32c6
-
-# Kompilieren
-idf.py build
-```
-
-Das erzeugt:
-* `build/openmotorbridge_omm446_module.bin`
-
-### 3.7 Target 7: Smart Keyfob & Silent Pager (`smart_keyfob`)
-
-Für das Nordic nRF52840 Target wird das Zephyr RTOS / nRF Connect SDK verwendet:
-
-```bash
-cd ../smart_keyfob
-
-# Zephyr Build mit nRF52840 Target & DeviceTree Overlay
-west build -b nrf52840dk_nrf52840 -- -DEXTRA_DTC_OVERLAY_FILE=openmotorbridge_keyfob.overlay
-
-# Flashen via SWD Header (J_SWD) mit Segger J-Link:
-nrfjprog --program build/zephyr/zephyr.hex --chiperase --reset
-```
-
-Das erzeugt:
-* `build/zephyr/zephyr.hex`
-* `build/zephyr/zephyr.bin`
-
----
-
-## 4. Partition Table & Storage-Architektur
-
-Alle Targets nutzen eine fehlertolerante Dual-Bank A/B OTA-Partitionierung mit automatischem Rollback-Schutz.
-
-### 4.1 Partitions-Layout (`partitions.csv`)
+### 3.1 Hauptcontroller (`firmware/main_controller/partitions.csv` — 8 MB / 16 MB Flash)
 
 ```csv
 # Name,   Type, SubType, Offset,   Size,     Flags
-nvs,      data, nvs,     0x9000,   0x4000,
-otadata,  data, ota,     0xd000,   0x2000,
-phy_init, data, phy,     0xf000,   0x1000,
-ota_0,    app,  ota_0,   0x10000,  0x300000,
-ota_1,    app,  ota_1,   0x310000, 0x300000,
-storage,  data, spiffs,  0x610000, 0x1E0000,
+nvs,      data, nvs,     0x9000,   0x6000,
+otadata,  data, ota,     0xf000,   0x2000,
+phy_init, data, phy,     0x11000,  0x1000,
+ota_0,    app,  ota_0,   0x20000,  0x2E0000,
+ota_1,    app,  ota_1,   0x300000, 0x2E0000,
+storage,  data, spiffs,  0x5E0000, 0x200000,
 ```
 
-* **`nvs` (16 KB):** Speichert kryptografische Schlüssel (AES-128-GCM Gruppen-Session-Keys), Kalibrierdaten der IMU und das zuletzt aktive CAN-Fahrzeugprofil.
-* **`otadata` (8 KB):** Verwaltet die aktive Boot-Partition und Rollback-Zähler (anti-bricking).
-* **`ota_0` / `ota_1` (je 3 MB):** Dual-Bank Firmware-Partitionen. Updates werden in die inaktive Bank geflasht; bootet diese nicht erfolgreich innerhalb von 30 s, schlägt der Bootloader automatisch auf die vorherige Version zurück.
-* **`storage` (LittleFS / SPIFFS):** Enthält CAN-Bus DBC/JSON-Fahrzeugprofile (`/can_profiles/bmw_k24.json`, `/can_profiles/harley_hdcan.json`) sowie Offline-Assets des PWA-Dashboards.
+### 3.2 Front-Node (`firmware/front_node/partitions.csv` — 4 MB / 8 MB Flash)
 
-### 4.2 Dateisystem-Image erstellen und flashen
+```csv
+# Name,   Type, SubType, Offset,  Size,     Flags
+nvs,      data, nvs,     0x9000,  0x4000,
+otadata,  data, ota,     0xd000,  0x2000,
+phy_init, data, phy,     0xf000,  0x1000,
+ota_0,    app,  ota_0,   0x10000, 0x1B0000,
+ota_1,    app,  ota_1,   0x1C0000,0x1B0000,
+storage,  data, spiffs,  0x370000,0x80000,
+```
+
+### 3.3 Dateisystem-Image (`data_image.bin`) erzeugen und flashen
+
+Um die Fahrzeugprofile (`hardware/vehicle_profiles/`) in ein SPIFFS-Image zu packen und in die `storage`-Partition der Zentralbox (`0x5E0000`) zu schreiben:
 
 ```bash
-# LittleFS / SPIFFS Partition für Fahrzeugprofile erzeugen und flashen:
-esptool.py --chip esp32s3 -p /dev/tty.usbmodem* write_flash 0x610000 data_image.bin
+# 1. SPIFFS-Image (2 MB = 0x200000) aus den Fahrzeugprofilen generieren:
+python3 $IDF_PATH/components/spiffs/spiffsgen.py 0x200000 hardware/vehicle_profiles build/data_image.bin
+
+# 2. Image in die storage-Partition (Offset 0x5E0000) flashen:
+esptool.py --chip esp32s3 -p /dev/cu.usbmodem1101 write_flash 0x5E0000 build/data_image.bin
 ```
 
 ---
 
-## 5. Flashen & Serieller Monitor
+## 4. Zentrales Flashen über den Fahrzeug-Bus (Zero-Disassembly Bus-DFU)
 
-### 5.1 Direktes Flashen via USB-C
+In v10.0 besitzt **nur die Zentralbox (`PCBA 01`)** einen von außen zugänglichen USB-C Service-Port (`J3`, abgesichert über die 5V Ideal-Diode `D3` `LM66100` und `U10` `USBLC6-2SC6`). Alle Satelliten-Knoten (`PCBA 03`, `PCBA 05`, `PCBA 08`, `PCBA 09/10`) hängen mit ihren nativen USB-D+/D--Leitungen (`GPIO 12/13` bzw. `GPIO 19/20`) direkt am internen 7-Port USB 2.0 Automotive-Hub (`U9` `USB2517I-JZX`) der Zentralbox.
 
-1. Verbinden Sie den USB-C Service-Port der Baugruppe mit dem PC.
-2. Identifizieren Sie den seriellen Port:
-   * **macOS:** `/dev/tty.usbmodem*`
-   * **Linux:** `/dev/ttyACM0` oder `/dev/ttyUSB0`
-   * **Windows:** `COM3`, `COM4`, etc.
+### 4.1 Flashen der Zentralbox (`PCBA 01`) über USB-C Service-Port `J3`
+Bei angestecktem USB-C-Kabel an `J3` wird die 5V/3.3V-Logik der Zentralbox über `D3` (`LM66100`) direkt vom Laptop gespeist (auch ohne 12V-Bordspannung):
 
 ```bash
-# Flash und automatischer Start des seriellen Monitors
-idf.py -p /dev/tty.usbmodem1101 flash monitor
+./firmware/build.sh main_controller flash monitor -p /dev/cu.usbmodem1101
 ```
 
-### 5.2 Manuelles Bootstrapping (Bootloader-Recovery)
-Sollte ein Modul nicht automatisch in den Bootloader wechseln:
-1. Taste `BOOT` (oder `SW_PAIR_RESET`) gedrückt halten.
-2. Taste `RESET` kurz drücken (oder Versorgungsspannung kurz trennen).
-3. Taste `BOOT` loslassen.
-4. Das Modul meldet sich im ROM-Bootloader-Modus (`waiting for download`).
-
-### 5.3 Monitor beenden & Filter
-* **Monitor beenden:** Tastenkombination `Ctrl + ]`.
-* **Logging-Level zur Laufzeit filtern:**
-  ```bash
-  idf.py monitor --print-filter="*:I UWB:D CAN:D"
-  ```
-
----
-
-## 6. Häufige Fehler & Troubleshooting
-
-1. **`PSRAM not detected` / Boot-Loop:**
-   * Ursache: Falscher Octal-/Quad-SPI Modus in `sdkconfig`.
-   * Lösung: `CONFIG_SPIRAM_MODE_OCT=y` für WROOM-1-N16R8 sicherstellen.
-2. **`Flash size mismatch` (16 MB vs. 4 MB / 8 MB):**
-   * Lösung: In `idf.py menuconfig` unter `Serial flasher config` -> `Flash size` exakt auf `16 MB` stellen.
-3. **UWB SPI Transceiver Timeout:**
-   * Prüfen, ob der SPI-Bus auf 20 MHz konfiguriert ist und der DW3110 Interrupt-Pin (`DW_IRQ`) GPIO-Konflikte aufweist.
+### 4.2 Flashen aller Satelliten-Knoten (`PCBA 03`, `05`, `08`, `09/10`) über die Zentralbox
+Kein einziges Satelliten-Gehäuse muss zum Flashen geöffnet werden (`Zero-Disassembly Bus-DFU`):
+1. **Reguläres Bus-DFU (`USB_PKT_DFU_ENTER = 0x50` / `USB_PKT_DFU_CHUNK = 0x51`):**
+   - [`omm_flasher.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/omm_flasher.cpp) auf der Zentralbox versetzt den Zielknoten per signiertem USB-Backbone-Befehl `0x50` in den DFU-Empfangsmodus, überträgt das Firmware-Image in 1024-Byte-Blöcken (`0x51` mit CRC32) mit 420 KB/s in dessen `ota_1`-Partition und löst nach erfolgreicher SHA-256-Prüfung den Reboot aus.
+2. **Hardware-Unbricking (eFuse Power-Cycle Recovery):**
+   - Reagiert ein Knoten nicht mehr auf Software-Befehle, schaltet die Zentralbox den jeweiligen Zweig über den Quad-eFuse-Switch `U12` (`TPS25921` auf `GPIO 13..16`) kurzzeitig stromlos (`250 ms`) und fängt das USB-Serial/JTAG-ROM-Bootloader-Fenster des Ziel-ESP32 direkt auf dem USB-Hub (`U9`) ab.

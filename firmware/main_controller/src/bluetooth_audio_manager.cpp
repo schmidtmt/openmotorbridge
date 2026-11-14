@@ -1,4 +1,5 @@
 #include "bluetooth_audio_manager.h"
+#include "group_split_rescue_engine.h"
 #include <string.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
@@ -59,6 +60,7 @@ static void parse_qcc_response(const char *line) {
         int state = 0;
         if (sscanf(line + 12, "%d", &state) == 1) {
             s_hfp_state = (HfpCallState_t)state;
+            group_split_set_hfp_call_state(s_hfp_state != HFP_STATE_IDLE);
             ESP_LOGI(TAG, "📞 QCC3084 HFP Call State updated: %d (%s)",
                      state, (state == HFP_STATE_RINGING) ? "RINGING" :
                             (state == HFP_STATE_CALL_ACTIVE) ? "CALL_ACTIVE" : "IDLE");
@@ -301,12 +303,14 @@ void bt_audio_hfp_answer(void) {
     ESP_LOGI(TAG, "📞 QCC3084 HFP: Answering incoming phone call (ATA)...");
     qcc_send_cmd("AT+ATA");
     s_hfp_state = HFP_STATE_CALL_ACTIVE;
+    group_split_set_hfp_call_state(true);
 }
 
 void bt_audio_hfp_hangup(void) {
     ESP_LOGI(TAG, "📞 QCC3084 HFP: Terminating / rejecting phone call (ATH)...");
     qcc_send_cmd("AT+ATH");
     s_hfp_state = HFP_STATE_IDLE;
+    group_split_set_hfp_call_state(false);
 }
 
 HfpCallState_t bt_audio_hfp_get_state(void) {

@@ -9,24 +9,30 @@ extern "C" {
 #endif
 
 // =============================================================================
-// OpenMotorBridge - Persistent Hardware Inventory & Topology Anomaly Supervisor
+// OpenMotorBridge v10.0 - Persistent Hardware Inventory & Topology Supervisor
+// Evaluates the USB2517I 7-Port Hub Star Topology + Onboard Peripherals
 // =============================================================================
 
 typedef enum {
-    HW_INV_POD1        = (1 << 0),  // Satelliten-Pod 1 (Intercom A / 1-Wire)
-    HW_INV_POD2        = (1 << 1),  // Satelliten-Pod 2 (Intercom B / 1-Wire)
-    HW_INV_POD3        = (1 << 2),  // Heck-Pod 3 Backbone (GNSS / LoRa / UART1)
-    HW_INV_FRONT_NODE  = (1 << 3),  // Front-Node (Cockpit / ESP-NOW)
-    HW_INV_RADAR       = (1 << 4),  // Radar 2.0 Sub-MCU / Garmin Varia (UART2)
-    HW_INV_ACTION_CAM  = (1 << 5),  // Action-Cam BLE Remote
-    HW_INV_OBD2        = (1 << 6),  // OBD2 / CAN BLE Adapter
-    HW_INV_TPMS_FRONT  = (1 << 7),  // TPMS Vorderrad BLE
-    HW_INV_TPMS_REAR   = (1 << 8),  // TPMS Hinterrad BLE
-    HW_INV_KEYFOB      = (1 << 9),  // Smart-Keyfob LoRa Pager
-    HW_INV_CAN_BUS     = (1 << 10), // Fahrzeug-CAN Bus
-    HW_INV_SD_CARD     = (1 << 11), // MicroSD-Karte gemountet
-    HW_INV_DS18B20     = (1 << 12)  // 1-Wire Außentemperaturfühler
+    HW_INV_POD1         = (1 << 0),  // Satelliten-Pod 1 (USB2517I Port 3 / PCBA 03 / OMM)
+    HW_INV_POD2         = (1 << 1),  // Satelliten-Pod 2 (USB2517I Port 4 / PCBA 03 / OMM)
+    HW_INV_LORA_SX1262  = (1 << 2),  // Onboard Semtech SX1262 868 MHz LoRa (U10 auf PCBA 01)
+    HW_INV_FRONT_NODE   = (1 << 3),  // Front-Node Cockpit (USB2517I Port 2 / PCBA 05 ESP32-P4 + E22)
+    HW_INV_RADAR        = (1 << 4),  // Radar 2.0 & 5.9 GHz C-ITS V2X (USB2517I Port 5 / PCBA 08 ESP32-C5)
+    HW_INV_ACTION_CAM   = (1 << 5),  // Action-Cam BLE Master (Central Box PCBA 01)
+    HW_INV_QCC3084_BT   = (1 << 6),  // Qualcomm QCC3084 BT 5.4 Dual-Audio & Auracast (U9 auf PCBA 01)
+    HW_INV_TPMS_FRONT   = (1 << 7),  // TPMS Vorderrad BLE
+    HW_INV_TPMS_REAR    = (1 << 8),  // TPMS Hinterrad BLE
+    HW_INV_KEYFOB       = (1 << 9),  // Smart-Keyfob LoRa Pager (PCBA 07)
+    HW_INV_CAN_BUS      = (1 << 10), // Fahrzeug-CAN-FD Bus (TCAN334G U6)
+    HW_INV_SD_CARD      = (1 << 11), // 4-Bit SDIO MicroSD-Karte gemountet (J2)
+    HW_INV_SENSOR_PUCK  = (1 << 12)  // Externer Sensor-Puck am Front-Node (SAM-M10Q + TMP117 + OPT3001)
 } HardwareInventoryBits_t;
+
+// Legacy bit aliases for backward compatibility
+#define HW_INV_POD3     HW_INV_LORA_SX1262
+#define HW_INV_OBD2     HW_INV_QCC3084_BT
+#define HW_INV_DS18B20  HW_INV_SENSOR_PUCK
 
 typedef enum {
     HW_NODE_OPTIONAL_ABSENT = 0, // In Baseline 0 & Aktuell 0 -> Dunkel (Normalfall für optionale Komponenten)
@@ -50,8 +56,8 @@ typedef struct {
 esp_err_t hw_inventory_init(void);
 
 /**
- * @brief Führt den System-Scan aller Busse (1-Wire, UART1, UART2, ESP-NOW, BLE) durch
- *        und generiert das 18-Paar Diagnosepaket für die Radar-LED-Matrix.
+ * @brief Führt den v10.0 System-Scan aller USB-Ports (USB2517I), SPI/I2C-ICs und BLE-Peripherie durch
+ *        und sendet das POST-Diagnosekommando über den 4-Draht USB-Bus an PCBA 08 (36x WS2812B Matrix).
  */
 void hw_inventory_scan_and_evaluate(void);
 

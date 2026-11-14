@@ -6,10 +6,10 @@ This document specifies the storage and telemetry subsystem of OpenMotorBridge v
 
 ## 1. High-Speed SDIO Storage Interface (4-Bit @ 40 MHz)
 
-* **Interface:** Native 4-bit SDIO bus operating at 40 MHz connected to ESP32-S3 (GPIOs 40-45).
-* **Throughput:** Continuous write speeds $> 12\,\text{MB/s}$ (enabling uninterrupted 10 Hz GPX, IMU, and audio telemetry logging).
-* **Filesystem:** FAT32 with dynamic sector buffering (32 kB cluster size).
-* **Failsafe:** The integrated BQ24075 UPS buffer guarantees clean unmounting and closing of FAT file allocation tables during abrupt power losses.
+* **Interface:** Native 4-bit SDIO bus operating at 40 MHz on `J2` (Push-Push MicroSD slot) of `PCBA 01`, wired directly to `ESP32-S31-WROOM-1U`: **`GPIO 38` (`SD_CLK`), `GPIO 39` (`SD_CMD`), `GPIO 33` (`SD_D0`), `GPIO 34` (`SD_D1`), `GPIO 35` (`SD_D2`), `GPIO 36` (`SD_D3`), and `GPIO 37` (`SD_CD` Card Detect)** (synchronized with [`07_pcba_hardware_pinouts.md`](file:///Users/schmidtm/openMotorBridge/docs/en/07_pcba_hardware_pinouts.md) and [`sdio_ring_buffer.h`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.h)).
+* **Throughput:** Continuous write speeds $> 12\,\text{MB/s}$ (enabling uninterrupted 10 Hz GPX, IMU, and audio telemetry logging via `esp_vfs_fat_sdmmc_mount()`).
+* **Filesystem:** FAT32 with dynamic sector buffering (32 kB cluster size) and real-time capacity queries via `esp_vfs_fat_info()`.
+* **Failsafe:** The integrated `BQ24075` UPS buffer guarantees clean `fsync` + `sdio_track_finalize()` closing of FAT file allocation tables during abrupt power losses.
 
 ---
 
@@ -161,9 +161,9 @@ To comply with European data privacy regulations (GDPR Art. 5 & 25) and German F
 +-------------------------------------------------------------+
 ```
 
-1. **Rolling Ringbuffer:** Normal riding data is recorded in 15-minute segments and cyclically overwritten.
-2. **Crash Freeze:** If the Bosch BMI270 IMU detects a severe deceleration impact ($> 4{,}0\,\text{g}$) or an engine cutoff accompanied by high tilt, the last 15 minutes plus subsequent rundown data are permanently write-protected.
-3. **Cryptographic Integrity (ECDSA SHA-256):** Every recorded segment is signed using a hardware key stored in the ESP32 eFuse/ATECC608A to provide tamper-proof evidence for accident reconstruction.
+1. **Rolling Ringbuffer (`sdio_purge_old_tracks_if_needed()`):** Normal riding data in `/sdcard/tracks/` is monitored via `esp_vfs_fat_info()`; when free space drops below `200 MB`, the ringbuffer manager iterates over unprotected `.gpx` files using POSIX `opendir()`/`readdir()`/`stat()` and unlinks (`unlink()`) the oldest segments by `st_mtime` until at least `250 MB` of free space is restored.
+2. **Crash Freeze & Highlight Lock (`sdio_track_lock_incident()`):** If the Bosch BMI270 IMU detects a severe deceleration impact ($> 4{,}0\,\text{g}$) or the rider presses the handlebar highlight switch, the firmware atomically renames the active track segment to `*.crash.gpx` or `*.fav.gpx` — permanently exempting it from automatic ringbuffer purging.
+3. **Cryptographic Integrity (`<omb:integrity_seal>` via SHA-256 Chain & Hardware eFuse Key):** Every written trackpoint updates a continuous `mbedtls_sha256` hash chain in [`sdio_ring_buffer.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.cpp). On file finalization (`sdio_track_finalize()`), the controller signs the final SHA-256 digest via `mbedtls_md_hmac` using the hardware-unique key derived from the `ESP32-S31` eFuse block (`EFUSE_BLK_KEY0` / Factory MAC) and embeds the integrity seal right before `</trk>`.
 
 ---
 
@@ -204,7 +204,7 @@ MOTORCYCLE ENTERS GARAGE (IGNITION OFF)
 +-------------------------------------------------------------+
 ```
 
-* **100% Automated:** The rider neither needs to unlock a smartphone nor physically extract microSD cards. The day's rides are already filed in the cloud upon entering the house.
+* **100% Automated & Zero-Coexistence-Conflict (Garage Post-Ride Sync Mode):** During active riding (`KL15 = HIGH`), 2.4 GHz Wi-Fi on `PCBA 01` remains strictly disabled (`0 dB` coexistence conflict with Bluetooth Classic / BLE audio; 5.9 GHz V2X Mesh runs on `ESP32-E22` inside Front Node `PCBA 05`). Only after parking (`KL15 = LOW` during UPS rundown or via Smartphone PWA relay) does [`webdav_uploader.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/webdav_uploader.cpp) initiate synchronization, create the remote collection via `HTTP_METHOD_MKCOL`, stream unsynced `.gpx` files in 2 kB chunks via `HTTP_METHOD_PUT` (TLS 1.3 / Basic Auth), and write a local `.uploaded` marker upon success.
 
 ### 7.1 Cloud Storage Architecture: Nextcloud vs. Lightweight Google Drive WebDAV Proxy (`omb.f0o.bar`)
 

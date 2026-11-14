@@ -1,5 +1,7 @@
 #include "audio_dsp_pipeline.h"
+#include "main_box_config.h"
 #include "uwb_cartridge_dispatcher.h"
+#include "group_split_rescue_engine.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -10,12 +12,12 @@
 
 static const char *TAG = "AUDIO_DSP";
 
-// I2S Pin-Definitionen (v8.0 Pinout)
-#define I2S_PIN_MCLK        GPIO_NUM_9
-#define I2S_PIN_BCLK        GPIO_NUM_10
-#define I2S_PIN_WS          GPIO_NUM_11
-#define I2S_PIN_DOUT        GPIO_NUM_12
-#define I2S_PIN_DIN         GPIO_NUM_13
+// I2S Pin-Definitionen (v10.0 PCBA 01 KiCad Pinout: U2 ESP32-S31 -> U3 ES8388 & U9 QCC3084)
+#define I2S_PIN_MCLK        PIN_MAIN_I2S_MCLK   // U2 Pad 12 (GPIO 0)
+#define I2S_PIN_BCLK        PIN_MAIN_I2S_BCLK   // U2 Pad 30 (GPIO 16)
+#define I2S_PIN_WS          PIN_MAIN_I2S_WS     // U2 Pad 32 (GPIO 47)
+#define I2S_PIN_DOUT        PIN_MAIN_I2S_DOUT   // U2 Pad 15 (GPIO 17)
+#define I2S_PIN_DIN         PIN_MAIN_I2S_DIN    // U2 Pad 16 (GPIO 18)
 
 #define SAMPLE_RATE         48000
 #define SAMPLE_RATE_HZ      SAMPLE_RATE
@@ -549,8 +551,9 @@ void task_audio_dsp(void *pvParameters) {
         int16_t music_l_sub[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
         int16_t music_r_sub[UWB_AUDIO_DOWN_MUSIC_SAMPLES];
 
+        bool hfp_call_mute = group_split_get_status().hfp_call_active;
         for (int v = 0; v < UWB_AUDIO_DOWN_VOICE_SAMPLES; v++) {
-            voice_sub[v] = s_privacy_mute_active ? 0 : (int16_t)(s_sidetone_linear * rx_buffer[v * 2]);
+            voice_sub[v] = (s_privacy_mute_active || hfp_call_mute) ? 0 : (int16_t)(s_sidetone_linear * rx_buffer[v * 2]);
         }
         for (int m = 0; m < UWB_AUDIO_DOWN_MUSIC_SAMPLES; m++) {
             music_l_sub[m] = (int16_t)(rx_buffer[m * 2] * s_ducking_factor);

@@ -220,28 +220,28 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
     (
         "02_pod_base/99_pod_monocoque_assembly.scad",
         os.path.join(CAD_IMG_DIR, "pod_monocoque_assembly_cutaway_3d.png"),
-        "75,35,20,55,0,320,300",
+        "78,35,20,55,0,320,315",
         "Tomorrow Night",
         ["-D", 'VIEW_MODE="cutaway"']
     ),
     (
         "02_pod_base/99_pod_monocoque_assembly.scad",
         os.path.join(CAD_IMG_DIR, "pod_monocoque_assembly_exploded_3d.png"),
-        "80,35,45,55,0,320,440",
+        "98,35,34,55,0,320,450",
         "Tomorrow",
         ["-D", 'VIEW_MODE="exploded"']
     ),
     (
         "02_pod_base/99_pod_monocoque_assembly.scad",
         os.path.join(CAD_IMG_DIR, "pod_monocoque_xray_assembly_3d.png"),
-        "75,35,20,55,0,320,330",
+        "86,35,20,55,0,320,350",
         "Tomorrow",
         ["-D", 'VIEW_MODE="xray"']
     ),
     (
         "02_pod_base/parts/016_fob_magnetic_lock_mechanism.scad",
         os.path.join(CAD_IMG_DIR, "pod_slide_lid_magnetic_lock_3d.png"),
-        "52,-10,24,60,0,335,115",
+        "-2,-5,20,62,0,225,135",
         "Tomorrow"
     ),
     (

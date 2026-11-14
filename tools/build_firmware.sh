@@ -60,27 +60,27 @@ fi
 case "$TARGET" in
     main|main_controller)
         TARGET_DIR="$FIRMWARE_DIR/main_controller"
-        TARGET_NAME="Main Controller (ESP32-S3)"
+        TARGET_NAME="Main Controller v10.0 (PCBA 01: ESP32-S31 + QCC3084 + SX1262)"
         ;;
     front|front_node)
         TARGET_DIR="$FIRMWARE_DIR/front_node"
-        TARGET_NAME="Front Node (ESP32-S3)"
+        TARGET_NAME="Front Node v10.0 (PCBA 05: ESP32-P4 + ESP32-E22 + Dual OLEDs)"
         ;;
     cartridge|smart_cartridge)
         TARGET_DIR="$FIRMWARE_DIR/smart_cartridge"
-        TARGET_NAME="Smart Cartridge (ESP32-C6)"
+        TARGET_NAME="Satellite Pod Interface v10.0 (PCBA 03: ESP32-C6 + SW3516 + U4)"
         ;;
     radar|radar_submcu)
         TARGET_DIR="$FIRMWARE_DIR/radar_submcu"
-        TARGET_NAME="Radar Sub-MCU (ESP32-C6)"
+        TARGET_NAME="Radar 2.0 & 5.9 GHz V2X v10.0 (PCBA 08: ESP32-C5 + MR20)"
         ;;
     omm|omm_module)
         TARGET_DIR="$FIRMWARE_DIR/omm_module"
-        TARGET_NAME="OMM 2.4 GHz Intercom (ESP32-C6)"
+        TARGET_NAME="OMM Unified Tri-Band v10.0 (PCBA 09/10: ESP32-C6 + SA818 + PICO)"
         ;;
     omm446|omm446_module)
         TARGET_DIR="$FIRMWARE_DIR/omm446_module"
-        TARGET_NAME="OMM 446 MHz Transceiver (ESP32-C6)"
+        TARGET_NAME="OMM 446 MHz PMR/DMR v10.0 (PCBA 10: ESP32-C6 + SA818-DMR)"
         ;;
     all)
         echo "========================================================================"

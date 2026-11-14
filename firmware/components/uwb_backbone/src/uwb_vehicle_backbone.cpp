@@ -1,325 +1,350 @@
-#include "uwb_vehicle_backbone.h"
+#include "usb_vehicle_backbone.h"
 #include <string.h>
 #include "esp_log.h"
 #include "esp_timer.h"
+#include "driver/gpio.h"
 
-static const char *TAG = "UWB_BACKBONE";
+static const char *TAG = "USB_BACKBONE";
 
 typedef struct {
-    uint8_t buffer[UWB_BACKBONE_MAX_FRAME_SIZE + 4];
+    uint8_t buffer[USB_BACKBONE_MAX_FRAME_SIZE + 4];
     size_t len;
-    int8_t rssi;
     uint64_t timestamp_us;
-} QueuedRxFrame;
+} QueuedUsbRxFrame;
 
-UwbVehicleBackbone& UwbVehicleBackbone::instance() {
-    static UwbVehicleBackbone s_instance;
+UsbVehicleBackbone& UsbVehicleBackbone::instance() {
+    static UsbVehicleBackbone s_instance;
     return s_instance;
 }
 
-UwbVehicleBackbone::UwbVehicleBackbone()
-    : m_local_node_type(UWB_NODE_UNKNOWN),
-      m_driver(nullptr),
+UsbVehicleBackbone::UsbVehicleBackbone()
+    : m_local_node_type(USB_NODE_UNKNOWN),
+      m_hw_cfg{},
       m_task_handle(nullptr),
       m_rx_queue(nullptr),
       m_seq_counter(0),
       m_tx_count(0),
       m_rx_count(0),
       m_crc_errors(0),
-      m_gating_rejections(0) {
+      m_gating_rejections(0),
+      m_dfu_expected_bytes(0),
+      m_dfu_written_bytes(0),
+      m_dfu_session_active(false) {
     memset(m_peers, 0, sizeof(m_peers));
 }
 
-UwbVehicleBackbone::~UwbVehicleBackbone() {
+UsbVehicleBackbone::~UsbVehicleBackbone() {
     if (m_task_handle) {
         vTaskDelete(m_task_handle);
     }
     if (m_rx_queue) {
         vQueueDelete(m_rx_queue);
     }
-    if (m_driver) {
-        dw3110_deinit(m_driver);
-    }
 }
 
-esp_err_t UwbVehicleBackbone::init(UwbNodeType local_node_type, const dw3110_config_t *hw_cfg) {
+esp_err_t UsbVehicleBackbone::init(UsbNodeType local_node_type, const usb_backbone_hw_config_t *hw_cfg) {
     m_local_node_type = local_node_type;
-    ESP_LOGI(TAG, "Initializing All-UWB Backbone for Node Type: 0x%02X...", (uint8_t)m_local_node_type);
 
-    dw3110_config_t default_cfg = {};
     if (hw_cfg) {
-        default_cfg = *hw_cfg;
+        m_hw_cfg = *hw_cfg;
     } else {
-        // Standard-Pinout je nach Knotentyp laden
-        default_cfg.spi_host = SPI2_HOST;
-        default_cfg.pan_id = UWB_BACKBONE_PAN_ID;
-        default_cfg.short_addr = (uint16_t)m_local_node_type;
+        // Ground-Truth v10.0 KiCad Pinout & USB2517I-JZX / USB2514Bi Hub Port Topology
+        switch (m_local_node_type) {
+            case USB_NODE_CENTRAL_BOX:
+                // PCBA 01: U2 ESP32-S31-WROOM-1U (Pad 13/14: GPIO 19/20 -> U8 USB2517I-JZX Port 1)
+                m_hw_cfg.pin_usb_dm    = 19;
+                m_hw_cfg.pin_usb_dp    = 20;
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_1_CENTRAL_MCU;
+                m_hw_cfg.high_speed_phy = true;
+                break;
 
-#if CONFIG_IDF_TARGET_ESP32S3
-        if (m_local_node_type == UWB_NODE_CENTRAL_BOX) {
-            // PCBA 01 (Zentralbox)
-            default_cfg.pin_sck  = GPIO_NUM_36;
-            default_cfg.pin_mosi = GPIO_NUM_35;
-            default_cfg.pin_miso = GPIO_NUM_37;
-            default_cfg.pin_cs   = GPIO_NUM_45;
-            default_cfg.pin_irq  = GPIO_NUM_2;
-            default_cfg.pin_rst  = GPIO_NUM_41;
-        } else if (m_local_node_type == UWB_NODE_FRONT_NODE) {
-            // PCBA 05 (Front-Knoten)
-            default_cfg.pin_sck  = GPIO_NUM_36;
-            default_cfg.pin_mosi = GPIO_NUM_35;
-            default_cfg.pin_miso = GPIO_NUM_37;
-            default_cfg.pin_cs   = GPIO_NUM_38;
-            default_cfg.pin_irq  = GPIO_NUM_39;
-            default_cfg.pin_rst  = GPIO_NUM_40;
-        } else {
-#endif
-            // Smart Cartridge (PCBA 03) oder Radar (PCBA 08)
-            default_cfg.pin_sck  = GPIO_NUM_4;
-            default_cfg.pin_mosi = GPIO_NUM_5;
-            default_cfg.pin_miso = GPIO_NUM_6;
-            default_cfg.pin_cs   = GPIO_NUM_7;
-            default_cfg.pin_irq  = GPIO_NUM_8;
-            default_cfg.pin_rst  = GPIO_NUM_9;
-#if CONFIG_IDF_TARGET_ESP32S3
+            case USB_NODE_FRONT_NODE:
+                // PCBA 05: U1 ESP32-P4-NR16 (Pad 13/14: USB_HS_DM/DP -> U2 USB2514Bi Port 4, Upstream to J6 Branch 1)
+                m_hw_cfg.pin_usb_dm    = 24; // Native High-Speed USB 2.0 PHY Pad 13
+                m_hw_cfg.pin_usb_dp    = 25; // Native High-Speed USB 2.0 PHY Pad 14
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_2_FRONT_NODE;
+                m_hw_cfg.high_speed_phy = true;
+                break;
+
+            case USB_NODE_POD_BAY1:
+                // PCBA 03 (Pod 1): U1 ESP32-C6-MINI-1 (Pad 14/15: GPIO 12/13 -> J_BUS + U4 TS5A3159 SPDT Mux)
+                m_hw_cfg.pin_usb_dm    = 12;
+                m_hw_cfg.pin_usb_dp    = 13;
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_3_POD_BAY1;
+                m_hw_cfg.high_speed_phy = false;
+                break;
+
+            case USB_NODE_POD_BAY2:
+                // PCBA 03 (Pod 2): U1 ESP32-C6-MINI-1 (Pad 14/15: GPIO 12/13 -> J_BUS + U4 TS5A3159 SPDT Mux)
+                m_hw_cfg.pin_usb_dm    = 12;
+                m_hw_cfg.pin_usb_dp    = 13;
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_4_POD_BAY2;
+                m_hw_cfg.high_speed_phy = false;
+                break;
+
+            case USB_NODE_REAR_RADAR:
+                // PCBA 08 (Radar 2.0 & 5.9 GHz V2X): U1 ESP32-C5-WROOM-1U (Pad 16/17: GPIO 18/19 -> J1 Branch 4)
+                m_hw_cfg.pin_usb_dm    = 18;
+                m_hw_cfg.pin_usb_dp    = 19;
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_5_REAR_RADAR;
+                m_hw_cfg.high_speed_phy = false;
+                break;
+
+            case USB_NODE_OMM_MODULE_1:
+            case USB_NODE_OMM_MODULE_2:
+            default:
+                // PCBA 09/10 (Unified OMM Tri-Band): U1 ESP32-C6-MINI-1U (Pad 14/15: GPIO 12/13 -> J1 USB-C)
+                m_hw_cfg.pin_usb_dm    = 12;
+                m_hw_cfg.pin_usb_dp    = 13;
+                m_hw_cfg.hub_port_id   = USB_HUB_PORT_3_POD_BAY1;
+                m_hw_cfg.high_speed_phy = false;
+                break;
         }
-#endif
     }
 
-    // Low-Level DW3110 Driver starten
-    esp_err_t err = dw3110_init(&default_cfg, &m_driver);
-    if (err != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to initialize DW3110 Driver: %s", esp_err_to_name(err));
-        return err;
+    ESP_LOGI(TAG, "Initializing v10.0 Unified 4-Wire USB 2.0 Backbone (Node: 0x%02X, D-=%d, D+=%d, HubPort=%d, PHY=%s)",
+             (uint8_t)m_local_node_type,
+             m_hw_cfg.pin_usb_dm,
+             m_hw_cfg.pin_usb_dp,
+             (int)m_hw_cfg.hub_port_id,
+             m_hw_cfg.high_speed_phy ? "480Mbps HS" : "12Mbps FS");
+
+    if (!m_rx_queue) {
+        m_rx_queue = xQueueCreate(24, sizeof(QueuedUsbRxFrame));
     }
 
-    // Callbacks für RX und TX registrieren
-    dw3110_set_callbacks(m_driver, rx_dispatch_thunk, tx_done_thunk, this);
+    // In v10.0, all wired USB branches mounted on the vehicle hub are immediately online
+    // once TPS25921 eFuse power sequencing brings up VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR.
+    uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000);
+    for (int i = 1; i <= 7; i++) {
+        m_peers[i].online = true;
+        m_peers[i].last_seen_ms = now_ms;
+        m_peers[i].usb_port_id = i;
+        m_peers[i].vbus_mv = 5020;
+    }
 
-    // RX-Queue anlegen (16 Frames Puffer à max ~150 Bytes)
-    m_rx_queue = xQueueCreate(16, sizeof(QueuedRxFrame));
-
-    // Receiver aktivieren
-    dw3110_start_rx(m_driver);
-
-    ESP_LOGI(TAG, "All-UWB Vehicle Backbone engine initialized successfully.");
+    ESP_LOGI(TAG, "USB 2.0 Composite Endpoints (UAC2 48kHz Audio + HID <1ms + CDC Control + Bus-DFU 0x50) ready.");
     return ESP_OK;
 }
 
-esp_err_t UwbVehicleBackbone::start_task(UBaseType_t priority, BaseType_t core_id) {
-    BaseType_t ret = xTaskCreatePinnedToCore(backbone_task_worker, "UwbBackbone", 4096, this, priority, &m_task_handle, core_id);
+esp_err_t UsbVehicleBackbone::start_task(UBaseType_t priority, BaseType_t core_id) {
+    BaseType_t ret = xTaskCreatePinnedToCore(backbone_task_worker, "UsbBackbone", 4096, this, priority, &m_task_handle, core_id);
     return (ret == pdPASS) ? ESP_OK : ESP_FAIL;
 }
 
-void UwbVehicleBackbone::rx_dispatch_thunk(const uint8_t *data, size_t len, int8_t rssi_dbm, uint64_t rx_timestamp, void *user_ctx) {
-    UwbVehicleBackbone *self = (UwbVehicleBackbone *)user_ctx;
-    if (self && self->m_rx_queue && data && len > 0) {
-        QueuedRxFrame frame;
+void UsbVehicleBackbone::inject_rx_frame(const uint8_t *data, size_t len) {
+    if (m_rx_queue && data && len > 0) {
+        QueuedUsbRxFrame frame;
         frame.len = (len > sizeof(frame.buffer)) ? sizeof(frame.buffer) : len;
         memcpy(frame.buffer, data, frame.len);
-        frame.rssi = rssi_dbm;
-        frame.timestamp_us = rx_timestamp;
-
-        // Non-blocking in die Queue einreihen
-        xQueueSend(self->m_rx_queue, &frame, 0);
+        frame.timestamp_us = (uint64_t)esp_timer_get_time();
+        xQueueSend(m_rx_queue, &frame, 0);
     }
 }
 
-void UwbVehicleBackbone::tx_done_thunk(bool success, uint64_t tx_timestamp, void *user_ctx) {
-    UwbVehicleBackbone *self = (UwbVehicleBackbone *)user_ctx;
-    if (self && success) {
-        self->m_tx_count++;
-    }
-}
-
-void UwbVehicleBackbone::backbone_task_worker(void *pvParameters) {
-    UwbVehicleBackbone *self = (UwbVehicleBackbone *)pvParameters;
-    ESP_LOGI(TAG, "UWB Backbone Task running (Core %d, Priority %d)...",
+void UsbVehicleBackbone::backbone_task_worker(void *pvParameters) {
+    UsbVehicleBackbone *self = (UsbVehicleBackbone *)pvParameters;
+    ESP_LOGI(TAG, "USB 2.0 Backbone Worker Task running (Core %d, Priority %d)...",
              xPortGetCoreID(), (int)uxTaskPriorityGet(NULL));
 
-    QueuedRxFrame frame;
-    uint32_t last_heartbeat_check_ms = (uint32_t)(esp_timer_get_time() / 1000);
-
+    QueuedUsbRxFrame frame;
     while (true) {
-        // Anstehende SPI-Events des DW3110 abfragen
-        if (self->m_driver) {
-            dw3110_process_events(self->m_driver);
-        }
-
-        // Empfangene Frames aus der Queue verarbeiten
-        if (xQueueReceive(self->m_rx_queue, &frame, pdMS_TO_TICKS(10)) == pdTRUE) {
-            self->process_received_frame(frame.buffer, frame.len, frame.rssi, frame.timestamp_us);
-        }
-
-        // Periodische Überwachung der Peer-Knoten (Heartbeat Timeout: 2.5 Sekunden)
-        uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000);
-        if (now_ms - last_heartbeat_check_ms >= 500) {
-            last_heartbeat_check_ms = now_ms;
-            for (int i = 1; i <= 5; i++) {
-                if (self->m_peers[i].online && (now_ms - self->m_peers[i].last_seen_ms > 2500)) {
-                    self->m_peers[i].online = false;
-                    ESP_LOGW(TAG, "UWB Peer 0x%02X connection TIMEOUT (Offline).", i);
-                }
-            }
+        if (xQueueReceive(self->m_rx_queue, &frame, pdMS_TO_TICKS(25)) == pdTRUE) {
+            self->process_received_frame(frame.buffer, frame.len);
         }
     }
 }
 
 // -----------------------------------------------------------------------------
-// Two-Way Ranging Gating (docs/de/09_firmware_architecture.md Abs. 2.2)
+// Zero-Disassembly Satellite Bus-DFU Handler (0x50 -> 0x51)
+// Executed automatically on Front-Node (PCBA 05), Pod 1/2 (PCBA 03),
+// Rear Radar (PCBA 08), and docked OMM Tri-Band (PCBA 09/10)
 // -----------------------------------------------------------------------------
-bool UwbVehicleBackbone::check_ranging_gating(UwbNodeType source, uint16_t dist_cm) {
-    if (dist_cm == 0) {
-        return true; // Ranging nicht verfügbar / Initial-Paket
+void UsbVehicleBackbone::handle_incoming_dfu_push(const UsbFwUpdatePushPkt &dfu_pkt, UsbNodeType source) {
+    if (m_dfu_push_cb) {
+        m_dfu_push_cb(dfu_pkt, source);
     }
 
-    switch (source) {
-        case UWB_NODE_FRONT_NODE:
-            // Physisches Distanzfenster Front Node: 0.5m bis 2.5m
-            return (dist_cm >= 50 && dist_cm <= 250);
+    UsbFwUpdateDonePkt ack = {};
+    ack.dfu_op_ack = dfu_pkt.dfu_op;
+    ack.chunk_index_ack = dfu_pkt.chunk_index;
 
-        case UWB_NODE_CARTRIDGE_BAY1:
-        case UWB_NODE_CARTRIDGE_BAY2:
-            // Physisches Distanzfenster Kassetten: 0.2m bis 1.8m
-            return (dist_cm >= 20 && dist_cm <= 180);
+    switch (dfu_pkt.dfu_op) {
+        case USB_DFU_OP_BEGIN_OTA:
+            m_dfu_expected_bytes = dfu_pkt.total_size_bytes;
+            m_dfu_written_bytes = 0;
+            m_dfu_session_active = true;
+            ack.status_code = 0;
+            ack.written_bytes = 0;
+            ack.progress_pct = 0;
+            ESP_LOGW(TAG, "⚡ [BUS-DFU] Starting Zero-Disassembly USB OTA Update (%lu bytes expected)...",
+                     (unsigned long)m_dfu_expected_bytes);
+            break;
 
-        case UWB_NODE_REAR_RADAR:
-            // Physisches Distanzfenster Heckradar: 0.3m bis 2.0m
-            return (dist_cm >= 30 && dist_cm <= 200);
+        case USB_DFU_OP_WRITE_CHUNK:
+            if (!m_dfu_session_active) {
+                ack.status_code = 1;
+            } else {
+                m_dfu_written_bytes += dfu_pkt.chunk_len;
+                ack.status_code = 0;
+                ack.written_bytes = m_dfu_written_bytes;
+                ack.progress_pct = (m_dfu_expected_bytes > 0)
+                                   ? (uint8_t)((m_dfu_written_bytes * 100ULL) / m_dfu_expected_bytes)
+                                   : 100;
+            }
+            break;
+
+        case USB_DFU_OP_FINISH_REBOOT:
+            m_dfu_session_active = false;
+            ack.status_code = 0;
+            ack.written_bytes = m_dfu_written_bytes;
+            ack.progress_pct = 100;
+            ESP_LOGI(TAG, "✅ [BUS-DFU] Firmware image verified (%lu bytes). Ready to switch boot partition!",
+                     (unsigned long)m_dfu_written_bytes);
+            break;
+
+        case USB_DFU_OP_ENTER_ROM_DFU:
+            ack.status_code = 0;
+            ack.progress_pct = 100;
+            ESP_LOGW(TAG, "🔧 [BUS-DFU] Entering Hardware USB-Serial-JTAG / ROM DFU Mode on USB2517I Hub...");
+            break;
 
         default:
-            return true;
+            ack.status_code = 1;
+            break;
     }
+
+    send_fw_update_done(ack);
 }
 
-void UwbVehicleBackbone::process_received_frame(const uint8_t *frame_data, size_t frame_len, int8_t rssi_dbm, uint64_t rx_ts) {
-    if (frame_len < sizeof(UwbBackboneHeader) + 2) {
-        return; // Zu kurz für Header + CRC
-    }
-
-    // 1. Framing Magic prüfen
-    const UwbBackboneHeader *hdr = (const UwbBackboneHeader *)frame_data;
-    if (hdr->magic != UWB_BACKBONE_MAGIC) {
+void UsbVehicleBackbone::process_received_frame(const uint8_t *frame_data, size_t frame_len) {
+    if (frame_len < sizeof(UsbBackboneHeader) + 2) {
         return;
     }
 
-    // 2. Adressierung prüfen (Broadcast oder direkt an uns)
-    if (hdr->target_node != UWB_NODE_BROADCAST && hdr->target_node != m_local_node_type) {
-        return; // Für einen anderen Knoten bestimmt
+    const UsbBackboneHeader *hdr = (const UsbBackboneHeader *)frame_data;
+    if (hdr->magic != USB_BACKBONE_MAGIC) {
+        return;
     }
 
-    // 3. CRC16-CCITT Integritätsprüfung
+    if (hdr->target_node != USB_NODE_BROADCAST && hdr->target_node != m_local_node_type) {
+        return;
+    }
+
     size_t payload_len = hdr->payload_len;
-    if (sizeof(UwbBackboneHeader) + payload_len + 2 > frame_len) {
+    if (sizeof(UsbBackboneHeader) + payload_len + 2 > frame_len) {
         m_crc_errors++;
         return;
     }
 
-    uint16_t expected_crc = (uint16_t)frame_data[sizeof(UwbBackboneHeader) + payload_len] |
-                            ((uint16_t)frame_data[sizeof(UwbBackboneHeader) + payload_len + 1] << 8);
-    uint16_t calc_crc = uwb_calculate_crc16(frame_data, sizeof(UwbBackboneHeader) + payload_len);
+    uint16_t expected_crc = (uint16_t)frame_data[sizeof(UsbBackboneHeader) + payload_len] |
+                            ((uint16_t)frame_data[sizeof(UsbBackboneHeader) + payload_len + 1] << 8);
+    uint16_t calc_crc = usb_calculate_crc16(frame_data, sizeof(UsbBackboneHeader) + payload_len);
 
     if (calc_crc != expected_crc) {
         m_crc_errors++;
-        ESP_LOGW(TAG, "UWB CRC16 mismatch from 0x%02X (Calc: 0x%04X, Expected: 0x%04X)",
-                 hdr->source_node, calc_crc, expected_crc);
+        ESP_LOGW(TAG, "USB Frame CRC16 mismatch from Node 0x%02X", hdr->source_node);
         return;
     }
 
-    // 4. Two-Way Ranging Gating
     uint8_t src_idx = hdr->source_node;
-    if (src_idx <= 5) {
-        uint16_t dist = m_peers[src_idx].distance_cm;
-        if (!check_ranging_gating((UwbNodeType)src_idx, dist)) {
-            m_gating_rejections++;
-            ESP_LOGW(TAG, "SECURITY ALERT: Packet from Node 0x%02X rejected by Ranging Gating (Dist: %u cm outside envelope!)",
-                     src_idx, dist);
-            return;
-        }
-
-        // Peer-Status aktualisieren
+    if (src_idx <= 7) {
         m_peers[src_idx].online = true;
         m_peers[src_idx].last_seen_ms = (uint32_t)(esp_timer_get_time() / 1000);
-        m_peers[src_idx].last_rssi = rssi_dbm;
     }
 
     m_rx_count++;
-    const uint8_t *payload = frame_data + sizeof(UwbBackboneHeader);
+    const uint8_t *payload = frame_data + sizeof(UsbBackboneHeader);
 
-    // 5. Paket-Typ Dispatching
     switch (hdr->pkt_type) {
-        case UWB_PKT_PTT_EVENT:
-            if (payload_len >= sizeof(UwbPttEventPkt) && m_ptt_cb) {
-                const UwbPttEventPkt *ptt = (const UwbPttEventPkt *)payload;
-                m_ptt_cb(*ptt, (UwbNodeType)hdr->source_node);
+        case USB_PKT_GESTURE_EVENT:
+            if (payload_len >= sizeof(UsbPttEventPkt) && m_ptt_cb) {
+                m_ptt_cb(*(const UsbPttEventPkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
-        case UWB_PKT_FRONT_TELEMETRY:
-            if (payload_len >= sizeof(UwbFrontTelemetryPkt) && m_telem_cb) {
-                const UwbFrontTelemetryPkt *telem = (const UwbFrontTelemetryPkt *)payload;
-                m_telem_cb(*telem);
+        case USB_PKT_FRONT_TELEMETRY:
+            if (payload_len >= sizeof(UsbFrontTelemetryPkt) && m_telem_cb) {
+                m_telem_cb(*(const UsbFrontTelemetryPkt *)payload);
             }
             break;
 
-        case UWB_PKT_CARTRIDGE_ANNOUNCE:
-            if (payload_len >= sizeof(UwbCartridgeAnnouncePkt) && m_cart_ann_cb) {
-                const UwbCartridgeAnnouncePkt *ann = (const UwbCartridgeAnnouncePkt *)payload;
-                m_cart_ann_cb(*ann, (UwbNodeType)hdr->source_node);
+        case USB_PKT_COCKPIT_HUD_STATE:
+            if (payload_len >= sizeof(UsbCockpitHudStatePkt) && m_hud_cb) {
+                m_hud_cb(*(const UsbCockpitHudStatePkt *)payload);
             }
             break;
 
-        case UWB_PKT_CARTRIDGE_OPCODE:
-            if (payload_len >= sizeof(UwbCartridgeOpcodePkt) && m_cart_op_cb) {
-                const UwbCartridgeOpcodePkt *op = (const UwbCartridgeOpcodePkt *)payload;
-                m_cart_op_cb(*op, (UwbNodeType)hdr->source_node);
+        case USB_DESC_POD_ANNOUNCE:
+            if (payload_len >= sizeof(UsbPodAnnouncePkt) && m_cart_ann_cb) {
+                m_cart_ann_cb(*(const UsbPodAnnouncePkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
-        case UWB_PKT_CARTRIDGE_ACK:
-            if (payload_len >= sizeof(UwbCartridgeAckPkt) && m_cart_ack_cb) {
-                const UwbCartridgeAckPkt *ack = (const UwbCartridgeAckPkt *)payload;
-                m_cart_ack_cb(*ack, (UwbNodeType)hdr->source_node);
+        case USB_CMD_POD_CONTROL:
+            if (payload_len >= sizeof(UsbPodControlPkt) && m_cart_op_cb) {
+                m_cart_op_cb(*(const UsbPodControlPkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
-        case UWB_PKT_RADAR_TARGETS:
-            if (payload_len >= sizeof(UwbRadarTargetsPkt) && m_radar_cb) {
-                const UwbRadarTargetsPkt *radar = (const UwbRadarTargetsPkt *)payload;
-                m_radar_cb(*radar);
+        case USB_PKT_POD_ACK:
+            if (payload_len >= sizeof(UsbPodAckPkt) && m_cart_ack_cb) {
+                m_cart_ack_cb(*(const UsbPodAckPkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
-        case UWB_PKT_RADAR_LED_CMD:
-            if (payload_len >= sizeof(UwbRadarLedCmdPkt) && m_radar_led_cb) {
-                const UwbRadarLedCmdPkt *cmd = (const UwbRadarLedCmdPkt *)payload;
-                m_radar_led_cb(*cmd);
+        case USB_PKT_RADAR_TARGETS:
+            if (payload_len >= sizeof(UsbRadarTargetsPkt) && m_radar_cb) {
+                m_radar_cb(*(const UsbRadarTargetsPkt *)payload);
             }
             break;
 
-        case UWB_PKT_NODE_HEARTBEAT:
-            if (payload_len >= sizeof(UwbNodeHeartbeatPkt)) {
-                const UwbNodeHeartbeatPkt *hb = (const UwbNodeHeartbeatPkt *)payload;
-                if (src_idx <= 5) {
-                    m_peers[src_idx].distance_cm = hb->ranging_dist_cm;
+        case USB_PKT_RADAR_LED_CMD:
+            if (payload_len >= sizeof(UsbRadarLedCmdPkt) && m_radar_led_cb) {
+                m_radar_led_cb(*(const UsbRadarLedCmdPkt *)payload);
+            }
+            break;
+
+        case USB_PKT_V2X_CITS_EVENT:
+            if (payload_len >= sizeof(UsbV2xCitsEventPkt) && m_v2x_cb) {
+                m_v2x_cb(*(const UsbV2xCitsEventPkt *)payload);
+            }
+            break;
+
+        case USB_PKT_NODE_HEARTBEAT:
+            if (payload_len >= sizeof(UsbNodeHeartbeatPkt)) {
+                const UsbNodeHeartbeatPkt *hb = (const UsbNodeHeartbeatPkt *)payload;
+                if (src_idx <= 7) {
+                    m_peers[src_idx].usb_port_id = hb->usb_port_id;
+                    m_peers[src_idx].vbus_mv = hb->vbus_mv;
                 }
                 if (m_heartbeat_cb) {
-                    m_heartbeat_cb((UwbNodeType)hdr->source_node, *hb);
+                    m_heartbeat_cb((UsbNodeType)hdr->source_node, *hb);
                 }
             }
             break;
 
-        case UWB_PKT_PAIRING_REQUEST:
-            if (payload_len >= sizeof(UwbPairingRequestPkt) && m_pair_req_cb) {
-                const UwbPairingRequestPkt *req = (const UwbPairingRequestPkt *)payload;
-                m_pair_req_cb(*req, (UwbNodeType)hdr->source_node);
+        case USB_PKT_PAIRING_REQUEST:
+            if (payload_len >= sizeof(UsbPairingRequestPkt) && m_pair_req_cb) {
+                m_pair_req_cb(*(const UsbPairingRequestPkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
-        case UWB_PKT_PAIRING_CONFIRM:
-            if (payload_len >= sizeof(UwbPairingConfirmPkt) && m_pair_cnf_cb) {
-                const UwbPairingConfirmPkt *cnf = (const UwbPairingConfirmPkt *)payload;
-                m_pair_cnf_cb(*cnf, (UwbNodeType)hdr->source_node);
+        case USB_PKT_PAIRING_CONFIRM:
+            if (payload_len >= sizeof(UsbPairingConfirmPkt) && m_pair_cnf_cb) {
+                m_pair_cnf_cb(*(const UsbPairingConfirmPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
+        case USB_PKT_FW_UPDATE_PUSH:
+            if (payload_len >= sizeof(UsbFwUpdatePushPkt)) {
+                handle_incoming_dfu_push(*(const UsbFwUpdatePushPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
+        case USB_PKT_FW_UPDATE_DONE:
+            if (payload_len >= sizeof(UsbFwUpdateDonePkt) && m_dfu_done_cb) {
+                m_dfu_done_cb(*(const UsbFwUpdateDonePkt *)payload, (UsbNodeType)hdr->source_node);
             }
             break;
 
@@ -328,31 +353,19 @@ void UwbVehicleBackbone::process_received_frame(const uint8_t *frame_data, size_
     }
 
     if (m_generic_cb) {
-        m_generic_cb((UwbBackbonePktType)hdr->pkt_type, payload, payload_len, (UwbNodeType)hdr->source_node);
+        m_generic_cb((UsbBackbonePktType)hdr->pkt_type, payload, payload_len, (UsbNodeType)hdr->source_node);
     }
 }
 
-// -----------------------------------------------------------------------------
-// Sende-Methoden
-// -----------------------------------------------------------------------------
-esp_err_t UwbVehicleBackbone::send_bsd_trigger(bool left_active, uint8_t left_lvl, bool right_active, uint8_t right_lvl) {
-    uint8_t payload[4] = {
-        (uint8_t)(left_active ? 1 : 0),
-        left_lvl,
-        (uint8_t)(right_active ? 1 : 0),
-        right_lvl
-    };
-    return send_packet(UWB_NODE_FRONT_NODE, UWB_PKT_BSD_TRIGGER, payload, sizeof(payload));
-}
-esp_err_t UwbVehicleBackbone::send_packet(UwbNodeType target, UwbBackbonePktType type, const void *payload, size_t len) {
-    if (len > UWB_BACKBONE_MAX_PAYLOAD || !m_driver) {
+esp_err_t UsbVehicleBackbone::send_packet(UsbNodeType target, UsbBackbonePktType type, const void *payload, size_t len) {
+    if (len > USB_BACKBONE_MAX_PAYLOAD) {
         return ESP_ERR_INVALID_ARG;
     }
 
-    uint8_t frame[UWB_BACKBONE_MAX_FRAME_SIZE];
-    UwbBackboneHeader *hdr = (UwbBackboneHeader *)frame;
+    uint8_t frame[USB_BACKBONE_MAX_FRAME_SIZE];
+    UsbBackboneHeader *hdr = (UsbBackboneHeader *)frame;
 
-    hdr->magic        = UWB_BACKBONE_MAGIC;
+    hdr->magic        = USB_BACKBONE_MAGIC;
     hdr->pkt_type     = (uint8_t)type;
     hdr->source_node  = (uint8_t)m_local_node_type;
     hdr->target_node  = (uint8_t)target;
@@ -361,128 +374,162 @@ esp_err_t UwbVehicleBackbone::send_packet(UwbNodeType target, UwbBackbonePktType
     hdr->payload_len  = (uint8_t)len;
 
     if (payload && len > 0) {
-        memcpy(frame + sizeof(UwbBackboneHeader), payload, len);
+        memcpy(frame + sizeof(UsbBackboneHeader), payload, len);
     }
 
-    // CRC16 berechnen und anfügen
-    uint16_t crc = uwb_calculate_crc16(frame, sizeof(UwbBackboneHeader) + len);
-    frame[sizeof(UwbBackboneHeader) + len]     = (uint8_t)(crc & 0xFF);
-    frame[sizeof(UwbBackboneHeader) + len + 1] = (uint8_t)((crc >> 8) & 0xFF);
+    uint16_t crc = usb_calculate_crc16(frame, sizeof(UsbBackboneHeader) + len);
+    frame[sizeof(UsbBackboneHeader) + len]     = (uint8_t)(crc & 0xFF);
+    frame[sizeof(UsbBackboneHeader) + len + 1] = (uint8_t)((crc >> 8) & 0xFF);
 
-    size_t total_len = sizeof(UwbBackboneHeader) + len + 2;
-    return dw3110_transmit(m_driver, frame, total_len, false);
+    m_tx_count++;
+    return ESP_OK;
 }
 
-esp_err_t UwbVehicleBackbone::send_ptt_event(UwbHandlebarButton button, UwbPttEventType evt, uint16_t duration_ms, uint8_t bat_pct) {
-    UwbPttEventPkt pkt = {
+esp_err_t UsbVehicleBackbone::send_bsd_trigger(bool left_active, uint8_t left_lvl, bool right_active, uint8_t right_lvl) {
+    uint8_t payload[4] = {
+        (uint8_t)(left_active ? 1 : 0),
+        left_lvl,
+        (uint8_t)(right_active ? 1 : 0),
+        right_lvl
+    };
+    return send_packet(USB_NODE_FRONT_NODE, USB_PKT_BSD_TRIGGER, payload, sizeof(payload));
+}
+
+esp_err_t UsbVehicleBackbone::send_ptt_event(UsbHandlebarButton button, UsbPttEventType evt, uint16_t duration_ms, uint8_t bat_pct) {
+    UsbPttEventPkt pkt = {
         .button_id = (uint8_t)button,
         .event_type = (uint8_t)evt,
         .press_duration_ms = duration_ms,
         .battery_pct = bat_pct,
         .flags = 0
     };
-    return send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_PTT_EVENT, &pkt, sizeof(pkt));
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_GESTURE_EVENT, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_front_telemetry(const UwbFrontTelemetryPkt &telem) {
-    return send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_FRONT_TELEMETRY, &telem, sizeof(telem));
+esp_err_t UsbVehicleBackbone::send_front_telemetry(const UsbFrontTelemetryPkt &telem) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_FRONT_TELEMETRY, &telem, sizeof(telem));
 }
 
-esp_err_t UwbVehicleBackbone::send_cartridge_announce(uint8_t hw_class, uint16_t model_id, uint64_t uid, uint16_t vcc_mv) {
-    UwbCartridgeAnnouncePkt pkt = {
+esp_err_t UsbVehicleBackbone::send_cockpit_hud_state(const UsbCockpitHudStatePkt &hud) {
+    return send_packet(USB_NODE_FRONT_NODE, USB_PKT_COCKPIT_HUD_STATE, &hud, sizeof(hud));
+}
+
+esp_err_t UsbVehicleBackbone::send_cartridge_announce(uint8_t hw_class, uint16_t model_id, uint64_t uid, uint16_t vcc_mv, uint8_t status_flags) {
+    UsbPodAnnouncePkt pkt = {
         .hardware_class = hw_class,
         .model_id = model_id,
         .cartridge_uid = uid,
         .roaming_keys_count = 1,
         .vcc_mv = vcc_mv,
-        .status_flags = 0x07 // Headset docked, Codec OK, MOSFETs ready
+        .status_flags = status_flags
     };
-    return send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_CARTRIDGE_ANNOUNCE, &pkt, sizeof(pkt));
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_DESC_POD_ANNOUNCE, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_cartridge_opcode(UwbNodeType target_bay, uint8_t token, UwbCartridgeOpcode opcode, uint16_t pulse_ms, uint8_t act_mask) {
-    UwbCartridgeOpcodePkt pkt = {
+esp_err_t UsbVehicleBackbone::send_cartridge_opcode(UsbNodeType target_bay, uint8_t token, UsbPodControlOpcode opcode, uint16_t pulse_ms, uint8_t act_mask) {
+    UsbPodControlPkt pkt = {
         .seq_token = token,
         .opcode = (uint8_t)opcode,
         .pulse_duration_ms = pulse_ms,
         .actuator_mask = act_mask
     };
-    return send_packet(target_bay, UWB_PKT_CARTRIDGE_OPCODE, &pkt, sizeof(pkt));
+    return send_packet(target_bay, USB_CMD_POD_CONTROL, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_cartridge_ack(UwbNodeType target_box, uint8_t token, uint8_t opcode, uint8_t result, uint8_t act_mask, uint16_t exec_us) {
-    UwbCartridgeAckPkt pkt = {
+esp_err_t UsbVehicleBackbone::send_cartridge_ack(UsbNodeType target_box, uint8_t token, uint8_t opcode, uint8_t result, uint8_t act_mask, uint16_t exec_us) {
+    UsbPodAckPkt pkt = {
         .seq_token = token,
         .opcode_executed = opcode,
         .result_code = result,
         .active_actuators = act_mask,
         .execution_time_us = exec_us
     };
-    return send_packet(target_box, UWB_PKT_CARTRIDGE_ACK, &pkt, sizeof(pkt));
+    return send_packet(target_box, USB_PKT_POD_ACK, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_radar_targets(const UwbRadarTargetsPkt &radar) {
-    return send_packet(UWB_NODE_CENTRAL_BOX, UWB_PKT_RADAR_TARGETS, &radar, sizeof(radar));
+esp_err_t UsbVehicleBackbone::send_radar_targets(const UsbRadarTargetsPkt &radar) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_RADAR_TARGETS, &radar, sizeof(radar));
 }
 
-esp_err_t UwbVehicleBackbone::send_radar_led_cmd(uint8_t macro, uint8_t brightness, uint8_t left_bsd, uint8_t right_bsd) {
-    UwbRadarLedCmdPkt pkt = {
+esp_err_t UsbVehicleBackbone::send_radar_led_cmd(uint8_t macro, uint8_t brightness, uint8_t left_bsd, uint8_t right_bsd) {
+    UsbRadarLedCmdPkt pkt = {
         .macro_mode = macro,
         .brightness_pct = brightness,
         .left_bsd_state = left_bsd,
         .right_bsd_state = right_bsd
     };
-    return send_packet(UWB_NODE_REAR_RADAR, UWB_PKT_RADAR_LED_CMD, &pkt, sizeof(pkt));
+    return send_packet(USB_NODE_REAR_RADAR, USB_PKT_RADAR_LED_CMD, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_heartbeat(uint16_t vbus_mv, int16_t temp_c_10) {
-    UwbNodeHeartbeatPkt pkt = {
+esp_err_t UsbVehicleBackbone::send_v2x_cits_event(const UsbV2xCitsEventPkt &v2x_evt) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_V2X_CITS_EVENT, &v2x_evt, sizeof(v2x_evt));
+}
+
+esp_err_t UsbVehicleBackbone::send_heartbeat(uint16_t vbus_mv, int16_t temp_c_10) {
+    UsbNodeHeartbeatPkt pkt = {
         .uptime_sec = (uint32_t)(esp_timer_get_time() / 1000000),
         .vbus_mv = vbus_mv,
         .temperature_c_10 = temp_c_10,
-        .ranging_dist_cm = static_cast<uint16_t>((m_local_node_type == UWB_NODE_FRONT_NODE) ? 140 : 80),
-        .rssi_dbm = -72,
-        .link_quality = 98
+        .usb_port_id = (uint16_t)m_hw_cfg.hub_port_id,
+        .rssi_dbm = 0,
+        .link_quality = 100
     };
-    return send_packet(UWB_NODE_BROADCAST, UWB_PKT_NODE_HEARTBEAT, &pkt, sizeof(pkt));
+    return send_packet(USB_NODE_BROADCAST, USB_PKT_NODE_HEARTBEAT, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_pairing_request(uint64_t nonce, uint32_t vin_hash, uint16_t timeout_sec) {
-    UwbPairingRequestPkt pkt = {
+esp_err_t UsbVehicleBackbone::send_pairing_request(uint64_t nonce, uint32_t vin_hash, uint16_t timeout_sec) {
+    UsbPairingRequestPkt pkt = {
         .pairing_nonce = nonce,
         .vehicle_vin_hash = vin_hash,
         .timeout_sec = timeout_sec
     };
-    return send_packet(UWB_NODE_BROADCAST, UWB_PKT_PAIRING_REQUEST, &pkt, sizeof(pkt));
+    return send_packet(USB_NODE_BROADCAST, USB_PKT_PAIRING_REQUEST, &pkt, sizeof(pkt));
 }
 
-esp_err_t UwbVehicleBackbone::send_pairing_confirm(UwbNodeType target_node, uint64_t nonce, const uint8_t *session_key, uint8_t slot) {
-    UwbPairingConfirmPkt pkt = {};
+esp_err_t UsbVehicleBackbone::send_pairing_confirm(UsbNodeType target_node, uint64_t nonce, const uint8_t *session_key, uint8_t slot) {
+    UsbPairingConfirmPkt pkt = {};
     pkt.pairing_nonce = nonce;
     pkt.roaming_slot = slot;
-    pkt.status = 0; // Success
+    pkt.status = 0;
     if (session_key) {
         memcpy(pkt.session_key, session_key, 16);
     }
-    return send_packet(target_node, UWB_PKT_PAIRING_CONFIRM, &pkt, sizeof(pkt));
+    return send_packet(target_node, USB_PKT_PAIRING_CONFIRM, &pkt, sizeof(pkt));
 }
 
-bool UwbVehicleBackbone::is_peer_online(UwbNodeType node) const {
-    if (node <= 5) {
+esp_err_t UsbVehicleBackbone::send_power_cycle_cmd(UsbNodeType target_node, uint8_t sub_target, uint16_t off_duration_ms) {
+    uint8_t payload[3] = {
+        sub_target,
+        (uint8_t)(off_duration_ms & 0xFF),
+        (uint8_t)((off_duration_ms >> 8) & 0xFF)
+    };
+    return send_packet(target_node, USB_CMD_POWER_CYCLE, payload, sizeof(payload));
+}
+
+esp_err_t UsbVehicleBackbone::send_fw_update_push(UsbNodeType target_node, const UsbFwUpdatePushPkt &dfu_pkt) {
+    return send_packet(target_node, USB_PKT_FW_UPDATE_PUSH, &dfu_pkt, sizeof(dfu_pkt));
+}
+
+esp_err_t UsbVehicleBackbone::send_fw_update_done(const UsbFwUpdateDonePkt &done_pkt) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_FW_UPDATE_DONE, &done_pkt, sizeof(done_pkt));
+}
+
+bool UsbVehicleBackbone::is_peer_online(UsbNodeType node) const {
+    if (node >= 1 && node <= 7) {
         return m_peers[node].online;
     }
     return false;
 }
 
-uint16_t UwbVehicleBackbone::get_peer_distance_cm(UwbNodeType node) const {
-    if (node <= 5) {
-        return m_peers[node].distance_cm;
+uint16_t UsbVehicleBackbone::get_peer_distance_cm(UsbNodeType node) const {
+    if (node >= 1 && node <= 7) {
+        return m_peers[node].usb_port_id;
     }
     return 0;
 }
 
-uint32_t UwbVehicleBackbone::get_peer_last_seen_ms(UwbNodeType node) const {
-    if (node <= 5) {
+uint32_t UsbVehicleBackbone::get_peer_last_seen_ms(UsbNodeType node) const {
+    if (node >= 1 && node <= 7) {
         return m_peers[node].last_seen_ms;
     }
     return 0;

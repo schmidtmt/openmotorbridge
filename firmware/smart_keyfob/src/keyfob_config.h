@@ -26,8 +26,8 @@
 #define KEYFOB_PIN_CHG_STAT         5   // P0.05
 #define KEYFOB_PAD_CHG_STAT         "K2"
 
-// Analog Battery Voltage Sensing (VBAT divider connected to AIN1)
-#define KEYFOB_ADC_VBAT_PIN         29  // P0.29 (SAADC Input)
+// Analog Battery Voltage Sensing (VBAT divider connected to AIN3 / P0.05 or internal VDDH SAADC)
+#define KEYFOB_ADC_VBAT_PIN         30  // SAADC internal VDD / VBAT channel (non-colliding with P0.29 LORA_NSS)
 #define KEYFOB_BAT_LOW_THRESH_MV    3400 // 3.4V Low Battery Cut-Off / Alert
 #define KEYFOB_BAT_FULL_THRESH_MV   4200 // 4.2V Full LiPo Charge
 

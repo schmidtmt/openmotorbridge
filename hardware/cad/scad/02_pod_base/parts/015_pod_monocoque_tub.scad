@@ -139,16 +139,20 @@ module pod_monocoque_tub() {
         // 9. Prominent C-Profile Guide Grooves & Upper Retaining Lips (Rille in der Gehäusewand)
         // Left C-groove: runs inside left wall (Y = 1.5 to 5.0 mm, Z = 32.0 to 35.2 mm)
         // Leaving a solid PA12 upper retaining lip (Dach/Hinterschnitt) from Z = 35.2 to 38.0 mm!
-        translate([6.0, 1.5, 32.0])
-            cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
+        translate([3.5, 1.5, 32.0])
+            cube([POD_OUTER_L - 2.5, 4.0, 3.4], center=false);
 
         // Right C-groove: runs inside right wall (Y = POD_OUTER_W - 5.5 to POD_OUTER_W - 1.5 mm, Z = 32.0 to 35.2 mm)
         // Leaving a solid PA12 upper retaining lip from Z = 35.2 to 38.0 mm!
-        translate([6.0, POD_OUTER_W - 5.5, 32.0])
-            cube([POD_OUTER_L - 5.0, 4.0, 3.4], center=false);
+        translate([3.5, POD_OUTER_W - 5.5, 32.0])
+            cube([POD_OUTER_L - 2.5, 4.0, 3.4], center=false);
+
+        // Front Wedge-Lock Undercut Groove in Front Bulkhead (at X = 3.5..4.8 mm, Z = 32.0..35.4 mm)
+        translate([3.2, POD_WALL, 32.0])
+            cube([1.6, POD_OUTER_W - 2*POD_WALL, 3.4], center=false);
 
         // Rear U-Portal Opening (for L-Slide Lid Upper Heckwand at X = 150 mm)
-        // Completely OPEN above the 14.0 mm lower sill (from Z = 14.0 to top Z = 38.0 mm)
+        // Completely OPEN above the 14.0 mm fixed lower rear wall (from Z = 14.0 to top Z = 38.0 mm)
         translate([POD_OUTER_L - POD_WALL - 1.5, POD_WALL, 14.0])
             cube([POD_WALL + 5.0, POD_OUTER_W - 2*POD_WALL, POD_OUTER_H - 14.0 + 3.0], center=false);
 
@@ -156,15 +160,15 @@ module pod_monocoque_tub() {
         translate([POD_OUTER_L - POD_WALL - 1.5, 1.4, 31.9])
             cube([POD_WALL + 5.0, POD_OUTER_W - 2.8, POD_OUTER_H - 31.9 + 3.0], center=false);
 
-        // Lower Sill (Z = 0..14 mm) Dual Corner Latch Sockets for U-Bracket Legs:
-        // Left corner socket (blind pocket depth 4.0 mm into sill top face)
-        translate([POD_OUTER_L - POD_WALL - 0.5, 6.0, 10.0])
-            cube([2.8, 6.0, 4.5], center=false);
-        // Right corner socket (blind pocket depth 4.0 mm into sill top face)
-        translate([POD_OUTER_L - POD_WALL - 0.5, POD_OUTER_W - 12.0, 10.0])
-            cube([2.8, 6.0, 4.5], center=false);
+        // Fixed Lower Rear Wall (Z = 0..14 mm) Dual Claw Catch Pockets for PA12 Plastikkrallen:
+        // Left claw catch pocket (at Y = 8.5..14.5 mm, Z = 9.8..14.2 mm, with rear retaining lip)
+        translate([POD_OUTER_L - POD_WALL - 0.6, 8.5, 9.8])
+            cube([3.0, 6.0, 4.5], center=false);
+        // Right claw catch pocket (at Y = 55.5..61.5 mm, Z = 9.8..14.2 mm, with rear retaining lip)
+        translate([POD_OUTER_L - POD_WALL - 0.6, POD_OUTER_W - 14.5, 9.8])
+            cube([3.0, 6.0, 4.5], center=false);
 
-        // Exterior Step/Rebate on Lower Sill for Flush Overlap of L-Lid Drip Apron (Tropfnase)
+        // Exterior Step/Rebate on Lower Rear Wall for Flush Overlap of L-Lid Drip Apron (Tropfnase)
         translate([POD_OUTER_L - 1.6, POD_WALL - 0.5, 10.5])
             cube([2.0, POD_OUTER_W - 2*POD_WALL + 1.0, 3.8], center=false);
 

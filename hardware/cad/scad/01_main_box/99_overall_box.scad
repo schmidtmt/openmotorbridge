@@ -22,12 +22,14 @@ use <02_colsure.scad>;
 // View Mode: Toggle true for exploded stack, false for assembled state
 EXPLODED_VIEW = true;
 
-// Vertical offsets for distinct 5-tier exploded layers
+// Vertical & horizontal slide-in offsets for distinct 5-tier exploded layers
 Z_LOWER_TUB   = 0.0;
-Z_MAIN_PCB    = EXPLODED_VIEW ? 32.0 : 6.0;
-Z_SLIDE_TRAY  = EXPLODED_VIEW ? 68.0 : 0.0;
-Z_LIPO_CELL   = EXPLODED_VIEW ? 96.0 : 19.0;
-Z_SLIDE_LID   = EXPLODED_VIEW ? 130.0 : 0.0;
+Z_MAIN_PCB    = EXPLODED_VIEW ? 26.0 : 6.0;
+Z_SLIDE_TRAY  = EXPLODED_VIEW ? 52.0 : 0.0;
+Y_SLIDE_TRAY  = EXPLODED_VIEW ? 28.0 : 0.0; // Displaced rearward (+Y) along Rail 1 insertion axis
+Z_LIPO_CELL   = EXPLODED_VIEW ? 78.0 : 19.0;
+Z_SLIDE_LID   = EXPLODED_VIEW ? 105.0 : 0.0;
+Y_SLIDE_LID   = EXPLODED_VIEW ? 42.0 : 0.0; // Displaced rearward (+Y) along Rail 2 insertion axis
 
 // Module for Taoglas FXP895 LoRa 868 MHz Flex Antenna Dummy
 module dummy_fxp895_antenna() {
@@ -73,29 +75,29 @@ module main_box_full_assembly(exploded = EXPLODED_VIEW) {
     // Layer 3: Slide-In Zwischenboden / Intermediate Tray (PA12 Slate Grey)
     // -------------------------------------------------------------------------
     color([0.30, 0.34, 0.38], 0.90)
-        translate([0, 0, Z_SLIDE_TRAY])
+        translate([0, Y_SLIDE_TRAY, Z_SLIDE_TRAY])
             main_box_mid_tray();
 
     // -------------------------------------------------------------------------
     // Layer 4: 1S LiPo Backup Battery & Taoglas Flex Antennas
     // -------------------------------------------------------------------------
     // A. 1S LiPo 2200 mAh Flat Cell (seated in tray cradle)
-    translate([21.6, 9.0, Z_LIPO_CELL])
+    translate([21.6, 9.0 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_lipo_battery();
 
     // B. Taoglas FXP895 LoRa 868 MHz Flex Antenna (seated in rear tray nest)
-    translate([12.8, 51.8, Z_LIPO_CELL])
+    translate([12.8, 51.8 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_fxp895_antenna();
 
     // C. Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna (seated in front tray nest)
-    translate([30.8, 3.7, Z_LIPO_CELL])
+    translate([30.8, 3.7 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_fxp73_antenna();
 
     // -------------------------------------------------------------------------
     // Layer 5: L-Slide Lid with Gore Vent & Deadbolt Heckwand (PA12 Graphite Grey)
     // -------------------------------------------------------------------------
     color([0.24, 0.26, 0.28], 0.88)
-        translate([0, 0, Z_SLIDE_LID])
+        translate([0, Y_SLIDE_LID, Z_SLIDE_LID])
             main_box_lid();
 }
 

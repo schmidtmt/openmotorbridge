@@ -1,47 +1,80 @@
 #pragma once
 
+#include <stdint.h>
 #include "driver/gpio.h"
 
 // =============================================================================
-// OpenMotorBridge - Universal Front Node (PCBA 05) Pinout & Configuration
+// OpenMotorBridge v10.0 - Universal Front-Node (PCBA 05) Ground-Truth Pinout
+// Extracted 1:1 from hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb
+// Core Architecture:
+//   - U1: ESP32-P4-NR16 (Dual-Core 400 MHz RISC-V, 0% Radio-on-Silicon, HS USB 2.0)
+//   - U9: ESP32-E22-WROOM-2X2 (Wi-Fi 6E 5/6 GHz 2x2 MIMO via 4-Bit SDIO 3.0)
+//   - U2: Microchip USB2514Bi-AEZG 4-Port High-Speed USB 2.0 Hub:
+//         * Upstream: J1 4-Wire USB Backbone to Central Box PCBA 01 (USB2517I Port 2)
+//         * Port 1 (DN1): U3 SW3526 30W USB-PD Fast Charger (J_PD_PHONE)
+//         * Port 2 (DN2): J_DONGLE (Ottocast / CarPlay via U4 TPS2051B)
+//         * Port 3 (DN3): J4 Glovebox Hub PCBA 05B
+//         * Port 4 (DN4): U1 ESP32-P4 Native High-Speed USB 2.0 PHY (Pad 13/14)
+//   - J_SENSOR_EXT: External Sensor-Puck (SAM-M10Q GNSS + TMP117 + OPT3001 + Knowles Mic)
+//   - J_DISP_L / J_DISP_R: Dual Cockpit Speaker-Corner OLED Displays (I2C 0x3C / 0x3D)
+//   - NO local flash port (J7 removed; flashed via Central USB-Bus DFU 0x50 on J1!)
+//   - NO 2.4 GHz radio on PCBA 05 (Action-Cam BLE migrated to Central Box PCBA 01!)
 // =============================================================================
 
-// --- 1. GPIO Pin Assignments (ESP32-S3 on PCBA 05) ---
-#define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot/Config Tactile Button SW1 (Active Low)
-#define PIN_OTTOCAST_PWR_EN     GPIO_NUM_1   // TI TPS2051B USB VBUS Power Enable (Active High)
-#define PIN_OTTOCAST_FAULT_N    GPIO_NUM_2   // TI TPS2051B Fault Alert (Active Low, Open-Drain)
-#define PIN_CAN_TERM_EN         GPIO_NUM_3   // CPC1017N Solid-State Relay for 120R CAN Termination (Auto-Sensing)
-#define PIN_KL15_SENSE          GPIO_NUM_4   // 12V Ignition KL15 Sense via voltage divider
-#define PIN_CAN_SILENT          GPIO_NUM_5   // TI TCAN334G Pin 8 Silent / Listen-Only Mode
-#define PIN_MIC_I2S_WS          GPIO_NUM_6   // MSM261S4030H0R / SPH0645 I2S Word Select / LRCLK
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // MSM261S4030H0R / SPH0645 I2S Bit Clock
-#define PIN_MIC_I2S_DATA        GPIO_NUM_8   // MSM261S4030H0R / SPH0645 I2S Serial Data
-#define PIN_I2C_SDA             GPIO_NUM_9   // Qwiic J12 I2C SDA
-#define PIN_I2C_SCL             GPIO_NUM_10  // Qwiic J12 I2C SCL
-#define PIN_WS2812B_DIN         GPIO_NUM_11  // Onboard WS2812B-2020 RGB Status LED (Light-pipe in lid)
-#define PIN_BSD_LED_LEFT        GPIO_NUM_12  // Left Mirror Radar BSD Warning LED Gate (DMN63D8 Ch A)
-#define PIN_BSD_LED_RIGHT       GPIO_NUM_13  // Right Mirror Radar BSD Warning LED Gate (DMN63D8 Ch B)
-#define PIN_AUX_LIGHT_EN        GPIO_NUM_14  // TPS1H100 High-Side Switch (J11 Aux Light / Strobe)
-#define PIN_PTT_IN1_N           GPIO_NUM_15  // Handlebar Button 1: Intercom PTT (Active Low)
-#define PIN_PTT_IN2_N           GPIO_NUM_16  // Handlebar Button 2: Action-Cam Bookmark / Highlight (Active Low)
-#define PIN_PTT_IN3_N           GPIO_NUM_17  // Handlebar Button 3: Media Next / Siri / Voice (Active Low)
-#define PIN_USB_DM              GPIO_NUM_19  // Native USB D- (Service / Flash Port J7)
-#define PIN_USB_DP              GPIO_NUM_20  // Native USB D+ (Service / Flash Port J7)
-#define PIN_CAN_TX              GPIO_NUM_21  // TCAN334G TWAI / CAN Transmitter
-#define PIN_CAN_RX              GPIO_NUM_47  // TCAN334G TWAI / CAN Receiver
+#define FRONT_NODE_HW_REV_MAJOR         10
+#define FRONT_NODE_HW_REV_MINOR         0
 
-// Legacy alias for single PTT button compatibility
-#define PIN_PTT_INPUT_N         PIN_PTT_IN1_N
+// --- 1. U1 (ESP32-P4-NR16) Exact KiCad Pad & GPIO Assignments on PCBA 05 ---
+#define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot / Service Mode Sense
 
-// --- 2. ESP-NOW Wireless Bridge & Cockpit Wi-Fi SoftAP Constants ---
-#define ESPNOW_WIFI_CHANNEL         1
-#define ESPNOW_MAX_PAYLOAD          250
-#define FRONT_NODE_PROTOCOL_VER     0x02
+// U4 (TI TPS2051BDBVR) High-Side Power Switch for J_DONGLE (CarPlay / Android Auto)
+#define PIN_CP2AA_PWR_EN        GPIO_NUM_1   // U1 Pad 39 -> U4 Pin 3 (CP2AA_PWR_EN)
+#define PIN_CP2AA_FAULT_N       GPIO_NUM_2   // U1 Pad 38 -> U4 Pin 4 (CP2AA_FAULT_N, Active Low)
+#define PIN_OTTOCAST_PWR_EN     PIN_CP2AA_PWR_EN
+#define PIN_OTTOCAST_FAULT_N    PIN_CP2AA_FAULT_N
 
-// Cockpit Wi-Fi Fallback SoftAP Configuration (WIFI_MODE_APSTA on Channel 1)
-#define COCKPIT_WIFI_AP_SSID        "OpenMotorBridge-Gateway"
-#define COCKPIT_WIFI_AP_PASS        "openmotor2024"
-#define COCKPIT_WIFI_AP_CHANNEL     ESPNOW_WIFI_CHANNEL   // Channel 1: Zero RF switching jitter with ESP-NOW
+// MK1 (Knowles SPH0645LM4H-B) + J_SENSOR_EXT Digital I2S MEMS Microphone
+#define PIN_MIC_I2S_WS          GPIO_NUM_6   // U1 Pad 6  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // U1 Pad 7  -> MK1 Pin 3 & J_SENSOR_EXT Pin 5 (MIC_I2S_BCLK)
+#define PIN_MIC_I2S_DATA        GPIO_NUM_12  // U1 Pad 12 -> MK1 Pin 1 & J_SENSOR_EXT Pin 7 (MIC_I2S_DATA)
+
+// J_POD_L & J_POD_R Wired Handlebar / Mirror Pod Buttons (Active Low)
+#define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 Pad 8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)
+#define PIN_BTN_SIG_R_N         GPIO_NUM_9   // U1 Pad 9  -> J_POD_R Pin 3 (BTN_SIG_R_N: Action-Cam / Mode)
+#define PIN_PTT_IN1_N           PIN_BTN_SIG_L_N
+#define PIN_PTT_IN2_N           PIN_BTN_SIG_R_N
+#define PIN_PTT_IN3_N           GPIO_NUM_15  // Optional 3rd Handlebar Input
+
+// Shared I2C Bus: J_SENSOR_EXT (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
+#define PIN_I2C_SDA             GPIO_NUM_17  // U1 Pad 17 -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
+#define PIN_I2C_SCL             GPIO_NUM_18  // U1 Pad 18 -> J_SENSOR_EXT Pin 2, J_DISP_L/R Pin 3 (I2C_SCL)
+#define I2C_ADDR_OLED_LEFT      0x3C         // J_DISP_L Left Speaker-Corner Cockpit OLED
+#define I2C_ADDR_OLED_RIGHT     0x3D         // J_DISP_R Right Speaker-Corner Cockpit OLED
+
+// LED1 (WS2812B-2020), Q1 (DMN63D8 Dual MOSFET Mirror BSD LEDs) & Q2 (TPS1H100 Aux Light)
+#define PIN_WS2812B_DIN         GPIO_NUM_11  // U1 Pad 19 -> LED1 Pin 4 (WS2812B_DIN)
+#define PIN_BSD_LED_LEFT        GPIO_NUM_13  // U1 Pad 20 -> Q1 Pin 2 -> J_POD_L Pin 2 (BSD_LED_LEFT)
+#define PIN_BSD_LED_RIGHT       GPIO_NUM_16  // U1 Pad 21 -> Q1 Pin 5 -> J_POD_R Pin 2 (BSD_LED_RIGHT)
+#define PIN_AUX_LIGHT_EN        GPIO_NUM_14  // U1 Pad 22 -> Q2 Pin 3 -> J_AUX_LIGHT Pin 1 (AUX_LIGHT_EN)
+
+// U1 Native High-Speed USB 2.0 PHY -> U2 (USB2514Bi-AEZG Port 4) -> J1 (Central Box)
+#define PIN_USB_HS_DM           GPIO_NUM_19  // U1 Pad 13 -> U2 Pin 7 (USB_HS_DM)
+#define PIN_USB_HS_DP           GPIO_NUM_20  // U1 Pad 14 -> U2 Pin 8 (USB_HS_DP)
+
+// U9 (ESP32-E22-WROOM-2X2) 4-Bit SDIO 3.0 Wi-Fi 6E (5 GHz / 6 GHz) Co-Processor Interface
+#define PIN_E22_SDIO_CLK        GPIO_NUM_35  // U1 Pad 30 -> U9 Pin 10 (SDIO_CLK)
+#define PIN_E22_SDIO_CMD        GPIO_NUM_36  // U1 Pad 31 -> U9 Pin 11 (SDIO_CMD)
+#define PIN_E22_SDIO_D0         GPIO_NUM_37  // U1 Pad 32 -> U9 Pin 12 (SDIO_D0)
+#define PIN_E22_SDIO_D1         GPIO_NUM_33  // U1 Pad 33 -> U9 Pin 13 (SDIO_D1)
+#define PIN_E22_SDIO_D2         GPIO_NUM_34  // U1 Pad 34 -> U9 Pin 14 (SDIO_D2)
+#define PIN_E22_SDIO_D3         GPIO_NUM_38  // U1 Pad 35 -> U9 Pin 15 (SDIO_D3)
+#define PIN_E22_IRQ             GPIO_NUM_39  // U1 Pad 37 -> U9 Pin 16 (E22_IRQ)
+#define PIN_E22_EN              GPIO_NUM_40  // U1 Pad 40 -> U9 Pin 3  (E22_EN)
+
+// --- 2. ESP32-E22 Wi-Fi 6E (5 GHz / 6 GHz) Cockpit Gateway Configuration ---
+#define COCKPIT_WIFI_AP_SSID        "OpenMotorBridge-6E"
+#define COCKPIT_WIFI_AP_PASS        "openmotor2026"
+#define COCKPIT_WIFI_AP_CHANNEL     36       // Clean 5 GHz UNII-1 Channel 36 (Zero 2.4 GHz Interference!)
 #define COCKPIT_WIFI_AP_MAX_CONN    4
 #define COCKPIT_WIFI_AP_IP          "192.168.4.1"
 #define COCKPIT_WIFI_AP_GW          "192.168.4.1"
@@ -50,107 +83,42 @@
 #define COCKPIT_WIFI_IP_PAX_PHONE   "192.168.4.11"
 #define COCKPIT_WIFI_IP_SKYLINE_OS  "192.168.4.20"
 
-// Packet Types
-enum FrontNodePacketType : uint8_t {
-    PKT_TYPE_HEARTBEAT       = 0x01,
-    PKT_TYPE_PTT_EVENT       = 0x02,
-    PKT_TYPE_AUDIO_RMS       = 0x03,
-    PKT_TYPE_OTTOCAST_STATUS = 0x04,
-    PKT_TYPE_CAN_TELEMETRY   = 0x05,
-    PKT_TYPE_CAM_STATUS      = 0x06,   // Action-Cam telemetry (brand, state, bat%, sd_min, flags)
-    PKT_TYPE_CAM_SCAN_RES    = 0x07,   // Discovered BLE camera item (mac, rssi, brand, name)
-    PKT_TYPE_BINDING_BEACON  = 0x08,   // Rescue / pairing beacon from Central Box
-    PKT_TYPE_BINDING_ACK     = 0x09,   // Binding confirmation from Front Node to Central Box
-    PKT_TYPE_BSD_TRIGGER     = 0x0A,   // Central Box -> Front Node: Rear Radar Mirror BSD Trigger
-    PKT_TYPE_COCKPIT_STATUS  = 0x0B,   // Front Node -> Central Box: 4-Port Hub, Qi, Aux Light, CAN Term
-    PKT_TYPE_CMD_POWER_CYCLE = 0x10,
-    PKT_TYPE_CMD_CONFIG      = 0x11,
-    PKT_TYPE_CAM_CMD         = 0x12,   // Action-Cam remote command from Central Box / WebApp
-    PKT_TYPE_CMD_UNBIND      = 0x13,   // Manual unpair / clear NVS binding command
-    PKT_TYPE_CMD_AUX_LIGHT   = 0x14,   // Central Box / PWA -> Front Node: Set Aux Light state (Off, On, Strobe)
-    PKT_TYPE_CMD_CAN_TERM    = 0x15,   // Central Box -> Front Node: Set CAN Termination Relay state
-    PKT_TYPE_CMD_WIFI_CONFIG = 0x16,   // Central Box / PWA -> Front Node: Set SSID, WPA2 Pass, Uplink
-    PKT_TYPE_WIFI_STATUS     = 0x17,   // Front Node -> Central Box / PWA: Live AP status & client table
-    PKT_TYPE_AGPS_INJECT     = 0x18,   // Central Box / Companion App -> Front Node: u-blox UBX-MGA packet
-    PKT_TYPE_OTA_BEGIN       = 0x20,
-    PKT_TYPE_OTA_CHUNK       = 0x21,
-    PKT_TYPE_OTA_FINISH      = 0x22
-};
-
-// Aux Light Operating Modes
+// Aux Light Operating Modes (Q2 TPS1H100)
 enum AuxLightMode : uint8_t {
     AUX_LIGHT_OFF            = 0x00,
     AUX_LIGHT_ON             = 0x01,
-    AUX_LIGHT_STROBE         = 0x02    // 4-5 Hz Emergency Brake Strobe
+    AUX_LIGHT_STROBE         = 0x02    // 4.5 Hz Emergency Brake / Hazard Strobe
 };
 
-// Radar Blind Spot Warning Alert Level
+// Mirror Blind Spot Warning Alert Level (Q1 DMN63D8 -> J_POD_L / J_POD_R)
 enum BsdAlertLevel : uint8_t {
     BSD_LEVEL_OFF            = 0x00,
     BSD_LEVEL_SOLID_AMBER    = 0x01,   // Target in blind spot zone (< 15 m)
     BSD_LEVEL_FAST_STROBE    = 0x02    // Rapid overtake / collision hazard (< 2.5s TTC, 8 Hz flash)
 };
 
-// Handlebar Button Identifier
+// Handlebar Button Identifier (J_POD_L / J_POD_R)
 enum HandlebarButtonId : uint8_t {
-    BTN_INTERCOM_PTT         = 0x01,   // J3 Pin 2 (PTT_IN1_N)
-    BTN_CAM_HIGHLIGHT        = 0x02,   // J3 Pin 3 (PTT_IN2_N)
-    BTN_MEDIA_VOICE          = 0x03    // J3 Pin 4 (PTT_IN3_N)
-};
-
-// Front Node Hardware-Binding States (1:1 Binding Machine)
-enum FrontNodeBindingState : uint8_t {
-    BINDING_STATE_UNPAIRED   = 0x00,   // Fresh / factory-reset: open pairing beacon listener
-    BINDING_STATE_LINKED     = 0x01,   // Exclusive 1:1 link with stored Central Box MAC
-    BINDING_STATE_ORPHAN     = 0x02    // Central Box lost (>60s timeout): ready for Proximity-Rescue
-};
-
-// Camera Profile Types
-enum CamProfileType : uint8_t {
-    CAM_PROFILE_NONE         = 0x00,
-    CAM_PROFILE_GOPRO        = 0x01,   // GoPro Hero 9/10/11/12/13, Max (Open GoPro BLE)
-    CAM_PROFILE_INSTA360     = 0x02,   // Insta360 X3/X4, Ace Pro, GO 3
-    CAM_PROFILE_DJI          = 0x03    // DJI Osmo Action 3/4/5 Pro, Osmo 360
-};
-
-// Camera Connection & Recording States
-enum CamState : uint8_t {
-    CAM_STATE_DISCONNECTED   = 0x00,
-    CAM_STATE_SCANNING       = 0x01,
-    CAM_STATE_CONNECTING     = 0x02,
-    CAM_STATE_CONNECTED      = 0x03,
-    CAM_STATE_RECORDING      = 0x04
-};
-
-// Action-Cam Command Subtypes for PKT_TYPE_CAM_CMD
-enum CamCmdSubtype : uint8_t {
-    CAM_CMD_TOGGLE_REC       = 0x01,   // Start/Stop recording toggle
-    CAM_CMD_HILIGHT_TAG      = 0x02,   // Insert bookmark / highlight marker
-    CAM_CMD_START_SCAN       = 0x03,   // Scan for nearby BLE cameras (10s)
-    CAM_CMD_PAIR             = 0x04,   // Pair specific MAC with profile
-    CAM_CMD_UNPAIR           = 0x05,   // Unpair and clear from NVS
-    CAM_CMD_SET_AUTOCONNECT  = 0x06,   // Toggle autonomous autoconnect on boot/wake
-    CAM_CMD_SET_FUEL_FILTER  = 0x07    // Toggle KL15 Tankpausen-Filter (Auto-Stop/Resume)
+    BTN_INTERCOM_PTT         = 0x01,   // J_POD_L Pin 3 (BTN_SIG_L_N)
+    BTN_CAM_HIGHLIGHT        = 0x02,   // J_POD_R Pin 3 (BTN_SIG_R_N)
+    BTN_MEDIA_VOICE          = 0x03
 };
 
 // PTT Multi-Click Action Types
 enum PttClickType : uint8_t {
     PTT_CLICK_NONE           = 0x00,
-    PTT_CLICK_SINGLE         = 0x01,   // Short press <400ms: Intercom/Radio PTT (<0.9ms zero-latency)
-    PTT_CLICK_DOUBLE         = 0x02,   // Double click: Action-Cam Record Toggle (Start/Stop)
-    PTT_CLICK_LONG           = 0x03,   // Long press >800ms: Action-Cam HiLight Marker
-    PTT_CLICK_RESET_PAIRING  = 0x04    // Continuous 10s hold: Manual unpair & NVS binding reset
+    PTT_CLICK_SINGLE         = 0x01,   // Short press <400ms
+    PTT_CLICK_DOUBLE         = 0x02,   // Double click
+    PTT_CLICK_LONG           = 0x03,   // Long press >800ms
+    PTT_CLICK_RESET_PAIRING  = 0x04    // Continuous 10s hold
 };
 
 // --- 3. Functional Timing & Threshold Parameters ---
 #define PTT_DEBOUNCE_MS              15      // Hardware/Software RC debounce threshold
 #define PTT_DOUBLE_CLICK_MS          350     // Inter-click max duration for double click
-#define PTT_LONG_PRESS_MS            800     // Duration threshold for HiLight bookmark trigger
-#define PTT_RESET_HOLD_MS            10000   // Continuous 10s hold to force unpair and NVS reset
-#define OTTOCAST_RESET_PULSE_MS      2500    // VBUS power-off duration during 1-click reboot
-#define CAFE_DISCONNECT_SEC          60      // Delay before disabling VBUS after ignition off
+#define PTT_LONG_PRESS_MS            800     // Duration threshold for long press
+#define PTT_RESET_HOLD_MS            10000   // Continuous 10s hold
+#define OTTOCAST_RESET_PULSE_MS      2500    // U4 TPS2051B power-off duration during 1-click reboot
+#define CAFE_DISCONNECT_SEC          60      // Delay before disabling J_DONGLE VBUS after ignition off
 #define AUDIO_RMS_INTERVAL_MS        20      // 50 Hz telemetry rate for dBA edge audio
-#define HEARTBEAT_INTERVAL_MS        500     // Link supervision heartbeat
-#define ORPHAN_HEARTBEAT_TIMEOUT_SEC 60      // Heartbeat timeout before entering ORPHAN state
-#define PROXIMITY_RSSI_THRESHOLD_DBM -42     // Minimum RSSI for Proximity-Rescue (< 1 m on bike)
-
+#define HEARTBEAT_INTERVAL_MS        500     // USB 2.0 Backbone link supervision heartbeat

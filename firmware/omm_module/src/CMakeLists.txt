@@ -11,6 +11,7 @@ idf_component_register(
         "."
     REQUIRES
         openmotormesh
+        uwb_backbone
         esp_wifi
         nvs_flash
         driver

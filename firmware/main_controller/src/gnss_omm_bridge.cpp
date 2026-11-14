@@ -8,11 +8,11 @@
 #include "esp_mac.h"
 #include "esp_timer.h"
 #include "sdio_ring_buffer.h"
-#include "esp_now_front_node_client.h"
+#include "sx1262_lora_engine.h"
 #include "can_bus_manager.h"
 #include "radar_processor.h"
 #include "baro_weather_trend.h"
-#include "uwb_vehicle_backbone.h"
+#include "usb_vehicle_backbone.h"
 
 static const char *TAG = "GNSS_BRIDGE";
 
@@ -91,9 +91,8 @@ uint8_t omm_get_capabilities_vector(void) {
         caps |= FEAT_GNSS_1PPS_LOCK;
     }
 
-    // Front Node Hardware (Knowles MEMS Fahrtwind-Mikrofon via UWB)
-    if (UwbVehicleBackbone::instance().is_peer_online(UWB_NODE_FRONT_NODE) ||
-        esp_now_front_node_get_status().is_linked) {
+    // Front Node Hardware (Knowles SPH0645LM4H MEMS Fahrtwind-Mikrofon via 4-Wire USB 2.0)
+    if (UsbVehicleBackbone::instance().is_peer_online(USB_NODE_FRONT_NODE)) {
         caps |= FEAT_ENV_MIC_ACTIVE;
     }
 
@@ -210,5 +209,7 @@ esp_err_t omm_broadcast_bike_alarm(uint8_t alarm_source, float lat, float lon) {
     }
     alarm_pkt.crc8_checksum = sum;
 
+    // Transmit directly over Onboard Semtech SX1262 (U10, 868.1 MHz +22 dBm) to Smart-Keyfob (PCBA 07)
+    sx1262_lora_transmit((const uint8_t *)&alarm_pkt, sizeof(alarm_pkt));
     return gnss_bridge_send_omm_packet((const uint8_t *)&alarm_pkt, sizeof(alarm_pkt));
 }

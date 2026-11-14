@@ -16,11 +16,12 @@ extern "C" {
 // Dual-A2DP (aptX HD / aptX Adaptive / Low-Latency < 20 ms), LE Audio Auracast broadcast,
 // HFP 1.8 Wideband Speech telephony offload, and direct I2S DMA link to ESP32-S3 DSP.
 
-#define QCC3084_UART_NUM        UART_NUM_1
-#define QCC3084_PIN_TX          GPIO_NUM_17
-#define QCC3084_PIN_RX          GPIO_NUM_18
-#define QCC3084_PIN_EN          GPIO_NUM_16
-#define QCC3084_PIN_STATUS      GPIO_NUM_21
+#include "main_box_config.h"
+
+#define QCC3084_UART_NUM        QCC3084_UART_PORT
+#define QCC3084_PIN_TX          PIN_MAIN_BT_UART_TX  // U2 Pad 11 -> U9 Pin 9 (GPIO 3)
+#define QCC3084_PIN_RX          PIN_MAIN_BT_UART_RX  // U2 Pad 10 -> U9 Pin 10 (GPIO 2)
+#define QCC3084_PIN_EN          PIN_MAIN_BT_EN       // U2 Pad 9  -> U9 Pin 11 (GPIO 1)
 
 typedef enum {
     BT_ROLE_RIDER = 1,   // Primary Rider Helmet (Stream 1 / HFP Telephony)

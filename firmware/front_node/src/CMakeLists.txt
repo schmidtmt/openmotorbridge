@@ -1,13 +1,11 @@
 idf_component_register(
     SRCS
         "main.cpp"
-        "esp_now_bridge.cpp"
         "ottocast_power_manager.cpp"
         "knowles_mems_dsp.cpp"
         "handlebar_ptt_handler.cpp"
-        "front_cam_ble_manager.cpp"
-        "cockpit_can_manager.cpp"
         "cockpit_switches_manager.cpp"
+        "cockpit_oled_display.cpp"
         "ws2812b_led_manager.cpp"
         "ota_service_manager.cpp"
         "cockpit_wifi_fallback.cpp"
@@ -23,7 +21,6 @@ idf_component_register(
         nvs_flash
         app_update
         mbedtls
-        bt
         uwb_backbone
     WHOLE_ARCHIVE
 )

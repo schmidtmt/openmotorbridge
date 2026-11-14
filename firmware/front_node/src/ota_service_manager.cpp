@@ -1,8 +1,7 @@
 #include "ota_service_manager.h"
 #include "esp_log.h"
 #include "esp_system.h"
-#include "cockpit_can_manager.h"
-#include "esp_now_bridge.h"
+#include "usb_vehicle_backbone.h"
 
 static const char* TAG = "OTA_MGR";
 
@@ -89,21 +88,18 @@ void OtaServiceManager::update_health_check(uint32_t delta_ms) {
     m_health_timer_ms += delta_ms;
 
     // 1. Evaluate verification criteria:
-    // Criteria A: CAN Bus communication functional (either recorded activity or manager has RX frames)
-    bool can_ok = (m_can_frames_seen > 0) || (CockpitCanManager::instance().get_rx_frame_count() > 0);
+    // Criteria A: 4-Wire USB 2.0 Automotive Backbone communication functional with Central Box
+    bool usb_bus_ok = (m_espnow_pings_seen > 0) ||
+                      UsbVehicleBackbone::instance().is_peer_online(USB_NODE_CENTRAL_BOX);
 
-    // Criteria B: ESP-NOW wireless bridge communication functional with Central Box
-    bool espnow_ok = (m_espnow_pings_seen > 0) || 
-                     (EspNowBridge::instance().get_binding_state() == BINDING_STATE_LINKED);
-
-    // 2. If both core interfaces are alive, mark partition as permanently VALID
-    if (can_ok && espnow_ok) {
+    // 2. If USB Backbone link to Central Box is alive, mark partition as permanently VALID
+    if (usb_bus_ok) {
         m_health_passed = true;
         m_health_pending = false;
         esp_err_t err = esp_ota_mark_app_valid_cancel_rollback();
         if (err == ESP_OK) {
-            ESP_LOGI(TAG, "Self-Health Check PASSED after %lu ms! (CAN frames: %lu, ESP-NOW pings: %lu). App marked permanently VALID.",
-                     m_health_timer_ms, m_can_frames_seen, m_espnow_pings_seen);
+            ESP_LOGI(TAG, "Self-Health Check PASSED after %lu ms! (USB Backbone link online). App marked permanently VALID.",
+                     m_health_timer_ms);
         } else {
             ESP_LOGE(TAG, "Failed to mark app valid: %s", esp_err_to_name(err));
         }
@@ -112,8 +108,8 @@ void OtaServiceManager::update_health_check(uint32_t delta_ms) {
 
     // 3. If timeout expires without passing health check -> Trigger Automatic Hardware Rollback
     if (m_health_timer_ms >= HEALTH_CHECK_TIMEOUT_MS) {
-        ESP_LOGE(TAG, "Self-Health Check FAILED / TIMED OUT after 30s! (CAN OK: %d, ESP-NOW OK: %d). Triggering Rollback...",
-                 can_ok, espnow_ok);
+        ESP_LOGE(TAG, "Self-Health Check FAILED / TIMED OUT after 30s! (USB Bus OK: %d). Triggering Rollback...",
+                 usb_bus_ok);
         m_health_pending = false;
         esp_ota_mark_app_invalid_rollback_and_reboot();
     }

@@ -12,7 +12,8 @@
 #include "audio_dsp_pipeline.h"
 #include "uwb_cartridge_dispatcher.h"
 #include "omm_flasher.h"
-#include "esp_now_front_node_client.h"
+#include "action_cam_ble_manager.h"
+#include "pairing_roaming_mgr.h"
 #include "gnss_omm_bridge.h"
 #include "tpms_ble_scanner.h"
 #include "bluetooth_audio_manager.h"
@@ -61,45 +62,47 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             uwb_cartridge_send_opcode(UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_CHANNEL_NEXT, 0);
         } else if (cmd[0] == 0x05) { // Trigger OEM Auto-Pairing (5s Hold)
             uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_POWER_BOOT, 5000);
-        } else if (cmd[0] == 0x06) { // Trigger OMM High-Speed UART Push
-            omm_flasher_push_file("/spiffs/omm_rear.bin");
+        } else if (cmd[0] == 0x06) { // Trigger Central USB-Bus DFU Firmware Push (cmd[1] = UsbNodeType, default OMM_MODULE_1)
+            UsbNodeType dfu_target = (len >= 2 && cmd[1] > 0) ? (UsbNodeType)cmd[1] : USB_NODE_OMM_MODULE_1;
+            usb_bus_dfu_flash_node_file(dfu_target, "/spiffs/node_update.bin");
         } else if (cmd[0] == 0x07) { // Trigger Bay Power Cycle / Boot
             uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, CARTRIDGE_OPCODE_POWER_BOOT, 0);
         } else if (cmd[0] == 0x08) { // Trigger Bay 1 Group Mesh Toggle (3s Hold)
             uwb_cartridge_send_opcode(UWB_NODE_CARTRIDGE_BAY1, CARTRIDGE_OPCODE_OPEN_GROUP_SW, 3000);
         } else if (cmd[0] == 0x09) { // Smart Cartridge Opcode Dispatch (cmd[1] = port, cmd[2] = opcode)
             uwb_cartridge_send_opcode(cmd[1] == 1 ? UWB_NODE_CARTRIDGE_BAY1 : UWB_NODE_CARTRIDGE_BAY2, (UwbCartridgeOpcode)cmd[2], 0);
-        } else if (cmd[0] == 0x10) { // Action-Cam: REC Start/Stop Toggle
-            esp_now_front_node_cam_toggle_rec();
-        } else if (cmd[0] == 0x11) { // Action-Cam: HiLight Bookmark Tag
-            esp_now_front_node_cam_hilight_tag();
+        } else if (cmd[0] == 0x10) { // Action-Cam (Central BLE Master): REC Start/Stop Toggle
+            action_cam_toggle_rec();
+        } else if (cmd[0] == 0x11) { // Action-Cam (Central BLE Master): HiLight Bookmark Tag
+            action_cam_trigger_hilight_tag("PWA_MANUAL");
         } else if (cmd[0] == 0x12) { // Action-Cam: Start BLE Camera Scan
-            esp_now_front_node_cam_start_scan();
+            action_cam_start_scan();
         } else if (cmd[0] == 0x13) { // Action-Cam: Pair Specific Camera
             if (len >= 8) {
-                esp_now_front_node_cam_pair(&cmd[1], cmd[7], (len > 8) ? reinterpret_cast<const char*>(&cmd[8]) : nullptr);
+                action_cam_pair(&cmd[1], cmd[7], (len > 8) ? reinterpret_cast<const char*>(&cmd[8]) : nullptr);
             }
         } else if (cmd[0] == 0x14) { // Action-Cam: Unpair Camera
-            esp_now_front_node_cam_unpair();
+            action_cam_unpair();
         } else if (cmd[0] == 0x15) { // Action-Cam: Set Autoconnect
-            esp_now_front_node_cam_set_autoconnect(cmd[1] != 0);
+            action_cam_set_autoconnect(cmd[1] != 0);
         } else if (cmd[0] == 0x16) { // Action-Cam: Set KL15 Fuel-Stop Filter
-            esp_now_front_node_cam_set_fuel_filter(cmd[1] != 0);
-        } else if (cmd[0] == 0x17) { // Front Node: 1-Click Ottocast Cold Reboot
-            esp_now_front_node_reboot_ottocast();
-        } else if (cmd[0] == 0x18) { // Front Node: Start Pairing / Proximity-Rescue Beacon
-            esp_now_front_node_start_pairing();
-        } else if (cmd[0] == 0x19) { // Front Node: Unbind & Clear NVS
-            esp_now_front_node_unbind();
+            action_cam_set_fuel_filter(cmd[1] != 0);
+        } else if (cmd[0] == 0x17) { // Front Node (USB 2.0): 1-Click Ottocast / CarPlay Dongle Cold Reboot (TPS2051B)
+            front_node_usb_reboot_cp2aa_dongle();
+        } else if (cmd[0] == 0x18) { // Start 60s Pairing Window / Find-My Dual Beaconing
+            pairing_mgr_start_pairing_window(60);
+            find_my_set_dual_beacon(true);
+        } else if (cmd[0] == 0x19) { // Clear Roaming / Pairing Slot
+            ESP_LOGI(TAG, "USB Node / Roaming slot unbind requested.");
         } else if (cmd[0] == 0x20) { // Bike Alarm: Arm / Disarm
             bool arm = (cmd[1] != 0);
             ESP_LOGI(TAG, "Bike Alarm Guard set: %s", arm ? "ARMED" : "DISARMED");
         } else if (cmd[0] == 0x21) { // Bike Alarm: Manual Trigger Test Alert
             omm_broadcast_bike_alarm(0x02, 0.0f, 0.0f); // 0x02 = IMU shock
-        } else if (cmd[0] == 0x22) { // Front Node Aux Light Mode
-            esp_now_front_node_set_aux_light(cmd[1]);
-        } else if (cmd[0] == 0x23) { // Front Node CAN Term Relais Mode
-            esp_now_front_node_set_can_term(cmd[1] != 0);
+        } else if (cmd[0] == 0x22) { // Front Node Aux Light Mode (Q2 TPS1H100 via USB)
+            front_node_usb_set_aux_light(cmd[1]);
+        } else if (cmd[0] == 0x23) { // Front Node Config Mode
+            front_node_usb_set_aux_light(cmd[1]);
         } else if (cmd[0] == 0x24) { // Privacy Mute Enable/Disable
             audio_set_privacy_mute_config(cmd[1] != 0);
         } else if (cmd[0] == 0x25) { // Headset Scan Start
@@ -138,9 +141,9 @@ static int gatt_svr_chr_access_omb(uint16_t conn_handle, uint16_t attr_handle,
             if (cmd[3] != 0) { // Bit/byte 3 = Test Strobe Trigger
                 radar_trigger_ess_test();
             }
-        } else if (cmd[0] == 0x2F) { // Safety Lighting: Front Aux Light Mode
+        } else if (cmd[0] == 0x2F) { // Safety Lighting: Front Aux Light Mode (Q2 TPS1H100 via USB)
             ESP_LOGI(TAG, "GATT: Front Aux Light Mode set to %d", cmd[1]);
-            esp_now_front_node_set_aux_light(cmd[1]);
+            front_node_usb_set_aux_light(cmd[1]);
         } else if (cmd[0] == 0x40) { // Safety Lighting: Radar 2.0 Macro Configuration (Persistent in NVS)
             if (len >= 3) {
                 uint16_t mask = (uint16_t)cmd[1] | ((uint16_t)cmd[2] << 8);
@@ -334,7 +337,7 @@ esp_err_t ble_server_init(void) {
     ble_svc_gap_init();
     ble_svc_gatt_init();
 
-    ble_svc_gap_device_name_set("OpenMotorBridge-v8");
+    ble_svc_gap_device_name_set("OpenMotorBridge-v10");
     ble_gatts_count_cfg(gatt_svr_svcs);
     ble_gatts_add_svcs(gatt_svr_svcs);
 

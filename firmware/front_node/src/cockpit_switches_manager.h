@@ -13,30 +13,22 @@ public:
     }
 
     esp_err_t init(void);
-    void update(uint32_t delta_ms); // Call at 20-50 Hz from supervisor task
+    void update(uint32_t delta_ms); // Call at 10-50 Hz from supervisor task
 
-    // --- 1. CAN Auto-Sensing 120-Ohm Termination ---
-    void perform_can_auto_sense(void);
-    void set_can_termination(bool enable);
-    bool is_can_termination_active(void) const { return m_can_term_active; }
-
-    // --- 2. Mirror BSD (Blind-Spot Detection) Warning LEDs ---
+    // --- 1. Mirror BSD (Blind-Spot Detection) Warning LEDs (Q1 DMN63D8 -> J_POD_L / J_POD_R) ---
     void set_bsd_warning(bool left_active, BsdAlertLevel left_level,
                          bool right_active, BsdAlertLevel right_level);
     bool is_bsd_left_active(void) const { return m_bsd_left_level != BSD_LEVEL_OFF; }
     bool is_bsd_right_active(void) const { return m_bsd_right_level != BSD_LEVEL_OFF; }
 
-    // --- 3. 12V Aux Light (TPS1H100 Smart High-Side Switch) ---
+    // --- 2. 12V Aux Light (Q2 TPS1H100 Smart High-Side Switch -> J_AUX_LIGHT) ---
     void set_aux_light_mode(AuxLightMode mode);
     AuxLightMode get_aux_light_mode(void) const { return m_aux_light_mode; }
     bool is_aux_light_on(void) const { return m_aux_light_mode != AUX_LIGHT_OFF; }
 
-    // --- 4. KL15 Ignition & Qi-Power Status ---
-    bool is_kl15_ignition_on(void);
-    bool is_qi_power_active(void) const { return m_qi_power_active; }
-
-    // --- 5. CAN Silent (Listen-Only) Mode ---
-    void set_can_silent(bool silent);
+    // --- 3. ESP32-E22 Wi-Fi 6E Co-Processor Hardware Enable (U9 Pin 3) ---
+    void set_e22_wifi6e_enable(bool enable);
+    bool is_e22_wifi6e_enabled(void) const { return m_e22_enabled; }
 
 private:
     CockpitSwitchesManager();
@@ -45,9 +37,7 @@ private:
     CockpitSwitchesManager(const CockpitSwitchesManager&) = delete;
     CockpitSwitchesManager& operator=(const CockpitSwitchesManager&) = delete;
 
-    bool m_can_term_active;
-    bool m_can_silent;
-    bool m_qi_power_active;
+    bool m_e22_enabled;
 
     // BSD State
     BsdAlertLevel m_bsd_left_level;
@@ -58,5 +48,5 @@ private:
     // Aux Light State
     AuxLightMode m_aux_light_mode;
     uint32_t m_aux_strobe_timer_ms;
-    bool m_aux_strobe_state; // Toggles at 4 Hz
+    bool m_aux_strobe_state; // Toggles at 4.5 Hz
 };

@@ -29,9 +29,14 @@ esp_err_t sdio_track_append_point(double lat, double lon, float ele, float speed
 esp_err_t sdio_track_add_video_marker(const char *camera_name, uint32_t clip_offset_ms);
 
 /**
- * @brief Schließt die aktuelle GPX-Datei sauber ab (Zündung AUS oder Stillstand > 15 min)
+ * @brief Schließt die aktuelle GPX-Datei sauber ab und signiert sie kryptografisch (SHA-256 / ECDSA)
  */
 esp_err_t sdio_track_finalize(void);
+
+/**
+ * @brief Markiert das aktuelle Segment als unlöschbares Unfall-/Beweissegment (.crash.gpx)
+ */
+esp_err_t sdio_track_lock_incident(const char *reason);
 
 /**
  * @brief BGH-Konformer Purge-Manager: Löscht älteste ungeschützte GPX-Dateien bei < 200 MB

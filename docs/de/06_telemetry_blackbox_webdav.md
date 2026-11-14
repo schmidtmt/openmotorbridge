@@ -4,10 +4,10 @@ Dieses Dokument spezifiziert das Telemetrie-, Navigations- und Speichersystem de
 
 ## 1. Speicheranbindung & High-Speed SDIO (4-Bit @ 40 MHz)
 
-* **Schnittstelle:** Nativer 4-Bit SDIO-Bus @ 40 MHz direkt angebunden an den ESP32-S3 (GPIOs 40-45).
-* **Durchsatz:** Kontinuierliche Schreibrate $> 12\,\text{MB/s}$ (unterbrechungsfreies 10 Hz GPX-, IMU-, Schräglagen- und Audio-Telemetrie-Logging).
-* **Dateisystem:** FAT32 mit dynamischer Sektor-Pufferung (Clustergröße 32 kB).
-* **Ausfallsicherheit:** Der integrierte BQ24075 USV-Puffer garantiert selbst bei plötzlichem Bordnetzabriss das saubere Schließen der FAT-Dateitabellen ohne Datenkorruption.
+* **Schnittstelle:** Nativer 4-Bit SDIO-Bus @ 40 MHz an `J2` (Push-Push MicroSD-Slot) auf `PCBA 01`, direkt angebunden an den `ESP32-S31-WROOM-1U`: **`GPIO 38` (`SD_CLK`), `GPIO 39` (`SD_CMD`), `GPIO 33` (`SD_D0`), `GPIO 34` (`SD_D1`), `GPIO 35` (`SD_D2`), `GPIO 36` (`SD_D3`) und `GPIO 37` (`SD_CD` Card Detect)** (synchronisiert mit [`07_pcba_hardware_pinouts.md`](file:///Users/schmidtm/openMotorBridge/docs/de/07_pcba_hardware_pinouts.md) und [`sdio_ring_buffer.h`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.h)).
+* **Durchsatz:** Kontinuierliche Schreibrate $> 12\,\text{MB/s}$ (unterbrechungsfreies 10 Hz GPX-, IMU-, Schräglagen- und Audio-Telemetrie-Logging über `esp_vfs_fat_sdmmc_mount()`).
+* **Dateisystem:** FAT32 mit dynamischer Sektor-Pufferung (Clustergröße 32 kB) und Echtzeit-Kapazitätsabfrage über `esp_vfs_fat_info()`.
+* **Ausfallsicherheit:** Der integrierte `BQ24075` USV-Puffer garantiert selbst bei plötzlichem Bordnetzabriss das saubere Schließen (`fsync` + `sdio_track_finalize()`) der FAT-Dateitabellen ohne Datenkorruption.
 
 ---
 
@@ -197,9 +197,9 @@ Um den strengen Vorgaben des Bundesgerichtshofs (BGH-Urteil VI ZR 233/17) und de
 +-------------------------------------------------------------+
 ```
 
-1. **Rollierender Ringspeicher:** Normale Fahrdaten werden in 15-Minuten-Segmenten rollierend überschrieben.
-2. **Crash-Freeze (Unfall-Erkennung):** Erkennt die Bosch BMI270 IMU einen extremen Stoßimpuls ($> 4{,}0\,\text{G}$) oder das Abreißen der Zündung bei hoher Querbeschleunigung (Sturz), werden die letzten 15 Minuten sowie alle Nachlaufdaten schreibgeschützt fixiert.
-3. **Kryptographische Integrität (ECDSA SHA-256):** Jeder Track-Datensatz wird blockweise mit einem auf der ATECC608A / ESP32-eFuse hinterlegten Hardware-Schlüssel signiert, um die Echtheit der Schräglagen- und Geschwindigkeitsdaten vor Gericht nachzuweisen.
+1. **Rollierender Ringspeicher (`sdio_purge_old_tracks_if_needed()`):** Normale Fahrdaten in `/sdcard/tracks/` werden über `esp_vfs_fat_info()` überwacht; sinkt der freie Speicher unter `200 MB`, iteriert der Ringbuffer-Manager per POSIX `opendir()`/`readdir()`/`stat()` über alle ungeschützten `.gpx`-Dateien und löscht (`unlink()`) deterministisch die ältesten Segmente nach `st_mtime`, bis wieder mindestens `250 MB` frei sind.
+2. **Crash-Freeze & Favoriten-Schutz (`sdio_track_lock_incident()`):** Erkennt die Bosch BMI270 IMU einen extremen Stoßimpuls ($> 4{,}0\,\text{G}$) oder betätigt der Fahrer den Lenkertaster, benennt die Firmware das aktuelle Track-Segment atomar in `*.crash.gpx` bzw. `*.fav.gpx` um — diese Dateien sind vom Auto-Purge dauerhaft ausgenommen.
+3. **Kryptographische Integrität (`<omb:integrity_seal>` via SHA-256 Chain & Hardware-eFuse Key):** Jeder geschriebene Trackpoint fließt in [`sdio_ring_buffer.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.cpp) fortlaufend in eine `mbedtls_sha256`-Hashkette ein. Beim Schließen der Datei (`sdio_track_finalize()`) signiert der Controller den finalen SHA-256-Digest mittels `mbedtls_md_hmac` über den aus dem `ESP32-S31` Hardware-eFuse-Block (`EFUSE_BLK_KEY0` / Factory MAC) abgeleiteten Geräteschlüssel und bettet das Prüfsiegel direkt vor `</trk>` in die GPX-Datei ein.
 
 ---
 
@@ -240,7 +240,7 @@ MOTORRAD ROLLT IN DIE GARAGE (ZÜNDUNG AUS)
 +-------------------------------------------------------------+
 ```
 
-* **Vollautomatisch:** Der Fahrer muss weder sein Smartphone zücken noch Speicherkarten entnehmen. Die Touren des Tages liegen beim Eintreten ins Haus bereits fertig im Nextcloud-Ordner bereit.
+* **Vollautomatisch & HF-koexistenzfrei (Garage Post-Ride Sync Mode):** Während der Fahrt (`KL15 = HIGH`) bleibt das 2,4-GHz-WLAN auf `PCBA 01` strikt deaktiviert (0 dB Koexistenzkonflikt mit Bluetooth Classic / BLE Audio; das 5,9-GHz-V2X-Mesh läuft auf dem `ESP32-E22` im Front-Node `PCBA 05`). Erst nach dem Abstellen des Motorrads (`KL15 = LOW` im USV-Nachlauf oder via Smartphone-PWA-Relay) aktiviert [`webdav_uploader.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/webdav_uploader.cpp) die Synchronisation, legt per `HTTP_METHOD_MKCOL` das Zielverzeichnis an, streamt alle neuen `.gpx`-Dateien in 2-kB-Chunks per `HTTP_METHOD_PUT` (TLS 1.3 / Basic Auth) auf den Server und markiert erfolgreich übertragene Tracks mit einer lokalen `.uploaded`-Markerdatei.
 
 ### 7.1 Cloud-Speicher-Architektur: Nextcloud vs. Schlanker Google-Drive WebDAV-Proxy (`omb.f0o.bar`)
 

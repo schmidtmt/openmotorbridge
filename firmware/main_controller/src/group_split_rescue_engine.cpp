@@ -1,4 +1,5 @@
 #include "group_split_rescue_engine.h"
+#include "sx1262_lora_engine.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -152,6 +153,7 @@ void group_split_update(float speed_kmh, double lat, double lon, float heading_d
                 s_status.rescue_level = RESCUE_LEVEL_2_LORA_868;
                 s_status.lifecycle_state = GROUP_LIFECYCLE_RESCUE_ESCALATION;
                 ESP_LOGW(TAG, "📡 RESCUE LEVEL 2: Semtech SX1262 LoRa 868 MHz Long-Range Telemetry active (up to 15km).");
+                sx1262_lora_send_convoy_status(LORA_STATUS_UNCONFIRMED_EMERGENCY, lat, lon, speed_kmh, heading_deg);
             }
 
             // Distanz & Peilung zur letzten Gruppenposition berechnen
@@ -228,4 +230,27 @@ void group_split_update_lead_position(double lat, double lon) {
         s_last_lead_lat = lat;
         s_last_lead_lon = lon;
     }
+}
+
+bool group_split_handle_human_loop_ptt(uint8_t click_type) {
+    if (!s_status.doubt_timer_active && s_status.rescue_level == RESCUE_LEVEL_NONE) {
+        return false;
+    }
+
+    if (click_type == 2) { // Double Click: "Alles OK / Ich biege absichtlich ab"
+        s_status.doubt_timer_active = false;
+        s_status.rescue_level = RESCUE_LEVEL_NONE;
+        s_status.lifecycle_state = GROUP_LIFECYCLE_GROUP_LEFT;
+        ESP_LOGI(TAG, "✅ [HUMAN-IN-THE-LOOP] Rider confirmed intentional split (Double-Click) -> Sending 'ALLES OK' via SX1262 LoRa.");
+        sx1262_lora_send_convoy_status(LORA_STATUS_LEFT_INTENTIONALLY, s_last_lead_lat, s_last_lead_lon, 0.0f, 0.0f);
+        return true;
+    } else if (click_type == 3) { // Long Press: "Technischer Stopp / Bitte kurz warten"
+        s_status.doubt_timer_active = false;
+        s_status.lifecycle_state = GROUP_LIFECYCLE_GROUP_PAUSED;
+        ESP_LOGW(TAG, "🛠️ [HUMAN-IN-THE-LOOP] Rider signaled Technical Stop (Long-Press) -> Sending 'BITTE WARTEN' via SX1262 LoRa.");
+        sx1262_lora_send_convoy_status(LORA_STATUS_TECH_STOP_WAIT, s_last_lead_lat, s_last_lead_lon, 0.0f, 0.0f);
+        return true;
+    }
+
+    return false;
 }

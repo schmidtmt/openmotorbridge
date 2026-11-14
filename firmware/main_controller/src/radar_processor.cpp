@@ -1,8 +1,8 @@
 #include "radar_processor.h"
 #include "audio_dsp_pipeline.h"
 #include "can_bus_manager.h"
-#include "esp_now_front_node_client.h"
-#include "uwb_vehicle_backbone.h"
+#include "action_cam_ble_manager.h"
+#include "usb_vehicle_backbone.h"
 #include "solar_position.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -235,10 +235,8 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
 
     uint8_t left_lvl = (s_radar_state.blind_spot_left) ? ((t->threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
     uint8_t right_lvl = (s_radar_state.blind_spot_right) ? ((t->threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
-    UwbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
+    UsbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
                                                     s_radar_state.blind_spot_right, right_lvl);
-    esp_now_front_node_send_bsd_warning(s_radar_state.blind_spot_left, left_lvl,
-                                        s_radar_state.blind_spot_right, right_lvl);
 
     uint32_t now = esp_log_timestamp();
     if (s_radar_state.sound_alert_enabled && t->threat != RADAR_THREAT_CLEAR) {
@@ -253,7 +251,7 @@ void radar_inject_simulated_target(float distance_m, float rel_speed_kmh, int8_t
         if (now - s_last_cam_tag_ms > 10000) {
             s_last_cam_tag_ms = now;
             ESP_LOGW(TAG, "⚡ Critical Radar Threat RED (TTC < 2.5s): Auto-setting Action Cam Bookmark!");
-            esp_now_front_node_cam_hilight_tag();
+            action_cam_trigger_hilight_tag("RADAR_TTC");
         }
     }
 
@@ -289,13 +287,11 @@ static void parse_submcu_packet(const uint8_t *data, size_t len) {
                         s_radar_state.targets[t].last_seen_ms = esp_log_timestamp();
                     }
 
-                    // Forward to Front-Node Mirror LEDs
+                    // Forward to Front-Node Mirror LEDs over 4-Wire USB Backbone
                     uint8_t left_lvl = (s_radar_state.blind_spot_left) ? ((s_radar_state.max_threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
                     uint8_t right_lvl = (s_radar_state.blind_spot_right) ? ((s_radar_state.max_threat == RADAR_THREAT_RED) ? 2 : 1) : 0;
-                    UwbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
+                    UsbVehicleBackbone::instance().send_bsd_trigger(s_radar_state.blind_spot_left, left_lvl,
                                                                     s_radar_state.blind_spot_right, right_lvl);
-                    esp_now_front_node_send_bsd_warning(s_radar_state.blind_spot_left, left_lvl,
-                                                        s_radar_state.blind_spot_right, right_lvl);
 
                     // Sound Alert
                     uint32_t now = esp_log_timestamp();
@@ -311,7 +307,7 @@ static void parse_submcu_packet(const uint8_t *data, size_t len) {
                         static uint32_t s_last_cam_tag_ms = 0;
                         if (now - s_last_cam_tag_ms > 10000) {
                             s_last_cam_tag_ms = now;
-                            esp_now_front_node_cam_hilight_tag();
+                            action_cam_trigger_hilight_tag("RADAR_TTC");
                         }
                     }
 
@@ -455,8 +451,8 @@ void radar_trigger_ess_test(void) {
     cmd.checksum = calc_crc16((const uint8_t *)&cmd, sizeof(cmd) - 2);
     uart_write_bytes(RADAR_UART_NUM, (const char *)&cmd, sizeof(cmd));
 
-    esp_now_front_node_set_aux_light(2);
-    esp_now_front_node_cam_hilight_tag();
+    front_node_usb_set_aux_light(2);
+    action_cam_trigger_hilight_tag("ESS_BRAKE");
 }
 
 void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g) {
@@ -475,8 +471,8 @@ void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g) {
             uint8_t varia_strobe[] = { 0xAA, 0x04, 0x30, 0x02, 0x00 };
             uart_write_bytes(RADAR_UART_NUM, (const char *)varia_strobe, sizeof(varia_strobe));
 
-            esp_now_front_node_set_aux_light(2);
-            esp_now_front_node_cam_hilight_tag();
+            front_node_usb_set_aux_light(2);
+            action_cam_trigger_hilight_tag("ESS_BRAKE");
         }
     } else if (s_ess_active && (now - s_ess_start_ms > 2500 || accel_x_g > -0.20f)) {
         s_ess_active = false;
@@ -485,7 +481,7 @@ void radar_notify_vehicle_dynamics(float speed_kmh, float accel_x_g) {
         uint8_t varia_solid[] = { 0xAA, 0x04, 0x30, 0x01, 0x00 };
         uart_write_bytes(RADAR_UART_NUM, (const char *)varia_solid, sizeof(varia_solid));
 
-        esp_now_front_node_set_aux_light(0);
+        front_node_usb_set_aux_light(0);
     }
 }
 
@@ -544,8 +540,7 @@ void task_radar_processor(void *pvParameters) {
                 s_radar_state.highest_rel_speed_kmh = 0.0f;
                 s_radar_state.blind_spot_left = false;
                 s_radar_state.blind_spot_right = false;
-                UwbVehicleBackbone::instance().send_bsd_trigger(false, 0, false, 0);
-                esp_now_front_node_send_bsd_warning(false, 0, false, 0);
+                UsbVehicleBackbone::instance().send_bsd_trigger(false, 0, false, 0);
             }
             xSemaphoreGive(s_radar_mutex);
         }

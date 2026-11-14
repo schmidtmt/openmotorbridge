@@ -3,14 +3,14 @@ idf_component_register(
         "main.cpp"
         "audio_dsp_pipeline.cpp"
         "ble_service_server.cpp"
-        "ble_handlebar_client.cpp"
+        "action_cam_ble_manager.cpp"
+        "sx1262_lora_engine.cpp"
         "sdio_ring_buffer.cpp"
         "webdav_uploader.cpp"
         "gnss_omm_bridge.cpp"
         "adr_ekf_filter.cpp"
         "omm_flasher.cpp"
         "can_bus_manager.cpp"
-        "esp_now_front_node_client.cpp"
         "radar_processor.cpp"
         "tpms_ble_scanner.cpp"
         "bluetooth_audio_manager.cpp"
@@ -32,6 +32,9 @@ idf_component_register(
         driver 
         esp_adc
         fatfs 
+        sdmmc
+        mbedtls
+        esp_hw_support
         json
         bt
         uwb_backbone

@@ -3,10 +3,10 @@
 #include <stdint.h>
 #include "driver/gpio.h"
 
-// Hardware Configuration: PCBA 10 (OMM 446 MHz PMR/DMR Transceiver Module)
-#define OMM446_HW_REV_MAJOR       1
+// Hardware Configuration: PCBA 10 v10.0 (OMM Universal Tri-Band Intercom Module)
+#define OMM446_HW_REV_MAJOR       10
 #define OMM446_HW_REV_MINOR       0
-#define OMM446_FW_VERSION_STRING  "v1.0.0-release"
+#define OMM446_FW_VERSION_STRING  "v10.0.0-triband"
 
 // ---------------------------------------------------------------------------
 // 1. Tactile Pushbuttons (Low Active, Internal Pull-Up 45k)

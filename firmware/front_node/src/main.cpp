@@ -7,245 +7,140 @@
 
 #include "front_node_config.h"
 #include "handlebar_ptt_handler.h"
-#include "front_cam_ble_manager.h"
 #include "ottocast_power_manager.h"
 #include "knowles_mems_dsp.h"
-#include "cockpit_can_manager.h"
 #include "cockpit_switches_manager.h"
+#include "cockpit_oled_display.h"
 #include "ws2812b_led_manager.h"
-#include "esp_now_bridge.h"
 #include "ota_service_manager.h"
 #include "cockpit_wifi_fallback.h"
 #include "usb_ethernet_tethering.h"
-#include "uwb_vehicle_backbone.h"
+#include "usb_vehicle_backbone.h"
 #include "front_sensor_hub.h"
 
-static const char* TAG = "FRONT_NODE_MAIN";
+static const char* TAG = "FRONT_NODE_V10";
 
 // -----------------------------------------------------------------------------
-// Remote Command Handler (Dispatched from Central Box via ESP-NOW / UWB)
+// Remote Command Handler (Dispatched from Central Box via 4-Wire USB 2.0 Backbone)
 // -----------------------------------------------------------------------------
-static void handle_remote_command(uint8_t cmd_type, const uint8_t* payload, size_t len) {
-    switch (cmd_type) {
-        case PKT_TYPE_CMD_POWER_CYCLE:
-            ESP_LOGW(TAG, "Command: Power-cycle Ottocast requested");
+static void handle_usb_command(UsbBackbonePktType pkt_type, const uint8_t* payload, size_t len) {
+    switch (pkt_type) {
+        case USB_CMD_POWER_CYCLE:
+            ESP_LOGW(TAG, "⚡ USB Command (0x10): 2.5s Hard-Reset of J_DONGLE (U4 TPS2051B) requested!");
             OttocastPowerManager::instance().trigger_hard_reset();
             break;
 
-        case PKT_TYPE_CMD_CONFIG:
-            if (len >= 1) {
+        case USB_CMD_CONFIG:
+            if (len >= 2) {
+                uint8_t sub_cmd = payload[0];
+                if (sub_cmd == 0x01) { // Ignition State Sync
+                    bool ignition = (payload[1] != 0);
+                    OttocastPowerManager::instance().set_ignition(ignition);
+                    ESP_LOGI(TAG, "USB Command (0x11): Ignition state synced to %s", ignition ? "ON" : "OFF");
+                } else if (sub_cmd == 0x02) { // Aux Light Q2 TPS1H100 Mode
+                    AuxLightMode mode = static_cast<AuxLightMode>(payload[1]);
+                    CockpitSwitchesManager::instance().set_aux_light_mode(mode);
+                    ESP_LOGI(TAG, "USB Command (0x11): Aux Light (Q2 TPS1H100) mode set to %d", (int)mode);
+                }
+            } else if (len == 1) {
                 bool ignition = (payload[0] != 0);
                 OttocastPowerManager::instance().set_ignition(ignition);
-                FrontCamBleManager::instance().on_ignition_state_change(ignition);
-                ESP_LOGI(TAG, "Command: Ignition state updated to %s", ignition ? "ON" : "OFF");
             }
             break;
 
-        case PKT_TYPE_CAM_CMD:
-            if (len >= 1) {
-                uint8_t subcmd = payload[0];
-                switch (subcmd) {
-                    case CAM_CMD_TOGGLE_REC:
-                        ESP_LOGI(TAG, "Command: Action-Cam Record Toggle");
-                        FrontCamBleManager::instance().toggle_recording();
-                        break;
-                    case CAM_CMD_HILIGHT_TAG:
-                        ESP_LOGI(TAG, "Command: Action-Cam HiLight Marker");
-                        FrontCamBleManager::instance().trigger_hilight();
-                        break;
-                    case CAM_CMD_START_SCAN:
-                        ESP_LOGI(TAG, "Command: Start BLE Camera Scan");
-                        FrontCamBleManager::instance().start_scan(10);
-                        break;
-                    case CAM_CMD_PAIR:
-                        if (len >= 8) {
-                            const uint8_t* mac = &payload[1];
-                            CamProfileType prof = static_cast<CamProfileType>(payload[7]);
-                            const char* name = (len > 8) ? reinterpret_cast<const char*>(&payload[8]) : nullptr;
-                            ESP_LOGI(TAG, "Command: Pair Camera with profile %d", (int)prof);
-                            FrontCamBleManager::instance().pair_device(mac, prof, name);
-                        }
-                        break;
-                    case CAM_CMD_UNPAIR:
-                        ESP_LOGI(TAG, "Command: Unpair Camera");
-                        FrontCamBleManager::instance().unpair();
-                        break;
-                    case CAM_CMD_SET_AUTOCONNECT:
-                        if (len >= 2) {
-                            FrontCamBleManager::instance().set_autoconnect(payload[1] != 0);
-                        }
-                        break;
-                    case CAM_CMD_SET_FUEL_FILTER:
-                        if (len >= 2) {
-                            FrontCamBleManager::instance().set_fuel_filter(payload[1] != 0);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            break;
-
-        case PKT_TYPE_BSD_TRIGGER:
+        case USB_PKT_BSD_TRIGGER:
             if (len >= 4) {
                 bool left_act = (payload[0] != 0);
                 BsdAlertLevel left_lvl = static_cast<BsdAlertLevel>(payload[1]);
                 bool right_act = (payload[2] != 0);
                 BsdAlertLevel right_lvl = static_cast<BsdAlertLevel>(payload[3]);
                 CockpitSwitchesManager::instance().set_bsd_warning(left_act, left_lvl, right_act, right_lvl);
-                ESP_LOGI(TAG, "BSD Mirror warning trigger: L=%d (lvl %d), R=%d (lvl %d)",
+                ESP_LOGI(TAG, "Mirror BSD Trigger (Q1 DMN63D8 -> J_POD_L/R): L=%d (lvl %d), R=%d (lvl %d)",
                          left_act, (int)left_lvl, right_act, (int)right_lvl);
             }
             break;
 
-        case PKT_TYPE_CMD_AUX_LIGHT:
-            if (len >= 1) {
-                AuxLightMode mode = static_cast<AuxLightMode>(payload[0]);
-                CockpitSwitchesManager::instance().set_aux_light_mode(mode);
-                ESP_LOGI(TAG, "Command: Aux Light mode set to %d", (int)mode);
-            }
-            break;
-
-        case PKT_TYPE_CMD_CAN_TERM:
-            if (len >= 1) {
-                bool term_en = (payload[0] != 0);
-                CockpitSwitchesManager::instance().set_can_termination(term_en);
-                ESP_LOGI(TAG, "Command: CAN Termination relay override: %s", term_en ? "ON" : "OFF");
-            }
-            break;
-
-        case PKT_TYPE_OTA_BEGIN:
-            if (len >= 4) {
-                uint32_t img_size = 0;
-                memcpy(&img_size, payload, 4);
-                ESP_LOGW(TAG, "Command: Remote OTA Begin! Image size: %lu bytes", img_size);
-                OtaServiceManager::instance().begin_update(img_size);
-            }
-            break;
-
-        case PKT_TYPE_OTA_CHUNK:
-            OtaServiceManager::instance().write_chunk(payload, len);
-            break;
-
-        case PKT_TYPE_OTA_FINISH:
-            ESP_LOGW(TAG, "Command: Remote OTA Finish! Finalizing and rebooting...");
-            OtaServiceManager::instance().finalize_and_reboot();
-            break;
-
-        case PKT_TYPE_AGPS_INJECT:
-            if (len > 0) {
-                ESP_LOGI(TAG, "Command: Injecting AssistNow A-GPS UBX-MGA packet (%zu bytes)...", len);
-                FrontSensorHub::instance().inject_assistnow_mga(payload, len);
-            }
-            break;
-
         default:
-            ESP_LOGD(TAG, "Unknown command type: 0x%02X (len=%zu)", cmd_type, len);
             break;
     }
 }
 
 // -----------------------------------------------------------------------------
-// Action Cam & PTT Multi-Click Callbacks
+// PTT Multi-Click Callback -> Dispatched via < 1 ms USB HID Interrupt Endpoint
+// to Central Box PCBA 01 (HFP Call Protection / Human-in-the-Loop / Action-Cam BLE)
 // -----------------------------------------------------------------------------
 static void on_ptt_action(PttClickType click_type) {
-    FrontCamBleManager& cam = FrontCamBleManager::instance();
+    UsbPttEventType usb_evt = USB_PTT_CLICK_SHORT;
+    uint16_t dur_ms = 120;
+
     if (click_type == PTT_CLICK_DOUBLE) {
-        ESP_LOGI(TAG, "⚡ Multi-Click: 2x Short -> Toggling Action-Cam Recording (Start/Stop)");
-        cam.toggle_recording();
+        usb_evt = USB_PTT_CLICK_DOUBLE;
+        dur_ms = 250;
     } else if (click_type == PTT_CLICK_LONG) {
-        ESP_LOGI(TAG, "⚡ Multi-Click: 1x Long (>800ms) -> Action-Cam HiLight Bookmark Tag");
-        cam.trigger_hilight();
-    } else if (click_type == PTT_CLICK_RESET_PAIRING) {
-        ESP_LOGW(TAG, "⚡ PTT 10s Override: Resetting Front Node NVS binding and entering UNPAIRED mode!");
-        EspNowBridge::instance().reset_binding();
+        usb_evt = USB_PTT_CLICK_LONG;
+        dur_ms = 900;
     }
-}
 
-static void on_cam_scan_result(const DiscoveredCamItem* item) {
-    if (!item) return;
-    ESP_LOGI(TAG, "Discovered BLE Action Cam: '%s' [%02X:%02X:%02X:%02X:%02X:%02X] RSSI=%d Profile=%d",
-             item->name,
-             item->mac[0], item->mac[1], item->mac[2],
-             item->mac[3], item->mac[4], item->mac[5],
-             item->rssi, (int)item->profile);
-
-    EspNowBridge::instance().send_cam_scan_result(item->mac, item->rssi, static_cast<uint8_t>(item->profile), item->name);
-}
-
-static void on_cam_status(CamState state, CamProfileType profile, uint8_t bat_pct, uint16_t sd_min, bool recording) {
-    FrontCamBleManager& cam = FrontCamBleManager::instance();
-    EspNowBridge::instance().send_cam_status(
-        static_cast<uint8_t>(profile),
-        static_cast<uint8_t>(state),
-        bat_pct,
-        sd_min,
-        cam.is_autoconnect_enabled(),
-        cam.is_fuel_filter_enabled()
-    );
+    ESP_LOGI(TAG, "⚡ Handlebar Multi-Click (%d) on J_POD_L/R -> Forwarding via 4-Wire USB HID (0x03) to Central Box!", (int)click_type);
+    UsbVehicleBackbone::instance().send_ptt_event(USB_BTN_INTERCOM_PTT, usb_evt, dur_ms, 100);
 }
 
 // -----------------------------------------------------------------------------
-// Task 1: Zero-Latency Handlebar PTT Forwarding (< 0.4 ms All-UWB Backbone)
+// Task 1: Zero-Latency Handlebar PTT Forwarding (< 1 ms USB 2.0 HID Interrupt)
 // -----------------------------------------------------------------------------
 static void ptt_task(void* pvParameters) {
     HandlebarPttHandler& ptt = HandlebarPttHandler::instance();
-    EspNowBridge& bridge = EspNowBridge::instance();
     PttEvent evt;
 
-    ESP_LOGI(TAG, "PTT monitoring task running on core %d (Priority 10)", xPortGetCoreID());
+    ESP_LOGI(TAG, "Handlebar PTT USB-HID Task running on Core %d (Priority 10)", xPortGetCoreID());
 
     while (1) {
         if (ptt.get_event(&evt, pdMS_TO_TICKS(20))) {
-            ESP_LOGI(TAG, "⚡ PTT Event (Btn %d): %s at %llu us -> Transmitting via All-UWB (<0.4 ms)",
+            ESP_LOGI(TAG, "⚡ PTT Edge (Btn %d): %s at %llu us -> Transmitting via 4-Wire USB 2.0 (< 1 ms)",
                      evt.button_id,
                      evt.pressed ? "PRESSED (ON)" : "RELEASED (OFF)",
                      evt.timestamp_us);
 
-            // 1. Primäre Übertragung über All-UWB Backbone (< 0.4 ms deterministische Latenz)
-            UwbVehicleBackbone::instance().send_ptt_event(
-                (UwbHandlebarButton)evt.button_id,
-                evt.pressed ? UWB_PTT_EDGE_DOWN : UWB_PTT_EDGE_UP,
+            UsbVehicleBackbone::instance().send_ptt_event(
+                (UsbHandlebarButton)evt.button_id,
+                evt.pressed ? USB_PTT_EDGE_DOWN : USB_PTT_EDGE_UP,
                 0, 100);
-
-            // 2. Redundante parallele Übertragung via ESP-NOW Bridge
-            bridge.send_ptt_event(evt.pressed, evt.timestamp_us);
         }
 
-        // Advance multi-click and long-press evaluator
         ptt.update();
     }
 }
 
 // -----------------------------------------------------------------------------
-// Task 2: Knowles MEMS I2S Audio Acquisition & Edge DSP
+// Task 2: Knowles SPH0645LM4H MEMS I2S Audio Acquisition & 10 Hz USB Telemetry
 // -----------------------------------------------------------------------------
 static void audio_dsp_task(void* pvParameters) {
     KnowlesMemsDsp& dsp = KnowlesMemsDsp::instance();
-    EspNowBridge& bridge = EspNowBridge::instance();
 
-    ESP_LOGI(TAG, "Audio Edge-DSP task running (50 Hz / 20 ms frames)");
+    ESP_LOGI(TAG, "Knowles SPH0645LM4H Edge-DSP Task running (50 Hz / 20 ms frames)");
     TickType_t last_wake_time = xTaskGetTickCount();
     uint8_t telem_decimator = 0;
 
     while (1) {
-        // Read audio samples via I2S DMA, calculate A-weighted RMS
         dsp.process_audio();
-
         uint8_t dba = dsp.get_latest_dba();
-        uint32_t rms = dsp.get_raw_rms();
 
-        // 1. Transmit 1-byte dBA acoustic telemetry via ESP-NOW
-        bridge.send_audio_rms(dba, rms);
-
-        // 2. Transmit consolidated 10 Hz telemetry frame via All-UWB Backbone
+        // Transmit consolidated 10 Hz telemetry frame via 4-Wire USB 2.0 Backbone
         if (++telem_decimator >= 5) { // 5 * 20 ms = 100 ms = 10 Hz
             telem_decimator = 0;
-            UwbFrontTelemetryPkt telem = {};
+            UsbFrontTelemetryPkt telem = {};
             FrontSensorHub::instance().populate_telemetry(telem);
             telem.wind_noise_dba = dba;
-            telem.status_flags = 0x01; // KL15 active
-            UwbVehicleBackbone::instance().send_front_telemetry(telem);
+            telem.status_flags = FRONT_STAT_KL15_ACTIVE |
+                                 FRONT_STAT_SENSOR_PUCK_OK |
+                                 FRONT_STAT_SW3526_PD_ACTIVE |
+                                 (OttocastPowerManager::instance().is_power_on() ? FRONT_STAT_CP2AA_PWR_ACTIVE : 0) |
+                                 (OttocastPowerManager::instance().has_fault() ? FRONT_STAT_CP2AA_FAULT : 0) |
+                                 (CockpitSwitchesManager::instance().is_e22_wifi6e_enabled() ? FRONT_STAT_E22_WIFI6E_OK : 0) |
+                                 (CockpitOledDisplay::instance().is_initialized() ? FRONT_STAT_DUAL_OLED_OK : 0) |
+                                 (CockpitSwitchesManager::instance().is_aux_light_on() ? FRONT_STAT_AUX_LIGHT_ON : 0);
+
+            UsbVehicleBackbone::instance().send_front_telemetry(telem);
         }
 
         vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(AUDIO_RMS_INTERVAL_MS));
@@ -253,91 +148,48 @@ static void audio_dsp_task(void* pvParameters) {
 }
 
 // -----------------------------------------------------------------------------
-// Task 3: System Supervisor, Ottocast, Action Cam, Cockpit Switches & RGB LED
+// Task 3: System Supervisor, Sensor-Puck, Dual Cockpit OLEDs, TPS2051B & LED1
 // -----------------------------------------------------------------------------
 static void supervisor_task(void* pvParameters) {
     OttocastPowerManager& ottocast = OttocastPowerManager::instance();
-    FrontCamBleManager& cam = FrontCamBleManager::instance();
-    CockpitCanManager& can = CockpitCanManager::instance();
     CockpitSwitchesManager& switches = CockpitSwitchesManager::instance();
+    CockpitOledDisplay& oleds = CockpitOledDisplay::instance();
     Ws2812bLedManager& rgb = Ws2812bLedManager::instance();
-    EspNowBridge& bridge = EspNowBridge::instance();
 
-    ESP_LOGI(TAG, "System supervisor task active (10 Hz)");
-
+    ESP_LOGI(TAG, "Front-Node v10.0 Supervisor Task active (10 Hz)");
     uint32_t heartbeat_counter = 0;
 
     while (1) {
-        // 0. Poll Qwiic Sensor Hub (SAM-M10Q GNSS, TMP117 Temp, OPT3001 Lux)
+        // 1. Poll External Sensor-Puck J_SENSOR_EXT (SAM-M10Q GNSS, TMP117 Temp, OPT3001 Lux)
         FrontSensorHub::instance().update();
 
-        // 1. Advance ESP-NOW Bridge State Machine (Heartbeat timeout & Orphan supervision)
-        bridge.update();
+        // 2. Auto-Dim Dual Cockpit Speaker-Corner OLEDs (J_DISP_L / J_DISP_R) via OPT3001 Lux & Refresh HUD
+        oleds.update_ambient_brightness(FrontSensorHub::instance().get_ambient_lux());
+        oleds.refresh();
 
-        // 2. Advance Ottocast State Machine (Overcurrent & Auto-Café timers)
+        // 3. Advance U4 TPS2051B Power Manager (Overcurrent & Auto-Café timers)
         ottocast.update();
 
-        // 3. Advance Action-Cam BLE Manager (Autoconnect, Scan timer, Telemetry)
-        cam.update();
-
-        // 4. Advance Cockpit Switches (BSD 8 Hz & Aux Light 4.5 Hz Strobes)
+        // 4. Advance Cockpit Switches (Q1 DMN63D8 8 Hz BSD & Q2 TPS1H100 4.5 Hz Aux Light Strobe)
         switches.update(100);
 
-        // 4. Poll & Advance Cockpit CAN Auto-Sensing / Telemetry
-        can.update(100);
-        CanMessage can_msg;
-        while (can.receive_message(&can_msg, 0)) {
-            ESP_LOGD(TAG, "CAN Frame RX: ID=0x%08lX, DLC=%d -> Forwarding via ESP-NOW", can_msg.id, can_msg.dlc);
-            bridge.send_can_telemetry(can_msg.id, can_msg.dlc, can_msg.data, can_msg.is_extended);
-        }
-
-        // 5. Heartbeat & Cockpit Telemetry (every 500 ms)
-        heartbeat_counter++;
-        if (heartbeat_counter >= 5) {
+        // 5. USB 2.0 Backbone Heartbeat (every 500 ms)
+        if (++heartbeat_counter >= 5) {
             heartbeat_counter = 0;
-            bridge.send_heartbeat();
-            UwbVehicleBackbone::instance().send_heartbeat(5000, 250);
-
-            bridge.send_ottocast_status(
-                static_cast<uint8_t>(ottocast.get_state()),
-                ottocast.is_power_on(),
-                ottocast.has_fault(),
-                ottocast.get_cafe_remaining_sec()
-            );
-            bridge.send_cam_status(
-                static_cast<uint8_t>(cam.get_profile()),
-                static_cast<uint8_t>(cam.get_state()),
-                cam.get_battery_pct(),
-                cam.get_sd_remaining_min(),
-                cam.is_autoconnect_enabled(),
-                cam.is_fuel_filter_enabled()
-            );
-            bridge.send_cockpit_status(
-                true,                                               // Port 1: Smartphone USB-PD 20W Fast-Charge
-                ottocast.is_power_on(),                             // Port 2: CP2AA Wireless Dongle (TPS2051B)
-                true,                                               // Port 3: Handschuhfach MP3 Jukebox / Update
-                false,                                              // Port 4: Cockpit Aux
-                switches.is_bsd_left_active(),                      // Mirror BSD Left
-                switches.is_bsd_right_active(),                     // Mirror BSD Right
-                switches.is_aux_light_on(),                         // Aux Light Active
-                switches.get_aux_light_mode() == AUX_LIGHT_STROBE,  // Aux Strobe
-                switches.is_can_termination_active(),               // CAN 120R Auto-Sense Relay
-                switches.is_qi_power_active()                       // Qi 12V Charger Active
+            UsbVehicleBackbone::instance().send_heartbeat(
+                5020,
+                FrontSensorHub::instance().get_temperature_c_100() / 10
             );
         }
 
-        // 6. Update WS2812B RGB Smart LED Animation Mode
-        bool uwb_online = UwbVehicleBackbone::instance().is_peer_online(UWB_NODE_CENTRAL_BOX);
+        // 6. Update Onboard LED1 (WS2812B-2020) Status Mode
+        bool usb_online = UsbVehicleBackbone::instance().is_peer_online(USB_NODE_CENTRAL_BOX);
         if (OtaServiceManager::instance().is_updating()) {
             rgb.set_mode(LED_MODE_FLASHING_BLUE);
         } else if (ottocast.has_fault()) {
             rgb.set_mode(LED_MODE_FLASHING_RED);
-        } else if (cam.is_recording()) {
-            rgb.set_mode(LED_MODE_RECORDING_RED);
-        } else if (uwb_online || bridge.get_binding_state() == BINDING_STATE_LINKED) {
+        } else if (usb_online) {
             rgb.set_mode(LED_MODE_BREATHING_GREEN);
-        } else if (bridge.get_binding_state() == BINDING_STATE_ORPHAN) {
-            rgb.set_mode(LED_MODE_SOLID_YELLOW);
         } else {
             rgb.set_mode(LED_MODE_SEARCHING_CYAN);
         }
@@ -347,19 +199,17 @@ static void supervisor_task(void* pvParameters) {
         usb_ethernet_update(100);
         OtaServiceManager::instance().update_health_check(100);
 
-        vTaskDelay(pdMS_TO_TICKS(100)); // 100 ms tick
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
-// -----------------------------------------------------------------------------
-// Application Entry Point
-// -----------------------------------------------------------------------------
 extern "C" void app_main(void) {
-    ESP_LOGI(TAG, "============================================================");
-    ESP_LOGI(TAG, "   OPENMOTORBRIDGE UNIVERSAL FRONT NODE FIRMWARE v2.5.0     ");
-    ESP_LOGI(TAG, "   Target: ESP32-S3-WROOM-1U (PCBA 05)                     ");
-    ESP_LOGI(TAG, "   All-UWB Deterministic Backbone (Qorvo DW3110 / 6.5 GHz)  ");
-    ESP_LOGI(TAG, "============================================================");
+    ESP_LOGI(TAG, "==================================================================");
+    ESP_LOGI(TAG, "   OPENMOTORBRIDGE v10.0 FRONT-NODE FIRMWARE (PCBA 05)            ");
+    ESP_LOGI(TAG, "   Core: U1 ESP32-P4-NR16 (0%% 2.4GHz) + U9 ESP32-E22 (Wi-Fi 6E) ");
+    ESP_LOGI(TAG, "   Hub:  U2 USB2514Bi 4-Port HS USB + U3 SW3526 30W USB-PD        ");
+    ESP_LOGI(TAG, "   HUD:  Dual Speaker-Corner OLEDs (J_DISP_L 0x3C / J_DISP_R 0x3D)");
+    ESP_LOGI(TAG, "==================================================================");
 
     // 1. Configure Boot Button
     gpio_config_t btn_conf = {
@@ -371,34 +221,28 @@ extern "C" void app_main(void) {
     };
     gpio_config(&btn_conf);
 
-    // 2. Initialize Subsystems & Hardware Drivers
+    // 2. Initialize Hardware Drivers & Peripherals
     Ws2812bLedManager::instance().init();
     CockpitSwitchesManager::instance().init();
     OtaServiceManager::instance().init();
     HandlebarPttHandler::instance().init();
     HandlebarPttHandler::instance().set_action_callback(on_ptt_action);
 
-    OttocastPowerManager::instance().init();
-    KnowlesMemsDsp::instance().init();
-    CockpitCanManager::instance().init(250); // Default 250 kbps for Harley / BMW cockpit CAN
-    FrontSensorHub::instance().init();      // Qwiic J12: SAM-M10Q GNSS, TMP117, OPT3001
+    OttocastPowerManager::instance().init(); // U4 TPS2051B (Pad 38/39 -> J_DONGLE)
+    KnowlesMemsDsp::instance().init();       // MK1 SPH0645LM4H (Pad 6/7/12)
+    FrontSensorHub::instance().init();       // J_SENSOR_EXT (Pad 17/18: SAM-M10Q, TMP117, OPT3001)
+    CockpitOledDisplay::instance().init();   // J_DISP_L (0x3C) & J_DISP_R (0x3D)
 
-    // 3. Initialize Action Cam BLE Bridge
-    FrontCamBleManager& cam = FrontCamBleManager::instance();
-    cam.init();
-    cam.set_scan_result_callback(on_cam_scan_result);
-    cam.set_status_callback(on_cam_status);
-
-    // 4. Initialize ESP-NOW Wireless Bridge (Legacy Redundant Fallback)
-    EspNowBridge& bridge = EspNowBridge::instance();
-    bridge.init();
-    bridge.set_command_callback(handle_remote_command);
+    // 3. Initialize U9 ESP32-E22 4-Bit SDIO 3.0 Wi-Fi 6E (5/6 GHz) & USB CDC-NCM Gateway
     cockpit_wifi_fallback_init();
     usb_ethernet_tethering_init();
 
-    // 5. Initialize All-UWB Deterministic Backbone (Qorvo DW3110 / 6.489 GHz Ch. 5, < 0.4 ms)
-    UwbVehicleBackbone::instance().init(UWB_NODE_FRONT_NODE);
-    UwbVehicleBackbone::instance().set_radar_led_callback([](const UwbRadarLedCmdPkt &cmd) {
+    // 4. Initialize Unified 4-Wire USB 2.0 Backbone (U1 Pad 13/14 -> U2 USB2514Bi Port 4 -> J1)
+    UsbVehicleBackbone::instance().init(USB_NODE_FRONT_NODE);
+    UsbVehicleBackbone::instance().set_cockpit_hud_callback([](const UsbCockpitHudStatePkt &hud) {
+        CockpitOledDisplay::instance().update_hud_state(hud);
+    });
+    UsbVehicleBackbone::instance().set_radar_led_callback([](const UsbRadarLedCmdPkt &cmd) {
         bool l_act = (cmd.left_bsd_state != 0);
         BsdAlertLevel l_lvl = (cmd.left_bsd_state == 2) ? BSD_LEVEL_FAST_STROBE :
                               (cmd.left_bsd_state == 1) ? BSD_LEVEL_SOLID_AMBER : BSD_LEVEL_OFF;
@@ -407,15 +251,15 @@ extern "C" void app_main(void) {
                               (cmd.right_bsd_state == 1) ? BSD_LEVEL_SOLID_AMBER : BSD_LEVEL_OFF;
         CockpitSwitchesManager::instance().set_bsd_warning(l_act, l_lvl, r_act, r_lvl);
     });
-    UwbVehicleBackbone::instance().set_generic_packet_callback([](UwbBackbonePktType type, const uint8_t *payload, size_t len, UwbNodeType source) {
-        handle_remote_command((uint8_t)type, payload, len);
+    UsbVehicleBackbone::instance().set_generic_packet_callback([](UsbBackbonePktType type, const uint8_t *payload, size_t len, UsbNodeType source) {
+        handle_usb_command(type, payload, len);
     });
-    UwbVehicleBackbone::instance().start_task(22, 0);
+    UsbVehicleBackbone::instance().start_task(22, 0);
 
-    // 6. Spawn Real-Time FreeRTOS Tasks
-    xTaskCreate(ptt_task, "ptt_task", 3072, NULL, 10, NULL);          // Highest priority
-    xTaskCreate(audio_dsp_task, "audio_dsp", 4096, NULL, 6, NULL);    // Real-time audio DSP
-    xTaskCreate(supervisor_task, "supervisor", 3072, NULL, 3, NULL);  // System housekeeping
+    // 5. Spawn Real-Time FreeRTOS Tasks
+    xTaskCreate(ptt_task, "ptt_task", 3072, NULL, 10, NULL);
+    xTaskCreate(audio_dsp_task, "audio_dsp", 4096, NULL, 6, NULL);
+    xTaskCreate(supervisor_task, "supervisor", 4096, NULL, 3, NULL);
 
-    ESP_LOGI(TAG, "All Front Node real-time tasks successfully started. System ready.");
+    ESP_LOGI(TAG, "✓ OpenMotorBridge v10.0 Front-Node (PCBA 05) is fully OPERATIONAL.");
 }

@@ -333,39 +333,34 @@ def render_main_box_cross_section(output_png):
     ax1.add_patch(patches.Rectangle((-42.5, -10.5), 85, 1.6, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
     ax1.text(-38.0, -9.7, "MAIN PCB (1.6mm)", color='#10b981', fontsize=7.5, fontweight='bold')
 
-    # Components on PCB:
-    # ESP32-S3-WROOM-1U (X = -39 to -21, Z = -8.9 to -5.7)
+    # Components on PCB (PCBA 01 v10.0):
+    # ESP32-S31-WROOM-1U (X = -39 to -21, Z = -8.9 to -5.7)
     ax1.add_patch(patches.Rectangle((-39, -8.9), 18, 3.2, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
-    ax1.text(-30, -7.3, "ESP32-S3", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
-    # LM5164 Power Stage (X = -19 to -1, Z = -8.9 to -4.4)
+    ax1.text(-30, -7.3, "ESP32-S31", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
+    # LM2596S-5.0 + TPS25921 Quad eFuse Stage (X = -19 to -1, Z = -8.9 to -4.4)
     ax1.add_patch(patches.Rectangle((-19, -8.9), 18, 4.5, facecolor='#1e293b', edgecolor='#f59e0b', linewidth=0.8))
-    ax1.text(-10, -6.6, "LM5164 DCDC", color='#f59e0b', fontsize=7.5, fontweight='bold', ha='center')
-    # Bourns Audio Transformers (X = 2 to 28, Z = -8.9 to -3.9)
-    ax1.add_patch(patches.Rectangle((2, -8.9), 26, 5.0, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=0.8))
-    ax1.text(15, -6.4, "BOURNS AUDIOTRANSFORMATOREN", color='#fbbf24', fontsize=7, fontweight='bold', ha='center')
+    ax1.text(-10, -6.6, "LM2596 + Quad eFuse", color='#f59e0b', fontsize=7, fontweight='bold', ha='center')
+    # QCC3084 + ES8388 + SX1262 + USB2517I (X = 2 to 32, Z = -8.9 to -4.2)
+    ax1.add_patch(patches.Rectangle((2, -8.9), 30, 4.7, facecolor='#1e293b', edgecolor='#fbbf24', linewidth=0.8))
+    ax1.text(17, -6.5, "QCC3084 / ES8388 / SX1262 / USB2517I", color='#fbbf24', fontsize=6.5, fontweight='bold', ha='center')
 
-    # Mid Partition Floor (Z = -2.0 to +0.5 mm) with 9x Convection Slots
+    # Rail 1 Slide-In Intermediate Tray (Z = -2.0 to +0.5 mm) with 11x Convection Slots
     ax1.add_patch(patches.Rectangle((-52, -2.0), 104, 2.5, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
-    ax1.text(-44.0, -0.8, "ZWISCHENBODEN (2.5mm)", color='#94a3b8', fontsize=7.5, fontweight='bold')
+    ax1.text(-44.0, -0.8, "RAIL 1: SLIDE-IN ZWISCHENBODEN (2.5mm)", color='#94a3b8', fontsize=7.5, fontweight='bold')
 
-    # Battery Cradle & 1S LiPo Battery (X = -34 to +34, Z = 1.0 to 6.0 mm, 2200 mAh // 68x39x5.0 mm)
-    ax1.add_patch(patches.Rectangle((-35, 0.5), 70, 0.8, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
-    ax1.add_patch(patches.Rectangle((-34, 1.0), 68, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
-    ax1.text(0.0, 3.5, "1S LiPo PUFFERAKKU (2.200 mAh // 68x39x5.0 mm)", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
+    # Integrated Battery Bed & 1S LiPo Battery (X = -34 to +34, Z = 0.5 to 5.5 mm, 2200 mAh // 67x38x5.0 mm)
+    ax1.add_patch(patches.Rectangle((-34, 0.5), 68, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
+    ax1.text(0.0, 3.0, "1S LiPo PUFFERAKKU IM ZWISCHENBODEN-BETT (2.200 mAh // 67x38x5.0 mm)", color='#ffffff', fontsize=7.5, fontweight='bold', ha='center')
 
-    # Modular Battery & Dual-Antenna Bridge (Z = 6.0 to 10.0 mm)
-    ax1.add_patch(patches.Rectangle((-36, 6.0), 72, 2.4, facecolor='#475569', edgecolor='#94a3b8', linewidth=1.0))
-    # Antenna nests (Taoglas FXP895 & FXP73)
-    ax1.add_patch(patches.Rectangle((-33, 8.4), 42, 0.8, facecolor='#f59e0b', edgecolor='#b45309', linewidth=0.6))
-    ax1.add_patch(patches.Rectangle((12, 8.4), 22, 0.8, facecolor='#38bdf8', edgecolor='#0284c7', linewidth=0.6))
-    # Protective Cover Shroud
-    ax1.add_patch(patches.Rectangle((-36, 9.2), 72, 0.8, facecolor='#0284c7', alpha=0.5, edgecolor='#38bdf8', linewidth=0.8))
-    ax1.text(0.0, 11.2, "MODULARE AKKUBRÜCKE MIT ANTENNENNESTERN (LoRa 868 & 2.4G) & SCHUTZBLENDE", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
+    # Recessed Taoglas Antenna Nests in Slide-In Tray (Taoglas FXP895 868 MHz & FXP73 2.4 GHz)
+    ax1.add_patch(patches.Rectangle((-38, 5.6), 44, 0.9, facecolor='#f59e0b', edgecolor='#b45309', linewidth=0.6))
+    ax1.add_patch(patches.Rectangle((10, 5.6), 26, 0.9, facecolor='#38bdf8', edgecolor='#0284c7', linewidth=0.6))
+    ax1.text(0.0, 7.8, "INTEGRIERTE ANTENNENNESTER IM SLIDE-IN TRAY (Taoglas FXP895 LoRa 868 & FXP73 2.4 GHz)", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
 
-    # 100% Cable-Free Solid Enclosure Lid (Z = +13 to +19 mm) with Gore Vent (X = -4 to +4)
+    # Rail 2 L-Slide Lid (Z = +13 to +19 mm) with Gore Vent (X = -5.75 to +5.75)
     ax1.add_patch(patches.Rectangle((-55, 13), 110, 6.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=1.0))
-    ax1.add_patch(patches.Rectangle((-4, 17.5), 8.0, 2.5, facecolor='#ffffff', edgecolor='#64748b', linewidth=0.8))
-    ax1.text(0, 21.5, "GORE ePTFE VENTIL (Ø 7.0 mm) // 100% KABELFREIER DECKEL", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
+    ax1.add_patch(patches.Rectangle((-5.75, 17.5), 11.5, 2.5, facecolor='#ffffff', edgecolor='#64748b', linewidth=0.8))
+    ax1.text(0, 21.5, "RAIL 2: L-SCHIEBEDECKEL MIT GORE ePTFE VENTIL (Ø 11.5 mm) // 100% KABELFREI", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
 
     ax1.set_xlim([-65, 65])
     ax1.set_ylim([-25, 25])
@@ -375,57 +370,60 @@ def render_main_box_cross_section(output_png):
     ax1.grid(True, color='#1e293b', linestyle=':', alpha=0.6)
 
     # =========================================================================
-    # SUBPLOT 2: QUERSCHNITT (Y-Z EBENE) DURCH KABELFÜHRUNG ZUM DTM-12 FLANSCH
+    # SUBPLOT 2: QUERSCHNITT (Y-Z EBENE) DURCH L-DECKEL, RAIL 1 & ZWEI-KABEL-FRONT
     # =========================================================================
     ax2.set_facecolor('#0b1120')
-    ax2.set_title("2. ZENTRALBOX QUERSCHNITT (Y-Z EBENE) // KABELFÜHRUNG DURCH OFFENE 70x10mm BUCHT ZUM DTM-12 FLANSCH", 
-                  color='#10b981', fontsize=12, fontweight='bold', pad=10)
+    ax2.set_title("2. ZENTRALBOX QUERSCHNITT (Y-Z EBENE) // L-SCHIEBEDECKEL MIT HECKWAND-RASTRIEGELN & ZWEI-KABEL-FRONT (J1 + J6)", 
+                  color='#10b981', fontsize=11.5, fontweight='bold', pad=10)
 
     # Outer Housing in Y-Z (74 x 38 mm from Y = -37 to +37, Z = -19 to +19)
     ax2.add_patch(patches.Rectangle((-37, -19), 74, 38, fill=False, edgecolor='#059669', linewidth=1.5, linestyle='--'))
     ax2.add_patch(patches.Rectangle((-37, -19), 74, 3.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))
     ax2.add_patch(patches.Rectangle((-37, 13), 74, 6.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=1.0))
     ax2.add_patch(patches.Rectangle((-37, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8)) # Front wall (Y = -37)
-    ax2.add_patch(patches.Rectangle((34, -19), 3.0, 38.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))  # Rear wall (Y = +37)
+    # Fixed Lower Rear Sill (Y = +34 to +37, Z = -19 to -4) + Upper L-Lid Heckwand (Z = -4 to +19)
+    ax2.add_patch(patches.Rectangle((34, -19), 3.0, 15.0, facecolor='#1e293b', edgecolor='#334155', linewidth=0.8))  # Fixed lower sill (15 mm)
+    ax2.add_patch(patches.Rectangle((34, -4), 3.0, 23.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=1.0))   # L-Lid vertical Heckwand
+    ax2.add_patch(patches.Rectangle((34.8, -7.5), 1.6, 4.0, facecolor='#06b6d4', edgecolor='#22d3ee', linewidth=0.9)) # PA12 Slam-Shut Claw
 
-    # Rear Wall 0.4mm Knockout Membrane for SMA Port (Y = 34 to 37, Z = 0 to 12)
-    ax2.add_patch(patches.Rectangle((34.0, 0.0), 2.1, 12.0, facecolor='#0f172a', edgecolor='#38bdf8', linewidth=0.8))
-    ax2.add_patch(patches.Rectangle((36.1, 0.0), 0.4, 12.0, facecolor='#f59e0b', edgecolor='#d97706', linewidth=1.0)) # 0.4mm membrane
-    ax2.text(39.0, 6.0, "0.4mm KNOCKOUT\nMEMBRAN (SMA)", color='#f59e0b', fontsize=7.5, fontweight='bold', ha='left', va='center')
+    # Rear Lower Sill: MicroSD Slot & 0.4mm Knockout Membrane for SMA Port (Z = -15 to -6)
+    ax2.add_patch(patches.Rectangle((34.0, -14.0), 2.5, 6.0, facecolor='#0f172a', edgecolor='#f59e0b', linewidth=0.8))
+    ax2.add_patch(patches.Rectangle((36.5, -14.0), 0.4, 6.0, facecolor='#f59e0b', edgecolor='#d97706', linewidth=1.0))
+    ax2.text(38.5, -5.0, "L-DECKEL HECKWAND\n+ PA12 KRALLENRIEGEL", color='#38bdf8', fontsize=7, fontweight='bold', ha='left', va='center')
+    ax2.text(38.5, -13.0, "FESTE 15mm SCHWELLE:\nMicroSD + SMA KNOCKOUT", color='#f59e0b', fontsize=7, fontweight='bold', ha='left', va='center')
 
     # Main PCB in Y-Z (55 x 1.6 mm from Y = -27.5 to +27.5, Z = -10.5 to -8.9)
     ax2.add_patch(patches.Rectangle((-27.5, -10.5), 55, 1.6, facecolor='#065f46', edgecolor='#10b981', linewidth=1.2))
-    ax2.text(-25.0, -12.5, "MAIN PCB (55mm Breite)", color='#10b981', fontsize=7.5, fontweight='bold')
+    ax2.text(-25.0, -12.5, "PCBA 01 v10 (85x55mm, 4-Layer)", color='#10b981', fontsize=7.5, fontweight='bold')
 
-    # J1: Deutsch DTM-12 Header on PCB (Y = -24 to -18, Z = -8.9 to -2.0)
-    ax2.add_patch(patches.Rectangle((-24.0, -8.9), 6.0, 6.9, facecolor='#0f172a', edgecolor='#fbbf24', linewidth=1.0))
-    ax2.text(-21.0, -5.5, "J1: DTM-12\nHEADER", color='#fbbf24', fontsize=7, fontweight='bold', ha='center')
+    # J1 (DTM06-6S Header) & J6 (16-Pin Picoflex Periphery Header) on PCB (Y = -24 to -17, Z = -8.9 to -2.0)
+    ax2.add_patch(patches.Rectangle((-24.0, -8.9), 7.0, 6.9, facecolor='#0f172a', edgecolor='#fbbf24', linewidth=1.0))
+    ax2.text(-20.5, -5.5, "J1 (6-Pin) +\nJ6 (16-Pin)", color='#fbbf24', fontsize=6.8, fontweight='bold', ha='center')
 
-    # Mid Partition Floor (Z = -2.0 to +0.5 mm)
+    # Rail 1 Slide-In Tray (Z = -2.0 to +0.5 mm)
     # Starts at Y = -24.0 (Leaving 10 mm OPEN CABLING BAY from Y = -34.0 to -24.0)
     ax2.add_patch(patches.Rectangle((-24.0, -2.0), 58.0, 2.5, facecolor='#334155', edgecolor='#64748b', linewidth=1.0))
     # Open Cable Bay highlighted
     ax2.add_patch(patches.Rectangle((-34.0, -2.2), 10.0, 2.9, facecolor='#10b981', alpha=0.35, edgecolor='#10b981', linewidth=1.5))
     ax2.text(-29.0, -5.5, "70x10mm\nOFFENE\nKABELBUCHT", color='#10b981', fontsize=7.5, fontweight='bold', ha='center')
 
-    # 6-Cable Flexible Service Loop routing from J1 & PCB through open bay to DTM-12 Flange
-    ax2.plot([-21.0, -21.0, -30.0, -30.0, -37.0], [-2.0, 4.0, 4.0, 6.0, 6.0], color='#f43f5e', linewidth=3.0)
-    ax2.text(-25.0, 7.5, "6-LEITER SERVICE-LOOP (DTM-12 / USB / DC / KOAX)", color='#f43f5e', fontsize=7.5, fontweight='bold', ha='center')
+    # Dual-Cable Service Loop routing from J1 & J6 through open bay to Front Flanges
+    ax2.plot([-20.5, -20.5, -30.0, -30.0, -37.0], [-2.0, 4.0, 4.0, 6.0, 6.0], color='#f43f5e', linewidth=3.0)
+    ax2.text(-24.0, 7.5, "ZWEI-KABEL-PEITSCHE (J1: 12V/CAN + J6: 4x 4-Ader USB/PD Bus)", color='#f43f5e', fontsize=7.2, fontweight='bold', ha='center')
 
-    # Deutsch DTM-12 Flange on Front Wall (Y = -37, Z = 0 to 12)
+    # Dual Automotive Flanges on Front Wall (Y = -37, Z = -12 to +2)
     ax2.add_patch(patches.Rectangle((-42.0, 0.0), 5.0, 12.0, facecolor='#0284c7', edgecolor='#38bdf8', linewidth=1.2))
     ax2.add_patch(patches.Rectangle((-43.5, 1.5), 1.5, 9.0, facecolor='#f43f5e', edgecolor='#be123c', linewidth=0.8)) # Gasket
-    ax2.text(-45.0, 6.0, "DEUTSCH DTM-12\nAUTOMOTIVE FLANSCH", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='right', va='center')
+    ax2.text(-44.5, 6.0, "ZWEI-KABEL-FRONT:\nDTM06-6S (Kabel 1)\n+ 16-Pin Bus (Kabel 2)\n+ USB-C (J3) & SW1", color='#38bdf8', fontsize=7, fontweight='bold', ha='right', va='center')
 
-    # Upper Compartment: LiPo Battery in Cradle (Y = -14 to +25, Z = 1.0 to 6.0 mm)
-    ax2.add_patch(patches.Rectangle((-15.0, 0.5), 40.0, 0.8, facecolor='#1e293b', edgecolor='#64748b', linewidth=0.6))
-    ax2.add_patch(patches.Rectangle((-14.0, 1.0), 39.0, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
-    ax2.text(5.5, 3.5, "1S LiPo PUFFERAKKU", color='#ffffff', fontsize=8, fontweight='bold', ha='center')
+    # Upper Compartment: LiPo Battery in Slide-In Tray Bed (Y = -14 to +24, Z = 0.5 to 5.5 mm)
+    ax2.add_patch(patches.Rectangle((-14.0, 0.5), 38.0, 5.0, facecolor='#3b82f6', edgecolor='#1d4ed8', linewidth=1.0))
+    ax2.text(5.0, 3.0, "1S LiPo PUFFERAKKU (IM SLIDE-IN TRAY)", color='#ffffff', fontsize=7.5, fontweight='bold', ha='center')
 
-    # Hinged Battery Bridge with C-Clip Strain Relief
-    ax2.add_patch(patches.Rectangle((-16.0, 6.0), 42.0, 2.4, facecolor='#475569', edgecolor='#94a3b8', linewidth=1.0))
-    ax2.add_patch(patches.Rectangle((-16.0, 8.4), 42.0, 0.8, facecolor='#0284c7', alpha=0.5, edgecolor='#38bdf8', linewidth=0.8))
-    ax2.text(5.5, 10.5, "AKKUBRÜCKE (SCHWENKBAR)", color='#38bdf8', fontsize=7.5, fontweight='bold', ha='center')
+    # Taoglas Flex Antennas in Recessed Tray Nests (Front FXP73 & Rear FXP895)
+    ax2.add_patch(patches.Rectangle((-22.0, 0.6), 6.5, 0.8, facecolor='#38bdf8', edgecolor='#0284c7', linewidth=0.8))
+    ax2.add_patch(patches.Rectangle((25.0, 0.6), 8.0, 0.8, facecolor='#f59e0b', edgecolor='#b45309', linewidth=0.8))
+    ax2.text(5.0, 7.2, "TAOGLAS FXP73 (VORN) & FXP895 (HINTEN) FLACH IM TRAY", color='#38bdf8', fontsize=7, fontweight='bold', ha='center')
 
     ax2.set_xlim([-50, 50])
     ax2.set_ylim([-25, 25])

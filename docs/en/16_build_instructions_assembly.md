@@ -61,18 +61,18 @@ The v10.0 generation of OpenMotorBridge completely eliminates brittle short-rang
 > [!TIP]
 > **100% Solder-Free Assembly (IKEA Principle) & Native USB-DFU:**  
 > All 3D printed parts (`.scad` / `.stl`) are designed with precision manufacturing tolerances ($+0.15\,\text{mm}$ for HP MJF PA12 or ASA/PET-CF). Heat-set brass threaded inserts (Ruthex) have been completely eliminated across the entire system in favor of captive **DIN 934 hex nut pockets** (simply pressed in by hand). Self-tapping plastic screws are strictly prohibited.  
-> **Native USB-DFU & Dual-Power Input:** All microcontrollers (ESP32-S31, ESP32-C6) feature integrated USB-Serial/JTAG hardware. The Central Box supports Dual-Power Input: On the bench, any standard USB-C smartphone or laptop charger (or PC USB port) powers the entire system -- **no 12V bench power supply required!** Every module flashes directly via standard USB-C.
+> **Native USB-DFU & Dual-Power Input:** All microcontrollers (ESP32-S31, ESP32-P4/E22, ESP32-C6, ESP32-C5) are centrally managed. The Central Box supports **Dual-Power Input (`LM66100` Ideal-Diode OR-ing)**: On the bench, any standard **5V USB-C cable into `J3`** (PC USB port or smartphone charger) powers the logic, configuration, and **Central Bus-DFU (firmware updates across all bus nodes)**. For full 60W/30W load testing of the 12V bus branches and cold-start solenoids, 12V DC is applied to `J1`.
 
 All discrete components, PCB ordering files, and COTS sourcing lists are documented in **[Chapter 15: Bill of Materials & Manufacturing](15_bom_manufacturing.md)**. Ensure the following items are ready before assembly begins:
 
 * [ ] **3D Printed Parts (MJF PA12 Black or FDM ASA/PET-CF):**
   * **1x Main Box (v10 Dual-Rail Monocoque):** Monolithic monocoque tub with isolation posts ([`000_monocoque_tub.stl`](../../hardware/cad/stl/01_main_box/000_monocoque_tub.stl)), slide-in intermediate tray with LiPo cradle and antenna nests ([`010_slide_tray.stl`](../../hardware/cad/stl/01_main_box/010_slide_tray.stl)), 100% cable-free L-Slide Lid with Slam-to-Shut Heckwand ([`020_slide_lid.stl`](../../hardware/cad/stl/01_main_box/020_slide_lid.stl)).
-  * **2x Saddlebag Pods v10.0:** Monocoque pod tubs ([`002_pod_housing_base.stl`](../../hardware/cad/stl/02_pod_base/002_pod_housing_base.stl)), 2x slide-in intermediate dry-flap trays ([`011_pod_slide_tray.stl`](../../hardware/cad/stl/02_pod_base/011_pod_slide_tray.stl)), 2x L-slide-in lids with captive neodymium lock pockets ([`021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl)).
-  * **2x Universal Actuator Slide Brackets:** ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) with continuously adjustable 15–85 mm slide guide for 2x mini solenoids in pod floor.
-  * **1x Front Node Riser Enclosure (v10 Dual-Rail Monocoque):** Monocoque tub ([`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl)) with riser / triple-tree bar clamp, slide-in intermediate tray ([`010_front_node_slide_tray.stl`](../../hardware/cad/stl/04_front_node/010_front_node_slide_tray.stl)), and L-Slide lid ([`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl)).
-  * **1x Modular Snap-On Sensor Puck:** ([`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) / [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl)) for `PCBA 05D` (SAM-M10Q GNSS, TMP117, OPT3001, and Knowles MEMS).
+  * **2x Saddlebag Pods v10.0:** Monocoque pod tubs with fixed $14.0\,\text{mm}$ rear wall and optional SMA antenna knockout ([`002_pod_housing_base.stl`](../../hardware/cad/stl/02_pod_base/002_pod_housing_base.stl)), 2x seated TPU/EPDM intermediate dry-flap splash covers ($48 \times 56\,\text{mm}$, [`011_pod_slide_tray.stl`](../../hardware/cad/stl/02_pod_base/011_pod_slide_tray.stl)), 2x L-shaped slide-in lids with integrated rear wall (`Heckwand`) and PA12 U-yoke latch with downward-gripping **PA12 plastic claws ("Plastikkrallen")** ([`021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl)).
+  * **2x Universal Actuator Cross-Struts (wall-guided in `Rail 1`):** ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)) with two independent cross-struts guided in the sidewall C-grooves (`Rail 1`, $Z = 21.5\dots 24.5\,\text{mm}$, 15–85 mm span), flush `DIN 7991` countersunk screws, and rear EPDM sealing plugs.
+  * **1x Front Node Riser Enclosure (v10 Monocoque):** Monocoque tub ([`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl)) with 4-in-1 mounting floor / riser clamp ([`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl)), L-Slide lid with 2x2 MIMO antenna clips and sensor-puck snap dock ([`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl)), and TPU cable glands ([`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)).
+  * **1x Modular Snap-On Sensor Puck ($\varnothing\,28 \times 14\,\text{mm}$ dome on $44 \times 44 \times 15\,\text{mm}$ snap base):** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) / [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) & [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl)) for `PCBA 05D` (SAM-M10Q GNSS, TMP117, OPT3001).
   * **2x Symmetrical Under-Perch Mirror Pods (Left & Right):** Form-fitted brackets for mounting under both mirror perch nuts ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl)) with button guides (`PCBA 05C`, Left: PTT; Right: Cam-Tag) and integrated amber LED light tunnels for bilateral blind-spot detection.
-  * **1x Glove Box 4-Port Hub Enclosure:** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for `PCBA 05B` in right glove compartment of Harley Touring (30W phone, 10W dongle, free port, OEM upstream).
+  * **1x Glove Box 5-Port USB-C Hub Enclosure ($82 \times 54 \times 15\,\text{mm}$):** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for `PCBA 05B` (`50 × 20 mm`, 5x USB-C `J1..J5`) in right glove compartment of Harley Touring (`J1` upstream, `J2` headunit out, `J3` 10W switched dongle, `J4` 15W/30W phone, `J5` media/service).
   * **1x Rear Radar Mount:** MR20 radar housing ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) with Hirth-joint swivel/tilt cradle, license plate bracket, and integrated roost deflector.
 * [ ] **Fully Assembled PCBs (SMT Production, all 10 active PCBAs):**
   * **1x PCBA 01 (Central Box):** Host board with **ESP32-S31-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertical SMD headers (Vehicle Power `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Periphery Bus `J6` Molex Picoflex 1.27mm 16P, UPS `J5` 4P, Status LED `J4` 3P, Spare `J7` 4P), Dual-Power Input (12V Main & 5V USB-C Service Port `J3` with LM66100 Ideal-Diode OR-ing), and DM3D MicroSD Slot `J2`. *(DW3110 UWB completely eliminated!)*
@@ -131,32 +131,30 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 
 ---
 
-### Step 2: Saddlebag Pods v10.0 Assembly (Slide-in Lid, Universal Actuator Bracket & 30W In-Bag USB Charger)
+### Step 2: Saddlebag Pods v10.0 Assembly (L-Slide Lid with Plastic Claws, Wall-Guided Actuator Struts & 30W In-Bag USB Charger)
 1. **Understanding the v10.0 Pod Design (Zero Servos, 100% Reliable):**
-   * Problematic motorized cassette ejectors and gearboxes are eliminated.
-   * The pod housing mounts securely inside the front corner of the hard saddlebag.
-   * A **slide-in lid** with perimeter seal closes the module bay. When inserted, an internal spring-loaded neodymium latch bolt locks the lid securely in place.
-   * **FOB Proximity Unlocking:** To remove the intercom module, simply place the magnetic OMB Smart Keyfob against the exterior alignment notch. The magnetic flux pulls back the latch bolt, allowing the lid to slide out smoothly.
-   * **Intermediate Dry-Flap Guard:** Directly behind the exterior lid sits a spring-loaded splash flap. Even if the saddlebag is opened during heavy rain, the internal electronics stay dry.
-   * **Chassis-Mounted Bulkhead Ports (Port A & Port B):** Both interfaces are horizontally centered ($Y = 35.0\,\text{mm}$) on the short bulkhead end-wall and stacked vertically:
+   * The pod housing mounts securely inside the front corner of the hard saddlebag (or in the GSA Cage Dock / Transition Dock).
+   * **L-Shaped Slide-in Lid (`021_pod_slide_lid.stl` / `013_pod_slide_lid.scad`) & Fixed $14.0\,\text{mm}$ Rear Wall:** The horizontal lid plate slides in the upper sidewall C-grooves (`Rail 2`, $Z = 32.0\dots 35.2\,\text{mm}$) and merges monolithically into the vertical upper rear wall (`Heckwand`). The lower rear wall of the monocoque tub (`002_pod_housing_base.stl`) is $14.0\,\text{mm}$ tall ($Z = 0\dots 14.0\,\text{mm}$), so the **optional SMA antenna bulkhead knockout ($Z = 7.5\,\text{mm}$, $Y = 35.0\,\text{mm}$) remains permanently fixed in the tub** and never moves when opening the lid.
+   * **PA12 U-Yoke Latch with Downward-Gripping Plastic Claws ("Plastikkrallen", `016_fob_magnetic_lock_mechanism.scad`):** Housed inside the lid's rear wall is a non-metallic, spring-loaded PA12 U-yoke with a small N52 coin magnet ($\varnothing\,6 \times 2\,\text{mm}$). Two outer **PA12 plastic claws ("Plastikkrallen")** ($Y = 8.5\,\text{mm}$ and $Y = 55.5\,\text{mm}$) reach down from the lid's rear wall on either side of the central SMA arch and hook positively into the undercut pockets ($Z = 9.8\dots 14.2\,\text{mm}$) of the low fixed rear wall.
+   * **FOB Proximity Unlocking:** To remove the intercom module, simply hold the magnetic OMB Smart Keyfob (`PCBA 07`) against the exterior rear-wall target. The magnetic field lifts the PA12 U-yoke and its plastic claws upward by $3.2\,\text{mm}$ out of the lower rear wall, allowing the L-lid to slide out smoothly.
+   * **Seated TPU Dry-Flap Splash Shield (`011_pod_slide_tray.stl` / `014_pod_dry_flap.scad`):** In the forward electronics bay ($X = 8\dots 56\,\text{mm}$), the $48 \times 56\,\text{mm}$ TPU shield rests on the perimeter step shelf ($Z = 14.5\,\text{mm}$) over `PCBA 03`, leaving the upper sidewall C-grooves completely unobstructed.
+   * **Chassis-Mounted Bulkhead Ports (Port A & Port B):** Both interfaces are horizontally centered ($Y = 35.0\,\text{mm}$) on the short front bulkhead end-wall and stacked vertically:
      * **Port A (top, $Z = 26.5\,\text{mm}$):** Weatherproof Bus socket (4-wire backbone `VCC_BUS`, `GND`, `USB_D+`, `USB_D-`), connected via a short internal 4-conductor silicone ribbon cable to header `J_BUS` on `PCBA 03`.
      * **Port B (bottom, $Z = 11.5\,\text{mm}$):** Weatherproof USB-C charging port (30W USB-PD), connected via an ultra-flexible 4-conductor internal silicone ribbon cable to header `J_USB_OUT` on `PCBA 03`.
-     * This guarantees 100% bilateral symmetry for left and right saddlebag pods and transfers all mechanical plugging and pull stresses directly into the rigid PA12 chassis wall.
-2. **Equipping & Adjusting the Universal Mechatronic Actuator Slide Bracket:**
-   * Insert the two mini-solenoids JF-0530B (12V DC, 300 mA, 10 mm stroke) into the carriage receptacles of the universal slide rail ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)).
-   * Push the soft Shore A50 silicone caps onto both plunger tips.
-   * Continuously adjust the two sliding carriages to match the button pitch of the installed OEM intercom (15–85 mm continuous adjustment span, e.g. exactly 50 mm gap between Intercom and Media buttons on Cardo Packtalk Edge or Sena button centers).
-   * Clamp the carriages form-fittingly in place using the captive DIN 912 M2.5 x 8 mm screws.
-   * Bolt the slide rail assembly into the pod floor and connect the actuator harness to the 8-pin header `J_ACT` on `PCBA 03`.
-   * **Function of the Mechatronic Cold-Start:** When switching ignition ON (KL15), the quad AO3400A MOSFETs on `PCBA 03` (driven via ESP32-C6 GPIO0, 1, 2, 3) energize the solenoids automatically for exactly 2.0 s. The silicone plungers press gently and precisely onto the rubberized keypad of the headset, reliably booting it from a completely unpowered state (zero standby battery drain, zero soldering to OEM PCB, zero manual pod disassembly before/after rides!).
-3. **PCB & Wiring Installation:**
-   * Secure `PCBA 03` ($42 \times 48\,\text{mm}$) into the pod body with 4x M2.5 screws and elastomer dampers ($36 \times 42\,\text{mm}$ hole pitch).
-   * Connect the 4-conductor internal silicone ribbon cable from the chassis-mounted Bus port (Port A, upper bulkhead position) to the 4-pin JST-GH header `J_BUS`.
-   * Connect the 4-conductor flexible silicone ribbon cable from the chassis-mounted USB-C port (Port B, lower bulkhead position) to the header `J_USB_OUT`.
-   * Connect rearward equipment interfaces: Intercom OEM adapter harness to `J_AUDIO_PWR` (8-Pin JST-SH, top-right) and actuator harness to `J_ACT` (8-Pin JST-SH, bottom-right). Both harnesses run parallel backwards into the equipment chamber without crossing over the PCB.
-4. **Slide-in Lid & Magnetic Latch Setup:**
-   * Insert the small N52 magnet and guide pin into the latch pocket of the lid and pre-load with the return spring.
-   * Fit the sealing profile into the lid's perimeter groove and lubricate lightly with silicone grease. Test-insert the lid: it locks with a crisp mechanical click. Bringing the Smart Keyfob near releases the latch instantly.
+2. **PCB, Wiring & Dry-Flap Installation:**
+   * Secure `PCBA 03` ($42 \times 48\,\text{mm}$) onto the forward floor standoffs with 4x M2.5 screws ($36 \times 42\,\text{mm}$ hole pitch).
+   * Connect the 4-conductor internal silicone ribbon cable from Port A (top, $Z = 26.5\,\text{mm}$) to `J_BUS` and from Port B (bottom, $Z = 11.5\,\text{mm}$) to `J_USB_OUT`.
+   * Connect rearward equipment interfaces: Intercom OEM adapter harness to `J_AUDIO_PWR` (8-Pin JST-SH, top-right) and actuator harness to `J_ACT` (8-Pin JST-SH, bottom-right).
+   * Seat the TPU dry-flap (`011_pod_slide_tray.stl`) onto the $Z = 14.5\,\text{mm}$ step shelf over `PCBA 03`, routing the cables cleanly through its rear pass-through slot.
+3. **Equipping & Calibrating the Wall-Guided Actuator Cross-Struts (`Rail 1`):**
+   * Insert the two mini-solenoids JF-0530B (with soft Shore A50 silicone caps) into the under-slung Z-carriages of the two independent cross-struts ([`012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl)).
+   * **Crucial (100% Unobstructed Tub Floor):** The struts are **not** bolted to the tub floor; instead, they slide horizontally from the rear into the middle sidewall C-grooves (**`Rail 1` at $Z = 21.5\dots 24.5\,\text{mm}$**)! This keeps the entire tub floor 100% smooth and unobstructed for the OEM intercom cradle (Cardo Air-Mount, Sena clamp, or OMM).
+   * Align the struts along X (in the sidewall C-groove), the carriages along Y ($Y = 16\dots 54\,\text{mm}$), and the plunger height along Z ($8\,\text{mm}$ vertical slot) directly above the headset buttons, then lock them using the **flush-countersunk `DIN 7991` M2.5 screws** into the captive `DIN 934` hex nuts (preserving over $8\,\text{mm}$ overhead clearance to the lid underside!).
+   * Press the two **EPDM rubber sealing plugs** into the rear `Rail 1` entry slots to lock the struts axially and seal the rail openings.
+   * **Function of the Mechatronic Cold-Start:** When switching ignition ON (KL15), the `AO3400A` MOSFETs on `PCBA 03` energize the solenoids automatically for 2.0 s, booting the powered-off headset hands-free.
+4. **L-Slide-in Lid & Plastic-Claw Magnetic Latch Setup:**
+   * Insert the PA12 U-yoke (`016_fob_magnetic_lock_mechanism.scad`) with its $\varnothing\,6 \times 2\,\text{mm}$ N52 coin magnet and dual return springs into the guide pocket inside the lid's rear wall so the two lower **PA12 plastic claws ("Plastikkrallen")** protrude downward.
+   * Fit the silicone cord into the lid's perimeter groove. Slide the L-lid from the rear into the upper C-grooves (`Rail 2`): at full insertion, both **plastic claws** snap audibly downward into the fixed $14.0\,\text{mm}$ lower rear wall (Slam-to-Shut). Bringing the Smart Keyfob near the rear wall lifts the claws and releases the lid instantly.
 
 ---
 
@@ -192,11 +190,11 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ## 4. Bench Testing, Flashing & Dry-Run Setup
 
 > [!IMPORTANT]
-> **Native USB-DFU & Bench Operation via USB-C (Zero 12V Bench Supply Required!):**  
-> OpenMotorBridge v10.0 eliminates external 12V power supplies, crocodile clips, and external UART bridge dongles:  
-> * **Dual-Power Input:** On the workbench, the Central Box can be **powered directly from any standard USB-C smartphone or laptop charger** (5V 3A or 9V–20V PD up to 60W) or power bank! The internal USB-PD Sink controller (CH224K) and dual ideal-diode OR-ing power the Central Box, charge the internal LiPo UPS battery, and deliver bus power over the 4-wire backbone to run connected Front Nodes and saddlebag pods simultaneously on your desk.
-> * **Native USB-DFU:** The **ESP32-S31** host enumerates over the same USB-C cable directly as `ESP32-S31 USB JTAG/serial debug unit` on your PC/Mac.
-> * Flashing and parameter tuning are performed directly in your browser via the **OpenMotorBridge Web PWA (WebSerial API)** or standard ESP-IDF terminal.
+> **Native USB-DFU, Central Bus-OTA & Bench Operation (`J3` 5V Service Input vs. `J1` 12V Full Load):**  
+> OpenMotorBridge v10.0 eliminates external UART bridge dongles and avoids opening individual nodes for firmware flashing:  
+> * **5V USB-C Service & Bench Input (`J3` with `LM66100` Ideal-Diode OR-ing):** On the workbench, the Central Box can be powered for initial setup, logic verification, LiPo charging (`BQ24075`), and **Central Bus-DFU of all nodes** directly from a standard **5V USB-C cable into `J3`** (PC/Mac USB port or 5V/3A USB-C adapter) – the `LM66100` ideal diode feeds `VCC_5V_MAIN` with zero reverse current into the 12V rail.
+> * **12V Full-Load Bench Test (`J1` KL30/KL15):** For high-power testing of the 12V periphery eFuses (`TPS25921L` `U3..U6`), the 60W/30W buck converters in the Front Node and Pods, and the cold-start solenoids, apply 12V DC to vehicle power header `J1`.
+> * **Native USB-DFU & Bus Bootloader:** The **ESP32-S31** host enumerates over `J3` directly as `ESP32-S31 USB JTAG/serial debug unit` on your PC/Mac and flashes the Front Node (`PCBA 05`), both Saddlebag Pods (`PCBA 03`), and the Rear Radar (`PCBA 08`) automatically via the internal `USB2517I` hub and RS-485 bus bootloader.
 
 ```text
 +-------------------------------------------------------------------------------------------------+
@@ -303,15 +301,16 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * **0 cm visible cable, 0 screws removed from the outer fairing!**
 4. **Functionality:** Driven locally by the ESP32-S3 on `PCBA 05` via SPI/QSPI (left: rear radar proximity bar & blind spot warnings; right: turn-by-turn navigation arrows, TPMS pressures, intercom channel/talking state, and smartphone charge status).
 
-#### Step 5.1.4: Glove Box 4-Port Media & Power-Injection Hub (Harley Touring)
+#### Step 5.1.4: Glove Box 5-Port USB-C Media & Power-Injection Hub (Harley Touring)
 1. Open the right glove box.
 2. Locate the OEM rubber grommet on the underside of the compartment floor for accessory wiring.
-3. Pass the link cable from the Front Node (combined 60W power injection & High-Speed USB 2.0 data cable for Harley headset emulation) from *below* through the grommet into the compartment.
-4. Place the form-fit 4-Port Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) into the compartment:
-   * **Port 1 (30W USB-PD Phone Fast Charge):** Ultra-fast charging of rider smartphone while navigating (stays 100% inside pocket).
-   * **Port 2 (10W Switched Dongle Port):** Supplies the wireless CarPlay / Android Auto dongle (Ottocast U2-Air / Carlinkit 5.0) with stable, filtered power (prevents reboot loops of the 12.3" Skyline OS / Boom! Box displays, stays inside pocket).
-   * **Port 3 (Free Media Port):** USB-A socket for USB flash drives (FLAC/MP3) or DFU firmware updates (stays inside pocket).
-   * **Port 4 (OEM Head Unit Upstream & Harley Headset Emulation via USB):** Connects data lines directly to factory USB input of infotainment system (Boom! Box GTS / Skyline OS). Routes MFi digital headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
+3. Pass the link cable from the Front Node (combined power supply & High-Speed USB 2.0 data cable for Harley headset emulation) from *below* through the grommet into the compartment.
+4. Place the form-fit 5-Port USB-C Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $82 \times 54 \times 15\,\text{mm}$ for `PCBA 05B` with **5x USB-C receptacles `J1..J5`**) into the compartment:
+   * **`J1` (USB-C Upstream In):** Combined feed from Front Node (`PCBA 05`).
+   * **`J2` (OEM Head Unit Out & Harley Headset Emulation via USB):** Connects data lines directly to the factory USB-C input of the infotainment system (Boom! Box GTS / Skyline OS). Routes MFi digital headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
+   * **`J3` (10W Switched Dongle Port):** Supplies the wireless CarPlay / Android Auto dongle (Ottocast U2-Air / Carlinkit 5.0) with stable, filtered power (prevents reboot loops of the 12.3" Skyline OS / Boom! Box displays, stays inside pocket).
+   * **`J4` (15W/30W USB-PD Phone Fast Charge):** Fast charging of rider smartphone while navigating (stays 100% inside pocket).
+   * **`J5` (Free USB-C Media / Service Port):** USB-C socket for USB flash drives (FLAC/MP3) or diagnostics/service (stays inside pocket).
 5. All connected devices and cabling remain 100% inside the compartment. Zero external cable egress! The glove box door seals airtight with zero cable interference across weatherstripping!
 
 #### Step 5.1.5: Saddlebag Pods & 100% Zero-Drill Feedthrough (OEM Ø 19 mm)

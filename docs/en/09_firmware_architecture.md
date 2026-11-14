@@ -2,57 +2,57 @@
 
 *Note: All CAD, electronic, and block diagrams reflect the standardized v10.0 node architecture (PCBA 01 through 10).*
 
-This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **ESP32-S31 AI RISC-V** host MCU on the Central Box (`PCBA 01`) featuring a 128-bit SIMD AI vector accelerator, the ESP32-S3 Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB-PD & USB 2.0 Backbone (`VBUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** to all satellite nodes, the **Dual-Power Input Engine** (12V DTM & USB-PD Sink 5V–20V via LM5050 ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05B`), the LittleFS profile engine, and the **Dual-Bank Rollback-OTA architecture** guaranteeing zero bricking during power interruptions.
+This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **`ESP32-S31-WROOM-1U`** host MCU on the Central Box (`PCBA 01`), the **`ESP32-P4` + `ESP32-E22`** Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB 2.0 & 12V Backbone (`+12V_BUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** across the `USB2517I` 7-port hub to all satellite nodes, the **Dual-Power Input Engine** (12V DTM `J1` via `LM74700-Q1` & 5V USB-C Service Input `J3` via `LM66100` ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05C`), the SPIFFS/LittleFS profile engine, and the **Dual-Bank Rollback-OTA & Central Bus-DFU architecture**.
 
 ---
 
 ## 1. Multi-Core & Multi-MCU System Architecture
 
-In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wire Automotive USB-PD & USB 2.0 bus**. All data, audio, and control links between Central Box and external nodes operate over wire with deterministic latency ($< 0.2\,	ext{ms}$) and massive power delivery (up to 60 W per branch):
+In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wire Automotive 12V & USB 2.0 bus**. All data, audio, and control links between Central Box and external nodes operate over wire with deterministic latency ($< 0.2\,\text{ms}$) and local USB-PD regulation (up to 60 W at Front Node via `SW3526`, 30 W in Pods via `SW3516H`):
 
 ```
 +----------------------------------------------------------------------------------------+
 |                        FIRMWARE CONTROLLERS IN CONCERT (v10.0)                         |
 +------------------------------------------------------+---------------------------------+
-| 1. CENTRAL BOX (ESP32-S31 AI RISC-V, PCBA 01)         | 2. FRONT NODE (ESP32-S3, PCBA 05)|
+| 1. CENTRAL BOX (ESP32-S31-WROOM-1U, PCBA 01)          | 2. FRONT NODE (ESP32-P4+E22, PCBA 05)|
 +------------------------------------------------------+---------------------------------+
-| * Core 0: 4-Wire USB-PD Host Engine, SX1262 LoRa     | * Core 0: USB Backbone Client,  |
-|   868 MHz, Dual-Power OR-ing, BLE, Pod Dispatcher    |   SAM-M10Q GNSS, CAN, USB-PD    |
-| * Core 1: 48 kHz SIMD AI Audio-DSP, Raised-Cosine    | * Core 1: Knowles Wind-DSP,     |
-|   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   5-Gesture Mirror-Pod Engine   |
+| * Core 0: USB2517I 7-Port Host Engine, SX1262 LoRa   | * Core 0: USB Backbone Client,  |
+|   868 MHz, Quad eFuse, BLE, Pod & Bus-DFU Dispatcher |   SAM-M10Q GNSS, CAN, SW3526 PD |
+| * Core 1: 48 kHz SIMD Audio-DSP, Raised-Cosine       | * Core 1: Knowles Wind-DSP,     |
+|   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   OLED UI, 5.9 GHz V2X Co-Proc  |
 +------------------------------------------------------+---------------------------------+
-| 3. SATELLITE PODS (ESP32-C6, PCBA 03 in Pod 1 & 2)   | 4. REAR RADAR (ESP32-C5 Sub-MCU, PCBA 08)|
+| 3. SATELLITE PODS (ESP32-C6-MINI-1U, PCBA 03)         | 4. REAR RADAR (ESP32-C6-MINI-1U, PCBA 08)|
 +------------------------------------------------------+---------------------------------+
-| * USB 2.0 Device & USB-PD Sink Controller (up to 30W)| * Wheeltec MR20 77-GHz mmWave   |
-| * ES8388 Audio Codec / USB Audio Class Streamer      | * 20 Hz Tracking Vectors via    |
-| * OptoMOS PTT Keying & Direct Headset Interface      |   CAN / High-Speed Serial       |
+| * USB 2.0 Device & SW3516H 30W USB-PD Controller     | * Wheeltec MR20 77-GHz mmWave   |
+| * PCM2912A USB Audio Codec / OMM_DETECT Auto-Sense   | * 20 Hz Tracking Vectors via    |
+| * OptoMOS PTT Keying & Dual AO3400A Cold-Start Pulse |   USB-CDC / WS2812B Strobe LED  |
 +------------------------------------------------------+---------------------------------+
 ```
 
-### 1.1 Central Box ESP32-S31 AI Host Controller Core Allocation (320 MHz RISC-V)
+### 1.1 Central Box `ESP32-S31-WROOM-1U` Host Controller Core Allocation (`PCBA 01`)
 
 #### CORE 0 (Communication, Telemetry, 4-Wire USB Backbone & Power Management):
-- **Automotive USB Backbone Host Engine (`usb_vehicle_backbone.cpp`):** Manages the USB 2.0 High-Speed connection across the onboard USB2514B hub to Front Node and saddlebag pods. Receives handlebar PTT and gesture events ($< 0.15\,	ext{ms}$), Knowles MEMS acoustic noise readings, 10 Hz Multi-GNSS packets, and pod telemetry.
-- **Dual-Power Input Manager (`dual_power_mgr.cpp`):** Overviews the TI LM5050-Q1 ideal-diode OR-ing between 12V vehicle power (Deutsch DTM-6 / Cable 1) and USB-PD Sink (5V–20V USB-C). Enables seamless switching and zero-disassembly flashing, benchtop calibration, and testing without a 12V laboratory power supply.
-- **Staggered Power Sequencing (`power_sequencer.cpp`):** Controls the automotive eFuses `TI TPS25982` on PCBA 01 to eliminate inrush current spikes:
-  - $T = 0\,	ext{ms}$: Central Box (PCBA 01) and Front Node (PCBA 05) boot synchronously upon ignition ON (KL15).
-  - $T = 200\,	ext{ms}$: Pod 1 (VBUS via eFuse with soft-start ramp).
-  - $T = 350\,	ext{ms}$: Pod 2 (VBUS via eFuse with soft-start ramp).
-  - $T = 500\,	ext{ms}$: Rear Radar (+12V switched on Whip 3).
-- **LoRa 868 MHz Mesh Engine (`lora_mesh_engine.cpp`):** Direct SPI link to the onboard Semtech SX1262 transceiver on PCBA 01 (24/7 UPS-buffered for theft sentry and group telemetry).
+- **Automotive USB Backbone Host Engine (`uwb_vehicle_backbone.cpp`):** Manages the USB 2.0 High-Speed connection across the onboard `USB2517I-JZX` 7-port hub to Front Node (`PCBA 05`), saddlebag pods (`PCBA 03`), and Rear Radar (`PCBA 08`). Receives handlebar PTT and gesture events ($< 0.15\,\text{ms}$), Knowles MEMS acoustic noise readings, 10 Hz Multi-GNSS packets, and pod telemetry.
+- **Dual-Power Input Monitoring:** Overviews the ideal-diode OR-ing between 12V vehicle power (`J1` Deutsch DTM06-6S via `LM74700-Q1`) and 5V USB-C Service Input (`J3` via `LM66100` / `TPS2115A`). Enables diagnostics and **Central Bus-DFU flashing** of all nodes on the workbench over a single USB-C cable.
+- **Staggered Power Sequencing (`power_sequencer.cpp`):** Controls the 4-channel automotive eFuses **`TI TPS25921` (`U12`, `GPIO 13..16`)** on `PCBA 01` to eliminate inrush current spikes:
+  - $T = 0\,\text{ms}$: Central Box (`PCBA 01`) and Front Node (`PCBA 05`, `GPIO 15`) boot synchronously upon ignition ON (`KL15`).
+  - $T = 200\,\text{ms}$: Pod 1 (`GPIO 13`, +12V via eFuse with soft-start ramp).
+  - $T = 350\,\text{ms}$: Pod 2 (`GPIO 14`, +12V via eFuse with soft-start ramp).
+  - $T = 500\,\text{ms}$: Rear Radar (`GPIO 16`, +12V switched on Branch 4).
+- **LoRa 868 MHz Mesh Engine (`sx1262_lora_engine.cpp`):** Direct SPI link (`GPIO 10..12`, `CS=9`, `BUSY=3`, `DIO1=8`) to the onboard Semtech SX1262 transceiver on `PCBA 01` (24/7 UPS-buffered for theft sentry and group telemetry).
 - **BLE GATT Server (`ble_service_server.cpp`):** Web-Bluetooth connection for the PWA dashboard (`0x180D`, `0x180A`, `0xFFE0`).
-- **Group Split Fallback Engine (`group_split_rescue_engine.cpp`):** Automatic state machine bridging radio shadows between Sena Mesh, Cardo DMC, OMM 2.4 GHz, and LoRa 868 MHz emergency beacon.
-- **WebDAV TLS 1.3 Client:** Asynchronous upload of GPX tour recordings to Nextcloud/Synology on home Wi-Fi upon ignition OFF.
-- **SDIO Logging Task:** 4-bit high-speed SD card logger with rolling BGH privacy auto-purge.
-- **ADR-EKF Filter:** 15-State sensor fusion fusing 10 Hz Multi-GNSS telemetry (from Front Node via USB) and onboard Bosch BMI270 6-axis IMU for uninterrupted navigation through tunnels.
+- **Group Split Fallback Engine (`group_split_rescue_engine.cpp`):** Automatic state machine bridging radio shadows between Sena Mesh, Cardo DMC, OMM 2.4 GHz, 5.9 GHz V2X, and LoRa 868 MHz emergency beacon.
+- **WebDAV TLS 1.3 Client (`webdav_uploader.cpp`):** Asynchronous upload of GPX tour recordings to Nextcloud/Synology in **Garage Post-Ride Sync Mode** upon ignition OFF (`KL15 = LOW`).
+- **SDIO Logging Task (`sdio_ring_buffer.cpp`):** 4-bit high-speed SD card logger (`GPIO 33..39`) with rolling BGH privacy auto-purge (`esp_vfs_fat_info`) and SHA-256 chain + hardware eFuse signature.
+- **ADR-EKF Filter (`adr_ekf_filter.cpp`):** 15-State sensor fusion fusing 10 Hz Multi-GNSS telemetry (from Front Node via USB) and onboard Bosch BMI270 6-axis IMU (`I2C 0x68`) for uninterrupted navigation through tunnels.
 
 #### CORE 1 (Realtime Edge-AI Audio DSP & Qualcomm QCC3084 Hub @ Highest Priority):
-- **128-bit SIMD AI Vector Accelerator:** Real-time filtering of wind noise, acoustic transients, and engine rumble, plus acoustic scene classification directly on silicon.
-- **Qualcomm QCC3084 Dual-Helmet Audio Hub (`bluetooth_audio_manager.cpp`):** Controls the dedicated QCC3084 BT 5.4 Audio SoC (`U9` on PCBA 01) via UART (GAIA/AT) for hardware-accelerated Dual-A2DP (aptX HD / Adaptive) to rider and pillion helmets, LE Audio Auracast, and synchronous HFP 1.8 Wideband voice channel.
-- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec and Qualcomm QCC3084 ($f_s = 48\,	ext{kHz}, 24\,	ext{bit}$, double-buffer of 128 samples = $2.67\,	ext{ms}$).
+- **128-bit SIMD Vector Accelerator:** Real-time filtering of wind noise, acoustic transients, and engine rumble, plus acoustic scene classification directly on silicon.
+- **Qualcomm QCC3084 Dual-Helmet Audio Hub (`bluetooth_audio_manager.cpp`):** Controls the dedicated QCC3084 BT 5.4 Audio SoC (`U9` on `PCBA 01`) via UART (GAIA/AT) for hardware-accelerated Dual-A2DP (aptX HD / Adaptive) to rider and pillion helmets, LE Audio Auracast, and synchronous HFP 1.8 Wideband voice channel.
+- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec (`I2C 0x10`) and Qualcomm QCC3084 ($f_s = 48\,\text{kHz}, 24\,\text{bit}$, double-buffer of 128 samples = $2.67\,\text{ms}$).
 - **Raised-Cosine Ducking Engine:** Click-free, continuously differentiable audio attenuation during intercom announcements or radar alerts.
 - **Dynamic AGC Volume Scaling:** Smooth automatic scaling of helmet output volume based on Front Node aerodynamic wind noise.
-- **Lookahead Brickwall Limiter:** Prevents digital clipping exceeding $0\,	ext{dBFS}$.
+- **Lookahead Brickwall Limiter:** Prevents digital clipping exceeding $0\,\text{dBFS}$.
 
 ---
 
@@ -261,3 +261,17 @@ OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building bl
 2. **Dynamic DLE Capabilities (`omm_get_capabilities_vector`):** The Central Box advertises only those hardware flags in mesh packets that physically respond.
 3. **Sensor-Fusion Autonomy (`adr_ekf_filter.cpp`):** If GNSS is lost, the EKF transitions immediately to **Dead Reckoning** supported by IMU and wheel speed.
 4. **Fault-Tolerant Audio Mixer (`audio_dsp_pipeline.cpp`):** If the Front Node Knowles MEMS is missing, AGC defaults to nominal unity gain (`1.0f`).
+
+---
+
+## 9. Build, Flash & HIL Verification Guide
+
+For step-by-step ESP-IDF v5.5+ toolchain setup (`esp32s3`, `esp32p4`, `esp32c6`), building all six firmware targets (`main_controller`, `front_node`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), generating SPIFFS filesystem images (`build/storage.bin` @ `0x5E0000`), and **Central Bus-DFU flashing** via the `USB2517I`/`USB2514Bi` hub backbone, see [`firmware/README.md`](file:///Users/schmidtm/openMotorBridge/firmware/README.md):
+
+```bash
+# Build all 6 firmware targets with their verified SoC targets:
+./firmware/build.sh all
+
+# Run the system-wide v10.0 Hardware-in-the-Loop (HIL) integration test:
+python3 tools/simulators/firmware_hil_system_sim.py
+```

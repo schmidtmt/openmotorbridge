@@ -30,56 +30,61 @@ include <../../00_common/parameters.scad>;
 $fn = 32;
 
 // Lid Mechanical Dimensions
-LID_L       = 143.0; // Fits inside tub along X (mm)
-LID_W       = 63.8;  // Fits into side grooves along Y (mm)
+LID_L       = 146.5; // Fits from front groove (X = 3.5 mm) flush to rear wall (X = 150.0 mm)
+LID_W       = 63.8;  // Fits into side grooves along Y (centered at Y = 3.1..66.9 mm)
 LID_PLATE_H = 3.2;   // Main rigid top plate thickness (mm)
 TONGUE_W    = 1.6;   // Lateral guide tongue protrusion on each flank (mm)
 TONGUE_H    = 2.4;   // Tongue thickness sliding in groove (mm)
 
 // Upper Heckwand (Vertical Leg of L) Dimensions
-HECK_WALL_TH = 3.8;  // Ultra-slim rear wall thickness (mm, leaves >10mm to OEM adapter)
-HECK_DROP_H  = 18.4; // Distance from lid underside down to tub sill (Z = 14.0 mm)
-DRIP_APRON_H = 3.5;  // Overlapping drip skirt extending over lower sill (mm)
-TOTAL_HECK_H = HECK_DROP_H + LID_PLATE_H; // 21.6 mm total rear wall height
+HECK_WALL_TH = 3.8;  // Rear wall thickness closing upper portal (X = 146.2..150.0 mm)
+HECK_DROP_H  = 18.4; // Distance from lid underside (Z = 32.4) down to fixed rear wall sill (Z = 14.0 mm)
+DRIP_APRON_H = 3.5;  // Overlapping drip skirt extending over lower sill down to Z = 10.5 mm
+TOTAL_HECK_H = HECK_DROP_H + LID_PLATE_H + 2.4; // 24.0 mm total rear wall height (Z = 14.0..38.0 mm)
 
-// U-Yoke Deadbolt Dimensions
-U_SPAN_W     = 55.0; // Total width of U-bracket (mm)
-U_LEG_W      = 5.0;  // Width of each corner locking leg (mm)
+// Non-Metallic PA12 U-Yoke Claw Latch ("Plastikkrallen") Dimensions
+U_SPAN_W     = 52.0; // Total width of U-bracket (claws at Y_tub = 9.0..14.0 & 56.0..61.0 mm)
+U_LEG_W      = 5.0;  // Width of each downward-gripping plastic claw (mm)
 U_BRIDGE_H   = 5.0;  // Height of horizontal cross-bridge (mm)
 U_THICK      = 1.8;  // Thickness of PA12 bracket (mm)
-U_LIFT_STROKE= 3.0;  // Vertical retraction stroke (mm)
+U_LIFT_STROKE= 3.2;  // Vertical retraction stroke when Keyfob magnet approaches (mm)
 
 // -----------------------------------------------------------------------------
-// MODULE: Non-Metallic PA12 U-Lock Bracket
+// MODULE: Non-Metallic PA12 U-Lock Bracket with Downward-Gripping Claws ("Plastikkrallen")
 // -----------------------------------------------------------------------------
 module pod_u_lock_bracket(unlocked = false) {
     z_lift = unlocked ? U_LIFT_STROKE : 0.0;
 
     translate([0, 0, z_lift]) {
-        // 1. RF-Transparent PA12 Portal Frame (High-contrast signal cyan/orange)
+        // 1. RF-Transparent PA12 Portal Frame with Downward Claws (Signal Cyan)
         color([0.15, 0.75, 0.85]) {
             difference() {
                 union() {
-                    // Top Cross-Bridge spanning between both corner legs
+                    // Top Cross-Bridge spanning between both corner claw legs
                     translate([0, (LID_W - U_SPAN_W)/2.0, -U_BRIDGE_H])
                         cube([U_THICK, U_SPAN_W, U_BRIDGE_H], center=false);
 
-                    // Left Corner Locking Leg
-                    translate([0, (LID_W - U_SPAN_W)/2.0, -HECK_DROP_H - 3.2]) {
-                        // Main vertical strut
-                        cube([U_THICK, U_LEG_W, HECK_DROP_H + 3.2], center=false);
-                        // 45° Lead-in chamfer on forward lower edge for slam-shut
-                        translate([U_THICK, 0, 0])
-                            rotate([0, -45, 0])
-                                cube([2.5, U_LEG_W, 2.5], center=false);
+                    // Left Plastic Claw Leg ("Plastikkralle" gripping down into low rear wall)
+                    translate([0, (LID_W - U_SPAN_W)/2.0, -HECK_DROP_H - 3.6]) {
+                        // Main vertical leg inside lid rear wall
+                        cube([U_THICK, U_LEG_W, HECK_DROP_H + 3.6], center=false);
+                        // Hooked claw barb ("Kralle") gripping behind the low rear wall catch lip
+                        translate([-1.2, 0, 0])
+                            cube([U_THICK + 1.2, U_LEG_W, 2.2], center=false);
+                        // 45° Lead-in ramp on forward (-X) lower tip for horizontal slam-shut
+                        translate([-1.2, 0, 0])
+                            rotate([0, 45, 0])
+                                cube([1.8, U_LEG_W, 1.8], center=false);
                     }
 
-                    // Right Corner Locking Leg
-                    translate([0, (LID_W + U_SPAN_W)/2.0 - U_LEG_W, -HECK_DROP_H - 3.2]) {
-                        cube([U_THICK, U_LEG_W, HECK_DROP_H + 3.2], center=false);
-                        translate([U_THICK, 0, 0])
-                            rotate([0, -45, 0])
-                                cube([2.5, U_LEG_W, 2.5], center=false);
+                    // Right Plastic Claw Leg ("Plastikkralle" gripping down into low rear wall)
+                    translate([0, (LID_W + U_SPAN_W)/2.0 - U_LEG_W, -HECK_DROP_H - 3.6]) {
+                        cube([U_THICK, U_LEG_W, HECK_DROP_H + 3.6], center=false);
+                        translate([-1.2, 0, 0])
+                            cube([U_THICK + 1.2, U_LEG_W, 2.2], center=false);
+                        translate([-1.2, 0, 0])
+                            rotate([0, 45, 0])
+                                cube([1.8, U_LEG_W, 1.8], center=false);
                     }
                 }
 
@@ -112,7 +117,7 @@ module pod_u_lock_bracket(unlocked = false) {
 // -----------------------------------------------------------------------------
 // MODULE: Main L-Slide Lid with Upper Heckwand & Integrated U-Lock
 // -----------------------------------------------------------------------------
-module pod_slide_lid(show_internal_lock = true, unlocked = false) {
+module pod_slide_lid_body() {
     difference() {
         union() {
             // 1. Horizontal Slide-in Lid Plate (100% SMOOTH UNDERSIDE - ZERO BOSSES!)
@@ -184,8 +189,13 @@ module pod_slide_lid(show_internal_lock = true, unlocked = false) {
             }
         }
     }
+}
 
-    // 12. Visual Display of the Internal RF-Transparent U-Lock Bracket
+module pod_slide_lid(show_internal_lock = true, unlocked = false, alpha = 0.95) {
+    color([0.22, 0.23, 0.25, alpha])
+        pod_slide_lid_body();
+
+    // 12. Visual Display of the Internal RF-Transparent U-Lock Bracket ("Plastikkrallen")
     if (show_internal_lock) {
         translate([LID_L - HECK_WALL_TH + 1.0, 0, 0])
             pod_u_lock_bracket(unlocked = unlocked);
@@ -193,5 +203,4 @@ module pod_slide_lid(show_internal_lock = true, unlocked = false) {
 }
 
 // Standalone execution preview
-color([0.22, 0.23, 0.25])
-    pod_slide_lid(show_internal_lock = true, unlocked = false);
+pod_slide_lid(show_internal_lock = true, unlocked = false);

@@ -1,4 +1,5 @@
 #include "can_bus_manager.h"
+#include "main_box_config.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -12,9 +13,9 @@
 
 static const char *TAG = "CAN_MGR";
 
-// GPIO Pin-Definitionen für TI TCAN334G Transceiver (v8.0 Pinout)
-#define PIN_CAN_TX          GPIO_NUM_19
-#define PIN_CAN_RX          GPIO_NUM_20
+// GPIO Pin-Definitionen für TI TCAN334G Transceiver (v10.0 PCBA 01 KiCad Pinout: U2 Pad 21/22 -> U6 Pin 1/4)
+#define PIN_CAN_TX          PIN_MAIN_CAN_TX     // GPIO 5
+#define PIN_CAN_RX          PIN_MAIN_CAN_RX     // GPIO 6
 
 static bool s_can_initialized = false;
 static bool s_can_traffic_active = false;

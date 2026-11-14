@@ -1,6 +1,5 @@
 idf_component_register(
     SRCS 
-        "src/dw3110_driver.cpp"
         "src/uwb_vehicle_backbone.cpp"
     INCLUDE_DIRS 
         "include"
