@@ -15,7 +15,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 | Baugruppe | Name & Funktion           | Platinenmaße  | Lagen   | Kern-ICs / Bauteile  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 01**| **Zentralbox Main Controller** | 85 x 55 mm    | 4 Lagen | ESP32-S31-WROOM-1U, USB2517I, |
-|       | (Unter Sitzbank, Audio/USV/PD)| (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164, BQ24075,|
+|       | (Unter Sitzbank, Audio/USV/PD)| (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164-Q1,   |
 |       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
 |       | Vertikal-SMD (MicroLock/Picoflex)|              |         | SX1262 LoRa, ES8388, BMI270, CAN|
 +-------+-------------------------------+---------------+---------+----------------------+
@@ -111,7 +111,7 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
 ## 3. PCBA 01: Zentralbox Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Zentralbox Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 72V Buck, BQ24075 USV-Lader, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
+*Abbildung 7.1a: KiCad 3D-Render der Zentralbox-Hauptplatine Top (PCBA 01, 85 x 55 mm, 4 Lagen) mit ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, Quad-eFuse U12, SX1262 LoRa 868 MHz und vertikal nach oben ragenden SMD-Steckverbindern (J1, J6, J5, J4, J7, J3).*
 
 ![PCBA 01 Zentralbox Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Abbildung 7.1b: KiCad 3D-Render der Zentralbox-Hauptplatine Bottom mit DM3D MicroSD-Push-Pull-Slot, TI LM66100 Ideal-Dioden-OR-ing Schaltung für Dual-Power (12V Bordnetz vs. USB-C Service), BMI270 6-Achs-IMU, ES8388 Audio-Codec und TCAN334G CAN-FD Transceiver.*
@@ -131,8 +131,8 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
   * **Hauptcontroller (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz mit 128-Bit SIMD AI Engine für On-Device Audio-Signalverarbeitung und Sprachfilterung, 16 MB Flash, 8 MB Octal-PSRAM, externe U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, zentralen geometrischen BLE-Master (Lenkertaster, OEM-Adapter, Action-Cam, Keyfob, TPMS) und CAN-FD Management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 7-Port High-Speed 480 Mbps Hub mit 24.000 MHz Quarz `Y2`. Bindet alle Peripherieknoten (Front, Pod 1, Pod 2, Radar, Helm-Audio, ESP32 und Service-Port) transparent und synchron an.
   * **Dedizierter Helm-Audio-SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC Modul ($13 \times 18\,\text{mm}$ mit integrierter Keramik-Chipantenne) für Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast Broadcast, HFP 1.8 Wideband Telefonie und nativen USB Audio Class 2.0 Uplink zu Hub `U8`.
-  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 72V-Buck-Converter (erzeugt `VCC_BUCK` / 5V aus dem 12V–72V Bordnetz) und TI `BQ24075` Power-Path-Controller mit Ladeelektronik für den internen USV-Akku.
-  * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-Kanal-Lastschalter zur getrennten Absicherung, Strommessung und thermischen Abschaltung der 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar).
+  * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 100V-Buck-Converter (erzeugt `VCC_5V` aus dem 12V–72V Bordnetz) kombiniert mit dem 3.3V Ultra-Low-Noise LDO `U11` (`TPS7A0533`).
+  * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-Kanal-Lastschalter (`TPS25921`) zur getrennten Absicherung, Strommessung und thermischen Abschaltung der 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar).
   * **Weitbereichsfunk (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL Buchse `ANT1` zur FXP895 Antenne in der Gehäusedeckeltasche.
   * **Status-Anzeige & Bedienelemente:** WS2812B RGB Smart-LED `D1`, Pairing-Hardwaretaster `SW1` sowie Vertikalstecker `J1` (Bordnetz 6P), `J6` (Peripherie 16P), `J5` (USV-Akku 4P), `J4` (RGB-LED 3P), `J7` (Reserve USB 4P) und `J3` (USB-C 16P).
 * **Bestückung Bottom-Layer (B.Cu):**
@@ -202,7 +202,7 @@ Zentraler Schnittstellen-Header (Molex Picoflex `90814-0016`, 1.27mm Raster, ver
 ```
 
 #### 3.2.3 Header J5: USV-Akku & NTC-Temperaturfühler (Molex Micro-Lock Plus 1.25mm 4-Pin Vertikal)
-Verbindet den internen 2.200-mAh-USV-Pouch-Akku (LiFePO4 oder LiPo) mit dem BQ24075 Power-Path-Controller und ESP32 ADC:
+Verbindet den internen USV-Pufferakku (LiFePO4 oder LiPo) mit dem analogen Spannungs- und Temperaturüberwachungsnetzwerk des ESP32-S31:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
@@ -210,9 +210,9 @@ Verbindet den internen 2.200-mAh-USV-Pouch-Akku (LiFePO4 oder LiPo) mit dem BQ24
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signalname     | Signalart / Pegel        | Querschnitt | Verbunden mit       | Funktion & Schutz       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Akku +)| AWG22 0.34² | BQ24075 BAT-Pin     | Akku-Lade- & Entladestrom|
+|  1  | BAT_PLUS       | +3.2V...+4.2V DC (Akku +)| AWG22 0.34² | Teiler R12/R13      | Akkuspannungsmessung    |
 |  2  | GND_PWR        | Power-Masse (Akku -)     | AWG22 0.34² | GND_PWR Masseplane  | Batterie-Masse          |
-|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | ESP32-S31 (Pin 25)  | 10k NTC Temperaturfühler|
+|  3  | BAT_NTC        | Analog In (0...3.3V)     | AWG26 0.14² | Pull-Up R14 (10k)   | 10k NTC Temperaturfühler|
 |  4  | GND_PWR        | Sensor-Masse (0V)        | AWG26 0.14² | GND_PWR Masseplane  | NTC-Rückleitung         |
 | MP1 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 1  |
 | MP2 | GND_PWR        | Mechanische Halterung    | SMT Pad     | PCB Massefläche     | Solder Retention Pad 2  |
@@ -414,7 +414,7 @@ Die integrierte 4-Kanal-eFuse schützt die Peripherieleitungen vor Kabelkurzschl
 | 28  | RGB_LED_DATA   | GPIO 48              | Header J4 & D1     | WS2812B RGB Smart-LED Datenleitung         |
 | 29  | UART_RXD0      | U0RXD                | Debug Header       | Serielle Konsole RX                        |
 | 30  | I2S_BCLK       | GPIO 16 (I2S BCLK)   | QCC3084 & ES8388   | I2S Bit-Clock (3.072 MHz)                  |
-| 31  | BAT_SENSE      | GPIO 10 (ADC1_CH9)   | BQ24075 BAT-Pin    | Analoge USV Akkuspannungsmessung           |
+| 31  | BAT_SENSE      | GPIO 10 (ADC1_CH9)   | Teiler R12/R13     | Analoge USV Akkuspannungsmessung           |
 | 32  | I2S_WS         | GPIO 47 (I2S WS)     | QCC3084 & ES8388   | I2S Word Select / Frame Sync (48 kHz)      |
 | 33  | SD_DAT1        | GPIO 33 (SDIO D1)    | MicroSD J2 (Pin 8)  | MicroSD 4-Bit Datenleitung 1               |
 | 34  | SD_DAT2        | GPIO 34 (SDIO D2)    | MicroSD J2 (Pin 1)  | MicroSD 4-Bit Datenleitung 2               |
@@ -680,6 +680,23 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 ![PCBA 05B Handschuhfach-Hub Draufsicht](../images/pcba/pcba05b_cockpit_breakout_top.png)
 *Abbildung 7.5d: Bestückungs-Draufsicht PCBA 05B (50,0 x 20,0 mm) mit 5x USB-C Buchsen, M2.5 Befestigungsbohrungen (H1/H2 im 42 mm Abstand) und Microchip USB2514Bi Controller.*
 
+#### 7.2.1 Technische Platinen-Kenndaten & Port-Topologie
+* **Abmessungen:** $50{,}0 \times 20{,}0 \times 1{,}6\,\text{mm}$, 2 Lagen FR-4 High-TG150, ENIG-Goldfinish (2x M2.5 Montagebohrungen im 42 mm Abstand).
+* **Hub-Controller (`U1`):** Microchip `USB2514Bi-AEZG` (QFN-36, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 4-Port High-Speed 480 Mbps USB-Hub.
+* **Dual-Edge USB-C Architektur:**
+  * **Nordkante (Zuleitung / Host):** 2x USB-C Buchsen (`J1 SKYLINE_HOST` zur OEM Head-Unit und `J2 FRONT_NODE` zum Universal Front-Knoten `PCBA 05`).
+  * **Südkante (Geräteanschlüsse im Handschuhfach):** 3x USB-C Buchsen (`J4 DONGLE` für Wireless CarPlay/AA, `J5 MEDIA` für USB-Speichersticks, `J3 PHONE_CHARGE` für Smartphone-Schnellladung).
+
+#### 7.2.2 Pinbelegung der 5 USB-C Buchsen auf PCBA 05B
+
+| Buchse | Signalname / Belegung | Typ | Funktion & Beschreibung |
+| :---: | :--- | :---: | :--- |
+| **`J1`** | **`SKYLINE_HOST`** (Upstream)<br>A6/B6: `USB_UP_DP`<br>A7/B7: `USB_UP_DM`<br>A4/B4/A9/B9: `VBUS_HOST_SENSE`<br>A5: `NET_J1_CC1`, B5: `NET_J1_CC2` | USB-C 16P | **OEM Upstream Host:** Verbindet zum werkseitigen USB-C Port der Harley-Davidson Boom! Box GTS / Skyline OS Head Unit. |
+| **`J2`** | **`FRONT_NODE`** (Downstream 3)<br>A6/B6: `USB_DN3_DP`<br>A7/B7: `USB_DN3_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J2_CC1`, B5: `NET_J2_CC2` | USB-C 16P | **Front-Node Lifeline:** Führt USB-Daten und Versorgungsleistung vom Universal Front-Knoten (`PCBA 05`, Header `J4`) zu. |
+| **`J4`** | **`DONGLE`** (Downstream 1)<br>A6/B6: `USB_DN1_DP`<br>A7/B7: `USB_DN1_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J4_CC1`, B5: `NET_J4_CC2` | USB-C 16P | **Wireless CarPlay / AA Adapter:** Gesteuerter USB-Port für Ottocast / CarlinKit Dongle mit ferngesteuertem Kaltstart-Reset. |
+| **`J5`** | **`MEDIA`** (Downstream 2)<br>A6/B6: `USB_DN2_DP`<br>A7/B7: `USB_DN2_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J5_CC1`, B5: `NET_J5_CC2` | USB-C 16P | **Media Storage:** Freier USB 2.0 Port für Musik-USB-Sticks, Dashcam-Export oder Software-Updates. |
+| **`J3`** | **`PHONE_CHARGE`** (Downstream 4)<br>A6/B6: `NET_PHONE_D`<br>A7/B7: `NET_PHONE_D`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J3_CC1`, B5: `NET_J3_CC2` | USB-C 16P | **Smartphone-Ladeport:** Dedizierter Ladeport für Handschuhfach-Smartphones ($5\,\text{V} / 3\,\text{A}$). |
+
 ---
 
 ### 7.3 PCBA 05C: Ultra-Kompakter Bilateral-Symmetrischer Under-Perch Spiegel-Pod (`openmotorbridge_mirror_pod`)
@@ -836,7 +853,7 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
      - **Texas Instruments TPS7A0533PDBVR (`U2`):** Ultra-Low-Quiescent-Current LDO ($I_Q = 1\,\mu\text{A}$) im SOT-23-5 Gehäuse. Erzeugt die saubere, hochstabile $3{,}3\,\text{V}$ Versorgungsspannung (`VCC_3V3`) für die Host-MCU.
      - **Filterung & Stützung:** 4.7 µH Shielded Power Inductor (`L1`, SMD 4040), $10\,\mu\text{F}$ / 50V Keramik-Eingangskondensator (`C_IN1`), $22\,\mu\text{F}$ / 16V Ausgangskondensator (`C_OUT1`) sowie $100\,\text{nF}$ Bootstrap-Kondensator (`C_BOOT`).
    * **Linke Hälfte (Sub-MCU & Funksubsystem):**
-     - **Espressif ESP32-C3-WROOM-02U (`U1`):** 32-Bit RISC-V Single-Core Prozessor @ 160 MHz mit 4 MB SPI Flash und werksseitigem U.FL-Goldport. Durch den externen U.FL-Steckanschluss entfällt die störende Leiterplattenantenne vollständig – keine HF-Keepouts oder Cu-Freistellungen nötig, maximale Masseflächen-Stabilität.
+     - **Espressif ESP32-C5-WROOM-1U (`U1`):** 32-Bit RISC-V Dual-Band Sub-MCU (2.4 GHz + 5 GHz / 5.9 GHz V2X) @ 160/240 MHz mit 4 MB SPI Flash und werksseitigem U.FL-Goldport. Ermöglicht neben der Radardatenauswertung den autarken Empfang von Car-to-X / ITS-G5 Meldungen (802.11p OCB) am Fahrzeugheck.
      - **Boot- & Reset-Schaltung:** Taktiler SMD-Mikrotaster `SW1` (Boot-Mode auf GPIO9), Pull-Up-Widerstände `R1` ($10\,\text{k}\Omega$ für `ESP_EN`), `R2` ($10\,\text{k}\Omega$ für `ESP_IO9_BOOT`) sowie Entkopplungskondensatoren `C3`/`C4` ($100\,\text{nF}$).
 
 3. **Senkrechte Steckverbinder nach hinten (`B.Cu`):**
@@ -868,7 +885,7 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 
 ---
 
-### 10.4 Vollständige Pinbelegung der Host-MCU U1 (ESP32-C3-WROOM-02U)
+### 10.4 Vollständige Pinbelegung der Host-MCU U1 (ESP32-C5-WROOM-1U)
 
 | Modul-Pad | Signalname | MCU GPIO / Funktion | Beschreibung / Hardware-Verbindung |
 | :---: | :--- | :--- | :--- |
@@ -907,6 +924,89 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
   * Das MR20 mmWave-Frontend liefert 20-Hz-Rohzielvektoren (Distanz, Relativgeschwindigkeit, Azimutwinkel).
   * Die Sub-MCU berechnet in Echtzeit Time-to-Collision ($\text{TTC} = \frac{d}{v_{\text{rel}}}$).
   * Bei $\text{TTC} < 2{,}5\,\text{s}$ wird autonom und ohne USB-Latenz das Prio-1 Warnflügel-Stroboskop ausgelöst und simultan ein USB-Interrupt (`USB_PKT_RADAR_TARGETS` mit `URGENT`-Flag) an die Zentralbox gesendet, der das Helm-Audio um $-12\,\text{dB}$ absenkt und den Warn-Ping einspielt.
+
+### 10.6 Hardware Power-On Self-Test (POST) 36-LED Diagnose-Matrix
+
+Beim Einschalten der Zündung (KL15) führt das System für **2,5 Sekunden einen optischen POST-Diagnosemodus** durch. Die 36 kreisförmig um die Radaröffnung angeordneten WS2812B-LEDs sind in **18 funktionale 2er-Gruppen** ($18 \times 2 = 36$) unterteilt:
+
+```text
+                          TOP BROW: D13 .. D18 (6 LEDs = 3 Paare)
+                      +-------------------------------------------+
+                      |   [GNSS]       [LoRa Mesh]      [V2X/Wi-Fi]|
+                      +-------------------------------------------+
+   LEFT WING                                                                 RIGHT WING
+   D1 .. D12 (12 LEDs = 6 Paare)                                             D19 .. D30 (12 LEDs = 6 Paare)
+ +---------------------------+   +-------------------------------------+   +---------------------------+
+ | D1/D2:   Front Node       |   |                                     |   | D19/D20: Pod 2 Funk       |
+ | D3/D4:   CAN-Bus          |   |         WHEELTEC MR20               |   | D21/D22: 4-Draht USB Bus  |
+ | D5/D6:   Pod 1 Intercom   |   |       77-GHz mmWave Radar           |   | D23/D24: BSD Spiegel R    |
+ | D7/D8:   BSD Spiegel L    |   |                                     |   | D25/D26: RDKS Hinten      |
+ | D9/D10:  RDKS Vorne       |   |                                     |   | D27/D28: Dallas DS18B20   |
+ | D11/D12: Actioncam BLE    |   |                                     |   | D29/D30: MicroSD Logger   |
+ +---------------------------+   +-------------------------------------+   +---------------------------+
+                      +-------------------------------------------+
+                      |   [12V KL15]     [18650 USV]     [77GHz Radar]|
+                      +-------------------------------------------+
+                         BOTTOM CHIN: D31 .. D36 (6 LEDs = 3 Paare)
+```
+
+#### Das 2-LED-Prinzip pro Funktion:
+* **LED A (Links / Oben): Hardware- & Bus-Präsenz:**
+  - **Grün:** Subsystem antwortet auf Bus (1-Wire ROM-ID, I2C ACK, UART Ping, USB/BLE Link OK).
+  - **Gelb:** Handshake / Bootloader aktiv.
+  - **Blinkend Rot:** Hardware fehlt / Kurzschluss / Bus-Timeout.
+  - **Dunkel:** Komponente im Fahrzeugprofil als „nicht installiert / optional“ deklariert.
+* **LED B (Rechts / Unten): Funktionszustand & Datenstrom:**
+  - **Grün:** Normalbetrieb aktiv (Datenstrom fließt, gültiger 3D-Fix, Reifendruck im Soll).
+  - **Gelb:** Initialisierung (z. B. GNSS sucht Satelliten, Straßenglätte $T \le +3^\circ\text{C}$).
+  - **Rot:** Sensorfehler / Plausibilitätsfehler.
+
+#### Zuordnung der 18 Motorrad-Subsysteme:
+1. **Linker Flügel (Cockpit, Bus & linke Fahrzeugseite):**
+   * **D1 / D2:** Front-Node (PCBA 05) 4-Draht Automotive USB-PD Link & Cockpit-Versorgung (KL15).
+   * **D3 / D4:** Motorrad CAN-Bus (HD-LAN / K-CAN) Transceiver & Telemetrie-Datenstrom.
+   * **D5 / D6:** Pod 1 (Koffereinschub Links PCBA 03) 4-Draht USB-Bus & Ladezustand bereit.
+   * **D7 / D8:** BSD Spiegelwarnung Links (Header `J9`) N-MOSFET & Treiberkreis bereit.
+   * **D9 / D10:** RDKS Vorne (Bluetooth LE Reifendrucksensor) Datenpaket empfangen & Druck im Soll.
+   * **D11 / D12:** Actioncam BLE Shutter Link gekoppelt & Kamera aufnahmebereit.
+2. **Rechter Flügel (Funk, Heck & rechte Fahrzeugseite):**
+   * **D19 / D20:** Pod 2 (Koffereinschub Rechts PCBA 03) 4-Draht USB-Bus & Ladezustand bereit.
+   * **D21 / D22:** Automotive USB 2.0 Backbone Link & WebUSB Enumeration aktiv.
+   * **D23 / D24:** BSD Spiegelwarnung Rechts (Header `J9`) N-MOSFET & Treiberkreis bereit.
+   * **D25 / D26:** RDKS Hinten (Bluetooth LE Reifendrucksensor) Datenpaket empfangen & Druck im Soll.
+   * **D27 / D28:** Dallas DS18B20 Straßentemperatursensor (`J6`) 1-Wire ansprechbar & plausibel.
+   * **D29 / D30:** MicroSD-Karte & Telemetrie-Blackbox SDIO 4-Bit gemountet & Logging aktiv.
+3. **Oberer Brauenbogen (Navigation, Mesh & RF):**
+   * **D13 / D14:** u-blox SAM-M10Q Multi-GNSS I2C Link & 3D-Fix ($\ge 6$ Satelliten).
+   * **D15 / D16:** Semtech SX1262 LoRa (OpenMotorMesh 868 MHz) SPI PLL-Lock & Mesh-Beacon.
+   * **D17 / D18:** 5.9 GHz ITS-G5 / Wi-Fi 6 (V2X) HF-Transceiver aktiv & PWA-Hotspot online.
+4. **Unterer Kinnbogen (Versorgung & Radartransceiver):**
+   * **D31 / D32:** Bordnetz 12V Versorgungsspannung stabil ($11{,}5\dots 14{,}8\,\text{V}$) & KL15 Gate geschlossen.
+   * **D33 / D34:** Interne 18650 USV-Batterieladung `BQ25895` & Kapazität $> 50\,\%$.
+   * **D35 / D36:** Wheeltec MR20 77-GHz Radartransceiver 20 Hz UART Target-Cluster & keine Tracking-Fehler.
+
+#### Nicht-blockierende Architektur (Zubehör-Sicher):
+* **Kein Radar installiert / Garmin Varia:** Wird kein Radar 2.0 Sub-MCU auf dem UART detektiert oder ist `radar_type: "none"` konfiguriert, startet die Zentralbox **asynchron in $< 800\,\text{ms}$** ohne blockierende Wartezeiten.
+* **Cockpit-Quittierung:** Die beiden **BSD-Spiegel-LEDs (`J9`) leuchten für 1,0 Sekunde bernsteinfarben**, um dem Fahrer beim Start sofortige visuelle Rückmeldung zu geben.
+* **Begleitfahrzeug (Kit 5):** Da Begleit-Vans kein Heckradar montieren, wird die Diagnosetelemetrie direkt auf dem Tablet-Dashboard der PWA dargestellt.
+
+---
+
+### 10.7 Konfigurierbare Warn-Makros & Lichtmuster-Management
+
+Alle optischen Warn- und Lichtmakros der Radar 2.0 Sub-MCU sind über **NVS-Bitmasken frei konfigurierbar** (`RadarMacroConfigBits_t`), um sowohl lokalen Zulassungsvorschriften (ECE / StVZO) als auch Fahrerwünschen gerecht zu werden:
+
+| Makro ID | Name & Funktion | Auslöser & Dynamik | Config-Flag (JSON / NVS) | Default |
+| :--- | :--- | :--- | :--- | :---: |
+| **`0x01`** | **Welcome & POST Sweep** | 2,5s 18-Paar Diagnose-Matrix $\rightarrow$ Sweep-Wisch ins Rücklicht | `post_matrix_enabled` | `true` |
+| **`0x02`** | **ESS Notbrems-Strobe** | $4{,}5\,\text{Hz}$ Vollintensitäts-Rot-Strobe bei Verzögerung $a_x < -0{,}6\,\text{g}$ | `ess_strobe_enabled` | `true` |
+| **`0x03`** | **Warnblink-Bake** | $1{,}2\,\text{Hz}$ Bernstein-Doppelblitz (*„Blitz-Blitz-Pause“*) bei Fahrzeugstillstand mit Warnblinker | `hazard_beacon_enabled` | `true` |
+| **`0x04`** | **Diebstahlabwehr-Strobe**| $12\,\text{Hz}$ desorientierender Weiß/Rot-Strobe + Spiegelflash bei Alarmauslösung | `theft_strobe_enabled` | `true` |
+| **`0x05`** | **Konvoi- / Follow-Me-Puls**| Sanft pulsierendes Wischlicht für Tourguides und Besenfahrzeuge | `convoy_marker_enabled` | `false` |
+| **`0x06`** | **Drängler-Abstandswarner** | Nach innen laufender Warn-Wisch bei extremem Auffahren ($d < 3\,\text{m}, v > 50$) | `tailgating_guard_enabled` | `false` |
+| **`0x07`** | **Standlicht (Astro-Dim)** | Sanftes rotes Positionslicht (18%-50% PWM, tageszeitabhängig gedimmt via Solar-Engine) | `ambient_glow_enabled` | `true` |
+
+* **PWA & Lenkerbedienung:** Jedes Makro kann in der PWA unter *Beleuchtung & Sicherheit* geschaltet und getestet werden. Im Stand ($v = 0\,\text{km/h}$) startet 4-maliges Tippen der Harley TRIP-Taste oder des Front-Node PTT-Tasters den POST-Diagnoselauf für 10 Sekunden.
 
 ---
 
@@ -992,14 +1092,14 @@ Der stirnseitige USB-C Port `J1` (`TYPE-C-31-M-12_IP67`) dient als universelle S
 
 Der auf der Platinenunterseite (`B.Cu`) platzierte 6-polige Header `J_HELMET` (JST-SH 1.0 mm, LCSC `C136657`) führt alle analogen Audio- und Steuersignale für den Helmeinsatz heraus. Durch die strikte Trennung von 5V Ladespannung (verbleibt ausschließlich auf USB-C `J1`) ist die Verbindung zu 100 % brumm- und störungsfrei:
 
-| Pin # | Netzname | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
+| Pin # | Netzname (KiCad / Funktion) | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | `HP_OUT_L` | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
-| **2** | `HP_OUT_R` | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
-| **3** | `AGND_SPK` | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
-| **4** | `MIC_IN+` | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
-| **5** | `AGND_MIC` | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
-| **6** | `BTN_PTT` | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |
+| **1** | **`AUDIO_OUT_L`** (`HP_OUT_L`) | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **2** | **`AUDIO_OUT_R`** (`HP_OUT_R`) | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **3** | **`AGND_SPK`** | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
+| **4** | **`VOICE_IN`** (`MIC_IN+`) | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
+| **5** | **`AGND_MIC`** | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
+| **6** | **`BTN_1`** (`BTN_PTT`) | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |
 
 ---
 
@@ -1087,11 +1187,11 @@ Identisch beschaltet wie bei PCBA 09: Dient als universelle Schnittstelle für *
 
 Der Header `J_HELMET` auf `B.Cu` ist **100 % anschlusskompatibel zu PCBA 09**:
 
-| Pin # | Netzname | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
+| Pin # | Netzname (KiCad / Funktion) | Signal-Typ | Ziel / Helm-Headset Peripherie | Elektrische Spezifikation |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | `HP_OUT_L` | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
-| **2** | `HP_OUT_R` | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
-| **3** | `AGND_SPK` | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
-| **4** | `MIC_IN+` | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
-| **5** | `AGND_MIC` | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
-| **6** | `BTN_PTT` | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |
+| **1** | **`AUDIO_OUT_L`** (`HP_OUT_L`) | Audio Out | Linker Helmlautsprecher (Tip 3.5mm Klinke) | ES8388 `LOUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **2** | **`AUDIO_OUT_R`** (`HP_OUT_R`) | Audio Out | Rechter Helmlautsprecher (Ring 3.5mm Klinke) | ES8388 `ROUT1`, $45\,\text{mW}$ @ $16\,\Omega$, AC-gekoppelt |
+| **3** | **`AGND_SPK`** | Audio Ground | Lautsprecher-Masse (Sleeve 3.5mm Klinke) | Stromlose Analogmasse ($I = 0\,\text{mA}$), kein Ladestrom |
+| **4** | **`VOICE_IN`** (`MIC_IN+`) | Audio In | Mikrofon-Kapsel (2-Pin Micro-JST Pin 1) | ES8388 `MIC1P` mit programmierbarem `MICBIAS` (2.2V) |
+| **5** | **`AGND_MIC`** | Mic Ground | Mikrofon-Rückleitung (2-Pin Micro-JST Pin 2) | Getrennte, rauscharme Vorverstärker-Masse |
+| **6** | **`BTN_1`** (`BTN_PTT`) | Digital In | Helm-PTT-Taster / Kinn-Klicker | ESP32-C6 GPIO 2, interner $45\,\text{k}\Omega$ Pullup, schaltet gegen GND |

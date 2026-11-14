@@ -270,7 +270,7 @@ OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building bl
 
 ## 9. Build, Flash & HIL Verification Guide
 
-For step-by-step ESP-IDF v5.5+ toolchain setup (`esp32s3`, `esp32p4`, `esp32c6`), building all six firmware targets (`main_controller`, `front_node`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), generating SPIFFS filesystem images (`build/storage.bin` @ `0x5E0000`), and **Central Bus-DFU flashing** via the `USB2517I`/`USB2514Bi` hub backbone, see [`firmware/README.md`](file:///Users/schmidtm/openMotorBridge/firmware/README.md):
+For step-by-step ESP-IDF v5.5+ toolchain setup (`esp32s3`, `esp32p4`, `esp32c6`), building all six firmware targets (`main_controller`, `front_node`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), generating SPIFFS filesystem images (`build/storage.bin` @ `0x5E0000`), and **Central Bus-DFU flashing** via the `USB2517I`/`USB2514Bi` hub backbone, see [`firmware/README.md`](../../firmware/README.md):
 
 ```bash
 # Build all 6 firmware targets with their verified SoC targets:

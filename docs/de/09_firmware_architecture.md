@@ -398,7 +398,7 @@ Für die schrittweise Einrichtung der ESP-IDF Toolchain (v5.5+ mit `esp32s3`, `e
 
 > [!TIP]
 > Die vollständige Schritt-für-Schritt-Anleitung mit allen CLI-Befehlen, Partitionstabellen und Central Bus-DFU Abläufen ist dokumentiert in:  
-> [`firmware/README.md`](file:///Users/schmidtm/openMotorBridge/firmware/README.md)
+> [`firmware/README.md`](../../firmware/README.md)
 
 ### 10.1 Schnellübersicht der Build- & Simulations-Befehle
 
