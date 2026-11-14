@@ -1,6 +1,6 @@
 # 06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync
 
-This document specifies the storage and telemetry subsystem of OpenMotorBridge v10.0 Standardized Node Architecture: the 4-bit high-speed SDIO bus, the GDPR/BGH-compliant rolling ringbuffer with cryptographic signatures, the automated TLS-secured WebDAV cloud upload, and the **low-power USB Mass Storage Class (MSC) mode** for direct PC access.
+This document specifies the storage and telemetry subsystem of OpenMotorBridge v10.0 Standardized Node Architecture: the 4-bit high-speed SDIO bus, the GDPR/BGH-compliant rolling ringbuffer with cryptographic HMAC-SHA256 integrity chaining, the automated TLS-secured WebDAV cloud upload, and the **low-power USB Mass Storage Class (MSC) mode** for direct PC access.
 
 ---
 
@@ -162,8 +162,8 @@ To comply with European data privacy regulations (GDPR Art. 5 & 25) and German F
 ```
 
 1. **Rolling Ringbuffer (`sdio_purge_old_tracks_if_needed()`):** Normal riding data in `/sdcard/tracks/` is monitored via `esp_vfs_fat_info()`; when free space drops below `200 MB`, the ringbuffer manager iterates over unprotected `.gpx` files using POSIX `opendir()`/`readdir()`/`stat()` and unlinks (`unlink()`) the oldest segments by `st_mtime` until at least `250 MB` of free space is restored.
-2. **Crash Freeze & Highlight Lock (`sdio_track_lock_incident()`):** If the Bosch BMI270 IMU detects a severe deceleration impact ($> 4{,}0\,\text{g}$) or the rider presses the handlebar highlight switch, the firmware atomically renames the active track segment to `*.crash.gpx` or `*.fav.gpx` — permanently exempting it from automatic ringbuffer purging.
-3. **Cryptographic Integrity (`<omb:integrity_seal>` via SHA-256 Chain & Hardware eFuse Key):** Every written trackpoint updates a continuous `mbedtls_sha256` hash chain in [`sdio_ring_buffer.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.cpp). On file finalization (`sdio_track_finalize()`), the controller signs the final SHA-256 digest via `mbedtls_md_hmac` using the hardware-unique key derived from the `ESP32-S31` eFuse block (`EFUSE_BLK_KEY0` / Factory MAC) and embeds the integrity seal right before `</trk>`.
+2. **Crash Freeze & Highlight Lock (`sdio_track_lock_incident()` / `sdio_track_lock_favorite()`):** If the Bosch BMI270 IMU detects a severe deceleration impact ($> 4{,}0\,\text{g}$) or the rear radar flags an imminent collision (`urgent_alert_active`), the active segment is locked via `sdio_track_lock_incident()`. If the rider presses the handlebar camera/bookmark switch (`USB_BTN_CAM_HIGHLIGHT`), `sdio_track_lock_favorite()` is triggered. Upon file finalization (`sdio_track_finalize()`), the firmware atomically renames the segment to `*.crash.gpx` or `*.fav.gpx` — permanently exempting it from automatic ringbuffer purging.
+3. **Cryptographic Integrity (`<omb:hw_hmac_sha256>` via SHA-256 Chain & Hardware eFuse Key):** Every written trackpoint updates a continuous `mbedtls_sha256` hash chain in [`sdio_ring_buffer.cpp`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller/src/sdio_ring_buffer.cpp). On file finalization (`sdio_track_finalize()`), the controller seals the segment chain via `mbedtls_md_hmac` using the hardware-unique device key derived from the `ESP32-S31` eFuse block (`EFUSE_BLK_KEY0` / Factory MAC) and embeds `chain_prev_sha256`, `segment_sha256`, and `hw_hmac_sha256` right before `</gpx>`. This provides tamper-evident integrity against file alteration or sector corruption (hardware-bound seal, not asymmetric PKI).
 
 ---
 

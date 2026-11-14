@@ -78,7 +78,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **1x PCBA 01 (Zentralbox):** Host-Platine mit **ESP32-S31-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertikalen SMD-Steckverbindern (Bordnetz `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Peripherie-Bus `J6` Molex Picoflex 1.27mm 16P, USV `J5` 4P, Status-LED `J4` 3P, Reserve `J7` 4P), Dual-Power Input (12V Bordnetz & 5V USB-C Service-Port `J3` mit LM66100 Ideal-Diode OR-ing) und DM3D MicroSD-Slot `J2`. *(DW3110 UWB entfällt komplett!)*
   * **2x PCBA 03 (Koffer-Pod Gateway):** Universal-Schnittstellenplatine mit ESP32-C6-WROOM-1, 30W USB-PD Sink/Buck-Regler, Koffer-USB-C Ladeport, Intercom-Audio-Routing (Sena / Cardo / OMM / Midland), PTT-Tastung und `J_ACT` Header mit AO3400A MOSFETs für 2,0 s Kaltstart-Tastendruck.
   * **1x PCBA 05 (Front-Knoten Riser-Hub):** 4-Layer Kompakt-Platine ($82 \times 50\,\text{mm}$) mit ESP32-P4-NR16 + ESP32-E22 Co-Prozessor, 60W USB-PD Engine (TPS54302 + SW3526), `J4` 6-Pin Port für den Sensor-Puck und Zubehörspeisung (30W Phone Fast Charge, 15W dediziertes Motorrad-GPS Nav, 10W Cam-Lead).
-  * **1x PCBA 05B (Handschuhfach 4-Port Media- & Power-Injection Hub):** 4-Layer Platine ($50 \times 20\,\text{mm}$) mit USB2514B-AEZC Hub, TPS25921L eFuses und 5x USB-C Buchsen (`J1..J5`).
+  * **1x PCBA 05B (Handschuhfach 5-Port Media- & Power-Injection Hub):** 4-Layer Platine ($50 \times 20\,\text{mm}$) mit FE1.1s Hub, TPS2051B Ladeschalter und 5x USB-C Buchsen (`J1..J5` im Gehäuse $55 \times 25 \times 15\,\text{mm}$).
   * **2x PCBA 05C (All-in-One Under-Perch Spiegel-Pod Platine):** Baugleiche 2-Layer Mini-Platinen ($18{,}25 \times 14{,}0\,\text{mm}$) für linken und rechten Spiegelfuß mit hochpräzisem Mikrotaster (Links: PTT; Rechts: Cam-Highlight) und ultraheller Amber-LED (BSD).
   * **1x PCBA 05D (Environmental Sensor-Puck):** 4-Layer Platine ($34 \times 34\,\text{mm}$) für SAM-M10Q GNSS, TMP117, OPT3001 und ICS-43434 MEMS-Mikrofon.
   * **1x PCBA 07 (Smart-Keyfob & LoRa Pager):** 4-Layer Platine ($46 \times 26\,\text{mm}$) mit nRF52840, SX1262 LoRa, BQ51050B Qi-Empfänger und DRV2605L Haptik-Treiber.
@@ -86,7 +86,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
   * **Optional 1x PCBA 09 (OMM 2.4 GHz Transceiver) / 1x PCBA 10 (Midland PMR446 Bridge):** 4-Layer Funk-Erweiterungsplatinen ($56 \times 32\,\text{mm}$).
 * [ ] **V4A Edelstahl-Normteile, Magnete & Aktuatoren (100 % lötfrei & schraubenlose Deckel):**
   * **4x Mini-Hubmagnete:** JF-0530B (12V DC, 300 mA, 10 mm Hub) mit aufgesteckten weichen Shore A50 Silikonkappen (2x pro Pod).
-  * 4x DIN 912 V4A M2.5 x 8 mm Schrauben für die Aktuator-Schlittenklemmung.
+  * 4x DIN 7991 V4A M2.5 x 8 mm Senkkopfschrauben mit Innensechskant/Torx (bündig versenkt für berührungsfreien Lauf der Aktuator-Traversen unter dem Schiebedeckel).
   * 8x DIN 934 / DIN 985 M2.5 / M3 Edelstahlmuttern (Platinen-Mutterntaschen)
   * 6x DIN 934 M4 Muttern (Radar- & Riser-Klemmung)
   * 8x M2.5 x 6 mm Platinenschrauben (Zentralbox & Front-Node; Gehäusedeckel selbst sind 100 % schraubenlos!)
@@ -306,12 +306,12 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 1. Das rechte Handschuhfach öffnen.
 2. An der Unterseite des Handschuhfachs befindet sich die originale Harley-Gummitülle für Zubehörverkabelung.
 3. Das Verbindungskabel vom Front-Knoten (kombinierte Stromversorgung & High-Speed USB 2.0 Datenleitung für Harley Headset-Emulation) von *unten* durch die Tülle nach oben in das Fach führen.
-4. Den formschlüssigen 5-Port USB-C Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $82 \times 54 \times 15\,\text{mm}$ für `PCBA 05B` mit **5x USB-C Buchsen `J1..J5`**) im Fach platzieren:
-   * **`J1` (USB-C Upstream In):** Kombinierte Zuleitung vom Front-Knoten (`PCBA 05`).
-   * **`J2` (OEM Headunit Out & Harley Headset-Emulation via USB):** Verbindet die Datenleitungen direkt mit dem werkseitigen USB-C-Eingang des Infotainmentsystems (Boom! Box GTS / Skyline OS). Überträgt die MFi-Headset-Emulation für native Apple CarPlay Freischaltung und digitales Helmmikrofon-Audio ohne analoge Brummschleifen.
-   * **`J3` (10W Switched Dongle Port):** Versorgt den Wireless CarPlay / Android Auto Dongle (Ottocast U2-Air / Carlinkit 5.0) mit stabiler, gefilterter Spannung (verhindert Bootloops des 12.3" Skyline OS / Boom! Box Displays, bleibt im Fach).
-   * **`J4` (15W/30W USB-PD Phone Fast Charge):** Schnelles Laden des Fahrer-Smartphones bei gleichzeitiger Navigation (bleibt im Fach).
-   * **`J5` (Free USB-C Media / Service Port):** USB-C Buchse für USB-Musiksticks (FLAC/MP3) oder Diagnose/Service (bleibt im Fach).
+4. Den formschlüssigen 5-Port USB-C Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $55 \times 25 \times 15\,\text{mm}$, Bauhülle $55 \times 25 \times 17\,\text{mm}$ für `PCBA 05B` $50 \times 20\,\text{mm}$ mit **5x USB-C Buchsen `J1..J5`**) im Fach platzieren:
+   * **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Downstream-Zuleitung vom Front-Knoten (`PCBA 05` `J7`).
+   * **`J1` (`HOST`, Nordkante, X = 27,18 mm):** Uplink zum OEM-Medienanschluss der Harley Head Unit (Skyline OS / Boom! Box GTS) inkl. digitaler Harley Headset-Emulation für Apple CarPlay.
+   * **`J3` (`PHONE`, Südkante, X = 7,82 mm):** 15W/30W USB-PD Schnellladeport für das Fahrer-Smartphone im Fach.
+   * **`J4` (`DONGLE`, Südkante, X = 19,82 mm):** 10W geschalteter VBUS (`TPS2051B`) für Wireless CarPlay / Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.
+   * **`J5` (`MEDIA`, Südkante, X = 31,82 mm):** High-Speed USB 2.0 Schnittstelle für USB-Musiksticks (FLAC/MP3) oder offizielle Harley-Software-Updates.
 5. Alle angeschlossenen Geräte und Kabel verbleiben vollständig im Handschuhfach. Null externe Kabeldurchzüge! Die Handschuhfachtür schließt hermetisch dicht – kein Kabel wird über die weiche Dichtlippe gequetscht!
 
 #### Schritt 5.1.5: Koffer-Pods & 100 % Zero-Drill Kofferwand-Durchführung (OEM Ø 19 mm)

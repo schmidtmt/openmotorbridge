@@ -137,19 +137,19 @@ module pod_monocoque_tub() {
         }
 
         // 9. Prominent C-Profile Guide Grooves & Upper Retaining Lips (Rille in der Gehäusewand)
-        // Left C-groove: runs inside left wall (Y = 1.5 to 5.0 mm, Z = 32.0 to 35.2 mm)
-        // Leaving a solid PA12 upper retaining lip (Dach/Hinterschnitt) from Z = 35.2 to 38.0 mm!
+        // Left C-groove: runs inside left wall (Y = 1.5 to 5.5 mm, Z = 32.0 to 35.6 mm, H = 3.6 mm)
+        // Leaving a solid 2.4 mm PA12 upper retaining lip (Dach/Hinterschnitt) from Z = 35.6 to 38.0 mm!
         translate([3.5, 1.5, 32.0])
-            cube([POD_OUTER_L - 2.5, 4.0, 3.4], center=false);
+            cube([POD_OUTER_L - 2.5, 4.0, 3.6], center=false);
 
-        // Right C-groove: runs inside right wall (Y = POD_OUTER_W - 5.5 to POD_OUTER_W - 1.5 mm, Z = 32.0 to 35.2 mm)
-        // Leaving a solid PA12 upper retaining lip from Z = 35.2 to 38.0 mm!
+        // Right C-groove: runs inside right wall (Y = POD_OUTER_W - 5.5 to POD_OUTER_W - 1.5 mm, Z = 32.0 to 35.6 mm, H = 3.6 mm)
+        // Leaving a solid 2.4 mm PA12 upper retaining lip from Z = 35.6 to 38.0 mm!
         translate([3.5, POD_OUTER_W - 5.5, 32.0])
-            cube([POD_OUTER_L - 2.5, 4.0, 3.4], center=false);
+            cube([POD_OUTER_L - 2.5, 4.0, 3.6], center=false);
 
-        // Front Wedge-Lock Undercut Groove in Front Bulkhead (at X = 3.5..4.8 mm, Z = 32.0..35.4 mm)
+        // Front Wedge-Lock Undercut Groove in Front Bulkhead (at X = 3.5..4.8 mm, Z = 32.0..35.6 mm)
         translate([3.2, POD_WALL, 32.0])
-            cube([1.6, POD_OUTER_W - 2*POD_WALL, 3.4], center=false);
+            cube([1.6, POD_OUTER_W - 2*POD_WALL, 3.6], center=false);
 
         // Rear U-Portal Opening (for L-Slide Lid Upper Heckwand at X = 150 mm)
         // Completely OPEN above the 14.0 mm fixed lower rear wall (from Z = 14.0 to top Z = 38.0 mm)

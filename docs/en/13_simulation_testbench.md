@@ -65,9 +65,12 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
 
 ## 3. Hardware-in-the-Loop (HIL) Firmware Simulator (`firmware_hil_system_sim.py`)
 
-Executes production C++ firmware algorithms against a virtual multi-board testbench across 10 lifecycle scenarios:
+> [!NOTE]
+> **Distinction Between Simulation and Physical Testing:** The Python test script `firmware_hil_system_sim.py` executes a software-based system and behavioral simulation of the OMB v10.0 architecture (state machines, packet formats, event cascades, and latency budgets). It does not replace physical hardware bench measurements on fabricated PCBs or real-world C++ firmware testing on physical USB nodes.
 
-* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) OR USB-PD Sink benchtop power $\rightarrow$ TI LM5050 ideal-diode OR-ing validation $\rightarrow$ Cold boot of host MCUs $\rightarrow$ 4-wire automotive USB bus enumeration.
+The script validates system-wide logic flows across 10 lifecycle scenarios:
+
+* **Scenario 1:** Ignition ON (KL15 = $12.60\,\text{V}$) OR 5V USB-C Service Mode (`J3`) $\rightarrow$ Validation of `LM74700-Q1` / `LM66100` dual-power decoupling $\rightarrow$ Cold boot of host MCUs $\rightarrow$ 4-wire automotive USB bus enumeration.
 * **Scenario 2A (Blank Pod):** No 1-Wire ID detected $\rightarrow$ Automatic `"disabled"` profile (Mute at $-96\,\text{dB}$ to protect against open inputs).
 * **Scenario 2B (Hot-Swap):** Insertion of Sena SPIDER X Slim / Cardo Edge cartridge on a live system $\rightarrow$ 1-Wire detection in $< 2\,\text{s}$ $\rightarrow$ Immediate profile loading and unmuting.
 * **Scenario 3:** u-blox SAM-M10Q Multi-GNSS 3D fix (22 satellites) via J12 Qwiic and precision time sync.

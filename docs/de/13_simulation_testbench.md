@@ -63,7 +63,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   1. **Automotive Load Dump (ISO 7637-2 / 87V Impuls 5b):** Clamping durch SMBJ33CA TVS-Diode auf sichere $54{,}1\,\text{V}$ ($+10{,}9\,\text{V}$ Headroom zum $65\,\text{V}$-Limit des LM5164 Buck).
   2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet unterbrechungsfrei ($0\,\mu\text{s}$) auf LiPo-Pufferung um.
   3. **Staged Power Sequencing Inrush Profile:** T=0ms Core, T=200ms Radar, T=350ms Cartridge, T=500ms Audio/CAN ($I_{\text{peak}} = 1{,}45\,\text{A} < 3{,}0\,\text{A}$).
-  4. **Satelliten-Pod Interface (PCBA 03):** USB-PD Controller (SC8721/TPS25750) bis 30W/60W Laden, ES8388 Audio-Codec via USB Audio Class 2.0 und OptoMOS K1 PTT-Keying Delay ($< 10\,\mu\text{s}$). Hubmagnete und DW3110 entfallen ersatzlos.
+  4. **Satelliten-Pod Interface (PCBA 03):** USB-PD Controller (`SW3516H`) bis 30W Schnellladen, ES8388 Audio-Codec via USB Audio Class 2.0, duale AO3400A MOSFET-Treiber für mechatronische Kaltstart-Hubmagnete (`JF-0530B`) sowie OptoMOS PTT-Keying Delay ($< 10\,\mu\text{s}$). (Das frühere 6.5-GHz-UWB-Funkmodul `DW3110` ist durch den geschirmten 4-Draht Automotive-USB-Backbone ersetzt.)
   5. **Radar 2.0 Sub-MCU & Halo Wings (PCBA 08):** Wheeltec 77 GHz MR20 Radar Target Tracking, TTC-Mathematik und Stromversorgung der 36x WS2812B Halo Wings ($5\,\text{V} / 1{,}8\,\text{A}$ max).
   6. **Universal Front Node DCDC & Hub (PCBA 05):** TPS54302 Synchrongleichrichter mit $92{,}4\,\%$ Wirkungsgrad ($9{,}6\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Öffnung, SAM-M10Q 10 Hz PVT & AssistNow A-GPS ($1{,}8\,\text{s}$ TTFF), TMP117 Kaltluftsensor ($\pm 0{,}1^\circ\text{C}$), OPT3001 Lux-Sensor.
   7. **Geschirmter 4-Draht-Automotive-Kabelbaum & JST-GH:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).
@@ -75,9 +75,12 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 ## 3. Hardware-in-the-Loop (HIL) Firmware-Simulator (`firmware_hil_system_sim.py`)
 
-Führt die reale C++-Firmware-Logik auf einer virtuellen Mehr-Platinen-Hardware aus und deckt 10 Lebenszyklus-Szenarien ab:
+> [!NOTE]
+> **Differenzierung zwischen Simulation und Hardware-Prüfung:** Das Python-Skript `firmware_hil_system_sim.py` führt einen softwarebasierten System- und Ablaufmodelltest der OMB v10.0 Architektur durch (Zustandsautomaten, Paketformate, Ereigniskaskaden und Latenzmodelle). Es ersetzt keine physischen Hardware-Prüfstandsmessungen auf den gefertigten Platinen oder Messungen der realen C++-Firmware an echten USB-Knoten.
 
-* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) ODER USB-PD Sink (5V-20V Werkbank-Modus) $\rightarrow$ TI LM5050 Ideal-Dioden-OR-ing Validierung $\rightarrow$ Staged Power-On Boot aller Controller $\rightarrow$ USB-Bus-Enumeration aller Knoten.
+Das Skript validiert die systemweiten logischen Abläufe über 10 Lebenszyklus-Szenarien:
+
+* **Szenario 1:** Zündung AN (KL15 = $12{,}60\,\text{V}$) ODER 5V USB-C Service-Modus (`J3`) $\rightarrow$ Validierung der `LM74700-Q1` / `LM66100` Dual-Power Entkopplung $\rightarrow$ Staged Power-On Boot aller Controller $\rightarrow$ USB-Bus-Enumeration aller Knoten.
 * **Szenario 2 (Satelliten-Pod USB Handshake & Profile):** USB-Enumeration des Pods $\rightarrow$ Erkennung des Profils (Sena SPIDER X Slim, Cardo Packtalk Pro, OMM UCS, PMR446) $\rightarrow$ USB-PD Ladeverhandlung (5V/9V/12V/20V bis 30W/60W).
 * **Szenario 3 (Front Sensor Hub & 10 Hz GNSS):** SAM-M10Q 10 Hz Multi-GNSS Fix mit AssistNow A-GPS Seed $\rightarrow$ 4-Draht USB-Bus Übertragung an ADR-EKF $\rightarrow$ TI TMP117 Kaltluftstrom-Messung löst bei $\le 3{,}5^\circ\text{C}$ akustische Glatteiswarnung im Helm aus.
 * **Szenario 4 (Spiegel-Pod 5-Gesten -> USB-Bus -> Pod Keying):** Daumentaster am Spiegel-Pod $\rightarrow$ 5-Gesten Entprellung ($< 10\,\mu\text{s}$) $\rightarrow$ USB-Bus Frame $\rightarrow$ Pod schaltet PTT via OptoMOS K1 in insgesamt **$< 0{,}20\,\text{ms}$** durch.

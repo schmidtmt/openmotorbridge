@@ -175,7 +175,7 @@ In OpenMotorBridge v10.0 entfällt das frühere System modularer Wechselkassette
 
 Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod 2 im rechten Seitenkoffer) auf ein **ultrakompaktes, direktes Monocoque-Gehäuse mit werkzeuglosem Slide-in Deckel, verdeckter FOB-Magnetverriegelung, schützendem Zwischendeckel (Dry-Flap) und integrierter Koffer-USB-Ladebuchse**:
 
-1. **Typ B (Universelles Monocoque-Pod-Gehäuse):** Ein zu 100 % bilaterales Monocoque-Gehäuse ($150{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$ Außenmaß mit $141{,}0 \times 61{,}0\,\text{mm}$ Wannenboden bzw. $143{,}0 \times 63{,}0 \times 32{,}0\,\text{mm}$ lichter Innenkammer oberhalb der Auflageleiste – **über 40 % mehr Nutzvolumen** als die früheren Kassetten), das dauerhaft im Seitenkoffer, am Heckrahmen oder an Sturzbügeln montiert wird.
+1. **Typ B (Universelles Monocoque-Pod-Gehäuse):** Ein zu 100 % bilaterales Monocoque-Gehäuse ($150{,}0 \times 70{,}0 \times 38{,}0\,\text{mm}$ Außenmaß mit $141{,}0 \times 61{,}0\,\text{mm}$ durchgehendem inneren Wannenboden und $93{,}5 \times 61{,}0\,\text{mm}$ freier Gerätekammer hinter der Elektronikbucht – **über 40 % mehr Nutzvolumen** als die früheren Kassetten), das dauerhaft im Seitenkoffer, am Heckrahmen oder an Sturzbügeln montiert wird.
 2. **L-förmiger Slot-in Schiebedeckel (`013_pod_slide_lid.scad`) mit nach unten greifenden PA12-Plastikkrallen & fester unterer Rückwand (`Z = 0..14 mm`):**
    * Der einteilige **L-förmige Schiebedeckel** ($146{,}5 \times 63{,}8\,\text{mm}$) kombiniert die horizontale Deckelplatte (geführt in den seitlichen C-Nuten bei $Z = 32{,}0\dots 35{,}2\,\text{mm}$ mit vorderem Keilanzug bei $X = 3{,}5\,\text{mm}$) monolithisch mit der oberen vertikalen **Deckelrückwand (`Heckwand`, $Z = 14{,}0\dots 38{,}0\,\text{mm}$ inkl. $3{,}5\,\text{mm}$ Tropfnase)**.
    * Die **untere Rückwand der Monocoque-Wanne (`015_pod_monocoque_tub.scad`) ist bis auf $Z = 14{,}0\,\text{mm}$ hochgezogen**, sodass der optionale **SMA-Antennendurchbruch ($Z = 7{,}5\,\text{mm}, Y = 35{,}0\,\text{mm}$)** dauerhaft fest in der Wanne verbleibt – eine montierte Außenantenne bewegt sich beim Aufschieben des Deckels keinen Millimeter!
@@ -188,7 +188,7 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
      * **Port B (USB-C Ladedose, unten bei $Z = 11{,}5\,\text{mm}$):** Tief eingelassene ($7{,}0\,\text{mm}$), formschlüssige USB-C Buchse (30W USB-PD), die über ein 4-adriges internes Silikonkabel mit dem Header `J_USB_OUT` auf `PCBA 03` verbunden ist.
      * Dies garantiert 100 % bilaterale Symmetrie (linke und rechte Koffer-Pods ergonomisch identisch) und fängt sämtliche mechanische Steck- und Zugkräfte direkt im PA12-Gehäuse ab – die Platine bleibt völlig zug- und schwingungsfrei.
    * **Zwischendeckel-Spritzschutzblende (`014_pod_dry_flap.scad`):** Eine auf dem umlaufenden Absatz ($Z = 14{,}0\,\text{mm}$) aufliegende Silikon-/TPU-Zwischenblende ($48{,}0 \times 56{,}0\,\text{mm}$) schirmt die Platine `PCBA 03` vollständig gegen Schmutz und Nässe ab.
-   * **Obere Zone / Gerätekammer ($143 \times 63\,\text{mm}$ gesamt bzw. $113 \times 61\,\text{mm}$ hinter der Elektronikbucht):** Bietet direkten Raum für Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS / OMM-446 oder Midland PMR446. Wird kein Intercom genutzt, fungiert das gesamte Fach als hermetische **Mini-Dry-Box** für Fahrzeugpapiere, Bargeld und Notfallschlüssel.
+   * **Obere Zone / Gerätekammer ($93{,}5 \times 61{,}0\,\text{mm}$ freie Bodenfläche ab $X = 52{,}0\,\text{mm}$ hinter der Elektronikbucht, lichter Gesamtausschnitt $141{,}0 \times 61{,}0\,\text{mm}$):** Bietet direkten Raum für Sena SPIDER X Slim, Cardo Packtalk Edge, OMM 2.4 GHz UCS / OMM-446 oder Midland PMR446. Wird kein Intercom genutzt, fungiert das gesamte Fach als hermetische **Mini-Dry-Box** für Fahrzeugpapiere, Bargeld und Notfallschlüssel.
 
 ---
 
@@ -200,7 +200,7 @@ Stattdessen setzen die beiden Satelliten-Pods (Pod 1 im linken Seitenkoffer, Pod
 
 ![OpenMotorBridge Satelliten-Pod Explosionsdarstellung CAD](../images/cad/pod_monocoque_assembly_exploded_3d.png)
 
-*Abbildung 8.7: 3D-CAD-Explosionsdarstellung des universellen Satelliten-Pods mit horizontaler Einschubkinematik: Der Slide-in Deckel wird nach hinten entlang der X-Achse aus dem hinteren Einschubschlitz herausgefahren. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, die zwei unabhängigen Quertraversen der modularen Aktuatorschiene mit bündig versenkten DIN 7991 Torx-Klemmschrauben, das Cardo Packtalk Edge im OEM Air-Mount Cradle sowie die hinteren EPDM-Dichtstopfen für die C-Führungsnuten.*
+*Abbildung 8.7: 3D-CAD-Teileübersicht (Explosionsdarstellung aller Komponenten) des universellen Satelliten-Pods: Die visuelle Spreizung in Z dient der eindeutigen Kennzeichnung aller inneren Funktionselemente. Im realen Einbauzustand verläuft die Kinematik rein horizontal: Der L-Slide-in Deckel wird nach hinten entlang der X-Achse in die C-Führungsnuten eingeschoben. Erkennbar sind die durchgehenden seitlichen Führungsfedern des Deckels, die tiefen C-Profil-Führungsnuten der Gehäusewände mit oberer Haltenase, die Monocoque-Wanne mit Rohrsattel, Port A Magnetkupplung und Port B USB-C Buchse, PCBA 03 Trägerplatine auf M2.5 Elastomer-Dämpfern, EPDM-Dry-Flap Schutzblende, die zwei unabhängigen Quertraversen der modularen Aktuatorschiene mit bündig versenkten DIN 7991 Torx-Klemmschrauben, das Cardo Packtalk Edge im OEM Air-Mount Cradle sowie die hinteren EPDM-Dichtstopfen für die C-Führungsnuten.*
 
 ### 4.2 Kinematik des L-Slide-in Deckels (L-Profil, metallfreier PA12 U-Bügel & 100 % innenliegender FOB-Diebstahlschutz)
 
@@ -395,7 +395,7 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
 
 ![Hermetische Mini-Dry-Box im Monocoque-Pod](../images/cad/pod_variant_drybox_cad.png)
 
-*Abbildung 8.17: Hermetische Mini-Dry-Box-Konfiguration des Monocoque-Satelliten-Pods. Der großzügige $145 \times 65\,\text{mm}$ Innenraum bietet separate Fächer für Notschlüssel, Dokumente und Kfz-Sicherungen, geschützt vor Witterung und unbefugtem Zugriff.*
+*Abbildung 8.17: Hermetische Mini-Dry-Box-Konfiguration des Monocoque-Satelliten-Pods. Der großzügige $141 \times 61\,\text{mm}$ Wannen-Innenraum ($93{,}5 \times 61\,\text{mm}$ freie Bodenfläche ab $X = 52\,\text{mm}$) bietet separate Fächer für Notschlüssel, Dokumente und Kfz-Sicherungen, geschützt vor Witterung und unbefugtem Zugriff.*
 
 ---
 
@@ -566,7 +566,7 @@ In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satelli
     - AUX 12V (Zusatzscheinwerfer)                    * USB 2.0 Host Pass-Through (J2)
     - NAV 12V (Garmin / Chigee AIO-5)                 * USB 2.0 Media Pass-Through (J5)
     - CAM 5V (Action-Cam entstört)                    * Integrierte thermische Louvers
-    - CKPT 1 & 2 (Spiegel-Pods / Disp)                * Kompakte Maße: 82 x 54 x 15 mm (5x USB-C)
+    - CKPT 1 & 2 (Spiegel-Pods / Disp)                * Kompakte Maße: 55 x 25 x 15 mm (Bauhülle 55 x 25 x 17 mm)
   * Externe Box ERSATZLOS ENTFALLEN!                  * Dovetail-Verbinder ENTFALLEN!
 ```
 
@@ -576,18 +576,18 @@ In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satelli
 
 2. **Aufgehen des Cockpit-Satelliten im 5-Port Handschuhfach-Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
    - Der vormalige Cockpit-Verteiler ist als spezialisierter, kompakter **5-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) für das rechte Handschuhfach (Media Compartment) moderner Touring-Bagger (Road Glide, Street Glide, CVO, CVO ST 2024+) aufgegangen.
-   - **Abmessungen:** Flache **$82{,}0 \times 54{,}0 \times 15{,}0\,\text{mm}$** (HP MJF PA12 für die Dual-Edge USB-C Platine `PCBA 05B` mit **5× USB-C Buchsen**), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
+   - **Abmessungen:** Flache **$55{,}0 \times 25{,}0 \times 15{,}0\,\text{mm}$** (Bauhülle inkl. Montageflanschen $55{,}0 \times 25{,}0 \times 17{,}0\,\text{mm}$, Platine $50{,}0 \times 20{,}0\,\text{mm}$, HP MJF PA12 für die Dual-Edge USB-C Platine `PCBA 05B` mit **5× USB-C Buchsen**), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
    - **Funktionale Schnittstellen (Nord- & Südkante):**
-     - **`J1` (`FRONT`, Nordkante):** Kombinierte Power- & USB 2.0 Zuleitung vom Front-Node (`PCBA 05`).
-     - **`J2` (`HOST`, Nordkante):** Verbindet sich mit dem werksseitigen Harley USB-C Medienkabel zur Head Unit (Skyline OS / Boom! Box GTS) inkl. digitaler Harley Headset-Emulation für Apple CarPlay.
-     - **`J3` (`PHONE`, Südkante):** Thermisch optimierter 30W USB-PD Schnellladeport (verhindert Akkuhitzestau im geschlossenen Fach).
-     - **`J4` (`DONGLE`, Südkante):** 10W geschalteter VBUS (`TPS2051B`) für drahtlose CarPlay/Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.
-     - **`J5` (`MEDIA`, Südkante):** High-Speed USB 2.0 Schnittstelle für USB-Sticks mit Musikdateien (FLAC/MP3) oder offizielle Harley-Software-Updates.
+     - **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Downstream-Zuleitung vom Universal Front-Node (`PCBA 05` `J7`).
+     - **`J1` (`HOST`, Nordkante, X = 27,18 mm):** Verbindet sich mit dem werksseitigen Harley USB-C Medienkabel zur Head Unit (Skyline OS / Boom! Box GTS) inkl. digitaler Harley Headset-Emulation für Apple CarPlay.
+     - **`J3` (`PHONE`, Südkante, X = 7,82 mm):** Thermisch optimierter 15W/30W USB-PD Schnellladeport (verhindert Akkuhitzestau im geschlossenen Fach).
+     - **`J4` (`DONGLE`, Südkante, X = 19,82 mm):** 10W geschalteter VBUS (`TPS2051B`) für drahtlose CarPlay/Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.
+     - **`J5` (`MEDIA`, Südkante, X = 31,82 mm):** High-Speed USB 2.0 Schnittstelle für USB-Sticks mit Musikdateien (FLAC/MP3) oder offizielle Harley-Software-Updates.
    - **Passive Konvektionskühlung:** Schräg angeordnete Entlüftungslamellen im Gehäusedeckel leiten die Abwärme zuverlässig nach oben ab.
 
 ![Handschuhfach Media & Power-Injection Hub CAD](../images/cad/glovebox_power_injection_hub_cad.png)
 
-*Abbildung 8.24: 5-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`, $82 \times 54 \times 15\,\text{mm}$) für das rechte Medienfach von Touring-Baggern mit 5x USB-C (`FRONT`, `HOST`, `PHONE` 30W PD, `DONGLE` 10W geschaltet, `MEDIA`) und passiven Konvektionsschlitzen.*
+*Abbildung 8.24: 5-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`, $55 \times 25 \times 15\,\text{mm}$, Bauhülle $55 \times 25 \times 17\,\text{mm}$) für das rechte Medienfach von Touring-Baggern mit 5x USB-C (Nord: `FRONT`, `HOST`; Süd: `PHONE` 15W/30W PD, `DONGLE` 10W geschaltet, `MEDIA`) und passiven Konvektionsschlitzen.*
 
 3. **Entfall der Schwalbenschwanz-Kupplung (Dovetail):**
    - Da kein Fahrzeug-Satellit mehr existiert und der Handschuhfach-Hub fest im Medienfach sitzt, entfällt der kombinierte Schwalbenschwanz-Schieber ersatzlos.
@@ -1649,7 +1649,7 @@ Die CAD-Dateistruktur von OpenMotorBridge (`hardware/cad/scad/` und `hardware/ca
 | **Zentralbox (`PCBA 01`)** | L-Schiebedeckel mit Keilanzug, Gore-Vent & Slam-to-Shut Heckwand (Rail 2) | [`01_main_box/020_slide_lid.stl`](../../hardware/cad/stl/01_main_box/020_slide_lid.stl) (`main_box_lid.stl`) | [`01_main_box/02_colsure.scad`](../../hardware/cad/scad/01_main_box/02_colsure.scad) (`parts/020_slide_lid.scad`) |
 | **Zentralbox (`PCBA 01`)** | Optionale Akku-Haltebrücke & Koax-Kabelführung | [`01_main_box/main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl) | [`01_main_box/parts/013_battery_antenna_bridge.scad`](../../hardware/cad/scad/01_main_box/parts/013_battery_antenna_bridge.scad) |
 | **Satelliten-Pod (`PCBA 03`)** | Monolithische Monocoque-Wanne (Typ B, $150 \times 70 \times 38\,\text{mm}$) mit C-Führungsnuten | [`02_pod_base/002_pod_housing_base.stl`](../../hardware/cad/stl/02_pod_base/002_pod_housing_base.stl) (`015_pod_monocoque_tub.stl`) | [`02_pod_base/parts/015_pod_monocoque_tub.scad`](../../hardware/cad/scad/02_pod_base/parts/015_pod_monocoque_tub.scad) |
-| **Satelliten-Pod (`PCBA 03`)** | Einschiebbarer TPU/PA12 Zwischendeckel / Dry-Flap Tray (Rail 1) | [`02_pod_base/011_pod_slide_tray.stl`](../../hardware/cad/stl/02_pod_base/011_pod_slide_tray.stl) (`pod_dry_flap.stl`) | [`02_pod_base/parts/014_pod_dry_flap.scad`](../../hardware/cad/scad/02_pod_base/parts/014_pod_dry_flap.scad) |
+| **Satelliten-Pod (`PCBA 03`)** | Eingelegter TPU/EPDM Zwischendeckel / Dry-Flap Spritzschutz ($48 \times 56\,\text{mm}$ auf Absatz $Z = 14{,}5\,\text{mm}$) | [`02_pod_base/014_pod_dry_flap.stl`](../../hardware/cad/stl/02_pod_base/014_pod_dry_flap.stl) (`pod_dry_flap.stl`) | [`02_pod_base/parts/014_pod_dry_flap.scad`](../../hardware/cad/scad/02_pod_base/parts/014_pod_dry_flap.scad) |
 | **Satelliten-Pod (`PCBA 03`)** | L-Schiebedeckel mit integriertem FOB-Magnetriegel & Slam-to-Shut Heckwand (Rail 2) | [`02_pod_base/021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl) (`013_pod_slide_lid.stl`) | [`02_pod_base/parts/013_pod_slide_lid.scad`](../../hardware/cad/scad/02_pod_base/parts/013_pod_slide_lid.scad) |
 | **Satelliten-Pod (`PCBA 03`)** | Universelle 2-fach Aktuator-Schlittenschiene (15–85 mm stufenlos für `JF-0530B`) | [`02_pod_base/012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl) | [`02_pod_base/parts/012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad) |
 | **Satelliten-Pod (`PCBA 03`)** | Geteilte Zero-Drill TPU-Kofferdichtung (Ø 19 mm OEM-Bohrung) | [`02_pod_base/010_saddlebag_hole_grommet_split.stl`](../../hardware/cad/stl/02_pod_base/010_saddlebag_hole_grommet_split.stl) | [`02_pod_base/parts/010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad) |

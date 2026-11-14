@@ -164,6 +164,7 @@ static void on_usb_ptt_event(const UsbPttEventPkt &pkt, UsbNodeType source) {
         set_system_led_state(LED_ACTIONCAM_MARKER_WHITE);
         action_cam_trigger_hilight_tag("HANDLEBAR_PTT");
         sdio_track_add_video_marker("actioncam_v10", 0);
+        sdio_track_lock_favorite("HANDLEBAR_BOOKMARK");
         vTaskDelay(pdMS_TO_TICKS(200));
         set_system_led_state(s_ignition_active ? LED_NORMAL_PULSE_GREEN : LED_UPS_BATTERY_YELLOW);
     } else if (pkt.button_id == USB_BTN_MEDIA_VOICE) {
@@ -226,6 +227,8 @@ void task_power_supervisor(void *pvParameters) {
                 set_system_led_state(LED_UPS_BATTERY_YELLOW);
                 group_split_persist_to_nvs();
                 sdio_track_finalize();
+                // Trigger WebDAV sync sequence: in post-ride garage rundown, activate uplink and sync
+                webdav_set_uplink_status(true);
                 webdav_trigger_sync_sequence();
                 find_my_set_dual_beacon(true);
                 power_sequencer_trigger_shutdown();
@@ -239,6 +242,9 @@ void task_power_supervisor(void *pvParameters) {
         // Update Central BLE Action-Cam Manager (Auto-Record > 10 km/h, Fuel-Stop Filter, Auto Event-Tagging)
         RadarOverview_t rad_ov = uwb_radar_get_overview();
         action_cam_update_tick(s_last_speed_kmh, s_ignition_active, rad_ov.urgent_alert_active, false);
+        if (rad_ov.urgent_alert_active) {
+            sdio_track_lock_incident("RADAR_COLLISION_ALERT");
+        }
 
         // Tier-2 Park Sentry Deep Sleep Transition after 15-min Rundown
         if (!s_ignition_active && !power_sequencer_get_diagnostics().benchtop_usb_only_mode) {

@@ -35,7 +35,7 @@ module rear_u_yoke_magnetic_lock_detail(unlocked = false, cutaway = true) {
                     translate([-24.0, -35.0, 0])
                         cube([27.5, 3.5, 38.0], center=false);
                     translate([-25.0, -33.5, 32.0])
-                        cube([30.0, 2.5, 3.4], center=false);
+                        cube([30.0, 2.5, 3.6], center=false);
                 }
             }
 

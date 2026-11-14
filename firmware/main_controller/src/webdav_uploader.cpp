@@ -11,7 +11,7 @@
 static const char *TAG = "WEBDAV_SYNC";
 
 #define TRACKS_LOCAL_DIR    "/sdcard/tracks"
-#define WEBDAV_CHUNK_SIZE   1024
+#define WEBDAV_CHUNK_SIZE   2048
 
 static WebDAVConfig_t s_config = {
     .server_url = "https://cloud.local/remote.php/dav/files/user/omb_tracks/",
@@ -108,11 +108,22 @@ static esp_err_t webdav_upload_single_file(const char *local_path, const char *f
     uint8_t chunk[WEBDAV_CHUNK_SIZE];
     size_t read_bytes = 0;
     while ((read_bytes = fread(chunk, 1, sizeof(chunk), fp)) > 0) {
-        int written = esp_http_client_write(client, (const char *)chunk, (int)read_bytes);
-        if (written < 0) {
-            err = ESP_FAIL;
+        size_t total_written = 0;
+        while (total_written < read_bytes) {
+            int written = esp_http_client_write(client, (const char *)(chunk + total_written), (int)(read_bytes - total_written));
+            if (written <= 0) {
+                err = ESP_FAIL;
+                break;
+            }
+            total_written += (size_t)written;
+        }
+        if (err != ESP_OK) {
             break;
         }
+    }
+    if (ferror(fp)) {
+        ESP_LOGE(TAG, "File read error on %s", local_path);
+        err = ESP_FAIL;
     }
     fclose(fp);
 

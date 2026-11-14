@@ -24,6 +24,7 @@ static FILE *s_current_gpx_file = NULL;
 static char s_current_filepath[128] = {0};
 static bool s_is_mounted = false;
 static bool s_current_locked = false;
+static bool s_current_favorite = false;
 static uint32_t s_trackpoint_counter = 0;
 static sdmmc_card_t *s_card = NULL;
 static mbedtls_sha256_context s_sha_ctx;
@@ -92,6 +93,7 @@ esp_err_t sdio_track_start_new(void) {
     }
 
     s_current_locked = false;
+    s_current_favorite = false;
     s_trackpoint_counter = 0;
     mbedtls_sha256_init(&s_sha_ctx);
     mbedtls_sha256_starts(&s_sha_ctx, 0);
@@ -160,6 +162,21 @@ esp_err_t sdio_track_lock_incident(const char *reason) {
     return ESP_OK;
 }
 
+esp_err_t sdio_track_lock_favorite(const char *tag) {
+    if (!s_current_gpx_file) return ESP_ERR_INVALID_STATE;
+    s_current_favorite = true;
+    char buf[256];
+    snprintf(buf, sizeof(buf),
+             "      <extensions>\n"
+             "        <omb:favorite_tag name=\"%s\" timestamp_ms=\"%lu\"/>\n"
+             "      </extensions>\n",
+             tag ? tag : "USER_BOOKMARK", (unsigned long)esp_log_timestamp());
+    write_and_hash(buf);
+    fflush(s_current_gpx_file);
+    ESP_LOGI(TAG, "Current track tagged as protected favorite (%s)", tag ? tag : "USER_BOOKMARK");
+    return ESP_OK;
+}
+
 esp_err_t sdio_track_finalize(void) {
     if (!s_current_gpx_file) return ESP_OK;
 
@@ -205,13 +222,19 @@ esp_err_t sdio_track_finalize(void) {
     fclose(s_current_gpx_file);
     s_current_gpx_file = NULL;
 
-    // If locked by incident/crash trigger, rename to .crash.gpx so ring-buffer purge never deletes it
+    // If locked by incident/crash trigger, rename to .crash.gpx; if favorite, rename to .fav.gpx
     if (s_current_locked && strlen(s_current_filepath) > 4) {
         char locked_path[140];
         snprintf(locked_path, sizeof(locked_path), "%.*s.crash.gpx",
                  (int)(strlen(s_current_filepath) - 4), s_current_filepath);
         rename(s_current_filepath, locked_path);
-        ESP_LOGW(TAG, "Renamed incident segment to write-protected file: %s", locked_path);
+        ESP_LOGW(TAG, "Renamed incident segment to write-protected crash log: %s", locked_path);
+    } else if (s_current_favorite && strlen(s_current_filepath) > 4) {
+        char fav_path[140];
+        snprintf(fav_path, sizeof(fav_path), "%.*s.fav.gpx",
+                 (int)(strlen(s_current_filepath) - 4), s_current_filepath);
+        rename(s_current_filepath, fav_path);
+        ESP_LOGI(TAG, "Renamed favorite segment to write-protected bookmark: %s", fav_path);
     }
 
     return ESP_OK;

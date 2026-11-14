@@ -31,19 +31,19 @@ $fn = 32;
 
 // Lid Mechanical Dimensions
 LID_L       = 146.5; // Fits from front groove (X = 3.5 mm) flush to rear wall (X = 150.0 mm)
-LID_W       = 63.8;  // Fits into side grooves along Y (centered at Y = 3.1..66.9 mm)
-LID_PLATE_H = 3.2;   // Main rigid top plate thickness (mm)
-TONGUE_W    = 1.6;   // Lateral guide tongue protrusion on each flank (mm)
-TONGUE_H    = 2.4;   // Tongue thickness sliding in groove (mm)
+LID_W       = 60.5;  // Main plate width (mm), clears 61.0 mm tub chamber opening (Y = 4.5..65.5 mm) with 0.25 mm play
+LID_PLATE_H = 2.8;   // Main rigid top plate thickness (mm), leaves 0.5 mm vertical clearance to 35.6 mm groove roof
+TONGUE_W    = 2.2;   // Lateral guide tongue protrusion on each flank (mm, engages Y = 2.55 and 67.45 mm into C-grooves)
+TONGUE_H    = 2.4;   // Tongue thickness sliding in 3.6 mm groove (mm, 0.6 mm total vertical clearance)
 
 // Upper Heckwand (Vertical Leg of L) Dimensions
 HECK_WALL_TH = 3.8;  // Rear wall thickness closing upper portal (X = 146.2..150.0 mm)
-HECK_DROP_H  = 18.4; // Distance from lid underside (Z = 32.4) down to fixed rear wall sill (Z = 14.0 mm)
+HECK_DROP_H  = 18.3; // Distance from lid underside (Z = 32.3) down to fixed rear wall sill (Z = 14.0 mm)
 DRIP_APRON_H = 3.5;  // Overlapping drip skirt extending over lower sill down to Z = 10.5 mm
-TOTAL_HECK_H = HECK_DROP_H + LID_PLATE_H + 2.4; // 24.0 mm total rear wall height (Z = 14.0..38.0 mm)
+TOTAL_HECK_H = HECK_DROP_H + LID_PLATE_H + 2.0; // 23.1 mm total rear wall height (Z = 14.0..37.1 mm)
 
 // Non-Metallic PA12 U-Yoke Claw Latch ("Plastikkrallen") Dimensions
-U_SPAN_W     = 52.0; // Total width of U-bracket (claws at Y_tub = 9.0..14.0 & 56.0..61.0 mm)
+U_SPAN_W     = 50.0; // Total width of U-bracket (claws at Y_tub = 10.0..15.0 & 55.0..60.0 mm)
 U_LEG_W      = 5.0;  // Width of each downward-gripping plastic claw (mm)
 U_BRIDGE_H   = 5.0;  // Height of horizontal cross-bridge (mm)
 U_THICK      = 1.8;  // Thickness of PA12 bracket (mm)

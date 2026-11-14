@@ -39,6 +39,11 @@ esp_err_t sdio_track_finalize(void);
 esp_err_t sdio_track_lock_incident(const char *reason);
 
 /**
+ * @brief Markiert das aktuelle Segment als geschützten Favoriten (.fav.gpx, z.B. per Lenkertaste)
+ */
+esp_err_t sdio_track_lock_favorite(const char *tag);
+
+/**
  * @brief BGH-Konformer Purge-Manager: Löscht älteste ungeschützte GPX-Dateien bei < 200 MB
  */
 esp_err_t sdio_purge_old_tracks_if_needed(void);

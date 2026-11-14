@@ -144,11 +144,12 @@ module pod_monocoque_full_assembly() {
         );
     }
 
-    // 8. Tool-Free L-Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.4 mm)
-    // Centered at Y = (POD_OUTER_W - 63.8)/2 = 3.1 mm, X = 3.5 mm (rear face flush at X = 150.0 mm)
+    // 8. Tool-Free L-Slide-In Lid (Sliding horizontally inside sidewall C-grooves at Z = 32.3 mm)
+    // Centered at Y = (POD_OUTER_W - 60.5)/2 = 4.75 mm, X = 3.5 mm (rear face flush at X = 150.0 mm)
+    // Plate width 60.5 mm glides inside 61.0 mm chamber with 0.25 mm clearance on both sides
     lid_x_pos = 3.5;
-    lid_y_pos = (POD_OUTER_W - 63.8) / 2.0; // 3.1 mm (centered)
-    lid_z_pos = 32.4;
+    lid_y_pos = (POD_OUTER_W - 60.5) / 2.0; // 4.75 mm (centered)
+    lid_z_pos = 32.3;
 
     if (VIEW_MODE == "cutaway") {
         translate([lid_x_pos + SLIDE_LID_X, lid_y_pos, lid_z_pos + EXP_LID_Z]) {

@@ -108,9 +108,13 @@ enum UsbBackbonePktType : uint8_t {
 * **Gesamtlatenz:** **$pprox 0{,}12\,	ext{ms}$** (Mehr als 80-fach schneller als die menschliche Wahrnehmungsschwelle von $10\,	ext{ms}$).
 
 ### 2.2 Dual-Power Input Management & Werkbank-Testing
-- **TI LM5050-Q1 Ideal-Diode OR-ing:** Entkoppelt das 12V Bordnetz (Deutsch DTM-6) und den USB-PD Sink Eingang (5V–20V über den nativen USB-C Port) verlustfrei ohne thermischen Spannungsabfall klassischer Schottky-Dioden.
-- **Nahtlose Umschaltung:** Wird das Motorrad bei gestecktem USB-C Ladekabel gestartet, übernimmt die 12V-Schiene unterbrechungsfrei die Last.
-- **Zero-Disassembly Benchtop Flashing:** Auf der Werkbank kann das gesamte System mit jedem handelsüblichen USB-C PD Handy- oder Laptop-Netzteil betrieben, geflasht und kalibriert werden – ein schweres 12V-Labornetzgerät ist nicht erforderlich!
+- **Aktiver Verpol- & Rückstromschutz (Zero Back-Feed):**
+  - **12V-Bordnetzpfad (`J1` Deutsch DTM-6):** Ein **TI `LM74700-Q1`** (`U1`) Ideal-Dioden-Controller mit externem N-Kanal-Power-MOSFET (`Q1`) schützt die Zentralbox verlustfrei vor Verpolung und transienten Spannungsspitzen.
+  - **5V-Service- & Diagnosepfad (`J3` USB-C):** Eine **TI `LM66100`** (`D3`) Ideal-Diode entkoppelt die 5V-USB-Versorgung vollständig vom 12V-Pfad und verhindert jegliche Rückspeisung in das angeschlossene Programmiergerät oder den Werkstatt-Laptop.
+- **Nahtlose Umschaltung via TI `TPS2115A` (`U5`):** Der automatische Power-Mux schaltet prioritär auf die aus dem 12V-Bordnetz über `LM2596S-5.0` (`U7`) erzeugte 5V-Systemschiene um, sobald die Zündung anliegt.
+- **Zwei klare Betriebsarten:**
+  - **1. Fahrzeugbetrieb (12V an `J1`):** Voller Leistungsumfang. Alle vier `TPS25921` eFuse-Zweige (Front-Node 60W USB-PD via `SW3526`, Koffer-Pods 30W USB-PD via `SW3516H`, Heckradar, 12V-Hubmagnete) sowie USV-Lader `BQ24075` und Logik werden aktiv versorgt.
+  - **2. Werkbank- & Laborbetrieb (5V über `J3` USB-C):** Versorgt direkt die 5V- und 3.3V-Logik der Zentralbox (`ESP32-S31`, `USB2517I` 7-Port Hub, DSP, LoRa) sowie die Logik aller über den 4-Draht USB-Backbone angeschlossenen Satelliten (`PCBA 03`, `PCBA 05`, `PCBA 08`). Ermöglicht vollständiges Flashen aller Knoten via **Zero-Disassembly Bus-DFU**, Sensor-Kalibrierung und Systemdiagnose am Schreibtisch mit jedem handelsüblichen 5V USB-Netzteil oder PC-Port, ohne ein 12V-Labornetzteil anschließen zu müssen (12V-Aktuatormagnete und Hochleistungs-Ladeausgänge bleiben dabei sicher stromlos).
 
 ---
 
@@ -207,7 +211,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über die beiden Hauptkontrol
 | **`gesture_engine_task`**| Front Node (Core 0)| **24** | 2 KB | GPIO Edge ISR       | USB TX Queue          | Verarbeitet Mirror-Pod Taster Links/Rechts, generiert 5 Gesten (< 0.15 ms). |
 | **`radar_task`**      | Central Box (Core 0) | **16** | 4 KB | CAN / UART DMA ISR  | FreeRTOS Queue        | 20 Hz Radar-Zielvektoren von Wheeltec MR20; TTC-Berechnung & Prio-1 Ducking. |
 | **`adr_ekf_task`**    | Central Box (Core 0) | **15** | 4 KB | 50 Hz Timer         | I2C / CAN-Puffer      | 15-State Kalman-Filter (SAM-M10Q GNSS + BMI270 IMU + CAN Speed). |
-| **`power_mgmt_task`** | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO / I2C Power      | Automotive eFuses, Dual-Power LM5050 Monitoring, gestaffelter Start. |
+| **`power_mgmt_task`** | Central Box (Core 0) | **14** | 2 KB | Boot-Event / Timer  | GPIO / I2C Power      | Automotive eFuses, Dual-Power LM74700-Q1 / LM66100 Monitoring, gestaffelter Start. |
 | **`ble_server_task`** | Central Box (Core 0) | **10** | 4 KB | Event-Driven        | NimBLE Stack          | Web-Bluetooth PWA Dashboard (GATT Services `0x180D`/`0x180A`/`0xFFE0`). |
 | **`sdio_log_task`**   | Central Box (Core 0) | **8**  | 8 KB | 10 Hz Ringpuffer    | FreeRTOS RingBuffer   | 4-Bit SDIO Blackbox-Logging mit ECDSA SHA-256 Signatur. |
 | **`webdav_sync_task`**| Central Box (Core 0) | **3**  | 8 KB | Nachlauf (Graceful) | LwIP TLS 1.3          | Automatischer GPX-Upload im Heim-WLAN bei Zündung AUS. |

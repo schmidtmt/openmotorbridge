@@ -527,18 +527,18 @@ In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks
 
 2. **Evolution of the Cockpit Satellite into the 5-Port Glovebox Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
    - The former cockpit distributor has evolved into the specialized, compact **5-Port Glovebox USB-C Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)), tailored for the right glovebox (Media Compartment) of modern touring baggers (Road Glide, Street Glide, CVO, CVO ST 2024+).
-   - **Outer Dimensions:** Compact $82.0 \times 54.0 \times 15.0\,\text{mm}$ enclosure (HP MJF PA12 housing the $50.0 \times 20.0\,\text{mm}$ opposing dual-edge USB-C `PCBA 05B` with **5x USB-C sockets `J1..J5`**), secured tool-free via an integrated 3M Dual-Lock channel on the compartment floor.
+   - **Outer Dimensions:** Compact $55.0 \times 25.0 \times 15.0\,\text{mm}$ enclosure (outer envelope $55.0 \times 25.0 \times 17.0\,\text{mm}$ with mounting flanges, HP MJF PA12 housing the $50.0 \times 20.0\,\text{mm}$ opposing dual-edge USB-C `PCBA 05B` with **5x USB-C sockets `J1..J5`**), secured tool-free via an integrated 3M Dual-Lock channel on the compartment floor.
    - **Functional Interfaces (`J1..J5`):**
-     - **`J1` (Upstream In):** Combined power & High-Speed USB 2.0 feed from the Front Node (`PCBA 05`).
-     - **`J2` (Headunit Out & Harley Headset Emulation):** Plugs into the OEM Harley USB-C socket connected to the head unit (Skyline OS / Boom! Box GTS) and emulates the OEM headset via USB for native Apple CarPlay activation without hardware bypass plugs.
-     - **`J3` (CarPlay/AA Dongle):** 10W switched VBUS for wireless CarPlay/Android Auto adapters (Ottocast / CarlinKit) with remote cold-restart from WebUI.
-     - **`J4` (Smartphone Fast Charge):** Thermally managed 15W/30W USB-PD fast charging (prevents battery heat buildup in the closed glovebox).
-     - **`J5` (Media / Service Pass-Through):** High-Speed USB 2.0 USB-C port for USB memory drives (FLAC/MP3 music) or official Harley software updates.
+     - **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Downstream power & High-Speed USB 2.0 feed from Universal Front Node (`PCBA 05` `J7`).
+     - **`J1` (`HOST`, North Edge, X = 27.18 mm):** Uplink connecting to the OEM Harley USB-C lead to the head unit (Skyline OS / Boom! Box GTS) with digital Harley headset emulation for native Apple CarPlay.
+     - **`J3` (`PHONE`, South Edge, X = 7.82 mm):** Thermally managed 15W/30W USB-PD fast charging (prevents battery heat buildup in the closed glovebox).
+     - **`J4` (`DONGLE`, South Edge, X = 19.82 mm):** 10W switched VBUS (`TPS2051B`) for wireless CarPlay/Android Auto adapters (Ottocast / CarlinKit) with remote cold-restart from WebUI.
+     - **`J5` (`MEDIA`, South Edge, X = 31.82 mm):** High-Speed USB 2.0 pass-through port for USB memory drives (FLAC/MP3 music) or official Harley software updates.
    - **Passive Convection Louvers:** Angled ventilation slots in the top lid channel heat upwards and away from phones.
 
 ![Glovebox Media & Power-Injection Hub CAD](../images/cad/glovebox_power_injection_hub_cad.png)
 
-*Figure 8.24: 5-Port Glovebox USB-C Media & Power-Injection Hub (PCBA 05B, glovebox_power_injection_hub.scad, 82 x 54 x 15 mm) for the right media compartment of touring baggers with 5x USB-C ports (`J1..J5`), switched dongle port, USB 2.0 media pass-through, and passive convection cooling slots.*
+*Figure 8.24: 5-Port Glovebox USB-C Media & Power-Injection Hub (PCBA 05B, glovebox_power_injection_hub.scad, 55 x 25 x 15 mm, outer envelope 55 x 25 x 17 mm) for the right media compartment of touring baggers with 5x USB-C ports (North: `J2 FRONT`, `J1 HOST`; South: `J3 PHONE` 15W/30W PD, `J4 DONGLE` 10W switched, `J5 MEDIA`) and passive convection cooling slots.*
 
 3. **Elimination of the Dovetail Interlocking Slide:**
    - With the Vehicle Satellite eliminated and the Glovebox Hub dedicated to the media compartment, the combined dovetail slider is no longer required.
@@ -672,7 +672,7 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 * **Split TPU Grommet & C-Slotted Tunnel Spacer Ring:** The two-piece EPDM/TPU grommet ([`010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad)) seals water-tight (IP67) around cable and M8 steel sleeve. Beneath the OEM $\varnothing 25\,\text{mm}$ washer, a C-slotted 4 mm PA12-CF/Alu spacer ring transfers 100% of the bolt's axial clamping force directly into the sleeve while the cable exits uncompressed through the tunnel and the OEM lever knob retains full 360° rotation.
 * **Hands-Free Saddlebag Removal (Magnetic Breakaway):** Detaching the bags simply requires loosening the two OEM lever knobs and lifting the bag. The external HytePro magnetic pogo coupling (`cots_pogo_magnetic_2pin`, IP68) separates cleanly at $10\dots 15\,\text{N}$ axial pull. No internal connectors are touched!
 * **Slide-in Lid & FOB Magnetic Latch:** Both pods mount preferably to the saddlebag lids. The slide-in lid provides a positive mechanical seal and releases instantly upon proximity of the OMB Smart Keyfob.
-* **Intermediate Dry-Flap Guard:** An internal spring-loaded flap protects internal electronics and intercom cradles even if the saddlebag lid is opened during torrential downpours.
+* **Intermediate Dry-Flap Guard:** A seated TPU intermediate splash shield ([`014_pod_dry_flap.scad`](../../hardware/cad/scad/02_pod_base/parts/014_pod_dry_flap.scad)) protects internal electronics and intercom cradles even if the saddlebag lid is opened during torrential downpours.
 * **Integrated In-Bag USB Charging Port:** Each pod provides a ruggedized USB-C charging port (5V/12V PD up to 30W) inside the bag, allowing action cams, smartphones, or helmet dryers to charge on the move.
 * **Maximum RF Isolation ($> 40\,\text{dB}$):** Sena (left) and Cardo (right) are separated by over $60\,\text{cm}$, using rear fender and chassis as an RF shield.
 
@@ -1333,11 +1333,11 @@ The **5-Port Glove Box USB-C Media & Power-Injection Hub** ([`glovebox_power_inj
  |                                                                         |
  |  +-------------------------------------------------------------------+  |
  |  | 5-PORT COMPARTMENT USB-C HUB (glovebox_power_injection_hub.scad)  |  |
- |  | * J1 (USB-C Upstream In): Feed from Front Node PCBA 05            |  |
- |  | * J2 (USB-C Headunit Out): Uplink to OEM Head Unit (Boom! GTS)    |  |
- |  | * J3 (USB-C Switched 10W): Wireless CarPlay / AA Dongle in pocket |  |
- |  | * J4 (USB-C 15W Fast-Charge): Smartphone charging in pocket       |  |
- |  | * J5 (USB-C Media/Service): USB media stick / diagnostics         |  |
+ |  | * J2 (FRONT, North): Downstream feed from Front Node PCBA 05 J7   |  |
+ |  | * J1 (HOST, North): Uplink to OEM Head Unit (Skyline / Boom! GTS) |  |
+ |  | * J3 (PHONE, South): 15W/30W Fast-Charge smartphone in pocket     |  |
+ |  | * J4 (DONGLE, South): 10W switched VBUS for Wireless CP/AA Dongle |  |
+ |  | * J5 (MEDIA, South): High-Speed USB 2.0 media stick / diagnostics |  |
  |  +-----------------------------------+-------------------------------+  |
  |                                      ^                                  |
  |                                      | Factory Bottom Rubber Grommet    |
@@ -1384,7 +1384,7 @@ The OpenMotorBridge CAD repository (`hardware/cad/scad/` and `hardware/cad/stl/`
 | **Central Box (`PCBA 01`)** | L-Slide Lid with wedge lock, Gore vent & Slam-to-Shut rear wall (Rail 2) | [`01_main_box/020_slide_lid.stl`](../../hardware/cad/stl/01_main_box/020_slide_lid.stl) (`main_box_lid.stl`) | [`01_main_box/02_colsure.scad`](../../hardware/cad/scad/01_main_box/02_colsure.scad) (`parts/020_slide_lid.scad`) |
 | **Central Box (`PCBA 01`)** | Optional Battery Retention Bridge & Coax Routing Guide | [`01_main_box/main_box_battery_bridge.stl`](../../hardware/cad/stl/01_main_box/main_box_battery_bridge.stl) | [`01_main_box/parts/013_battery_antenna_bridge.scad`](../../hardware/cad/scad/01_main_box/parts/013_battery_antenna_bridge.scad) |
 | **Satellite Pod (`PCBA 03`)** | Monolithic Monocoque Tub (Type B, $150 \times 70 \times 38\,\text{mm}$) with C-groove rails (`Rail 1` & `Rail 2`) and fixed $14\,\text{mm}$ rear wall with optional SMA knockout | [`02_pod_base/002_pod_housing_base.stl`](../../hardware/cad/stl/02_pod_base/002_pod_housing_base.stl) (`015_pod_monocoque_tub.stl`) | [`02_pod_base/parts/015_pod_monocoque_tub.scad`](../../hardware/cad/scad/02_pod_base/parts/015_pod_monocoque_tub.scad) |
-| **Satellite Pod (`PCBA 03`)** | Seated TPU/PA12 Intermediate Dry-Flap Splash Shield ($48 \times 56\,\text{mm}$ on $Z = 14.5\,\text{mm}$ step) | [`02_pod_base/011_pod_slide_tray.stl`](../../hardware/cad/stl/02_pod_base/011_pod_slide_tray.stl) (`pod_dry_flap.stl`) | [`02_pod_base/parts/014_pod_dry_flap.scad`](../../hardware/cad/scad/02_pod_base/parts/014_pod_dry_flap.scad) |
+| **Satellite Pod (`PCBA 03`)** | Seated TPU/PA12 Intermediate Dry-Flap Splash Shield ($48 \times 56\,\text{mm}$ on $Z = 14.5\,\text{mm}$ step) | [`02_pod_base/014_pod_dry_flap.stl`](../../hardware/cad/stl/02_pod_base/014_pod_dry_flap.stl) (`pod_dry_flap.stl`) | [`02_pod_base/parts/014_pod_dry_flap.scad`](../../hardware/cad/scad/02_pod_base/parts/014_pod_dry_flap.scad) |
 | **Satellite Pod (`PCBA 03`)** | L-Slide-In Lid with integrated FOB magnetic latch, downward-gripping PA12 plastic claws ("Plastikkrallen") & Slam-to-Shut rear wall (`Rail 2`) | [`02_pod_base/021_pod_slide_lid.stl`](../../hardware/cad/stl/02_pod_base/021_pod_slide_lid.stl) (`013_pod_slide_lid.stl`) | [`02_pod_base/parts/013_pod_slide_lid.scad`](../../hardware/cad/scad/02_pod_base/parts/013_pod_slide_lid.scad) |
 | **Satellite Pod (`PCBA 03`)** | Universal Dual-Carriage Actuator Slide Bracket (wall-guided in `Rail 1` at $Z = 21.5\dots 24.5\,\text{mm}$, 15–85 mm span for `JF-0530B`) | [`02_pod_base/012_universal_actuator_slide_bracket.stl`](../../hardware/cad/stl/02_pod_base/012_universal_actuator_slide_bracket.stl) | [`02_pod_base/parts/012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad) |
 | **Satellite Pod (`PCBA 03`)** | Split Zero-Drill TPU Saddlebag Grommet (Ø 19 mm OEM bore) | [`02_pod_base/010_saddlebag_hole_grommet_split.stl`](../../hardware/cad/stl/02_pod_base/010_saddlebag_hole_grommet_split.stl) | [`02_pod_base/parts/010_saddlebag_hole_grommet_split.scad`](../../hardware/cad/scad/02_pod_base/parts/010_saddlebag_hole_grommet_split.scad) |
