@@ -10840,6 +10840,14 @@
 		(net "TCXO_OUT")
 		(uuid "fadf9efe-48c9-4c77-ac17-65cdc28e4a05")
 	)
+	(segment
+		(start 115.2625 72.7625)
+		(end 114.5125 73.5)
+		(width 0.25)
+		(layer "B.Cu")
+		(net "GND")
+		(uuid "4a79850d-284a-4964-b5b1-4dd861e9711c")
+	)
 	(zone
 		(net "GND")
 		(layer "F.Cu")
