@@ -495,7 +495,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_E22_EN"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "fd79d056-acd7-4a0c-ae9f-f06139e9c250")
@@ -1246,7 +1246,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "af6680a6-381b-4ac3-84ca-b127a8913820")
@@ -3000,7 +3000,7 @@
 				)
 			)
 		)
-		(property "Value" "13.7k"
+		(property "Value" "13.7k_FB2"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "8b1663b7-07cb-4106-93d5-f3894dea1dfd")
@@ -4003,7 +4003,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "ba574177-0766-4a6a-bedf-06174651a100")
@@ -4828,7 +4828,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "2679dabf-6670-4079-a150-4be64103da1f")
@@ -6307,7 +6307,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF_LED"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "5f622da3-6065-4a06-a115-de3164e29b7b")
@@ -6375,7 +6375,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "da847110-7173-4815-bd09-c03497291a2a")
@@ -6443,7 +6443,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF_BOOT"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "76b1b9d5-baec-40c0-a460-1e1197c4fb8d")
@@ -6927,7 +6927,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "210751b2-93d1-4ec1-827e-1c1175d09b9b")
@@ -10533,7 +10533,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "4.7k_I2C"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "327dc79a-854a-4e00-b12f-ebd086527c1e")
@@ -11360,7 +11360,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "4.7k_I2C"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "278a3047-b889-493d-a2a5-0d27c23c2dd4")
@@ -11618,7 +11618,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "100k_FB1"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "d8b68ab9-2712-4b2f-bf14-ff68dca1f0d7")
@@ -11833,7 +11833,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_BOOT"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "b558b4d9-80d9-4625-bbb1-9d627dc6ad52")
@@ -12826,7 +12826,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "2cebf712-800a-48be-987a-3e430d266445")
@@ -13084,7 +13084,7 @@
 				)
 			)
 		)
-		(property "Value" "1uF"
+		(property "Value" "1uF_EN"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "c9f434ea-d356-4985-8595-4bd518dc0461")
@@ -13152,7 +13152,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF"
+		(property "Value" "100nF_MIC"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "111dc0a9-693c-4582-9f91-9c14e661530c")
@@ -13514,7 +13514,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_PULLUP"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "c3d99643-3d16-487a-81dd-656474f274bc")
@@ -13729,7 +13729,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_HUB_RST"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "bfdd8b06-c718-499b-bef2-046d75b366ef")
@@ -13797,7 +13797,7 @@
 				)
 			)
 		)
-		(property "Value" "1uF"
+		(property "Value" "1uF_1V8"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "18ec42ab-a8b4-457a-8f40-8c89d70a5766")
@@ -14925,7 +14925,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "10k_EN"
 			(at 0.25 1.43 0)
 			(layer "F.Fab")
 			(uuid "c235de49-49bb-4bf4-8207-0e914f9bf2e3")

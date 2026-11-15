@@ -15,7 +15,7 @@ BOARDS = [
     "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
     "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
     "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
-    "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
+    "hardware/archive/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
     "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",
     "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb",
     "hardware/kicad_omm_intercom/openmotorbridge_omm_intercom.kicad_pcb",

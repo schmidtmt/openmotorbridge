@@ -15,7 +15,7 @@ Generate Complete, Routing-Ready KiCad PCB for PCBA 06: MagSafe Frame Dock Adapt
 import os
 import subprocess
 
-pcb_file = "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"
+pcb_file = "hardware/archive/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"
 kicad10_3d_dir = "${KICAD10_3DMODEL_DIR}"
 
 nets = [

@@ -110,8 +110,8 @@ BOARDS = [
     {
         "id": "pcba06",
         "name": "06_magsafe_dock",
-        "pcb": os.path.join(BASE_DIR, "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"),
-        "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_magsafe_dock"),
+        "pcb": os.path.join(BASE_DIR, "hardware/archive/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb"),
+        "dest_dir": os.path.join(BASE_DIR, "hardware/archive/kicad_magsafe_dock"),
         "outputs": [
             ("pcba06_magsafe_dock_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.15"]),
             ("pcba06_magsafe_dock_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.05"]),

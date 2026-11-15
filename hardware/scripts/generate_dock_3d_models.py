@@ -249,7 +249,7 @@ def generate_magsafe_model():
     return wrl_content
 
 if __name__ == '__main__':
-    target_dir = 'hardware/kicad_magsafe_dock'
+    target_dir = 'hardware/archive/kicad_magsafe_dock'
     os.makedirs(target_dir, exist_ok=True)
     m8_path = os.path.join(target_dir, 'm8_6pin_horizontal_receptacle.wrl')
     magsafe_path = os.path.join(target_dir, 'magsafe_6pin_dock_connector.wrl')

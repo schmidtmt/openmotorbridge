@@ -25,7 +25,7 @@ BOARDS = {
     "Main Board (Central Control Box PCBA 01)": "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
     "Pod Cartridge (Universal Intercom Sled PCBA 03)": "hardware/kicad_pod_cartridge/openmotorbridge_pod_cartridge.kicad_pcb",
     "Front Node (Universal Cockpit Hub PCBA 05)": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
-    "MagSafe Frame Dock (PCBA 06 Adapter)": "hardware/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
+    "MagSafe Frame Dock (PCBA 06 Adapter - Legacy Archive)": "hardware/archive/kicad_magsafe_dock/openmotorbridge_magsafe_dock.kicad_pcb",
     "Smart-Keyfob & Pager (PCBA 07)": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",
     "Radar 2.0 Sub-MCU & Halo (PCBA 08)": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb"
 }
