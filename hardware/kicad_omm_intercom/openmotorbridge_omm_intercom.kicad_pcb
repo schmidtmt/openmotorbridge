@@ -151,7 +151,16 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
+		(path "/f0000000-0000-0000-0000-0000000001d2")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -193,6 +202,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "GND")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(zone_connect 2)
 			(uuid "21512721-c0a8-41d9-b42c-7699b017e8dd")
 		)
@@ -253,6 +264,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000180")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -423,6 +442,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "BTN_3")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(uuid "e3110a51-a2da-4485-bd80-356af8764793")
 		)
 		(pad "2" smd roundrect
@@ -431,6 +452,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "2_2")
+			(pintype "passive")
 			(uuid "e2a1a75a-510f-40e7-8579-6d76ac3f8e4c")
 		)
 		(embedded_fonts no)
@@ -503,6 +526,18 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000100")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "2" "1" "40" "41"
+					"42" "26" "43" "44" "45" "27" "46" "47" "48" "49" "50" "51" "52" "53"
+					"54" "55" "56" "57" "25" "24" "23" "22" "21" "20" "19" "18" "17" "16"
+					"15" "14" "28" "29" "58" "59" "60" "61" "62" "63" "64" "65"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -726,6 +761,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_1")
+			(pintype "power_in")
 			(uuid "41c5c773-aa66-4561-b62c-76f6f818ede5")
 		)
 		(pad "2" smd rect
@@ -733,6 +770,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "VCC_3V3")
+			(pinfunction "3V3_2")
+			(pintype "power_in")
 			(uuid "64161e92-1a06-4ffe-a8f2-61c7b73a8c2c")
 		)
 		(pad "3" smd rect
@@ -740,6 +779,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "EN_3")
+			(pintype "input")
 			(uuid "d52d0930-68e1-49a9-ab42-291b944b27da")
 		)
 		(pad "4" smd rect
@@ -747,6 +788,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BTN_3")
+			(pinfunction "IO4_4")
+			(pintype "bidirectional")
 			(uuid "432191d4-61aa-4080-bd17-0d39a304e5b9")
 		)
 		(pad "5" smd rect
@@ -754,6 +797,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BTN_4")
+			(pinfunction "IO5_5")
+			(pintype "bidirectional")
 			(uuid "078e05b8-21c1-45aa-80d7-ed626d9c047c")
 		)
 		(pad "6" smd rect
@@ -761,6 +806,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "WS2812_DATA")
+			(pinfunction "IO6_6")
+			(pintype "bidirectional")
 			(uuid "2ee0c469-50a2-4bf6-ba11-c429f90be845")
 		)
 		(pad "7" smd rect
@@ -768,6 +815,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "CHG_STAT")
+			(pinfunction "IO7_7")
+			(pintype "bidirectional")
 			(uuid "c2aae5b1-586a-4475-8370-eff91f137432")
 		)
 		(pad "8" smd rect
@@ -775,6 +824,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BTN_1")
+			(pinfunction "IO2_8")
+			(pintype "bidirectional")
 			(uuid "5be323dd-95d9-4512-a899-ee8eec4036e4")
 		)
 		(pad "9" smd rect
@@ -782,6 +833,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BTN_2")
+			(pinfunction "IO3_9")
+			(pintype "bidirectional")
 			(uuid "ad7a8db7-25f9-426a-b2df-43ea9b9bab58")
 		)
 		(pad "10" smd rect
@@ -789,6 +842,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2C_SDA")
+			(pinfunction "IO8_10")
+			(pintype "bidirectional")
 			(uuid "2156c6ef-a17f-4e01-8b79-9c5be449ca77")
 		)
 		(pad "11" smd rect
@@ -796,6 +851,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2C_SCL")
+			(pinfunction "IO9_11")
+			(pintype "bidirectional")
 			(uuid "18cacd1e-aecc-4423-bd14-200c01dac7a1")
 		)
 		(pad "12" smd rect
@@ -803,6 +860,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_BOOT")
+			(pinfunction "IO10_12")
+			(pintype "bidirectional")
 			(uuid "6cdea191-bfc8-4f5b-b182-0303469287a4")
 		)
 		(pad "13" smd rect
@@ -810,6 +869,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_RESET")
+			(pinfunction "IO11_13")
+			(pintype "bidirectional")
 			(uuid "f327481c-8bb1-4f7c-ab32-d94ff0cd7558")
 		)
 		(pad "14" smd rect
@@ -817,6 +878,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "USB_DN")
+			(pinfunction "IO12_14")
+			(pintype "bidirectional")
 			(uuid "1610b18b-ef9c-4d1b-b79d-d620fe49d560")
 		)
 		(pad "15" smd rect
@@ -824,6 +887,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "USB_DP")
+			(pinfunction "IO13_15")
+			(pintype "bidirectional")
 			(uuid "0fa7fb16-c9dd-479e-9aa8-5797cf7b5623")
 		)
 		(pad "16" smd rect
@@ -831,6 +896,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "SA818_TXD")
+			(pinfunction "IO14_16")
+			(pintype "bidirectional")
 			(uuid "c8d0240f-642d-4b63-b640-3f528f97220c")
 		)
 		(pad "17" smd rect
@@ -838,6 +905,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "SA818_RXD")
+			(pinfunction "IO15_17")
+			(pintype "bidirectional")
 			(uuid "18a1ec6e-52ec-40b7-8dbb-9d30c50e105f")
 		)
 		(pad "18" smd rect
@@ -845,6 +914,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "SA818_PTT")
+			(pinfunction "IO16_18")
+			(pintype "bidirectional")
 			(uuid "960054c0-caf7-43ef-9bad-c061bba43102")
 		)
 		(pad "19" smd rect
@@ -852,6 +923,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "SA818_SQL")
+			(pinfunction "IO17_19")
+			(pintype "bidirectional")
 			(uuid "57e99e63-cae0-4b2d-a821-b1992e8a2db9")
 		)
 		(pad "20" smd rect
@@ -859,6 +932,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "SA818_PWR_HL")
+			(pinfunction "IO18_20")
+			(pintype "bidirectional")
 			(uuid "89dbd90d-92ee-4008-9abb-b7dff638b496")
 		)
 		(pad "21" smd rect
@@ -866,6 +941,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2S_MCLK")
+			(pinfunction "IO19_21")
+			(pintype "bidirectional")
 			(uuid "d13da90d-9d89-4932-ad07-a0aa9d4e69f0")
 		)
 		(pad "22" smd rect
@@ -873,6 +950,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2S_BCLK")
+			(pinfunction "IO20_22")
+			(pintype "bidirectional")
 			(uuid "59598562-de52-4f79-b38e-d6eb4de4f798")
 		)
 		(pad "23" smd rect
@@ -880,6 +959,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2S_WS")
+			(pinfunction "IO21_23")
+			(pintype "bidirectional")
 			(uuid "68665070-a05c-4b6a-9fdd-84a5508b75f4")
 		)
 		(pad "24" smd rect
@@ -887,6 +968,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2S_DOUT")
+			(pinfunction "IO22_24")
+			(pintype "bidirectional")
 			(uuid "5c443cb8-b79c-4f4d-a9f8-ca8f7ed000d5")
 		)
 		(pad "25" smd rect
@@ -894,6 +977,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "I2S_DIN")
+			(pinfunction "IO23_25")
+			(pintype "bidirectional")
 			(uuid "357018ae-4813-4d7b-8573-ab3e093f7ee1")
 		)
 		(pad "26" smd rect
@@ -901,6 +986,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_UART_CTS")
+			(pinfunction "GND_26")
+			(pintype "power_in")
 			(uuid "666c73d4-5b1a-4365-afe0-96b6570716f6")
 		)
 		(pad "27" smd rect
@@ -908,6 +995,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_UART_RTS")
+			(pinfunction "EP_27")
+			(pintype "power_in")
 			(uuid "0deaa595-8f25-4455-8785-d0d5a9ff446b")
 		)
 		(pad "28" smd rect
@@ -915,6 +1004,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_UART_TX")
+			(pinfunction "IO0_28")
+			(pintype "bidirectional")
 			(uuid "71f343cb-0bcd-4f65-b808-c52f448b2a17")
 		)
 		(pad "29" smd rect
@@ -922,6 +1013,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "BT_UART_RX")
+			(pinfunction "IO1_29")
+			(pintype "bidirectional")
 			(uuid "d7d45e57-8d8d-40e7-8e63-bd7c0ae2ce5a")
 		)
 		(pad "30" smd rect
@@ -989,6 +1082,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_40")
+			(pintype "power_in")
 			(uuid "636bddb4-755e-42df-84f5-b4425d2ef509")
 		)
 		(pad "41" smd rect
@@ -996,6 +1091,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_41")
+			(pintype "power_in")
 			(uuid "61833685-041b-4d33-bd4a-31b5b066b29a")
 		)
 		(pad "42" smd rect
@@ -1003,6 +1100,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_42")
+			(pintype "power_in")
 			(uuid "fe5ed866-2418-4478-bdca-713b3ad4cb90")
 		)
 		(pad "43" smd rect
@@ -1010,6 +1109,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_43")
+			(pintype "power_in")
 			(uuid "3c1e87c6-8bad-4f1a-b503-ae46ddde1392")
 		)
 		(pad "44" smd rect
@@ -1017,6 +1118,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_44")
+			(pintype "power_in")
 			(uuid "0b249428-3e6a-487e-abd9-b99594fe43d6")
 		)
 		(pad "45" smd rect
@@ -1024,6 +1127,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_45")
+			(pintype "power_in")
 			(uuid "f39b3cfc-5f35-4854-87ae-5cee0d95865b")
 		)
 		(pad "46" smd rect
@@ -1031,6 +1136,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_46")
+			(pintype "power_in")
 			(uuid "0bfd52d7-57f1-42d0-ae94-c08bb574087f")
 		)
 		(pad "47" smd rect
@@ -1038,6 +1145,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_47")
+			(pintype "power_in")
 			(uuid "e0a12b05-719c-4b4f-bde4-53aa134b6ebf")
 		)
 		(pad "48" smd rect
@@ -1045,6 +1154,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_48")
+			(pintype "power_in")
 			(uuid "8391d65d-0dd3-4fc4-bd0c-9ea1f850a1e2")
 		)
 		(pad "49" smd rect
@@ -1052,6 +1163,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_49")
+			(pintype "power_in")
 			(uuid "0b523a8a-fdbb-4c9b-a574-baa62ee6cda5")
 		)
 		(pad "50" smd rect
@@ -1059,6 +1172,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_50")
+			(pintype "power_in")
 			(uuid "45719aad-395b-405e-a026-7cd436e3882d")
 		)
 		(pad "51" smd rect
@@ -1066,6 +1181,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_51")
+			(pintype "power_in")
 			(uuid "1b0029be-1612-40fb-a2e7-bcdd6f97ddb5")
 		)
 		(pad "52" smd rect
@@ -1073,6 +1190,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_52")
+			(pintype "power_in")
 			(uuid "a9406d8b-223e-4fec-b5b5-f99f9455a5da")
 		)
 		(pad "53" smd rect
@@ -1080,6 +1199,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_53")
+			(pintype "power_in")
 			(uuid "f36913b8-9eb7-4bf2-913c-710f8e573195")
 		)
 		(pad "54" smd rect
@@ -1087,6 +1208,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_54")
+			(pintype "power_in")
 			(uuid "500ed3c3-80d2-4483-8516-c6434321039c")
 		)
 		(pad "55" smd rect
@@ -1094,6 +1217,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_55")
+			(pintype "power_in")
 			(uuid "0fa6339a-1119-4c5f-8bcf-6c20208706c9")
 		)
 		(pad "56" smd rect
@@ -1101,6 +1226,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_56")
+			(pintype "power_in")
 			(uuid "04c3e8c3-49ed-4b0e-9616-516fbe0c26c4")
 		)
 		(pad "57" smd rect
@@ -1108,6 +1235,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_57")
+			(pintype "power_in")
 			(uuid "ee3dc4a3-9e93-4131-9723-390fe28ea1cd")
 		)
 		(pad "58" smd rect
@@ -1115,6 +1244,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_58")
+			(pintype "power_in")
 			(uuid "495f8c4d-c3c1-49d0-bcd5-aace1e6ee421")
 		)
 		(pad "59" smd rect
@@ -1122,6 +1253,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_59")
+			(pintype "power_in")
 			(uuid "0e03b034-97ae-407d-89b8-e589262d2ac9")
 		)
 		(pad "60" smd rect
@@ -1129,6 +1262,8 @@
 			(size 0.8 0.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_60")
+			(pintype "power_in")
 			(uuid "a8070cf5-19d7-48bf-a3bd-9577a9473961")
 		)
 		(pad "61" smd roundrect
@@ -1140,6 +1275,8 @@
 			(chamfer_ratio 0.33)
 			(chamfer top_left)
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "729d1861-22bf-4066-b25a-6b65fa090def")
 		)
@@ -1149,6 +1286,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "27a5fc6e-bd4c-4926-9433-78b1713784d3")
 		)
@@ -1158,6 +1297,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "713e0216-5fc2-4f2f-841b-cebb4c463a43")
 		)
@@ -1167,6 +1308,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "28c76620-3666-4758-b513-6e5765af1900")
 		)
@@ -1176,6 +1319,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "8e3d1dcc-7179-4067-9683-25afb9fff6a0")
 		)
@@ -1185,6 +1330,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "8cd7fecf-6332-4b27-b929-bb7b7a00a706")
 		)
@@ -1194,6 +1341,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "e29b7b50-e3fb-4a8b-8d69-beb219ae71d9")
 		)
@@ -1203,6 +1352,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "9aa14ea3-dfea-46b6-af0b-677422e60236")
 		)
@@ -1212,6 +1363,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_61")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "da246bfd-14a3-4e13-a4c0-574a27b3d52d")
 		)
@@ -1220,6 +1373,8 @@
 			(size 0.8 0.8)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_62")
+			(pintype "power_in")
 			(uuid "aaa31fb5-64d1-48c3-be71-d87a34a3c319")
 		)
 		(pad "63" smd rect
@@ -1227,6 +1382,8 @@
 			(size 0.8 0.8)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_63")
+			(pintype "power_in")
 			(uuid "96c87bee-15e5-415e-98c1-00bf59063af5")
 		)
 		(pad "64" smd rect
@@ -1234,6 +1391,8 @@
 			(size 0.8 0.8)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_64")
+			(pintype "power_in")
 			(uuid "48fd7424-fcab-420b-b12f-1d030f2bee4c")
 		)
 		(pad "65" smd rect
@@ -1241,6 +1400,8 @@
 			(size 0.8 0.8)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "GND_65")
+			(pintype "power_in")
 			(uuid "58a3b313-db68-43c9-9bbf-1abe1a0bf189")
 		)
 		(embedded_fonts no)
@@ -1311,6 +1472,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000150")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "2" "3" "4" "1")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1491,6 +1660,8 @@
 			(size 0.7 0.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "DO_1")
+			(pintype "output")
 			(uuid "112be2a2-2a70-4fe7-9129-7a3fb5792d29")
 		)
 		(pad "2" smd rect
@@ -1498,6 +1669,8 @@
 			(size 0.7 0.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "VCC_3V3")
+			(pinfunction "DI_2")
+			(pintype "input")
 			(uuid "06aebacc-6152-4b5e-b1c0-92893caaecb0")
 		)
 		(pad "3" smd rect
@@ -1505,6 +1678,8 @@
 			(size 0.7 0.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "VDD_3")
+			(pintype "power_in")
 			(uuid "8627d038-165d-46c0-820f-34573824dd82")
 		)
 		(pad "4" smd rect
@@ -1512,6 +1687,8 @@
 			(size 0.7 0.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "WS2812_DATA")
+			(pinfunction "GND_4")
+			(pintype "power_in")
 			(uuid "0d127eca-383c-4a25-94cc-f449cde8cb3d")
 		)
 		(embedded_fonts no)
@@ -1582,6 +1759,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000160")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -1752,6 +1937,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "BTN_1")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(uuid "c95948aa-79a8-4d32-b7f0-825f6fe8f5de")
 		)
 		(pad "2" smd roundrect
@@ -1760,6 +1947,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "2_2")
+			(pintype "passive")
 			(uuid "b938925c-5a6e-4895-a779-d5016d436178")
 		)
 		(embedded_fonts no)
@@ -1830,6 +2019,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000170")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -2000,6 +2197,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "BTN_2")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(uuid "19d9f4ea-758c-4c03-aaa1-b79dda5a81bc")
 		)
 		(pad "2" smd roundrect
@@ -2008,6 +2207,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "2_2")
+			(pintype "passive")
 			(uuid "4f7c75fe-c373-4b39-a649-9ba8a906761b")
 		)
 		(embedded_fonts no)
@@ -2085,7 +2286,16 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
+		(path "/f0000000-0000-0000-0000-0000000001d4")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -2127,6 +2337,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "GND")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(zone_connect 2)
 			(uuid "d4c3ff2d-44c0-401c-8e67-9e855953f1a4")
 		)
@@ -2195,6 +2407,16 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000120")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "4" "5" "6" "7" "9" "12" "14" "13" "8" "17" "2" "3" "10" "11"
+					"15" "16"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -2517,7 +2739,6 @@
 			(size 0.73 0.73)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "d8fe3a66-a6ba-48a5-a103-23d3c2c61d23")
 		)
 		(pad "" smd roundrect
@@ -2525,7 +2746,6 @@
 			(size 0.73 0.73)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "15e258eb-85a3-4433-8756-dd351a6a7a31")
 		)
 		(pad "" smd roundrect
@@ -2533,7 +2753,6 @@
 			(size 0.73 0.73)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "3a8ace42-b3df-4e38-b124-76661f989b0d")
 		)
 		(pad "" smd roundrect
@@ -2541,7 +2760,6 @@
 			(size 0.73 0.73)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "47cd9536-18b0-44e0-973e-2568c0fbdd04")
 		)
 		(pad "1" smd roundrect
@@ -2550,6 +2768,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "TS_1")
+			(pintype "input")
 			(uuid "3271e952-342b-4c64-8e2a-a1af328cea87")
 		)
 		(pad "2" smd roundrect
@@ -2558,6 +2778,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBAT")
+			(pinfunction "BAT_2")
+			(pintype "power_out")
 			(uuid "70ab6de5-9cb9-4a5e-a034-f9c324817267")
 		)
 		(pad "3" smd roundrect
@@ -2566,6 +2788,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBAT")
+			(pinfunction "BAT_3")
+			(pintype "power_out")
 			(uuid "a5484ac2-da5a-45d8-bc12-2d8e413a09fa")
 		)
 		(pad "4" smd roundrect
@@ -2574,6 +2798,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "~CE_4")
+			(pintype "input")
 			(uuid "5b816f51-0295-4b3c-9c52-6221d155bf51")
 		)
 		(pad "5" smd roundrect
@@ -2582,6 +2808,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "EN2_5")
+			(pintype "input")
 			(uuid "5e411640-6725-4435-be8f-586465f14f3e")
 		)
 		(pad "6" smd roundrect
@@ -2590,6 +2818,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "EN1_6")
+			(pintype "input")
 			(uuid "40665943-b5a7-4ec4-98cb-bbcb323cc4e1")
 		)
 		(pad "7" smd roundrect
@@ -2598,6 +2828,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "~PGOOD_7")
+			(pintype "output")
 			(uuid "baa170f8-53cc-4d81-9b71-84ff42302f3b")
 		)
 		(pad "8" smd roundrect
@@ -2606,6 +2838,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "VSS_8")
+			(pintype "power_in")
 			(uuid "95e8b636-4bee-4f51-9a32-a033ac915dbd")
 		)
 		(pad "9" smd roundrect
@@ -2614,6 +2848,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "CHG_STAT")
+			(pinfunction "~CHG_9")
+			(pintype "output")
 			(uuid "42ffd86c-5739-4d65-8ca8-13ccd3ff9167")
 		)
 		(pad "10" smd roundrect
@@ -2622,6 +2858,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "SYS_PWR")
+			(pinfunction "OUT_10")
+			(pintype "power_out")
 			(uuid "bc201531-0163-4e16-9987-5cc4a54beba9")
 		)
 		(pad "11" smd roundrect
@@ -2630,6 +2868,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "SYS_PWR")
+			(pinfunction "OUT_11")
+			(pintype "power_out")
 			(uuid "b09c0636-def1-410a-ae9b-d33135014c04")
 		)
 		(pad "12" smd roundrect
@@ -2638,6 +2878,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "ILIM_12")
+			(pintype "input")
 			(uuid "a4c12797-3147-40ab-9578-e8c451ab3e62")
 		)
 		(pad "13" smd roundrect
@@ -2646,6 +2888,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "IN_13")
+			(pintype "power_in")
 			(uuid "98441a31-20f5-4fc7-b09b-d44765dad50e")
 		)
 		(pad "14" smd roundrect
@@ -2654,6 +2898,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "TMR_14")
+			(pintype "passive")
 			(uuid "f302ecc3-b033-4b82-b5b8-725f7f461c48")
 		)
 		(pad "15" smd roundrect
@@ -2662,6 +2908,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "ISET_15")
+			(pintype "input")
 			(uuid "9bff65ad-15b2-4d66-b5b0-ced3734c2630")
 		)
 		(pad "16" smd roundrect
@@ -2670,6 +2918,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "SYSOFF_16")
+			(pintype "input")
 			(uuid "1ba0a34c-56db-414a-95e5-95c433ed9959")
 		)
 		(pad "17" smd rect
@@ -2678,6 +2928,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask")
 			(net "GND")
+			(pinfunction "EP_17")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "8ca4a646-576d-4c70-8347-ac5008d181dc")
 		)
@@ -2756,7 +3008,16 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
+		(path "/f0000000-0000-0000-0000-0000000001d1")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -2798,6 +3059,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "GND")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(zone_connect 2)
 			(uuid "ced8e8af-7eed-473e-8f42-68106ea1aa7b")
 		)
@@ -2858,6 +3121,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000190")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3028,6 +3299,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "BTN_4")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(uuid "3d4c5a7f-20e9-4414-88f0-147f0f735456")
 		)
 		(pad "2" smd roundrect
@@ -3036,6 +3309,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "2_2")
+			(pintype "passive")
 			(uuid "b89ccfb0-2759-423d-9380-d025c1fa8053")
 		)
 		(embedded_fonts no)
@@ -3113,7 +3388,16 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
+		(path "/f0000000-0000-0000-0000-0000000001d3")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1")
+			)
+		)
+		(attr exclude_from_bom)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_circle
 			(center 0 0)
@@ -3155,6 +3439,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "GND")
+			(pinfunction "1_1")
+			(pintype "passive")
 			(zone_connect 2)
 			(uuid "edd35187-aa1f-4769-88b4-54c321148aa3")
 		)
@@ -3223,6 +3509,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000000d0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "3" "5" "2" "6" "4")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3446,6 +3740,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DP")
+			(pinfunction "I/O1_IN_1")
+			(pintype "input")
 			(uuid "0db85801-0129-4b51-b6a2-95a5a3d13055")
 		)
 		(pad "2" smd roundrect
@@ -3454,6 +3750,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "GND_2")
+			(pintype "power_in")
 			(uuid "e5c9aad4-4b5b-4e2a-a190-50113f018947")
 		)
 		(pad "3" smd roundrect
@@ -3462,6 +3760,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DN")
+			(pinfunction "I/O2_IN_3")
+			(pintype "input")
 			(uuid "f1aeef45-e251-40a8-91eb-cd25d46fe366")
 		)
 		(pad "4" smd roundrect
@@ -3470,6 +3770,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DN")
+			(pinfunction "I/O2_OUT_4")
+			(pintype "output")
 			(uuid "4bd13be6-f8ce-4336-adc0-e3fba1762891")
 		)
 		(pad "5" smd roundrect
@@ -3478,6 +3780,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "VBUS_5")
+			(pintype "power_in")
 			(uuid "47dcdb70-58d2-4495-8b0b-fb8b744fa01e")
 		)
 		(pad "6" smd roundrect
@@ -3486,6 +3790,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DP")
+			(pinfunction "I/O1_OUT_6")
+			(pintype "output")
 			(uuid "d30f37ec-5ab0-42dd-82be-a04d29cffc68")
 		)
 		(embedded_fonts no)
@@ -3554,6 +3860,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000001a0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(pad "1" smd rect
@@ -3561,6 +3875,8 @@
 			(size 1 1)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "RF_ANT")
+			(pinfunction "In_1")
+			(pintype "passive")
 			(uuid "f221b7a0-776d-4f21-a4d1-bbadd3c65e9d")
 		)
 		(pad "2" smd rect
@@ -3568,6 +3884,8 @@
 			(size 1.05 2.2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "Ext_2")
+			(pintype "power_in")
 			(uuid "cec0b902-7d55-4531-910d-965f06b9334a")
 		)
 		(pad "3" smd rect
@@ -3575,6 +3893,8 @@
 			(size 1.05 2.2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(net "GND")
+			(pinfunction "Ext_3")
+			(pintype "power_in")
 			(uuid "75e84ccc-49b4-4ace-a8b8-c0da5c9cca02")
 		)
 		(embedded_fonts no)
@@ -3653,6 +3973,16 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000000a0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4" "5" "6" "7" "8" "25" "9" "10" "15" "16" "23" "24"
+					"29" "11" "12" "14" "17" "18" "19" "20" "21"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -3975,7 +4305,6 @@
 			(size 0.97 0.97)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "373d057e-b6ab-4c27-9508-01a2fd0786a7")
 		)
 		(pad "" smd roundrect
@@ -3983,7 +4312,6 @@
 			(size 0.97 0.97)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "de82678c-c9cb-4cca-b7b7-9373345f2294")
 		)
 		(pad "" smd roundrect
@@ -3991,7 +4319,6 @@
 			(size 0.97 0.97)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "287b7438-ae36-43fc-bcf5-d49d27cb6cbe")
 		)
 		(pad "" smd roundrect
@@ -3999,7 +4326,6 @@
 			(size 0.97 0.97)
 			(layers "F.Paste")
 			(roundrect_rratio 0.25)
-			(net "GND")
 			(uuid "207c5dcc-8aaa-4d89-bd27-8db1d5dfceb9")
 		)
 		(pad "1" smd roundrect
@@ -4008,6 +4334,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2S_MCLK")
+			(pinfunction "MCLK_1")
+			(pintype "input")
 			(uuid "3056bcb2-271b-45c3-afa6-dfd4c0e7e467")
 		)
 		(pad "2" smd roundrect
@@ -4016,6 +4344,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2S_BCLK")
+			(pinfunction "BCLK_2")
+			(pintype "input")
 			(uuid "ba72402e-b286-4a25-90dc-514278793433")
 		)
 		(pad "3" smd roundrect
@@ -4024,6 +4354,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2S_WS")
+			(pinfunction "WS_3")
+			(pintype "input")
 			(uuid "52c6cad7-c1f3-4b38-a172-7becea854119")
 		)
 		(pad "4" smd roundrect
@@ -4032,6 +4364,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2S_DOUT")
+			(pinfunction "SDIN_4")
+			(pintype "input")
 			(uuid "1ff57ff9-6552-4daa-9d1a-7e316d63dc86")
 		)
 		(pad "5" smd roundrect
@@ -4040,6 +4374,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2S_DIN")
+			(pinfunction "SDOUT_5")
+			(pintype "output")
 			(uuid "2f8383c8-7017-4138-9617-ccc63bfe5c92")
 		)
 		(pad "6" smd roundrect
@@ -4048,6 +4384,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2C_SDA")
+			(pinfunction "SDA_6")
+			(pintype "bidirectional")
 			(uuid "c5b34112-9292-4391-b70f-017c8f53f002")
 		)
 		(pad "7" smd roundrect
@@ -4056,6 +4394,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "I2C_SCL")
+			(pinfunction "SCL_7")
+			(pintype "input")
 			(uuid "98ef2193-6abb-4b14-b13d-9352c43b331d")
 		)
 		(pad "8" smd roundrect
@@ -4064,6 +4404,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "AD0_8")
+			(pintype "input")
 			(uuid "f35cf7a2-b771-4419-926f-16ebff89fbae")
 		)
 		(pad "9" smd roundrect
@@ -4072,6 +4414,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "DVDD_9")
+			(pintype "power_in")
 			(uuid "987ae7e7-1368-46e8-9333-9047967fb46f")
 		)
 		(pad "10" smd roundrect
@@ -4080,6 +4424,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "DGND_10")
+			(pintype "power_in")
 			(uuid "a848a76d-e190-4220-a88e-30f0f1cadd47")
 		)
 		(pad "11" smd roundrect
@@ -4088,6 +4434,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AUDIO_OUT_R")
+			(pinfunction "ROUT1_11")
+			(pintype "output")
 			(uuid "34208458-f1d2-4a20-be1e-ff9c76b6f5c6")
 		)
 		(pad "12" smd roundrect
@@ -4096,6 +4444,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AUDIO_OUT_L")
+			(pinfunction "LOUT1_12")
+			(pintype "output")
 			(uuid "079cb58f-1de6-47ba-b167-c0b218ff5d61")
 		)
 		(pad "13" smd roundrect
@@ -4111,6 +4461,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "SA818_MIC_IN")
+			(pinfunction "LOUT2_14")
+			(pintype "output")
 			(uuid "d72b9780-bcd0-4af7-b5db-3d03770a203b")
 		)
 		(pad "15" smd roundrect
@@ -4119,6 +4471,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "AVDD_15")
+			(pintype "power_in")
 			(uuid "ba683794-7d2f-47d3-8743-012bc97da41b")
 		)
 		(pad "16" smd roundrect
@@ -4127,6 +4481,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND")
+			(pinfunction "AGND_16")
+			(pintype "power_in")
 			(uuid "15260022-8b4b-4c32-a764-777baee1a896")
 		)
 		(pad "17" smd roundrect
@@ -4135,6 +4491,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND")
+			(pinfunction "VREF_17")
+			(pintype "passive")
 			(uuid "e65cd48b-d4e2-40a0-95a8-42defc9e84cb")
 		)
 		(pad "18" smd roundrect
@@ -4143,6 +4501,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND")
+			(pinfunction "MICBIAS_18")
+			(pintype "output")
 			(uuid "61daff5a-0e91-45da-8bc9-d295aa84c5bc")
 		)
 		(pad "19" smd roundrect
@@ -4151,6 +4511,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VOICE_IN")
+			(pinfunction "MIC1P_19")
+			(pintype "input")
 			(uuid "cb12663e-737a-4700-b069-32bc887f6e99")
 		)
 		(pad "20" smd roundrect
@@ -4159,6 +4521,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND_MIC")
+			(pinfunction "MIC1N_20")
+			(pintype "input")
 			(uuid "953f6a7d-d3ae-419a-9218-c7511a27cfb2")
 		)
 		(pad "21" smd roundrect
@@ -4167,6 +4531,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "SA818_AF_OUT")
+			(pinfunction "LIN2_21")
+			(pintype "input")
 			(uuid "ccd8d92c-630b-485d-ae25-d475d78f52e0")
 		)
 		(pad "22" smd roundrect
@@ -4182,6 +4548,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "PVDD_23")
+			(pintype "power_in")
 			(uuid "6326b807-c289-48f3-9f12-875aade9527c")
 		)
 		(pad "24" smd roundrect
@@ -4190,6 +4558,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND_SPK")
+			(pinfunction "PGND_24")
+			(pintype "power_in")
 			(uuid "5af1d8d8-dc69-43bc-8eeb-c18258ce40b3")
 		)
 		(pad "25" smd roundrect
@@ -4198,6 +4568,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "CE_25")
+			(pintype "input")
 			(uuid "f1edb120-0034-4f2f-a54d-c7a4c8a927c3")
 		)
 		(pad "26" smd roundrect
@@ -4227,6 +4599,8 @@
 			(property pad_prop_heatsink)
 			(layers "F.Cu" "F.Mask")
 			(net "GND")
+			(pinfunction "EP_29")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "0b316ec1-b838-48a5-bc4b-c3b462eed8ae")
 		)
@@ -4307,6 +4681,14 @@
 			)
 		)
 		(path "/95dda394-c249-47d1-9e6c-ee4ead793df9")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -4446,6 +4828,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.208333)
 			(net "BT_ANT")
+			(pinfunction "FEED_1")
+			(pintype "input")
 			(uuid "2765381c-3db7-4c9d-8ed8-1688de04738a")
 		)
 		(pad "2" smd roundrect
@@ -4454,6 +4838,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.208333)
 			(net "GND")
+			(pinfunction "GND_2")
+			(pintype "power_in")
 			(uuid "d6ed2998-56ed-4278-968e-5ef4c10795d8")
 		)
 		(embedded_fonts no)
@@ -4524,6 +4910,16 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000000c0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "A1" "A4" "A5" "A6" "A7" "A8" "A9" "A12" "SH" "B1" "B4" "B5" "B6"
+					"B7" "B8" "B9" "B12"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -4687,6 +5083,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "PGND")
+			(pinfunction "GND_A1")
+			(pintype "power_in")
 			(uuid "e3131571-5ff1-4c80-b34b-811a461a275b")
 		)
 		(pad "A4" smd roundrect
@@ -4695,6 +5093,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "VBUS_A4")
+			(pintype "power_in")
 			(uuid "03fbb7bc-884e-4e47-b32a-3bb26cb5f796")
 		)
 		(pad "A5" smd roundrect
@@ -4703,6 +5103,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "HP_OUT_L_A5")
+			(pintype "output")
 			(uuid "b50b6205-64a1-43d7-925e-d71aa4a6a2cb")
 		)
 		(pad "A6" smd roundrect
@@ -4711,6 +5113,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DP")
+			(pinfunction "USB_DP_A6")
+			(pintype "bidirectional")
 			(uuid "fe1d6c22-78c5-4f3d-828e-f5c5c950e3b8")
 		)
 		(pad "A7" smd roundrect
@@ -4719,6 +5123,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DN")
+			(pinfunction "USB_DN_A7")
+			(pintype "bidirectional")
 			(uuid "5a03b635-a2d7-4591-aafe-c85b92b32cf1")
 		)
 		(pad "A8" smd roundrect
@@ -4726,6 +5132,8 @@
 			(size 0.3 1.45)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
+			(pinfunction "MIC_IN+_A8")
+			(pintype "input")
 			(uuid "d1570fb6-b0e9-4033-8e79-fc4d7d50b969")
 		)
 		(pad "A9" smd roundrect
@@ -4734,6 +5142,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "VBUS_A9")
+			(pintype "power_in")
 			(uuid "cf0eb955-4395-4ac9-b0f7-7370220731f9")
 		)
 		(pad "A12" smd roundrect
@@ -4742,6 +5152,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "PGND")
+			(pinfunction "GND_A12")
+			(pintype "power_in")
 			(uuid "831088e9-118b-444b-b9a5-5eaccfff55d9")
 		)
 		(pad "B1" smd roundrect
@@ -4750,6 +5162,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "PGND")
+			(pinfunction "GND_B1")
+			(pintype "power_in")
 			(uuid "cf3f537c-6c04-492b-a36e-0dcd9ec93908")
 		)
 		(pad "B4" smd roundrect
@@ -4758,6 +5172,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "VBUS_B4")
+			(pintype "power_in")
 			(uuid "569de732-c42e-4741-82c9-2341ff81cbc0")
 		)
 		(pad "B5" smd roundrect
@@ -4766,6 +5182,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "HP_OUT_R_B5")
+			(pintype "output")
 			(uuid "352fc388-1a1e-4273-9ecb-9751ee22a281")
 		)
 		(pad "B6" smd roundrect
@@ -4774,6 +5192,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DP")
+			(pinfunction "USB_DP_B6")
+			(pintype "bidirectional")
 			(uuid "be78d154-1dad-474c-80b7-a47b116cbfd9")
 		)
 		(pad "B7" smd roundrect
@@ -4782,6 +5202,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "USB_DN")
+			(pinfunction "USB_DN_B7")
+			(pintype "bidirectional")
 			(uuid "6a85a85b-c0ec-45f5-85a6-29dbc42fb05f")
 		)
 		(pad "B8" smd roundrect
@@ -4789,6 +5211,8 @@
 			(size 0.3 1.45)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
+			(pinfunction "AGND_B8")
+			(pintype "passive")
 			(uuid "48ec1273-bba6-4a77-b918-b058c9d95a29")
 		)
 		(pad "B9" smd roundrect
@@ -4797,6 +5221,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBUS_5V")
+			(pinfunction "VBUS_B9")
+			(pintype "power_in")
 			(uuid "00d685b6-9104-4662-8f48-60678a89ff46")
 		)
 		(pad "B12" smd roundrect
@@ -4805,6 +5231,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "PGND")
+			(pinfunction "GND_B12")
+			(pintype "power_in")
 			(uuid "b5ef7053-5424-49b9-a565-7a7353c61991")
 		)
 		(pad "SH" thru_hole oval
@@ -4815,6 +5243,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "PGND")
+			(pinfunction "SH_SH")
+			(pintype "passive")
 			(uuid "b753465e-1d41-4fa9-a65f-7fdfb8ac1580")
 		)
 		(pad "SH" thru_hole oval
@@ -4825,6 +5255,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "PGND")
+			(pinfunction "SH_SH")
+			(pintype "passive")
 			(uuid "190542f7-b0d0-4edb-84c3-a75c3cd1ca33")
 		)
 		(pad "SH" thru_hole oval
@@ -4835,6 +5267,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "PGND")
+			(pinfunction "SH_SH")
+			(pintype "passive")
 			(uuid "5de538e3-e4d0-4641-ab81-986d5a6b9d49")
 		)
 		(pad "SH" thru_hole oval
@@ -4845,6 +5279,8 @@
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
 			(net "PGND")
+			(pinfunction "SH_SH")
+			(pintype "passive")
 			(uuid "e4a7d8eb-7b46-4768-9e89-358f1320d76c")
 		)
 		(embedded_fonts no)
@@ -4923,6 +5359,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-000000000140")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "3" "1" "2")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -5196,6 +5640,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "GND_1")
+			(pintype "power_in")
 			(uuid "7f6a649a-b09f-4a8e-8281-a0c97c313251")
 		)
 		(pad "2" smd roundrect
@@ -5204,6 +5650,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VOUT_2")
+			(pintype "power_out")
 			(uuid "8f574a1a-0689-4ced-865b-2a1294d6cbd1")
 		)
 		(pad "3" smd roundrect
@@ -5212,6 +5660,8 @@
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
 			(net "SYS_PWR")
+			(pinfunction "VIN_3")
+			(pintype "power_in")
 			(uuid "a6c02106-0e44-440d-bb0a-9c447a5708dd")
 		)
 		(embedded_fonts no)
@@ -5290,6 +5740,16 @@
 			)
 		)
 		(path "/965c7adc-4784-46ae-bc92-5453b1821cde")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "2" "9" "23" "1" "49" "3" "4" "19" "37" "43" "46" "41" "40" "21"
+					"20"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -5613,7 +6073,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "208f3d98-45e2-4ad8-8cd7-c935cfc22354")
 		)
 		(pad "" smd roundrect
@@ -5621,7 +6080,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "249d36ad-f0d6-4923-9b93-0a1cd85ae024")
 		)
 		(pad "" smd roundrect
@@ -5629,7 +6087,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "d8d05052-285b-4416-86e9-7cce90faddd0")
 		)
 		(pad "" smd roundrect
@@ -5637,7 +6094,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "2d765e7f-1cc3-4269-97a1-57df21f61259")
 		)
 		(pad "" smd roundrect
@@ -5645,7 +6101,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "7449383d-dd86-43c2-ae4e-0ad1cc3eb704")
 		)
 		(pad "" smd roundrect
@@ -5653,7 +6108,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "ffa656eb-41f8-4748-85f1-65443221e0ea")
 		)
 		(pad "" smd roundrect
@@ -5661,7 +6115,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "de7b1197-71f6-4c03-9143-50ee30e9e07f")
 		)
 		(pad "" smd roundrect
@@ -5669,7 +6122,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "47593ba0-0213-4c40-b593-1ca85594b688")
 		)
 		(pad "" smd roundrect
@@ -5677,7 +6129,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "3db780a7-dd7a-4455-86b5-39663861c667")
 		)
 		(pad "" smd roundrect
@@ -5685,7 +6136,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "f8e2c41c-8e2f-41d1-8fdb-7571021145b5")
 		)
 		(pad "" smd roundrect
@@ -5693,7 +6143,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "874714fd-deb1-4071-89c9-c0fb343031cc")
 		)
 		(pad "" smd roundrect
@@ -5701,7 +6150,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "5f257691-e830-43a7-92a5-5d75ee7be073")
 		)
 		(pad "" smd roundrect
@@ -5709,7 +6157,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "b5848af1-3bfd-4407-ab4b-593632fa9ebe")
 		)
 		(pad "" smd roundrect
@@ -5717,7 +6164,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "008ef220-57cb-432c-bc76-35f5dad06bdc")
 		)
 		(pad "" smd roundrect
@@ -5725,7 +6171,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "1b04a7a0-8778-449a-874c-10d8ed70f9be")
 		)
 		(pad "" smd roundrect
@@ -5733,7 +6178,6 @@
 			(size 1.07 1.07)
 			(layers "B.Paste")
 			(roundrect_rratio 0.233645)
-			(net "GND")
 			(uuid "39f96008-8eda-4a0c-b82c-0aa3a03cc1be")
 		)
 		(pad "1" smd roundrect
@@ -5742,6 +6186,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDDA_1")
+			(pintype "power_in")
 			(uuid "b9a82c09-b96d-4548-9394-4b1fb8436b33")
 		)
 		(pad "2" smd roundrect
@@ -5750,6 +6196,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_ANT")
+			(pinfunction "LNA_IN_2")
+			(pintype "bidirectional")
 			(uuid "2bb53efd-3ff4-4c3e-9de5-da841ebf53e3")
 		)
 		(pad "3" smd roundrect
@@ -5758,6 +6206,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDDA3P3_3")
+			(pintype "power_in")
 			(uuid "2bad649f-9bdc-4603-bd4c-c16ddf31cea8")
 		)
 		(pad "4" smd roundrect
@@ -5766,6 +6216,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDDA3P3_4")
+			(pintype "power_in")
 			(uuid "1c257d6a-1671-439e-b081-d4e5c130e556")
 		)
 		(pad "5" smd roundrect
@@ -5802,6 +6254,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_RESET")
+			(pinfunction "EN_9")
+			(pintype "input")
 			(uuid "adc9d58a-5b8a-4500-85b7-9cb640857282")
 		)
 		(pad "10" smd roundrect
@@ -5873,6 +6327,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDD3P3_RTC_19")
+			(pintype "power_in")
 			(uuid "47b567ef-a174-42e9-a969-dd3e6746e686")
 		)
 		(pad "20" smd roundrect
@@ -5881,6 +6337,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_UART_CTS")
+			(pinfunction "IO13_CTS_20")
+			(pintype "bidirectional")
 			(uuid "4d97a136-e6b1-4e84-a7b3-1909e0964afd")
 		)
 		(pad "21" smd roundrect
@@ -5889,6 +6347,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_UART_RTS")
+			(pinfunction "IO15_RTS_21")
+			(pintype "bidirectional")
 			(uuid "08e159b8-f7be-4bcd-9a30-e726be3dbe76")
 		)
 		(pad "22" smd roundrect
@@ -5904,6 +6364,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_BOOT")
+			(pinfunction "IO0_BOOT_23")
+			(pintype "bidirectional")
 			(uuid "eb773121-f978-4fca-b024-8fc18aeb5097")
 		)
 		(pad "24" smd roundrect
@@ -6003,6 +6465,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDD3P3_CPU_37")
+			(pintype "power_in")
 			(uuid "d53b2192-1e1b-4517-9fb8-08a46d74e5a5")
 		)
 		(pad "38" smd roundrect
@@ -6025,6 +6489,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_UART_RX")
+			(pinfunction "U0RXD_40")
+			(pintype "input")
 			(uuid "83049a68-7c27-45f9-b54b-a0fdc6abfd9e")
 		)
 		(pad "41" smd roundrect
@@ -6033,6 +6499,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BT_UART_TX")
+			(pinfunction "U0TXD_41")
+			(pintype "output")
 			(uuid "4f6b8517-48c9-4ede-b71b-9ddfbc313b3c")
 		)
 		(pad "42" smd roundrect
@@ -6048,6 +6516,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDDA_43")
+			(pintype "power_in")
 			(uuid "881004ef-ea65-40a7-a7a9-0d0e39f5bce8")
 		)
 		(pad "44" smd roundrect
@@ -6070,6 +6540,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VCC_3V3")
+			(pinfunction "VDDA_46")
+			(pintype "power_in")
 			(uuid "3e6dc812-bf67-4a49-bc62-ccd49aa77dc7")
 		)
 		(pad "47" smd roundrect
@@ -6092,6 +6564,8 @@
 			(property pad_prop_heatsink)
 			(layers "B.Cu" "B.Mask")
 			(net "GND")
+			(pinfunction "GND_49")
+			(pintype "power_in")
 			(zone_connect 2)
 			(uuid "be342d06-ed56-4e35-b695-18c0976327e7")
 		)
@@ -6161,6 +6635,16 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000000e0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "18" "17" "16" "15" "14"
+					"13" "12" "11"
+				)
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_rect
@@ -6202,12 +6686,16 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "VCC_3V3")
+			(pinfunction "AUDIO_ON_1")
+			(pintype "passive")
 			(uuid "6d57acc2-cbd6-42da-84cc-974ff51f7678")
 		)
 		(pad "2" smd rect
 			(at -7.62 -8 180)
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
+			(pinfunction "NC_2")
+			(pintype "passive")
 			(uuid "fe86e51e-dd34-4d08-b54d-3963cf5d65c7")
 		)
 		(pad "3" smd rect
@@ -6215,12 +6703,16 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_AF_OUT")
+			(pinfunction "AF_OUT_3")
+			(pintype "output")
 			(uuid "e79781a7-ff6e-498d-8021-dae7b55b3957")
 		)
 		(pad "4" smd rect
 			(at -2.54 -8 180)
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
+			(pinfunction "NC_4")
+			(pintype "passive")
 			(uuid "09c38d08-160a-43e8-b1c1-9864420a5c60")
 		)
 		(pad "5" smd rect
@@ -6228,6 +6720,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_PTT")
+			(pinfunction "PTT_5")
+			(pintype "input")
 			(uuid "56881654-3d08-435d-9cfb-3b399cc7c062")
 		)
 		(pad "6" smd rect
@@ -6235,6 +6729,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SYS_PWR")
+			(pinfunction "PD_6")
+			(pintype "input")
 			(uuid "997ddfa0-b87a-4225-aaee-f592a2513028")
 		)
 		(pad "7" smd rect
@@ -6242,6 +6738,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_PWR_HL")
+			(pinfunction "HL_7")
+			(pintype "input")
 			(uuid "b897e183-f6f1-4c15-9bfb-2e242f413f8d")
 		)
 		(pad "8" smd rect
@@ -6249,6 +6747,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SYS_PWR")
+			(pinfunction "VBAT_8")
+			(pintype "power_in")
 			(uuid "5173de6a-e22b-464a-b9fa-643562967a4c")
 		)
 		(pad "9" smd rect
@@ -6256,6 +6756,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "PGND")
+			(pinfunction "PGND_9")
+			(pintype "power_in")
 			(uuid "30b40698-a37a-4c71-be99-7e790470eeca")
 		)
 		(pad "10" smd rect
@@ -6263,12 +6765,16 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "GND")
+			(pinfunction "RF_GND_10")
+			(pintype "power_in")
 			(uuid "d7413b7e-3b66-407d-8540-dd7801b65624")
 		)
 		(pad "11" smd rect
 			(at -7.62 8 180)
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
+			(pinfunction "NC_11")
+			(pintype "passive")
 			(uuid "900adf72-b41b-4a11-969c-6fa3b21392c2")
 		)
 		(pad "12" smd rect
@@ -6276,12 +6782,16 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "RF_ANT")
+			(pinfunction "ANT_12")
+			(pintype "bidirectional")
 			(uuid "ed7296c6-157e-4992-a2d9-a790b48b11c3")
 		)
 		(pad "13" smd rect
 			(at 7.62 8 180)
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
+			(pinfunction "NC_13")
+			(pintype "passive")
 			(uuid "5d0e9a4e-5071-4334-9d39-c2a09b94e87f")
 		)
 		(pad "14" smd rect
@@ -6289,6 +6799,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_SQL")
+			(pinfunction "SQ_14")
+			(pintype "output")
 			(uuid "954eb143-0278-4268-b40f-6ee6f5e1eeb6")
 		)
 		(pad "15" smd rect
@@ -6296,6 +6808,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_TXD")
+			(pinfunction "RXD_15")
+			(pintype "input")
 			(uuid "cc3e7226-22bf-4f48-8015-f5d1d158a791")
 		)
 		(pad "16" smd rect
@@ -6303,6 +6817,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_RXD")
+			(pinfunction "TXD_16")
+			(pintype "output")
 			(uuid "b5c0fa09-2a79-457c-b8fd-f083cd4e39fb")
 		)
 		(pad "17" smd rect
@@ -6310,6 +6826,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "SA818_MIC_IN")
+			(pinfunction "MIC_IN_17")
+			(pintype "input")
 			(uuid "b5941cd6-8c42-4cb3-96eb-de604fc0e1ad")
 		)
 		(pad "18" smd rect
@@ -6317,6 +6835,8 @@
 			(size 1.2 2.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(net "AGND")
+			(pinfunction "AGND_18")
+			(pintype "power_in")
 			(uuid "ecfed508-3b58-4439-9736-a6dd6501abc7")
 		)
 		(embedded_fonts no)
@@ -6397,6 +6917,15 @@
 					(thickness 0.15)
 				)
 				(justify mirror)
+			)
+		)
+		(path "/f0000000-0000-0000-0000-0000000001c0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4" "5" "6" "MP")
 			)
 		)
 		(attr smd)
@@ -6765,6 +7294,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "AUDIO_OUT_L")
+			(pinfunction "Pin_1_1")
+			(pintype "passive")
 			(uuid "f743e374-c108-47f3-8b66-2f966c21cb6e")
 		)
 		(pad "2" smd roundrect
@@ -6773,6 +7304,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "AUDIO_OUT_R")
+			(pinfunction "Pin_2_2")
+			(pintype "passive")
 			(uuid "a9f47685-0f23-4885-a415-047f0d6a4927")
 		)
 		(pad "3" smd roundrect
@@ -6781,6 +7314,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND_SPK")
+			(pinfunction "Pin_3_3")
+			(pintype "passive")
 			(uuid "1325a374-fc24-4eca-ac37-8bd9838021c1")
 		)
 		(pad "4" smd roundrect
@@ -6789,6 +7324,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VOICE_IN")
+			(pinfunction "Pin_4_4")
+			(pintype "passive")
 			(uuid "a822ad3f-0b53-4b97-9662-9710688a03c7")
 		)
 		(pad "5" smd roundrect
@@ -6797,6 +7334,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "AGND_MIC")
+			(pinfunction "Pin_5_5")
+			(pintype "passive")
 			(uuid "34cdf8cd-7317-4ef9-b503-f90528d52477")
 		)
 		(pad "6" smd roundrect
@@ -6805,6 +7344,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "BTN_1")
+			(pinfunction "Pin_6_6")
+			(pintype "passive")
 			(uuid "9778b181-8a9e-44d6-9dca-e603c4de9579")
 		)
 		(pad "MP" smd roundrect
@@ -6813,6 +7354,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.208333)
 			(net "GND")
+			(pinfunction "MP_MP")
+			(pintype "passive")
 			(uuid "e03fde65-ec71-4bdb-a644-09f6ed6099d4")
 		)
 		(pad "MP" smd roundrect
@@ -6821,6 +7364,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.208333)
 			(net "GND")
+			(pinfunction "MP_MP")
+			(pintype "passive")
 			(uuid "a55b429e-67d0-4b6f-b077-cab4b3a00700")
 		)
 		(embedded_fonts no)
@@ -6904,6 +7449,14 @@
 			)
 		)
 		(path "/f0000000-0000-0000-0000-0000000001b0")
+		(sheetname "/")
+		(sheetfile "openmotorbridge_omm_intercom.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "MP")
+			)
+		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -7226,6 +7779,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "VBAT")
+			(pinfunction "+_1")
+			(pintype "power_out")
 			(uuid "d5cbb885-7c35-46ae-9a0e-80aaa2a325b4")
 		)
 		(pad "2" smd roundrect
@@ -7234,6 +7789,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
 			(net "GND")
+			(pinfunction "-_2")
+			(pintype "power_in")
 			(uuid "f76ebcde-df0a-4d37-aa99-b68e5fcaa3a1")
 		)
 		(pad "MP" smd roundrect
@@ -7242,6 +7799,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.208333)
 			(net "GND")
+			(pinfunction "MP_MP")
+			(pintype "passive")
 			(uuid "384025cf-1776-4716-9c95-9940c1a276dd")
 		)
 		(pad "MP" smd roundrect
@@ -7250,6 +7809,8 @@
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.208333)
 			(net "GND")
+			(pinfunction "MP_MP")
+			(pintype "passive")
 			(uuid "874b64c2-4f62-45e4-8939-e1b04309164c")
 		)
 		(embedded_fonts no)
