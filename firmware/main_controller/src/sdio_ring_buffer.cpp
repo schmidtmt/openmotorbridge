@@ -12,6 +12,7 @@
 #include "mbedtls/sha256.h"
 #include "mbedtls/md.h"
 #include "esp_mac.h"
+#include "nvs.h"
 #include "esp_log.h"
 
 static const char *TAG = "SDIO_STORAGE";
@@ -187,11 +188,26 @@ esp_err_t sdio_track_finalize(void) {
     mbedtls_sha256_finish(&s_sha_ctx, digest);
     mbedtls_sha256_free(&s_sha_ctx);
 
-    // Derive hardware-unique key from factory eFuse MAC and seal digest via HMAC-SHA256 integrity seal
+    // Retrieve hardware-backed secret key:
+    // First attempt to load a provisioned 256-bit secret from secure NVS ("sec_storage" / "hmac_key").
+    // If unprovisioned, fall back to device-unique hardware derivation from factory eFuse MAC.
     uint8_t hw_key[32] = {0};
-    esp_efuse_mac_get_default(hw_key);
-    for (int i = 6; i < 32; ++i) {
-        hw_key[i] = (uint8_t)(hw_key[i % 6] ^ (0xA5 + i * 7));
+    bool key_from_nvs = false;
+    nvs_handle_t nvs_h;
+    if (nvs_open("sec_storage", NVS_READONLY, &nvs_h) == ESP_OK) {
+        size_t key_len = sizeof(hw_key);
+        if (nvs_get_blob(nvs_h, "hmac_key", hw_key, &key_len) == ESP_OK && key_len == 32) {
+            key_from_nvs = true;
+            ESP_LOGD(TAG, "Using provisioned secure NVS HMAC key for tour integrity sealing");
+        }
+        nvs_close(nvs_h);
+    }
+
+    if (!key_from_nvs) {
+        esp_efuse_mac_get_default(hw_key);
+        for (int i = 6; i < 32; ++i) {
+            hw_key[i] = (uint8_t)(hw_key[i % 6] ^ (0xA5 + i * 7));
+        }
     }
 
     uint8_t sig_bytes[32];

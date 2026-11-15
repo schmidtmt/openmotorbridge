@@ -33,10 +33,10 @@
 #define PIN_OTTOCAST_PWR_EN     PIN_CP2AA_PWR_EN
 #define PIN_OTTOCAST_FAULT_N    PIN_CP2AA_FAULT_N
 
-// MK1 (Knowles SPH0645LM4H-B) + J_SENSOR_EXT Digital I2S MEMS Microphone
+// MK1 (Knowles SPH0645LM4H-B) & J_SENSOR_EXT (6-Pin: 1=3V3, 2=GND, 3=SDA, 4=SCL, 5=MIC_DATA, 6=MIC_WS)
 #define PIN_MIC_I2S_WS          GPIO_NUM_6   // U1 Pad 6  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // U1 Pad 7  -> MK1 Pin 3 & J_SENSOR_EXT Pin 5 (MIC_I2S_BCLK)
-#define PIN_MIC_I2S_DATA        GPIO_NUM_12  // U1 Pad 12 -> MK1 Pin 1 & J_SENSOR_EXT Pin 7 (MIC_I2S_DATA)
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // U1 Pad 7  -> MK1 Pin 3 (MIC_I2S_BCLK)
+#define PIN_MIC_I2S_DATA        GPIO_NUM_12  // U1 Pad 12 -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
 
 // J_POD_L & J_POD_R Wired Handlebar / Mirror Pod Buttons (Active Low)
 #define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 Pad 8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)
@@ -45,9 +45,9 @@
 #define PIN_PTT_IN2_N           PIN_BTN_SIG_R_N
 #define PIN_PTT_IN3_N           GPIO_NUM_15  // Optional 3rd Handlebar Input
 
-// Shared I2C Bus: J_SENSOR_EXT (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
+// Shared I2C Bus: J_SENSOR_EXT Pin 3/4 (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
 #define PIN_I2C_SDA             GPIO_NUM_17  // U1 Pad 17 -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
-#define PIN_I2C_SCL             GPIO_NUM_18  // U1 Pad 18 -> J_SENSOR_EXT Pin 2, J_DISP_L/R Pin 3 (I2C_SCL)
+#define PIN_I2C_SCL             GPIO_NUM_18  // U1 Pad 18 -> J_SENSOR_EXT Pin 4, J_DISP_L/R Pin 3 (I2C_SCL)
 #define I2C_ADDR_OLED_LEFT      0x3C         // J_DISP_L Left Speaker-Corner Cockpit OLED
 #define I2C_ADDR_OLED_RIGHT     0x3D         // J_DISP_R Right Speaker-Corner Cockpit OLED
 

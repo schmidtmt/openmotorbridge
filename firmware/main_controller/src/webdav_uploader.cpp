@@ -7,6 +7,10 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_http_client.h"
+#include "esp_wifi.h"
+#include "esp_event.h"
+#include "esp_netif.h"
+#include "freertos/event_groups.h"
 
 static const char *TAG = "WEBDAV_SYNC";
 
@@ -196,4 +200,92 @@ esp_err_t webdav_trigger_sync_sequence(void) {
 
     ESP_LOGI(TAG, "WebDAV Garage Sync completed (%lu new GPX files uploaded).", (unsigned long)uploaded_count);
     return ESP_OK;
+}
+
+#define WIFI_CONNECTED_BIT  BIT0
+#define WIFI_FAIL_BIT       BIT1
+
+static EventGroupHandle_t s_wifi_event_group = NULL;
+
+static void wifi_event_handler(void* arg, esp_event_base_t event_base,
+                               int32_t event_id, void* event_data) {
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_wifi_event_group) {
+            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
+        }
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        if (s_wifi_event_group) {
+            xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+        }
+    }
+}
+
+esp_err_t webdav_execute_post_ride_garage_sync(uint32_t timeout_ms) {
+    ESP_LOGI(TAG, "Initiating Post-Ride Garage Wi-Fi connection & WebDAV Sync (Timeout: %lu ms)...", (unsigned long)timeout_ms);
+
+    if (s_has_internet_uplink) {
+        ESP_LOGI(TAG, "Uplink already active, starting sync immediately...");
+        return webdav_trigger_sync_sequence();
+    }
+
+    if (strlen(s_config.wifi_ssid) == 0) {
+        // Fallback default: "Garage_WiFi"
+        strncpy(s_config.wifi_ssid, "Garage_WiFi", sizeof(s_config.wifi_ssid) - 1);
+    }
+
+    if (!s_wifi_event_group) {
+        s_wifi_event_group = xEventGroupCreate();
+    }
+    xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT);
+
+    esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    esp_err_t err = esp_wifi_init(&cfg);
+    if (err != ESP_OK && err != ESP_ERR_INVALID_STATE) {
+        ESP_LOGW(TAG, "esp_wifi_init returned %s, falling back", esp_err_to_name(err));
+        return err;
+    }
+
+    esp_event_handler_instance_t instance_any_id;
+    esp_event_handler_instance_t instance_got_ip;
+    esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL, &instance_any_id);
+    esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL, &instance_got_ip);
+
+    wifi_config_t wifi_cfg = {};
+    strncpy((char*)wifi_cfg.sta.ssid, s_config.wifi_ssid, sizeof(wifi_cfg.sta.ssid) - 1);
+    strncpy((char*)wifi_cfg.sta.password, s_config.wifi_password, sizeof(wifi_cfg.sta.password) - 1);
+    wifi_cfg.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
+
+    esp_wifi_set_mode(WIFI_MODE_STA);
+    esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg);
+    esp_wifi_start();
+
+    ESP_LOGI(TAG, "Connecting to Garage Wi-Fi SSID '%s'...", s_config.wifi_ssid);
+    EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
+                                           WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+                                           pdFALSE, pdFALSE,
+                                           pdMS_TO_TICKS(timeout_ms));
+
+    esp_err_t sync_ret = ESP_OK;
+    if (bits & WIFI_CONNECTED_BIT) {
+        ESP_LOGI(TAG, "Connected to Garage Wi-Fi. IP assigned. Starting WebDAV upload...");
+        s_has_internet_uplink = true;
+        sync_ret = webdav_trigger_sync_sequence();
+    } else {
+        ESP_LOGW(TAG, "Garage Wi-Fi connection timed out or failed. Keeping tours buffered on SD card.");
+    }
+
+    // Gracefully shut down Wi-Fi station to save power before deep sleep
+    s_has_internet_uplink = false;
+    esp_wifi_disconnect();
+    esp_wifi_stop();
+    esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, instance_got_ip);
+    esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id);
+    if (sta_netif) {
+        esp_netif_destroy_default_wifi(sta_netif);
+    }
+
+    return sync_ret;
 }

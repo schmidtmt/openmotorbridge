@@ -227,9 +227,8 @@ void task_power_supervisor(void *pvParameters) {
                 set_system_led_state(LED_UPS_BATTERY_YELLOW);
                 group_split_persist_to_nvs();
                 sdio_track_finalize();
-                // Trigger WebDAV sync sequence: in post-ride garage rundown, activate uplink and sync
-                webdav_set_uplink_status(true);
-                webdav_trigger_sync_sequence();
+                // Post-Ride Garage Rundown: Starte automatischen Wi-Fi STA Connect & WebDAV Sync
+                webdav_execute_post_ride_garage_sync(15000);
                 find_my_set_dual_beacon(true);
                 power_sequencer_trigger_shutdown();
             }

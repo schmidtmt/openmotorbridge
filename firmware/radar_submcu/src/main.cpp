@@ -9,6 +9,8 @@
 #include "esp_timer.h"
 #include "esp_log.h"
 #include "esp_system.h"
+#include "esp_cpu.h"
+#include "esp_rom_sys.h"
 #include "radar_mr20_protocol.h"
 #include "usb_vehicle_backbone.h"
 #include "usb_backbone_types.h"
@@ -73,7 +75,39 @@ typedef struct {
 static RgbColor_t s_led_buffer[NUM_LEDS];
 
 static void update_neopixel_halo(void) {
-    // Drives the 36 WS2812B-2020 LEDs (D1..D36) via RMT/SPI-MOSI on GPIO 8
+    // Drives the 36 WS2812B-2020 LEDs (D1..D36) via cycle-accurate bitstream on PIN_NEOPIXEL (GPIO 8)
+    // WS2812B timings @ 160 MHz: T0H=56 cyc, T0L=144 cyc, T1H=112 cyc, T1L=88 cyc
+    const uint32_t c_t0h = 56;
+    const uint32_t c_t0l = 144;
+    const uint32_t c_t1h = 112;
+    const uint32_t c_t1l = 88;
+
+    portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+    taskENTER_CRITICAL(&mux);
+
+    for (int n = 0; n < NUM_LEDS; n++) {
+        // WS2812B expects GRB order, MSB first
+        uint32_t grb = ((uint32_t)s_led_buffer[n].g << 16) |
+                       ((uint32_t)s_led_buffer[n].r << 8)  |
+                       ((uint32_t)s_led_buffer[n].b);
+
+        for (int i = 23; i >= 0; i--) {
+            bool bit = (grb >> i) & 0x01;
+            uint32_t high_cycles = bit ? c_t1h : c_t0h;
+            uint32_t low_cycles  = bit ? c_t1l : c_t0l;
+
+            gpio_set_level(PIN_NEOPIXEL, 1);
+            uint32_t start = esp_cpu_get_cycle_count();
+            while ((esp_cpu_get_cycle_count() - start) < high_cycles) {}
+
+            gpio_set_level(PIN_NEOPIXEL, 0);
+            start = esp_cpu_get_cycle_count();
+            while ((esp_cpu_get_cycle_count() - start) < low_cycles) {}
+        }
+    }
+
+    taskEXIT_CRITICAL(&mux);
+    esp_rom_delay_us(60);
 }
 
 static void init_uarts(void) {
@@ -361,6 +395,16 @@ extern "C" void app_main(void) {
     // 0. HF Hardening: 2.4 GHz Wi-Fi & BLE are strictly disabled at the vehicle rear.
     // Only 5.9 GHz ETSI ITS-G5 (IEEE 802.11p OCB Promiscuous RX on Ch 176/180) is active via U.FL patch antenna.
     ESP_LOGI(TAG, "HF Hardening verified: 2.4 GHz disabled. 5.9 GHz C-ITS V2X OCB RX & 4-Wire USB 2.0 active.");
+
+    // Initialize WS2812B Halo GPIO
+    gpio_config_t neo_conf = {};
+    neo_conf.intr_type = GPIO_INTR_DISABLE;
+    neo_conf.mode = GPIO_MODE_OUTPUT;
+    neo_conf.pin_bit_mask = (1ULL << PIN_NEOPIXEL);
+    neo_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
+    neo_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+    gpio_config(&neo_conf);
+    gpio_set_level(PIN_NEOPIXEL, 0);
 
     // 1. Initialize Wheeltec MR20 UART (RX=GPIO 3, TX=GPIO 4)
     init_uarts();
