@@ -21,7 +21,7 @@ EXPLODED_VIEW = false;
 // Dimensional Parameters
 FOB_L = 58.0;   // Overall length (mm)
 FOB_W = 34.0;   // Overall width (mm)
-FOB_H = 13.0;   // Overall thickness (mm)
+FOB_H = 14.0;   // Overall thickness (mm, 14.0 mm allows 1.2 mm B.Cu SMD component clearance above battery)
 FOB_WALL = 1.8; // Structural shell wall thickness (mm)
 CORNER_R = 6.0; // Outer ergonomic corner radius (mm)
 
@@ -37,7 +37,7 @@ PCB_W = 19.0;
 PCB_T = 1.0;
 PCB_X = 5.0;  // X position in fob (5.0 to 43.0 mm)
 PCB_Y = 4.0;  // Y position in fob (4.0 to 23.0 mm)
-PCB_Z = 5.0;  // Z position (resting on shelf at Z=5.0)
+PCB_Z = 6.2;  // Z position (resting on shelf at Z=6.2 mm, leaving 1.2 mm air gap to 3.8 mm battery at Z=1.2..5.0 mm)
 
 // Magnet Key Dimensions (Lateral pocket, shielded)
 MAG_L = 20.0;
@@ -394,25 +394,25 @@ module internal_pcba(include_battery = true) {
     if (include_battery) {
         // 180 mAh LiPo Pouch Cell (25 x 18 x 3.8 mm, beneath PCB)
         color("#334155")
-            translate([PCB_X + 2.0, PCB_Y + 0.5, -3.8])
+            translate([PCB_X + 2.0, PCB_Y + 0.5, -5.0])
                 cube([25.0, 18.0, 3.8]);
 
         // Qi Wireless Charging Receiver Coil (Ø 24 mm ultra-thin copper flat coil)
         // Seated on lower shell floor below battery
         color("#b45309", 0.9)
-            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -4.0])
+            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -5.2])
                 cylinder(r=11.5, h=0.3, $fn=48);
 
         // Ferrite Shielding Foil (0.3 mm sheet on top of Qi coil, magnetic barrier for LiPo & PCB)
         color("#1e293b", 0.85)
-            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -3.7])
+            translate([FOB_L / 2.0 - 4.0, FOB_W / 2.0, -4.9])
                 cylinder(r=11.8, h=0.3, $fn=48);
 
         // Qi Coil Connection Leads (2x enameled copper leads from coil up to J_QI pads)
         color("#b45309") {
-            translate([QI_PAD_X, QI_PAD_Y - 0.4, -3.7])
+            translate([QI_PAD_X, QI_PAD_Y - 0.4, -4.9])
                 cylinder(r=0.25, h=3.7 + PCB_T, $fn=16);
-            translate([QI_PAD_X, QI_PAD_Y + 0.4, -3.7])
+            translate([QI_PAD_X, QI_PAD_Y + 0.4, -4.9])
                 cylinder(r=0.25, h=3.7 + PCB_T, $fn=16);
         }
 

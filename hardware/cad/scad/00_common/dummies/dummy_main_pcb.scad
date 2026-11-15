@@ -62,10 +62,10 @@ module dummy_main_pcb() {
         translate([28.43 - 2.25, 51.65 - 2.25, 1.6])
             cube(size=[4.5, 4.5, 2.5], center=false);
 
-    // 8. Header J6: Molex Picoflex 16-Pin 2x08 Vertikal (4 Autarke OMB-Systemstränge)
-    color("black")
-        translate([40.78 - 11.5, 46.15 - 3.0, 1.6])
-            cube(size=[23.0, 6.0, 8.5], center=false);
+    // 8. Header J6: Molex Micro-Lock Plus 16-Pin 2x08 Vertikal (4 Autarke OMB-Systemstränge)
+    color("ivory")
+        translate([40.78 - 6.7, 46.15 - 3.2, 1.6])
+            cube(size=[13.4, 6.4, 6.5], center=false);
 
     // 9. Receptacle J3: USB Type-C 16-Pin Service & Flash Port (HRO TYPE-C-31-M-12)
     color("silver")
