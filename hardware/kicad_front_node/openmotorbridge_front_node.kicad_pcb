@@ -484,7 +484,7 @@
 		(uuid "0f5ac4bd-54b1-4710-b3f1-512a1e953ea4")
 		(at 107.725 80)
 		(descr "10k")
-		(property "Reference" "R_E22_EN"
+		(property "Reference" "R4"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "c58cdc86-bb1d-4e16-b6c5-9e42d939b209")
@@ -820,7 +820,7 @@
 		(at 133.5 116.5)
 		(descr "JST SH series connector, SM04B-SRSS-TB (http://www.jst-mfg.com/product/pdf/eng/eSH.pdf)")
 		(tags "connector JST SH horizontal")
-		(property "Reference" "J_DISP_R"
+		(property "Reference" "J11"
 			(at 0 -3.98 0)
 			(layer "F.SilkS")
 			(uuid "fbfc59f8-b736-4a5f-9135-c7a32243be14")
@@ -1235,7 +1235,7 @@
 		(uuid "1d2cbcf6-ed3f-4427-bb2f-42133ca47561")
 		(at 107.725 82)
 		(descr "10k")
-		(property "Reference" "R_SDIO_D0"
+		(property "Reference" "R13"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "3d8f7d85-6a44-498b-965a-c5b9f984b30a")
@@ -2077,7 +2077,7 @@
 		(at 170.5 116.5)
 		(descr "JST GH series connector, SM04B-GHS-TB (http://www.jst-mfg.com/product/pdf/eng/eGH.pdf)")
 		(tags "connector JST GH horizontal")
-		(property "Reference" "J_POD_L"
+		(property "Reference" "J2"
 			(at 0 -3.9 0)
 			(layer "F.SilkS")
 			(uuid "a6c05e75-059d-443e-8032-c8e1c53057de")
@@ -2989,7 +2989,7 @@
 		(uuid "2d2cb77b-e166-46d6-9e8a-a010af291fc9")
 		(at 174 86)
 		(descr "13.7k")
-		(property "Reference" "R_FB2"
+		(property "Reference" "R8"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "41f6f725-bd8c-48e1-a6f2-4678f534dae5")
@@ -3057,7 +3057,7 @@
 		(uuid "338067ec-7dd4-49cc-a66c-8cc5a80927d4")
 		(at 137.5 92.225 90)
 		(descr "18pF")
-		(property "Reference" "C_XTAL2"
+		(property "Reference" "C8"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "2328edca-4046-431a-a2b9-2a98cfa91a5b")
@@ -3508,7 +3508,7 @@
 		(uuid "42d32fab-1ed3-42f7-912a-06c4327ec419")
 		(at 125.5 90 -90)
 		(descr "18pF")
-		(property "Reference" "C_XTAL1"
+		(property "Reference" "C7"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "54e72f03-b65d-42a9-a3b2-b69008d8bac5")
@@ -3992,7 +3992,7 @@
 		(uuid "4e4a19d8-47d6-47aa-9dba-85e17c6be3c1")
 		(at 110.475 84)
 		(descr "10k")
-		(property "Reference" "R_SDIO_D3"
+		(property "Reference" "R16"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "eb69db5b-06d9-40e4-9b5e-00e727720690")
@@ -4817,7 +4817,7 @@
 		(uuid "4fbbd9c0-1048-43e4-b98d-aac5ced0405a")
 		(at 117.5 110.5 90)
 		(descr "10k")
-		(property "Reference" "R_BTN_R"
+		(property "Reference" "R3"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "ae14d60d-c163-498b-b67e-dfb325990348")
@@ -6296,7 +6296,7 @@
 		(uuid "5c0efbce-feb8-414d-9fb1-472bbcd21efe")
 		(at 180.225 110.25)
 		(descr "100nF")
-		(property "Reference" "C_LED"
+		(property "Reference" "C4"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "e568b79e-c964-4ba3-9c88-c4e9e8725114")
@@ -6364,7 +6364,7 @@
 		(uuid "6c76711a-b96a-460c-aef2-618302dab9d4")
 		(at 110.475 82)
 		(descr "10k")
-		(property "Reference" "R_SDIO_D1"
+		(property "Reference" "R14"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "8d2c8b18-6335-463c-8f31-40ca1b1c9a06")
@@ -6432,7 +6432,7 @@
 		(uuid "6e6c7807-5bae-4be4-b500-1433c4e2d232")
 		(at 174.25 79.25 180)
 		(descr "100nF")
-		(property "Reference" "C_BOOT"
+		(property "Reference" "C2"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "dc7584dc-77b3-4b2e-9eb5-365df7762929")
@@ -6501,7 +6501,7 @@
 		(at 143.975 73.35 180)
 		(descr "JST GH series connector, SM04B-GHS-TB (http://www.jst-mfg.com/product/pdf/eng/eGH.pdf)")
 		(tags "connector JST GH horizontal")
-		(property "Reference" "J_DONGLE"
+		(property "Reference" "J5"
 			(at 0 -3.9 0)
 			(layer "F.SilkS")
 			(uuid "407d7c64-8f47-44ac-92b3-4a4f88f17759")
@@ -6916,7 +6916,7 @@
 		(uuid "789f58be-2280-402c-839a-576c734c3fde")
 		(at 110.475 80)
 		(descr "10k")
-		(property "Reference" "R_SDIO_CMD"
+		(property "Reference" "R12"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "42b9bc35-bddd-4ba1-8dec-116f8a527ebd")
@@ -8967,7 +8967,7 @@
 		(at 159.5 116.5)
 		(descr "JST SH series connector, SM04B-SRSS-TB (http://www.jst-mfg.com/product/pdf/eng/eSH.pdf)")
 		(tags "connector JST SH horizontal")
-		(property "Reference" "J_DISP_L"
+		(property "Reference" "J9"
 			(at 0 -3.98 0)
 			(layer "F.SilkS")
 			(uuid "867dacb8-aad4-4348-9868-8e044be76bf0")
@@ -9573,7 +9573,7 @@
 		(at 154 77 180)
 		(descr "JST PH series connector, S2B-PH-K (http://www.jst-mfg.com/product/pdf/eng/ePH.pdf)")
 		(tags "connector JST PH horizontal")
-		(property "Reference" "J_AUX_LIGHT"
+		(property "Reference" "J7"
 			(at 1 -2.55 0)
 			(layer "F.SilkS")
 			(uuid "7b9e6d12-8147-455f-a1c0-71fa80a9bac6")
@@ -10522,7 +10522,7 @@
 		(uuid "a7721531-22ed-4193-9a1b-561ef56c2a74")
 		(at 138.75 114.5 180)
 		(descr "4.7k")
-		(property "Reference" "R_SCL"
+		(property "Reference" "R10"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "f8a5e493-8c32-456a-94a4-d26f3d29e5ba")
@@ -11349,7 +11349,7 @@
 		(uuid "b6ef2f31-2723-4d89-bac0-b20118d4cfe5")
 		(at 141.5 108.5 90)
 		(descr "4.7k")
-		(property "Reference" "R_SDA"
+		(property "Reference" "R11"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "0e555b7b-7018-42d6-aaa4-79e5b66ee776")
@@ -11607,7 +11607,7 @@
 		(uuid "c0adff98-8f04-4cb5-93ab-32e5cafb16c6")
 		(at 170.25 86)
 		(descr "100k")
-		(property "Reference" "R_FB1"
+		(property "Reference" "R7"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "23a2c666-7d76-4ef0-915d-debd36b4301e")
@@ -11822,7 +11822,7 @@
 		(uuid "c2988c57-6b10-471b-9324-358ad869cf36")
 		(at 103.275 77.25 180)
 		(descr "10k")
-		(property "Reference" "R_BOOT"
+		(property "Reference" "R1"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "229f02cd-1772-40b5-adc9-60517ce36f70")
@@ -12311,7 +12311,7 @@
 		(at 121.5 116.5)
 		(descr "JST GH series connector, SM04B-GHS-TB (http://www.jst-mfg.com/product/pdf/eng/eGH.pdf)")
 		(tags "connector JST GH horizontal")
-		(property "Reference" "J_POD_R"
+		(property "Reference" "J3"
 			(at 0 -3.9 0)
 			(layer "F.SilkS")
 			(uuid "f163e553-ccac-4f96-b25b-68130e5e5eba")
@@ -12815,7 +12815,7 @@
 		(uuid "cb706fd0-86d0-4764-804c-6f9394e44783")
 		(at 107.725 84)
 		(descr "10k")
-		(property "Reference" "R_SDIO_D2"
+		(property "Reference" "R15"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "8b2f19b3-64ce-4dd6-bb48-08fc5587f6f1")
@@ -13073,7 +13073,7 @@
 		(uuid "cf74883a-e064-40c0-9cca-c492da1896bf")
 		(at 102 106.75 180)
 		(descr "1uF")
-		(property "Reference" "C_EN"
+		(property "Reference" "C3"
 			(at -0.25 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "11ceeb57-716b-4c91-8d0f-e1ba92e5dd8d")
@@ -13141,7 +13141,7 @@
 		(uuid "d7143e38-059b-4fa8-b513-21e9824ce2a7")
 		(at 108.5 113.5)
 		(descr "100nF")
-		(property "Reference" "C_MIC"
+		(property "Reference" "C5"
 			(at 0.25 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "907dcf0b-a3be-4543-9d44-3e3f6f69fb99")
@@ -13503,7 +13503,7 @@
 		(uuid "d8fb0487-49a7-4b97-bfcd-1e7e19c4521d")
 		(at 167.5 110.5 90)
 		(descr "10k")
-		(property "Reference" "R_BTN_L"
+		(property "Reference" "R2"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "900c0da4-03fb-4599-9503-b380d9618d82")
@@ -13718,7 +13718,7 @@
 		(uuid "e8ea9930-5c40-4726-9a3a-373153565679")
 		(at 125.5 92.475 90)
 		(descr "10k")
-		(property "Reference" "R_HUB_RST"
+		(property "Reference" "R9"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "47ce5b6f-b8ca-4e7a-a60d-e3822ffa882a")
@@ -13786,7 +13786,7 @@
 		(uuid "eac101fe-9f9c-4953-84e3-38071a6c0b38")
 		(at 121 82.25 90)
 		(descr "1uF")
-		(property "Reference" "C_VDD18"
+		(property "Reference" "C6"
 			(at 0 -1.43 90)
 			(layer "F.SilkS")
 			(uuid "92154cf4-8e9c-4b26-9fe2-1d6b9fff5272")
@@ -13855,7 +13855,7 @@
 		(at 146.5 116.5)
 		(descr "JST GH series connector, SM06B-GHS-TB (http://www.jst-mfg.com/product/pdf/eng/eGH.pdf)")
 		(tags "connector JST GH horizontal")
-		(property "Reference" "J_SENSOR_EXT"
+		(property "Reference" "J6"
 			(at 0 -3.9 0)
 			(layer "F.SilkS")
 			(uuid "b5c2cad2-66c2-49e4-ac7b-4e306c650bef")
@@ -14719,7 +14719,7 @@
 		(at 179 81.5 90)
 		(descr "Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC-7352 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf)")
 		(tags "capacitor tantalum")
-		(property "Reference" "C_BUF"
+		(property "Reference" "C1"
 			(at 0 -3.1 90)
 			(layer "F.SilkS")
 			(uuid "9d5e6251-ea80-43f8-aa75-2f696f4114e7")
@@ -14914,7 +14914,7 @@
 		(uuid "fec1757f-c64a-41e7-8e5f-0f04588e3b0e")
 		(at 104.725 106.75)
 		(descr "10k")
-		(property "Reference" "R_EN"
+		(property "Reference" "R6"
 			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(uuid "9871dbe6-6b1a-4155-9cdc-1f3d1378a9aa")

@@ -1905,7 +1905,7 @@
 		(layer "F.Cu")
 		(uuid "39f8c565-d01b-4450-9529-8dcaeb5d1ef4")
 		(at 105.5 77.8375)
-		(property "Reference" "J_QI"
+		(property "Reference" "J1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(uuid "bab54774-3de7-4bd6-a690-fd9766f97505")
@@ -4150,7 +4150,7 @@
 		(at 132.3375 81)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
-		(property "Reference" "P_BAT"
+		(property "Reference" "J3"
 			(at 0 -1.65 0)
 			(layer "F.SilkS")
 			(uuid "a26f980a-89c0-47ae-8640-41ae5efffbdd")
@@ -5046,7 +5046,7 @@
 		(at 108.75 85.405)
 		(descr "surface-mounted straight pin header, 1x04, 1.27mm pitch, single row, style 1 (pin 1 left)")
 		(tags "Surface mounted pin header SMD 1x04 1.27mm single row style1 pin1 left")
-		(property "Reference" "J_SWD"
+		(property "Reference" "J2"
 			(at 0 -3.65 0)
 			(layer "F.SilkS")
 			(uuid "916a660d-5ca2-4282-8131-ebfb19ec3144")

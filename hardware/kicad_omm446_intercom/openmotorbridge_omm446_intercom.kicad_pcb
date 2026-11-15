@@ -3507,7 +3507,7 @@
 		(at 110.2 113.5)
 		(descr "Hirose U.FL coax connector 50 Ohm SMT")
 		(tags "U.FL coaxial connector")
-		(property "Reference" "J_RF"
+		(property "Reference" "J3"
 			(at -3.275 0.75 0)
 			(layer "F.SilkS")
 			(uuid "b5cc1f7e-fcff-4965-ac39-2028da82d953")
@@ -6338,7 +6338,7 @@
 		(at 127.05 99.7 90)
 		(descr "JST SH series connector, BM06B-SRSS-TB (http://www.jst-mfg.com/product/pdf/eng/eSH.pdf)")
 		(tags "connector JST SH vertical")
-		(property "Reference" "J_HELMET"
+		(property "Reference" "J2"
 			(at 0.2 1.45 270)
 			(layer "B.SilkS")
 			(uuid "761c0eac-8126-40e0-9c70-cd1394bef445")

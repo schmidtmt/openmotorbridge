@@ -11424,7 +11424,7 @@
 		(at 150.475 88.75)
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor")
-		(property "Reference" "C_BOOT"
+		(property "Reference" "C5"
 			(at 0 -1.43 0)
 			(layer "B.SilkS")
 			(uuid "cb736478-19fa-4b07-8c81-6cd8afa24f35")
@@ -12771,7 +12771,7 @@
 		(at 137.925 92.5 180)
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
-		(property "Reference" "R_FB1"
+		(property "Reference" "R3"
 			(at 0 -1.43 0)
 			(layer "B.SilkS")
 			(uuid "c303abf0-9971-47ad-be0a-40bf52c2da88")
@@ -13075,7 +13075,7 @@
 		(at 132.75 89.325 90)
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
-		(property "Reference" "R_FB2"
+		(property "Reference" "R4"
 			(at 0 1.43 90)
 			(layer "B.SilkS")
 			(uuid "7805b327-f14c-4ac2-9905-408886a5798c")
@@ -13573,7 +13573,7 @@
 		(at 156.25 83.95 90)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
-		(property "Reference" "C_OUT1"
+		(property "Reference" "C7"
 			(at 0 -1.68 90)
 			(layer "B.SilkS")
 			(uuid "c063e970-42be-4050-a011-dac1c09fb644")
@@ -14343,7 +14343,7 @@
 		(at 138 85 180)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
-		(property "Reference" "C_IN1"
+		(property "Reference" "C6"
 			(at 0 1.68 0)
 			(layer "B.SilkS")
 			(uuid "9145d0aa-4d62-4a8b-b21b-0f3c2d5dba39")
