@@ -523,10 +523,29 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.15,
+        "name": "LED_DATA",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": -1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2,
+        "tuning_profile": "",
+        "via_diameter": 0.6,
+        "via_drill": 0.3,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 0.15,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.15,
         "name": "Power",
-        "pcb_color": "rgba(200, 50, 50, 1.000)",
-        "priority": 100,
-        "schematic_color": "rgba(200, 50, 50, 1.000)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": -1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.3,
         "tuning_profile": "",
         "via_diameter": 0.6,
@@ -543,28 +562,9 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.15,
         "name": "USB_DIFF",
-        "pcb_color": "rgba(50, 100, 200, 1.000)",
-        "priority": 100,
-        "schematic_color": "rgba(50, 100, 200, 1.000)",
-        "track_width": 0.2,
-        "tuning_profile": "",
-        "via_diameter": 0.6,
-        "via_drill": 0.3,
-        "wire_width": 6
-      },
-      {
-        "bus_width": 12,
-        "clearance": 0.15,
-        "diff_pair_gap": 0.25,
-        "diff_pair_via_gap": 0.25,
-        "diff_pair_width": 0.2,
-        "line_style": 0,
-        "microvia_diameter": 0.3,
-        "microvia_drill": 0.15,
-        "name": "LED_DATA",
-        "pcb_color": "rgba(50, 200, 50, 1.000)",
-        "priority": 100,
-        "schematic_color": "rgba(50, 200, 50, 1.000)",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": -1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "tuning_profile": "",
         "via_diameter": 0.6,
@@ -607,26 +607,6 @@
         "pattern": "BUCK_FB"
       },
       {
-        "netclass": "Power",
-        "pattern": "*VCC*"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "*GND*"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "*12V*"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "*5V*"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "*3V3*"
-      },
-      {
         "netclass": "USB_DIFF",
         "pattern": "BUS_DP"
       },
@@ -640,7 +620,143 @@
       },
       {
         "netclass": "LED_DATA",
-        "pattern": "LED*_DO"
+        "pattern": "LED1_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED2_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED3_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED4_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED5_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED6_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED7_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED8_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED9_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED10_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED11_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED12_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED13_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED14_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED15_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED16_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED17_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED18_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED19_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED20_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED21_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED22_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED23_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED24_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED25_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED26_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED27_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED28_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED29_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED30_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED31_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED32_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED33_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED34_DO"
+      },
+      {
+        "netclass": "LED_DATA",
+        "pattern": "LED35_DO"
       }
     ]
   },
