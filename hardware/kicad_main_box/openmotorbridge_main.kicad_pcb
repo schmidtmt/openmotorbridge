@@ -3070,7 +3070,7 @@
 		(layer "F.Cu")
 		(uuid "9fd15b66-3a21-45ca-9f10-0db11dd04d2d")
 		(at 156.25 124.25 -90)
-		(descr "Quad Automotive eFuse Smart Switch QFN-20")
+		(descr "TI Automotive 40V Quad-Channel Smart High-Side Switch")
 		(property "Reference" "U12"
 			(at 0 -2.8 90)
 			(layer "F.SilkS")
@@ -3082,7 +3082,7 @@
 				)
 			)
 		)
-		(property "Value" "TPS25921_Quad_eFuse"
+		(property "Value" "TPS4H160BQPWPRQ1"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "ebdfff42-0659-4625-8e3d-7ba7d26a2fb5")

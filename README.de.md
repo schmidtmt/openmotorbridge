@@ -35,7 +35,7 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
    *OpenMotorMesh (OMM), Dynamic Leader Election (DLE), 868 MHz LoRa Fallback & 10 Hz Multi-GNSS.*
 
 5. [**05 - Stromversorgung, USV-Akkusystem & Power-Gate**](docs/de/05_power_management_ups.md)  
-   *LM5164-Q1 72V Buck, BQ24075 USV, TPS25921 Quad-eFuse, Front-Node TPS54302 / SW3526 30W PD & 1-Klick CarPlay Kaltstart.*
+   *LM5164-Q1 72V Buck, BQ24075 USV, TPS4H160-Q1 Quad Smart Switch, Front-Node TPS54302 / SW3526 30W PD & 1-Klick CarPlay Kaltstart.*
 
 6. [**06 - Telemetrie-Blackbox, SDIO-Ringpuffer & WebDAV-Sync**](docs/de/06_telemetry_blackbox_webdav.md)  
    *4-Bit High-Speed SDIO, BGH- und DSGVO-konformer Ringspeicher, ECDSA SHA-256 & automatischer Cloud-Sync.*

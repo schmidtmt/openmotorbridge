@@ -46,7 +46,7 @@ For firmware development, configuration, and desk diagnostics of the Central Box
 +----------------------------+
 | 12V VEHICLE NET (J1 DTM-6) |---> KL30_IN ---> [D2 SMBJ33CA TVS (33V Clamping)]
 | KL30 (Batt) / KL15 (Ign.)  |        |
-+----------------------------+        +---> [U12 TPS25921 Quad eFuse] ---> J6 Satellites (12V)
++----------------------------+        +---> [U12 TPS4H160-Q1 Quad Switch] ---> J6 Satellites (12V)
                                        |     (VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR)
                                        v
                                 [U1 LM5164-Q1 Buck] (100V Wide-VIN Step-Down)
@@ -62,7 +62,7 @@ For firmware development, configuration, and desk diagnostics of the Central Box
 ```
 
 * **Clear Separation of the Two Operating Modes:**
-  * **1. On-Bike & 12V Testbench Full Operation (`J1` DTM06-6S on 12V Power):** When 12V vehicle net voltage is present at `J1`, the 100V synchronous step-down regulator **`U1` (`LM5164-Q1`)** efficiently converts vehicle voltage into `VCC_5V` and via the ultra-low-IQ LDO **`U11` (`TPS7A0533`)** into `VCC_3V3`. Simultaneously, the **`TPS25921` Quad Automotive eFuse (`U12`)** switches monitored 12V power to the four peripheral branches on `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In this mode, all satellites (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Rear Radar) are energized and can be flashed and operated over the 4-wire USB backbone via **Central Bus-DFU**.
+  * **1. On-Bike & 12V Testbench Full Operation (`J1` DTM06-6S on 12V Power):** When 12V vehicle net voltage is present at `J1`, the 100V synchronous step-down regulator **`U1` (`LM5164-Q1`)** efficiently converts vehicle voltage into `VCC_5V` and via the ultra-low-IQ LDO **`U11` (`TPS7A0533`)** into `VCC_3V3`. Simultaneously, the **`TPS4H160-Q1` Quad Automotive High-Side Smart Switch (`U12`)** switches monitored 12V power to the four peripheral branches on `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In this mode, all satellites (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Rear Radar) are energized and can be flashed and operated over the 4-wire USB backbone via **Central Bus-DFU**.
   * **2. Workbench & Desk Diagnostics via 5V USB-C (`J3`):** When connected to a PC or standard USB charger, the **`LM66100` Ideal Diode (`D3`)** directly feeds the internal `VCC_5V` rail and via `U11` the 3.3V logic of the **Central Box (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-port hub, Audio DSP, LoRa, and IMU). This allows the Central Box alone to be flashed, calibrated, and monitored without requiring a 12V power supply.
   * **Hardware Clarification on Satellite Powering During Workbench Mode (P01):** On `PCBA 01`, the USB-C service input `J3` exclusively powers the Central Box's internal 5V rail (`VCC_5V`). The four satellite branches on `J6` are hardware-wired directly to `KL30_IN` (12V) through `U12`; there is intentionally no unprotected 5V cross-tie onto the 12V vehicle bus line to prevent overloading the host PC or causing reverse feed. To power or flash connected satellite nodes together with the Central Box on the bench, a 12V supply at `J1` is required, OR the respective satellite must be energized individually via its local test port.
   * **Zero Back-Feed Isolation:** The **`LM66100` Ideal Diode (`D3`)** strictly blocks reverse current from `VCC_5V` back to `J3`. When 12V vehicle power is active while a diagnostic laptop is plugged into `J3`, `D3` reliably prevents any back-feed into the programming PC.
@@ -86,13 +86,13 @@ For firmware development, configuration, and desk diagnostics of the Central Box
 
 ## 3. Automotive Transient, EMC & Polarity Protection (ISO 7637-2 & ISO 16750-2)
 
-- **Overcurrent Protection & Current Limiting:** 4-channel automotive eFuses (**`U12 TPS25921`**) with programmable current clamps for each external branch on `J6`.
+- **Overcurrent Protection & Current Limiting:** 4-channel automotive smart switch (**`U12 TPS4H160-Q1`**) with programmable current clamps for each external branch on `J6`.
 - **Transient & Spike Clamping:** Littelfuse **`SMBJ33CA`** bidirectional TVS diode (**`D2`**, $33\,\text{V}$ standoff voltage) clamping ISO 16750-2 / ISO 7637-2 load dump spikes.
 - **High-Voltage Rating:** The central buck converter **`U1 LM5164-Q1`** is rated for input transients up to $100\,\text{V}$, providing $> 45\,\text{V}$ margin above the clamped TVS voltage.
 - **Decoupling & LC Filtering:** $10\,\mu\text{F}$ 100V X7R ceramic input capacitor (`C1`) at KL30 and LC filter network (`L1` $47\,\mu\text{H}$ + `C2` $22\,\mu\text{F}$) for minimum ripple on the 5V rail.
 
-### 3.1 Two-Cable Architecture & Power Distribution with TI TPS25921 eFuse Protection
-All peripheral connections from Central Box (`PCBA 01`) route through the **Two-Cable Architecture** (Cable 1: 6-pin Deutsch DTM `J1` for vehicle net/CAN; Cable 2: 16-pin Automotive Connector `J4` for periphery bus). Every external branch is hardware-protected on `PCBA 01` via a dedicated **TI TPS25921 eFuse (`U12`, `GPIO 13..16`)**:
+### 3.1 Two-Cable Architecture & Power Distribution with TI TPS4H160-Q1 Smart Switch Protection
+All peripheral connections from Central Box (`PCBA 01`) route through the **Two-Cable Architecture** (Cable 1: 6-pin Deutsch DTM `J1` for vehicle net/CAN; Cable 2: 16-pin Automotive Connector `J4` for periphery bus). Every external branch is hardware-protected on `PCBA 01` via a dedicated channel of the **TI TPS4H160-Q1 Smart Switch (`U12`, `GPIO 13..16`)**:
 * **Branch 1 (Front Node & Cockpit):** **60W Budget** (regulated locally on `PCBA 05` via the **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** and `TPS54302` `U1`). Powers driver smartphone fast-charging (27–30W USB-PD/QC via the Glovebox Hub), dedicated motorcycle GPS (15W for Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), action-cam continuous power (10W weather-sealed USB-C), dual cockpit OLED displays (`PCBA 05C`, 2W in Speaker Corner Pods), and host MCU (`ESP32-P4` + `ESP32-E22`), sensor puck (`PCBA 05D`), & `USB2514Bi` hub (3.5W).
 * **Branch 2 (Saddlebag Pod Left):** **30W USB-PD Budget** (regulated locally on `PCBA 03` via **`SW3516H` `U5`**) for internal in-bag USB receptacle (`J2`), `ESP32-C6-MINI-1U` host, `PCM2912A` audio codec, and mechatronic cold-start pushers.
 * **Branch 3 (Saddlebag Pod Right):** **30W USB-PD Budget** for Bay 2, identical to Branch 2.

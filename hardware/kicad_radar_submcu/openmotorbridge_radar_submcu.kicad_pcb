@@ -10242,12 +10242,12 @@
 			)
 		)
 	)
-	(footprint "ESP32-C3-WROOM-02U"
+	(footprint "ESP32-C5-WROOM-1U"
 		(layer "B.Cu")
 		(uuid "041a37ef-0258-446a-a62a-7604c2f9024c")
 		(at 56 100 180)
-		(descr "RF Module, ESP32-C3 WROOM-02 , Wi-Fi and Bluetooth, BLE, external antenna, https://www.espressif.com/sites/default/files/documentation/esp32-c3-wroom-02_datasheet_en.pdf")
-		(tags "ESP32-C3 WROOM-02 espressif")
+		(descr "RF Module, ESP32-C5 WROOM-1U, Dual-Band 2.4/5GHz Wi-Fi 6 & Bluetooth 5, external U.FL antenna for 5.9 GHz ETSI ITS-G5 V2X, https://www.espressif.com/sites/default/files/documentation/esp32-c5_datasheet_en.pdf")
+		(tags "ESP32-C5 WROOM-1U espressif 5GHz V2X")
 		(property "Reference" "U1"
 			(at -10.5 -5.13 90)
 			(layer "B.SilkS")

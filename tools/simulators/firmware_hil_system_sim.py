@@ -8,9 +8,9 @@ Simulates all physical PCBAs running their respective v10.0 firmware:
 
 Boards in Simulation:
   1. PCBA 01: Central Box Main Controller (ESP32-S31-WROOM-1U / esp32s3):
-     - TPS25921 Quad eFuse Staged Power Sequencer (GPIO 13..16: T=0ms Core, T=150ms Front, T=300ms Pods, T=450ms Radar)
+     - TPS4H160-Q1 Quad Automotive Smart Switch Staged Power Sequencer (GPIO 13..16: T=0ms Core, T=150ms Front, T=300ms Pods, T=450ms Radar)
      - USB2517I-JZX 7-Port High-Speed USB 2.0 Automotive Hub Backbone (< 0.125 ms microframe latency)
-     - Zero-Disassembly Central USB-Bus DFU Engine (Opcodes 0x50 DFU_ENTER / 0x51 DFU_CHUNK + eFuse Recovery)
+     - Zero-Disassembly Central USB-Bus DFU Engine (Opcodes 0x50 DFU_ENTER / 0x51 DFU_CHUNK + Switch Recovery)
      - SX1262 868 MHz LoRa Engine (SPI GPIO 10..12, CS=9, BUSY=46, DIO1=3, RST=8) & Group Split Rescue
      - QCC3084 Dual-Mode Bluetooth 5.4 LE Audio + ES8388 I2S Full-Duplex DSP Matrix
      - Action-Cam BLE GATT Remote Client (GoPro / DJI / Insta360 HiLight Tagging)
@@ -24,10 +24,10 @@ Boards in Simulation:
      - Native USB 2.0 Full-Speed/High-Speed Bus Interface (GPIO 12/13)
      - OMM_DETECT Hardware Auto-Sense (GPIO 14 -> U4 TS5A3159DBVR Analog Switch on GPIO 15)
      - 4x AO3400A Mechatronic Cold-Boot Actuator Drivers (GPIO 4/5/6/7) + ES8388 Codec + SW3516 30W USB-PD
-  4. PCBA 08: Rear Radar & V2X Node (ESP32-C6-MINI-1U):
-     - 77 GHz MR20 mmWave Radar Target Tracking (UART1 GPIO 4/5, TTC < 2.5s)
-     - 5.9 GHz ETSI ITS-G5 (IEEE 802.11p OCB) V2X C-ITS Receiver (UART0 GPIO 18/19, CAM/DENM Opcode 0x32)
-     - 36x WS2812B Halo LED Warning Wings (GPIO 6/7)
+  4. PCBA 08: Rear Radar & V2X Node (ESP32-C5-WROOM-1U Dual-Band):
+     - 77 GHz MR20 mmWave Radar Target Tracking (UART1 GPIO 3/4, TTC < 2.5s)
+     - 5.9 GHz ETSI ITS-G5 (IEEE 802.11p OCB) V2X C-ITS Receiver (Opcode 0x32)
+     - 36x WS2812B Halo LED Warning Wings (GPIO 8)
 """
 
 import time
@@ -169,10 +169,10 @@ class RadarV2xFirmware:
     def boot(self):
         self.hw.is_powered = True
         self.hw.usb_enumerated = True
-        log_radar("Booting Rear Radar & V2X Node PCBA 08 (ESP32-C6-MINI-1U on USB Hub Port 4)...")
-        log_radar("✓ UART1 (GPIO 4/5): 77 GHz MR20 mmWave Radar Parser online (115200 Bd)")
-        log_radar("✓ UART0 (GPIO 18/19): 5.9 GHz ETSI ITS-G5 (802.11p OCB) V2X Receiver online")
-        log_radar("✓ RMT (GPIO 6/7): 36x WS2812B Halo LED Wings initialized")
+        log_radar("Booting Rear Radar & V2X Node PCBA 08 (ESP32-C5-WROOM-1U on USB Hub Port 4)...")
+        log_radar("✓ UART1 (GPIO 3/4): 77 GHz MR20 mmWave Radar Parser online (115200 Bd)")
+        log_radar("✓ 5.9 GHz ETSI ITS-G5 (802.11p OCB) Dual-Band V2X Receiver online")
+        log_radar("✓ RMT (GPIO 8): 36x WS2812B Halo LED Wings initialized")
 
     def update_radar_tracking(self, distance_m: float, rel_speed_kmh: float) -> Tuple[float, str]:
         self.hw.target_distance_m = distance_m
@@ -256,10 +256,10 @@ class CentralBoxMainFirmware:
         self.v_ign = v_ign_in
         self.v_sys = 5.00 if self.v_ign >= 11.8 else self.v_bat
         log_main("⚡ [T =   0 ms] STAGE 0: ESP32-S31 Core, USB2517I 7-Port Hub & SX1262 LoRa 3.3V Rails ENERGIZED.")
-        log_main("⚡ [T = 150 ms] STAGE 1: TPS25921 eFuse CH1 (GPIO 13 -> EN_PWR_FRONT) ENABLED.")
-        log_main("⚡ [T = 300 ms] STAGE 2: TPS25921 eFuse CH2/CH3 (GPIO 14/15 -> EN_PWR_POD1/POD2) ENABLED.")
-        log_main("⚡ [T = 450 ms] STAGE 3: TPS25921 eFuse CH4 (GPIO 16 -> EN_PWR_RADAR) + ES8388 & QCC3084 ONLINE.")
-        log_main("✓ Quad-eFuse Staged Sequencing COMPLETE (Zero inrush surge, per-branch current limiting active).")
+        log_main("⚡ [T = 150 ms] STAGE 1: TPS4H160-Q1 Smart Switch CH1 (GPIO 13 -> EN_PWR_FRONT) ENABLED.")
+        log_main("⚡ [T = 300 ms] STAGE 2: TPS4H160-Q1 Smart Switch CH2/CH3 (GPIO 14/15 -> EN_PWR_POD1/POD2) ENABLED.")
+        log_main("⚡ [T = 450 ms] STAGE 3: TPS4H160-Q1 Smart Switch CH4 (GPIO 16 -> EN_PWR_RADAR) + ES8388 & QCC3084 ONLINE.")
+        log_main("✓ Quad Smart Switch Staged Sequencing COMPLETE (Zero inrush surge, per-branch current limiting active).")
 
     def enumerate_usb_node(self, port: int, node_name: str, latency_ms: float):
         self.usb_nodes.append(node_name)
@@ -277,10 +277,10 @@ def run_hil_system_simulation():
     print("OPENMOTORBRIDGE v10.0 FULL MULTI-BOARD HARDWARE-IN-THE-LOOP (HIL) SIMULATOR".center(80))
     print("=" * 80)
     print("Verifying v10.0 4-Wire USB 2.0 Hub Backbone across all physical PCBAs:")
-    print("  * PCBA 01: Central Box (ESP32-S31, USB2517I 7-Port Hub, TPS25921 Quad eFuse, SX1262 LoRa)")
+    print("  * PCBA 01: Central Box (ESP32-S31, USB2517I 7-Port Hub, TPS4H160-Q1 Quad Switch, SX1262 LoRa)")
     print("  * PCBA 05: Universal Front Node (ESP32-P4+E22, USB2514Bi Hub, Dual OLEDs, Sensor-Puck 05D)")
     print("  * PCBA 03: Satellite Pod Interface (ESP32-C6, SW3516 30W PD, OMM_DETECT Auto-Sense, 4x AO3400A)")
-    print("  * PCBA 08: Rear Radar & V2X Node (ESP32-C6, 77 GHz MR20, 5.9 GHz 802.11p V2X, 36x Halo LEDs)")
+    print("  * PCBA 08: Rear Radar & V2X Node (ESP32-C5, 77 GHz MR20, 5.9 GHz 802.11p V2X, 36x Halo LEDs)")
     print("-" * 80)
 
     backbone = FourWireAutomotiveBackbone()

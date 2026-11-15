@@ -54,7 +54,7 @@ esp_err_t usb_bus_dfu_flash_node_file(UsbNodeType target_node, const char *bin_f
 esp_err_t usb_bus_dfu_flash_node_buffer(UsbNodeType target_node, const uint8_t *data, size_t length);
 
 /**
- * @brief Versetzt einen Zielknoten über den USB2517I-Hub + TPS25921 eFuse in den Hardware-DFU-Modus
+ * @brief Versetzt einen Zielknoten über den USB2517I-Hub + TPS4H160-Q1 Smart Switch in den Hardware-DFU-Modus
  */
 esp_err_t usb_bus_dfu_enter_rom_bootloader(UsbNodeType target_node);
 

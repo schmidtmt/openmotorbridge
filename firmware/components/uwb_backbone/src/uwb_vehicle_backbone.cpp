@@ -114,7 +114,7 @@ esp_err_t UsbVehicleBackbone::init(UsbNodeType local_node_type, const usb_backbo
     }
 
     // In v10.0, all wired USB branches mounted on the vehicle hub are immediately online
-    // once TPS25921 eFuse power sequencing brings up VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR.
+    // once TPS4H160-Q1 power sequencing brings up VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR.
     uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000);
     for (int i = 1; i <= 7; i++) {
         m_peers[i].online = true;

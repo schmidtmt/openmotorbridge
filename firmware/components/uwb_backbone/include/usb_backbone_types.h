@@ -75,7 +75,7 @@ enum UsbBackbonePktType : uint8_t {
     USB_PKT_COCKPIT_HUD_STATE   = 0x08,  // Zentralbox -> Front-Node: Dual Cockpit Speaker-Corner OLED HUD Update
 
     // --- Steuerbefehle & System-Synchronisation ---
-    USB_CMD_POWER_CYCLE         = 0x10,  // Zentralbox -> Front-Node / eFuse: 2.5s Kaltstart (TPS2051B / TPS25921)
+    USB_CMD_POWER_CYCLE         = 0x10,  // Zentralbox -> Front-Node / Switch: 2.5s Kaltstart (TPS2051B / TPS4H160-Q1)
     USB_CMD_CONFIG              = 0x11,  // Zentralbox -> Satelliten: Zündungs-Sync, Aux-Light (Q2) & Sleep-State
     USB_PKT_PAIRING_REQUEST     = 0x12,  // Pairing-Ablauf nach SW1 Tasterdruck (60s Fenster)
     USB_PKT_PAIRING_CONFIRM     = 0x13,  // AES-128 Session-Key Austausch & NVS Speicherung

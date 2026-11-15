@@ -19,7 +19,7 @@ static PowerSupervisorDiag_t s_diag = {
 };
 
 esp_err_t power_sequencer_init(void) {
-    ESP_LOGI(TAG, "Initializing v10.0 Quad Automotive eFuse Power Sequencer (U12 TI TPS25921)...");
+    ESP_LOGI(TAG, "Initializing v10.0 Quad Automotive Smart Switch Power Sequencer (U12 TI TPS4H160-Q1)...");
     ESP_LOGI(TAG, "  KL15 Sense: GPIO %d | BAT_NTC: GPIO %d | BAT_SENSE: GPIO %d",
              PIN_MAIN_KL15_SENSE, PIN_MAIN_BAT_NTC_ADC, PIN_MAIN_BAT_SENSE_ADC);
 
@@ -38,7 +38,7 @@ esp_err_t power_sequencer_init(void) {
 }
 
 void power_sequencer_trigger_boot(void) {
-    ESP_LOGI(TAG, "⚡ Starting v10.0 Staggered Inrush Power-On Sequence (TPS25921 4-Branch eFuse):");
+    ESP_LOGI(TAG, "⚡ Starting v10.0 Staggered Inrush Power-On Sequence (TPS4H160-Q1 4-Branch Smart Switch):");
 
     // Stage 1 (T = 0 ms): Central Box (U2 + U8 USB2517I + U9 QCC3084) & Branch 1 (VBUS_FRONT 5.0A)
     s_diag.stage = POWER_STAGE_CORE_BOOT;
@@ -70,7 +70,7 @@ void power_sequencer_trigger_boot(void) {
     ESP_LOGI(TAG, "  [T = 500 ms] Stage 4: Branch 4 (VBUS_RADAR 1.5A -> PCBA 08 Radar + V2X) ON.");
 
     s_diag.stage = POWER_STAGE_FULL_OPERATIONAL;
-    ESP_LOGI(TAG, "✓ All 4 USB2517I / TPS25921 Vehicle Branches powered & enumerated (Zero Voltage Drop).");
+    ESP_LOGI(TAG, "✓ All 4 USB2517I / TPS4H160-Q1 Vehicle Branches powered & enumerated (Zero Voltage Drop).");
 }
 
 void power_sequencer_trigger_shutdown(void) {
@@ -100,22 +100,22 @@ bool power_sequencer_is_fully_powered(void) {
 
 void power_sequencer_set_front_power(bool enable) {
     s_diag.branch1_front_enabled = enable;
-    ESP_LOGI(TAG, "TPS25921 CH1 (VBUS_FRONT 5.0A): %s", enable ? "ENABLED" : "DISABLED");
+    ESP_LOGI(TAG, "TPS4H160-Q1 CH1 (VBUS_FRONT 5.0A): %s", enable ? "ENABLED" : "DISABLED");
 }
 
 void power_sequencer_set_bay1_power(bool enable) {
     s_diag.branch2_pod1_enabled = enable;
-    ESP_LOGI(TAG, "TPS25921 CH2 (VBUS_POD1 2.5A): %s", enable ? "ENABLED" : "DISABLED");
+    ESP_LOGI(TAG, "TPS4H160-Q1 CH2 (VBUS_POD1 2.5A): %s", enable ? "ENABLED" : "DISABLED");
 }
 
 void power_sequencer_set_bay2_power(bool enable) {
     s_diag.branch3_pod2_enabled = enable;
-    ESP_LOGI(TAG, "TPS25921 CH3 (VBUS_POD2 2.5A): %s", enable ? "ENABLED" : "DISABLED");
+    ESP_LOGI(TAG, "TPS4H160-Q1 CH3 (VBUS_POD2 2.5A): %s", enable ? "ENABLED" : "DISABLED");
 }
 
 void power_sequencer_set_radar_power(bool enable) {
     s_diag.branch4_radar_enabled = enable;
-    ESP_LOGI(TAG, "TPS25921 CH4 (VBUS_RADAR 1.5A): %s", enable ? "ENABLED" : "DISABLED");
+    ESP_LOGI(TAG, "TPS4H160-Q1 CH4 (VBUS_RADAR 1.5A): %s", enable ? "ENABLED" : "DISABLED");
 }
 
 void power_sequencer_update_telemetry(float v_ign_volts, float v_bat_volts, float ntc_temp_c) {

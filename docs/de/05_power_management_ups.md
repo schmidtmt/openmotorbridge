@@ -46,7 +46,7 @@ Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`)
 +----------------------------+
 | 12V BORDNETZ (J1 DTM06-6S) |---> KL30_IN ---> [D2 SMBJ33CA TVS (33V Clamping)]
 | KL30 (Dauer) / KL15 (Zünd.)|        |
-+----------------------------+        +---> [U12 TPS25921 Quad eFuse] ---> J6 Satelliten (12V)
++----------------------------+        +---> [U12 TPS4H160-Q1 Quad Switch] ---> J6 Satelliten (12V)
                                        |     (VBUS_FRONT, VBUS_POD1, VBUS_POD2, VBUS_RADAR)
                                        v
                                 [U1 LM5164-Q1 Buck] (100V Wide-VIN Step-Down)
@@ -62,7 +62,7 @@ Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`)
 ```
 
 * **Klare Trennung der beiden Betriebsarten:**
-  * **1. Fahrzeug- & Prüfstands-Vollbetrieb (`J1` DTM06-6S an 12V Bordnetz):** Liegt 12V-Bordnetzspannung an `J1` an, wandelt der 100V-Synchron-Schaltregler **`U1` (`LM5164-Q1`)** die Bordspannung hocheffizient in `VCC_5V` und über den Ultra-Low-IQ-LDO **`U11` (`TPS7A0533`)** in `VCC_3V3` um. Gleichzeitig schaltet die **`TPS25921` Quad Automotive eFuse (`U12`)** die 12V-Bordspannung überwacht auf die vier Peripheriezweige an `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In dieser Betriebsart sind alle Satelliten (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Heckradar) aktiv und können von der Zentralbox über den 4-Draht USB-Backbone per **Central Bus-DFU** geflasht und betrieben werden.
+  * **1. Fahrzeug- & Prüfstands-Vollbetrieb (`J1` DTM06-6S an 12V Bordnetz):** Liegt 12V-Bordnetzspannung an `J1` an, wandelt der 100V-Synchron-Schaltregler **`U1` (`LM5164-Q1`)** die Bordspannung hocheffizient in `VCC_5V` und über den Ultra-Low-IQ-LDO **`U11` (`TPS7A0533`)** in `VCC_3V3` um. Gleichzeitig schaltet der **`TPS4H160-Q1` Quad Automotive High-Side Smart Switch (`U12`)** die 12V-Bordspannung überwacht auf die vier Peripheriezweige an `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In dieser Betriebsart sind alle Satelliten (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Heckradar) aktiv und können von der Zentralbox über den 4-Draht USB-Backbone per **Central Bus-DFU** geflasht und betrieben werden.
   * **2. Werkbank- & Schreibtisch-Servicebetrieb über 5V USB-C (`J3`):** Wird die Zentralbox am PC oder USB-Netzteil angeschlossen, speist die **`LM66100` Ideal-Diode (`D3`)** direkt die interne `VCC_5V`-Schiene und über `U11` die 3.3V-Logik der **Zentralbox (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-Port Hub, Audio-DSP, LoRa und IMU). Dadurch lässt sich die Zentralbox autark ohne 12V-Labornetzteil flashen, kalibrieren und diagnostizieren.
   * **Hardware-Klarstellung zur Satellitenversorgung im Werkbankbetrieb (P01):** Auf der Platine `PCBA 01` speist der USB-C Eingang `J3` ausschließlich die interne 5V-Systemschiene der Zentralbox (`VCC_5V`). Die vier Satellitenzweige auf `J6` werden hardwareseitig direkt aus `KL30_IN` (12V) über `U12` gespeist; es existiert auf der Hauptplatine bewusst keine ungesicherte 5V-Querverbindung auf die 12V-Busleitung, um eine Überlastung des Host-PCs oder unzulässige Rückspeisungen zu verhindern. Sollen angeschlossene Satelliten an der Zentralbox auf der Werkbank betrieben oder geflasht werden, ist daher an `J1` eine 12V-Versorgung (z. B. ein einfaches 12V-Steckernetzteil am DTM-6 Gegenstecker) erforderlich, ODER der jeweilige Satellit wird an seinem eigenen lokalen Port separat mit Energie versorgt.
   * **Vollständige galvanische Rückstromsperre (Zero Back-Feed):** Die Ideal-Diode **`D3` (`LM66100`)** sperrt den Rückstrompfad von `VCC_5V` zum USB-C Service-Port `J3` hermetisch ab. Liegt am Fahrzeug gleichzeitig 12V an, während ein Diagnose-Laptop an `J3` angeschlossen ist, verhindert `D3` zuverlässig jede Rückspeisung in das Programmiergerät.
@@ -86,13 +86,13 @@ Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`)
 
 ## 3. Kfz-Transienten-, EMV- & Verpolschutz (ISO 7637-2 & ISO 16750-2)
 
-- **Eingangssicherung & Strombegrenzung:** 4-Kanal Automotive-eFuses (**`U12 TPS25921`**) mit programmierbarer Strombegrenzung für alle externen Zweige auf `J6`.
+- **Eingangssicherung & Strombegrenzung:** 4-Kanal Automotive Smart Switch (**`U12 TPS4H160-Q1`**) mit programmierbarer Strombegrenzung und Diagnose für alle externen Zweige auf `J6`.
 - **Überspannungs- & Spikeschutz:** Littelfuse **`SMBJ33CA`** bidirektionale TVS-Diode (**`D2`**, $33\,\text{V}$ Standoff-Spannung) zum Clamping von Load-Dump-Impulsen nach ISO 16750-2 / ISO 7637-2.
 - **High-Voltage Schutz:** Der zentrale Buck-Converter **`U1 LM5164-Q1`** ist für Eingangsspannungen bis $100\,\text{V}$ spezifiziert und bietet $> 45\,\text{V}$ Sicherheitsreserve über die geclampte Überspannung hinaus.
 - **Filterung:** $10\,\mu\text{F}$ 100V X7R Eingangskondensator (`C1`) am KL30-Eingang und LC-Dämpfungsnetzwerk (`L1` $47\,\mu\text{H}$ + `C2` $22\,\mu\text{F}$) für minimale Restwelligkeit auf der 5V-Schiene.
 
-### 3.1 Zwei-Kabel-Architektur & Leistungsverteilung mit TI TPS25921 eFuse-Schutz
-Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **Zwei-Kabel-Architektur** (Kabel 1: 6-Pin Deutsch DTM `J1` für Bordnetz/CAN; Kabel 2: 16-Pin Automotive Connector `J4` für den Peripheriebus) geführt. Jeder externe Zweig ist auf `PCBA 01` hardwareseitig durch eine eigene **TI TPS25921 eFuse (`U12`, `GPIO 13..16`)** geschützt:
+### 3.1 Zwei-Kabel-Architektur & Leistungsverteilung mit TI TPS4H160-Q1 Smart Switch
+Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **Zwei-Kabel-Architektur** (Kabel 1: 6-Pin Deutsch DTM `J1` für Bordnetz/CAN; Kabel 2: 16-Pin Automotive Connector `J4` für den Peripheriebus) geführt. Jeder externe Zweig ist auf `PCBA 01` hardwareseitig durch einen eigenen Kanal des **TI TPS4H160-Q1 Smart Switch (`U12`, `GPIO 13..16`)** geschützt:
 * **Strang 1 (Front-Node & Cockpit):** **60W Budget** (lokal auf `PCBA 05` über den **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** und `TPS54302` `U1` geregelt). Versorgt Driver Smartphone Fast-Charging (27–30W USB-PD/QC über den Handschuhfach-Hub), dediziertes Motorrad-Navi (15W für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), Action-Cam Dauerstrom (10W wetterfest USB-C), Dual OLED Cockpit-Displays (`PCBA 05C`, 2W in Speaker Corner Pods) sowie Host-MCU (`ESP32-P4` + `ESP32-E22`), Sensor-Puck (`PCBA 05D`) & `USB2514Bi` Hub-Logik (3,5W).
 * **Strang 2 (Koffer-Pod Links):** **30W USB-PD Budget** (lokal auf `PCBA 03` über **`SW3516H` `U5`** geregelt) für interne Koffer-Ladedose (`J2`), `ESP32-C6-MINI-1U` Host, `PCM2912A` Audio-Codec und mechatronischen Kaltstart-Impuls.
 * **Strang 3 (Koffer-Pod Rechts):** **30W USB-PD Budget** für Bucht 2, identisch zu Strang 2.

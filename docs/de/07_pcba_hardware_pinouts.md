@@ -134,7 +134,7 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 100V-Buck-Converter (erzeugt `VCC_5V` aus dem 12V–72V Bordnetz).
   * **LiPo-Lade- & Power-Path-PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) mit Dynamic Power Path Management (DPPM). Lädt den internen 2.200-mAh-Flach-LiPo (`J5`) automatisch aus `VCC_5V` (LM5164-Q1 oder USB-C `J3`) mit 1,0 A (`R16`), überwacht die Akkutemperatur per NTC (`J5` Pin 3) und puffert Startspannungseinbrüche beim Anlassen des Motors (Cold Crank bis 6,5V) sowie Zündungsabschaltungen unterbrechungsfrei in $< 10\,\mu\text{s}$ auf der Systemspannung `VCC_SYS` (speist den 3.3V Ultra-Low-Noise LDO `U11` `TPS7A0533`).
   * **System-LDO (`U11`):** Texas Instruments `TPS7A0533` Ultra-Low-Noise LDO (speist `VCC_3V3` unterbrechungsfrei aus `VCC_SYS` für ESP32-S31, SX1262 LoRa und Sensorik).
-  * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-Kanal-Lastschalter (`TPS25921`) zur getrennten Absicherung, Strommessung und thermischen Abschaltung der 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar).
+  * **Quad Automotive Smart Switch (`U12`):** HTSSOP-28 4-Kanal-Lastschalter (`TPS4H160-Q1`) zur getrennten Absicherung, Strommessung und thermischen Abschaltung der 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar).
   * **Weitbereichsfunk (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) mit U.FL Buchse `ANT1` zur FXP895 Antenne in der Gehäusedeckeltasche.
   * **Status-Anzeige & Bedienelemente:** WS2812B RGB Smart-LED `D1`, Pairing-Hardwaretaster `SW1` sowie Vertikalstecker `J1` (Bordnetz 6P), `J6` (Peripherie 16P), `J5` (USV-Akku 4P), `J4` (RGB-LED 3P), `J7` (Reserve USB 4P) und `J3` (USB-C 16P).
 * **Bestückung Bottom-Layer (B.Cu):**
@@ -773,7 +773,7 @@ Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard v
 
 Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfallen**:
 * Da über die fahrzeugseitige Koffer-Trennstelle ausschließlich 2-Draht DC-Gleichspannung geführt wird, kommt anstelle einer proprietären Leiterplatte ein **industrieller 2-Pin Magnet-Pogo-Steckverbinder (IP68 COTS)** zum Einsatz.
-* Kurzschlussschutz und Überlastbegrenzung erfolgen zentral auf `PCBA 01` durch die jeweiligen **TI TPS25921 eFuses**.
+* Kurzschlussschutz und Überlastbegrenzung erfolgen zentral auf `PCBA 01` durch den **TI TPS4H160-Q1 Smart Switch**.
 
 ---
 

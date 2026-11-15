@@ -10,9 +10,9 @@ extern "C" {
 #endif
 
 // =============================================================================
-// OpenMotorBridge v10.0 - Gestaffeltes Power-Sequencing & Quad Automotive eFuse
+// OpenMotorBridge v10.0 - Gestaffeltes Power-Sequencing & Quad Smart Switch
 // Hardware:
-//   - U12 TI TPS25921 Quad eFuse (J6 Branch 1..4):
+//   - U12 TI TPS4H160-Q1 Quad Automotive High-Side Smart Switch (J6 Branch 1..4):
 //       CH1: VBUS_FRONT (5.0 A Limit) -> T = 0 ms
 //       CH2: VBUS_POD1  (2.5 A Limit) -> T = 200 ms
 //       CH3: VBUS_POD2  (2.5 A Limit) -> T = 350 ms

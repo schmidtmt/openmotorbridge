@@ -21,7 +21,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **U9** | Qualcomm QCC3084 | Qualcomm | SMD Modul (13x18mm) | C-Qualcomm | Bluetooth 5.4 Audio SoC (Dual-A2DP, LE Audio Auracast, HFP 1.8 HD Voice) |
 | **U10** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 USV-gepuffert) |
 | **U11** | TPS7A0533 | Texas Instruments | SOT-23-5 (B.Cu)| C2845350 | 3.3V Ultra-Low-Noise LDO für analoge Signal- & Audio-Speisung |
-| **U12** | TPS25921 / Quad eFuse | Texas Instruments | QFN-20 | C2843580 | Quad Automotive eFuse Smart Switch (getrennte Absicherung Front, Pod 1, Pod 2, Radar) |
+| **U12** | TPS4H160BQPWPRQ1 | Texas Instruments | HTSSOP-28-1EP | C969241 | Automotive 40V Quad High-Side Smart Switch (AEC-Q100, getrennte Absicherung Front, Pod 1, Pod 2, Radar) |
 | **D3** | LM66100DCKR | Texas Instruments | SOT-23-6 (B.Cu)| C443274 | Automotive Ideal-Diode für verlustarmes Dual-Power OR-ing (12V Bordnetz vs. USB-C 5V) |
 | **D1** | WS2812B-B | Worldsemi | 5050 SMD | C114586 | Onboard RGB Status-LED für optische Betriebsmodusanzeige |
 | **SW1** | TS-1187A-C-A-B | C&K / Omron | SMD Taster | C318884 | Hardware Pairing- & Reset-Taster (3s Pair, 10s Purge) |

@@ -337,7 +337,7 @@ def render_main_box_cross_section(output_png):
     # ESP32-S31-WROOM-1U (X = -39 to -21, Z = -8.9 to -5.7)
     ax1.add_patch(patches.Rectangle((-39, -8.9), 18, 3.2, facecolor='#cbd5e1', edgecolor='#94a3b8', linewidth=0.8))
     ax1.text(-30, -7.3, "ESP32-S31", color='#080c14', fontsize=7.5, fontweight='bold', ha='center')
-    # LM5164-Q1 + TPS25921 Quad eFuse Stage (X = -19 to -1, Z = -8.9 to -4.4)
+    # LM5164-Q1 + TPS4H160-Q1 Quad Smart Switch Stage (X = -19 to -1, Z = -8.9 to -4.4)
     ax1.add_patch(patches.Rectangle((-19, -8.9), 18, 4.5, facecolor='#1e293b', edgecolor='#f59e0b', linewidth=0.8))
     ax1.text(-10, -6.6, "LM5164 + Quad eFuse", color='#f59e0b', fontsize=7, fontweight='bold', ha='center')
     # QCC3084 + ES8388 + SX1262 + USB2517I (X = 2 to 32, Z = -8.9 to -4.2)

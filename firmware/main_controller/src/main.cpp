@@ -196,7 +196,7 @@ static void on_usb_front_telemetry(const UsbFrontTelemetryPkt &telem) {
 }
 
 void task_power_supervisor(void *pvParameters) {
-    ESP_LOGI(TAG, "v10.0 Power Supervisor Task started (KL15 GPIO 4, TPS25921 Quad eFuse, LM66100 Dual-Power & NTC JEITA)...");
+    ESP_LOGI(TAG, "v10.0 Power Supervisor Task started (KL15 GPIO 4, TPS4H160-Q1 Quad Smart Switch, LM66100 Dual-Power & NTC JEITA)...");
     uint32_t ignition_off_timer_sec = 0;
 
     while (true) {
@@ -219,7 +219,7 @@ void task_power_supervisor(void *pvParameters) {
                 set_system_led_state(LED_NORMAL_PULSE_GREEN);
                 find_my_set_dual_beacon(false);
                 sdio_track_start_new();
-                // Staggered TPS25921 4-Branch eFuse Power-On (T=0 Front, T=200ms Pod1, T=350ms Pod2, T=500ms Radar)
+                // Staggered TPS4H160-Q1 4-Branch Smart Switch Power-On (T=0 Front, T=200ms Pod1, T=350ms Pod2, T=500ms Radar)
                 power_sequencer_trigger_boot();
             } else {
                 // Zündung AUS: 15-Minuten Tier-1 Graceful Rundown (ESP32-E22 Wi-Fi 6E WebDAV Sync + Coffee Break NVS)
@@ -304,7 +304,7 @@ extern "C" void app_main(void) {
     }
     ESP_ERROR_CHECK(ret);
 
-    // 2. Quad Automotive eFuse Power Sequencer (U12 TPS25921) & Status RGB LED (GPIO 48)
+    // 2. Quad Automotive Smart Switch Power Sequencer (U12 TPS4H160-Q1) & Status RGB LED (GPIO 48)
     power_sequencer_init();
 
     gpio_config_t io_conf = {};

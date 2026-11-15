@@ -35,7 +35,7 @@ The comprehensive technical specification is split into 18 logically organized c
    *OpenMotorMesh (OMM), Dynamic Leader Election (DLE), 868 MHz LoRa fallback, and 10 Hz Multi-GNSS.*
 
 5. [**05 - Power Management, UPS Battery & Power Gate**](docs/en/05_power_management_ups.md)  
-   *LM5164-Q1 72V buck, BQ24075 UPS, TPS25921 Quad-eFuse, Front Node TPS54302 / SW3526 30W PD & 1-click CarPlay hard reboot.*
+   *LM5164-Q1 72V buck, BQ24075 UPS, TPS4H160-Q1 Quad Smart Switch, Front Node TPS54302 / SW3526 30W PD & 1-click CarPlay hard reboot.*
 
 6. [**06 - Telemetry Blackbox, SDIO Ringbuffer & WebDAV Sync**](docs/en/06_telemetry_blackbox_webdav.md)  
    *4-bit high-speed SDIO, GDPR/court-compliant ringbuffer, ECDSA SHA-256, and automated private cloud sync.*

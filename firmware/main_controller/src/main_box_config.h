@@ -39,7 +39,7 @@
 #define MAIN_LIPO_JEITA_MAX_TEMP_C      45.0f
 
 // -----------------------------------------------------------------------------
-// 4. Shared Internal I2C Bus (U3 ES8388 Codec, U5 Bosch BMI270 IMU, U12 TPS25921 eFuse)
+// 4. Shared Internal I2C Bus (U3 ES8388 Codec, U5 Bosch BMI270 IMU)
 // -----------------------------------------------------------------------------
 #define MAIN_I2C_PORT                   I2C_NUM_0
 #define PIN_MAIN_I2C_SDA                GPIO_NUM_8   // U2 Pad 17 -> U3 Pin 28, U5 Pin 13 (I2C_SDA)
@@ -95,15 +95,20 @@
 #define PIN_MAIN_SD_CD                  GPIO_NUM_39  // U2 Pad 39 -> J2 Pin 9 (SD_CD Card Detect)
 
 // -----------------------------------------------------------------------------
-// 10. Quad Automotive eFuse Smart Power Distribution (U12 TI TPS25921 -> J6)
-// Current Limits:
+// 10. Quad Automotive High-Side Switch Smart Power Distribution (U12 TI TPS4H160-Q1 -> J6)
+// Current Limits & Channels:
 //   - Branch 1 (VBUS_FRONT): 5.0 A (PCBA 05 + 30W USB-PD SW3526 + Ottocast)
 //   - Branch 2 (VBUS_POD1):  2.5 A (PCBA 03 Pod 1 + Intercom / OMM)
 //   - Branch 3 (VBUS_POD2):  2.5 A (PCBA 03 Pod 2 + Intercom / OMM)
-//   - Branch 4 (VBUS_RADAR): 1.5 A (PCBA 08 MR20 24GHz Radar + 36x WS2812B + V2X)
+//   - Branch 4 (VBUS_RADAR): 1.5 A (PCBA 08 MR20 77GHz Radar + 36x WS2812B + 5GHz V2X)
 // -----------------------------------------------------------------------------
-#define EFUSE_LIMIT_BRANCH1_FRONT_MA    5000
-#define EFUSE_LIMIT_BRANCH2_POD1_MA     2500
-#define EFUSE_LIMIT_BRANCH3_POD2_MA     2500
-#define EFUSE_LIMIT_BRANCH4_RADAR_MA    1500
+#define SWITCH_LIMIT_BRANCH1_FRONT_MA   5000
+#define SWITCH_LIMIT_BRANCH2_POD1_MA    2500
+#define SWITCH_LIMIT_BRANCH3_POD2_MA    2500
+#define SWITCH_LIMIT_BRANCH4_RADAR_MA   1500
+// Legacy aliases
+#define EFUSE_LIMIT_BRANCH1_FRONT_MA    SWITCH_LIMIT_BRANCH1_FRONT_MA
+#define EFUSE_LIMIT_BRANCH2_POD1_MA     SWITCH_LIMIT_BRANCH2_POD1_MA
+#define EFUSE_LIMIT_BRANCH3_POD2_MA     SWITCH_LIMIT_BRANCH3_POD2_MA
+#define EFUSE_LIMIT_BRANCH4_RADAR_MA    SWITCH_LIMIT_BRANCH4_RADAR_MA
 
