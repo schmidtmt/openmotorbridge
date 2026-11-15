@@ -1249,4 +1249,6 @@
 	(global_label "GND" (shape bidirectional) (at 75.24 473.97 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "1fb8a007-e8a8-4f09-bb37-681420a86deb"))
 	(wire (pts (xy 70.16 476.51) (xy 75.24 476.51)) (stroke (width 0) (type default)) (uuid "b7bc9da0-cb80-4be9-8bf3-3d28714e29d0"))
 	(global_label "GND" (shape bidirectional) (at 75.24 476.51 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "2932aeb6-50ec-4457-b12b-99401de8a880"))
+	(no_connect (at 49.84 479.05) (uuid "80ed03fa-1b6b-42be-b472-3f395f109612"))
+	(no_connect (at 70.16 438.41) (uuid "5df330b0-f1cf-4954-91ea-78fe47024574"))
 )
