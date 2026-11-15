@@ -202,6 +202,42 @@ struct __attribute__((packed)) OmmEmergencyAlert_t {
 };
 ```
 
+#### Bike Alarm & Smart-Keyfob Security Token (`TYPE_BIKE_ALARM = 0xFE`)
+```cpp
+struct __attribute__((packed)) OmmBikeAlarmAlert_t {
+    uint8_t  packet_type;       // 0xFE = TYPE_BIKE_ALARM
+    uint8_t  alarm_source;      // 0x01: BCM Alarm, 0x02: IMU Shock, 0x03: Pod Tamper
+    uint32_t msg_seq;           // Monotonically increasing 32-bit counter
+    uint64_t bike_uid;          // 64-bit UID of protected motorcycle
+    int32_t  park_lat_1e7;      // Last known park coordinates
+    int32_t  park_lon_1e7;
+    uint8_t  battery_soc_pct;   // Internal UPS cell SoC (0..100 %)
+    uint8_t  flags;             // Bit 0: Buddy mesh forward active
+    uint8_t  auth_tag[4];       // 32-bit AES-128-GCM authentication tag
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR checksum
+};
+```
+
+#### Standby, Winter & Multi-Battery Health Packet (`TYPE_BATTERY_HEALTH = 0xFD`)
+Broadcast periodically (every 6 to 12 hours) via RTC timer during winter storage to HomeSphere base or public LoRaWAN gateways:
+```cpp
+struct __attribute__((packed)) OmmBatteryHealthPacket_t {
+    uint8_t  packet_type;       // 0xFD = TYPE_BATTERY_HEALTH
+    uint64_t bike_uid;          // 64-bit UID of motorcycle
+    uint16_t v_kl30_mv;         // Starter battery terminal voltage in mV (e.g. 12450 = 12.45 V)
+    uint16_t v_ups_mv;          // Central Box UPS LiPo voltage in mV (e.g. 3920 = 3.92 V)
+    uint8_t  soc_ups_pct;       // Central Box UPS SoC (0..100 %)
+    uint8_t  soc_fob_pct;       // Smart Keyfob SoC (0..100 %, 0xFF = unreachable)
+    int8_t   temp_celsius;      // Ambient temperature (-40 .. +85 °C via TMP117 / NTC)
+    uint8_t  alert_flags;       // Bit 0: Starter Battery Low (<= 11.9V / 13.0V)
+                                // Bit 1: Starter Battery Critical (<= 11.6V / 12.8V)
+                                // Bit 2: UPS LiPo Low (<= 3.6V)
+                                // Bit 3: Keyfob LiPo Low (<= 15%)
+                                // Bit 4: Winter hibernation active
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR checksum
+};
+```
+
 ---
 
 ## 5. Universal Group-Split LoRa Fallback Engine & OMM 2.4 GHz Swap Cartridge

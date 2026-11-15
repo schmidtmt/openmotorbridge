@@ -183,6 +183,13 @@ The digital 2.4 GHz mesh node is driven by `openmotorbridge_omm_ucs` (**`PCBA 09
 * **Battery (`BAT1` on `B.Cu` under `J1` USB-C):** **1000 mAh LiPo (`Type 603040 / 602840`, $3.7\,\text{V}$, $3.7\,\text{Wh}$)** delivering **13–18 hours** of continuous full-duplex operation.
 * **TDMA Protocol Stack:** 10 ms Superframe cycle with collision-free audio slots for up to 6 concurrent full-duplex speakers, 802.11s L2 duplicate filtering, 6LoWPAN/IPv6 multicast, and Opus HD voice streaming ($< 18\,\text{ms}$ overall latency).
 
+### 3.1 Battery Health Monitoring & Autonomous In-Helmet Voice Prompts
+In standalone helmet mode (away from luggage pod docking), the `ESP32-C6` continuously monitors the terminal voltage of the internal 1,000 mAh LiPo cell (`BAT1` via `BQ24075`). When capacity drops below defined thresholds, the `ES8388` stereo audio codec (`U4`) injects multi-stage, distraction-free voice prompts directly into the helmet speakers via `J_HELMET`:
+* **20 % SoC:** Gentle chime + voice prompt: *“Battery low – 20 percent remaining”*.
+* **10 % SoC:** Urgent double-beep + voice prompt: *“Battery critical – please recharge”*.
+* **5 % SoC:** Voice prompt: *“Battery empty – shutting down”* followed by graceful shutdown into ULP deep sleep to prevent cell damage from over-discharge.
+* **Bike Docking & Cockpit Display:** When within range of the motorcycle, the helmet state is transmitted over the 2.4 GHz OMM mesh; the Cockpit OLEDs pop up `OMM BATT: 18% [!]`.
+
 ### 3.2 Bluetooth 5.3 LE Audio (LC3 Codec) & BLE GATT Remote Control
 
 Beyond its 2.4 GHz IEEE 802.15.4 mesh engine, the ESP32-C6 features a complete Bluetooth 5.3 subsystem that handles two vital functions:

@@ -189,3 +189,88 @@ The portable Smart Keyfob is powered by an internal 3.7V LiPo cell (350-500 mAh)
 |              |               | automatic ULP deep sleep to protect cell     |
 +--------------+---------------+----------------------------------------------+
 ```
+
+### 6.3 Central Box UPS LiPo (PCBA 01): BQ24075 & BAT_SENSE
+The Central Box features an internal 1S LiPo cell (2,200 mAh) on `J5`, managed by the Texas Instruments `BQ24075RGTR` (`U4`) power-path PMIC:
+* **Onboard Charging & UPS Power Path:** The cell charges automatically from the 5V system rail (`VCC_5V` from the LM5164-Q1 automotive buck or USB-C `J3`) at $I_{\mathrm{CHG}} = 1.0\,\text{A}$ ($I_{\mathrm{IN\_MAX}} = 1.5\,\text{A}$). Upon vehicle power interruption or cranking voltage dips, `U4` switches to the LiPo cell in $< 10\,\mu\text{s}$ glitch-free without MCU reboot.
+* **Voltage Sensing (`BAT_SENSE`):** High-impedance divider `R12/R13` ($100\,\text{k}\Omega / 100\,\text{k}\Omega$) feeds cell voltage to `ADC1_CH9` (GPIO 10) of the ESP32-S31.
+* **Thermal Protection (`BAT_NTC`):** The integrated $10\,\text{k}\Omega$ NTC thermistor on `J5` Pin 3 connects to `TS` of the `BQ24075` (JEITA charge cutoff below 0 °C and above 45 °C to prevent lithium plating during freezing winter conditions).
+* **Thresholds & Cut-off:**
+  * **$> 3.8\,\text{V}$ (> 60 % SoC):** Full UPS reserve (cranking buffer, GPX blackbox sealing, WebDAV sync).
+  * **$\le 3.6\,\text{V}$ (approx. 15 % SoC):** Yellow early warning in telemetry; power-hungry background services suspended.
+  * **$\le 3.3\,\text{V}$ (approx. 3 % SoC):** Emergency system cut-off into ULP deep sleep ($< 15\,\mu\text{A}$) to prevent irreversible cell damage from over-discharge.
+
+### 6.4 OMM UCS Intercom Module (PCBA 09 / 10): LiPo & Autonomous Acoustic Voice Alerts
+The universal ECE 22.06 intercom module (`PCBA 09` / `PCBA 10`) utilizes an internal 1S LiPo cell (1,000 mAh `Type 603040 / 602840`) on `BAT1` (JST-SH on bottom layer):
+* **Operating Modes:**
+  * *In Luggage Pod (Bay 1 / Bay 2):* Continuous charging via cartridge docking rail (`VCC_5V_PROT` via `U4` TS5A3159 / `J1` USB-C).
+  * *In Helmet (Autonomous):* Standalone battery operation for 13–18 hours of continuous full-duplex intercom.
+* **Acoustic In-Helmet Voice Prompts:**
+  Because the OMM module in helmet mode connects directly via the ultra-low-power `ES8388` stereo codec (`U4`) and `J_HELMET` to the 40 mm helmet speakers, battery warnings are delivered prioritarily and distraction-free via voice prompts directly into the rider's ear:
+  * **20 % SoC:** Gentle chime + voice prompt: *“Battery low – 20 percent remaining”*.
+  * **10 % SoC:** Urgent double-beep + voice prompt: *“Battery critical – please recharge”*.
+  * **5 % SoC:** Voice prompt: *“Battery empty – shutting down”* followed by graceful shutdown (ULP deep sleep to safeguard the LiPo cell).
+* **Companion Notification:** Once the helmet comes within wireless range of the motorcycle (2.4 GHz OMM Mesh / BLE), the module transmits its battery state to the Front Node: the Cockpit OLEDs pop up `OMM BATT: 18% [!]`, and the WebApp dashboard updates in real time.
+
+---
+
+## 7. Multi-Battery Alert Infrastructure: LoRa Sentry, HomeSphere & Fallbacks
+
+To ensure complete protection against unnoticed discharge during months of winter storage or long stays in windowless underground parking garages, OpenMotorBridge implements a multi-tier alert and reporting chain:
+
+### 7.1 The Storage & Winter Hibernation Challenge
+Motorcycle starter batteries suffer irreversible sulfation during winter storage if open-circuit voltage falls below $11.8\,\text{V}$ (lead-acid/AGM) or $12.8\,\text{V}$ (LiFePO4). Meanwhile, 2.4 GHz wireless technologies (Wi-Fi, BLE) fail completely through reinforced concrete ceilings and fire doors.
+
+```
++-----------------------------------------------------------------------------+
+|             MULTI-BATTERY STANDBY & WINTER ALERT PIPELINE                   |
++-----------------------------------------------------------------------------+
+| 1. MOTORCYCLE (Garage): ESP32-S31 RTC Wakeup every 12h (40 ms Airtime)      |
+|    -> Samples KL30 (Starter Batt), BAT_SENSE (UPS LiPo) & NTC (Temp)        |
+|    -> Transmits 16-Byte LoRa Health Packet (0xFD) @ 868 MHz (+14..+22 dBm)  |
++-----------------------------------------------------------------------------+
+                                      |
+         +----------------------------+----------------------------+
+         | (Primary: 868 MHz)                                      | (Fallback: Wi-Fi/IP)
+         v                                                         v
++-------------------------------+                         +-------------------+
+| HOMESPHERE USB LoRa Dongle    |                         | Home Wi-Fi Garage |
+| * Penetrates reinforced concrete|                       | * MQTT / Webhook  |
+| * HomeSphere Alert Engine     |                         | * Home Assistant  |
+| * Push notification to phone  |                         | * ntfy / Telegram |
++-------------------------------+                         +-------------------+
+```
+
+### 7.2 Primary Route: 868 MHz Semtech SX1262 LoRa to HomeSphere (via USB LoRa Dongle)
+* **Ultra-Low-Power Wake-up & Burst:** In winter storage, the Central Box remains in deep sleep ($< 15\,\mu\text{A}$ current draw).
+* The internal RTC timer wakes the ESP32-S31 periodically (default: every 12 hours) for just **$pprox 40\,\text{ms}$**.
+* The MCU samples the vehicle starter battery (`KL30`), UPS battery (`BAT_SENSE`), queries keyfob status via ultra-short BLE, and reads ambient temperature (`TMP117`/NTC).
+* The onboard `SX1262` transceiver broadcasts a compact **16-byte LoRa health packet (`0xFD`)** at maximum transmit power (+14 to +22 dBm) in the 868 MHz SRD band.
+* **HomeSphere Integration:** A **USB LoRa dongle** connected to the user's HomeSphere home automation hub receives the packet through reinforced concrete ceilings. HomeSphere feeds the telemetry directly into its existing alert infrastructure:
+  * Instant smartphone push notification: *“⚠️ Motorcycle starter battery at 11.8 V – connect charger!”*
+  * Battery health charts in the HomeSphere dashboard.
+  * Smart garage outlet automation (e.g. activating a Ctek/Optimate trickle charger).
+
+### 7.3 Fallback 1: Local Home Wi-Fi (Garage / Carport)
+For riders without a LoRa dongle whose motorcycle is parked within home Wi-Fi range:
+* During periodic wake-up, the ESP32-S31 attempts a brief connection to the configured home Wi-Fi.
+* Telemetry alerts are dispatched directly over IP:
+  * **Smart Home Hubs:** Dispatched via MQTT or REST webhook to **Home Assistant**, **ioBroker**, or **openHAB**.
+  * **Standalone (No Server):** Direct HTTPS push via `esp_http_client` to services like **ntfy.sh**, **Pushover**, **Pushsafer**, or a **Telegram bot**.
+
+### 7.4 Fallback 2: Public LoRaWAN / The Things Network (TTN)
+* Because the onboard `SX1262` natively supports standard LoRaWAN Class A uplinks, the 16-byte winter health packet can be broadcast via public **The Things Network (TTN)** gateways.
+* Urban and suburban regions provide dense free TTN coverage.
+* A free TTN webhook forwards the payload to push notification endpoints on the rider's smartphone with **zero proprietary home receiving hardware**.
+
+### 7.5 Fallback 3: Local Proximity & Ignition Sentry (Street Parking without RF Coverage)
+For motorcycles parked on street curbs without any RF coverage:
+* **BLE Proximity Beacon:** When the rider approaches with smartphone or keyfob, the Companion App / WebApp catches BLE advertisement packets and triggers a low-battery alert.
+* **Cockpit Full-Screen Ignition Alert (KL15):** When the rider turns the key, the system evaluates battery voltage instantly before cranking. If terminal voltage is critically low, the **Dual Under-Perch Cockpit OLEDs** immediately present a prominent warning:
+  ```
+  +-----------------------------+
+  |  ⚠️ 12V BATT LOW: 11.5 V    |
+  |  START MOTOR IMMEDIATELY!   |
+  +-----------------------------+
+  ```
+  An urgent voice alert plays through the helmet speakers, preventing the rider from flattening the battery by leaving accessories on.

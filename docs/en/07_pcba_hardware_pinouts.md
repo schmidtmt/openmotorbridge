@@ -1063,7 +1063,7 @@ The **`PCBA 09`** and **`PCBA 10`** boards share the exact same unified $60.0 \t
 
 ### 11.2 Key Components & Circuit Architecture
 1. **Host MCU (`U1`):** Espressif ESP32-C6-MINI-1U (32-Bit RISC-V @ 160 MHz, 512 kB SRAM, 4 MB Flash, U.FL RF connector). Supports Wi-Fi 6, 802.15.4 TDMA mesh, and BLE 5.3 / LE Audio LC3.
-2. **Power Path PMIC (`U2`):** Texas Instruments BQ24075RGTR with Dynamic Power Path Management (DPPM). Zero-reboot switching between external 5V USB-C and internal **1000 mAh LiPo cell (`Type 603040 / 602840`, $40 \times 28 \times 6.0\,\text{mm}$, $3.7\,\text{Wh}$)** in $< 10\,\mu\text{s}$ (**13–18 h** standalone helmet runtime). Internal cell acts as uninterruptible power supply (UPS).
+2. **Power Path PMIC (`U2`):** Texas Instruments BQ24075RGTR with Dynamic Power Path Management (DPPM). Zero-reboot switching between external 5V USB-C and internal **1000 mAh LiPo cell (`Type 603040 / 602840`, $40 \times 28 \times 6.0\,\text{mm}$, $3.7\,\text{Wh}$)** in $< 10\,\mu\text{s}$ (**13–18 h** standalone helmet runtime). Internal cell acts as uninterruptible power supply (UPS). In standalone helmet mode, low-battery states trigger autonomous in-helmet voice prompts via the `ES8388` codec (20%: *“Battery low”*, 10%: *“Battery critical”*, 5%: *“Battery empty – shutting down”*).
 3. **Stereo Audio Codec (`U4`):** Everest Semi ES8388 (24-Bit / 96 kHz I2S). Dedicated L/R headphone amplifiers for stereo helmet speakers and low-noise differential microphone preamplifier.
 4. **2.4 GHz RF Antenna & Dual-/Triple-Engine Architecture:**
    * **Host MCU (`U1`):** Uses the factory-integrated U.FL gold port on the `ESP32-C6-MINI-1U` module.

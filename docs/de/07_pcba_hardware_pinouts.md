@@ -1035,7 +1035,7 @@ Die Platinen **`PCBA 09`** und **`PCBA 10`** nutzen dasselbe vereinheitlichte $6
 2. **Power-Management & Lade-IC (`U2`):**
    * **Texas Instruments BQ24075RGTR** (QFN-16 3x3mm) mit Dynamic Power Path Management (DPPM).
    * Unterbrechungsfreie Umschaltung zwischen USB-C 5V-Speisung (Bordnetz über Kassetten-Schlitten oder Powerbank) und dem internen **1000-mAh-LiPo-Akku (`Typ 603040 / 602840`, $40 \times 28 \times 6{,}0\,\text{mm}$, $3{,}7\,\text{Wh}$)** in $< 10\,\mu\text{s}$ ohne MCU-Reboot (13–18 h autarke Helmlaufzeit). Der interne Akku dient im Kassettenbetrieb als unterbrechungsfreie Stromversorgung (USV).
-   * Einstellbarer Ladestrom ($500\,\text{mA}$), JEITA-konforme Temperaturüberwachung über NTC-Thermistor ($10\,\text{k}\Omega$).
+   * Einstellbarer Ladestrom ($500\,\text{mA}$), JEITA-konforme Temperaturüberwachung über NTC-Thermistor ($10\,\text{k}\Omega$). Im Helmbetrieb steuert die MCU bei schwachem Akku autonome Sprachansagen über den Codec `ES8388` ein (20 %: *„Battery low“*, 10 %: *„Battery critical“*, 5 %: *„Battery empty – shutting down“*).
 3. **Audio-Frontend Stereo Codec (`U4`):**
    * **Everest Semi ES8388** (QFN-28 4x4mm): Ultra-Low-Power Stereo Audio Codec mit 24-Bit / 96 kHz I2S-Interface.
    * Getrennte linke und rechte Kopfhörer-Treiber ($2\times 45\,\text{mW}$ @ $16\,\Omega$ / $25\,\text{mW}$ @ $32\,\Omega$) für echten Stereo-Klang (A2DP-Musik, räumliche Navigationshinweise, LE Audio).

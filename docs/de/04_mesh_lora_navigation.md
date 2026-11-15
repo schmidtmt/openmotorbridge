@@ -288,6 +288,26 @@ struct __attribute__((packed)) OmmBikeAlarmAlert_t {
 };
 ```
 
+### 5.4 Standby-, Winter- & Multi-Batterie Health-Paket (`0xFD` auf Kanal 3 / HomeSphere / LoRaWAN)
+Wird im Tiefschlaf (Winterlager/Stillstand) periodisch alle 6 bis 12 Stunden per RTC-Timer zur HomeSphere-Zentrale oder an LoRaWAN-Gateways gesendet:
+```cpp
+struct __attribute__((packed)) OmmBatteryHealthPacket_t {
+    uint8_t  packet_type;       // 0xFD = TYPE_BATTERY_HEALTH
+    uint64_t bike_uid;          // 64-Bit UID des Motorrads
+    uint16_t v_kl30_mv;         // Starterbatterie Spannung in mV (z. B. 12450 = 12.45 V)
+    uint16_t v_ups_mv;          // Zentralbox USV LiPo Spannung in mV (z. B. 3920 = 3.92 V)
+    uint8_t  soc_ups_pct;       // Zentralbox USV Ladezustand (0..100 %)
+    uint8_t  soc_fob_pct;       // Smart-Keyfob SoC (0..100 %, 0xFF = nicht erreichbar)
+    int8_t   temp_celsius;      // Umgebungstemperatur (-40 .. +85 °C via TMP117 / NTC)
+    uint8_t  alert_flags;       // Bit 0: Warnung Starterbatterie (<= 11.9V / 13.0V)
+                                // Bit 1: Kritisch Starterbatterie (<= 11.6V / 12.8V)
+                                // Bit 2: Warnung USV-LiPo (<= 3.6V)
+                                // Bit 3: Warnung Keyfob-LiPo (<= 15%)
+                                // Bit 4: Winter-Hibernate Modus aktiv
+    uint8_t  crc8_checksum;     // CRC-8/AUTOSAR Prüfsumme
+};
+```
+
 ---
 
 ## 6. Schnittstellen- & Querverweise

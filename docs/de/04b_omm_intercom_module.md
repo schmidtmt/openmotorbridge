@@ -206,6 +206,13 @@ flowchart TD
     VDD --> CODEC
 ```
 
+### 3.0 Akkuzustandsüberwachung & Autonome Sprachansagen im Helm (Voice Prompts)
+Im autarken Helmbetrieb (Standby & Fahrt abseits des Koffer-Pods) überwacht der `ESP32-C6` die Zellspannung der internen 1.000-mAh-LiPo-Zelle (`BAT1` an `BQ24075`) kontinuierlich. Fällt die Akkukapazität unter definierte Schwellwerte, spielt der Audio-Codec `ES8388` (`U4`) über `J_HELMET` direkt in die Helmlautsprecher mehrstufige, ablenkungsfreie Audio-Hinweise ein:
+* **20 % SoC:** Sanfter Doppelton (Chime) + Sprachansage: *„Battery low – 20 percent remaining“*.
+* **10 % SoC:** Dringlicher Doppelton + Sprachansage: *„Battery critical – please recharge“*.
+* **5 % SoC:** Sprachansage: *„Battery empty – shutting down“* mit anschließendem geordneten Übergang in den ULP-Tiefschlaf zum Schutz der LiPo-Zelle vor Tiefentladung.
+* **Bike-Docking & Cockpit-Display:** Befindet sich der Helm in Reichweite des Motorrads, wird der Akkustand im 2.4-GHz-Mesh-Header mitgeführt; auf den Cockpit-OLEDs erscheint kurz ein Pop-Up `OMM BATT: 18% [!]`.
+
 ### 3.1 TDMA Superframe & Protokoll-Stack (Layer 1 bis 4)
 * **Layer 1 (TDMA Superframe):** $10{,}0\,\text{ms}$ Superframe-Zyklus (100 Hz). Subframe 0 überträgt Sidelink Synchronization Signals (SLSS); Subframes 1–9 bieten kollisionsfreie Zeitschlitze für bis zu 6 gleichzeitige Vollduplex-Sprecher.
 * **Layer 2 (802.11s-Light Duplicate Filter):** 16-Byte Header mit monoton steigender Sequenznummer und 64-Entry Cache verwirft Mehrwege-Duplikate in $< 5\,\mu\text{s}$.

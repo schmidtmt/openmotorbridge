@@ -214,3 +214,88 @@ Der tragbare Smart-Keyfob wird von einem internen 3,7V LiPo-Akku (350-500 mAh) v
 |              |               | ULP-Deep-Sleep zum Schutz vor Tiefentladung  |
 +--------------+---------------+----------------------------------------------+
 ```
+
+### 6.3 Zentralbox USV-LiPo (PCBA 01): BQ24075 & BAT_SENSE
+Die Zentralbox verfügt über eine interne 1S LiPo-Zelle (2.200 mAh) an `J5`, gesteuert durch den Power-Path PMIC Texas Instruments `BQ24075RGTR` (`U4`):
+* **Onboard-Ladung & USV-Power-Path:** Die Zelle wird automatisch aus der 5V-Systemschiene (`VCC_5V` aus LM5164-Q1 Kfz-Buck oder USB-C `J3`) geladen ($I_{\mathrm{CHG}} = 1{,}0\,\text{A}$, $I_{\mathrm{IN\_MAX}} = 1{,}5\,\text{A}$). Bei Ausfall oder Einbruch der Bordspannung (z. B. Startvorgang) schaltet `U4` in $< 10\,\mu\text{s}$ unterbrechungsfrei auf den LiPo um.
+* **Spannungsüberwachung (`BAT_SENSE`):** Ein hochohmiger Spannungsteiler `R12/R13` ($100\,\text{k}\Omega / 100\,\text{k}\Omega$) führt die Zellspannung an `ADC1_CH9` (GPIO 10) des ESP32-S31.
+* **Thermoschutz (`BAT_NTC`):** Der integrierte $10\,\text{k}\Omega$ NTC-Thermistor an `J5` Pin 3 wird durch den `TS`-Pin des `BQ24075` überwacht (JEITA-Ladestopp unter 0 °C und über 45 °C zum Schutz vor Lithium-Plating im Winter).
+* **Warn- & Abschaltschwellen:**
+  * **$> 3{,}8\,\text{V}$ (> 60 % SoC):** Vollständige Pufferbereitschaft (Cranking-Kompensation, GPX-Blackbox-Abschluss, WebDAV-Uploads).
+  * **$\le 3{,}6\,\text{V}$ (ca. 15 % SoC):** Gelbe Vorwarnung in der Telemetrie; Deaktivierung von stromhungrigen Hintergrundaufgaben.
+  * **$\le 3{,}3\,\text{V}$ (ca. 3 % SoC):** Notabschaltung des Systems in den ULP-Tiefschlaf ($< 15\,\mu\text{A}$), um die LiPo-Zelle zuverlässig vor irreversibler Tiefentladung zu schützen.
+
+### 6.4 OMM UCS Intercom-Modul (PCBA 09 / 10): LiPo & Autonome Akustik-Ansagen
+Das universelle ECE 22.06 Intercom-Modul (`PCBA 09` / `PCBA 10`) nutzt eine interne 1S LiPo-Zelle (1.000 mAh `Typ 603040 / 602840`) an `BAT1` (JST-SH auf der Platinenunterseite):
+* **Betriebsarten-Umschaltung:**
+  * *Im Koffer-Pod (Bucht 1 / Bucht 2):* Kontinuierliche Ladung über den Kassetten-Schlitten (`VCC_5V_PROT` via `U4` TS5A3159 / `J1` USB-C).
+  * *Im Helm (autark):* Autarker Akkubetrieb für 13–18 Stunden kontinuierlichen Vollduplex-Betrieb.
+* **Akustische Sprachansagen (Voice Prompts) direkt im Helm:**
+  Da das OMM-Modul im Helm autark am Stereo-Codec `ES8388` (`U4`) und den Helmlautsprechern (`J_HELMET`) arbeitet, werden Batteriewarnungen prioritär und ablenkungsfrei akustisch direkt ins Ohr des Fahrers eingespielt:
+  * **20 % SoC:** Sanfter Doppelton (Chime) + Sprachansage: *„Battery low – 20 percent remaining“*.
+  * **10 % SoC:** Dringlicher Doppelton + Sprachansage: *„Battery critical – please recharge“*.
+  * **5 % SoC:** Sprachansage: *„Battery empty – shutting down“* mit anschließendem geordneten Abschalten (Power-Down in den ULP-Schlaf zum Schutz der LiPo-Zelle).
+* **Begleitende Anzeige:** Befindet sich der Helm in Funkreichweite des Motorrads (2.4 GHz OMM-Mesh / BLE), meldet das Modul seinen Ladezustand an den Front-Node: Auf den Cockpit-OLEDs erscheint kurz ein Pop-Up `OMM BATT: 18% [!]`, und das WebApp-Dashboard aktualisiert den Füllstand in Echtzeit.
+
+---
+
+## 7. Multi-Batterie Alert-Infrastruktur: LoRa-Sentry, HomeSphere & Fallbacks
+
+Zur lückenlosen Absicherung gegen unbemerkte Entladung – insbesondere bei monatelanger Standzeit im Winterlager oder in fensterlosen Tiefgaragen – implementiert OpenMotorBridge eine mehrstufige Alarmierungs- und Meldekette:
+
+### 7.1 Die Standzeit- & Winterpause-Problematik
+In kalten Garagen und Tiefgaragen droht der Starterbatterie schleichende Sulfatierung (bei Standard Blei-Säure/AGM unter $11{,}8\,\text{V}$ bzw. Zellschädigung bei LiFePO4 unter $12{,}8\,\text{V}$). Gleichzeitig versagen 2,4-GHz-Funkstandards (WLAN, Bluetooth) durch die starke Dämpfung von Stahlbetondecken und Brandschutztoren vollständig.
+
+```
++-----------------------------------------------------------------------------+
+|              MULTI-BATTERIE STANDBY- & WINTER-ALERT PIPELINE                |
++-----------------------------------------------------------------------------+
+| 1. MOTORRAD (Tiefgarage): ESP32-S31 RTC-Wakeup alle 12h (40 ms Airtime)     |
+|    -> Misst KL30 (Starterbatt), BAT_SENSE (USV-LiPo) & NTC (Temp)           |
+|    -> Sendet 16-Byte LoRa-Health-Paket (0xFD) @ 868 MHz (+14..+22 dBm)      |
++-----------------------------------------------------------------------------+
+                                      |
+         +----------------------------+----------------------------+
+         | (Primär: 868 MHz)                                       | (Fallback: WLAN/IP)
+         v                                                         v
++-------------------------------+                         +-------------------+
+| HOMESPHERE USB-LoRa-Dongle    |                         | Heim-WLAN Garage  |
+| * Empfang durch Stahlbeton    |                         | * MQTT / Webhook  |
+| * HomeSphere Alert-Engine     |                         | * Home Assistant  |
+| * Push-Notification aufs Handy|                         | * ntfy / Telegram |
++-------------------------------+                         +-------------------+
+```
+
+### 7.2 Primärpfad: 868 MHz Semtech SX1262 LoRa an HomeSphere (mit USB-LoRa-Dongle)
+* **Ultra-Low-Power Wake-up & Burst:** Im Winterlager / Stillstand verharrt die Zentralbox im Deep Sleep ($< 15\,\mu\text{A}$ Gesamtstromaufnahme).
+* Der interne RTC-Timer weckt den ESP32-S31 in konfigurierbaren Intervallen (Standard: alle 12 Stunden) für lediglich **$pprox 40\,\text{ms}$** auf.
+* Der Controller misst über den ADC die Starterbatterie-Spannung (`KL30`), die USV-Akkuspannung (`BAT_SENSE`), fragt per Ultra-Short-BLE den letzten Keyfob-Status ab und erfasst die Umgebungstemperatur (`TMP117`/NTC).
+* Anschließend sendet der Onboard-Transceiver `SX1262` ein kompaktes **16-Byte LoRa-Health-Paket (`0xFD`)** mit maximaler Reichweite (+14 bis +22 dBm) im 868-MHz-SRD-Band.
+* **HomeSphere-Integration:** An der zentralen HomeSphere-Station im Wohnhaus empfängt ein **USB-LoRa-Dongle** (z. B. auf Basis des SX1262 / ESP32-C6) das Paket auch durch dicke Stahlbetondecken und Tiefgaragentore hindurch. HomeSphere speist die Telemetriedaten nahtlos in die bestehende Alert-Infrastruktur ein:
+  * Sofortige Push-Benachrichtigung ans Smartphone: *„⚠️ Motorrad-Starterbatterie bei 11.8 V – Ladegerät anschließen!“*
+  * Grafische Anzeige der Batteriespannungen im HomeSphere-Dashboard.
+  * Automatisierte Schaltung von smarten Garagensteckdosen (z. B. Aktivierung des Ctek/Optimate-Erhaltungsladegeräts bei Unterschreiten der Warnschwelle).
+
+### 7.3 Fallback 1: Lokales Heim-WLAN (Garage / Carport)
+Für Nutzer ohne LoRa-Dongle, deren Motorrad in Reichweite des heimischen WLANs steht:
+* Beim periodischen Aufwachen prüft der ESP32-S31, ob das hinterlegte Heim-WLAN erreichbar ist.
+* Ist dies der Fall, wird der Alert direkt über das IP-Netzwerk abgesetzt:
+  * **Smart-Home-Nutzer:** Senden per MQTT oder REST-Webhook an **Home Assistant**, **ioBroker** oder **openHAB**.
+  * **Standalone (ohne Heimserver):** Direkter HTTPS-Aufruf via `esp_http_client` an freie Push-Dienste wie **ntfy.sh**, **Pushover**, **Pushsafer** oder als direkte Chat-Nachricht über einen **Telegram-Bot** auf das Mobiltelefon des Besitzers.
+
+### 7.4 Fallback 2: Öffentliches LoRaWAN / The Things Network (TTN)
+* Da der onboard Semtech `SX1262` standardkonformes LoRaWAN (Class A Uplink) beherrscht, kann das 16-Byte Winter-Health-Paket über frei zugängliche **The Things Network (TTN)**-Gateways gefunkt werden.
+* In vielen städtischen und suburbanen Regionen existiert bereits eine flächendeckende TTN-Abdeckung.
+* Ein kostenloser TTN-Webhook leitet das empfangene Datenpaket als Push-Benachrichtigung an das Smartphone des Fahrers weiter – **vollkommen ohne eigene Empfängerhardware oder Dongles zu Hause**.
+
+### 7.5 Fallback 3: Lokaler Nahfeld- & Fahrtantritts-Schutz (Laternenparker ohne Funkempfang)
+Steht das Motorrad an der Straße ohne jegliche Funkabdeckung (kein LoRa-Dongle, kein TTN, kein WLAN):
+* **BLE Proximity Beacon:** Sobald der Fahrer sich mit Smartphone oder Fob dem abgestellten Motorrad nähert, erkennt die Smartphone-App / WebApp die periodischen BLE-Werbepakete und signalisiert: *„Achtung: Batteriespannung niedrig (11.6 V)!“*.
+* **Cockpit-Vollbildwarnung bei Zündung EIN (KL15):** Schaltet der Fahrer die Zündung ein, evaluiert der Controller die Starterbatterie sofort. Fällt die Leerlaufspannung unter die Warnschwelle, schalten die beiden **Dual Under-Perch Cockpit-OLEDs** augenblicklich auf eine dominante Warnanzeige:
+  ```
+  +-----------------------------+
+  |  ⚠️ 12V BATT LOW: 11.5 V    |
+  |  START MOTOR IMMEDIATELY!   |
+  +-----------------------------+
+  ```
+  Gleichzeitig ertönt ein dringlicher Signalton im Headset, **bevor** der Anlasser betätigt wird. So wird verhindert, dass der Fahrer durch langes Stehenlassen mit Zündung AN die Batterie restlos entlädt.
