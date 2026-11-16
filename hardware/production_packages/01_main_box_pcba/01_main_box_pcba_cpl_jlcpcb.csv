@@ -25,7 +25,7 @@ Ref,Val,Package,PosX,PosY,Rot,Side
 "Y2","24.000MHz","Crystal_SMD_2016-4Pin_2.0x1.6mm",167.950000,-104.250000,90.000000,bottom
 "ANT1","Taoglas_FXP895_868MHz_Lid","U.FL_Hirose_U.FL-R-SMT-1_Vertical",176.025000,-74.750000,0.000000,top
 "C5","100nF_ESP_EN","C_0603_1608Metric",125.250000,-76.750000,90.000000,top
-"D1","WS2812B_RGB","LED_WS2812B-2020",187.750000,-106.500000,0.000000,top
+"D1","WS2812B_RGB","LED_WS2812B-2020",186.500000,-123.500000,0.000000,top
 "D3","LM66100_Ideal_Diode","SOT-23-6",181.300000,-114.850000,0.000000,top
 "H1","MountingHole","MountingHole_3.2mm_M3_Pad_Via",119.220000,-75.850000,0.000000,top
 "H2","MountingHole","MountingHole_3.2mm_M3_Pad_Via",196.220000,-75.850000,0.000000,top
@@ -33,10 +33,9 @@ Ref,Val,Package,PosX,PosY,Rot,Side
 "H4","MountingHole","MountingHole_3.2mm_M3_Pad_Via",196.220000,-122.850000,0.000000,top
 "J1","MicroLock_Plus_6Pin_Vertical","Molex_Micro-Lock_Plus_505568-0671_1x06_P1.25mm_Vertical",131.375000,-123.750000,0.000000,top
 "J3","USB_C_Service_Port","USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P",178.000000,-122.750000,0.000000,top
-"J4","RGB_LED_3PIN","Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical",196.800000,-101.850000,90.000000,top
 "J5","PWR_BAT_NTC_4PIN","Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical",196.800000,-91.850000,90.000000,top
 "J6","MicroLock_Plus_16Pin_2x08_Vertical","Molex_Micro-Lock_Plus_505433-1671_2x08_P1.25mm_Vertical",156.000000,-122.500000,0.000000,top
-"J7","USB_Reserve_Port7","Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical",196.800000,-111.850000,90.000000,top
+"J7","USB_Reserve_Port7","Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical",196.800000,-101.850000,90.000000,top
 "L1","47uH_Inductor","L_Sunlord_MWSA1206S-470",124.000000,-103.000000,0.000000,top
 "R10","4k7_SDA","R_0603_1608Metric",137.500000,-107.325000,90.000000,top
 "R11","4k7_SCL","R_0603_1608Metric",143.425000,-102.500000,180.000000,top

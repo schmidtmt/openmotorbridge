@@ -17,7 +17,6 @@ D3,LM66100_Ideal_Diode,Package_TO_SOT_SMD:SOT-23-6,,1
 J1,MicroLock_Plus_6Pin_Vertical,Connector_Molex:Molex_Micro-Lock_Plus_505568-0671_1x06_P1.25mm_Vertical,,1
 J2,MicroSD_Card,Connector_Card:microSD_HC_Hirose_DM3D-SF,,1
 J3,USB_C_Service_Port,Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P,,1
-J4,RGB_LED_3PIN,Connector_Molex:Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical,,1
 J5,PWR_BAT_NTC_4PIN,Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical,,1
 J6,MicroLock_Plus_16Pin_2x08_Vertical,Connector_Molex:Molex_Micro-Lock_Plus_505433-1671_2x08_P1.25mm_Vertical,,1
 J7,USB_Reserve_Port7,Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical,,1

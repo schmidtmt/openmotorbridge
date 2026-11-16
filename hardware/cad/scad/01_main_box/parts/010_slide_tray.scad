@@ -136,27 +136,26 @@ module main_box_slide_tray(
 
             // --- SUBTRACTIONS ---
 
-            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm recess)
+            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm recess for LoRa 868 MHz)
+            // Located at North edge: X = 10.0..95.2 mm, Y = 48.6..66.8 mm
             translate([10.0, 48.6, tray_t - 0.3])
                 cube([85.2, 18.2, 1.0], center=false);
 
-            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.2 x 7.2 x 0.5 mm recess for 2.4 GHz)
-            // Located between battery and front edge: X = 28.0..76.0 mm, Y = 0.5..8.0 mm
-            translate([28.0, 0.5, tray_t - 0.4])
-                cube([47.5, 3.2, 1.0], center=false);
+            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm recess for 2.4 GHz Wi-Fi/BLE)
+            // Relocated to North side adjacent to LoRa antenna: X = 12.0..59.5 mm, Y = 39.0..46.2 mm
+            translate([12.0, 39.0, tray_t - 0.4])
+                cube([47.5, 7.2, 1.0], center=false);
 
-            // 10. Cable Passthrough Slots
-            // A. Battery 2-Pin JST-GH cable slot (routes down to PCBA 01 J7)
-            translate([88.5, 12.0, -0.5])
-                cube([10.0, 6.0, tray_t + 2.0], center=false);
+            // 10. Cable Passthrough Openings
+            // A. Battery J5 open lateral U-notch (allows tool-free tray sliding with pre-crimped Molex 4P plug)
+            // Positioned directly over PCBA 01 J5 (X = 90.0 mm to right edge, Y = 34.0..48.0 mm)
+            translate([90.0, 34.0, -0.5])
+                cube([tray_l - 90.0 + 2.0, 14.0, tray_t + 2.0], center=false);
 
-            // B. LoRa U.FL Coaxial Cable Slot (routes down to PCBA 01 ANT1)
-            translate([96.0, 52.0, -0.5])
-                cube([6.0, 10.0, tray_t + 2.0], center=false);
-
-            // C. 2.4 GHz U.FL Coaxial Cable Slot (routes down to PCBA 01 ANT2/3)
-            translate([20.0, 1.0, -0.5])
-                cube([6.0, 4.0, tray_t + 2.0], center=false);
+            // B. Shared Dual U.FL RF Coaxial Drop Slot (routes both LoRa & 2.4 GHz cables down to PCBA 01)
+            // Positioned at North side directly above ANT1 and U2 U.FL ports (X = 62.0..76.0 mm, Y = 46.0..52.0 mm)
+            translate([62.0, 46.0, -0.5])
+                cube([14.0, 6.0, tray_t + 2.0], center=false);
 
             // 11. Convective Thermal Breathing Louvers
             // Left flank breathing slots (X = 5.0..14.0 mm)

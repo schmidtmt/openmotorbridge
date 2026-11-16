@@ -17,21 +17,21 @@ module main_box_front_cutout_tool(wall_th=5.0) {
     // Height center along Z: Mid tray height is 15.0 mm. Center is at Z = 7.5 mm.
     z_mid = 7.5;
 
-    // 1. IP67 USB-C Waterproof Panel Port (at X = 24.0 mm)
+    // 1. IP67 USB-C Waterproof Panel Port (centered at X = 75.3 mm)
     // Round threaded barrel Ø 11.0 mm with flat indexing
-    translate([24.0, -1.0, z_mid])
+    translate([75.3, -1.0, z_mid])
         rotate([-90, 0, 0])
             cylinder(r=5.5, h=wall_th + 2.0, center=false, $fn=32);
 
-    // 2. WS2812B RGB Status LED Light Pipe Window (at X = 42.0 mm)
+    // 2. WS2812B RGB Status LED Light Pipe Window (directly right of USB-C at X = 84.5 mm)
     // Ø 3.2 mm bore for diffuse PMMA light pipe with sealing O-ring
-    translate([42.0, -1.0, z_mid])
+    translate([84.5, -1.0, z_mid])
         rotate([-90, 0, 0])
             cylinder(r=1.6, h=wall_th + 2.0, center=false, $fn=24);
 
-    // 3. Hardware SW1 Push-Button (Pair / Reset at X = 54.0 mm)
+    // 3. Hardware SW1 Push-Button (Pair / Reset at X = 41.0 mm)
     // Ø 6.5 mm bore for waterproof IP67 miniature tactile button with silicone boot
-    translate([54.0, -1.0, z_mid])
+    translate([41.0, -1.0, z_mid])
         rotate([-90, 0, 0])
             cylinder(r=3.25, h=wall_th + 2.0, center=false, $fn=28);
 

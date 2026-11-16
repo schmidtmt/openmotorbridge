@@ -191,15 +191,21 @@ module main_box_monocoque_tub(
                     cylinder(r=M3_SCREW_HOLE_R, h=wall + 2.0, $fn=24);
         }
 
-        // C. USB-C Service & Flash Port (J3 Receptacle Cutout, centered at X = 82.0 mm, Z = 7.6 mm)
-        translate([82.0 - 5.0, -1.0, 7.6 - 2.2])
+        // C. USB-C Service & Flash Port (J3 Receptacle Cutout, centered at X = 75.3 mm, Z = 7.6 mm)
+        translate([75.3 - 5.0, -1.0, 7.6 - 2.2])
             cube([10.0, wall + 2.0, 4.4], center=false);
         // Recessed O-ring sealing pocket / cap recess for USB-C (14.0 x 8.0 mm, depth 1.2 mm)
-        translate([82.0 - 7.0, -0.5, 7.6 - 4.0])
+        translate([75.3 - 7.0, -0.5, 7.6 - 4.0])
             cube([14.0, 1.8, 8.0], center=false);
 
-        // D. Hardware SW1 Button & Status LED Window (centered at X = 96.0 mm, Z = 8.5 mm)
-        translate([96.0, -1.0, 8.5])
+        // D. WS2812B RGB Status LED Light Pipe Window (directly to the right of J3, centered at X = 84.5 mm, Z = 7.6 mm)
+        // Ø 3.2 mm bore for diffuse PMMA light pipe with sealing O-ring
+        translate([84.5, -1.0, 7.6])
+            rotate([-90, 0, 0])
+                cylinder(r=1.6, h=wall + 2.0, $fn=24);
+
+        // E. Hardware SW1 Button (Pairing / Reset, centered at X = 41.0 mm, Z = 8.5 mm)
+        translate([41.0, -1.0, 8.5])
             rotate([-90, 0, 0])
                 cylinder(r=3.25, h=wall + 2.0, $fn=28);
     }

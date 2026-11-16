@@ -1732,7 +1732,7 @@
 	(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0471_1x04_P1.25mm_Vertical"
 		(layer "F.Cu")
 		(uuid "0e9589ba-c689-4f21-9e93-3d92511b9761")
-		(at 196.8 111.85 90)
+		(at 196.8 101.85)
 		(descr "Molex Micro-Lock Plus 1.25mm 4-Pin SMD Header")
 		(property "Reference" "J7"
 			(at 0 -3 0)
@@ -4991,145 +4991,7 @@
 			)
 		)
 	)
-	(footprint "Connector_Molex:Molex_Micro-Lock_Plus_505568-0371_1x03_P1.25mm_Vertical"
-		(layer "F.Cu")
-		(uuid "bff177c0-0310-451b-9833-5e961ff48678")
-		(at 196.8 101.85 90)
-		(descr "Molex Micro-Lock Plus 1.25mm 3-Pin SMD Header")
-		(property "Reference" "J4"
-			(at 0 -3 0)
-			(layer "F.SilkS")
-			(uuid "e6a116b3-f664-4fbf-962e-1d8acbe9f7c8")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(property "Value" "RGB_LED_3PIN"
-			(at 0 3 90)
-			(layer "F.Fab")
-			(uuid "524f168a-8af2-4e95-9f1f-cea5cd54ca70")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "aefc924b-0655-4903-a46e-b9f944221da5")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Molex Micro-Lock Plus 1.25mm 3-Pin SMD RGB Header"
-			(at 0 0 90)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "78bc13e5-97ac-4a2d-ba31-a17bcd40b817")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(path "/f732056b-4f0a-49c9-ac7c-76cbe962d561")
-		(sheetname "/")
-		(sheetfile "openmotorbridge_main.kicad_sch")
-		(units
-			(unit
-				(name "A")
-				(pins "1" "2" "3" "MP1" "MP2")
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(fp_rect
-			(start -3 -2.5)
-			(end 3 2.5)
-			(stroke
-				(width 0.15)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.SilkS")
-			(uuid "f0fe3feb-36e0-408d-8bfb-492741ba48de")
-		)
-		(fp_rect
-			(start -3.5 -3)
-			(end 3.5 3)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(fill no)
-			(layer "F.CrtYd")
-			(uuid "ae4fed70-0740-4046-9144-d6d20425b34c")
-		)
-		(pad "1" smd rect
-			(at -1.25 -1.5 90)
-			(size 0.6 1.4)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "VCC_5V")
-			(pinfunction "1_1")
-			(pintype "passive")
-			(uuid "b33a5b76-6f3a-4831-8fbd-8f3ad74e43d2")
-		)
-		(pad "2" smd rect
-			(at 0 -1.5 90)
-			(size 0.6 1.4)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "RGB_LED_DATA")
-			(pinfunction "2_2")
-			(pintype "passive")
-			(uuid "d6d05a5c-8d5e-4548-a375-73ebf3f1c2cd")
-		)
-		(pad "3" smd rect
-			(at 1.25 -1.5 90)
-			(size 0.6 1.4)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "GND_PWR")
-			(pinfunction "3_3")
-			(pintype "passive")
-			(uuid "fd0bc31f-8871-48e2-a165-be496967eb2e")
-		)
-		(pad "MP1" smd rect
-			(at -2.5 1.2 90)
-			(size 1 1.6)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "GND_PWR")
-			(pinfunction "MP1_MP1")
-			(pintype "passive")
-			(uuid "d5b31479-5d82-4842-a973-a6f4371b24ae")
-		)
-		(pad "MP2" smd rect
-			(at 2.5 1.2 90)
-			(size 1 1.6)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "GND_PWR")
-			(pinfunction "MP2_MP2")
-			(pintype "passive")
-			(uuid "6e56746e-2070-4c78-bcce-960190397b51")
-		)
-		(embedded_fonts no)
-		(model "${KICAD8_3DMODEL_DIR}/Connector_JST.3dshapes/JST_GH_BM03B-GHS-TBT_1x03-1MP_P1.25mm_Vertical.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
+	
 	(footprint "Inductor_SMD:L_Sunlord_MWSA1206S-470"
 		(layer "F.Cu")
 		(uuid "c0000000-0000-0000-0000-0406d7741b93")
@@ -6943,7 +6805,7 @@
 	(footprint "LED_SMD:LED_WS2812B-2020"
 		(layer "F.Cu")
 		(uuid "c0000000-0000-0000-0000-a95884e42680")
-		(at 187.75 106.5)
+		(at 186.5 123.5)
 		(property "Reference" "D1"
 			(at 0 -2.5 0)
 			(layer "F.SilkS")

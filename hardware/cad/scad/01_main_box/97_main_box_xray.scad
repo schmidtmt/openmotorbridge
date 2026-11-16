@@ -42,7 +42,7 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
     translate([12.8, 51.8, 19.0])
         dummy_fxp895_antenna();
 
-    translate([30.8, 3.7, 19.0])
+    translate([14.8, 42.2, 19.0])
         dummy_fxp73_antenna();
 
     // 5. Top L-Slide Lid (Translucent Graphite Grey, 25% alpha)
