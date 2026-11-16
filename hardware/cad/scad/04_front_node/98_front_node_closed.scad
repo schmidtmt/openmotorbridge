@@ -37,7 +37,7 @@ module front_node_closed_assembly() {
             front_node_usbc_plug();
 
     // 6. Modular Snap-On Environmental Sensor Puck (docked into top lid)
-    translate([ch_x_start + 55.0 - 22.0, ch_y_start + 28.0 - 22.0, FRONT_NODE_OUTER_H - 1.2])
+    translate([ch_x_start + 55.0 - 19.0, ch_y_start + 28.0 - 19.0, FRONT_NODE_OUTER_H - 1.2])
         sensor_puck_environmental_assembly();
 }
 

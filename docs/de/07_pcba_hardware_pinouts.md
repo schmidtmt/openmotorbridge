@@ -735,13 +735,13 @@ Beide Taster sind hardwareseitig identisch und können über das PWA-Dashboard v
 
 #### 7.4.1 Technische Platinen-Kenndaten & Bestückung
 * **Abmessungen:** $34{,}0 \times 34{,}0\,\text{mm}$ mit $2{,}0\,\text{mm}$ Eck-Fasen, 4 Lagen FR-4 High-TG150 ($1{,}6\,\text{mm}$, ENIG-Goldfinish, Layer 2: 100% durchgehende HF-GND-Plane für GNSS-Patch, Layer 3: 3.3V Power-Plane).
-* **Befestigung:** Werkzeuglose 4-Punkt-Schnapprastung direkt im oberen Korb des Front-Node Gehäuses oder absetzbar an der Windschutzscheibe via 1,5m JST-GH Kabel.
+* **Befestigung:** Formschlüssig in maßgeschneidertem $38{,}0 \times 38{,}0 \times 15{,}0\,\text{mm}$ Schnapp-Gehäuse ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad), $34{,}8 \times 34{,}8\,\text{mm}$ Innenkavität mit $0{,}35\,\text{mm}$ Passluft, Schnappdeckel & Rastfüßen) direkt im oberen Dock des Front-Node Gehäusedeckels oder abgesetzt an der Windschutzscheibe via 1,5m JST-GH Verlängerung.
 * **Bestückung:**
   * **`U1` (u-blox SAM-M10Q):** Multi-Konstellations-GNSS-Modul (GPS, GLONASS, Galileo, BeiDou) mit integrierter $15{,}5 \times 15{,}5\,\text{mm}$ Keramik-Patch-Antenne.
   * **`U2` (TI TMP117AIDRVR):** NIST-rückführbarer Digital-Temperatursensor ($\pm 0{,}1^\circ\text{C}$ Genauigkeit) auf einer durch einen $0{,}8\,\text{mm}$ U-förmigen Frässchlitz thermisch entkoppelten Platinen-Zunge im laminaren Front-Lufteinlass zur Glatteiswarnung ohne Motorabwärme-Beeinflussung.
   * **`U3` (TI OPT3001DNPR):** Umgebungslichtsensor mit menschlicher Augencharakteristik unter der oberen $\varnothing 4{,}5\,\text{mm}$ optischen Gehäuseöffnung (Lux-Messung zur automatischen Umschaltung Tag/Nacht-Modus in PWA und Instrumenten).
-  * **`J1` (Primary In):** 6-polige JST-GH SMD Buchse (`SM06B-GHS-TB`, 1.25 mm Raster) horizontal nach Osten zum Front-Node Kabelstrang.
-  * **`J2` (Daisy-Chain Expansion Out):** 6-polige JST-SH SMD Buchse (`SM06B-SRSS-TB`, 1.00 mm Raster) horizontal nach Osten für zukünftige Cockpit-Zusatzsensoren (bei Nichtbenutzung mit bündigem TPU-Blindstopfen abgedichtet).
+  * **`J1` (Primary In):** 6-polige JST-GH SMD Buchse (`SM06B-GHS-TB`, 1.25 mm Raster) horizontal nach Osten (`+X`) zum Front-Node Kabelstrang.
+  * **`J2` (Daisy-Chain Expansion Out):** 6-polige JST-SH SMD Buchse (`SM06B-SRSS-TB`, 1.00 mm Raster) horizontal nach Norden (`+Y`) für zukünftige Cockpit-Zusatzsensoren (bei Nichtbenutzung mit bündigem TPU-Blindstopfen abgedichtet).
   *(Hinweis zum Akustiksensor: Das Knowles SPH0645 I2S MEMS-Mikrofon verbleibt geschützt vor direktem Fahrtwind auf der Unterseite des Universal Front-Knotens [`PCBA 05`](#7-pcba-05-universal-front-knoten-openmotorbridge_front_node) über dem Gore-Membran Bodenventil; die I2S-Leitungen werden über den Puck als generischer `EXT_I2S` Bus für Erweiterungen durchgeschleift).*
 
 #### 7.4.2 Pinbelegung des Sensor-Puck Primary In (`J1` / 6-Pin JST-GH) & Expansion Out (`J2` / 6-Pin JST-SH)

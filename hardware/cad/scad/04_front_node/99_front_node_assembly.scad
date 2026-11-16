@@ -91,7 +91,7 @@ module front_node_exploded_assembly() {
             front_node_upper_lid();
 
     // 9. Modular Snap-On Environmental Sensor Puck (u-blox SAM-M10Q, TMP117, OPT3001)
-    translate([ch_x_start + 55.0 - 22.0, ch_y_start + 28.0 - 22.0, EXPLODE_PUCK_Z])
+    translate([ch_x_start + 55.0 - 19.0, ch_y_start + 28.0 - 19.0, EXPLODE_PUCK_Z])
         sensor_puck_environmental_assembly();
 }
 

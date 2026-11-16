@@ -738,13 +738,13 @@ Both buttons are hardware-identical and freely assignable via the PWA dashboard 
 
 #### 7.4.1 Technical Board Specifications & Components
 * **Dimensions:** $34.0 \times 34.0\,\text{mm}$ with $2.0\,\text{mm}$ corner chamfers, 4 layers FR-4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish, Layer 2: 100% continuous RF GND plane for GNSS patch, Layer 3: 3.3V power plane).
-* **Mounting:** Tool-free 4-point snap retention directly in the upper basket of the Front Node enclosure or remote-mountable at the windshield via 1.5m JST-GH cable.
+* **Mounting:** Form-fitted inside custom $38.0 \times 38.0 \times 15.0\,\text{mm}$ snap enclosure ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad), $34.8 \times 34.8\,\text{mm}$ internal cavity with $0.35\,\text{mm}$ clearance, perimeter snap lid & retention feet) docking directly in upper basket of Front Node lid or remote-mountable at windshield via 1.5m JST-GH cable.
 * **Components:**
   * **`U1` (u-blox SAM-M10Q):** Multi-constellation GNSS module (GPS, GLONASS, Galileo, BeiDou) with integrated $15.5 \times 15.5\,\text{mm}$ ceramic patch antenna.
   * **`U2` (TI TMP117AIDRVR):** NIST-traceable digital temperature sensor ($\pm 0.1^\circ\text{C}$ accuracy) isolated on a thermally decoupled PCB tongue via a $0.8\,\text{mm}$ U-slot directly in the laminar frontal intake for black ice detection unaffected by engine waste heat.
   * **`U3` (TI OPT3001DNPR):** Ambient light sensor with human eye spectral response beneath the upper $\varnothing 4.5\,\text{mm}$ optical casing port (lux measurement for auto day/night mode switching in PWA and instrument clusters).
-  * **`J1` (Primary In):** 6-pin JST-GH SMD receptacle (`SM06B-GHS-TB`, 1.25 mm pitch) facing east to the Front Node wire harness.
-  * **`J2` (Daisy-Chain Expansion Out):** 6-pin JST-SH SMD receptacle (`SM06B-SRSS-TB`, 1.00 mm pitch) facing east for future cockpit sensors (sealed with flush TPU blanking plug when unused).
+  * **`J1` (Primary In):** 6-pin JST-GH SMD receptacle (`SM06B-GHS-TB`, 1.25 mm pitch) facing east (`+X`) to the Front Node wire harness.
+  * **`J2` (Daisy-Chain Expansion Out):** 6-pin JST-SH SMD receptacle (`SM06B-SRSS-TB`, 1.00 mm pitch) facing north (`+Y`) for future cockpit sensors (sealed with flush TPU blanking plug when unused).
   *(Note on acoustic sensing: The Knowles SPH0645 I2S MEMS microphone remains sheltered from direct airflow on the underside of Universal Front Node [`PCBA 05`](#7-pcba-05-universal-front-node-openmotorbridge_front_node) above the Gore-Tex vent; I2S signals pass through the puck as a generic `EXT_I2S` bus for modular extensions).*
 
 #### 7.4.2 Pinout of Sensor Puck Primary In (`J1` / 6-Pin JST-GH) & Expansion Out (`J2` / 6-Pin JST-SH)

@@ -354,6 +354,13 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "Tomorrow"
     ),
     (
+        "04_front_node/parts/sensor_puck_environmental.scad",
+        os.path.join(CAD_IMG_DIR, "sensor_puck_environmental_3d.png"),
+        "19,19,8,55,0,320,180",
+        "Tomorrow",
+        ["-D", 'part="assembly"']
+    ),
+    (
         "04_front_node/98_front_node_closed.scad",
         os.path.join(CAD_IMG_DIR, "front_node_bottom_cad.png"),
         "49,34,5,130,0,320,240",
