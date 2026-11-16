@@ -11655,7 +11655,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "openmotorbridge:Qi_Coil_SolderPads_2P"
 			(at 220 160 0)
 			(hide yes)
 			(show_name no)

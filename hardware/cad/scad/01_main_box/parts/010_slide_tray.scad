@@ -71,30 +71,31 @@ module main_box_slide_tray(
                             polygon(points=[[tongue_prot + 0.1, 0], [0, 2.5], [tongue_prot + 0.1, 2.5]]);
                 }
 
-                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo in Front/Center)
-                // Battery placement: X = 17.0..87.0 mm (dx = 70 mm), Y = 3.0..41.5 mm (dy = 38.5 mm)
+                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo in Front/Center + PCM)
+                // Battery placement: X = 20.1..87.1 mm (dx = 67 mm), Y = 2.4..44.4 mm (dy = 42.0 mm clear)
+                // Accommodates 38.0 mm cell body + 3.0 mm PCM strip + 1.0 mm margin
                 // Rib height = 4.5 mm (Z = tray_t .. tray_t + 4.5)
-                translate([17.0, 3.0, tray_t]) {
+                translate([18.0, 0.8, tray_t]) {
                     // Front containment rib
-                    cube([70.0, 1.8, 4.5], center=false);
+                    cube([71.6, 1.6, 4.5], center=false);
                     // Rear containment rib (separating battery from North antenna zone)
-                    translate([0, 38.5, 0])
-                        cube([70.0, 1.8, 4.5], center=false);
+                    translate([0, 43.6, 0])
+                        cube([71.6, 1.6, 4.5], center=false);
                     // Left containment rib
-                    cube([1.8, 40.3, 4.5], center=false);
+                    cube([1.6, 45.2, 4.5], center=false);
                     // Right containment rib
-                    translate([68.2, 0, 0])
-                        cube([1.8, 40.3, 4.5], center=false);
+                    translate([70.0, 0, 0])
+                        cube([1.6, 45.2, 4.5], center=false);
                     // 2x Elastic retention catch nubs
-                    translate([1.8, 15.0, 3.8])
+                    translate([1.6, 16.0, 3.8])
                         cube([0.8, 10.0, 0.8], center=false);
-                    translate([67.4, 15.0, 3.8])
+                    translate([69.2, 16.0, 3.8])
                         cube([0.8, 10.0, 0.8], center=false);
                 }
 
                 // 5. North Antenna Bed: Dual Antennas both at North (LoRa unten, 2.4 GHz darüber)
-                // A. Taoglas FXP895 LoRa 868 MHz (85 x 18 mm at Y = 42.5..60.5 mm: UNTEN)
-                translate([9.5, 42.0, tray_t]) {
+                // A. Taoglas FXP895 LoRa 868 MHz (85 x 18 mm at Y = 46.0..64.0 mm: UNTEN)
+                translate([9.5, 45.5, tray_t]) {
                     cube([86.0, 1.4, 1.5], center=false);
                     translate([0, 18.6, 0])
                         cube([86.0, 1.4, 1.5], center=false);
@@ -130,8 +131,8 @@ module main_box_slide_tray(
             // --- SUBTRACTIONS ---
 
             // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm for LoRa 868 MHz at North: UNTEN)
-            // Located at Y = 42.5..60.5 mm, X = 10.0..95.2 mm
-            translate([10.0, 42.5, tray_t - 0.4])
+            // Located at Y = 46.0..64.0 mm, X = 10.0..95.2 mm
+            translate([10.0, 46.0, tray_t - 0.4])
                 cube([85.2, 18.0, 1.0], center=false);
 
             // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm for 2.4 GHz at North: ETWAS DARÜBER)
@@ -163,9 +164,9 @@ module main_box_slide_tray(
                     cube([8.0, 2.4, tray_t + 2.0], center=false);
             }
 
-            // 12. LiPo Underside Cushioning Foam Recess (64.0 x 36.0 x 0.8 mm)
-            translate([20.0, 4.5, -0.1])
-                cube([64.0, 36.0, 0.8], center=false);
+            // 12. LiPo Underside Cushioning Foam Recess (65.0 x 40.0 x 0.8 mm)
+            translate([20.0, 2.5, -0.1])
+                cube([65.0, 40.0, 0.8], center=false);
         }
     }
 }

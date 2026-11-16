@@ -783,7 +783,7 @@ Für alle Harley-Davidson Cockpit-Konzepte stehen robuste, vibrationsentkoppelte
    * **Ergebnis:** Alle angeschlossenen Geräte verbleiben zu 100 % im Handschuhfach. Null externe Kabeldurchzüge!
 
 4. **Modularer Snap-On Environmental Sensor-Puck ("Körbchen" / `sensor_puck_environmental.scad`, `PCBA 05D`):**
-   * Kompakte aerodynamische Schnapp-Kapsel ($38{,}0 \times 38{,}0 \times 15{,}0\,\text{mm}$ Gehäuse mit $\varnothing 28{,}0 \times 14{,}0\,\text{mm}$ Kuppel), passgenau für die $34 \times 34\,\text{mm}$ `PCBA 05D`, die u-blox SAM-M10Q Multi-GNSS, TI TMP117 Präzisionsthermometer und OPT3001 Umgebungslichtsensor beherbergt (das Knowles MEMS-Mikrofon `MK1` sitzt im Boden des Front-Nodes vor dem ePTFE-Akustikvent).
+   * Kompakte Schnapp-Kapsel ($38{,}0 \times 38{,}0 \times 15{,}0\,\text{mm}$ Unterschale, $17{,}2\,\text{mm}$ Bauhöhe mit flacher 2,2-mm-Deckelplatte, $21{,}7\,\text{mm}$ gesamte Bauhülle inkl. Rastfüßen), passgenau für die $34 \times 34\,\text{mm}$ `PCBA 05D`, die u-blox SAM-M10Q Multi-GNSS, TI TMP117 Präzisionsthermometer und OPT3001 Umgebungslichtsensor beherbergt (das Knowles MEMS-Mikrofon `MK1` sitzt im Boden des Front-Nodes vor dem ePTFE-Akustikvent).
    * **Am Motorrad:** Rastet formschlüssig direkt oben auf den Deckel des Front-Node Monocoques ein.
    * **Im Auto / Support-Van:** Unclip mit einem Handgriff; wird über ein 1,5m Verlängerungskabel an den Dashboard-/Windschutzscheiben-Adapter ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) angedockt.
 

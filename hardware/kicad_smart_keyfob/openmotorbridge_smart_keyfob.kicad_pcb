@@ -1699,7 +1699,7 @@
 			)
 		)
 	)
-	(footprint ""
+	(footprint "openmotorbridge:Qi_Coil_SolderPads_2P"
 		(layer "F.Cu")
 		(uuid "39f8c565-d01b-4450-9529-8dcaeb5d1ef4")
 		(at 105.5 77.8375)

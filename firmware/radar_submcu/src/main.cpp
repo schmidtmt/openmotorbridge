@@ -27,10 +27,10 @@ static const char *TAG = "RADAR2_SUBMCU";
 #define PIN_MR20_TX                 GPIO_NUM_4   // U1 Pad 5: MR20_RX (to J2 Pin 4 Radar Config Commands)
 #define MR20_BAUDRATE               115200
 
-#define PIN_NEOPIXEL                GPIO_NUM_8   // U1 Pad 8: WS2812_DATA -> D1..D36 Halo Warning Wings
-#define PIN_RADAR_BOOT              GPIO_NUM_9   // U1 Pad 13: ESP_IO9_BOOT (SW1)
-#define PIN_RADAR_USB_DM            GPIO_NUM_18  // U1 Pad 16: BUS_DM (J1 Pin 4 USB 2.0 D- to Central Box)
-#define PIN_RADAR_USB_DP            GPIO_NUM_19  // U1 Pad 17: BUS_DP (J1 Pin 3 USB 2.0 D+ to Central Box)
+#define PIN_NEOPIXEL                GPIO_NUM_8   // U1 Pad 12: WS2812_DATA -> D1..D36 Halo Warning Wings
+#define PIN_RADAR_BOOT              GPIO_NUM_9   // U1 Pad 11: ESP_IO9_BOOT (SW1)
+#define PIN_RADAR_USB_DM            GPIO_NUM_13  // U1 Pad 13: BUS_DM (J1 Pin 4 USB 2.0 D- to Central Box)
+#define PIN_RADAR_USB_DP            GPIO_NUM_14  // U1 Pad 14: BUS_DP (J1 Pin 3 USB 2.0 D+ to Central Box)
 
 #define NUM_LEDS                    36           // 36-LED Visual Warning Wings (D1..D36)
 #define WING_LEDS                   18           // 18 LEDs per wing (Left: 0..17, Right: 18..35)

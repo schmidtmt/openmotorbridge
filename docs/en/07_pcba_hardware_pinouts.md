@@ -17,7 +17,7 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 | **PCBA 01**| **Central Box Main Controller**| 85 x 55 mm    | 4 Layer | ESP32-S31-WROOM-1U, USB2517I,|
 |       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164-Q1,   |
 |       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
-|       | Vertical SMD (MicroLock/Picoflex)|              |         | SX1262 LoRa, ES8388, BMI270, CAN|
+|       | Vertical SMD (Micro-Lock Plus)|               |         | SX1262 LoRa, ES8388, BMI270, CAN|
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satellite Pod Interface**   | 42 x 48 mm    | 4 Layer | ESP32-C6, ES8388,    |
 |       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
@@ -59,7 +59,7 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 
 ### 1.1 Breakdown by System Component
 1. **Core Assemblies (Standard on Every Motorcycle):**
-   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP audio mixing, dual Bluetooth headsets, LoRa mesh, and USB Hub coordination. Equipped with **Dual-Power Input** (12V vehicle power via Molex Micro-Lock Plus `J1` / Deutsch DTM-6 bulkhead or 5V USB-C Service Port `J3` via TI LM66100 ideal-diode OR-ing for benchtop flashing without a 12V lab power supply) and **vertical SMD headers (Pointing UP)** (Vehicle Power `J1`, 4-channel periphery bus `J6` Picoflex 16-Pin, UPS battery `J5`, status LED `J4`, spare USB `J7`, USB-C `J3`).
+   * **`PCBA 01` (Central Box Main Controller):** Central under-seat compute hub for power management, UPS, DSP audio mixing, dual Bluetooth headsets, LoRa mesh, and USB Hub coordination. Equipped with **Dual-Power Input** (12V vehicle power via Molex Micro-Lock Plus `J1` / Deutsch DTM-6 bulkhead or 5V USB-C Service Port `J3` via TI LM66100 ideal-diode OR-ing for benchtop flashing without a 12V lab power supply) and **vertical SMD headers (Pointing UP)** (Vehicle Power `J1`, 4-channel periphery bus `J6` Micro-Lock Plus 16-Pin, UPS battery `J5`, spare USB `J7`, USB-C `J3`).
    * **`PCBA 03` (Satellite Pod Interface Board):** Universal interface board mounted on the floor of both saddlebag pods (Pod 1 & Pod 2). Provides an integrated USB-C fast-charging port (up to 30W/60W) directly inside the bag and connects Sena, Cardo, or OMM losslessly to the 4-wire bus.
    * **`PCBA 05` (Universal Front Node):** Cockpit module at the handlebar riser for Multi-GNSS (SAM-M10Q), ram-air environmental sensing, ambient microphone, and Qi accessory power. Connected via the 4-wire backbone routed through the Harley wire caddy (**ZERO tank lifting required!**).
    * **`PCBA 05B` (Symmetrical Under-Perch Mirror Pods):** Two identical boards clamped under the mirror perch studs (Left & Right) for bilateral Blind Spot Detection (BSD amber LEDs) and software-defined thumb switches (PTT, Voice Assistant, 1-Click Hazard Pin Drop for Waze, Cam-Tags, SOS).
@@ -167,12 +167,12 @@ Connects via internal silicone wire harness to the external Deutsch DTM04-6P bul
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-#### 3.2.2 Header J6: OMB 4-Channel Periphery Bus (Molex Picoflex 16-Pin 2x08 Vertical)
-Central high-speed interface (Molex Picoflex `90814-0016`, 1.27mm pitch, vertical top-entry) supplying power and native USB 2.0 data to Front Node, Pod 1, Pod 2, and Radar:
+#### 3.2.2 Header J6: OMB 4-Channel Periphery Bus (Molex Micro-Lock Plus 16-Pin 2x08 Vertical)
+Central high-speed interface (Molex Micro-Lock Plus `505433-1671`, 1.25mm pitch, vertical top-entry with positive latching) supplying power and native USB 2.0 data to Front Node, Pod 1, Pod 2, and Radar:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| HEADER J6: MOLEX PICOFLEX 16-PIN (2x08) VERTICAL (90814-0016) - 4 INDEPENDENT OMB SYSTEM BRANCHES            |
+| HEADER J6: MOLEX MICRO-LOCK PLUS 16-PIN (2x08) VERTICAL (505433-1671) - 4 INDEPENDENT OMB SYSTEM BRANCHES     |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Target Component    | Function & Protection   |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
@@ -351,20 +351,25 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 
 ---
 
-### 3.5 Quad Automotive eFuse Smart Switch (`U12`)
+### 3.5 Quad Automotive Smart High-Side Switch (`U12`)
+
+The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 package) protects the 12V periphery branches against cable short circuits, reverse polarity, and overload. Control inputs IN1–IN4 (Pins 3–6) are tied to `VCC_3V3` via hardware pull-up (autonomous powering as soon as the 3.3V rail is up; cold starts and sequenced peripheral enables take place at the protocol/node level):
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| QUAD AUTOMOTIVE EFUSE (QFN-20): SOLID-STATE LOAD SWITCH CHANNEL ASSIGNMENTS                                   |
+| QUAD AUTOMOTIVE SMART SWITCH (HTSSOP-28, TI TPS4H160-Q1): CHANNEL ASSIGNMENTS & PIN ALLOCATION               |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
-| Chan. | Input Pin          | Output Pin         | Net Name           | Protection & Allocation                |
+| Chan. | Input Pins         | Output Pins        | Net Name           | Protection & Allocation                |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
-| In    | Pin 1, 2           | -                  | KL30_IN            | Vehicle Main +12V DC Supply            |
-| CH 1  | -                  | Pin 5              | VBUS_FRONT         | Front Node Feed (Current Limit: 5.0A)  |
-| CH 2  | -                  | Pin 6              | VBUS_POD1          | Pod 1 Feed (Current Limit: 2.5A)       |
-| CH 3  | -                  | Pin 7              | VBUS_POD2          | Pod 2 Feed (Current Limit: 2.5A)       |
-| CH 4  | -                  | Pin 8              | VBUS_RADAR         | Rear Radar Feed (Current Limit: 1.5A)  |
-| GND   | Pin 10, EP         | -                  | GND_PWR            | Thermal Ground Pad                     |
+| VS    | Pins 20, 21, 22, 23| -                  | KL30_IN            | Vehicle Main +12V DC Supply            |
+| CH 1  | Pin 3 (IN1: 3V3)   | Pins 27, 28 (OUT1) | VBUS_FRONT         | Front Node Feed (PCBA 05)              |
+| CH 2  | Pin 4 (IN2: 3V3)   | Pins 25, 26 (OUT2) | VBUS_POD1          | Pod 1 Feed (PCBA 03)                   |
+| CH 3  | Pin 5 (IN3: 3V3)   | Pins 17, 18 (OUT3) | VBUS_POD2          | Pod 2 Feed (PCBA 03)                   |
+| CH 4  | Pin 6 (IN4: 3V3)   | Pins 15, 16 (OUT4) | VBUS_RADAR         | Rear Radar Feed (PCBA 08)              |
+| DIAG  | Pin 14 (DIAG_EN)   | -                  | VCC_3V3            | Diagnostics functions enabled          |
+| CL    | Pin 11 (CL)        | -                  | GND_PWR            | Current limit reference                |
+| GND   | Pins 1, 12, EP (29)| -                  | GND_PWR            | IC Ground & Thermal Pad (13 Vias)      |
+| NC    | Pins 2, 19, 24     | -                  | NC                 | No internal connection                 |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
 ```
 
@@ -439,7 +444,7 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 |                                       • Freed from BLE (zero channel saturation!)                             |
 |                                                       ▲                                                       |
 |                                                       │  Cable 2 Branch 1: USB 2.0 High-Speed                 |
-|                                                       │  (480 Mbps) + 12V 60W (Picoflex 16P)                  |
+|                                                       │  (480 Mbps) + 12V 60W (Micro-Lock Plus 16P)           |
 |                                                       ▼                                                       |
 |     [ POD 1 LEFT: 50 cm ]               [ CENTRAL BOX: GEOMETRIC CENTER OF MASS ]       [ POD 2 RIGHT: 50 cm ]|
 |  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master (U.FL Housing Antenna)   • OEM-Adapter (Cardo Edge)|
@@ -449,7 +454,7 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 |                                      • S31 Wi-Fi: DISABLED IN NORMAL RIDE (Zero Jam)                          |
 |                                                       ▲                                                       |
 |                                                       │  Cable 2 Branch 4: USB 2.0 High-Speed                 |
-|                                                       │  (480 Mbps) + 12V 1.5A (Picoflex 16P)                 |
+|                                                       │  (480 Mbps) + 12V 1.5A (Micro-Lock Plus 16P)          |
 |                                                       ▼                                                       |
 |                                           [ REAR: RADAR NODE ]                                                |
 |                                       • ESP32-C5 Sub-MCU with 5 GHz V2X                                       |
@@ -471,7 +476,7 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
    * The `ESP32-C5` runs in 802.11p OCB promiscuous mode (ETSI ITS-G5 on 5.9 GHz, channels 176/180) to capture unencrypted Car-to-X broadcasts (architecture analogous to *OpenTrafficMap* / *CITS-to-go*):
      - **SPATEM / SPaT & GLOSA:** Live traffic light phase countdowns (remaining red/green time in seconds) and Green Light Optimal Speed Advisory (GLOSA) for green-wave riding displayed in cockpit OLEDs or HUD.
      - **CAM & DENM:** Early detection of approaching emergency vehicles (siren priority), public transit, road hazard zones, queue tails, and breakdown vehicles.
-   * All data streams (Wheeltec MR20 radar clusters, C-ITS telemetry, and 36-LED halo triggers) sync 100% hardwired over the shielded Picoflex USB harness (Cable 2 Branch 4, USB 2.0 @ 480 Mbps) to the Central Box.
+   * All data streams (Wheeltec MR20 radar clusters, C-ITS telemetry, and 36-LED halo triggers) sync 100% hardwired over the shielded Micro-Lock Plus USB harness (Cable 2 Branch 4, USB 2.0 @ 480 Mbps) to the Central Box.
 
 ---
 
