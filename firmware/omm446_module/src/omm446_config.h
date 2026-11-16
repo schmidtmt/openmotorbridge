@@ -19,20 +19,20 @@
 // ---------------------------------------------------------------------------
 // 2. Status Indicator LED (WS2812B-2020)
 // ---------------------------------------------------------------------------
-#define OMM446_PIN_WS2812B        GPIO_NUM_6
+#define OMM446_PIN_WS2812B        GPIO_NUM_0  // U1 Pad 12 (IO0) -> D1 WS2812B-2020
 #define OMM446_LED_COUNT          1
 
 // ---------------------------------------------------------------------------
 // 3. Battery & PMIC Supervision (TI BQ24075)
 // ---------------------------------------------------------------------------
-#define OMM446_PIN_CHG_STAT       GPIO_NUM_7  // Low active when charging
-#define OMM446_ADC_BAT_CHANNEL    ADC_CHANNEL_0 // GPIO 0 (ADC1_CH0) for Vbat sensing
+#define OMM446_PIN_CHG_STAT       GPIO_NUM_1  // U1 Pad 13 (IO1) <- BQ24075 /STAT (Low active when charging)
+// Note: Battery charging status is digitally monitored via /STAT on GPIO1.
 
 // ---------------------------------------------------------------------------
 // 4. I2C Codec Control Bus (Everest Semi ES8388)
 // ---------------------------------------------------------------------------
-#define OMM446_PIN_I2C_SDA        GPIO_NUM_8
-#define OMM446_PIN_I2C_SCL        GPIO_NUM_9
+#define OMM446_PIN_I2C_SDA        GPIO_NUM_7  // U1 Pad 16 (IO7) -> ES8388 SDA
+#define OMM446_PIN_I2C_SCL        GPIO_NUM_6  // U1 Pad 15 (IO6) -> ES8388 SCL
 #define OMM446_I2C_PORT           I2C_NUM_0
 #define OMM446_I2C_FREQ_HZ        400000
 #define ES8388_I2C_ADDR           0x10        // AD0 = 0 (GND) -> 0x10
@@ -40,20 +40,20 @@
 // ---------------------------------------------------------------------------
 // 5. USB 2.0 PHY (Native DFU & Serial)
 // ---------------------------------------------------------------------------
-#define OMM446_PIN_USB_DN         GPIO_NUM_12
-#define OMM446_PIN_USB_DP         GPIO_NUM_13
+#define OMM446_PIN_USB_DN         GPIO_NUM_12 // U1 Pad 17 (IO12)
+#define OMM446_PIN_USB_DP         GPIO_NUM_13 // U1 Pad 18 (IO13)
 
 // ---------------------------------------------------------------------------
 // 6. NiceRF SA818-DMR Transceiver Control Interface
 // ---------------------------------------------------------------------------
-#define OMM446_PIN_SA818_TXD      GPIO_NUM_14 // ESP32 TXD -> SA818 RXD (AT Commands)
-#define OMM446_PIN_SA818_RXD      GPIO_NUM_15 // SA818 TXD -> ESP32 RXD (Status/Telemetry)
+#define OMM446_PIN_SA818_TXD      GPIO_NUM_14 // U1 Pad 19 (IO14): ESP32 TXD -> SA818 RXD (AT Commands)
+#define OMM446_PIN_SA818_RXD      GPIO_NUM_15 // U1 Pad 20 (IO15): SA818 TXD -> ESP32 RXD (Status/Telemetry)
 #define OMM446_UART_PORT          UART_NUM_1
 #define OMM446_UART_BAUDRATE      9600
 
-#define OMM446_PIN_SA818_PTT      GPIO_NUM_16 // Low active: 0 = Transmit, 1 = Receive
-#define OMM446_PIN_SA818_SQL      GPIO_NUM_17 // Squelch Output: 0 = Carrier detected, 1 = Muted
-#define OMM446_PIN_SA818_PWR_HL   GPIO_NUM_18 // Power mode: 0 = 0.2W (Helmet), 1 = 0.5W (Bike)
+#define OMM446_PIN_SA818_PTT      GPIO_NUM_8  // U1 Pad 22 (IO8): Low active: 0 = Transmit, 1 = Receive
+#define OMM446_PIN_SA818_SQL      GPIO_NUM_9  // U1 Pad 23 (IO9): Squelch Output: 0 = Carrier detected, 1 = Muted
+#define OMM446_PIN_SA818_PWR_HL   GPIO_NUM_18 // U1 Pad 24 (IO18): Power mode: 0 = 0.2W (Helmet), 1 = 0.5W (Bike)
 
 // ---------------------------------------------------------------------------
 // 7. I2S Audio Bus (Everest Semi ES8388 Stereo Codec)

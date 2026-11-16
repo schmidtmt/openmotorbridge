@@ -12,7 +12,7 @@
 		(date "2026-10-31")
 		(rev "v10.0")
 		(company "OpenMotorBridge Open Source Hardware")
-		(comment 1 "ESP32-P4 (400MHz 0% RF, 480M USB HS), ESP32-E22 (Wi-Fi 6E 5/6GHz 2x2 MIMO), USB2514B Hub, 60W Power Engine")
+		(comment 1 "ESP32-S3-WROOM-1U-N16R8 (240MHz Wi-Fi/BLE, USB OTG), ESP32-E22 (Wi-Fi 6E 5/6GHz 2x2 MIMO), USB2514B Hub, 60W Power Engine")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -6342,7 +6342,7 @@
 				)
 			)
 		)
-		(property "Value" "ESP32-P4-NR16"
+		(property "Value" "ESP32-S3-WROOM-1U-N16R8"
 			(at 0 11.45 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -16430,7 +16430,7 @@
 		(layer "Edge.Cuts")
 		(uuid "c6560000-0000-0000-0000-000000000003")
 	)
-	(gr_text "ESP32-P4 + ESP32-E22 5/6GHz MIMO"
+	(gr_text "ESP32-S3 + ESP32-E22 5/6GHz MIMO"
 		(at 149.5 114 180)
 		(layer "F.SilkS")
 		(uuid "d1230000-0000-0000-0000-000000000002")

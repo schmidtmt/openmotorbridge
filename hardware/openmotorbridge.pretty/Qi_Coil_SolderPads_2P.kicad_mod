@@ -1,0 +1,92 @@
+(footprint "openmotorbridge:Qi_Coil_SolderPads_2P"
+	(layer "F.Cu")
+	(uuid "39f8c565-d01b-4450-9529-8dcaeb5d1ef4")
+	(at 105.5 77.8375)
+	(property "Reference" "J1"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "bab54774-3de7-4bd6-a690-fd9766f97505")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Value" "QI_COIL_ACH_2P"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c11f51d-3ae1-4f90-bd28-2d623d148e5d")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "81669abd-fa21-4e19-9e36-e9ec7865141a")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3851006d-ffb8-4d79-b43f-f28754f7ab3d")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(path "/f72c3d5d-05de-47de-9741-3f0744335b76")
+	(sheetname "/")
+	(sheetfile "openmotorbridge_smart_keyfob.kicad_sch")
+	(units
+		(unit
+			(name "A")
+			(pins "1" "2")
+		)
+	)
+	(duplicate_pad_numbers_are_jumpers no)
+	(pad "1" smd roundrect
+		(at 0 -0.9125)
+		(size 1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(net "QI_AC1")
+		(pinfunction "QI_AC1_1")
+		(pintype "passive")
+		(thermal_bridge_angle 45)
+		(uuid "29304316-5218-46f7-ad5e-2b9bb45ab172")
+	)
+	(pad "2" smd roundrect
+		(at 0 0.9125)
+		(size 1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(net "QI_AC2")
+		(pinfunction "QI_AC2_2")
+		(pintype "passive")
+		(thermal_bridge_angle 45)
+		(uuid "71b9f533-6f8c-4f8a-a4cd-c33916fe21e3")
+	)
+	(embedded_fonts no)
+	(model "${KICAD8_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0805_2012Metric.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

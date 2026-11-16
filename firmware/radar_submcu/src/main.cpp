@@ -23,14 +23,14 @@ static const char *TAG = "RADAR2_SUBMCU";
 // Host MCU: U1 ESP32-C5-WROOM-1U / ESP32-C3-WROOM-02U Pinout
 // =============================================================================
 #define UART_MR20_PORT              UART_NUM_1
-#define PIN_MR20_RX                 GPIO_NUM_3   // U1 Pad 4: MR20_TX (from J2 Pin 3 Radar Target Vectors)
-#define PIN_MR20_TX                 GPIO_NUM_4   // U1 Pad 5: MR20_RX (to J2 Pin 4 Radar Config Commands)
+#define PIN_MR20_RX                 GPIO_NUM_2   // U1 Pad 4 (IO2): MR20_TX (from J2 Pin 3 Radar Target Vectors)
+#define PIN_MR20_TX                 GPIO_NUM_3   // U1 Pad 5 (IO3): MR20_RX (to J2 Pin 4 Radar Config Commands)
 #define MR20_BAUDRATE               115200
 
-#define PIN_NEOPIXEL                GPIO_NUM_8   // U1 Pad 12: WS2812_DATA -> D1..D36 Halo Warning Wings
-#define PIN_RADAR_BOOT              GPIO_NUM_9   // U1 Pad 11: ESP_IO9_BOOT (SW1)
-#define PIN_RADAR_USB_DM            GPIO_NUM_13  // U1 Pad 13: BUS_DM (J1 Pin 4 USB 2.0 D- to Central Box)
-#define PIN_RADAR_USB_DP            GPIO_NUM_14  // U1 Pad 14: BUS_DP (J1 Pin 3 USB 2.0 D+ to Central Box)
+#define PIN_NEOPIXEL                GPIO_NUM_10  // U1 Pad 12 (IO10): WS2812_DATA -> D1..D36 Halo Warning Wings
+#define PIN_RADAR_BOOT              GPIO_NUM_28  // U1 Pad 15 (IO28): ESP_IO28_BOOT (SW1 Boot Strap)
+#define PIN_RADAR_USB_DM            GPIO_NUM_13  // U1 Pad 13 (IO13): BUS_DM (J1 Pin 4 USB 2.0 D- to Central Box)
+#define PIN_RADAR_USB_DP            GPIO_NUM_14  // U1 Pad 14 (IO14): BUS_DP (J1 Pin 3 USB 2.0 D+ to Central Box)
 
 #define NUM_LEDS                    36           // 36-LED Visual Warning Wings (D1..D36)
 #define WING_LEDS                   18           // 18 LEDs per wing (Left: 0..17, Right: 18..35)
@@ -75,7 +75,7 @@ typedef struct {
 static RgbColor_t s_led_buffer[NUM_LEDS];
 
 static void update_neopixel_halo(void) {
-    // Drives the 36 WS2812B-2020 LEDs (D1..D36) via cycle-accurate bitstream on PIN_NEOPIXEL (GPIO 8)
+    // Drives the 36 WS2812B-2020 LEDs (D1..D36) via cycle-accurate bitstream on PIN_NEOPIXEL (GPIO 10)
     // WS2812B timings @ 160 MHz: T0H=56 cyc, T0L=144 cyc, T1H=112 cyc, T1L=88 cyc
     const uint32_t c_t0h = 56;
     const uint32_t c_t0l = 144;
@@ -111,7 +111,7 @@ static void update_neopixel_halo(void) {
 }
 
 static void init_uarts(void) {
-    // Wheeltec MR20 Sensor UART on J2 (Pin 3 = MR20_TX -> GPIO 3 RX, Pin 4 = MR20_RX <- GPIO 4 TX)
+    // Wheeltec MR20 Sensor UART on J2 (Pin 3 = MR20_TX -> GPIO 2 RX, Pin 4 = MR20_RX <- GPIO 3 TX)
     const uart_config_t mr20_uart_config = {
         .baud_rate = MR20_BAUDRATE,
         .data_bits = UART_DATA_8_BITS,
@@ -406,7 +406,7 @@ extern "C" void app_main(void) {
     gpio_config(&neo_conf);
     gpio_set_level(PIN_NEOPIXEL, 0);
 
-    // 1. Initialize Wheeltec MR20 UART (RX=GPIO 3, TX=GPIO 4)
+    // 1. Initialize Wheeltec MR20 UART (RX=GPIO 2, TX=GPIO 3)
     init_uarts();
 
     // 2. Initialize 4-Wire USB 2.0 Automotive Backbone (Node-ID 0x05, Port 5 on USB2517I)
@@ -434,5 +434,5 @@ extern "C" void app_main(void) {
     xTaskCreate(task_neopixel_halo, "neopixel_halo", 3072, NULL, 4, NULL);
     xTaskCreate(task_usb_radar_bridge, "usb_radar_tx", 4096, NULL, 6, NULL);
 
-    ESP_LOGI(TAG, "Radar 2.0 Sub-MCU v10.0 initialized on USB Node 0x05 (BUS_DM=GPIO18, BUS_DP=GPIO19).");
+    ESP_LOGI(TAG, "Radar 2.0 Sub-MCU v10.0 initialized on USB Node 0x05 (BUS_DM=GPIO13, BUS_DP=GPIO14).");
 }

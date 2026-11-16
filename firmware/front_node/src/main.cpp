@@ -206,7 +206,7 @@ static void supervisor_task(void* pvParameters) {
 extern "C" void app_main(void) {
     ESP_LOGI(TAG, "==================================================================");
     ESP_LOGI(TAG, "   OPENMOTORBRIDGE v10.0 FRONT-NODE FIRMWARE (PCBA 05)            ");
-    ESP_LOGI(TAG, "   Core: U1 ESP32-P4-NR16 (0%% 2.4GHz) + U9 ESP32-E22 (Wi-Fi 6E) ");
+    ESP_LOGI(TAG, "   Core: U1 ESP32-S3-WROOM-1U-N16R8 (0%% 2.4GHz) + U9 ESP32-E22 (Wi-Fi 6E) ");
     ESP_LOGI(TAG, "   Hub:  U2 USB2514Bi 4-Port HS USB + U3 SW3526 30W USB-PD        ");
     ESP_LOGI(TAG, "   HUD:  Dual Speaker-Corner OLEDs (J_DISP_L 0x3C / J_DISP_R 0x3D)");
     ESP_LOGI(TAG, "==================================================================");

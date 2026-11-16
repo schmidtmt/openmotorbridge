@@ -105,11 +105,11 @@ module main_box_slide_tray(
                 }
 
                 // B. Taoglas FXP73 2.4 GHz Wi-Fi/BLE (47 x 7 mm at Y = 60.5..67.5 mm: ETWAS DARÜBER)
-                // Elevated 0.6 mm rear ledge
+                // Elevated 1.2 mm rear ledge (separates FXP73 from 0.8 mm FXP895 with 0.4 mm PA12 floor)
                 translate([27.5, 60.5, tray_t]) {
-                    cube([48.0, 7.0, 0.6], center=false);
+                    cube([48.0, 7.0, 1.2], center=false);
                     translate([0, 6.8, 0])
-                        cube([48.0, 1.2, 1.6], center=false);
+                        cube([48.0, 1.2, 2.2], center=false);
                 }
 
                 // 6. Rear Service Handle Flange (at Y = tray_w - 2.5 mm, Z = tray_t .. tray_t + 5.5 mm)
@@ -137,7 +137,7 @@ module main_box_slide_tray(
 
             // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm for 2.4 GHz at North: ETWAS DARÜBER)
             // Located at Y = 60.5..67.5 mm, X = 28.0..75.5 mm (on elevated ledge)
-            translate([28.0, 60.5, tray_t + 0.6 - 0.4])
+            translate([28.0, 60.5, tray_t + 1.2 - 0.4])
                 cube([47.5, 7.0, 1.0], center=false);
 
             // 10. Cable Passthrough Openings

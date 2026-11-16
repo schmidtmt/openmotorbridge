@@ -132,9 +132,9 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 100V buck converter (delivers `VCC_5V` from 12V–72V vehicle supply).
   * **LiPo Charger & Power-Path PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) with Dynamic Power Path Management (DPPM). Automatically charges the internal 2,200 mAh flat LiPo cell (`J5`) from `VCC_5V` (LM5164-Q1 or USB-C `J3`) at 1.0 A (`R16`), monitors cell temperature via NTC (`J5` Pin 3) and buffers starter crank voltage dips (down to 6.5V) and ignition-off rundowns seamlessly in $< 10\,\mu\text{s}$ on `VCC_SYS` (feeding the 3.3V ultra-low-noise LDO `U11` `TPS7A0533`).
   * **System LDO (`U11`):** Texas Instruments `TPS7A0533` ultra-low-noise LDO (supplies `VCC_3V3` glitch-free from `VCC_SYS` for ESP32-S31, SX1262 LoRa, and sensors).
-  * **Quad Automotive eFuse Smart Switch (`U12`):** QFN-20 4-channel solid-state load switch providing dedicated current limiting, telemetry, and fault isolation for all 4 periphery branches (Front, Pod 1, Pod 2, Radar).
+  * **Quad Automotive eFuse Smart Switch (`U12`):** Texas Instruments `TPS4H160-Q1` HTSSOP-28 4-channel solid-state load switch providing dedicated current limiting, telemetry, and fault isolation for all 4 periphery branches (Front, Pod 1, Pod 2, Radar).
   * **Long-Range Telemetry (`U10`):** Semtech `SX1262` LoRa Transceiver (+22 dBm PA) with U.FL connector `ANT1` linked to the Taoglas FXP895 antenna embedded in the lid.
-  * **Status & Interface Controls:** WS2812B RGB Smart-LED `D1`, pairing tactile switch `SW1`, plus vertical connectors `J1` (Power/CAN 6P), `J6` (Periphery Bus 16P), `J5` (UPS Battery 4P), `J4` (RGB-LED 3P), `J7` (Spare USB 4P), and `J3` (USB-C 16P).
+  * **Status & Interface Controls:** WS2812B RGB Smart-LED `D1`, pairing tactile switch `SW1`, plus vertical connectors `J1` (Power/CAN 6P), `J6` (Periphery Bus 16P), `J5` (UPS Battery 4P), `J7` (Spare USB 4P), and `J3` (USB-C 16P).
 * **Bottom-Layer Components (B.Cu):**
   * **MicroSD Socket (`J2`):** Hirose `DM3D-SF` push-pull MicroSD card holder (4-Bit High-Speed SDIO) positioned at the front edge for tool-free card swapping.
   * **Audio Codec (`U3`):** Everest Semi `ES8388` 24-Bit / 48 kHz low-power stereo audio codec (QFN-28).
@@ -219,24 +219,7 @@ Connects the internal UPS backup cell (LiFePO4 or LiPo) to the analog voltage an
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-#### 3.2.4 Header J4: External Enclosure RGB Smart-LED (Molex Micro-Lock Plus 1.25mm 3-Pin Vertical)
-Drives an optional external status indicator LED located on the housing face or dashboard:
-
-```
-+---------------------------------------------------------------------------------------------------------------+
-| HEADER J4: MOLEX MICRO-LOCK PLUS 3-PIN VERTICAL (505568-0371) - EXTERNAL STATUS RGB LED                       |
-+-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-| Pin | Signal Name    | Signal Type / Level      | Wire Gauge  | Connected to        | Function & Protection   |
-+-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-|  1  | VCC_5V         | +5.0V DC (Power Out)     | AWG24 0.22² | 5V Power Plane      | LED Operating Voltage   |
-|  2  | RGB_LED_DATA   | Digital Out (WS2812B DIN)| AWG26 0.14² | ESP32-S31 (Pin 28)  | Serial LED Data Line    |
-|  3  | GND_PWR        | Power Ground (0V)        | AWG24 0.22² | GND_PWR Plane       | LED Ground              |
-| MP1 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 1  |
-| MP2 | GND_PWR        | Mechanical Mounting Pad  | SMT Pad     | PCB Ground Plane    | Solder Retention Pad 2  |
-+-----+----------------+--------------------------+-------------+---------------------+-------------------------+
-```
-
-#### 3.2.5 Header J7: Spare USB Port 7 (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
+#### 3.2.4 Header J7: Spare USB Port 7 (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
 Exposes Downstream Port 7 of the USB2517I Hub for future modular expansions (e.g. cellular modem or dashcam):
 
 ```

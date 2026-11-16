@@ -26,9 +26,10 @@
 #define PIN_OMM_DETECT          GPIO_NUM_0   // U1 Pad 12 (GPIO0)  -> OMM_DETECT (10k R9 Pull-Up)
 #define PIN_POD_PTT_BTN         GPIO_NUM_2   // U1 Pad 5  (GPIO2)  -> J_AUDIO_PWR Pin 8 (Physical PTT, Active-Low)
 
-// --- 4. Status LED & Bay ID Strap ---
-#define PIN_CARTRIDGE_LED       GPIO_NUM_19  // U1 Pad 25 (GPIO19) -> Tiny SMD Status LED
-#define PIN_BAY_SELECT          GPIO_NUM_20  // U1 Pad 26 (GPIO20) -> Hardware Bay Strap: LOW = Pod 1 Left (0x03), HIGH = Pod 2 Right (0x04)
+// --- 4. Bay ID Configuration & Status ---
+// Note: PCBA 03 uses 100% identical symmetric hardware for Pod 1 (Left, 0x03) and Pod 2 (Right, 0x04).
+// Bay assignment is determined via NVS configuration / USB Hub Port enumeration (U1 Pads 25 and 26 are NC).
+#define CARTRIDGE_DEFAULT_BAY_ID  0x03        // Default: Pod 1 (Left Bay, 0x03)
 
 // --- 5. Everest Semi ES8388 Audio-Codec (U3) & SW3516 30W USB-PD (U_PD) ---
 #define PIN_CODEC_I2C_SCL       GPIO_NUM_1   // U1 Pad 13 (GPIO1)  -> ES8388 Pin 27 & SW3516 SCL

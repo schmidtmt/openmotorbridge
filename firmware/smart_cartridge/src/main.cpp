@@ -27,8 +27,7 @@ static bool s_ptt_pressed = false;
 // -----------------------------------------------------------------------------
 static UsbNodeType detect_bay_and_mode() {
     gpio_config_t conf = {
-        .pin_bit_mask = (1ULL << PIN_BAY_SELECT) |
-                        (1ULL << PIN_OMM_DETECT) |
+        .pin_bit_mask = (1ULL << PIN_OMM_DETECT) |
                         (1ULL << PIN_POD_PTT_BTN),
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_ENABLE,
@@ -37,28 +36,22 @@ static UsbNodeType detect_bay_and_mode() {
     };
     gpio_config(&conf);
 
-    // 1. Check OMM_DETECT (U1 Pad 16 / GPIO 14 -> J_AUDIO_PWR Pin 6 & U4 TS5A3159 IN):
+    // 1. Check OMM_DETECT (U1 Pad 12 / GPIO 0 -> J_AUDIO_PWR Pin 6 & U4 TS5A3159 IN):
     //    LOW (0V):    OEM Harness grounds Pin 6 -> U4 stays on NC (ES8388 Analog Voice Out)
     //    HIGH (3.3V): OMM Module leaves Pin 6 open (R9 10k pull-up) -> U4 switches to NO (Digital USB-Audio)
     int omm_lvl = gpio_get_level(PIN_OMM_DETECT);
     s_omm_digital_mode = (omm_lvl != 0);
     if (s_omm_digital_mode) {
         s_model_id = 0x0401; // OMM Universal Tri-Band Module (PCBA 09/10)
-        ESP_LOGI(TAG, "OMM_DETECT (GPIO 14) is HIGH -> U4 TS5A3159 in DIGITAL USB-AUDIO Mode (OMM Tri-Band 0x0401)");
+        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is HIGH -> U4 TS5A3159 in DIGITAL USB-AUDIO Mode (OMM Tri-Band 0x0401)");
     } else {
         s_model_id = 0x0101; // Analog OEM Intercom (Sena / Cardo / Midland via ES8388 + Q1..Q4 Actuators)
-        ESP_LOGI(TAG, "OMM_DETECT (GPIO 14) is LOW  -> U4 TS5A3159 in ANALOG ES8388 Mode (OEM Intercom 0x0101)");
+        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is LOW  -> U4 TS5A3159 in ANALOG ES8388 Mode (OEM Intercom 0x0101)");
     }
 
-    // 2. Check Bay Strap (GPIO 2): LOW = Pod 1 Left (0x03), HIGH = Pod 2 Right (0x04)
-    int bay_lvl = gpio_get_level(PIN_BAY_SELECT);
-    if (bay_lvl == 0) {
-        ESP_LOGI(TAG, "Hardware Bay Detect: GPIO %d is LOW -> Assigning POD BAY 1 (Links, 0x03)", PIN_BAY_SELECT);
-        return USB_NODE_POD_BAY1;
-    } else {
-        ESP_LOGI(TAG, "Hardware Bay Detect: GPIO %d is HIGH -> Assigning POD BAY 2 (Rechts, 0x04)", PIN_BAY_SELECT);
-        return USB_NODE_POD_BAY2;
-    }
+    // 2. Bay Assignment: Symmetrical hardware default is Pod 1 (Left, 0x03), configurable via NVS / USB
+    ESP_LOGI(TAG, "Pod Bay Assignment: Configured as POD BAY 1 (Links, 0x03).");
+    return USB_NODE_POD_BAY1;
 }
 
 // -----------------------------------------------------------------------------

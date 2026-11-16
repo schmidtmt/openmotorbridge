@@ -90,7 +90,7 @@ module main_box_full_assembly(exploded = EXPLODED_VIEW) {
         dummy_fxp895_antenna();
 
     // C. Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna (seated in North tray nest: ETWAS DARÜBER)
-    translate([30.8, 63.7 + Y_SLIDE_TRAY, Z_LIPO_CELL + 0.6])
+    translate([30.8, 63.7 + Y_SLIDE_TRAY, Z_LIPO_CELL + 1.2])
         dummy_fxp73_antenna();
 
     // -------------------------------------------------------------------------
