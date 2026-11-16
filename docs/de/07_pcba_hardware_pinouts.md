@@ -17,7 +17,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 | **PCBA 01**| **Zentralbox Main Controller** | 85 x 55 mm    | 4 Lagen | ESP32-S31-WROOM-1U, USB2517I, |
 |       | (Unter Sitzbank, Audio/USV/PD)| (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164-Q1,   |
 |       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
-|       | Vertikal-SMD (MicroLock/Picoflex)|              |         | SX1262 LoRa, ES8388, BMI270, CAN|
+|       | Vertikal-SMD (MicroLock Plus)   |              |         | SX1262 LoRa, ES8388, BMI270, CAN|
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satelliten-Pod Interface**  | 42 x 48 mm    | 4 Lagen | ESP32-C6, ES8388,    |
 |       | (Koffer-Pod 1 & 2 Bodenwanne) | (36x42 mm M2.5| (ENIG)  | 4-Draht Bus, SW3516  |
@@ -59,7 +59,7 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 
 ### 1.1 Gliederung nach Systemkomponenten
 1. **Kern-Baugruppen (Standard-Ausstattung jedes Bikes):**
-   * **`PCBA 01` (Zentralbox Main Controller):** Zentrale Recheneinheit unter der Sitzbank für Energie-Management, USV, DSP-Mischung, Dual-Bluetooth-Headsets, LoRa-Schwarm und USB-Hub Koordination. Ausgestattet mit **Dual-Power Input** (12V Bordnetz via Molex Micro-Lock Plus `J1` / Gehäuseflansch Deutsch DTM-6 oder 5V USB-C Service-Port `J3` via TI LM66100 Ideal-Dioden-OR-ing für schreibtischbasiertes Flashen ohne 12V-Labornetzteil) und **vertikalen SMD-Steckverbindern (Pointing UP)** (Bordnetz `J1`, 4-Kanal Peripherie-Bus `J6` Picoflex 16-Pin, USV-Akku `J5`, Status-LED `J4`, Reserve-USB `J7`, USB-C `J3`).
+   * **`PCBA 01` (Zentralbox Main Controller):** Zentrale Recheneinheit unter der Sitzbank für Energie-Management, USV, DSP-Mischung, Dual-Bluetooth-Headsets, LoRa-Schwarm und USB-Hub Koordination. Ausgestattet mit **Dual-Power Input** (12V Bordnetz via Molex Micro-Lock Plus `J1` / Gehäuseflansch Deutsch DTM-6 oder 5V USB-C Service-Port `J3` via TI LM66100 Ideal-Dioden-OR-ing für schreibtischbasiertes Flashen ohne 12V-Labornetzteil) und **vertikalen SMD-Steckverbindern (Pointing UP)** (Bordnetz `J1`, 4-Kanal Peripherie-Bus `J6` Micro-Lock Plus 16-Pin, USV-Akku `J5`, Status-LED `J4`, Reserve-USB `J7`, USB-C `J3`).
    * **`PCBA 03` (Satelliten-Pod Interface Board):** Universelle Schnittstellenplatine am Boden beider Seitenkoffer-Pods (Pod 1 & Pod 2). Bietet einen integrierten USB-C Schnellladeport (bis 30W/60W) direkt im Koffer und bindet Sena, Cardo oder OMM verlustfrei an den 4-Draht-Bus an.
    * **`PCBA 05` (Universal Front-Knoten):** Cockpit-Einheit am Riser mit ESP32-P4 + ESP32-E22 Dual-Chip, Wi-Fi 6E MIMO, USB-Hub, Qi-Zusatzspeisung und integriertem Knowles SPH0645 MEMS-Mikrofon über dem Gehäuse-Bodenventil. Verbunden über den 4-Draht-Kabelbaum durch den Harley-Kabelkanal (**ZERO Tank-Demontage!**).
    * **`PCBA 05B` (Handschuhfach-Hub & Cockpit Breakout):** 4-Port Media- & Power-Injection Hub mit Microchip USB2514Bi für Harley Skyline OS Upstream und Phone Fast-Charge im Handschuhfach.
@@ -169,12 +169,12 @@ Verbindet die Zentralbox über eine interne geschirmte Kabelpeitsche mit dem fah
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-#### 3.2.2 Header J6: OMB 4-Kanal Peripherie-Bus (Molex Picoflex 16-Pin 2x08 Vertikal)
-Zentraler Schnittstellen-Header (Molex Picoflex `90814-0016`, 1.27mm Raster, vertikal nach oben) zur Speisung und nativer USB 2.0 High-Speed Datenanbindung aller 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar). Jeder Strang besitzt eine eigene eFuse-Strombegrenzung:
+#### 3.2.2 Header J6: OMB 4-Kanal Peripherie-Bus (Molex Micro-Lock Plus 16-Pin 2x08 Vertikal)
+Zentraler Schnittstellen-Header (Molex Micro-Lock Plus `505433-1671`, 1.25mm Raster, vertikal nach oben mit formschlüssiger Verriegelung) zur Speisung und nativer USB 2.0 High-Speed Datenanbindung aller 4 Peripheriestränge (Front, Pod 1, Pod 2, Radar). Jeder Strang besitzt eine eigene eFuse-Strombegrenzung:
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| HEADER J6: MOLEX PICOFLEX 16-PIN (2x08) VERTIKAL (90814-0016) - 4 AUTARKE OMB-SYSTEMSTRÄNGE                  |
+| HEADER J6: MOLEX MICRO-LOCK PLUS 16-PIN (2x08) VERTIKAL (505433-1671) - 4 AUTARKE OMB-SYSTEMSTRÄNGE          |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 | Pin | Signalname     | Signalart / Pegel        | Querschnitt | Zielkomponente      | Funktion & Schutz       |
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
@@ -357,22 +357,25 @@ Der auf der Oberseite platzierte **Qualcomm QCC3084** verbindet Helme drahtlos �
 
 ---
 
-### 3.5 Quad Automotive eFuse Smart Switch (`U12`)
+### 3.5 Quad Automotive Smart High-Side Switch (`U12`)
 
-Die integrierte 4-Kanal-eFuse schützt die Peripherieleitungen vor Kabelkurzschlüssen und Überlastung:
+Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Gehäuse) schützt die 12V-Peripheriezweige vor Kabelkurzschlüssen, Verpolung und Überlastung. Die Steuereingänge IN1–IN4 (Pins 3–6) sind an `VCC_3V3` hardware-aktiviert (autonome Bestromung sobald die 3,3V-Schiene steht; Kaltstarts und gestaffelte Freigabe der Peripherie erfolgen auf Protokoll-/Knotenebene):
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| QUAD AUTOMOTIVE EFUSE (QFN-20): LASTKANAL-BELEGUNG                                                            |
+| QUAD AUTOMOTIVE SMART SWITCH (HTSSOP-28, TI TPS4H160-Q1): LASTKANAL- & PIN-BELEGUNG                           |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
-| Kanal | Eingangs-Pin       | Ausgangs-Pin       | Netzknoten         | Absicherung & Funktion                 |
+| Kanal | Eingangs-Pins      | Ausgangs-Pins      | Netzknoten         | Absicherung & Funktion                 |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
-| In    | Pin 1, 2           | -                  | KL30_IN            | Bordnetz-Zuleitung 12V DC              |
-| CH 1  | -                  | Pin 5              | VBUS_FRONT         | Front-Knoten Speisung (Limit: 5.0A)    |
-| CH 2  | -                  | Pin 6              | VBUS_POD1          | Koffer-Pod 1 Speisung (Limit: 2.5A)    |
-| CH 3  | -                  | Pin 7              | VBUS_POD2          | Koffer-Pod 2 Speisung (Limit: 2.5A)    |
-| CH 4  | -                  | Pin 8              | VBUS_RADAR         | Heck-Radar Speisung (Limit: 1.5A)      |
-| GND   | Pin 10, EP         | -                  | GND_PWR            | Thermisches Massepad                   |
+| VS    | Pins 20, 21, 22, 23| -                  | KL30_IN            | Bordnetz-Zuleitung 12V DC              |
+| CH 1  | Pin 3 (IN1: 3V3)   | Pins 27, 28 (OUT1) | VBUS_FRONT         | Front-Knoten Speisung (PCBA 05)        |
+| CH 2  | Pin 4 (IN2: 3V3)   | Pins 25, 26 (OUT2) | VBUS_POD1          | Koffer-Pod 1 Speisung (PCBA 03)        |
+| CH 3  | Pin 5 (IN3: 3V3)   | Pins 17, 18 (OUT3) | VBUS_POD2          | Koffer-Pod 2 Speisung (PCBA 03)        |
+| CH 4  | Pin 6 (IN4: 3V3)   | Pins 15, 16 (OUT4) | VBUS_RADAR         | Heck-Radar Speisung (PCBA 08)          |
+| DIAG  | Pin 14 (DIAG_EN)   | -                  | VCC_3V3            | Diagnosefunktionen aktiviert           |
+| CL    | Pin 11 (CL)        | -                  | GND_PWR            | Strombegrenzungs-Referenz              |
+| GND   | Pins 1, 12, EP (29)| -                  | GND_PWR            | Bausteinmasse & Thermal Pad (13 Vias)  |
+| NC/NC | Pins 2, 19, 24     | -                  | NC                 | Nicht intern verbunden                 |
 +-------+--------------------+--------------------+--------------------+----------------------------------------+
 ```
 
@@ -447,7 +450,7 @@ In OpenMotorBridge v10.0 ist die drahtlose Kommunikation strikt nach **HF-Physik
 |                                       • Befreit von BLE (keine Kanalüberlastung!)                             |
 |                                                       ▲                                                       |
 |                                                       │  Kabel 2 Strang 1: USB 2.0 High-Speed                 |
-|                                                       │  (480 Mbps) + 12V 60W (Picoflex 16P)                  |
+|                                                       │  (480 Mbps) + 12V 60W (MicroLock+ 16P)                |
 |                                                       ▼                                                       |
 |     [ POD 1 LINKS: 50 cm ]             [ ZENTRALBOX: GEOMETRISCHER SCHWERPUNKT ]        [ POD 2 RECHTS: 50 cm ]|
 |  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master (U.FL Gehäuseantenne)    • OEM-Adapter (Cardo Edge)|
@@ -457,7 +460,7 @@ In OpenMotorBridge v10.0 ist die drahtlose Kommunikation strikt nach **HF-Physik
 |                                      • S31 Wi-Fi: IM NORMALBETRIEB AUS (Null Störung)                         |
 |                                                       ▲                                                       |
 |                                                       │  Kabel 2 Strang 4: USB 2.0 High-Speed                 |
-|                                                       │  (480 Mbps) + 12V 1.5A (Picoflex 16P)                 |
+|                                                       │  (480 Mbps) + 12V 1.5A (MicroLock+ 16P)                |
 |                                                       ▼                                                       |
 |                                           [ HECK: RADAR NODE ]                                                |
 |                                       • ESP32-C5 Sub-MCU mit 5 GHz V2X                                        |
@@ -479,7 +482,7 @@ In OpenMotorBridge v10.0 ist die drahtlose Kommunikation strikt nach **HF-Physik
    * Der `ESP32-C5` nutzt seinen Transceiver im 802.11p OCB Promiscuous-Modus (ETSI ITS-G5 auf 5,9 GHz, Kanäle 176/180) zum Empfang unverschlüsselter Car-to-X Broadcasts (Architektur analog zu *OpenTrafficMap* / *CITS-to-go*):
      - **SPATEM / SPaT & GLOSA:** Ampelphasen-Countdown (Restrot / Restgrün) und Geschwindigkeitsempfehlung für die „Grüne Welle“ im Cockpit / HUD.
      - **CAM & DENM:** Frühwarnung vor herannahenden Einsatzfahrzeugen (Blaulicht-Vorrang), ÖPNV, vorausliegenden Stauenden, Pannenstellen und Gefahren.
-   * Sämtliche Daten (Radartargets des Wheeltec MR20, C-ITS Telemetrie und Trigger für den 36-LED-Halo) werden zu 100 % kabelgebunden und störungsfrei über das geschirmte Picoflex-USB-Kabel (Kabel 2 Strang 4, USB 2.0 @ 480 Mbps) mit der Zentralbox synchronisiert.
+   * Sämtliche Daten (Radartargets des Wheeltec MR20, C-ITS Telemetrie und Trigger für den 36-LED-Halo) werden zu 100 % kabelgebunden und störungsfrei über das geschirmte Micro-Lock-Plus-USB-Kabel (Kabel 2 Strang 4, USB 2.0 @ 480 Mbps) mit der Zentralbox synchronisiert.
 
 ---
 

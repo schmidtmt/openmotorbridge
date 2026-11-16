@@ -8456,7 +8456,7 @@
 				)
 			)
 		)
-		(property "Value" "ESP32-P4-NR16"
+		(property "Value" "ESP32-S3-WROOM-1U-N16R8"
 			(at 0 11.45 90)
 			(unlocked yes)
 			(layer "F.Fab")

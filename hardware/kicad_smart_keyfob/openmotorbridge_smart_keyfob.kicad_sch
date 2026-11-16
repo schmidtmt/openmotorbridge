@@ -4834,6 +4834,60 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at 10.16 -1.27 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 10.16 -3.81 180)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at -10.16 -1.27 0)
+					(length 2.54)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 				(pin passive line
 					(at -10.16 1.27 0)
 					(length 2.54)
@@ -5984,6 +6038,26 @@
 			(type default)
 		)
 		(uuid "a049430e-72b2-4ad8-a3f9-d5bfb59c1da7")
+	)
+	(wire
+		(pts
+			(xy 390.16 161.27) (xy 395.24 161.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a049430e-72b2-4ad8-a3f9-d5bfb59c1da8")
+	)
+	(wire
+		(pts
+			(xy 390.16 163.81) (xy 395.24 163.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a049430e-72b2-4ad8-a3f9-d5bfb59c1da9")
 	)
 	(wire
 		(pts
@@ -8271,6 +8345,50 @@
 	)
 	(global_label "GND"
 		(shape bidirectional)
+		(at 395.24 161.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a74e0202-b661-4a9c-a8ce-e5057998b202")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 395.24 161.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "VBAT"
+		(shape bidirectional)
+		(at 395.24 163.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a74e0203-b661-4a9c-a8ce-e5057998b203")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 395.24 163.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND"
+		(shape bidirectional)
 		(at 155.24 58.73 0)
 		(effects
 			(font
@@ -10360,11 +10478,20 @@
 				)
 			)
 		)
-		(pin "5"
-			(uuid "b7d6fef8-87ef-42c4-aff0-b6d091ccdc54")
-		)
 		(pin "1"
 			(uuid "68bf20d6-f249-4ac8-93fc-6e34cf7251b5")
+		)
+		(pin "2"
+			(uuid "f74e0202-b661-4a9c-a8ce-e5057998b202")
+		)
+		(pin "3"
+			(uuid "f74e0203-b661-4a9c-a8ce-e5057998b203")
+		)
+		(pin "4"
+			(uuid "f74e0204-b661-4a9c-a8ce-e5057998b204")
+		)
+		(pin "5"
+			(uuid "b7d6fef8-87ef-42c4-aff0-b6d091ccdc54")
 		)
 		(instances
 			(project "openmotorbridge_smart_keyfob"

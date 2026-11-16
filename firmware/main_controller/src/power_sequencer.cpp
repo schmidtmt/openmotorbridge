@@ -39,6 +39,8 @@ esp_err_t power_sequencer_init(void) {
 
 void power_sequencer_trigger_boot(void) {
     ESP_LOGI(TAG, "⚡ Starting v10.0 Staggered Inrush Power-On Sequence (TPS4H160-Q1 4-Branch Smart Switch):");
+    // Hardware architecture note: U12 (TPS4H160-Q1) IN1..IN4 are hardware-tied to VCC_3V3 on PCBA 01.
+    // The staggered delays below correspond to peripheral satellite node boot-up and enumeration windows.
 
     // Stage 1 (T = 0 ms): Central Box (U2 + U8 USB2517I + U9 QCC3084) & Branch 1 (VBUS_FRONT 5.0A)
     s_diag.stage = POWER_STAGE_CORE_BOOT;

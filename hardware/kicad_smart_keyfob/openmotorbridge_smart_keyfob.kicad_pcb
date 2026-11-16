@@ -5440,7 +5440,7 @@
 		(units
 			(unit
 				(name "A")
-				(pins "5" "1")
+				(pins "1" "2" "3" "4" "5")
 			)
 		)
 		(attr smd)
@@ -5726,6 +5726,9 @@
 			(size 1.325 0.6)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net "GND")
+			(pinfunction "GND_2")
+			(pintype "power_in")
 			(uuid "1994ec2f-e375-445b-8145-f3de662ea0a6")
 		)
 		(pad "3" smd roundrect
@@ -5733,6 +5736,9 @@
 			(size 1.325 0.6)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net "VBAT")
+			(pinfunction "EN_3")
+			(pintype "input")
 			(uuid "6fb67734-79b1-41e3-a599-8506d302d907")
 		)
 		(pad "4" smd roundrect
@@ -5740,6 +5746,9 @@
 			(size 1.325 0.6)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
+			(net "unconnected-(U6-NC-Pad4)")
+			(pinfunction "NC_4")
+			(pintype "no_connect")
 			(uuid "212287d1-3b73-40c8-8ef5-d73d8f74ea1a")
 		)
 		(pad "5" smd roundrect
@@ -8729,6 +8738,14 @@
 		(uuid "3f7a5473-904e-4ca8-a9e8-2c1157ff067c")
 	)
 	(segment
+		(start 131.3 75.6)
+		(end 132.25 75.7)
+		(width 0.127)
+		(layer "B.Cu")
+		(net "VBAT")
+		(uuid "3f7a5473-904e-4ca8-a9e8-2c1157ff067d")
+	)
+	(segment
 		(start 130.4 76.5)
 		(end 129.5 76.5)
 		(width 0.127)
@@ -10839,6 +10856,22 @@
 		(layer "In2.Cu")
 		(net "TCXO_OUT")
 		(uuid "fadf9efe-48c9-4c77-ac17-65cdc28e4a05")
+	)
+	(via
+		(at 133.25 74.75)
+		(size 0.25)
+		(drill 0.15)
+		(layers "F.Cu" "B.Cu")
+		(net "GND")
+		(uuid "fa8e6065-52b6-4210-882b-4bd9ceed66f2")
+	)
+	(segment
+		(start 132.25 74.75)
+		(end 133.25 74.75)
+		(width 0.127)
+		(layer "B.Cu")
+		(net "GND")
+		(uuid "fa8e6065-52b6-4210-882b-4bd9ceed66f3")
 	)
 	(segment
 		(start 115.2625 72.7625)
