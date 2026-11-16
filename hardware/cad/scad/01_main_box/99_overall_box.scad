@@ -79,18 +79,18 @@ module main_box_full_assembly(exploded = EXPLODED_VIEW) {
             main_box_mid_tray();
 
     // -------------------------------------------------------------------------
-    // Layer 4: 1S LiPo Backup Battery & Taoglas Flex Antennas
+    // Layer 4: 1S LiPo Backup Battery & Taoglas Dual Antennas (North & South)
     // -------------------------------------------------------------------------
-    // A. 1S LiPo 2200 mAh Flat Cell (seated in tray cradle)
-    translate([21.6, 9.0 + Y_SLIDE_TRAY, Z_LIPO_CELL])
+    // A. 1S LiPo 2200 mAh Flat Cell (seated in center tray cradle)
+    translate([21.6, 12.5 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_lipo_battery();
 
-    // B. Taoglas FXP895 LoRa 868 MHz Flex Antenna (seated in rear tray nest)
+    // B. Taoglas FXP895 LoRa 868 MHz Flex Antenna (seated in rear tray nest at NORTH)
     translate([12.8, 51.8 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_fxp895_antenna();
 
-    // C. Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna (seated in North tray nest adjacent to LoRa)
-    translate([14.8, 42.2 + Y_SLIDE_TRAY, Z_LIPO_CELL])
+    // C. Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna (seated in front tray nest at SOUTH)
+    translate([30.8, 4.0 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_fxp73_antenna();
 
     // -------------------------------------------------------------------------

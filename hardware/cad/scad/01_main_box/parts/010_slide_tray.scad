@@ -57,15 +57,8 @@ module main_box_slide_tray(
                     cube([tongue_prot + 0.1, tray_w - 4.0, tongue_h], center=false);
                     // 45° Lead-in chamfer at front end
                     translate([0, -2.5, 0])
-                        polyhedron(
-                            points=[
-                                [0, 0, 0], [tongue_prot, 0, 0], [tongue_prot, 2.5, 0], [0, 2.5, 0],
-                                [tongue_prot, 2.5, tongue_h], [tongue_prot, 2.5, tongue_h], [tongue_prot, 0, tongue_h], [0, 2.5, tongue_h]
-                            ],
-                            faces=[
-                                [0,1,2,3], [4,5,6,7], [0,3,7,6], [1,2,5,4], [0,1,4,7], [3,2,5,6]
-                            ]
-                        );
+                        linear_extrude(height=tongue_h)
+                            polygon(points=[[0, 0], [tongue_prot + 0.1, 2.5], [0, 2.5]]);
                 }
 
                 // 3. Right Lateral Guide Tongue (slides into Right Rail 1 Groove)
@@ -73,32 +66,25 @@ module main_box_slide_tray(
                     // Main tongue strip
                     cube([tongue_prot + 0.1, tray_w - 4.0, tongue_h], center=false);
                     // 45° Lead-in chamfer at front end
-                    translate([tongue_prot, -2.5, 0])
-                        polyhedron(
-                            points=[
-                                [0, 0, 0], [-tongue_prot, 0, 0], [-tongue_prot, 2.5, 0], [0, 2.5, 0],
-                                [-tongue_prot, 2.5, tongue_h], [-tongue_prot, 2.5, tongue_h], [-tongue_prot, 0, tongue_h], [0, 2.5, tongue_h]
-                            ],
-                            faces=[
-                                [0,1,2,3], [4,5,6,7], [0,3,7,6], [1,2,5,4], [0,1,4,7], [3,2,5,6]
-                            ]
-                        );
+                    translate([0, -2.5, 0])
+                        linear_extrude(height=tongue_h)
+                            polygon(points=[[tongue_prot + 0.1, 0], [0, 2.5], [tongue_prot + 0.1, 2.5]]);
                 }
 
-                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo)
-                // Battery placement: X = 18.0..86.0 mm (dx = 68 mm), Y = 5.0..44.0 mm (dy = 39 mm)
+                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo in Center)
+                // Battery placement: X = 17.0..87.0 mm (dx = 70 mm), Y = 8.5..47.5 mm (dy = 39 mm)
                 // Rib height = 4.5 mm (Z = tray_t .. tray_t + 4.5)
-                translate([17.0, 4.0, tray_t]) {
-                    // Front containment rib
+                translate([17.0, 8.5, tray_t]) {
+                    // Front containment rib (separating battery from South FXP73 antenna)
                     cube([70.0, 1.8, 4.5], center=false);
-                    // Rear containment rib
-                    translate([0, 40.0, 0])
+                    // Rear containment rib (separating battery from North FXP895 antenna)
+                    translate([0, 39.0, 0])
                         cube([70.0, 1.8, 4.5], center=false);
                     // Left containment rib
-                    cube([1.8, 41.8, 4.5], center=false);
+                    cube([1.8, 40.8, 4.5], center=false);
                     // Right containment rib
                     translate([68.2, 0, 0])
-                        cube([1.8, 41.8, 4.5], center=false);
+                        cube([1.8, 40.8, 4.5], center=false);
                     // 2x Elastic retention catch nubs
                     translate([1.8, 15.0, 3.8])
                         cube([0.8, 10.0, 0.8], center=false);
@@ -106,7 +92,7 @@ module main_box_slide_tray(
                         cube([0.8, 10.0, 0.8], center=false);
                 }
 
-                // 5. Rear Antenna Bed Platform (Taoglas FXP895 LoRa 868 MHz: 85 x 18 mm)
+                // 5. Rear Antenna Bed Platform (Taoglas FXP895 LoRa 868 MHz: 85 x 18 mm at NORTH)
                 // Elevated 0.6 mm above base plate for rigidity and cable routing clearance underneath
                 translate([9.5, 48.0, tray_t]) {
                     // Border ribs around FXP895 antenna
@@ -116,6 +102,14 @@ module main_box_slide_tray(
                     cube([1.4, 20.0, 1.5], center=false);
                     translate([84.6, 0, 0])
                         cube([1.4, 20.0, 1.5], center=false);
+                }
+
+                // 5b. Front Antenna Bed Border (Taoglas FXP73 2.4 GHz: 47 x 7 mm at SOUTH)
+                translate([27.5, 0.5, tray_t]) {
+                    // Side borders for FXP73
+                    cube([1.4, 7.5, 1.2], center=false);
+                    translate([48.0, 0, 0])
+                        cube([1.4, 7.5, 1.2], center=false);
                 }
 
                 // 6. Rear Service Handle Flange (at Y = tray_w - 2.5 mm, Z = tray_t .. tray_t + 5.5 mm)
@@ -136,49 +130,47 @@ module main_box_slide_tray(
 
             // --- SUBTRACTIONS ---
 
-            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm recess for LoRa 868 MHz)
-            // Located at North edge: X = 10.0..95.2 mm, Y = 48.6..66.8 mm
+            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm recess for LoRa 868 MHz at NORTH)
+            // Located at North / Rear edge: X = 10.0..95.2 mm, Y = 48.6..66.8 mm
             translate([10.0, 48.6, tray_t - 0.3])
                 cube([85.2, 18.2, 1.0], center=false);
 
-            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm recess for 2.4 GHz Wi-Fi/BLE)
-            // Relocated to North side adjacent to LoRa antenna: X = 12.0..59.5 mm, Y = 39.0..46.2 mm
-            translate([12.0, 39.0, tray_t - 0.4])
+            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm recess for 2.4 GHz Wi-Fi/BLE at SOUTH)
+            // Located at South / Front edge: X = 28.0..75.5 mm, Y = 0.8..8.0 mm
+            translate([28.0, 0.8, tray_t - 0.4])
                 cube([47.5, 7.2, 1.0], center=false);
 
             // 10. Cable Passthrough Openings
             // A. Battery J5 open lateral U-notch (allows tool-free tray sliding with pre-crimped Molex 4P plug)
-            // Positioned directly over PCBA 01 J5 (X = 90.0 mm to right edge, Y = 34.0..48.0 mm)
-            translate([90.0, 34.0, -0.5])
+            // Positioned directly over PCBA 01 J5 (X = 90.0 mm to right edge, Y = 32.0..46.0 mm)
+            translate([90.0, 32.0, -0.5])
                 cube([tray_l - 90.0 + 2.0, 14.0, tray_t + 2.0], center=false);
 
-            // B. Shared Dual U.FL RF Coaxial Drop Slot (routes both LoRa & 2.4 GHz cables down to PCBA 01)
-            // Positioned at North side directly above ANT1 and U2 U.FL ports (X = 62.0..76.0 mm, Y = 46.0..52.0 mm)
-            translate([62.0, 46.0, -0.5])
-                cube([14.0, 6.0, tray_t + 2.0], center=false);
+            // B. Shared Dual U.FL RF Coaxial Drop Slots:
+            // - North LoRa U.FL slot down to PCBA 01 ANT1 (X = 64.0..76.0 mm, Y = 46.0..51.0 mm)
+            translate([64.0, 46.0, -0.5])
+                cube([12.0, 5.0, tray_t + 2.0], center=false);
+
+            // - South 2.4 GHz U.FL slot down to PCBA 01 ESP32-S31 (X = 20.0..26.0 mm, Y = 1.0..6.0 mm)
+            translate([20.0, 1.0, -0.5])
+                cube([6.0, 5.0, tray_t + 2.0], center=false);
 
             // 11. Convective Thermal Breathing Louvers
             // Left flank breathing slots (X = 5.0..14.0 mm)
-            for (sy = [10.0:7.0:40.0]) {
+            for (sy = [12.0:7.0:44.0]) {
                 translate([6.0, sy, -0.5])
                     cube([8.0, 2.4, tray_t + 2.0], center=false);
             }
 
-            // Right flank breathing slots (X = 90.0..99.0 mm, directly over PCBA 01 L1 inductor & buck converter)
-            for (sy = [22.0:7.0:44.0]) {
+            // Right flank breathing slots (X = 91.0..99.0 mm, directly over PCBA 01 L1 inductor & buck converter)
+            for (sy = [14.0:7.0:30.0]) {
                 translate([91.0, sy, -0.5])
                     cube([8.0, 2.4, tray_t + 2.0], center=false);
             }
 
-            // Center-front breathing slots (between battery and front wall)
-            for (sx = [12.0:10.0:92.0]) {
-                translate([sx, 1.2, -0.5])
-                    cube([6.0, 2.0, tray_t + 2.0], center=false);
-            }
-
-            // 12. LiPo Underside Cushioning Foam Recess (64.0 x 35.0 x 0.8 mm)
-            translate([20.0, 6.5, -0.1])
-                cube([64.0, 35.0, 0.8], center=false);
+            // 12. LiPo Underside Cushioning Foam Recess (64.0 x 36.0 x 0.8 mm)
+            translate([20.0, 9.5, -0.1])
+                cube([64.0, 36.0, 0.8], center=false);
         }
     }
 }

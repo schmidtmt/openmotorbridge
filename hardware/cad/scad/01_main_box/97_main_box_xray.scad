@@ -34,15 +34,17 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
         translate([0, 0, 0])
             main_box_mid_tray();
 
-    // 4. 1S LiPo Backup Battery (Opaque blue pouch cell)
-    translate([21.6, 9.0, 19.0])
+    // 4. 1S LiPo Backup Battery (Opaque blue pouch cell centered)
+    translate([21.6, 12.5, 19.0])
         dummy_lipo_battery();
 
-    // 4b. Taoglas Flex Antennas (Opaque green & gold)
+    // 4b. Taoglas Flex Antennas (North & South Spatial Diversity)
+    // North: FXP895 LoRa 868 MHz
     translate([12.8, 51.8, 19.0])
         dummy_fxp895_antenna();
 
-    translate([14.8, 42.2, 19.0])
+    // South: FXP73 2.4 GHz Wi-Fi/BLE
+    translate([30.8, 4.0, 19.0])
         dummy_fxp73_antenna();
 
     // 5. Top L-Slide Lid (Translucent Graphite Grey, 25% alpha)
@@ -53,7 +55,7 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
     // -------------------------------------------------------------------------
     // 6. Front Interface Hardware Fittings (at Y = 0)
     // -------------------------------------------------------------------------
-    // A. Deutsch DTM-6 Flanged Receptacle (centered at X = 25.0, Z = 11.5 mm)
+    // A. Deutsch DTM-6 Flanged Receptacle (Cable 1 Bordnetz & CAN, centered at X = 25.0, Z = 11.5 mm)
     color([0.18, 0.20, 0.22], 0.9) {
         translate([25.0, -3.5, 11.5])
             cube([18.0, 7.0, 11.0], center=true);
@@ -65,7 +67,13 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
         }
     }
 
-    // B. 16-Pin Periphery Flanged Receptacle (centered at X = 58.0, Z = 11.5 mm)
+    // B. SW1 Hardware Button (Pair / Reset at X = 41.0, Z = 8.5 mm)
+    color("crimson", 0.95)
+        translate([41.0, -2.5, 8.5])
+            rotate([90, 0, 0])
+                cylinder(r=3.25, h=3.0, center=true, $fn=28);
+
+    // C. 16-Pin Periphery Flanged Receptacle (Cable 2 Peripherie, centered at X = 58.0, Z = 11.5 mm)
     color([0.18, 0.20, 0.22], 0.9) {
         translate([58.0, -3.5, 11.5])
             cube([21.0, 7.0, 11.0], center=true);
@@ -77,22 +85,17 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
         }
     }
 
-    // C. USB-C Waterproof Anodized Aluminium Service Cap (centered at X = 82.0, Z = 7.6 mm)
+    // D. USB-C Waterproof Anodized Service Cap (centered at X = 75.3, Z = 7.6 mm)
     color([0.15, 0.45, 0.75], 0.9)
-        translate([82.0, -2.5, 7.6])
+        translate([75.3, -2.5, 7.6])
             rotate([90, 0, 0])
                 cylinder(r=5.0, h=4.5, center=true, $fn=32);
 
-    // D. SW1 Pair / Reset IP67 Silicone Button & Status LED Window (centered at X = 96.0, Z = 8.5 mm)
-    color("black", 0.9)
-        translate([96.0, -1.8, 8.5])
-            rotate([90, 0, 0])
-                cylinder(r=3.2, h=3.0, center=true, $fn=28);
-
+    // E. WS2812B RGB Status LED Light Pipe Window (centered at X = 84.5, Z = 7.6 mm)
     color("cyan", 0.95)
-        translate([96.0, -2.8, 8.5])
+        translate([84.5, -2.8, 7.6])
             rotate([90, 0, 0])
-                cylinder(r=1.2, h=1.0, center=true, $fn=20);
+                cylinder(r=1.6, h=1.5, center=true, $fn=20);
 
     // -------------------------------------------------------------------------
     // 7. Rear Interface Hardware Fittings (at Y = 74.0 mm)
