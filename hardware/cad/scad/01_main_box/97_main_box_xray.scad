@@ -34,17 +34,17 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
         translate([0, 0, 0])
             main_box_mid_tray();
 
-    // 4. 1S LiPo Backup Battery (Opaque blue pouch cell centered)
-    translate([21.6, 12.5, 19.0])
+    // 4. 1S LiPo Backup Battery (Opaque blue pouch cell in front/center)
+    translate([21.6, 6.2, 19.0])
         dummy_lipo_battery();
 
-    // 4b. Taoglas Flex Antennas (North & South Spatial Diversity)
-    // North: FXP895 LoRa 868 MHz
-    translate([12.8, 51.8, 19.0])
+    // 4b. Taoglas Flex Antennas (Both at North Side: LoRa unten, 2.4 GHz etwas darüber)
+    // North: FXP895 LoRa 868 MHz (unten)
+    translate([12.8, 45.7, 19.0])
         dummy_fxp895_antenna();
 
-    // South: FXP73 2.4 GHz Wi-Fi/BLE
-    translate([30.8, 4.0, 19.0])
+    // North: FXP73 2.4 GHz Wi-Fi/BLE (etwas darüber)
+    translate([30.8, 63.7, 19.6])
         dummy_fxp73_antenna();
 
     // 5. Top L-Slide Lid (Translucent Graphite Grey, 25% alpha)

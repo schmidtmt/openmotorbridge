@@ -71,20 +71,20 @@ module main_box_slide_tray(
                             polygon(points=[[tongue_prot + 0.1, 0], [0, 2.5], [tongue_prot + 0.1, 2.5]]);
                 }
 
-                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo in Center)
-                // Battery placement: X = 17.0..87.0 mm (dx = 70 mm), Y = 8.5..47.5 mm (dy = 39 mm)
+                // 4. Battery Containment Perimeter Ribs (for 67 x 38 x 5 mm LiPo in Front/Center)
+                // Battery placement: X = 17.0..87.0 mm (dx = 70 mm), Y = 3.0..41.5 mm (dy = 38.5 mm)
                 // Rib height = 4.5 mm (Z = tray_t .. tray_t + 4.5)
-                translate([17.0, 8.5, tray_t]) {
-                    // Front containment rib (separating battery from South FXP73 antenna)
+                translate([17.0, 3.0, tray_t]) {
+                    // Front containment rib
                     cube([70.0, 1.8, 4.5], center=false);
-                    // Rear containment rib (separating battery from North FXP895 antenna)
-                    translate([0, 39.0, 0])
+                    // Rear containment rib (separating battery from North antenna zone)
+                    translate([0, 38.5, 0])
                         cube([70.0, 1.8, 4.5], center=false);
                     // Left containment rib
-                    cube([1.8, 40.8, 4.5], center=false);
+                    cube([1.8, 40.3, 4.5], center=false);
                     // Right containment rib
                     translate([68.2, 0, 0])
-                        cube([1.8, 40.8, 4.5], center=false);
+                        cube([1.8, 40.3, 4.5], center=false);
                     // 2x Elastic retention catch nubs
                     translate([1.8, 15.0, 3.8])
                         cube([0.8, 10.0, 0.8], center=false);
@@ -92,10 +92,9 @@ module main_box_slide_tray(
                         cube([0.8, 10.0, 0.8], center=false);
                 }
 
-                // 5. Rear Antenna Bed Platform (Taoglas FXP895 LoRa 868 MHz: 85 x 18 mm at NORTH)
-                // Elevated 0.6 mm above base plate for rigidity and cable routing clearance underneath
-                translate([9.5, 48.0, tray_t]) {
-                    // Border ribs around FXP895 antenna
+                // 5. North Antenna Bed: Dual Antennas both at North (LoRa unten, 2.4 GHz darüber)
+                // A. Taoglas FXP895 LoRa 868 MHz (85 x 18 mm at Y = 42.5..60.5 mm: UNTEN)
+                translate([9.5, 42.0, tray_t]) {
                     cube([86.0, 1.4, 1.5], center=false);
                     translate([0, 18.6, 0])
                         cube([86.0, 1.4, 1.5], center=false);
@@ -104,12 +103,12 @@ module main_box_slide_tray(
                         cube([1.4, 20.0, 1.5], center=false);
                 }
 
-                // 5b. Front Antenna Bed Border (Taoglas FXP73 2.4 GHz: 47 x 7 mm at SOUTH)
-                translate([27.5, 0.5, tray_t]) {
-                    // Side borders for FXP73
-                    cube([1.4, 7.5, 1.2], center=false);
-                    translate([48.0, 0, 0])
-                        cube([1.4, 7.5, 1.2], center=false);
+                // B. Taoglas FXP73 2.4 GHz Wi-Fi/BLE (47 x 7 mm at Y = 60.5..67.5 mm: ETWAS DARÜBER)
+                // Elevated 0.6 mm rear ledge
+                translate([27.5, 60.5, tray_t]) {
+                    cube([48.0, 7.0, 0.6], center=false);
+                    translate([0, 6.8, 0])
+                        cube([48.0, 1.2, 1.6], center=false);
                 }
 
                 // 6. Rear Service Handle Flange (at Y = tray_w - 2.5 mm, Z = tray_t .. tray_t + 5.5 mm)
@@ -130,46 +129,42 @@ module main_box_slide_tray(
 
             // --- SUBTRACTIONS ---
 
-            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm recess for LoRa 868 MHz at NORTH)
-            // Located at North / Rear edge: X = 10.0..95.2 mm, Y = 48.6..66.8 mm
-            translate([10.0, 48.6, tray_t - 0.3])
-                cube([85.2, 18.2, 1.0], center=false);
+            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm for LoRa 868 MHz at North: UNTEN)
+            // Located at Y = 42.5..60.5 mm, X = 10.0..95.2 mm
+            translate([10.0, 42.5, tray_t - 0.4])
+                cube([85.2, 18.0, 1.0], center=false);
 
-            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm recess for 2.4 GHz Wi-Fi/BLE at SOUTH)
-            // Located at South / Front edge: X = 28.0..75.5 mm, Y = 0.8..8.0 mm
-            translate([28.0, 0.8, tray_t - 0.4])
-                cube([47.5, 7.2, 1.0], center=false);
+            // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm for 2.4 GHz at North: ETWAS DARÜBER)
+            // Located at Y = 60.5..67.5 mm, X = 28.0..75.5 mm (on elevated ledge)
+            translate([28.0, 60.5, tray_t + 0.6 - 0.4])
+                cube([47.5, 7.0, 1.0], center=false);
 
             // 10. Cable Passthrough Openings
             // A. Battery J5 open lateral U-notch (allows tool-free tray sliding with pre-crimped Molex 4P plug)
-            // Positioned directly over PCBA 01 J5 (X = 90.0 mm to right edge, Y = 32.0..46.0 mm)
-            translate([90.0, 32.0, -0.5])
+            // Positioned directly over PCBA 01 J5 (X = 90.0 mm to right edge, Y = 28.0..42.0 mm)
+            translate([90.0, 28.0, -0.5])
                 cube([tray_l - 90.0 + 2.0, 14.0, tray_t + 2.0], center=false);
 
-            // B. Shared Dual U.FL RF Coaxial Drop Slots:
-            // - North LoRa U.FL slot down to PCBA 01 ANT1 (X = 64.0..76.0 mm, Y = 46.0..51.0 mm)
-            translate([64.0, 46.0, -0.5])
-                cube([12.0, 5.0, tray_t + 2.0], center=false);
-
-            // - South 2.4 GHz U.FL slot down to PCBA 01 ESP32-S31 (X = 20.0..26.0 mm, Y = 1.0..6.0 mm)
-            translate([20.0, 1.0, -0.5])
-                cube([6.0, 5.0, tray_t + 2.0], center=false);
+            // B. Shared Dual U.FL RF Coaxial Drop Slot (routes both LoRa & 2.4 GHz cables down to PCBA 01 ANT1 & U2)
+            // Positioned between the two antennas directly over ANT1 and U2 ports (X = 52.0..74.0 mm, Y = 56.0..62.0 mm)
+            translate([52.0, 56.0, -0.5])
+                cube([22.0, 6.0, tray_t + 2.0], center=false);
 
             // 11. Convective Thermal Breathing Louvers
             // Left flank breathing slots (X = 5.0..14.0 mm)
-            for (sy = [12.0:7.0:44.0]) {
+            for (sy = [10.0:7.0:38.0]) {
                 translate([6.0, sy, -0.5])
                     cube([8.0, 2.4, tray_t + 2.0], center=false);
             }
 
             // Right flank breathing slots (X = 91.0..99.0 mm, directly over PCBA 01 L1 inductor & buck converter)
-            for (sy = [14.0:7.0:30.0]) {
+            for (sy = [12.0:7.0:26.0]) {
                 translate([91.0, sy, -0.5])
                     cube([8.0, 2.4, tray_t + 2.0], center=false);
             }
 
             // 12. LiPo Underside Cushioning Foam Recess (64.0 x 36.0 x 0.8 mm)
-            translate([20.0, 9.5, -0.1])
+            translate([20.0, 4.5, -0.1])
                 cube([64.0, 36.0, 0.8], center=false);
         }
     }
