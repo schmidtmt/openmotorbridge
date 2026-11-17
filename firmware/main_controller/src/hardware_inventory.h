@@ -17,7 +17,7 @@ typedef enum {
     HW_INV_POD1         = (1 << 0),  // Satelliten-Pod 1 (USB2517I Port 3 / PCBA 03 / OMM)
     HW_INV_POD2         = (1 << 1),  // Satelliten-Pod 2 (USB2517I Port 4 / PCBA 03 / OMM)
     HW_INV_LORA_SX1262  = (1 << 2),  // Onboard Semtech SX1262 868 MHz LoRa (U10 auf PCBA 01)
-    HW_INV_FRONT_NODE   = (1 << 3),  // Front-Node Cockpit (USB2517I Port 2 / PCBA 05 ESP32-P4 + E22)
+    HW_INV_FRONT_NODE   = (1 << 3),  // Front-Node Cockpit (USB2517I Port 2 / PCBA 05 ESP32-S31 + E22)
     HW_INV_RADAR        = (1 << 4),  // Radar 2.0 & 5.9 GHz C-ITS V2X (USB2517I Port 5 / PCBA 08 ESP32-C5)
     HW_INV_ACTION_CAM   = (1 << 5),  // Action-Cam BLE Master (Central Box PCBA 01)
     HW_INV_QCC3084_BT   = (1 << 6),  // Qualcomm QCC3084 BT 5.4 Dual-Audio & Auracast (U9 auf PCBA 01)

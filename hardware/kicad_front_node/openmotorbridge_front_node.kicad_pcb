@@ -12,7 +12,7 @@
 		(date "2026-10-31")
 		(rev "v10.0")
 		(company "OpenMotorBridge Open Source Hardware")
-		(comment 1 "ESP32-S3-WROOM-1U-N16R8 (240MHz Wi-Fi/BLE, USB OTG), ESP32-E22 (Wi-Fi 6E 5/6GHz 2x2 MIMO), USB2514B Hub, 60W Power Engine")
+		(comment 1 "ESP32-S31-WROOM-1U (240MHz Wi-Fi/BLE, USB OTG), ESP32-E22 (Wi-Fi 6E 5/6GHz 2x2 MIMO), USB2514B Hub, 60W Power Engine")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -6342,7 +6342,7 @@
 				)
 			)
 		)
-		(property "Value" "ESP32-S3-WROOM-1U-N16R8"
+		(property "Value" "ESP32-S31-WROOM-1U"
 			(at 0 11.45 90)
 			(unlocked yes)
 			(layer "F.Fab")

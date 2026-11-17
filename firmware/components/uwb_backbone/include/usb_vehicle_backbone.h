@@ -24,7 +24,7 @@ typedef struct {
     int pin_usb_dm;           // Native USB D- GPIO (e.g. GPIO 19 on S31, GPIO 12 on C6, GPIO 18 on C5)
     int pin_usb_dp;           // Native USB D+ GPIO (e.g. GPIO 20 on S31, GPIO 13 on C6, GPIO 19 on C5)
     UsbHubPortId hub_port_id; // Assigned port on USB2517I-JZX / USB2514Bi
-    bool high_speed_phy;      // true = 480 Mbps HS (ESP32-P4 / USB2517I), false = 12 Mbps FS
+    bool high_speed_phy;      // true = 480 Mbps HS (ESP32-S31 / USB2517I), false = 12 Mbps FS
 } usb_backbone_hw_config_t;
 
 // Legacy config alias

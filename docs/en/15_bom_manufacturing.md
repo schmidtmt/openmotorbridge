@@ -30,6 +30,8 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **J3** | TYPE-C-31-M-12 | Korean HRO | USB-C 16-Pin SMD Receptacle | C2765186 | Front Service, DFU Flash & Diagnostic Port (USB 2.0 High-Speed) |
 | **J2** | DM3D-SF | Hirose | SMD Push-Pull (B.Cu) | C266624 | 4-Bit High-Speed SDIO MicroSD Socket for Tour Logging & Offline Maps |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | LoRa 868 MHz U.FL socket to Taoglas FXP895 in lid |
+| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | Helmet Audio 2.4 GHz U.FL socket to Taoglas BT antenna in lid (Qualcomm QCC3084) |
+| **ANT3** | 2450AT18D0100 | Johanson Technology | SMD 3216 (3.2x1.6mm) | C983086 | Onboard 2.4 GHz ceramic chip antenna for ESP32-S31 BLE Master (Pods, Cam, Keyfob, TPMS) |
 
 *(Note: All PCB headers J1, J6, J5, J4, J7 point vertically UP into the housing overhead wiring channel, eliminating sharp wire bends and allowing the slide-in sled to be removed vibration-free).*
 
@@ -76,7 +78,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | ESP32-P4-NR16 | Espressif Systems | QFN-56 (7x7mm) | `C5356488` | Dual-Core 400 MHz RISC-V Application SoC (H.264/JPEG, High-Speed USB 2.0 OTG, Audio/CP2AA Bridge) |
+| **U1** | ESP32-S31-WROOM-1U | Espressif Systems | SMD Module (18x25.5mm) | `C983085` | Dual-Core 320 MHz RISC-V SoC with native 480 Mbps High-Speed USB 2.0 PHY, AI-SIMD, U.FL (2.4 GHz internal radio disabled via firmware) |
 | **U9** | ESP32-E22-WROOM-2X2 | Espressif Systems | SMD Module (Top) | `C5356490` | Wi-Fi 6E (2.4/5/6 GHz 2x2 MIMO) & Bluetooth 5.4 Dual-Radio Co-Processor for Wireless CarPlay / Android Auto |
 | **U2** | USB2514Bi-AEZG / USB2514B | Microchip | QFN-36 | `C16251` | Automotive/Industrial USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
 | **U3** | TPS54302DDCR | Texas Instruments | SOT-23-6 | `C311974` | Automotive 28V Synchronous Buck (5V / 3.0A) for Hub & Cockpit Peripherals |

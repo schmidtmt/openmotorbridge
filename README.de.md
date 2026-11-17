@@ -47,7 +47,7 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
    *Schraubenlose Dual-Rail Slide-In Monocoques (Typ A & B), Under-Perch Mirror-Pod (`PCBA 05C`), 5-Port Handschuhfach-Hub (`PCBA 05B`), Sensor-Puck (`PCBA 05D`), Radar 2.0 Flügel-Gehäuse mit Garmin-Bajonett sowie 4-Pin IP67 Magnet-Abreißkupplungen.*
 
 9. [**09 - Firmware-Architektur, FreeRTOS & Rollback-OTA**](docs/de/09_firmware_architecture.md)  
-   *Multi-Core ESP32-S31 (Main) & ESP32-P4 + ESP32-E22 (Front), Pod-Co-Prozessoren (ESP32-C6), ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
+   *Multi-Core ESP32-S31 (Main) & ESP32-S31 + ESP32-E22 (Front), Pod-Co-Prozessoren (ESP32-C6), ESP-NOW Low-Latency-Protokoll und ausfallsicheres Dual-Bank OTA.*
 
 10. [**10 - WebApp PWA & Dashboard-Bedienung**](docs/de/10_webapp_pwa_dashboard.md)  
     *Autarkes WebBLE Dashboard, Fahrdynamik-HUD, Front-Node Steuerung (1-Klick Reboot), Begleitfahrzeug- & Kolonnen-Modi, Smart-Keyfob Pager & 4-stufiger GPX-Export.*
@@ -83,7 +83,7 @@ Die modulare technische Gesamtspezifikation gliedert sich in 18 thematisch struk
 * **`docs/de/`**: Sämtliche technische Spezifikationen und Designdokumente auf Deutsch.
 * **`docs/en/`**: Vollständige technische Spezifikationen auf Englisch.
 * **`firmware/main_controller/`**: ESP-IDF / C++ Quellcode für die zentrale Steuerbox (ESP32-S31, PCBA 01).
-* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-P4 + ESP32-E22, PCBA 05).
+* **`firmware/front_node/`**: ESP-IDF / C++ Quellcode für den Universal Front-Knoten (ESP32-S31 + ESP32-E22, PCBA 05).
 * **`firmware/smart_cartridge/`**: ESP-IDF / C++ Quellcode für die Koffer-Pod-Gateways Pod 1 & 2 (ESP32-C6, PCBA 03).
 * **`firmware/radar_submcu/`**: ESP-IDF / C++ Quellcode für Heck-Radar 2.0 Sub-MCU & Halo-Wings (ESP32-C5, PCBA 08).
 * **`webapp_pwa/`**: Offlinefähiges WebBLE Dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).

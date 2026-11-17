@@ -106,7 +106,7 @@ OpenMotorBridge v10.0 definiert die Plattform über **standardisierte Funktionsk
 ```
                      DIE STANDARDISIERTEN FUNKTIONSKNOTEN (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. FRONT-NODE (Am Lenker-Riser):  PCBA 05 (ESP32-P4 + E22) & PCBA 05D Puck  |
+| 1. FRONT-NODE (Am Lenker-Riser):  PCBA 05 (ESP32-S31 + E22) & PCBA 05D Puck  |
 |    (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind-MEMS, 30W USB-PD          |
 +-----------------------------------------------------------------------------+
 | 2. SYMMETRISCHE DUAL UNDER-PERCH SPIEGEL-PODS (PCBA 05C Links & Rechts):    |

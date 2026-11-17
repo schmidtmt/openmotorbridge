@@ -50,6 +50,8 @@ fi
 # Source ESP-IDF environment cleanly
 # shellcheck disable=SC1090
 . "$IDF_EXPORT" > /dev/null 2>&1
+export IDF_PATH="${IDF_PATH:-/Users/schmidtm/esp-idf}"
+export PATH="$IDF_PATH/tools:$PATH"
 
 echo "✓ OpenMotorBridge ESP-IDF Environment Loaded."
 echo "  - CMake:  $(which cmake 2>/dev/null || echo 'not found')"

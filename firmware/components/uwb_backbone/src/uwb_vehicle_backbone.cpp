@@ -59,7 +59,7 @@ esp_err_t UsbVehicleBackbone::init(UsbNodeType local_node_type, const usb_backbo
                 break;
 
             case USB_NODE_FRONT_NODE:
-                // PCBA 05: U1 ESP32-P4-NR16 (Pad 13/14: USB_HS_DM/DP -> U2 USB2514Bi Port 4, Upstream to J6 Branch 1)
+                // PCBA 05: U1 ESP32-S31-WROOM-1U (Pad 13/14: USB_HS_DM/DP -> U2 USB2514Bi Port 4, Upstream to J6 Branch 1)
                 m_hw_cfg.pin_usb_dm    = 24; // Native High-Speed USB 2.0 PHY Pad 13
                 m_hw_cfg.pin_usb_dp    = 25; // Native High-Speed USB 2.0 PHY Pad 14
                 m_hw_cfg.hub_port_id   = USB_HUB_PORT_2_FRONT_NODE;

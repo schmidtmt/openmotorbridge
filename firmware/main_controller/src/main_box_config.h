@@ -58,6 +58,10 @@
 
 // -----------------------------------------------------------------------------
 // 6. Qualcomm QCC3084 Bluetooth 5.4 Dual-Audio & Auracast SoC (U9)
+// Exclusively dedicated to Helmet Intercom & Audio (aptX-HD / LE Audio Auracast).
+// RF Output: Dedicated U.FL Coaxial Receptacle ANT2 (Taoglas_BT_Helmaudio_Lid)
+// at KiCad (X=184.00, Y=74.75) routed directly to external lid dipole.
+// Zero multiplexing with vehicle control / BLE scanning to prevent packet drops!
 // -----------------------------------------------------------------------------
 #define QCC3084_UART_PORT               UART_NUM_1
 #define PIN_MAIN_BT_EN                  GPIO_NUM_1   // U2 Pad 9  -> U9 Pin 11 (BT_EN)
@@ -67,6 +71,8 @@
 // -----------------------------------------------------------------------------
 // 7. Onboard Semtech SX1262IMLTRT 868 MHz LoRa Transceiver (U10, +22 dBm)
 // Powered directly from UPS rail for 24/7 Theft Sentry & Convoy Split Rescue
+// RF Output: Dedicated U.FL Coaxial Receptacle ANT1 (Taoglas_FXP895_868MHz_Lid)
+// at KiCad (X=176.03, Y=74.75) routed to external lid 868MHz dipole.
 // -----------------------------------------------------------------------------
 #define MAIN_LORA_SPI_HOST              SPI2_HOST
 #define PIN_MAIN_LORA_SCK               GPIO_NUM_12  // U2 Pad 4  -> U10 Pin 20 (SPI_SCK)
@@ -76,6 +82,17 @@
 #define PIN_MAIN_LORA_RST               GPIO_NUM_7   // U2 Pad 23 -> U10 Pin 1  (LORA_RST)
 #define PIN_MAIN_LORA_BUSY              GPIO_NUM_21  // U2 Pad 20 -> U10 Pin 14 (LORA_BUSY)
 #define PIN_MAIN_LORA_DIO1              GPIO_NUM_14  // U2 Pad 19 -> U10 Pin 15 (LORA_DIO1)
+
+// -----------------------------------------------------------------------------
+// 7b. On-Board 2.4 GHz BLE Control Antenna (ANT3 Johanson 2450AT18D0100)
+// Dedicated SMD ceramic chip antenna (3.2 x 1.6 mm) on left board edge
+// at KiCad (X=117.80, Y=88.25, rot=180 deg) with feed pad facing inward.
+// Driven directly from U2 ESP32-S31-WROOM-1U Pin 40 (BLE_RF_2G4).
+// Handles vehicle control: Pods, Action Cam, TPMS & Smart Keyfob proximity.
+// Separated by >65 mm from ANT1 (LoRa) and ANT2 (Helmaudio) to prevent desense.
+// -----------------------------------------------------------------------------
+#define MAIN_BLE_ANTENNA_TYPE           "Johanson_2450AT18D0100_Ceramic_SMD"
+#define MAIN_BLE_RF_PIN_U2_PAD          40           // ESP32-S31 Pad 40 (BLE_RF_2G4)
 
 // -----------------------------------------------------------------------------
 // 8. Automotive CAN-FD Transceiver (U6 TI TCAN334GDCNT -> J1 Pin 3/4)

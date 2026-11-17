@@ -491,7 +491,7 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | LINKE FLANKE / WEST (X = 0 mm)     |              INNENRAUM (PCBA 05, 82 x 50 mm)    | RECHTE FLANKE / OST (X = 98 mm)      |
 |                                    |                                                 |                                      |
-| * Monocoque Einschubportal mit     | * ESP32-P4 Core MCU (0% Radio, native 480M USB) | * J7: IP67 USB-C Service-Buchse mit  |
+| * Monocoque Einschubportal mit     | * ESP32-S31 Core MCU (480M USB HS, 2.4G aus)  | * J7: IP67 USB-C Service-Buchse mit  |
 |   massiver 6.0 mm Unterschwelle    | * ESP32-E22 Wi-Fi 6E Radio (ANT1 & ANT2 U.FL)   |   formschlüssigem TPU-Schutzstopfen  |
 | * 2x Deadbolt Schnappriegel-Taschen| * USB2514Bi Automotive 4-Port USB 2.0 Hub       |   (100 % hermetisch verschließbar)   |
 | * Heckwand Tropfnasen-Überdeckung  | * SW3526 30W USB-PD Controller & Drossel        | * Keilanzug-Nut für Deckel-Vordersitz|

@@ -442,7 +442,7 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | LEFT FLANK / WEST (X = 0 mm)       |              INTERNAL CHAMBER (82 x 50 mm PCB)  | RIGHT FLANK / EAST (X = 98 mm)       |
 |                                    |                                                 |                                      |
-| * Monocoque insertion portal with  | * ESP32-P4 Core MCU (0% Radio, native 480M USB) | * J7: IP67 Waterproof USB-C Service  |
+| * Monocoque insertion portal with  | * ESP32-S31 Core MCU (480M USB HS, 2.4G off) | * J7: IP67 Waterproof USB-C Service  |
 |   solid 6.0 mm lower sill          | * ESP32-E22 Wi-Fi 6E Radio (ANT1 & ANT2 U.FL)   |   Port with tethered TPU sealing cap |
 | * 2x Deadbolt snap catch sockets   | * USB2514Bi Automotive 4-Port USB 2.0 Hub       |   (100% Hermetically Sealed)         |
 | * Heckwand drip apron overlap      | * SW3526 30W USB-PD Controller & Choke          | * Front Wedge-Lock pocket for lid    |

@@ -7,14 +7,14 @@
 // OpenMotorBridge v10.0 - Universal Front-Node (PCBA 05) Ground-Truth Pinout
 // Extracted 1:1 from hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb
 // Core Architecture:
-//   - U1: ESP32-S3-WROOM-1U-N16R8 (Dual-Core 400 MHz RISC-V, 0% Radio-on-Silicon, HS USB 2.0)
+//   - U1: ESP32-S31-WROOM-1U (Dual-Core 320 MHz RISC-V with AI SIMD, 480 Mbps HS USB 2.0, internal 2.4GHz disabled)
 //   - U9: ESP32-E22-WROOM-2X2 (Wi-Fi 6E 5/6 GHz 2x2 MIMO via 4-Bit SDIO 3.0)
 //   - U2: Microchip USB2514Bi-AEZG 4-Port High-Speed USB 2.0 Hub:
 //         * Upstream: J1 4-Wire USB Backbone to Central Box PCBA 01 (USB2517I Port 2)
 //         * Port 1 (DN1): U3 SW3526 30W USB-PD Fast Charger (J_PD_PHONE)
 //         * Port 2 (DN2): J_DONGLE (Ottocast / CarPlay via U4 TPS2051B)
 //         * Port 3 (DN3): J4 Glovebox Hub PCBA 05B
-//         * Port 4 (DN4): U1 ESP32-S3 Native High-Speed USB 2.0 PHY (Pad 13/14)
+//         * Port 4 (DN4): U1 ESP32-S31 Native High-Speed USB 2.0 PHY (Pad 13/14)
 //   - J_SENSOR_EXT: External Sensor-Puck (SAM-M10Q GNSS + TMP117 + OPT3001 + Knowles Mic)
 //   - J_DISP_L / J_DISP_R: Dual Cockpit Speaker-Corner OLED Displays (I2C 0x3C / 0x3D)
 //   - NO local flash port (J7 removed; flashed via Central USB-Bus DFU 0x50 on J1!)
@@ -24,7 +24,7 @@
 #define FRONT_NODE_HW_REV_MAJOR         10
 #define FRONT_NODE_HW_REV_MINOR         0
 
-// --- 1. U1 (ESP32-S3-WROOM-1U-N16R8) Exact KiCad Pad & GPIO Assignments on PCBA 05 ---
+// --- 1. U1 (ESP32-S31-WROOM-1U) Exact KiCad Pad & GPIO Assignments on PCBA 05 ---
 #define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot / Service Mode Sense
 
 // U4 (TI TPS2051BDBVR) High-Side Power Switch for J_DONGLE (CarPlay / Android Auto)

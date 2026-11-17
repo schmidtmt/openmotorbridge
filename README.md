@@ -47,7 +47,7 @@ The comprehensive technical specification is split into 18 logically organized c
    *Screwless Dual-Rail Slide-In Monocoques (Type A & B), Under-Perch Mirror Pod (`PCBA 05C`), 5-Port Glovebox Hub (`PCBA 05B`), Sensor Puck (`PCBA 05D`), Radar 2.0 Winged Housing with Garmin Bayonet, and 4-pin IP67 magnetic breakaway couplers.*
 
 9. [**09 - Firmware Architecture, FreeRTOS & Rollback-OTA**](docs/en/09_firmware_architecture.md)  
-   *Multi-core ESP32-S31 (Main) & ESP32-P4 + ESP32-E22 (Front), Pod Co-Processors (ESP32-C6), ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
+   *Multi-core ESP32-S31 (Main) & ESP32-S31 + ESP32-E22 (Front), Pod Co-Processors (ESP32-C6), ESP-NOW low-latency protocol (< 1.8 ms), and dual-bank rollback OTA.*
 
 10. [**10 - WebApp PWA & Dashboard Operation**](docs/en/10_webapp_pwa_dashboard.md)  
     *Zero-cloud PWA web app, Web Bluetooth API (WebBLE), vehicle dynamics HUD, Front Node controls, Support-Van / Convoy profile modes, and 4-tier GPX export.*
@@ -83,7 +83,7 @@ The comprehensive technical specification is split into 18 logically organized c
 * **`docs/de/`**: Complete technical specifications in German.
 * **`docs/en/`**: Complete technical specifications in English.
 * **`firmware/main_controller/`**: ESP-IDF / C++ source code for the central main box (ESP32-S31, PCBA 01).
-* **`firmware/front_node/`**: ESP-IDF / C++ source code for the Universal Front Node (ESP32-P4 + ESP32-E22, PCBA 05).
+* **`firmware/front_node/`**: ESP-IDF / C++ source code for the Universal Front Node (ESP32-S31 + ESP32-E22, PCBA 05).
 * **`firmware/smart_cartridge/`**: ESP-IDF / C++ source code for Saddlebag Pod Gateways Pod 1 & 2 (ESP32-C6, PCBA 03).
 * **`firmware/radar_submcu/`**: ESP-IDF / C++ source code for Heck-Radar 2.0 Sub-MCU & Halo Wings (ESP32-C5, PCBA 08).
 * **`webapp_pwa/`**: Zero-cloud offline WebBLE dashboard (HTML5, Vanilla JS, CSS3, Service Worker, i18n).

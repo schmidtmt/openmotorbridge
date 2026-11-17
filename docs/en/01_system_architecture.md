@@ -101,7 +101,7 @@ OpenMotorBridge v10.0 defines the platform across **standardized functional node
 ```
                      THE STANDARDIZED FUNCTIONAL NODES (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. FRONT NODE (At Handlebar Riser): PCBA 05 (ESP32-P4 + E22) & PCBA 05D     |
+| 1. FRONT NODE (At Handlebar Riser): PCBA 05 (ESP32-S31 + E22) & PCBA 05D    |
 |    Puck (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind MEMS, 30W USB-PD     |
 +-----------------------------------------------------------------------------+
 | 2. SYMMETRICAL DUAL UNDER-PERCH MIRROR PODS (PCBA 05C Left & Right):        |

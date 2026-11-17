@@ -39,7 +39,7 @@ typedef enum : uint8_t {
 typedef enum : uint8_t {
     USB_NODE_UNKNOWN        = 0x00,
     USB_NODE_CENTRAL_BOX    = 0x01,  // Coordinator / Master (ESP32-S31-WROOM-1U, PCBA 01)
-    USB_NODE_FRONT_NODE     = 0x02,  // Cockpit Hub & Sensorik (ESP32-P4 + ESP32-E22, PCBA 05)
+    USB_NODE_FRONT_NODE     = 0x02,  // Cockpit Hub & Sensorik (ESP32-S31 + ESP32-E22, PCBA 05)
     USB_NODE_POD_BAY1       = 0x03,  // Monocoque-Pod 1 Links (ESP32-C6-MINI-1, PCBA 03)
     USB_NODE_POD_BAY2       = 0x04,  // Monocoque-Pod 2 Rechts (ESP32-C6-MINI-1, PCBA 03)
     USB_NODE_REAR_RADAR     = 0x05,  // Heck-Radar 2.0 & 5.9 GHz V2X (ESP32-C5-WROOM-1U, PCBA 08)
@@ -88,7 +88,7 @@ enum UsbBackbonePktType : uint8_t {
     // --- Digitales USB Audio Class 2.0 (UAC2) Backbone (48 kHz Bidirektional) ---
     USB_PKT_AUDIO_STREAM_DOWN   = 0x24,  // Zentralbox -> Pods: Master-Mix an Headsets (Voice + Stereo Media)
     USB_PKT_AUDIO_STREAM_UP     = 0x25,  // Pods -> Zentralbox: Intercom Spk-Out / OMM Voice zur Zentralbox
-    USB_PKT_AUDIO_MEDIA_UP      = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen (ESP32-P4/E22)
+    USB_PKT_AUDIO_MEDIA_UP      = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen (ESP32-S31/E22)
 
     // --- Radar 2.0 & 5.9 GHz C-ITS V2X (PCBA 08, ESP32-C5-WROOM-1U) ---
     USB_PKT_RADAR_TARGETS       = 0x30,  // 20 Hz voroptimierte Zielliste (TTC, Distanz, Azimut) + URGENT-Flag

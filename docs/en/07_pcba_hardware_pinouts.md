@@ -18,12 +18,14 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164-Q1,   |
 |       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
 |       | Vertical SMD (Micro-Lock Plus)|               |         | SX1262 LoRa, ES8388, BMI270, CAN|
+|       | Triple-Antenna Topology        |               |         | ANT1 LoRa U.FL, ANT2 BT U.FL,  |
+|       |                                |               |         | ANT3 BLE Johanson 2450AT Chip  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satellite Pod Interface**   | 42 x 48 mm    | 4 Layer | ESP32-C6, ES8388,    |
 |       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
 |       | In-Bag 30W USB-PD Charge Port | 2-Sided SMT   |         | 30W PD, J_AUDIO_PWR  |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05**| **Universal Front Node**      | 82 x 50 mm    | 4 Layer | ESP32-P4, ESP32-E22, |
+| **PCBA 05**| **Universal Front Node**      | 82 x 50 mm    | 4 Layer | ESP32-S31-WROOM-1U, ESP32-E22,|
 |       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
 |       | 4-Wire Bus (Zero Tank Lift!)  |               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
@@ -219,7 +221,10 @@ Connects the internal UPS backup cell (LiFePO4 or LiPo) to the analog voltage an
 +-----+----------------+--------------------------+-------------+---------------------+-------------------------+
 ```
 
-#### 3.2.4 Header J7: Spare USB Port 7 (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
+#### 3.2.4 Status Indicator D1 & Elimination of Header J4
+System status is indicated directly via the onboard **WS2812B RGB Smart-LED (`D1`)**, positioned on the south front edge directly to the right of USB-C socket `J3`. A flush-mounted PMMA light pipe ($\varnothing 3.2\,\text{mm}$) integrated into the enclosure front wall channels light outward with zero transmission loss. The former external connector `J4` has thus been eliminated without replacement, saving component cost and board edge clearance.
+
+#### 3.2.5 Header J7: Spare USB Port 7 (Molex Micro-Lock Plus 1.25mm 4-Pin Vertical)
 Exposes Downstream Port 7 of the USB2517I Hub for future modular expansions (e.g. cellular modem or dashcam):
 
 ```
@@ -311,7 +316,7 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| QUALCOMM QCC3084 (14-PIN MODULE WITH INTEGRATED CERAMIC ANTENNA) - SYSTEM PINOUT                              |
+| QUALCOMM QCC3084 (15-PIN MODULE WITH DEDICATED U.FL RF PORT ANT2) - SYSTEM PINOUT                              |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
 | Pin | Signal Name    | Signal Type        | Connected to      | Function & Protocol                           |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
@@ -329,6 +334,7 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 | 12  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF Shield Ground                              |
 | 13  | BT_USB_DM      | USB 2.0 D- (Data)  | USB2517I (Pin 56) | USB Audio Class 2.0 High-Res Stream Minus     |
 | 14  | BT_USB_DP      | USB 2.0 D+ (Data)  | USB2517I (Pin 57) | USB Audio Class 2.0 High-Res Stream Plus      |
+| 15  | BT_RF_AUDIO    | RF Out (50 Ohm)    | ANT2 (U.FL Header) | Dedicated 2.4 GHz RF Port to Helmet Audio Lid Dipole |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
 ```
 
@@ -405,7 +411,7 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 37  | SD_DAT0        | GPIO 37 (SDIO D0)    | MicroSD J2 (Pin 7)  | MicroSD 4-Bit Data Line 0                   |
 | 38  | SD_DAT3        | GPIO 38 (SDIO D3)    | MicroSD J2 (Pin 2)  | MicroSD 4-Bit Data Line 3                   |
 | 39  | SD_CD          | GPIO 39              | MicroSD J2 (Pin 9)  | Card Detect (MicroSD Card Inserted)         |
-| 40  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
+| 40  | BLE_RF_2G4     | RF 2.4G (50 Ohm)     | ANT3 (Johanson)    | 2.4 GHz BLE 5.4 RF Feed to Ceramic Antenna  |
 | 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Central Thermal Ground Pad                  |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 ```
@@ -430,10 +436,10 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 |                                                       │  (480 Mbps) + 12V 60W (Micro-Lock Plus 16P)           |
 |                                                       ▼                                                       |
 |     [ POD 1 LEFT: 50 cm ]               [ CENTRAL BOX: GEOMETRIC CENTER OF MASS ]       [ POD 2 RIGHT: 50 cm ]|
-|  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master (U.FL Housing Antenna)   • OEM-Adapter (Cardo Edge)|
+|  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master: Johanson Ceramic (ANT3) • OEM-Adapter (Cardo Edge)|
 |  • In-Bag Charging Electronics       • Aggregates BLE: Controls, Cams, Keyfob, TPMS  • In-Bag Charging         |
-|                                      • Qualcomm QCC3084: Dual-Helmet Audio (BT 5.4)                           |
-|                                      • SX1262 LoRa: 868 MHz Swarm Telemetry & SOS                             |
+|                                      • Qualcomm QCC3084: Dual-Helmet Audio (U.FL ANT2)                         |
+|                                      • SX1262 LoRa: 868 MHz Swarm & SOS (U.FL ANT1)                            |
 |                                      • S31 Wi-Fi: DISABLED IN NORMAL RIDE (Zero Jam)                          |
 |                                                       ▲                                                       |
 |                                                       │  Cable 2 Branch 4: USB 2.0 High-Speed                 |
@@ -446,9 +452,12 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 +---------------------------------------------------------------------------------------------------------------+
 ```
 
-1. **Central Box (PCBA 01) as Geometric BLE Master:**
+1. **Central Box (PCBA 01) as Geometric BLE Master & Triple-Antenna Architecture:**
    * **Symmetrical Proximity:** Positioned on the battery bridge under the seat, the Central Box maintains an identical short distance of ~ $50\,\text{cm}$ to both saddlebag pods, ~ $90\,\text{cm}$ to handlebar controls, and ~ $30\,\text{cm}$ to the rider.
-   * **Dedicated U.FL Antenna:** The `ESP32-S31` utilizes an external U.FL antenna routed inside the monocoque housing for uniform 360° omnidirectional coverage across the entire motorcycle.
+   * **Strict RF Isolation via Triple Antennas:**
+     - **`ANT1` (U.FL, Taoglas FXP895, 868 MHz):** External monocoque lid antenna for the `SX1262` LoRa transceiver (theft sentry & convoy emergency recovery).
+     - **`ANT2` (U.FL, Taoglas BT Helmet Audio, 2.4 GHz):** External monocoque lid antenna for the Qualcomm `QCC3084`. Completely dedicated to helmet audio, eliminating aptX-HD / LE Audio Auracast audio dropouts from vehicle BLE polling.
+     - **`ANT3` (SMD Ceramic Chip, Johanson 2450AT18D0100, $3.2 \times 1.6\,\text{mm}$):** On-board at left PCB edge at $(X = 117.8\,\text{mm}, Y = 88.25\,\text{mm}, \text{rot} = 180^\circ)$ with feed pad facing inward and $>65\,\text{mm}$ separation from `ANT1`/`ANT2`. Driven by `ESP32-S31` BLE 5.4 for near-field vehicle controls without external pigtail clutter.
    * **Deterministic Event Parsing:** All control and sensor events (OEM adapter PTT signals from both pods, BMW WonderWheel / handlebar buttons, action cam triggers, smart keyfob proximity, and tire pressure TPMS) feed directly via BLE into the `ESP32-S31` state machine, eliminating USB bus forwarding latencies.
    * **Wi-Fi Inactive in Ride Mode:** The internal 2.4 GHz Wi-Fi transceiver of the `ESP32-S31` remains disabled during ride mode, completely eliminating co-channel interference with the adjacent Qualcomm `QCC3084` helmet audio SoC.
 2. **Front Node (PCBA 05 v10) as Cockpit Wi-Fi Specialist:**
@@ -574,32 +583,32 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 ## 7. PCBA 05: Universal Front Node (`openmotorbridge_front_node`)
 
 ![PCBA 05 Universal Front Node Top 3D](../images/pcba/pcba05_front_node_3d.png)
-*Figure 7.5a: KiCad 3D view of the Universal Front Node Top (PCBA 05, 82 x 50 mm) featuring the ESP32-P4 Dual-Core RISC-V Host MCU (0% Radio on Silicon, native 480 Mbps USB HS PHY), ESP32-E22 Companion Radio (Wi-Fi 6E 5/6 GHz 2x2 MIMO with Dual-U.FL Ports via SDIO 3.0), USB2514Bi Industrial Hub, modular Sensor Puck interface, Knowles MEMS acoustic sensor, 60W Power Engine (SW3526 30W USB-PD, TPS54302 5V Buck, TPS2051B Dongle Gate, TPS1H100 Aux Switch), and modular JST automotive connectors.*
+*Figure 7.5a: KiCad 3D view of the Universal Front Node Top (PCBA 05, 82 x 50 mm) featuring the ESP32-S31 Dual-Core RISC-V Host MCU (native 480 Mbps USB HS PHY, internal 2.4G disabled), ESP32-E22 Companion Radio (Wi-Fi 6E 5/6 GHz 2x2 MIMO with Dual-U.FL Ports via SDIO 3.0), USB2514Bi Industrial Hub, modular Sensor Puck interface, Knowles MEMS acoustic sensor, 60W Power Engine (SW3526 30W USB-PD, TPS54302 5V Buck, TPS2051B Dongle Gate, TPS1H100 Aux Switch), and modular JST automotive connectors.*
 
-### 7.1 Board Specifications & v10 Dual-Chip Architecture (ESP32-P4 + ESP32-E22)
+### 7.1 Board Specifications & v10 Dual-Chip Architecture (ESP32-S31 + ESP32-E22)
 * **Dimensions:** $82.0 \times 50.0\,\text{mm}$ with 4x M2.5 mounting holes ($75.0 \times 43.0\,\text{mm}$ hole pitch, enclosure footprint $98 \times 68 \times 25\,\text{mm}$ in sealed IP68 monocoque housing at handlebar riser).
 * **Layer Stackup:** 4 Layers FR-4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish, impedance-controlled 50 $\Omega$ single-ended / 90 $\Omega$ differential USB & SDIO).
-* **Host Microcontroller (`U1`, ESP32-P4-NR16):**
-  * Dual-Core RISC-V processor clocked up to 400 MHz with integrated High-Speed USB 2.0 PHY (480 Mbps).
-  * **0.0% Radio on Silicon:** Complete absence of on-chip RF power amplifiers ensures maximum signal integrity and zero electromagnetic interference into sensitive I2S microphone traces or GPS receiver frontends.
-  * Native 480 Mbps USB link to Downstream Port 4 of the `USB2514Bi` Hub for ultra-low latency Harley Headset Emulation (MFi / USB Audio Class) and CDC-NCM Ethernet tethering.
+* **Host Microcontroller (`U1`, ESP32-S31-WROOM-1U):**
+  * Dual-Core RISC-V processor clocked up to 320 MHz, AI-SIMD pipeline, and native High-Speed USB 2.0 PHY (480 Mbps).
+  * **2.4 GHz RF Disabled via Firmware:** The internal 2.4 GHz radio is permanently disabled in firmware (`front_node_config.h`) to keep the handlebar area 100% RF-clean and prevent interference with adjacent systems.
+  * Native 480 Mbps USB link to Downstream Port 4 of the `USB2514Bi` Hub for ultra-low latency Harley Headset Emulation (MFi / USB Audio Class) and CDC-NCM Ethernet tethering across the backbone to the Central Box.
 * **Wireless Companion Radio (`U9`, ESP32-E22-WROOM-2X2):**
   * High-performance Wi-Fi 6E transceiver operating on the 5 GHz and 6 GHz bands with 2x2 MIMO.
   * Dual U.FL coaxial RF connectors (`ANT1` Main, `ANT2` MIMO) on the top PCB surface for low-loss pigtails to external housing or riser antennas.
-  * High-speed link to host MCU `ESP32-P4` via a 4-bit SDIO 3.0 bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
-  * **2.4 GHz Elimination:** 2.4 GHz RF is 100% eliminated from the Front Node, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3084 / S31 Bluetooth / BLE mesh.
+  * High-speed link to host MCU `ESP32-S31` via a 4-bit SDIO 3.0 bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
+  * **Strict 5/6 GHz Frequency Isolation:** Cockpit Wi-Fi and telemetry operate exclusively on 5/6 GHz, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3084 / S31 Bluetooth / BLE mesh.
 * **USB Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
   * Upstream Port: Connected to `J1` Backbone (4-wire automotive harness to Central Box).
   * Port 1 (`USB_DN1`): Glovebox / 30W USB-PD fast-charge controller (SW3526).
   * Port 2 (`USB_DN2`): JST-GH 4-pin receptacle (`J_DONGLE`) with TPS2051B power-gating (`CP2AA_PWR_EN`) for wireless CarPlay/Android-Auto dongles.
   * Port 3 (`USB_DN3`): Glovebox media hub extension (`J4`).
-  * Port 4 (`USB_HS`): Dedicated 480 Mbps point-to-point interconnect to the `ESP32-P4` native USB HS PHY.
-  * Independent USB-C Service & Flash Port (`J7`): Directly routed to the hardware ESP32-P4 USB Serial/JTAG controller for bench diagnosis, DFU flashing, and emergency recovery without interfering with the internal hub bus.
+  * Port 4 (`USB_HS`): Dedicated 480 Mbps point-to-point interconnect to the `ESP32-S31` native USB HS PHY.
+  * Service & DFU Architecture: Flashed centrally via Bus-DFU (`0x50`/`0x51`) over the vehicle backbone `J1`.
 * **Automotive Backbone Connection (`J1`, Branch 1):** Shielded 4-wire cable from Central Box (12V-20V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
 * **60W Power Engine:**
   * TPS54302 Synchronous Buck Converter (`U3`): Regulates clean +5V (up to 3A) for cockpit peripherals, mirror pods, and WS2812B LEDs.
   * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Up to 30W USB-PD (PPS, QC4+, AFC, FCP) for driver smartphone fast charging.
-  * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-P4, ESP32-E22, and onboard sensors.
+  * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-S31, ESP32-E22, and onboard sensors.
   * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle with overcurrent fault reporting.
   * TPS1H100 Smart High-Side Switch (`Q2`): Switched 12V high-side output (`J_AUX_LIGHT`) for auxiliary light pods or heated grips.
 * **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**

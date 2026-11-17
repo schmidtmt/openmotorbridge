@@ -2,7 +2,7 @@
 
 *Hinweis: Sämtliche CAD-, Elektronik- und Blockschaltbilder spiegeln die standardisierte v10.0 Node-Architektur (PCBA 01 bis 10) wider.*
 
-Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): die Multi-Core-Aufteilung des **`ESP32-S31-WROOM-1U`** Hauptcontrollers auf der Zentralbox (`PCBA 01`), des **`ESP32-P4` + `ESP32-E22`** Front-Knotens (`PCBA 05`), des deterministischen **4-Draht Automotive USB 2.0 & 12V Backbones (`+12V_BUS`, `GND`, `D+`, `D-`, Latenz < 0,2 ms)** über den `USB2517I` 7-Port Hub zu allen Satelliten (Front-Node, Pod 1, Pod 2, Heckradar), der **Dual-Power Input Engine** (12V DTM `J1` via `LM5164-Q1` & 5V USB-C Service-Input `J3` via `LM66100` Ideal-Diode OR-ing), der **5-Gesten-Trigger-Engine** für die symmetrischen Under-Perch Spiegel-Pods (`PCBA 05C`), der SPIFFS/LittleFS-Profil-Engine sowie der **Dual-Bank Rollback-OTA & Central Bus-DFU Architektur**.
+Dieses Dokument spezifiziert die systemweite Firmware-Architektur der OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): die Multi-Core-Aufteilung des **`ESP32-S31-WROOM-1U`** Hauptcontrollers auf der Zentralbox (`PCBA 01`), des **`ESP32-S31-WROOM-1U` + `ESP32-E22`** Front-Knotens (`PCBA 05`), des deterministischen **4-Draht Automotive USB 2.0 & 12V Backbones (`+12V_BUS`, `GND`, `D+`, `D-`, Latenz < 0,2 ms)** über den `USB2517I` 7-Port Hub zu allen Satelliten (Front-Node, Pod 1, Pod 2, Heckradar), der **Dual-Power Input Engine** (12V DTM `J1` via `LM5164-Q1` & 5V USB-C Service-Input `J3` via `LM66100` Ideal-Diode OR-ing), der **5-Gesten-Trigger-Engine** für die symmetrischen Under-Perch Spiegel-Pods (`PCBA 05C`), der SPIFFS/LittleFS-Profil-Engine sowie der **Dual-Bank Rollback-OTA & Central Bus-DFU Architektur**.
 
 ---
 
@@ -14,7 +14,7 @@ In v10.0 ist das Gesamtsystem auf einen robusten, geschirmten **4-Draht Automoti
 +----------------------------------------------------------------------------------------+
 |                        DIE FIRMWARE-KONTROLLER IM SYSTEMVERBUND (v10.0)                |
 +------------------------------------------------------+---------------------------------+
-| 1. ZENTRALBOX (ESP32-S31-WROOM-1U, PCBA 01)          | 2. FRONT-NODE (ESP32-P4+E22, PCBA 05)|
+| 1. ZENTRALBOX (ESP32-S31-WROOM-1U, PCBA 01)          | 2. FRONT-NODE (ESP32-S31+E22, PCBA 05)|
 +------------------------------------------------------+---------------------------------+
 | * Core 0: USB2517I 7-Port Host Engine, SX1262 LoRa   | * Core 0: USB-Backbone Client,  |
 |   868 MHz, Quad eFuse, BLE, Pod & Bus-DFU Dispatcher |   SAM-M10Q GNSS, CAN, SW3526 PD |
@@ -193,7 +193,7 @@ Um **jegliches Überkreuzen von Kabeln am Riser vollständig zu vermeiden**, sin
 * **Plug & Play Auto-Learn Setup-Wizard:**
   1. Der Nutzer startet im Dashboard den geführten Assistenten *"Cockpit-Kalibrierung"*.
   2. Die PWA fordert auf: *"Bitte jetzt den LINKEN Spiegeltaster drücken."*
-  3. Der Front-Node ESP32-P4 registriert die erste Flanke am entsprechenden GPIO (`BTN_SIG_1` oder `BTN_SIG_2`), weist diesen Port dauerhaft im NVS als `LOGICAL_LEFT` zu (und den Gegenport als `LOGICAL_RIGHT`) und bestätigt dies mit einem kurzen, doppelten Aufblinken der linken Bernstein-LED.
+  3. Der Front-Node ESP32-S31 registriert die erste Flanke am entsprechenden GPIO (`BTN_SIG_1` oder `BTN_SIG_2`), weist diesen Port dauerhaft im NVS als `LOGICAL_LEFT` zu (und den Gegenport als `LOGICAL_RIGHT`) und bestätigt dies mit einem kurzen, doppelten Aufblinken der linken Bernstein-LED.
   4. Montagefehler oder verdreht montierte Boxen werden damit in 2 Sekunden ohne Werkzeug korrigiert.
 
 ---

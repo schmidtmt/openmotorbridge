@@ -2,7 +2,7 @@
 
 *Note: All CAD, electronic, and block diagrams reflect the standardized v10.0 node architecture (PCBA 01 through 10).*
 
-This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **`ESP32-S31-WROOM-1U`** host MCU on the Central Box (`PCBA 01`), the **`ESP32-P4` + `ESP32-E22`** Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB 2.0 & 12V Backbone (`+12V_BUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** across the `USB2517I` 7-port hub to all satellite nodes, the **Dual-Power Input Engine** (12V DTM `J1` via `LM5164-Q1` & 5V USB-C Service Input `J3` via `LM66100` ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05C`), the SPIFFS/LittleFS profile engine, and the **Dual-Bank Rollback-OTA & Central Bus-DFU architecture**.
+This document specifies the system-wide firmware architecture of OpenMotorBridge v10.0 (Native USB-PD & Edge-AI Generation): the multi-core allocation of the **`ESP32-S31-WROOM-1U`** host MCU on the Central Box (`PCBA 01`), the **`ESP32-S31-WROOM-1U` + `ESP32-E22`** Front Node (`PCBA 05`), the deterministic **4-Wire Automotive USB 2.0 & 12V Backbone (`+12V_BUS`, `GND`, `D+`, `D-`, latency < 0.2 ms)** across the `USB2517I` 7-port hub to all satellite nodes, the **Dual-Power Input Engine** (12V DTM `J1` via `LM5164-Q1` & 5V USB-C Service Input `J3` via `LM66100` ideal-diode OR-ing), the **5-Gesture Trigger Engine** for symmetrical under-perch mirror pods (`PCBA 05C`), the SPIFFS/LittleFS profile engine, and the **Dual-Bank Rollback-OTA & Central Bus-DFU architecture**.
 
 ---
 
@@ -14,7 +14,7 @@ In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wir
 +----------------------------------------------------------------------------------------+
 |                        FIRMWARE CONTROLLERS IN CONCERT (v10.0)                         |
 +------------------------------------------------------+---------------------------------+
-| 1. CENTRAL BOX (ESP32-S31-WROOM-1U, PCBA 01)          | 2. FRONT NODE (ESP32-P4+E22, PCBA 05)|
+| 1. CENTRAL BOX (ESP32-S31-WROOM-1U, PCBA 01)          | 2. FRONT NODE (ESP32-S31+E22, PCBA 05)|
 +------------------------------------------------------+---------------------------------+
 | * Core 0: USB2517I 7-Port Host Engine, SX1262 LoRa   | * Core 0: USB Backbone Client,  |
 |   868 MHz, Quad eFuse, BLE, Pod & Bus-DFU Dispatcher |   SAM-M10Q GNSS, CAN, SW3526 PD |

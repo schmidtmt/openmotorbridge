@@ -46,8 +46,10 @@ if [ ! -f "$ENV_SCRIPT" ]; then
     exit 1
 fi
 
+set +e
 # shellcheck disable=SC1090
 source "$ENV_SCRIPT"
+set -e
 
 TARGET="${1:-main_controller}"
 shift 2>/dev/null || true

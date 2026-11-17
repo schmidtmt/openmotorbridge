@@ -1,5 +1,7 @@
 Designator,Comment,Footprint,LCSC Part #,Quantity
 ANT1,Taoglas_FXP895_868MHz_Lid,U.FL_Hirose_U.FL-R-SMT-1_Vertical,C2834595,1
+ANT2,Taoglas_BT_Helmaudio_Lid,U.FL_Hirose_U.FL-R-SMT-1_Vertical,,1
+ANT3,Johanson_2450AT18x100,RF_Antenna:Johanson_2450AT18x100,,1
 C1,10uF_100V,Capacitor_SMD:C_0805_2012Metric,,1
 C10,100nF_MCU,Capacitor_SMD:C_0603_1608Metric,,1
 C11,10uF_MCU,Capacitor_SMD:C_0805_2012Metric,,1

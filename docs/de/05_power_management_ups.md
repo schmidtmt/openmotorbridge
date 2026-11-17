@@ -18,7 +18,7 @@ Um hohe Wirkungsgrade und thermische Reserven im geschlossenen IP67-Gehäuse zu 
 | * Ausgang: 5.0 V DC / 1.0 A Dauer    | * Ausgang: 5.0 V DC / 3.0 A Dauer    |
 | * nachgeschaltet: TPS7A0533 LDO      | * Zusatz-PD: SW3526 (65W Buck-Boost) |
 | * Dual-Input: LM66100 Ideal-Diode    | * USV-Schutz: SMBJ24A + AO3401A P-FET|
-| * Versorgt: S31, Hub, Audio, LoRa    | * Versorgt: ESP32-P4/E22, Hub, OLEDs |
+| * Versorgt: S31, Hub, Audio, LoRa    | * Versorgt: ESP32-S31/E22, Hub, OLEDs |
 +--------------------------------------+--------------------------------------+
 ```
 
@@ -93,7 +93,7 @@ Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`)
 
 ### 3.1 Zwei-Kabel-Architektur & Leistungsverteilung mit TI TPS4H160-Q1 Smart Switch
 Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **Zwei-Kabel-Architektur** (Kabel 1: 6-Pin Deutsch DTM `J1` für Bordnetz/CAN; Kabel 2: 16-Pin Automotive Connector `J4` für den Peripheriebus) geführt. Jeder externe Zweig ist auf `PCBA 01` hardwareseitig durch einen eigenen Kanal des **TI TPS4H160-Q1 Smart Switch (`U12`, `GPIO 13..16`)** geschützt:
-* **Strang 1 (Front-Node & Cockpit):** **60W Budget** (lokal auf `PCBA 05` über den **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** und `TPS54302` `U1` geregelt). Versorgt Driver Smartphone Fast-Charging (27–30W USB-PD/QC über den Handschuhfach-Hub), dediziertes Motorrad-Navi (15W für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), Action-Cam Dauerstrom (10W wetterfest USB-C), Dual OLED Cockpit-Displays (`PCBA 05C`, 2W in Speaker Corner Pods) sowie Host-MCU (`ESP32-P4` + `ESP32-E22`), Sensor-Puck (`PCBA 05D`) & `USB2514Bi` Hub-Logik (3,5W).
+* **Strang 1 (Front-Node & Cockpit):** **60W Budget** (lokal auf `PCBA 05` über den **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** und `TPS54302` `U1` geregelt). Versorgt Driver Smartphone Fast-Charging (27–30W USB-PD/QC über den Handschuhfach-Hub), dediziertes Motorrad-Navi (15W für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), Action-Cam Dauerstrom (10W wetterfest USB-C), Dual OLED Cockpit-Displays (`PCBA 05C`, 2W in Speaker Corner Pods) sowie Host-MCU (`ESP32-S31` + `ESP32-E22`), Sensor-Puck (`PCBA 05D`) & `USB2514Bi` Hub-Logik (3,5W).
 * **Strang 2 (Koffer-Pod Links):** **30W USB-PD Budget** (lokal auf `PCBA 03` über **`SW3516H` `U5`** geregelt) für interne Koffer-Ladedose (`J2`), `ESP32-C6-MINI-1U` Host, `PCM2912A` Audio-Codec und mechatronischen Kaltstart-Impuls.
 * **Strang 3 (Koffer-Pod Rechts):** **30W USB-PD Budget** für Bucht 2, identisch zu Strang 2.
 * **Strang 4 (Heck-Radar MR20):** **12V geschaltet** (1,0A Max) für 77-GHz Radarsensor und Strobe-Warn-LEDs.
@@ -197,7 +197,7 @@ Die Bordnetzspannung an KL15 und KL30 wird über hochpräzise Spannungsteiler ($
 Das OpenMotorBridge-Ökosystem überwacht dezentrale Peripherie-Knoten kontinuierlich:
 
 ### 6.1 Front-Node (PCBA 05): Bordnetzüberwachung
-Der im Cockpit montierte Front-Node wird über den 4-Draht-Zweig (12V + USB 2.0) der Zentralbox versorgt und regelt lokal über seinen `TPS54302` Buck-Converter (`U1`) sowie den `SW3526` 65W USB-PD Controller (`U4`). Ein hochohmiger Präzisions-Spannungsteiler speist den internen ADC des `ESP32-P4`, um lokale Spannungsabfälle an Lenkerarmaturen und Bordsteckdosen in Echtzeit an die Zentralbox zu melden.
+Der im Cockpit montierte Front-Node wird über den 4-Draht-Zweig (12V + USB 2.0) der Zentralbox versorgt und regelt lokal über seinen `TPS54302` Buck-Converter (`U1`) sowie den `SW3526` 65W USB-PD Controller (`U4`). Ein hochohmiger Präzisions-Spannungsteiler speist den internen ADC des `ESP32-S31`, um lokale Spannungsabfälle an Lenkerarmaturen und Bordsteckdosen in Echtzeit an die Zentralbox zu melden.
 
 ### 6.2 Smart-Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
 Der tragbare Smart-Keyfob wird von einem internen 3,7V LiPo-Akku (350-500 mAh) versorgt, der über USB-C geladen wird. Ein **Maxim MAX17048 I2C Fuel Gauge** misst Ladezustand (SoC in %), Zellspannung und Entladerate präzise ohne Shunt-Widerstand. Der Keyfob sendet diesen Status zyklisch über den standardisierten **Bluetooth SIG Battery Service (`UUID 0x180F`)** sowie im periodischen LoRa-Health-Paket:

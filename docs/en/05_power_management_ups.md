@@ -18,7 +18,7 @@ To achieve high efficiency and thermal headroom inside sealed IP67 enclosures, t
 | * Output: 5.0 V DC / 1.0 A Continuous| * Output: 5.0 V DC / 3.0 A Continuous|
 | * Post-reg: TPS7A0533 LDO            | * PD Source: SW3526 (65W Buck-Boost) |
 | * Dual-Input: LM66100 Ideal Diode    | * Protection: SMBJ24A + AO3401A P-FET|
-| * Supplies: S31, Hub, Audio, LoRa    | * Supplies: ESP32-P4/E22, Hub, OLEDs |
+| * Supplies: S31, Hub, Audio, LoRa    | * Supplies: ESP32-S31/E22, Hub, OLEDs |
 +--------------------------------------+--------------------------------------+
 ```
 
@@ -93,7 +93,7 @@ For firmware development, configuration, and desk diagnostics of the Central Box
 
 ### 3.1 Two-Cable Architecture & Power Distribution with TI TPS4H160-Q1 Smart Switch Protection
 All peripheral connections from Central Box (`PCBA 01`) route through the **Two-Cable Architecture** (Cable 1: 6-pin Deutsch DTM `J1` for vehicle net/CAN; Cable 2: 16-pin Automotive Connector `J4` for periphery bus). Every external branch is hardware-protected on `PCBA 01` via a dedicated channel of the **TI TPS4H160-Q1 Smart Switch (`U12`, `GPIO 13..16`)**:
-* **Branch 1 (Front Node & Cockpit):** **60W Budget** (regulated locally on `PCBA 05` via the **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** and `TPS54302` `U1`). Powers driver smartphone fast-charging (27–30W USB-PD/QC via the Glovebox Hub), dedicated motorcycle GPS (15W for Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), action-cam continuous power (10W weather-sealed USB-C), dual cockpit OLED displays (`PCBA 05C`, 2W in Speaker Corner Pods), and host MCU (`ESP32-P4` + `ESP32-E22`), sensor puck (`PCBA 05D`), & `USB2514Bi` hub (3.5W).
+* **Branch 1 (Front Node & Cockpit):** **60W Budget** (regulated locally on `PCBA 05` via the **`SW3526` Synchronous Buck-Boost PD-Source Controller `U4`** and `TPS54302` `U1`). Powers driver smartphone fast-charging (27–30W USB-PD/QC via the Glovebox Hub), dedicated motorcycle GPS (15W for Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), action-cam continuous power (10W weather-sealed USB-C), dual cockpit OLED displays (`PCBA 05C`, 2W in Speaker Corner Pods), and host MCU (`ESP32-S31` + `ESP32-E22`), sensor puck (`PCBA 05D`), & `USB2514Bi` hub (3.5W).
 * **Branch 2 (Saddlebag Pod Left):** **30W USB-PD Budget** (regulated locally on `PCBA 03` via **`SW3516H` `U5`**) for internal in-bag USB receptacle (`J2`), `ESP32-C6-MINI-1U` host, `PCM2912A` audio codec, and mechatronic cold-start pushers.
 * **Branch 3 (Saddlebag Pod Right):** **30W USB-PD Budget** for Bay 2, identical to Branch 2.
 * **Branch 4 (Rear Radar MR20):** **12V Switched** (1.0A Max) for 77-GHz radar sensor and warning strobe LEDs.
@@ -172,7 +172,7 @@ Vehicle battery voltage at KL15 and KL30 is monitored via precision voltage divi
 The OpenMotorBridge ecosystem continuously monitors its decentralized peripheral nodes:
 
 ### 6.1 Front Node (PCBA 05): Electrical System Monitoring
-Mounted in the cockpit, the Front Node is powered via the 4-wire branch (12V + USB 2.0) from the Central Box and regulates locally via its `TPS54302` buck converter (`U1`) and `SW3526` 65W USB-PD controller (`U4`). A high-impedance precision divider feeds the `ESP32-P4` ADC input to report handlebar switchgear and cockpit socket voltages to the Central Box in real time.
+Mounted in the cockpit, the Front Node is powered via the 4-wire branch (12V + USB 2.0) from the Central Box and regulates locally via its `TPS54302` buck converter (`U1`) and `SW3526` 65W USB-PD controller (`U4`). A high-impedance precision divider feeds the `ESP32-S31` ADC input to report handlebar switchgear and cockpit socket voltages to the Central Box in real time.
 
 ### 6.2 Smart Keyfob & Pager (PCBA 07): LiPo Fuel Gauge (BLE Service 0x180F & LoRa)
 The portable Smart Keyfob is powered by an internal 3.7V LiPo cell (350-500 mAh) charged via USB-C. A **Maxim MAX17048 I2C fuel gauge** measures State of Charge (SoC in %), cell voltage, and discharge rate without requiring an external sense resistor. The Keyfob reports its battery status periodically via the standard **Bluetooth SIG Battery Service (`UUID 0x180F`)** and within its periodic LoRa health beacons:

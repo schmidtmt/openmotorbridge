@@ -20,7 +20,7 @@ static OmmFlashStatus_t s_flash_status = {
 
 static const char* node_to_name(UsbNodeType node) {
     switch (node) {
-        case USB_NODE_FRONT_NODE:   return "Front-Node PCBA 05 (ESP32-P4 + E22)";
+        case USB_NODE_FRONT_NODE:   return "Front-Node PCBA 05 (ESP32-S31 + E22)";
         case USB_NODE_POD_BAY1:     return "Satellite Pod 1 PCBA 03 (ESP32-C6)";
         case USB_NODE_POD_BAY2:     return "Satellite Pod 2 PCBA 03 (ESP32-C6)";
         case USB_NODE_REAR_RADAR:   return "Rear Radar & V2X PCBA 08 (ESP32-C5)";
