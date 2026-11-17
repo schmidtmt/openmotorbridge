@@ -4,8 +4,9 @@
 // File: hardware/cad/scad/01_main_box/99_overall_box.scad
 // Description: Full 3D assembly of the v10.0 Dual-Rail Monocoque Central Box
 //              (Gehäuse Typ A: 110 x 74 x 38 mm) with PCBA 01 v10 (ESP32-S31,
-//              QCC3084, SX1262 LoRa), Slide-In Intermediate Tray, 1S LiPo
-//              Backup Battery, Taoglas Dual Antennas, and L-Slide Lid.
+//              QCC3084, SX1262 LoRa, on-board Johanson ceramic chip antenna,
+//              dual U.FL ports ANT1 & ANT2), Slide-In Intermediate Tray,
+//              1S LiPo Backup Battery, Taoglas Dual Antennas, and L-Slide Lid.
 //
 // View Modes:
 // - EXPLODED_VIEW = true:  Vertical 5-tier exploded stack for layer inspection
@@ -44,7 +45,7 @@ module dummy_fxp895_antenna() {
                 cylinder(r=0.6, h=25.0, $fn=16);
 }
 
-// Module for Taoglas FXP73 2.4 GHz Wi-Fi / BLE Flex Antenna Dummy
+// Module for Taoglas FXP73 2.4 GHz Helmet Audio (QCC3084 BT 5.4) Flex Antenna Dummy
 module dummy_fxp73_antenna() {
     color([0.15, 0.35, 0.20]) // Dark green flex substrate
         cube([47.0, 7.0, 0.5], center=false);
@@ -66,7 +67,8 @@ module main_box_full_assembly(exploded = EXPLODED_VIEW) {
             main_box_lower_case();
 
     // -------------------------------------------------------------------------
-    // Layer 2: Mainboard PCBA 01 v10 (85 x 55 mm, ESP32-S31, QCC3084, SX1262)
+    // Layer 2: Mainboard PCBA 01 v10 (85 x 55 mm, ESP32-S31, QCC3084, SX1262,
+    //          ANT1 LoRa U.FL, ANT2 Helmaudio U.FL, ANT3 Ceramic Chip Antenna)
     // -------------------------------------------------------------------------
     translate([12.5, 9.5, Z_MAIN_PCB])
         dummy_main_pcb();
@@ -89,7 +91,7 @@ module main_box_full_assembly(exploded = EXPLODED_VIEW) {
     translate([12.8, 49.2 + Y_SLIDE_TRAY, Z_LIPO_CELL])
         dummy_fxp895_antenna();
 
-    // C. Taoglas FXP73 2.4 GHz Wi-Fi/BLE Flex Antenna (seated in North tray nest: ETWAS DARÜBER)
+    // C. Taoglas FXP73 2.4 GHz Helmet Audio Flex Antenna (seated in North tray nest: ETWAS DARÜBER)
     translate([30.8, 63.7 + Y_SLIDE_TRAY, Z_LIPO_CELL + 1.2])
         dummy_fxp73_antenna();
 

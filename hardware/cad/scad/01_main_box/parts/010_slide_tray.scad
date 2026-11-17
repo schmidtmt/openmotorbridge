@@ -18,7 +18,7 @@
 //
 // 3. Integrated RF Antenna Nests:
 //    - Recessed adhesive nest for Taoglas FXP895 (LoRa 868 MHz flex PCB: 85 x 18 x 0.8 mm).
-//    - Recessed adhesive nest for Taoglas FXP73 (2.4 GHz Wi-Fi/BLE: 47 x 7 x 0.5 mm).
+//    - Recessed adhesive nest for Taoglas FXP73 (2.4 GHz Helmet Audio: 47 x 7 x 0.5 mm).
 //    - 100% metal-free, RF-transparent PA12 platform with maximum isolation.
 //
 // 4. Cable Management & Convective Airflow:
@@ -104,7 +104,7 @@ module main_box_slide_tray(
                         cube([1.4, 20.0, 1.5], center=false);
                 }
 
-                // B. Taoglas FXP73 2.4 GHz Wi-Fi/BLE (47 x 7 mm at Y = 60.5..67.5 mm: ETWAS DARÜBER)
+                // B. Taoglas FXP73 2.4 GHz Helmet Audio (47 x 7 mm at Y = 60.5..67.5 mm: ETWAS DARÜBER)
                 // Elevated 1.2 mm rear ledge (separates FXP73 from 0.8 mm FXP895 with 0.4 mm PA12 floor)
                 translate([27.5, 60.5, tray_t]) {
                     cube([48.0, 7.0, 1.2], center=false);

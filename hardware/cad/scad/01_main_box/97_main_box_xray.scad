@@ -43,7 +43,7 @@ module main_box_xray_inspection_assembly(has_sma_bulkhead = has_sma_bulkhead) {
     translate([12.8, 49.2, 19.0])
         dummy_fxp895_antenna();
 
-    // North: FXP73 2.4 GHz Wi-Fi/BLE (etwas darüber, Z=20.2 mm)
+    // North: FXP73 2.4 GHz Helmet Audio (etwas darüber, Z=20.2 mm)
     translate([30.8, 63.7, 20.2])
         dummy_fxp73_antenna();
 

@@ -3,7 +3,8 @@
 // =============================================================================
 // File: hardware/cad/scad/00_common/dummies/dummy_lipo_battery.scad
 // Description: 3D model of the 2200 mAh ultra-flat LiPo pouch cell (504068 / 503870)
-//              with integrated PCM protection board and Molex Micro-Fit 3.0 wires.
+//              with integrated PCM protection board, silicone wiring harness,
+//              and Molex Micro-Lock Plus 1.25mm 4-Pin vertical mating plug (J5).
 // =============================================================================
 
 include <../parameters.scad>;
@@ -18,21 +19,31 @@ module dummy_lipo_battery() {
         translate([0.0, 38.0, 0.5])
             cube(size=[67.0, 3.0, 4.0], center=false);
 
-    // 3. Silicone Output Wires (Red + Black + NTC Yellow)
+    // 3. Silicone Output Wires (Red: PWR+, Black: PWR-, Yellow: NTC+, Blue: NTC GND)
     color("red")
-        translate([25.0, 41.0, 2.5])
+        translate([24.0, 41.0, 2.5])
             rotate([-90, 0, 0])
-                cylinder(r=0.7, h=10.0, $fn=16);
+                cylinder(r=0.6, h=10.0, $fn=16);
 
     color("black")
+        translate([27.0, 41.0, 2.5])
+            rotate([-90, 0, 0])
+                cylinder(r=0.6, h=10.0, $fn=16);
+
+    color("gold")
         translate([30.0, 41.0, 2.5])
             rotate([-90, 0, 0])
-                cylinder(r=0.7, h=10.0, $fn=16);
+                cylinder(r=0.6, h=10.0, $fn=16);
 
-    // 4. Molex Micro-Fit 3.0 2-Pin Plug
-    color("white")
-        translate([23.5, 51.0, 0.5])
-            cube(size=[9.6, 7.0, 5.0], center=false);
+    color("deepskyblue")
+        translate([33.0, 41.0, 2.5])
+            rotate([-90, 0, 0])
+                cylinder(r=0.6, h=10.0, $fn=16);
+
+    // 4. Molex Micro-Lock Plus 1.25mm 4-Pin Plug (Mates to PCBA 01 J5)
+    color("ivory")
+        translate([22.5, 51.0, 0.5])
+            cube(size=[12.0, 5.0, 4.5], center=false);
 }
 
 // Preview standalone
