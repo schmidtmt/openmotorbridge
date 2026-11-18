@@ -9,10 +9,9 @@
 //                 with laminar airflow ventilation slots on West flank.
 //              3. TI OPT3001 ambient light luxmeter with top optical aperture & bevel.
 //              4. 3x M2 mounting screw bosses (H1, H2, H3) matching KiCad PCB coordinates.
-//              5. East flank notch for 6-pin JST-GH cable (J1 - SENSOR_IN from Front Node).
-//              6. North flank notch for 6-pin JST-SH cable (J2 - EXP_OUT expansion bus).
-//              7. Snap-fit cap with stepped perimeter seal lip and corner pry slot.
-//              8. Dual bottom snap-fit arms for toolless Front Node lid docking.
+//              5. East flank notch for 8-pin JST-GH cable (J1 - SENSOR_IN from Front Node).
+//              6. Snap-fit cap with stepped perimeter seal lip and corner pry slot.
+//              7. Dual bottom snap-fit arms for toolless Front Node lid docking.
 // =============================================================================
 
 $fn = 48;
@@ -45,15 +44,11 @@ OPT_Y           = PCB_Y0 + 5.61;  // 7.61 mm
 TMP_X           = PCB_X0 + 5.0;   // 7.0 mm
 TMP_Y           = PCB_Y0 + 7.0;   // 9.0 mm
 
-// 3. J1 JST-GH 6-Pin Connector at (30.15, 18.28) facing East (+X)
+// 3. J1 JST-GH 8-Pin Connector at (30.15, 16.50) facing East (+X)
 J1_X            = PCB_X0 + 30.15; // 32.15 mm
-J1_Y            = PCB_Y0 + 18.28; // 20.28 mm
+J1_Y            = PCB_Y0 + 16.50; // 18.50 mm
 
-// 4. J2 JST-SH 6-Pin Connector at (22.95, 30.12) facing North (+Y)
-J2_X            = PCB_X0 + 22.95; // 24.95 mm
-J2_Y            = PCB_Y0 + 30.12; // 32.12 mm
-
-// 5. 3x M2 Mounting Holes: H1 (3.5, 30.5), H2 (30.5, 30.5), H3 (30.5, 3.5)
+// 4. 3x M2 Mounting Holes: H1 (3.5, 30.5), H2 (30.5, 30.5), H3 (30.5, 3.5)
 // (Corner at PCB (3.5, 3.5) is kept completely open for TMP117 thermal isolation!)
 BOSS_LIST = [
     [PCB_X0 + 3.5,  PCB_Y0 + 30.5], // H1: (5.5, 32.5)
@@ -95,21 +90,13 @@ module sensor_puck_cradle() {
                 cube([WALL_THICK + 1.0, 7.0, 1.4], center=false);
         }
 
-        // J1 Cable Notch on East Flank (+X) for JST-GH 6-Pin Connector
+        // J1 Cable Notch on East Flank (+X) for JST-GH 8-Pin Connector (13.0 mm width clears 12.0 mm footprint)
         // Opens from PCB level to top rim so PCB drops in freely from above
         translate([PUCK_L - WALL_THICK - 0.5, J1_Y - 6.5, FLOOR_THICK + STANDOFF_H]) {
             cube([WALL_THICK + 1.0, 13.0, PUCK_H], center=false);
             // Beveled outer lead-in for cable strain relief and easy unlatching
             translate([0.5, -1.0, 0])
                 cube([WALL_THICK + 1.0, 15.0, PUCK_H], center=false);
-        }
-
-        // J2 Cable Notch on North Flank (+Y) for JST-SH 6-Pin Expansion Connector
-        translate([J2_X - 5.5, PUCK_W - WALL_THICK - 0.5, FLOOR_THICK + STANDOFF_H]) {
-            cube([11.0, WALL_THICK + 1.0, PUCK_H], center=false);
-            // Beveled outer lead-in
-            translate([-1.0, 0.5, 0])
-                cube([13.0, WALL_THICK + 1.0, PUCK_H], center=false);
         }
 
         // Corner Service Pry Slot (SW corner for easy cap removal)

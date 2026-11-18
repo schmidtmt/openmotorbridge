@@ -87,32 +87,32 @@ module dummy_front_node_pcb() {
 
     // 9. North Edge Connectors (J1, J4, J_DONGLE, J_AUX_LIGHT, J10, J8)
     color("ghostwhite") {
-        // J1 (JST GH 4P at 20.47, 3.35)
-        translate([20.47 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J4 (JST GH 6P at 32.22, 3.35)
-        translate([32.22 - 4.75, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([9.5, 4.0, 4.5], center=false);
-        // J_DONGLE (JST GH 4P at 43.97, 3.35)
-        translate([43.97 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J_AUX_LIGHT (JST PH 2P at 54.00, 7.00)
-        translate([54.00 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
-        // J10 (JST PH 2P at 62.25, 7.00)
-        translate([62.25 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
-        // J8 (JST PH 2P at 70.25, 6.95)
-        translate([70.25 - 3.0, 6.95 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
+        // J1 (JST GH 4P at 19.73, 3.35)
+        translate([19.73 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
+        // J4 (JST GH 8P at 32.97, 3.35)
+        translate([32.97 - 6.0, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([12.0, 4.0, 4.5], center=false);
+        // J_DONGLE (JST GH 4P at 46.22, 3.35)
+        translate([46.22 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
+        // J_AUX_LIGHT (JST PH 2P at 55.68, 7.00)
+        translate([55.68 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
+        // J10 (JST PH 2P at 63.87, 7.00)
+        translate([63.87 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
+        // J8 (JST PH 2P at 72.05, 6.95)
+        translate([72.05 - 3.0, 6.95 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
     }
 
     // 10. South Edge Connectors (J_POD_R, J_DISP_R, J_SENSOR_EXT, J_DISP_L, J_POD_L)
     color("ghostwhite") {
-        // J_POD_R (JST GH 4P at 21.50, 46.50)
-        translate([21.50 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J_DISP_R (JST SH 4P at 33.50, 46.50)
-        translate([33.50 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
-        // J_SENSOR_EXT (JST GH 6P at 46.50, 46.50)
-        translate([46.50 - 4.75, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([9.5, 4.0, 4.5], center=false);
-        // J_DISP_L (JST SH 4P at 59.50, 46.50)
-        translate([59.50 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
-        // J_POD_L (JST GH 4P at 70.50, 46.50)
-        translate([70.50 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
+        // J_POD_R (JST GH 4P at 19.73, 46.50)
+        translate([19.73 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
+        // J_DISP_R (JST SH 4P at 31.24, 46.50)
+        translate([31.24 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
+        // J_SENSOR_EXT (JST GH 8P at 45.25, 46.50)
+        translate([45.25 - 6.0, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([12.0, 4.0, 4.5], center=false);
+        // J_DISP_L (JST SH 4P at 59.26, 46.50)
+        translate([59.26 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
+        // J_POD_L (JST GH 4P at 70.77, 46.50)
+        translate([70.77 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
     }
 }
 

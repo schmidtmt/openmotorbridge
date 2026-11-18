@@ -39,7 +39,7 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05D**| **Env & GNSS Sensor Puck**    | 34 x 34 mm    | 4 Layer | u-blox SAM-M10Q,     |
 |       | (Snap-On Basket for FrontNode)| (Snap-Fit)    | (ENIG)  | TMP117, OPT3001,     |
-|       | I2C/I2S Env & Daisy-Chain     | 100% SMT      |         | JST-GH In, JST-SH Out|
+|       | I2C/UART/1PPS Env & GNSS      | 100% SMT      |         | JST-GH 8P In (SM08B) |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Layer | Nordic nRF52832 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Pocket M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
@@ -617,9 +617,9 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-S31, ESP32-E22, and onboard sensors.
   * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle at `J5` (Scenario B) with overcurrent fault reporting and 0.0 µA deep sleep.
   * TPS1H100 Smart High-Side Switch (`Q2`): Switched 12V high-side output (`J_AUX_LIGHT`) for auxiliary light pods or heated grips.
-* **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**
-  * Routes I2C (`SCL`, `SDA`, `3V3`, `GND`) and I2S (`I2S_SD`, `I2S_WS`) to the snap-on sensor cradle ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
-  * Integrates u-blox SAM-M10Q Multi-GNSS, TI TMP117 precision thermometer, OPT3001 light sensor, and Knowles I2S MEMS.
+* **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / `J6` / 8-Pin JST-GH):**
+  * Routes power rails (`3V3`, `GND`), I2C bus (`SCL`, `SDA`), and dedicated GNSS hardware signals (`TIMEPULSE` 1PPS, `GNSS_TXD`, `GNSS_RXD`, `GNSS_RESET_N`) to the snap-on sensor cradle ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
+  * Integrates u-blox SAM-M10Q Multi-GNSS, TI TMP117 precision thermometer, and OPT3001 light sensor (Knowles I2S MEMS microphone remains directly protected on the underside of PCBA 05).
   * Snaps directly onto the Front Node on bikes; unclips for remote mounting on car/van windshields via 1.5m extension lead.
 * **Peripheral Ports & Enclosure Interfaces (100% Modular JST Receptacles):**
   * **Cockpit Wall (facing handlebars / rider, 3x oval ports $11.0 \times 5.5\,\text{mm}$):**
@@ -627,7 +627,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
       * `J_POD_R` (JST-GH 4P): Right Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) (BSD Amber LED + Switch).
       * `J_DISP_R` (JST-SH 4P): Right Cockpit Speaker Corner Pod Display (I2C Bus + 3.3V + GND).
     * **`SENSOR` (Center on PCB, $X = 46.5\,\text{mm}$):**
-      * `J_SENSOR_EXT` (JST-GH 6P): Environmental & GNSS Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) upward into snap cradle.
+      * `J_SENSOR_EXT` (JST-GH 8P): Environmental & GNSS Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) upward into snap cradle.
     * **`CKPT 2` (Left on PCB, $X = 59.5$ and $70.5\,\text{mm}$):**
       * `J_DISP_L` (JST-SH 4P): Left Cockpit Speaker Corner Pod Display (I2C Bus + 3.3V + GND).
       * `J_POD_L` (JST-GH 4P): Left Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) (BSD Amber LED + Switch).
@@ -653,11 +653,11 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Cockpit Right** | `J_POD_R` | JST-GH 4P (5V, BSD LED, Switch, GND) | `CKPT 1` | **Active:** Right Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) | **Active:** Right Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) |
 | **Cockpit Right** | `J_DISP_R` | JST-SH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 1` | **Active:** Speaker Corner Display Right | **Blanking Plug** (no fairing speakers) |
-| **Cockpit Center**| `J_SENSOR_EXT` | JST-GH 6P (3.3V, GND, I2C, I2S, UART)| `SENSOR` | **Active:** Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) snapped top | **Active:** Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) snapped top |
+| **Cockpit Center**| `J_SENSOR_EXT` | JST-GH 8P (3.3V, GND, I2C, 1PPS, UART, RST)| `SENSOR` | **Active:** Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) snapped top | **Active:** Sensor Puck ([`PCBA 05D`](#74-pcba-05d-snap-on-sensor-puck-openmotorbridge_sensor_puck)) snapped top |
 | **Cockpit Left** | `J_DISP_L` | JST-SH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 2` | **Active:** Speaker Corner Display Left | **Blanking Plug** (no fairing speakers) |
 | **Cockpit Left** | `J_POD_L` | JST-GH 4P (5V, BSD LED, Switch, GND) | `CKPT 2` | **Active:** Left Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) | **Active:** Left Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) |
 | **Vehicle West** | `J1` | JST-GH 4P (12V-20V, GND, USB HS D+/D-)| `MAIN` | **ALWAYS Active:** 4-wire lifeline from Central Box [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) | **ALWAYS Active:** 4-wire lifeline from Central Box [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) |
-| **Vehicle West** | `J4` | JST-GH 6P (5V, USB DN3, Fast-Charge) | `MAIN` | **Active:** Link to Glovebox Hub ([`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) | **Optional:** Handlebar USB-C charger or **Blanking Plug** |
+| **Vehicle West** | `J4` | JST-GH 8P (30W PD, CC1/CC2, 5V, USB DN3)| `MAIN` | **Active:** Dual-Rail Lifeline to Glovebox Hub ([`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) | **Optional:** Handlebar USB-C charger or **Blanking Plug** |
 | **Vehicle Center**| `J_DONGLE` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blanking Plug:** CarPlay dongle resides in glovebox at [`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout) | **ONLY active** with aftermarket CP/AA display; else **Blanking Plug** |
 | **Vehicle East 1**| `J_AUX_LIGHT`| JST-PH 2P (12V switched, max 2.5A) | `AUX 12V`| **Optional:** Auxiliary lights or **Mini Blanking Plug** | **Optional:** Auxiliary lights or **Mini Blanking Plug** |
 | **Vehicle East 2**| `J10` | JST-PH 2P (12V continuous, max 1.5A)| `NAV 12V`| **Mini Blanking Plug:** Factory display (Skyline OS / GTS) active | **Active:** 12V power for Garmin Zūmo XT2 / Chigee AIO-5 |
@@ -680,14 +680,14 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 |  1  | GND            | GND                  | System Ground      | Power Ground                               |
 |  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Operating Voltage ESP32-S31                |
 |  3  | ESP_EN         | CHIP_PU              | RC Network/Reset   | Hardware Enable / Chip Reset               |
-|  4  | GPIO4          | GPIO 4               | Reserved / Test    | Free I/O                                   |
-|  5  | GPIO5          | GPIO 5               | Reserved / Test    | Free I/O                                   |
-|  6  | MIC_I2S_WS     | GPIO 6 (I2S WS)      | Knowles SPH0645    | MEMS Microphone Word Select / Frame Sync   |
-|  7  | MIC_I2S_BCLK   | GPIO 7 (I2S BCLK)    | Knowles SPH0645    | MEMS Microphone Bit Clock                  |
-|  8  | BTN_SIG_L_N    | GPIO 8               | J_POD_L (Pin 3)    | Left Mirror Pod Thumb Button               |
-|  9  | BTN_SIG_R_N    | GPIO 9               | J_POD_R (Pin 3)    | Right Mirror Pod Thumb Button              |
-| 10  | GPIO10         | GPIO 10              | Reserved / Test    | Free I/O                                   |
-| 11  | GPIO11         | GPIO 11              | Reserved / Test    | Free I/O                                   |
+|  4  | GNSS_TIMEPULSE | GPIO 4               | J_SENSOR_EXT (Pin 5)| u-blox SAM-M10Q 1PPS Hardware Timepulse (Time Sync)|
+|  5  | GNSS_TXD       | GPIO 5               | J_SENSOR_EXT (Pin 6)| u-blox SAM-M10Q UART TXD (NMEA/UBX Telemetry)      |
+|  6  | MIC_I2S_WS     | GPIO 6 (I2S WS)      | Knowles SPH0645     | MEMS Microphone Word Select / Frame Sync   |
+|  7  | MIC_I2S_BCLK   | GPIO 7 (I2S BCLK)    | Knowles SPH0645     | MEMS Microphone Bit Clock                  |
+|  8  | BTN_SIG_L_N    | GPIO 8               | J_POD_L (Pin 3)     | Left Mirror Pod Thumb Button               |
+|  9  | BTN_SIG_R_N    | GPIO 9               | J_POD_R (Pin 3)     | Right Mirror Pod Thumb Button              |
+| 10  | GNSS_RXD       | GPIO 10              | J_SENSOR_EXT (Pin 7)| u-blox SAM-M10Q UART RXD (Configuration)   |
+| 11  | GNSS_RESET_N   | GPIO 11              | J_SENSOR_EXT (Pin 8)| u-blox SAM-M10Q Hardware Reset (Active-Low)|
 | 12  | MIC_I2S_DATA   | GPIO 12 (I2S DIN)    | Knowles SPH0645    | MEMS Microphone Data (Wind Noise Sensing)  |
 | 13  | NC_GPIO33      | GPIO 33 (USB-JTAG D-)| Not Connected (NC) | S31 USB-Serial/JTAG D- (reserved)          |
 | 14  | NC_GPIO34      | GPIO 34 (USB-JTAG D+)| Not Connected (NC) | S31 USB-Serial/JTAG D+ (reserved)          |
@@ -727,6 +727,36 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 ```
 
+#### 7.1.3 Header J4 Pinout: Glovebox Hub Lifeline (JST-GH 1.25mm 8-Pin Horizontal)
+Connects the Universal Front Node (`PCBA 05`) directly to the Glovebox Breakout Hub (`PCBA 05B`) over an 8-conductor shielded automotive harness:
+
+| Pin | Signal Name | Type | Level / Current | Function & Description |
+| :-: | :--- | :---: | :---: | :--- |
+| **1** | `VBUS_PD1_OUT` | Power Out | 5V / 9V / 12V / 15V (up to 30W) | Dedicated USB-PD fast-charge power from SW3526 (`U5`), passed straight through to `J3` Phone |
+| **2** | `GND` | Power | 0 V / Return | Power ground for USB-PD fast charging path |
+| **3** | `USB_DN1_CC1` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 1 for native USB-PD contract negotiation between smartphone and SW3526 |
+| **4** | `USB_DN1_CC2` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 2 for native USB-PD contract negotiation between smartphone and SW3526 |
+| **5** | `VCC_5V` | Power Out | $5.0\,\text{V} \pm 2\,\%$ (max. 3.0A) | Clean 5V system rail from TPS54302 (`U3`) for Dongle, Media thumbdrive, and Hub controller |
+| **6** | `GND` | Power | 0 V / Logic GND | System ground for 5V peripherals and USB 2.0 data bus |
+| **7** | `USB_DN3_DP` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Plus (Downstream 3 from USB2514Bi to upstream of `PCBA 05B` hub) |
+| **8** | `USB_DN3_DM` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Minus (Downstream 3 from USB2514Bi to upstream of `PCBA 05B` hub) |
+| **MP**| `SHIELD` | Shield | Chassis GND / PE | 360° braided shield termination & strain relief (SMD retention solder tabs) |
+
+#### 7.1.4 Header J6 Pinout: Sensor Puck Lifeline (`J_SENSOR_EXT`, JST-GH 1.25mm 8-Pin Horizontal)
+Connects the Universal Front Node (`PCBA 05`) directly to the Environmental & GNSS Sensor Puck (`PCBA 05D`) via an 8-conductor shielded cable:
+
+| Pin | Signal Name | Type | Level / Current | Function & Description |
+| :-: | :--- | :---: | :---: | :--- |
+| **1** | `VCC_3V3` | Power Out | $3.3\,\text{V} \pm 2\,\%$ (max. 300 mA) | Regulated system rail for SAM-M10Q, TMP117, and OPT3001 |
+| **2** | `GND` | Power | 0 V / System Ground | Signal and RF return ground (direct ground plane tie) |
+| **3** | `I2C_SDA` | Bidi Open-Drain | $0\,\text{V} - 3.3\,\text{V}$ | I2C Data Bus (SAM-M10Q DDC `0x42`, OPT3001 `0x44`, TMP117 `0x48`) from ESP32-S31 GPIO17 |
+| **4** | `I2C_SCL` | Out Open-Drain | $0\,\text{V} - 3.3\,\text{V}$ (400 kHz) | I2C Clock Bus (Fast-Mode) from ESP32-S31 GPIO18 |
+| **5** | `GNSS_TIMEPULSE` | Digital In | $0\,\text{V} - 3.3\,\text{V}$ | High-precision 1PPS hardware time synchronization pulse from SAM-M10Q to ESP32-S31 GPIO4 |
+| **6** | `GNSS_TXD` | Digital In | $0\,\text{V} - 3.3\,\text{V}$ (UART) | High-speed serial telemetry stream (NMEA-0183 / UBX binary) from SAM-M10Q TXD to ESP32-S31 GPIO5 RX |
+| **7** | `GNSS_RXD` | Digital Out | $0\,\text{V} - 3.3\,\text{V}$ (UART) | Serial control and configuration channel from ESP32-S31 GPIO10 TX to SAM-M10Q RXD |
+| **8** | `GNSS_RESET_N` | Digital Out | $0\,\text{V} - 3.3\,\text{V}$ | Hardware reset line (Active-Low, 10k pull-up R3 on puck) from ESP32-S31 GPIO11 to SAM-M10Q RESET_N |
+| **MP**| `SHIELD` | Shield | Chassis Ground / PE | Cable braided shield & mechanical strain relief (SMD tabs) |
+
 ---
 
 ### 7.2 PCBA 05B: Glovebox Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
@@ -751,11 +781,11 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 | Receptacle | Signal Name / Pinout | Type | Function & Description |
 | :---: | :--- | :---: | :--- |
-| **`J1`** | **`SKYLINE_HOST`** (Upstream)<br>A6/B6: `USB_UP_DP`<br>A7/B7: `USB_UP_DM`<br>A4/B4/A9/B9: `VBUS_HOST_SENSE`<br>A5: `NET_J1_CC1`, B5: `NET_J1_CC2` | USB-C 16P | **OEM Upstream Host:** Connects to factory USB-C port of Harley-Davidson Boom! Box GTS / Skyline OS head unit. |
-| **`J2`** | **`FRONT_NODE`** (Downstream 3)<br>A6/B6: `USB_DN3_DP`<br>A7/B7: `USB_DN3_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J2_CC1`, B5: `NET_J2_CC2` | USB-C 16P | **Front Node Lifeline:** Carries USB data and power from Universal Front Node (`PCBA 05`, Header `J4`). |
-| **`J4`** | **`DONGLE`** (Downstream 1)<br>A6/B6: `USB_DN1_DP`<br>A7/B7: `USB_DN1_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J4_CC1`, B5: `NET_J4_CC2` | USB-C 16P | **Wireless CarPlay / AA Adapter:** Managed USB port for Ottocast / CarlinKit dongle with remote cold-boot reset. |
-| **`J5`** | **`MEDIA`** (Downstream 2)<br>A6/B6: `USB_DN2_DP`<br>A7/B7: `USB_DN2_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J5_CC1`, B5: `NET_J5_CC2` | USB-C 16P | **Media Storage:** Auxiliary USB 2.0 port for music thumbdrives, dashcam export, or software updates. |
-| **`J3`** | **`PHONE_CHARGE`** (Downstream 4)<br>A6/B6: `NET_PHONE_D`<br>A7/B7: `NET_PHONE_D`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J3_CC1`, B5: `NET_J3_CC2` | USB-C 16P | **Smartphone Charging Port:** Dedicated charge port for glovebox smartphones ($5\,\text{V} / 3\,\text{A}$). |
+| **`J1`** | **`SKYLINE_HOST`** (Upstream)<br>A6/B6: `USB_UP_DP`<br>A7/B7: `USB_UP_DM`<br>A4/B4/A9/B9: `VBUS_HOST_SENSE`<br>A5: `NET_J1_CC1`, B5: `NET_J1_CC2` | USB-C 16P | **OEM Upstream Host:** Connects to factory USB-C port of Harley-Davidson Boom! Box GTS / Skyline OS head unit. Pure data host without power extraction. |
+| **`J2`** | **`FRONT_NODE`** (Dual-Rail Lifeline)<br>A4/B4/A9/B9: `VBUS_PD_30W`<br>A5: `PD_CC1`, B5: `PD_CC2`<br>A8/B8 (SBU1/SBU2): `VCC_5V`<br>A6/B6: `USB_DN3_DP`<br>A7/B7: `USB_DN3_DM`<br>A1/B1/A12/B12: `GND` | USB-C 24P | **Dual-Rail Front Node Lifeline:** Delivers isolated 30W USB-PD power (routed straight to `J3`), native CC1/CC2 PD negotiation, clean 5V system power (for Dongle `J4`, Media `J5`, and Hub LDO `U2`), and USB 2.0 High-Speed data from the Front Node (Header `J4`). |
+| **`J4`** | **`DONGLE`** (Downstream 1)<br>A6/B6: `USB_DN1_DP`<br>A7/B7: `USB_DN1_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J4_CC1`, B5: `NET_J4_CC2` | USB-C 16P | **Wireless CarPlay / AA Adapter:** Managed USB port for Ottocast / CarlinKit dongle with remote cold-boot reset via Front Node. Powered from separate 5V regulator (`TPS54302`). |
+| **`J5`** | **`MEDIA`** (Downstream 2)<br>A6/B6: `USB_DN2_DP`<br>A7/B7: `USB_DN2_DM`<br>A4/B4/A9/B9: `VCC_5V`<br>A5: `NET_J5_CC1`, B5: `NET_J5_CC2` | USB-C 16P | **Media Storage:** Auxiliary USB 2.0 port for music thumbdrives, dashcam export, or software updates (5V power). |
+| **`J3`** | **`PHONE_CHARGE`** (Downstream 4 & 30W PD)<br>A4/B4/A9/B9: `VBUS_PD_30W`<br>A5: `PD_CC1`, B5: `PD_CC2`<br>A6/B6: `NET_PHONE_D` (DP)<br>A7/B7: `NET_PHONE_D` (DM)<br>A1/B1/A12/B12: `GND` | USB-C 24P | **Dedicated 30W Smartphone Fast-Charging Port:** Exclusive USB-PD rail (5V/9V/12V/15V up to 3A) directly from the Front Node SW3526 controller with native CC negotiation. Fully isolated from the dongle power rail (zero brownouts!). Concurrent USB 2.0 data interconnect to the hub. |
 
 ---
 
@@ -797,33 +827,35 @@ Both buttons are hardware-identical and freely assignable via the PWA dashboard 
 ### 7.4 PCBA 05D: Snap-On Sensor Puck (`openmotorbridge_sensor_puck`)
 
 ![PCBA 05D Sensor Puck 3D](../images/pcba/pcba05d_sensor_puck_3d.png)
-*Figure 7.5g: 3D CAD view of the snap-on 4-layer Sensor Puck (PCBA 05D, 34 x 34 mm) with u-blox SAM-M10Q patch antenna, thermal double-L isolation slot for TMP117, and horizontal JST-GH/SH receptacles.*
+*Figure 7.5g: 3D CAD view of the snap-on 4-layer Sensor Puck (PCBA 05D, 34 x 34 mm) with u-blox SAM-M10Q patch antenna, thermal double-L isolation slot for TMP117, and horizontal 8-pin JST-GH receptacle.*
 
 ![PCBA 05D Sensor Puck Top View](../images/pcba/pcba05d_sensor_puck_top.png)
 *Figure 7.5h: Component placement top view of PCBA 05D.*
 
 #### 7.4.1 Technical Board Specifications & Components
 * **Dimensions:** $34.0 \times 34.0\,\text{mm}$ with $2.0\,\text{mm}$ corner chamfers, 4 layers FR-4 High-TG150 ($1.6\,\text{mm}$, ENIG gold finish, Layer 2: 100% continuous RF GND plane for GNSS patch, Layer 3: 3.3V power plane).
-* **Mounting:** Form-fitted inside custom $38.0 \times 38.0 \times 15.0\,\text{mm}$ snap enclosure ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad), $34.8 \times 34.8\,\text{mm}$ internal cavity with $0.35\,\text{mm}$ clearance, perimeter snap lid & retention feet) docking directly in upper basket of Front Node lid or remote-mountable at windshield via 1.5m JST-GH cable.
+* **Mounting:** Form-fitted inside custom $38.0 \times 38.0 \times 15.0\,\text{mm}$ snap enclosure ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad), $34.8 \times 34.8\,\text{mm}$ internal cavity with $0.35\,\text{mm}$ clearance, perimeter snap lid & retention feet) docking directly in upper basket of Front Node lid or remote-mountable at windshield via 1.5m JST-GH cable. The North wall is completely solid (no `J2` cutout), ensuring optimal weather sealing (IP67).
 * **Components:**
   * **`U1` (u-blox SAM-M10Q):** Multi-constellation GNSS module (GPS, GLONASS, Galileo, BeiDou) with integrated $15.5 \times 15.5\,\text{mm}$ ceramic patch antenna.
   * **`U2` (TI TMP117AIDRVR):** NIST-traceable digital temperature sensor ($\pm 0.1^\circ\text{C}$ accuracy) isolated on a thermally decoupled PCB tongue via a $0.8\,\text{mm}$ U-slot directly in the laminar frontal intake for black ice detection unaffected by engine waste heat.
   * **`U3` (TI OPT3001DNPR):** Ambient light sensor with human eye spectral response beneath the upper $\varnothing 4.5\,\text{mm}$ optical casing port (lux measurement for auto day/night mode switching in PWA and instrument clusters).
-  * **`J1` (Primary In):** 6-pin JST-GH SMD receptacle (`SM06B-GHS-TB`, 1.25 mm pitch) facing east (`+X`) to the Front Node wire harness.
-  * **`J2` (Daisy-Chain Expansion Out):** 6-pin JST-SH SMD receptacle (`SM06B-SRSS-TB`, 1.00 mm pitch) facing north (`+Y`) for future cockpit sensors (sealed with flush TPU blanking plug when unused).
-  *(Note on acoustic sensing: The Knowles SPH0645 I2S MEMS microphone remains sheltered from direct airflow on the underside of Universal Front Node [`PCBA 05`](#7-pcba-05-universal-front-node-openmotorbridge_front_node) above the Gore-Tex vent; I2S signals pass through the puck as a generic `EXT_I2S` bus for modular extensions).*
+  * **`U4` (Bosch Sensortec BMP390):** High-precision barometric pressure and altimeter sensor in a 10-pin LGA 2x2mm package (I2C address `0x76`) for vertical ascent/descent rates, altitude profiling, and weather trend prediction.
+  * **`J1` (Primary In / Lifeline):** 8-pin JST-GH SMD receptacle (`SM08B-GHS-TB`, 1.25 mm pitch) facing east (`+X`) to the Front Node wire harness.
+  *(Note on architecture cleanup v10.0: The unused expansion connector `J2` and I2S lines have been retired. In place of `J2`, the Bosch BMP390 altimeter `U4` has been integrated. The 8-pin JST-GH lifeline now provides complete dedicated sensor and GNSS integration: I2C for TMP117, OPT3001 & BMP390, UART TX/RX for high-speed NMEA/UBX telemetry and commands, 1PPS timepulse for microsecond time synchronization, and active-low hardware reset to ESP32-S31 on Front Node. The Knowles SPH0645 I2S MEMS microphone remains sheltered from direct airflow on the underside of `PCBA 05`).*
 
-#### 7.4.2 Pinout of Sensor Puck Primary In (`J1` / 6-Pin JST-GH) & Expansion Out (`J2` / 6-Pin JST-SH)
+#### 7.4.2 Pinout of Sensor Puck Primary In (`J1` / 8-Pin JST-GH)
 
 | Pin | Signal Name | Signal Type | Function on PCBA 05D & Bus Behavior |
 | :---: | :--- | :---: | :--- |
-| **1** | **`VCC_3V3`** | Power (+3.3V) | Regulated system rail (supplies L3 power plane, U1, U2, U3, passed to J2) |
-| **2** | **`GND`** | Ground (0V) | Signal and RF ground (direct connection to L2 solid GND plane, passed to J2) |
-| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C data bus (SAM-M10Q addr `0x42`, OPT3001 addr `0x44`, TMP117 addr `0x48`, to J2) |
-| **4** | **`I2C_SCL`** | Input Open-Drain | I2C clock bus (400 kHz Fast-Mode, passed to J2) |
-| **5** | **`EXT_I2S_DATA`** | Bidi Digital | Generic I2S audio/sensor data stream (passed 1:1 from J1 to J2) |
-| **6** | **`EXT_I2S_WS`** | Clock Digital | Generic I2S Word Select / Frame Clock (passed 1:1 from J1 to J2) |
-| **MP** | **`GND`** | Shield | Mechanical latch tabs soldered to GND plane |
+| **1** | **`VCC_3V3`** | Power (+3.3V) | Regulated system rail (supplies L3 power plane, U1, U2, U3, U4) |
+| **2** | **`GND`** | Ground (0V) | Signal and RF ground (direct connection to L2 solid GND plane) |
+| **3** | **`I2C_SDA`** | Bidi Open-Drain | I2C data bus (SAM-M10Q DDC addr `0x42`, OPT3001 addr `0x44`, TMP117 addr `0x48`, BMP390 addr `0x76`) |
+| **4** | **`I2C_SCL`** | Input Open-Drain | I2C clock bus (400 kHz Fast-Mode from Front Node) |
+| **5** | **`GNSS_TIMEPULSE`** | Digital Out | 1PPS hardware time synchronization pulse from SAM-M10Q (Pin 7) |
+| **6** | **`GNSS_TXD`** | Digital Out | UART serial telemetry stream (NMEA/UBX) from SAM-M10Q (Pin 13) |
+| **7** | **`GNSS_RXD`** | Digital In | UART serial control channel to SAM-M10Q (Pin 14) |
+| **8** | **`GNSS_RESET_N`** | Digital In | Active-low hardware reset to SAM-M10Q (Pin 18, 10k pull-up R3 to 3.3V) |
+| **MP** | **`GND`** | Shield | Mechanical latch tabs soldered to chassis / GND plane |
 
 ---
 
