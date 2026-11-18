@@ -152,19 +152,20 @@ module front_node_upper_lid() {
 
             // 11. Modular Sensor Puck Docking Interface (Snap Slots matching sensor_puck_environmental)
             // Sensor Puck footprint is 38 x 38 mm, centered at X = ch_x_start + 55 mm, Y = ch_y_start + 28 mm
-            // Slot 1 (South catch): Y offset -19.0 mm
-            translate([ch_x_start + 55.0 - 7.5, ch_y_start + 28.0 - 19.0 - 1.5, lid_top_z - 3.2]) {
-                cube([15.0, 2.8, 3.5], center=false);
+            // Rotated 90 deg so Puck cable notch faces North (+Y) matching Front Node Cockpit/Sensor port
+            // Slot 1 (West catch): X offset -19.0 mm
+            translate([ch_x_start + 55.0 - 19.0 - 1.5, ch_y_start + 28.0 - 7.5, lid_top_z - 3.2]) {
+                cube([2.8, 15.0, 3.5], center=false);
                 // Catch barb undercut
-                translate([0, -0.8, 0])
-                    cube([15.0, 1.2, 1.8], center=false);
+                translate([-0.8, 0, 0])
+                    cube([1.2, 15.0, 1.8], center=false);
             }
-            // Slot 2 (North catch): Y offset +19.0 mm
-            translate([ch_x_start + 55.0 - 7.5, ch_y_start + 28.0 + 19.0 - 1.3, lid_top_z - 3.2]) {
-                cube([15.0, 2.8, 3.5], center=false);
+            // Slot 2 (East catch): X offset +19.0 mm
+            translate([ch_x_start + 55.0 + 19.0 - 1.3, ch_y_start + 28.0 - 7.5, lid_top_z - 3.2]) {
+                cube([2.8, 15.0, 3.5], center=false);
                 // Catch barb undercut
-                translate([0, 2.4, 0])
-                    cube([15.0, 1.2, 1.8], center=false);
+                translate([2.4, 0, 0])
+                    cube([1.2, 15.0, 1.8], center=false);
             }
 
             // 12. Status LED Light-Pipe Aperture (Ø 3.0 mm over LED1 at East side)

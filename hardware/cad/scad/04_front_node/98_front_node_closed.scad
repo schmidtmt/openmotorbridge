@@ -36,9 +36,11 @@ module front_node_closed_assembly() {
         rotate([0, 90, 90])
             front_node_usbc_plug();
 
-    // 6. Modular Snap-On Environmental Sensor Puck (docked into top lid)
-    translate([ch_x_start + 55.0 - 19.0, ch_y_start + 28.0 - 19.0, FRONT_NODE_OUTER_H - 1.2])
-        sensor_puck_environmental_assembly();
+    // 6. Modular Snap-On Environmental Sensor Puck (docked into top lid, rotated 90 deg so port faces North)
+    translate([ch_x_start + 55.0, ch_y_start + 28.0, FRONT_NODE_OUTER_H - 1.2])
+        rotate([0, 0, 90])
+            translate([-19.0, -19.0, 0])
+                sensor_puck_environmental_assembly();
 }
 
 front_node_closed_assembly();

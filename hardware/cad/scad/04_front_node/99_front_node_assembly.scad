@@ -90,9 +90,11 @@ module front_node_exploded_assembly() {
         translate([0, 0, EXPLODE_LID_Z])
             front_node_upper_lid();
 
-    // 9. Modular Snap-On Environmental Sensor Puck (u-blox SAM-M10Q, TMP117, OPT3001)
-    translate([ch_x_start + 55.0 - 19.0, ch_y_start + 28.0 - 19.0, EXPLODE_PUCK_Z])
-        sensor_puck_environmental_assembly();
+    // 9. Modular Snap-On Environmental Sensor Puck (u-blox SAM-M10Q, TMP117, OPT3001, rotated 90 deg so port faces North)
+    translate([ch_x_start + 55.0, ch_y_start + 28.0, EXPLODE_PUCK_Z])
+        rotate([0, 0, 90])
+            translate([-19.0, -19.0, 0])
+                sensor_puck_environmental_assembly();
 }
 
 front_node_exploded_assembly();
