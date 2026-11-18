@@ -263,14 +263,18 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
 * **Nativer 4-Draht USB-Backbone zur Zentralbox:** Der Front-Node kommuniziert über den geschirmten **4-Draht Automotive USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit $< 0{,}2\,\text{ms}$ Latenz mit der Zentralbox (Strang 1 des 16-Pin Peripheriebusses). Zero Funk-Jitter, unempfindlich gegen EMV-Einstrahlung von Zündkerzen oder LED-Scheinwerfern.
 * **Drahtgebundener Lenker-PTT (Optokoppler an `J3` / GPIO 0, $< 1{,}8\,\text{ms}$ Latenz):** Nur $30\dots 50\,\text{cm}$ kurzes, geschütztes Kabel am Lenker - kein bruchgefährdetes Signalkabel über den schwenkenden Lenkkopf nach hinten zur Zentralbox!
 * **Digitales I2S-MEMS Ambient-Mikrofon (Sipeed / Zilltek MSM261S4030H0R / Knowles SPH0645):** Berechnet Umgebungs- und Fahrtwindgeräusche (dB-A/RMS) direkt an der Front für automatische Helmlautstärke-Nachführung (AGC) via Xtensa Vektor-DSP. Standard-I2S mit hoher Bauteilverfügbarkeit.
-* **Automotive USB 2.0 Subsystem (Microchip USB2514B 4-Port Hub & Power-Architektur):**
-  * **Upstream Host Port (`J4`):** Führt über das kombinierte Power- und High-Speed-USB-Kabel zum 4-Port Handschuhfach-Hub (`glovebox_power_injection_hub.scad`) und dort an Port 4 zur Harley Boom! Box GTS / Skyline OS für Headset-Emulation und CarPlay.
-  * **Downstream Port 1 (Smartphone-Datenlink):** High-Speed Datenverbindung zum Smartphone am Handschuhfach-Port 1 (oder Lenkerhalterung `J5`) für kabelgebundenes CarPlay / Android Auto.
-  * **Downstream Port 2 (`J6` / CP2AA-Dongle):** Geschalteter $+5{,}0\,\text{V}$ VBUS über `TI TPS2051B` Lastschalter mit softwaregesteuertem **2,5s-Kaltstart**, automatischem **Not-Power-Gating bei Verkleidungshitze** und 0.0 µA Deep-Sleep für den Wireless CarPlay / Android Auto Dongle (3M Dual-Lock im Verkleidungshohlraum).
-  * **Downstream Port 3 (Handschuhfach Media-Port):** Durchgeschliffener USB-Port an Handschuhfach-Port 3 - bleibt zu **$100\,\%$ frei für MP3/FLAC USB-Sticks und offizielle OEM-Software-Updates** (inkl. hardwareseitiger Port-Sense Überwachung).
-  * **Downstream Port 4 (ESP32-S3 Interner OTG-Port):** Dedizierter nativer USB-Port des ESP32-S3 für digitale Headset-Emulation (MFi / USB Audio Class) und CDC-NCM Ethernet Tethering zur OEM-Headunit.
-  * **USB-C Service Port (`J7`):** Nativer Diagnose-, Kalibrier- und Flash-Port direkt am ESP32-S3.
-  * **Strikte Trennung von Navi (`J10`) & Action-Cam (`J8`):** Beide Geräte erhalten **ausschließlich reine Stromversorgungs-Leitungen (Power-Only / BC 1.2 DCP)** von den Schaltreglern und besitzen **keinerlei Datenverbindung zum USB2514B Hub**, wodurch PC-Verbindungs- und Webcam-Blockaden ausgeschlossen sind.
+* **Automotive USB 2.0 Subsystem & Architektur (Daten-Master vs. Power-Master):**
+  * **Rollenverteilung (Daten-Master vs. Power-Master):**
+    * **Daten-Master (USB 2.0 Host):** Im Touring-Betrieb ist **Skyline OS** (die OEM-Headunit im Dash) der alleinige Host am Handschuhfach-Hub (`PCBA 05B`). Skyline OS steuert den Datenbus für CarPlay, Media-Stick und die digitale Headset-Emulation.
+    * **Power-Master:** Der **Universal Front-Node (`PCBA 05`)** stellt die 60W Power-Engine (SW3526 Buck-Boost & TPS54302 Buck) und regelt die Stromversorgung für Cockpit und Handschuhfach-Hub.
+  * **Szenario A: Touring (Skyline OS / GTS & 5-Port Handschuhfach-Hub `PCBA 05B`):**
+    * Der Wireless CarPlay/AA Dongle (`J4`), der Media-Stick (`J5`) und das Smartphone-Ladekabel (`J3`) sitzen zu 100 % im Handschuhfach am Hub `PCBA 05B`.
+    * Der Front-Node ist über Header `J4` (`HUB_EXT`) mit `J2 FRONT_NODE` des Hubs verbunden und meldet sich gegenüber Skyline OS als konformes digitales MFi-Headset / USB Audio Class Device an.
+    * Der fahrzeugseitige Lenker-Port `J5` (`DONGLE`) am Front-Node wird im Touring-Betrieb nicht benötigt und ist mit dem geprägten **TPU-Blindstopfen `DONGLE`** hermetisch (IP68) verschlossen.
+  * **Szenario B: Universal (BMW GS, Road King Special, Low Rider ST, Naked Bikes & Nachrüst-Displays):**
+    * Auf Motorrädern ohne Handschuhfach und ohne Skyline OS (oder bei Montage eines Nachrüst-CarPlay/Android Auto Displays wie Chigee AIO-5 oder Carpuride am Lenker) ist **`J5` (`J_DONGLE`) am Front-Node aktiv**!
+    * Der interne USB-Host des Front-Nodes und der Lastschalter `TI TPS2051B` versorgen und steuern diesen Port autark mit **softwaregesteuertem 2,5s-Kaltstart**, automatischem **Not-Power-Gating bei Überhitzung** und 0.0 µA Deep-Sleep.
+  * **Strikte Trennung von Navi (`J10`) & Action-Cam (`J8`):** Beide Geräte erhalten **ausschließlich reine Stromversorgungs-Leitungen (Power-Only / BC 1.2 DCP)** von den Schaltreglern und besitzen **keinerlei Datenverbindung zum USB-Bus**, wodurch PC-Verbindungs- und Webcam-Blockaden ausgeschlossen sind.
 * **USB-Media Proxy & Source-Aware CAN Gating:**
   * Emuliert gegenüber Skyline OS ein MFi-iPod / USB Audio Class Gerät: Track-Titel, Interpret, Album und Spieldauer erscheinen nativ auf dem 12.3" Harley-Bildschirm, während das Audiosignal per LDAC/aptX direkt im Helm bleibt (kein WHIM-Zwang).
   * **Kollisionsschutz:** Wertet `infotainment_source_active` (CAN `0x388`) und Hub-Port 3 aus, damit Wippen-Befehle nur an das Smartphone geleitet werden, wenn OMB/CarPlay/BT aktiv ist (kein versehentliches Streaming bei MP3-Stick oder Radio!).

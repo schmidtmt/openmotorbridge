@@ -29,15 +29,13 @@ esp_err_t CartridgeMechatronics::init() {
     io_conf.pin_bit_mask = (1ULL << PIN_ACT1_PLUS) |
                            (1ULL << PIN_ACT2_MINUS) |
                            (1ULL << PIN_ACT3_CENTER) |
-                           (1ULL << PIN_ACT4_MESH) |
-                           (1ULL << PIN_CARTRIDGE_LED);
+                           (1ULL << PIN_ACT4_MESH);
     io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
     io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
     gpio_config(&io_conf);
 
     // Initial safe state: All gates 0V
     set_actuators_raw(0);
-    gpio_set_level(PIN_CARTRIDGE_LED, 0);
 
     return ESP_OK;
 }
@@ -47,7 +45,6 @@ void CartridgeMechatronics::set_actuators_raw(uint8_t mask) {
     gpio_set_level(PIN_ACT2_MINUS,  (mask & ACT_MASK_MINUS)  ? 1 : 0);
     gpio_set_level(PIN_ACT3_CENTER, (mask & ACT_MASK_CENTER) ? 1 : 0);
     gpio_set_level(PIN_ACT4_MESH,   (mask & ACT_MASK_MESH)   ? 1 : 0);
-    gpio_set_level(PIN_CARTRIDGE_LED, mask != 0 ? 1 : 0);
     m_active_mask = mask;
 }
 

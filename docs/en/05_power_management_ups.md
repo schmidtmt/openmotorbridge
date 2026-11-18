@@ -63,8 +63,17 @@ For firmware development, configuration, and desk diagnostics of the Central Box
 
 * **Clear Separation of the Two Operating Modes:**
   * **1. On-Bike & 12V Testbench Full Operation (`J1` DTM06-6S on 12V Power):** When 12V vehicle net voltage is present at `J1`, the 100V synchronous step-down regulator **`U1` (`LM5164-Q1`)** efficiently converts vehicle voltage into `VCC_5V` and via the ultra-low-IQ LDO **`U11` (`TPS7A0533`)** into `VCC_3V3`. Simultaneously, the **`TPS4H160-Q1` Quad Automotive High-Side Smart Switch (`U12`)** switches monitored 12V power to the four peripheral branches on `J6` (`VBUS_FRONT`, `VBUS_POD1`, `VBUS_POD2`, `VBUS_RADAR`). In this mode, all satellites (`PCBA 05` Front Node, `PCBA 03` Pod 1/2, `PCBA 08` Rear Radar) are energized and can be flashed and operated over the 4-wire USB backbone via **Central Bus-DFU**.
-  * **2. Workbench & Desk Diagnostics via 5V USB-C (`J3`):** When connected to a PC or standard USB charger, the **`LM66100` Ideal Diode (`D3`)** directly feeds the internal `VCC_5V` rail and via `U11` the 3.3V logic of the **Central Box (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-port hub, Audio DSP, LoRa, and IMU). This allows the Central Box alone to be flashed, calibrated, and monitored without requiring a 12V power supply.
-  * **Hardware Clarification on Satellite Powering During Workbench Mode (P01):** On `PCBA 01`, the USB-C service input `J3` exclusively powers the Central Box's internal 5V rail (`VCC_5V`). The four satellite branches on `J6` are hardware-wired directly to `KL30_IN` (12V) through `U12`; there is intentionally no unprotected 5V cross-tie onto the 12V vehicle bus line to prevent overloading the host PC or causing reverse feed. To power or flash connected satellite nodes together with the Central Box on the bench, a 12V supply at `J1` is required, OR the respective satellite must be energized individually via its local test port.
+  * **2. Workbench & Workshop Service Operation via 5V USB-C (`J3`):** When connected to a PC or USB charger, the **`LM66100` Ideal Diode (`D3`)** directly feeds the internal `VCC_5V` rail and via `U11` the 3.3V logic of the **Central Box (`PCBA 01`)** (`ESP32-S31`, `USB2517I` 7-port hub, Audio DSP, LoRa, and IMU).
+  * **Bus-Wide Flashing & Workshop Power Budget:** Through the `USB2517I` 7-port hub on the Central Box, all peripheral branches (Branch 1 Front Node, Branch 2 Pod 1, Branch 3 Pod 2, Branch 4 Rear Radar) are linked over the USB bus, allowing the entire motorcycle to be flashed and diagnosed from this single USB-C service port via WebUSB / DFU.
+    * **Power Budget Breakdown (Without external cockpit / glovebox loads):**
+      * Central Box (`PCBA 01`): $\approx 1.6\,\text{W}$ ($320\,\text{mA}$)
+      * Front Node & Sensor Puck (`PCBA 05` + `05D`): $\approx 1.4\,\text{W}$ ($280\,\text{mA}$)
+      * Rear Radar (`PCBA 08` incl. MR20 Standby): $\approx 2.1\,\text{W}$ ($420\,\text{mA}$)
+      * 2x Saddlebag Pods (`PCBA 02` + `03` incl. both OEM communicators in standby audio mode): $\approx 2.2\,\text{W}$ ($440\,\text{mA}$)
+      * Harness and switching losses: $\approx 0.3\,\text{W}$
+      * **Total Workshop Full Operation Power:** **$\approx 7.6\,\text{W}$ ($5.0\,\text{V} / 1.52\,\text{A}$)**.
+      * *(Pure MCU flash/programming mode with radar RF idle and intercoms inactive: only $\approx 4.5\,\text{W}$ or $0.9\,\text{A}$, fully compliant with standard legacy USB 3.0).*
+    * **Conclusion:** On any modern standard USB-C port ($5\,\text{V} / 3.0\,\text{A} = 15\,\text{W}$), the fully populated system uses only $\approx 51\,\%$ of the available power. Neither radar nor intercoms must be forcibly shut down in workshop mode. In firmware, internal LiPo charging via `BQ24075` is throttled to $500\,\text{mA}$ and external 30W smartphone fast-charging is disabled during bench mode.
   * **Zero Back-Feed Isolation:** The **`LM66100` Ideal Diode (`D3`)** strictly blocks reverse current from `VCC_5V` back to `J3`. When 12V vehicle power is active while a diagnostic laptop is plugged into `J3`, `D3` reliably prevents any back-feed into the programming PC.
 
 ---
@@ -126,7 +135,7 @@ The Universal Front Node features intelligent power management for external wire
                                                           v
 +----------------------------+              +----------------------------+
 | Ottocast CarPlay Dongle    |  5V VBUS     | TI TPS2051B Load Switch    |
-| * Port 2 (USB-A, Switched) |<-------------+ * 1.05A Fast Short Clamp   |
+| * Port J5 (Gated DONGLE)   |<-------------+ * 1.05A Fast Short Clamp   |
 | * 1-Click Hard Restart     | (max. 1.05A) | * 1.2 ms Soft-Start Ramp   |
 +----------------------------+              +----------------------------+
 ```

@@ -1395,7 +1395,7 @@
         "de": "PCBA 07: Smart-Keyfob",
         "en": "PCBA 07: Smart Keyfob"
       },
-      "spec": "38.0x19.0 mm 4-Layer, Nordic nRF52840, SX1262 LoRa, DRV2605L LRA, BQ51003 Qi, JST-ACH",
+      "spec": "38.0x19.0 mm 4-Layer, Nordic nRF52832, SX1262 LoRa, DRV2605L LRA, BQ51003 Qi, JST-SH",
       "source": "JLCPCB / SMT",
       "unit": "Stk.",
       "cost_eur": [
@@ -1478,7 +1478,7 @@
         "de": "1S LiPo Pouch-Akku 180-200 mAh (Keyfob)",
         "en": "1S LiPo Pouch Battery 180-200 mAh (Keyfob)"
       },
-      "spec": "3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin",
+      "spec": "3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-SH 2-Pin",
       "source": "EEMB / Web",
       "unit": "Stk.",
       "cost_eur": [
@@ -1486,8 +1486,8 @@
         3.24
       ],
       "desc": {
-        "de": "Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-ACH 2P Stecker)",
-        "en": "Flat LiPo pouch for Smart Keyfob (100% solderless with JST-ACH 2P plug)"
+        "de": "Flacher LiPo-Pouch für Smart-Keyfob (100 % lötfrei mit JST-SH 2P Stecker)",
+        "en": "Flat LiPo pouch for Smart Keyfob (100% solderless with JST-SH 2P plug)"
       },
       "pkg_qty": 1,
       "pkg_name": "1S LiPo Pouch (EEMB)"
@@ -1618,7 +1618,7 @@
         "de": "Qi Induktions-Empfängerspule Ø 24 mm",
         "en": "Qi Inductive Receiver Coil Ø 24 mm"
       },
-      "spec": "Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin",
+      "spec": "Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-SH 2-Pin",
       "source": "Sunlord / Web",
       "unit": "Stk.",
       "cost_eur": [

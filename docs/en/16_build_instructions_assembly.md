@@ -306,7 +306,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 2. Locate the OEM rubber grommet on the underside of the compartment floor for accessory wiring.
 3. Pass the link cable from the Front Node (combined power supply & High-Speed USB 2.0 data cable for Harley headset emulation) from *below* through the grommet into the compartment.
 4. Place the form-fit 5-Port USB-C Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $55 \times 25 \times 15\,\text{mm}$, outer envelope $55 \times 25 \times 17\,\text{mm}$ for `PCBA 05B` $50 \times 20\,\text{mm}$ with **5x USB-C receptacles `J1..J5`**) into the compartment:
-   * **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Downstream feed from Front Node (`PCBA 05` `J7`).
+   * **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Feed line from Front Node (`PCBA 05`, Header `J4` to USB-C) for headset emulation and power.
    * **`J1` (`HOST`, North Edge, X = 27.18 mm):** Connects data lines directly to the factory USB-C input of the infotainment system (Boom! Box GTS / Skyline OS) with digital MFi headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
    * **`J3` (`PHONE`, South Edge, X = 7.82 mm):** 15W/30W USB-PD fast charging of rider smartphone while navigating (stays 100% inside pocket).
    * **`J4` (`DONGLE`, South Edge, X = 19.82 mm):** 10W switched VBUS (`TPS2051B`) for wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit) with remote cold-restart from WebUI.

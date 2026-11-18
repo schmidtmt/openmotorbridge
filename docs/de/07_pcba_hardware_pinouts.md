@@ -41,9 +41,9 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (Schnappkorb für Front-Node)  | (Schnapprast) | (ENIG)  | TMP117, OPT3001,     |
 |       | I2C/I2S Umwelt & Daisy-Chain  | 100% SMT      |         | JST-GH In, JST-SH Out|
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Lagen | Nordic nRF52840 SoC, |
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Lagen | Nordic nRF52832 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
-|       | Öffnet Pod-Slide-in Deckel    |               |         | BQ51003 Qi, JST-ACH  |
+|       | Öffnet Pod-Slide-in Deckel    |               |         | BQ51003 Qi, JST-SH   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C3/C5 Sub-MCU, |
 |       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M3)   | (ENIG)  | Wheeltec MR20 (AoP), |
@@ -374,9 +374,9 @@ Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Geh�
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| ESP32-S31-WROOM-1U (41-PIN MODUL) PINOUT & GPIO-ZUORDNUNG AUF PCBA 01                                         |
+| ESP32-S31-WROOM-1U (64-PAD MODUL) PINOUT & GPIO-ZUORDNUNG AUF PCBA 01                                         |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
-| Pin | Signalname     | ESP32 GPIO           | Peripherie / IC    | Funktion & Beschreibung                    |
+| Pad | Signalname     | ESP32 GPIO / Typ     | Peripherie / IC    | Funktion & Beschreibung                    |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 |  1  | GND_PWR        | GND                  | Systemmasse        | Power Ground                               |
 |  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Betriebsspannung ESP32-S31                 |
@@ -390,8 +390,8 @@ Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Geh�
 | 10  | BT_UART_RX     | GPIO 2               | QCC3084 (Pin 10)   | Bluetooth AT Steuerbefehle RX              |
 | 11  | BT_UART_TX     | GPIO 3               | QCC3084 (Pin 9)    | Bluetooth Telemetrie / Status TX           |
 | 12  | I2S_MCLK       | GPIO 0               | QCC3084 & ES8388   | I2S Audio Master Clock (12.288 MHz)        |
-| 13  | ESP_USB_DM     | GPIO 19 (USB D-)     | USB2517I (Pin 16)  | Nativer USB CDC / WebUSB D-                |
-| 14  | ESP_USB_DP     | GPIO 20 (USB D+)     | USB2517I (Pin 17)  | Nativer USB CDC / WebUSB D+                |
+| 13  | NC_GPIO33      | GPIO 33 (USB-JTAG D-)| Nicht belegt (NC)  | S31 USB-Serial/JTAG D- (reserviert)        |
+| 14  | NC_GPIO34      | GPIO 34 (USB-JTAG D+)| Nicht belegt (NC)  | S31 USB-Serial/JTAG D+ (reserviert)        |
 | 15  | I2S_DOUT       | GPIO 17 (I2S DOUT)   | QCC3084 & ES8388   | I2S PCM Audio Out (DSP Mix an Headsets)    |
 | 16  | I2S_DIN        | GPIO 18 (I2S DIN)    | QCC3084 & ES8388   | I2S PCM Audio In (Mikrofon-Streams)        |
 | 17  | I2C_SDA        | GPIO 8 (I2C SDA)     | BMI270 & ES8388    | I2C Datenleitung Sensorik & Codec          |
@@ -417,8 +417,14 @@ Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Geh�
 | 37  | SD_DAT0        | GPIO 37 (SDIO D0)    | MicroSD J2 (Pin 7)  | MicroSD 4-Bit Datenleitung 0               |
 | 38  | SD_DAT3        | GPIO 38 (SDIO D3)    | MicroSD J2 (Pin 2)  | MicroSD 4-Bit Datenleitung 3               |
 | 39  | SD_CD          | GPIO 39              | MicroSD J2 (Pin 9)  | Card Detect (MicroSD Karte gesteckt)       |
-| 40  | BLE_RF_2G4     | RF 2.4G (50 Ohm)     | ANT3 (Johanson)    | 2.4 GHz BLE 5.4 Speisung zu SMD-Keramikantenne |
-| 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Zentrales Massepads & Kühlung              |
+| 40  | GND_PWR        | GND (Gehäuse/HF)     | Systemmasse        | Modul-Masse (S31 Datenblatt Pin 40 = GND)  |
+| 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Zentrales Massepads & Modul-Kühlung        |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|42..53| NC / RESERVED  | S31 Inner LGA Array  | Reserviert         | Nicht belegt (Unterseiten-Pads)            |
+| 54  | ESP_USB_DM     | USB HS PHY D-        | USB2517I (Pin 16)  | Nativer 480 Mbps High-Speed USB PHY D-     |
+| 55  | ESP_USB_DP     | USB HS PHY D+        | USB2517I (Pin 17)  | Nativer 480 Mbps High-Speed USB PHY D+     |
+|56..63| NC / RESERVED  | S31 Inner LGA Array  | Reserviert         | Nicht belegt (Pad 63 optional ANT2)        |
+| 64  | GND_PWR        | Inner Corner GND     | GND_PWR Plane      | Unterseitige Abschlussmasse                |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 ```
 
@@ -604,18 +610,18 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
   * Hochgeschwindigkeits-Anbindung an den Host-MCU `ESP32-S31` über einen 4-Bit SDIO 3.0 Bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
   * **Strikte 5/6 GHz Frequenztrennung:** Cockpit-WLAN und Telemetrie laufen exklusiv auf 5/6 GHz. Dadurch keinerlei Interferenz mit dem Qualcomm QCC3084 / S31 Bluetooth / BLE-Mesh der Zentralbox.
 * **USB-Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
-  * Upstream-Port: Verbunden mit `J1` Backbone (4-Draht Automotive-Leitung zur Zentralbox).
+  * Upstream-Port: Verbunden mit `J1` Backbone (4-Draht Automotive-Leitung zur Zentralbox für Bus-weites Flashen, DFU und Telemetrie).
   * Port 1 (`USB_DN1`): Handschuhfach / 30W USB-PD Ladecontroller (SW3526).
-  * Port 2 (`USB_DN2`): JST-GH 4-Pin Buchse (`J_DONGLE`) mit TPS2051B Power-Gating (`CP2AA_PWR_EN`) für kabellose CarPlay/Android-Auto Adapter.
-  * Port 3 (`USB_DN3`): Handschuhfach Media-Erweiterung (`J4`).
-  * Port 4 (`USB_HS`): Dedizierte 480 Mbps Punkt-zu-Punkt Verbindung zum `ESP32-S31` Native USB HS PHY.
-  * Wartungs- & DFU-Architektur: Flashen erfolgt über das zentrale Bus-DFU (`0x50`/`0x51`) über den Backbone `J1`.
+  * Port 2 (`USB_DN2`): JST-GH 4-Pin Buchse (`J_DONGLE` / `J5`) mit TPS2051B Power-Gating (`CP2AA_PWR_EN`) für kabellose CarPlay/Android-Auto Adapter (**Aktiv in Szenario B: Universal / Nachrüst-Display**; in Szenario A bei Bagger-Touring mit formschlüssigem TPU-Blindstopfen hermetisch verschlossen).
+  * Port 3 (`USB_DN3`): Handschuhfach-Erweiterung (`J4` Header zu `PCBA 05B` im Medienfach).
+  * Port 4 (`USB_HS`): Dedizierte 480 Mbps Punkt-zu-Punkt Verbindung zum `ESP32-S31` Native USB HS PHY (für digitale Headset-Emulation gegenüber Skyline OS bzw. CDC-NCM Ethernet-Tethering).
+  * Wartungs- & DFU-Architektur: Flashen erfolgt über das zentrale Bus-DFU (`0x50`/`0x51`) über den Backbone `J1` direkt von der Zentralbox aus.
 * **Automotive-Backbone Anbindung (`J1`, Strang 1):** Geschirmtes 4-Ader-Kabel von der Zentralbox (12V-20V Bordnetz, GND, USB 2.0 D+/D-), verlegt durch den Harley-Kabelkanal unter der Tankkonsole (**ZERO Tank-Demontage!**).
-* **60W USB-PD Power-Engine:**
+* **60W USB-PD Power-Engine (Power-Master):**
   * TPS54302 Synchronous Buck Converter (`U3`): Erzeugt stabile +5V (bis 3A) für Peripherie, Pods und WS2812B.
-  * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Bis 30W USB-PD (PPS, QC4+, AFC, FCP) für Smartphone-Schnellladen am Lenker oder Handschuhfach.
+  * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Bis 30W USB-PD (PPS, QC4+, AFC, FCP) für Smartphone-Schnellladen am Lenker oder Handschuhfach-Hub (`PCBA 05B`).
   * TLV75533P Low-Noise LDO (`U7`): Liefert saubere +3.3V Systemspannung für ESP32-S31, ESP32-E22 und Sensoren.
-  * TPS2051B Load Switch (`U4`): Softwaregesteuertes Power-Gating für den CP2AA Dongle mit Fault-Reporting.
+  * TPS2051B Load Switch (`U4`): Softwaregesteuertes Power-Gating für den CP2AA Dongle an `J5` (Szenario B) mit Fault-Reporting und 0.0 µA Deep-Sleep.
   * TPS1H100 Smart High-Side Switch (`Q2`): Schaltbarer 12V High-Side Ausgang (`J_AUX_LIGHT`) für LED-Zusatzscheinwerfer oder Heizgriff-Steuerung.
 * **Modularer Sensor-Puck ("Körbchen") Schnittstelle (`J_SENSOR_EXT` / 6-Pin JST-GH):**
   * Führt I2C (`SCL`, `SDA`, `3V3`, `GND`) und I2S (`I2S_SD`, `I2S_WS`) zum schnappbaren Sensor-Puck ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
@@ -669,6 +675,66 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 ---
 
+### 7.1.2 ESP32-S31-WROOM-1U (`U1`) Vollständige Pinout-Matrix auf PCBA 05
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| ESP32-S31-WROOM-1U (64-PAD MODUL) PINOUT & GPIO-ZUORDNUNG AUF PCBA 05                                         |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+| Pad | Signalname     | ESP32 GPIO / Typ     | Peripherie / IC    | Funktion & Beschreibung                    |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|  1  | GND            | GND                  | Systemmasse        | Power Ground                               |
+|  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Betriebsspannung ESP32-S31                 |
+|  3  | ESP_EN         | CHIP_PU              | RC-Glied / Reset   | Hardware Enable / Reset                    |
+|  4  | GPIO4          | GPIO 4               | Reserviert / Test  | Freier I/O                                 |
+|  5  | GPIO5          | GPIO 5               | Reserviert / Test  | Freier I/O                                 |
+|  6  | MIC_I2S_WS     | GPIO 6 (I2S WS)      | Knowles SPH0645    | MEMS Mikrofon Word Select / Frame Sync     |
+|  7  | MIC_I2S_BCLK   | GPIO 7 (I2S BCLK)    | Knowles SPH0645    | MEMS Mikrofon Bit Clock                    |
+|  8  | BTN_SIG_L_N    | GPIO 8               | J_POD_L (Pin 3)    | Linker Spiegel-Pod Daumentaster            |
+|  9  | BTN_SIG_R_N    | GPIO 9               | J_POD_R (Pin 3)    | Rechter Spiegel-Pod Daumentaster           |
+| 10  | GPIO10         | GPIO 10              | Reserviert / Test  | Freier I/O                                 |
+| 11  | GPIO11         | GPIO 11              | Reserviert / Test  | Freier I/O                                 |
+| 12  | MIC_I2S_DATA   | GPIO 12 (I2S DIN)    | Knowles SPH0645    | MEMS Mikrofon Datenleitung (Schallpegel)   |
+| 13  | NC_GPIO33      | GPIO 33 (USB-JTAG D-)| Nicht belegt (NC)  | S31 USB-Serial/JTAG D- (reserviert)        |
+| 14  | NC_GPIO34      | GPIO 34 (USB-JTAG D+)| Nicht belegt (NC)  | S31 USB-Serial/JTAG D+ (reserviert)        |
+| 15  | GPIO15         | GPIO 15              | Reserviert / Test  | Freier I/O                                 |
+| 16  | GPIO16         | GPIO 16              | Reserviert / Test  | Freier I/O                                 |
+| 17  | I2C_SDA        | GPIO 17 (I2C SDA)    | J_SENSOR_EXT / I2C | I2C Datenbus Sensorik & Displays           |
+| 18  | I2C_SCL        | GPIO 18 (I2C SCL)    | J_SENSOR_EXT / I2C | I2C Taktbus Sensorik & Displays            |
+| 19  | WS2812B_DIN    | GPIO 19              | RGB Status-LEDs    | WS2812B Datenstrom                         |
+| 20  | BSD_LED_LEFT   | GPIO 20              | Q_BSD_L Gate       | Linke Spiegel BSD Amber-LED Ansteuerung    |
+| 21  | BSD_LED_RIGHT  | GPIO 21              | Q_BSD_R Gate       | Rechte Spiegel BSD Amber-LED Ansteuerung   |
+| 22  | AUX_LIGHT_EN   | GPIO 22              | TPS1H100 Gate      | Geschalteter 12V AUX Ausgang               |
+| 23  | GPIO23         | GPIO 23              | Reserviert / Test  | Freier I/O                                 |
+| 24  | GPIO24         | GPIO 24              | Reserviert / Test  | Freier I/O                                 |
+| 25  | GPIO25         | GPIO 25              | Reserviert / Test  | Freier I/O                                 |
+| 26  | GPIO26         | GPIO 26              | Reserviert / Test  | Freier I/O                                 |
+| 27  | ESP_BOOT       | GPIO 0 (Boot Mode)   | Taster SW1         | Bootloader-Aktivierung bei Reset           |
+| 28  | GPIO28         | GPIO 28              | Reserviert / Test  | Freier I/O                                 |
+| 29  | GPIO29         | GPIO 29              | Reserviert / Test  | Freier I/O                                 |
+| 30  | SDIO_CLK       | GPIO 30 (SDIO CLK)   | ESP32-E22 Radio    | SDIO 3.0 Bus-Takt zum Wi-Fi 6E Radio       |
+| 31  | SDIO_CMD       | GPIO 31 (SDIO CMD)   | ESP32-E22 Radio    | SDIO 3.0 Befehl / Antwort                  |
+| 32  | SDIO_D0        | GPIO 32 (SDIO D0)    | ESP32-E22 Radio    | SDIO 3.0 Datenleitung 0                    |
+| 33  | SDIO_D1        | GPIO 35 (SDIO D1)    | ESP32-E22 Radio    | SDIO 3.0 Datenleitung 1                    |
+| 34  | SDIO_D2        | GPIO 36 (SDIO D2)    | ESP32-E22 Radio    | SDIO 3.0 Datenleitung 2                    |
+| 35  | SDIO_D3        | GPIO 37 (SDIO D3)    | ESP32-E22 Radio    | SDIO 3.0 Datenleitung 3                    |
+| 36  | E22_EN         | GPIO 38              | ESP32-E22 CHIP_PU  | Wi-Fi 6E Companion Chip Enable             |
+| 37  | E22_IRQ        | GPIO 39              | ESP32-E22 IRQ      | Wi-Fi 6E Interrupt Request                 |
+| 38  | CP2AA_FAULT_N  | GPIO 40              | TPS2051B FAULT     | CarPlay Dongle Überstrom-Erkennung         |
+| 39  | CP2AA_PWR_EN   | GPIO 41              | TPS2051B EN        | CarPlay Dongle Power-Gating                |
+| 40  | GND            | GND (Gehäuse/HF)     | Systemmasse        | Modul-Masse (S31 Datenblatt Pin 40 = GND)  |
+| 41  | GND            | Thermal EP (13 Vias) | GND Plane          | Zentrales Massepads & Modul-Kühlung        |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|42..53| NC / RESERVED  | S31 Inner LGA Array  | Reserviert         | Nicht belegt (Unterseiten-Pads)            |
+| 54  | USB_HS_DM      | USB HS PHY D-        | USB2514Bi (Port 4) | Nativer 480 Mbps High-Speed USB PHY D-     |
+| 55  | USB_HS_DP      | USB HS PHY D+        | USB2514Bi (Port 4) | Nativer 480 Mbps High-Speed USB PHY D+     |
+|56..63| NC / RESERVED  | S31 Inner LGA Array  | Reserviert         | Nicht belegt                               |
+| 64  | GND            | Inner Corner GND     | GND Plane          | Unterseitige Abschlussmasse                |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+```
+
+---
+
 ### 7.2 PCBA 05B: Handschuhfach-Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
 
 ![PCBA 05B Handschuhfach-Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
@@ -680,8 +746,11 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 #### 7.2.1 Technische Platinen-Kenndaten & Port-Topologie
 * **Abmessungen:** $50{,}0 \times 20{,}0 \times 1{,}6\,\text{mm}$, 2 Lagen FR-4 High-TG150, ENIG-Goldfinish (2x M2.5 Montagebohrungen im 42 mm Abstand).
 * **Hub-Controller (`U1`):** Microchip `USB2514Bi-AEZG` (QFN-36, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 4-Port High-Speed 480 Mbps USB-Hub.
-* **Dual-Edge USB-C Architektur:**
-  * **Nordkante (Zuleitung / Host):** 2x USB-C Buchsen (`J1 SKYLINE_HOST` zur OEM Head-Unit und `J2 FRONT_NODE` zum Universal Front-Knoten `PCBA 05`).
+* **Master-Rollenverteilung:**
+  * **Daten-Master (USB 2.0 Host):** **Skyline OS** an `J1 SKYLINE_HOST` ist der alleinige Host für alle Daten.
+  * **Power-Master:** Der Universal Front-Knoten (`PCBA 05`) speist den Hub über `J2 FRONT_NODE` mit geregelter Versorgungsleistung aus seiner 60W Power-Engine.
+* **Dual-Edge USB-C Architektur (5x USB-C Buchsen):**
+  * **Nordkante (Zuleitung / Host):** 2x USB-C Buchsen (`J1 SKYLINE_HOST` zur OEM Head-Unit und `J2 FRONT_NODE` zum Universal Front-Knoten `PCBA 05` für Headset-Emulation & Strom).
   * **Südkante (Geräteanschlüsse im Handschuhfach):** 3x USB-C Buchsen (`J4 DONGLE` für Wireless CarPlay/AA, `J5 MEDIA` für USB-Speichersticks, `J3 PHONE_CHARGE` für Smartphone-Schnellladung).
 
 #### 7.2.2 Pinbelegung der 5 USB-C Buchsen auf PCBA 05B
@@ -776,46 +845,54 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 
 ![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
 
-*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine (38,0 x 19,0 mm, 2 Lagen) mit Nordic nRF52840 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und 2-Pin JST-ACH Induktions-Spulenanschluss.*
+*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine (38,0 x 19,0 mm, 4 Lagen) mit Nordic nRF52832 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und JST-SH Induktions-Spulen-, Akku- und SWD-Anschlüssen.*
 
 ### 9.1 Technische Platinen-Kenndaten & Lötfreie Qi-Montage
-* **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (2-Lagen FR-4, ENIG-Goldfinish).
+* **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (4-Lagen FR-4, ENIG-Goldfinish).
 * **Kern-Chips:**
-  * Nordic `nRF52840` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, Hardware-Crypto).  
+  * Nordic `nRF52832-QFxx` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, QFN-48 $6 \times 6\,\text{mm}$, LCSC `C80252`).  
     *(BLE gewährleistet einen extrem sparsamen Ruhestrom von $< 25\,\mu\text{A}$, sodass die 200-mAh-Zelle monatelang betriebsbereit bleibt).*
   * Semtech `SX1262` LoRa Transceiver (868.5 MHz Kanal 3, empfängt Alarme bis zu 4,5 km Reichweite).
   * Texas Instruments `DRV2605L` Haptiktreiber für Vybronics 10x3.6mm LRA Linearmotor.
-  * Texas Instruments `BQ51003` Qi Wireless Power Receiver Controller.
-* **100 % Lötfreie Induktionsspulen- & Akku-Montage (`J_QI` & `J_BAT`):**
-  * Die 24–28 mm Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-ACH SMD-Header (`J_QI`)** vibrationsfest angesteckt.
-  * Der 180–200 mAh LiPo-Pouch-Akku (mit integrierter PCM-Schutzschaltung) wird über einen baugleichen **2-poligen JST-ACH SMD-Header (`J_BAT`)** angesteckt (1,2 mm Raster, nur 1,4 mm Bauhöhe).
+  * Texas Instruments `BQ51003` Qi Wireless Power Receiver Controller & `BQ25100` LiPo-Lademanager.
+* **100 % Lötfreie Induktionsspulen- & Akku-Montage (`J3`, `J1` & `J2`):**
+  * Die 24–28 mm Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-SH SMD-Header (`J3`, `BM02B-SRSS-TB`, 1.00 mm Raster)** vibrationsfest angesteckt.
+  * Der 180–200 mAh LiPo-Pouch-Akku (mit integrierter PCM-Schutzschaltung) wird über einen baugleichen **2-poligen JST-SH SMD-Header (`J1`, `BM02B-SRSS-TB`, 1.00 mm Raster)** angesteckt.
+  * Der 4-polige **JST-SH SMD-Header (`J2`, `BM04B-SRSS-TB`, 1.00 mm Raster)** dient als SWD-Programmierschnittstelle (`VCC_3V3`, `SWDIO`, `SWDCLK`, `GND`).
   * Beim Zusammenbau des Smart-Keyfobs sind somit keinerlei manuelle Lötarbeiten erforderlich (100 % lötfreies IKEA-Montageprinzip).
 
-### 9.2 Vollständige Pinbelegung des Nordic nRF52840 SoC (PCBA 07 `U1`)
+### 9.2 Vollständige Pinbelegung des Nordic nRF52832 SoC (PCBA 07 `U1`)
 
-| SoC-Pad | Signalname | Signal-Typ | Funktion / Hardware-Verbindung |
-| :---: | :--- | :---: | :--- |
-| **A8** | `BLE_ANT_50R` | RF 2.4G | 50 Ohm Leitung zur Johanson 2450AT Keramik-Chipantenne (`ANT1`) |
-| **A12 / A14** | `XTAL1` / `XTAL2` | Analog | 32.000 MHz HF-Präzisionsquarz |
-| **F23 / H23** | `RTC1` / `RTC2` | Analog | 32.768 kHz Uhrenquarz (Sleep-Timer & Real-Time Clock) |
-| **H2 / AC24** | `SWDCLK` / `SWDIO` | Digital In/Out | 4-Pin SWD Programmier-Header `J_SWD` |
-| **B1** | `VCC_3V3` | Power | +3.3V Systemspannung (BQ25100 / LDO) |
-| **B9, B11, EP** | `GND` | Power | System- und HF-Masse |
-| **C1** | `LORA_SCK` | Digital Out | SPI Serial Clock zu Semtech SX1262 (`U2`) |
-| **R1** | `LORA_NSS` | Digital Out | SPI Chip-Select (Active-Low) zu SX1262 (`U2`) |
-| **T2** | `LORA_MOSI` | Digital Out | SPI Master-Out Slave-In zu SX1262 (`U2`) |
-| **U1** | `LORA_MISO` | Digital In | SPI Master-In Slave-Out von SX1262 (`U2`) |
-| **W1** | `LORA_BUSY` | Digital In | Busy-Statusleitung von SX1262 (`U2`) |
-| **D2** | `LORA_DIO1` | Digital In | IRQ-Leitung von SX1262 (Empfang 0xFE Alarmpaket) |
-| **Y2** | `LORA_RESET` | Digital Out | Hardware-Reset zu SX1262 (`U2`) |
-| **F2** | `BUZZER_PWM` | Digital Out | PWM-Ansteuerung (2.7 kHz / 4.0 kHz) für Murata SMD Piezo-Buzzer (`BZ1`) |
-| **G1** | `BTN_ARM_N` | Digital In | Scharfschalt-Taster `SW1` (Arm/Disarm, Active-Low) |
-| **J1** | `BTN_SOS_N` | Digital In | Notfall-Paniktaster `SW2` (SOS/Alarm, Active-Low) |
-| **K2** | `CHG_STAT` | Digital In | Ladezustandsanzeige von TI BQ25100 (Low = Lädt, High = Voll) |
-| **L1** | `LED_DATA` | Digital Out | Datenleitung für WS2812B-2020 RGB Status-LED (`D1`) |
-| **M2** | `DRV_EN` | Digital Out | Hardware-Enable für TI DRV2605L Haptiktreiber (`U3`) |
-| **N1** | `I2C_SDA` | Open-Drain | I2C Datenleitung zu DRV2605L Haptiktreiber (`U3`) |
-| **P2** | `I2C_SCL` | Open-Drain | I2C Taktleitung zu DRV2605L Haptiktreiber (`U3`) |
+| QFN-48 Pin | Signalname | Signal-Typ | Zephyr GPIO | Funktion / Hardware-Verbindung |
+| :---: | :--- | :---: | :---: | :--- |
+| **2** | `RTC1` | Analog | `P0.00` | 32.768 kHz Uhrenquarz XL1 |
+| **3** | `RTC2` | Analog | `P0.01` | 32.768 kHz Uhrenquarz XL2 |
+| **4** | `LORA_SCK` | Digital Out | `P0.02` | SPI Serial Clock zu Semtech SX1262 (`U2`) |
+| **5** | `LORA_MOSI` | Digital Out | `P0.03` | SPI Master-Out Slave-In zu SX1262 (`U2`) |
+| **6** | `LORA_MISO` | Digital In | `P0.04` | SPI Master-In Slave-Out von SX1262 (`U2`) |
+| **7** | `LORA_NSS` | Digital Out | `P0.05` | SPI Chip-Select (Active-Low) zu SX1262 (`U2`) |
+| **8** | `LORA_DIO1` | Digital In | `P0.06` | IRQ-Leitung von SX1262 (Empfang 0xFE Alarmpaket) |
+| **9** | `LORA_BUSY` | Digital In | `P0.07` | Busy-Statusleitung von SX1262 (`U2`) |
+| **10** | `LORA_RESET` | Digital Out | `P0.08` | Hardware-Reset zu SX1262 (`U2`) |
+| **13** | `VCC_3V3` | Power In | - | +3.3V VDD Hauptversorgung |
+| **22** | `CHG_STAT` | Digital In | `P0.19` | Ladezustandsanzeige von TI BQ25100 (Low = Lädt, High = Voll) |
+| **23** | `BTN_ARM_N` | Digital In | `P0.20` | Scharfschalt-Taster `SW1` (Arm/Disarm, Active-Low, 10k Pull-Up) |
+| **25** | `SWDCLK` | Digital In | SWDCLK | SWD Programmiertakt zu `J2` Pin 3 |
+| **26** | `SWDIO` | Bi-Dir | SWDIO | SWD Programmierdaten zu `J2` Pin 2 |
+| **27** | `BTN_SOS_N` | Digital In | `P0.22` | Notfall-Paniktaster `SW2` (SOS/Alarm, Active-Low, 10k Pull-Up) |
+| **28** | `LED_DATA` | Digital Out | `P0.23` | Datenleitung für WS2812B-2020 RGB Status-LED (`D1`) |
+| **29** | `BUZZER_PWM` | Digital Out | `P0.24` | PWM-Ansteuerung (2.7 kHz / 4.0 kHz) für Murata SMD Piezo-Buzzer (`LS1`) |
+| **30** | `BLE_ANT_50R` | RF 2.4G | - | 50 Ohm Leitung zur Johanson 2450AT Keramik-Chipantenne (`ANT1`) |
+| **31** | `GND` | Power | - | System- und HF-Masse VSS |
+| **34** | `XTAL1` | Analog | - | 32.000 MHz HF-Präzisionsquarz XC1 |
+| **35** | `XTAL2` | Analog | - | 32.000 MHz HF-Präzisionsquarz XC2 |
+| **36** | `VCC_3V3` | Power In | - | +3.3V VDD Versorgung |
+| **40** | `DRV_EN` | Digital Out | `P0.28` | Hardware-Enable für TI DRV2605L Haptiktreiber (`U3`) |
+| **41** | `I2C_SDA` | Open-Drain | `P0.29` | I2C Datenleitung zu DRV2605L Haptiktreiber (`U3`) |
+| **42** | `I2C_SCL` | Open-Drain | `P0.30` | I2C Taktleitung zu DRV2605L Haptiktreiber (`U3`) |
+| **45** | `GND` | Power | - | Systemmasse VSS |
+| **48** | `VCC_3V3` | Power In | - | +3.3V VDD Versorgung |
+| **49 (EP)** | `GND` | Power | - | Exposed Thermal & Ground Pad |
 
 ---
 
@@ -888,23 +965,20 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 | :---: | :--- | :--- | :--- |
 | **1** | `GND` | Masse | Systemmasse (Rückleitung) |
 | **2** | `VCC_3V3` | Power In | +3.3V Versorgungsspannung von TI TPS7A0533 (`U2`) |
-| **3** | *NC* | GPIO2 | Unbelegt |
-| **4** | `MR20_TX` | GPIO3 / U0RXD | Radar UART RX (empfängt 20 Hz Zielvektoren von J2 Pin 3) |
-| **5** | `MR20_RX` | GPIO4 / U0TXD | Radar UART TX (sendet Konfigurationspakete an J2 Pin 4) |
-| **6** | *NC* | GPIO5 | Unbelegt |
-| **7** | `ESP_EN` | CHIP_PU | Chip-Enable mit $10\,\text{k}\Omega$ Pull-up `R1` und $100\,\text{nF}$ `C3` |
-| **8** | `WS2812_DATA` | GPIO8 | High-Speed RMT/SPI-Datenstrom zu DIN der ersten Halo-LED `D1` |
-| **9** | `GND` | Masse | Systemmasse |
-| **10** | *NC* | GPIO6 | Unbelegt |
-| **11** | *NC* | GPIO7 | Unbelegt |
-| **12** | *NC* | NC | Unbelegt |
-| **13** | `ESP_IO9_BOOT`| GPIO9 | Boot-Strapping Pin mit $10\,\text{k}\Omega$ Pull-up `R2` und Taster `SW1` |
-| **14** | *NC* | GPIO10 | Unbelegt |
-| **15** | *NC* | GPIO11 | Unbelegt |
-| **16** | `BUS_DM` | GPIO18 / USB_D- | Native USB 2.0 D- zur Zentralbox (`J1` Pin 4) |
-| **17** | `BUS_DP` | GPIO19 / USB_D+ | Native USB 2.0 D+ zur Zentralbox (`J1` Pin 3) |
-| **18** | `GND` | Masse | Systemmasse |
-| **19** | `GND` | Thermal EP | Unterseitiges Thermal Pad / HF-Masse |
+| **3** | `ESP_EN` | CHIP_PU | Chip-Enable mit $10\,\text{k}\Omega$ Pull-up `R1` und $100\,\text{nF}$ `C3` |
+| **4** | `MR20_TX` | GPIO2 / U0RXD | Radar UART RX (empfängt 20 Hz Zielvektoren von J2 Pin 3) |
+| **5** | `MR20_RX` | GPIO3 / U0TXD | Radar UART TX (sendet Konfigurationspakete an J2 Pin 4) |
+| **6** | `WS2812_DATA` | GPIO10 | High-Speed RMT/SPI-Datenstrom zu DIN der ersten Halo-LED `D1` |
+| **7..12** | *NC* | Reserviert | Nicht belegt / frei |
+| **13** | `BUS_DM` | GPIO13 / USB_D- | Native USB 2.0 D- zur Zentralbox (`J1` Pin 4) |
+| **14** | `BUS_DP` | GPIO14 / USB_D+ | Native USB 2.0 D+ zur Zentralbox (`J1` Pin 3) |
+| **15** | `ESP_IO28_BOOT`| GPIO28 / BOOT | Boot-Strapping Pin mit $10\,\text{k}\Omega$ Pull-up `R2` und Taster `SW1` |
+| **16** | `GND` | Masse | Systemmasse |
+| **17..28** | *NC* | Reserviert | Nicht belegt / frei |
+| **29** | `GND` | Thermal EP | Unterseitiges Thermal Pad / HF-Masse |
+| **30** | `GND` | Masse | Randabschluss-Masse |
+| **31** | *NC* | Reserviert | Nicht belegt |
+| **32** | `GND` | Masse | Randabschluss-Masse |
 
 ---
 

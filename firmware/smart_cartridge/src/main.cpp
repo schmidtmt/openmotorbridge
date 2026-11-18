@@ -6,6 +6,8 @@
 #include "esp_system.h"
 #include "esp_mac.h"
 #include "driver/gpio.h"
+#include "nvs_flash.h"
+#include "nvs.h"
 
 #include "cartridge_config.h"
 #include "cartridge_mechatronics.h"
@@ -49,9 +51,19 @@ static UsbNodeType detect_bay_and_mode() {
         ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is LOW  -> U4 TS5A3159 in ANALOG ES8388 Mode (OEM Intercom 0x0101)");
     }
 
-    // 2. Bay Assignment: Symmetrical hardware default is Pod 1 (Left, 0x03), configurable via NVS / USB
-    ESP_LOGI(TAG, "Pod Bay Assignment: Configured as POD BAY 1 (Links, 0x03).");
-    return USB_NODE_POD_BAY1;
+    // 2. Bay Assignment: Read from NVS (defaulting to Pod Bay 1 Left, 0x03)
+    uint8_t bay_id = 1;
+    nvs_handle_t nvs_h;
+    if (nvs_open("pod_cfg", NVS_READONLY, &nvs_h) == ESP_OK) {
+        if (nvs_get_u8(nvs_h, "bay_id", &bay_id) == ESP_OK) {
+            ESP_LOGI(TAG, "Loaded configured bay_id from NVS: %d", bay_id);
+        }
+        nvs_close(nvs_h);
+    }
+    UsbNodeType node = (bay_id == 2) ? USB_NODE_POD_BAY2 : USB_NODE_POD_BAY1;
+    ESP_LOGI(TAG, "Pod Bay Assignment: Configured as POD BAY %d (%s, 0x%02X).",
+             bay_id, (node == USB_NODE_POD_BAY2) ? "Rechts" : "Links", (uint8_t)node);
+    return node;
 }
 
 // -----------------------------------------------------------------------------
@@ -223,6 +235,13 @@ extern "C" void app_main(void) {
     ESP_LOGI(TAG, "   Target: ESP32-C6-MINI-1U + SW3516 30W PD + ES8388 + U4   ");
     ESP_LOGI(TAG, "   4-Wire USB 2.0 Automotive Backbone & Central Bus-DFU     ");
     ESP_LOGI(TAG, "============================================================");
+
+    // Initialize NVS for persistent bay assignment and calibration
+    esp_err_t nvs_ret = nvs_flash_init();
+    if (nvs_ret == ESP_ERR_NVS_NO_FREE_PAGES || nvs_ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        nvs_flash_erase();
+        nvs_flash_init();
+    }
 
     // 1. Detect Bay (Pod 1 Left or Pod 2 Right) & OMM_DETECT Mode (U4 TS5A3159)
     s_local_bay_node = detect_bay_and_mode();

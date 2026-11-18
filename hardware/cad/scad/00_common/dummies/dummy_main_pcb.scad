@@ -13,9 +13,9 @@
 // - X: 0.0 to 85.0 mm (West to East)
 // - Y: 0.0 to 55.0 mm (South [Front Wall / Connectors] to North [Rear Wall / Antennas])
 //   * Y = 0..10 mm (SOUTH): J1 (Bordnetz 6P), SW1 (Button), J6 (Periphery 16P), J3 (USB-C), D1 (Status LED)
-//   * Y = 40..55 mm (NORTH): ANT1 (LoRa U.FL), ANT2 (Helmaudio U.FL), U2 (ESP32-S31), J2 (MicroSD Slot), U10 (SX1262)
+//   * Y = 40..55 mm (NORTH): ANT1 (LoRa U.FL), ANT2 (Helmaudio U.FL), U2 (ESP32-S31), U10 (SX1262)
 //   * X = 0..5 mm (WEST): ANT3 (Johanson Ceramic Chip Antenna for BLE at X=2.58, Y=38.60)
-//   * X = 80..85 mm (EAST): J5 (Battery 4P at Y = 35.0), J7 (Reserve USB 4P at Y = 25.0)
+//   * X = 75..85 mm (EAST): J5 (Battery 4P at Y = 35.0), J7 (Reserve USB 4P at Y = 25.0), J2 (MicroSD Slot on B.Cu at Y = 16.60)
 // =============================================================================
 
 include <../parameters.scad>;
@@ -177,11 +177,11 @@ module dummy_main_pcb() {
         translate([28.03 - 1.5, 18.85 - 1.5, -0.9]) cube(size=[3.0, 3.0, 0.9], center=false); // U5 BMI270
     }
 
-    // 19. Hirose DM3D-SF MicroSD Push-Pull Card Slot (J2 on B.Cu at North / rear edge)
-    // KiCad: X = 37.28, Y_cad = 48.10 mm
+    // 19. Hirose DM3D-SF MicroSD Push-Pull Card Slot (J2 on B.Cu relocated to East edge)
+    // KiCad: X = 193.50, Y = 110.25, Rot = 90 deg -> SCAD: X_cad = 78.28, Y_cad = 16.60 mm
     color("lightgrey")
-        translate([37.28 - 7.0, 48.10 - 7.0, -1.8])
-            cube(size=[14.0, 14.5, 1.8], center=false);
+        translate([78.28 - 7.25, 16.60 - 7.0, -1.8])
+            cube(size=[14.5, 14.0, 1.8], center=false);
 }
 
 // Standalone preview

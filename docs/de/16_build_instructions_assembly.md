@@ -307,7 +307,7 @@ Alle Einzelteile, Platinen-Bestelldaten und COTS-Zukauflisten sind detailliert i
 2. An der Unterseite des Handschuhfachs befindet sich die originale Harley-Gummitülle für Zubehörverkabelung.
 3. Das Verbindungskabel vom Front-Knoten (kombinierte Stromversorgung & High-Speed USB 2.0 Datenleitung für Harley Headset-Emulation) von *unten* durch die Tülle nach oben in das Fach führen.
 4. Den formschlüssigen 5-Port USB-C Media- & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $55 \times 25 \times 15\,\text{mm}$, Bauhülle $55 \times 25 \times 17\,\text{mm}$ für `PCBA 05B` $50 \times 20\,\text{mm}$ mit **5x USB-C Buchsen `J1..J5`**) im Fach platzieren:
-   * **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Downstream-Zuleitung vom Front-Knoten (`PCBA 05` `J7`).
+   * **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Zuleitung vom Front-Knoten (`PCBA 05`, Header `J4` zu USB-C) für Headset-Emulation und Versorgungsleistung.
    * **`J1` (`HOST`, Nordkante, X = 27,18 mm):** Uplink zum OEM-Medienanschluss der Harley Head Unit (Skyline OS / Boom! Box GTS) inkl. digitaler Harley Headset-Emulation für Apple CarPlay.
    * **`J3` (`PHONE`, Südkante, X = 7,82 mm):** 15W/30W USB-PD Schnellladeport für das Fahrer-Smartphone im Fach.
    * **`J4` (`DONGLE`, Südkante, X = 19,82 mm):** 10W geschalteter VBUS (`TPS2051B`) für Wireless CarPlay / Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.

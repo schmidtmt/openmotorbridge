@@ -78,7 +78,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **U1** | ESP32-S31-WROOM-1U | Espressif Systems | SMD Module (18x25.5mm) | `C983085` | Dual-Core 320 MHz RISC-V SoC with native 480 Mbps High-Speed USB 2.0 PHY, AI-SIMD, U.FL (2.4 GHz internal radio disabled via firmware) |
+| **U1** | ESP32-S31-WROOM-1U | Espressif Systems | SMD Module (18x19.2mm) | `C983085` | Dual-Core 320 MHz RISC-V SoC with native 480 Mbps High-Speed USB 2.0 PHY, AI-SIMD, U.FL (2.4 GHz internal radio disabled via firmware) |
 | **U9** | ESP32-E22-WROOM-2X2 | Espressif Systems | SMD Module (Top) | `C5356490` | Wi-Fi 6E (2.4/5/6 GHz 2x2 MIMO) & Bluetooth 5.4 Dual-Radio Co-Processor for Wireless CarPlay / Android Auto |
 | **U2** | USB2514Bi-AEZG / USB2514B | Microchip | QFN-36 | `C16251` | Automotive/Industrial USB 2.0 High-Speed 480 Mbps 4-Port Hub Controller |
 | **U3** | TPS54302DDCR | Texas Instruments | SOT-23-6 | `C311974` | Automotive 28V Synchronous Buck (5V / 3.0A) for Hub & Cockpit Peripherals |
@@ -156,18 +156,18 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, NFC & Crypto | `C190767` |
+| **`U1`** | nRF52832-QFxx | QFN-48 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, 512KB Flash, 64KB RAM | `C80252` |
 | **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
 | **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with Integrated Effect Library | `C61633` |
 | **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
 | **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charge Controller with 50 nA Quiescent Current | `C144857` |
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz Resonant Frequency) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Sounder (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`J_SWD`**| 1x04 1.27mm PinHeader | SMD 1.27mm Vert. | SWD programming header (3V3/SWDIO/SWDCLK/GND; populate for prototypes!) | `C2883733` |
+| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD (1.00mm) | SWD programming header (3V3/SWDIO/SWDCLK/GND) | `C160404` |
 | **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Tactile IP67 micro push-buttons (Arm/Disarm, Aux/Light) | `C115358` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | RGB status LED under PMMA lightpipe | `C2843785` |
-| **`J_QI`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.4 mm profile) | `C2843552` |
-| **`J_BAT`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C2843552` |
+| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.0 mm pitch) | `C160402` |
+| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C160402` |
 
 ---
 
@@ -507,14 +507,14 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **OMM Silicone Gasket Cord Ø 0.8 mm** | Silikon-Rundschnur Ø 0.8 mm Shore 40A | O-Ring-Shop / Web | 0.4 m | Ultra-flexible housing seal for OMM UCS enclosure (approx. 22 cm per module, IP67) |
 | **Silicone Sealing Cord Ø 1.5 mm** | Silikon-Rundschnur Ø 1.5 mm Shore 40A | O-Ring-Shop / Amazon | 1.4 m | Continuous sealing cord for Central Box (40 cm) & Front Node (30 cm) groove for IP67 |
 | **1S LiPo Pouch Battery 1000 mAh (OMM)** | 3.7V / 3.70Wh (Typ 603040 / 602840, 40x28x6.0 mm) mit PCM & 2-Pin JST-SH | EEMB / Web | 2 pcs | Internal 1000 mAh battery for universal OMM Tri-Band UCS module (13-18 h standalone helmet runtime, sits cleanly between BAT1 and J_HELMET) |
-| **1S LiPo Pouch Battery 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-ACH 2-Pin | EEMB / Web | 1 pcs | Flat LiPo pouch for Smart Keyfob (100% solderless with JST-ACH 2P plug) |
+| **1S LiPo Pouch Battery 180-200 mAh (Keyfob)** | 3.7V / 0.74Wh (Typ 402030, 25x18x3.8 mm) mit PCM & JST-SH 2-Pin | EEMB / Web | 1 pcs | Flat LiPo pouch for Smart Keyfob (100% solderless with JST-SH 2P plug) |
 | **4-Pin IP67 Pod Bulkhead Feed-Through (J_BUS)** | 4-Pin Automotive Magnetkupplung (VCC_BUS, GND, USB_D-, USB_D+) mit EPDM-Flanschdichtung | COTS Automotive / Web | 2 pcs | Tool-free 4-pin IP67 bus feed-through for Pod 1 & Pod 2 (30W USB-PD + USB 2.0 data) |
 | **5V DC Miniature Solenoid (JF-0530B Cold-Start)** | JF-0530B / Ø 6.5 x 12 mm, Hub 2.0 mm, mit TPU-Dämpfungsspitze | Solenoid / Web | 4 pcs | Mechatronic cold-start pushers on universal slide rail to wake Sena/Cardo units (2x per pod) |
 | **5V Bi-Directional RF Booster / LNA** | 25 x 15 mm, +12 dB RX-LNA, NF < 2.5 dB, 5V DC via J_AUDIO_PWR | COTS Standard / Web | 1 pcs | Fixed-mount booster inside cartridge sled for maximum range in sealed pod |
 | **Helmet Speakers & ECM Mic Kit** | 40 mm 32 Ohm Hi-Fi Stereo-Lautsprecher + ECM Schwanenhalsmikrofon | COTS Audio / Web | 1 Set | Plug-and-play audio peripherals for OMM UCS headset inside helmet |
 | **Polycarbonate Radome Window** | Laserzuschnitt Polycarbonat 1.6 mm (RF-transparent) | COTS / Plexiglas | 1 pcs | Microwave & optical window for MR20 radar & 24-LED Halo |
 | **Buffer Battery (LiPo UPS 2,200 mAh)** | 1S 3.7V 2.200 mAh Flat-Pack (Typ 504068) Molex Micro-Fit | EEMB / Enerpower | 1 pcs | Seamless UPS reserve in Central Box during engine cranking & ignition off |
-| **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-ACH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |
+| **Qi Inductive Receiver Coil Ø 24 mm** | Ø 24 x 0.3 mm Flachspule mit Ferritfolie (0.3 mm) & JST-SH 2-Pin | Sunlord / Web | 1 pcs | Ultra-thin Qi receiver coil for Smart Keyfob (100% solderless plug connection) |
 | **Wheeltec MR20 77-GHz mmWave Radar** | 77-GHz FMCW Automotive Radar (150 m Reichweite) | Wheeltec / DE-Distributor | 1 pcs | Automotive mmWave radar for blind spot detection & forward/rear collision alert |
 | **OMM 2.4 GHz Stubby Antenna** | 2.4 GHz Rubber-Duck (38 mm, SMA-Male, +2.5 dBi omni) | COTS Standard | 2 pcs | Compact 38 mm 2.4 GHz stubby antenna (SMA-Male) for SMA_24G on OMM Tri-Band UCS module (buffet-free on helmet and in pod) |
 | **OMM 446 MHz Stubby Antenna** | 446 MHz Helical-Stummelantenne (48 mm, SMA-Male, PMR/DMR) | COTS Standard | 2 pcs | Compact 48 mm 446 MHz helical stubby antenna (SMA-Male) for SMA_446 on OMM Tri-Band UCS module (PMR446 & DMR Tier I) |

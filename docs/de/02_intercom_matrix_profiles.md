@@ -162,13 +162,19 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 +----------------------------------------------------------------------------------------+
 ```
 
-### 2.1 Digitale Direktanbindung & Kassetten- und Stößelfreies Pod-Konzept (v10.0)
+### 2.1 Digitale Direktanbindung, Mechatronik-Kaltstart & Kassettenfreies Monocoque-Konzept (v10.0)
 
-In früheren Generationen wurden Headsets über mechanische Tauchanker-Hubmagnete bedient. In OpenMotorBridge v10.0 wurde dieses mechanische Konzept vollständig durch **digitale Direktanbindung und smartes Power-Cycling** ersetzt:
-* **Null mechanischer Verschleiß:** Keine Hubmagnete, keine Stößelbrücken, keine Auswurffedern.
-* **100 % Erhalt von Garantie & IP67-Schutz:** Das Headset wird fabrikneu und ungeöffnet in die obere Bucht des Monocoque-Pods gebettet. 
-* **OptoMOS PTT-Keying (`CPC1017N`):** Schaltet galvanisch isoliert in $< 10\,\mu	ext{s}$ PTT gegen Masse für Funkgeräte (Midland PMR446) oder Audio-Keying.
-* **Smart USB-PD Power-Cycling:** Automatischer Kaltstart bei Zündung EIN und sicheres Herunterfahren bei Zündung AUS über softwaregesteuertes Power-Gating der internen USB-PD Ladeversorgung.
+In OpenMotorBridge v10.0 wurde das veraltete Kassetten-Einschubsystem (mit Doppelwänden und Auswurffedern) durch das schlanke **Monocoque-Pod-Design mit formschlüssigen Einlegern** ersetzt. Die Steuerung und das Einschalten sind in zwei klar getrennte Betriebsphasen unterteilt:
+
+* **1. Kaltstart bei Zündung EIN (`KL15` Wake-Up):**
+  * Kommerzielle OEM-Intercoms (Cardo Packtalk Edge/Pro, Sena SPIDER X Slim/50S) besitzen im vollständig ausgeschalteten Zustand **kein Bluetooth-Wakeup** (der interne Prozessor schläft stromlos).
+  * Um das Headset beim Start des Motorrads zuverlässig aus dem Null-Watt-Zustand zu wecken, setzt das modulare **Doppel-Traversen-System** ([`012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad)) bei Zündung EIN einen einmaligen, definierten $2{,}0$-Sekunden-Impuls über weiche Shore-A50 Silikon-Stößelfüße auf die Ein-/Ausschalttasten.
+* **2. Laufender Fahrbetrieb (100 % digital & verschleißfrei):**
+  * Sobald das Headset gebootet ist, erfolgen sämtliche Bedienfunktionen (Mesh Ein/Aus, Kanalwechsel, Lautstärke, PTT, Mute) **vollständig digital über BLE GATT bzw. den Audiopfad** über die programmierbaren Under-Perch Lenkertaster.
+  * Während der Fahrt finden **keinerlei mechanische Stößelbewegungen** statt – null Verschleiß im Dauerbetrieb.
+* **100 % Erhalt von Garantie & IP67-Schutz:** Das Headset wird fabrikneu und ungeöffnet in die obere Bucht des Monocoque-Pods gebettet.
+* **OptoMOS PTT-Keying (`CPC1017N`):** Schaltet galvanisch isoliert in $< 10\,\mu\text{s}$ PTT gegen Masse für Funkgeräte (Midland PMR446) oder analoge Intercom-Bridges.
+* **Native OMB-Transceiver (OMM 2.4 GHz UCS):** Beherrschen echtes natives **USB-Power-On** und starten bei anliegender 5V-Speisung vollautomatisch ohne jeden mechatronischen Impuls.
 
 ### 2.2 Symmetrische Dual Under-Perch Tastenbelegung & 5-Gesten-Engine
 

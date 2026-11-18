@@ -1,47 +1,49 @@
 # OpenMotorBridge - PCBA 07 Smart Keyfob & Silent Pager Firmware
 
-Dieses Verzeichnis enthält die Firmware für den **2-in-1 LoRa Smart-Keyfob & Silent Pager** ([PCBA 07](../../docs/de/07_pcba_hardware_pinouts.md#7-pcba-07-2-in-1-lora-smart-keyfob--silent-pager)).
+Dieses Verzeichnis enthält die Firmware für den **2-in-1 LoRa Smart-Keyfob & Silent Pager** ([PCBA 07](../../docs/de/07_pcba_hardware_pinouts.md#9-pcba-07-2-in-1-lora-smart-keyfob-openmotorbridge_smart_keyfob)).
 
 ---
 
 ## 1. Übersicht & Hardware-Architektur
 
-Der Smart-Keyfob kombiniert Nahbereichs-Fernbedienung (BLE 5.4) und Weitbereichs-Alarmierung (SX1262 LoRa 868 MHz bis 4,5 km) in einem ultrakompakten Schlüsselanhänger ($38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$):
+Der Smart-Keyfob kombiniert Nahbereichs-Fernbedienung (BLE 5.4) und Weitbereichs-Alarmierung (SX1262 LoRa 868 MHz bis 4,5 km) in einem ultrakompakten Schlüsselanhänger ($38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$, 4 Lagen FR-4 ENIG):
 
-* **MCU:** Nordic Semiconductor `nRF52840-QIAA` (ARM Cortex-M4F @ 64 MHz, 1 MB Flash, 256 KB RAM).
+* **MCU:** Nordic Semiconductor `nRF52832-QFxx` (ARM Cortex-M4F @ 64 MHz, 512 KB Flash, 64 KB RAM, QFN-48 $6 \times 6\,\text{mm}$).
 * **LoRa:** Semtech `SX1262` (868.5 MHz Kanal 3, empfängt Diebstahl-/Erschütterungsalarme bis zu 4,5 km Reichweite).
 * **Haptik:** Texas Instruments `DRV2605L` Haptiktreiber & Vybronics 10x3.6mm LRA Linearmotor (spürbarer Vibrationsalarm in der Tasche).
 * **Akustik:** Murata SMD Piezo-Buzzer `CPT-9019S` (2,7 kHz Bestätigungs-Chirps, 4,0 kHz Alarmsirene).
 * **Optik:** `WS2812B-2020` Smart RGB-LED (Grün/Cyan = Scharf, Rot Strobe = Alarm, Gelb = Qi-Laden).
-* **Laden:** TI `BQ51003` Qi-Empfänger & TI `BQ25100` LiPo-Lademanager (100 % lötfreier 2-Pin JST-ACH Akku- & Spulenanschluss).
+* **Laden:** TI `BQ51003` Qi-Empfänger & TI `BQ25100` LiPo-Lademanager (100 % lötfreie JST-SH Akku- & Spulenanschlüsse).
 * **Ruhestrom:** $< 25\,\mu\text{A}$ im System ON Standby (Monatelange Laufzeit mit 200 mAh LiPo).
 
 ---
 
-## 2. Vollständige Pinbelegung (Nordic nRF52840 AQFN-73)
+## 2. Vollständige Pinbelegung (Nordic nRF52832 QFN-48)
 
-| Pad | Signalname | Zephyr Pin | Richtung | Funktion / Peripherie |
+| QFN-48 Pin | Signalname | Zephyr Pin | Richtung | Funktion / Peripherie |
 | :---: | :--- | :---: | :---: | :--- |
-| **G1** | `BTN_ARM_N` | `P0.08` | Digital In | Scharfschalt-Taster SW1 (Active-LOW, 10k Pull-Up R1) |
-| **J1** | `BTN_SOS_N` | `P0.07` | Digital In | SOS / Paniktaster SW2 (Active-LOW, 10k Pull-Up R2) |
-| **K2** | `CHG_STAT` | `P0.05` | Digital In | BQ25100 Ladeanzeige (LOW = Qi-Laden aktiv) |
-| **M2** | `DRV_EN` | `P0.03` | Digital Out | Hardware-Enable für TI DRV2605L Haptiktreiber |
-| **N1** | `I2C_SDA` | `P0.02` | Open-Drain | I2C SDA zu DRV2605L (Adresse `0x5A`) |
-| **P2** | `I2C_SCL` | `P0.28` | Open-Drain | I2C SCL zu DRV2605L |
-| **F2** | `BUZZER_PWM` | `P0.06` | Digital Out | PWM-Tonsignal für Piezo-Buzzer LS1 |
-| **L1** | `LED_DATA` | `P0.04` | Digital Out | 800 kHz Datenstrom für WS2812B Smart-LED D1 |
-| **C1** | `LORA_SCK` | `P0.26` | Digital Out | SPI SCK zu Semtech SX1262 LoRa |
-| **R1** | `LORA_NSS` | `P0.29` | Digital Out | SPI Chip-Select (Active-LOW) zu SX1262 |
-| **T2** | `LORA_MOSI` | `P0.30` | Digital Out | SPI MOSI zu SX1262 |
-| **U1** | `LORA_MISO` | `P0.31` | Digital In | SPI MISO von SX1262 |
-| **W1** | `LORA_BUSY` | `P1.09` | Digital In | Busy-Leitung von SX1262 |
-| **D2** | `LORA_DIO1` | `P0.27` | Digital In | IRQ Interrupt von SX1262 (Empfang 0xFE Alarmframe) |
-| **Y2** | `LORA_RESET`| `P0.24` | Digital Out | Hardware-Reset zu SX1262 |
-| **H2** | `SWDCLK` | SWD | Digital In | SWD Programmiertakt (`J_SWD.2`) |
-| **AC24**| `SWDIO` | SWD | Bi-Dir | SWD Programmierdaten (`J_SWD.3`) |
-| **A8** | `BLE_ANT_50R`| RF | RF 50R | 2.4 GHz Antennenleitung zur Johanson 2450AT Chipantenne |
-| **A12/14**| `XTAL1/2` | Analog | Analog | 32.000 MHz HF-Präzisionsquarz |
-| **F23/H23**| `RTC1/2` | Analog | Analog | 32.768 kHz Uhrenquarz |
+| **23** | `BTN_ARM_N` | `P0.20` | Digital In | Scharfschalt-Taster SW1 (Active-LOW, 10k Pull-Up R1) |
+| **27** | `BTN_SOS_N` | `P0.22` | Digital In | SOS / Paniktaster SW2 (Active-LOW, 10k Pull-Up R2) |
+| **22** | `CHG_STAT` | `P0.19` | Digital In | BQ25100 Ladeanzeige (LOW = Qi-Laden aktiv) |
+| **40** | `DRV_EN` | `P0.28` | Digital Out | Hardware-Enable für TI DRV2605L Haptiktreiber |
+| **41** | `I2C_SDA` | `P0.29` | Open-Drain | I2C SDA zu DRV2605L (Adresse `0x5A`) |
+| **42** | `I2C_SCL` | `P0.30` | Open-Drain | I2C SCL zu DRV2605L |
+| **29** | `BUZZER_PWM` | `P0.24` | Digital Out | PWM-Tonsignal für Piezo-Buzzer LS1 |
+| **28** | `LED_DATA` | `P0.23` | Digital Out | 800 kHz Datenstrom für WS2812B Smart-LED D1 |
+| **4** | `LORA_SCK` | `P0.02` | Digital Out | SPI SCK zu Semtech SX1262 LoRa |
+| **7** | `LORA_NSS` | `P0.05` | Digital Out | SPI Chip-Select (Active-LOW) zu SX1262 |
+| **5** | `LORA_MOSI` | `P0.03` | Digital Out | SPI MOSI zu SX1262 |
+| **6** | `LORA_MISO` | `P0.04` | Digital In | SPI MISO von SX1262 |
+| **9** | `LORA_BUSY` | `P0.07` | Digital In | Busy-Leitung von SX1262 |
+| **8** | `LORA_DIO1` | `P0.06` | Digital In | IRQ Interrupt von SX1262 (Empfang 0xFE Alarmframe) |
+| **10** | `LORA_RESET`| `P0.08` | Digital Out | Hardware-Reset zu SX1262 |
+| **25** | `SWDCLK` | SWD | Digital In | SWD Programmiertakt (`J2.3` / `J_SWD.3`) |
+| **26** | `SWDIO` | SWD | Bi-Dir | SWD Programmierdaten (`J2.2` / `J_SWD.2`) |
+| **30** | `BLE_ANT_50R`| RF | RF 50R | 2.4 GHz Antennenleitung zur Johanson 2450AT Chipantenne |
+| **34 / 35**| `XTAL1 / 2` | Analog | Analog | 32.000 MHz HF-Präzisionsquarz (XC1 / XC2) |
+| **2 / 3** | `RTC1 / 2` | Analog | Analog | 32.768 kHz Uhrenquarz (XL1 / XL2) |
+| **13, 36, 48** | `VCC_3V3` | Power | Power In | +3.3V VDD Versorgung von BQ25100 / LDO |
+| **31, 45, 49** | `GND` | Power | Ground | Systemmasse und Exposed Die Pad (EP) |
 
 ---
 
@@ -59,8 +61,8 @@ Die Firmware basiert auf **Zephyr RTOS v3.5+** bzw. dem **Nordic nRF Connect SDK
 ```bash
 cd firmware/smart_keyfob
 
-# Zephyr Build mit nRF52840 Target
-west build -b nrf52840dk_nrf52840 -- -DEXTRA_DTC_OVERLAY_FILE=openmotorbridge_keyfob.overlay
+# Zephyr Build mit nRF52832 Target
+west build -b nrf52dk_nrf52832 -- -DEXTRA_DTC_OVERLAY_FILE=openmotorbridge_keyfob.overlay
 ```
 
 Das erzeugt:
@@ -69,12 +71,12 @@ Das erzeugt:
 
 ---
 
-## 4. Flashen via SWD Header (`J_SWD`)
+## 4. Flashen via SWD Header (`J2` / `J_SWD`)
 
-Der 4-polige SMD-Header `J_SWD` (1,27 mm Raster) auf der Unterseite der PCBA 07 führt:
+Der 4-polige JST-SH SMD-Header `J2` (1,00 mm Raster, `BM04B-SRSS-TB`) führt:
 * Pin 1: `VCC_3V3`
-* Pin 2: `SWDCLK`
-* Pin 3: `SWDIO`
+* Pin 2: `SWDIO`
+* Pin 3: `SWDCLK`
 * Pin 4: `GND`
 
 ### Flashen mit Segger J-Link:

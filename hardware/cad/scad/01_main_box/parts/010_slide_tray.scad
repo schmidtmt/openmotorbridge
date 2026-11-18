@@ -130,10 +130,10 @@ module main_box_slide_tray(
 
             // --- SUBTRACTIONS ---
 
-            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.6 mm for LoRa 868 MHz at North: UNTEN)
-            // Located at Y = 46.0..64.0 mm, X = 10.0..95.2 mm
+            // 8. Taoglas FXP895 Shallow Adhesive Nest (85.2 x 18.2 x 0.8 mm for LoRa 868 MHz at North: UNTEN)
+            // Located at Y = 46.0..64.0 mm, X = 10.0..95.2 mm (depth 1.4 mm ensures 0.8 mm antenna + adhesive clears tray ledge)
             translate([10.0, 46.0, tray_t - 0.4])
-                cube([85.2, 18.0, 1.0], center=false);
+                cube([85.2, 18.0, 1.4], center=false);
 
             // 9. Taoglas FXP73 Shallow Adhesive Nest (47.5 x 7.2 x 0.5 mm for 2.4 GHz at North: ETWAS DARÜBER)
             // Located at Y = 60.5..67.5 mm, X = 28.0..75.5 mm (on elevated ledge)

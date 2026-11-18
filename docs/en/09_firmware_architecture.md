@@ -21,7 +21,7 @@ In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wir
 | * Core 1: 48 kHz SIMD Audio-DSP, Raised-Cosine       | * Core 1: Knowles Wind-DSP,     |
 |   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   OLED UI, 5.9 GHz V2X Co-Proc  |
 +------------------------------------------------------+---------------------------------+
-| 3. SATELLITE PODS (ESP32-C6-MINI-1U, PCBA 03)         | 4. REAR RADAR (ESP32-C6-MINI-1U, PCBA 08)|
+| 3. SATELLITE PODS (ESP32-C6-MINI-1U, PCBA 03)         | 4. REAR RADAR (ESP32-C5-WROOM-1U, PCBA 08)|
 +------------------------------------------------------+---------------------------------+
 | * USB 2.0 Device & SW3516H 30W USB-PD Controller     | * Wheeltec MR20 77-GHz mmWave   |
 | * PCM2912A USB Audio Codec / OMM_DETECT Auto-Sense   | * 20 Hz Tracking Vectors via    |

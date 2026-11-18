@@ -41,9 +41,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Snap-On Basket for FrontNode)| (Snap-Fit)    | (ENIG)  | TMP117, OPT3001,     |
 |       | I2C/I2S Env & Daisy-Chain     | 100% SMT      |         | JST-GH In, JST-SH Out|
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 2 Layer | Nordic nRF52840 SoC, |
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Layer | Nordic nRF52832 SoC, |
 |       | (Silent Pager, N52 Key & Qi)  | (Pocket M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
-|       | Opens Pod Slide-in Lid Latch  |               |         | BQ51003 Qi, JST-ACH  |
+|       | Opens Pod Slide-in Lid Latch  |               |         | BQ51003 Qi, JST-SH   |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Layer | ESP32-C3/C5 Sub-MCU, |
 |       | (Wheeltec 77GHz & V2X Patch)  | (Wing M3)     | (ENIG)  | Wheeltec MR20 (AoP), |
@@ -368,9 +368,9 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| ESP32-S31-WROOM-1U (41-PIN MODULE) PINOUT & GPIO ALLOCATION ON PCBA 01                                        |
+| ESP32-S31-WROOM-1U (64-PAD MODULE) PINOUT & GPIO ALLOCATION ON PCBA 01                                        |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
-| Pin | Signal Name    | ESP32 GPIO           | Peripheral / IC    | Function & Description                     |
+| Pad | Signal Name    | ESP32 GPIO / Type    | Peripheral / IC    | Function & Description                     |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 |  1  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
 |  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Operating Voltage ESP32-S31                |
@@ -384,8 +384,8 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 10  | BT_UART_RX     | GPIO 2               | QCC3084 (Pin 10)   | Bluetooth AT Commands RX                   |
 | 11  | BT_UART_TX     | GPIO 3               | QCC3084 (Pin 9)    | Bluetooth Telemetry / Status TX            |
 | 12  | I2S_MCLK       | GPIO 0               | QCC3084 & ES8388   | I2S Audio Master Clock (12.288 MHz)        |
-| 13  | ESP_USB_DM     | GPIO 19 (USB D-)     | USB2517I (Pin 16)  | Native USB CDC / WebUSB D-                 |
-| 14  | ESP_USB_DP     | GPIO 20 (USB D+)     | USB2517I (Pin 17)  | Native USB CDC / WebUSB D+                 |
+| 13  | NC_GPIO33      | GPIO 33 (USB-JTAG D-)| Not Connected (NC) | S31 USB-Serial/JTAG D- (reserved)          |
+| 14  | NC_GPIO34      | GPIO 34 (USB-JTAG D+)| Not Connected (NC) | S31 USB-Serial/JTAG D+ (reserved)          |
 | 15  | I2S_DOUT       | GPIO 17 (I2S DOUT)   | QCC3084 & ES8388   | I2S PCM Audio Out (DSP Mix to Headsets)    |
 | 16  | I2S_DIN        | GPIO 18 (I2S DIN)    | QCC3084 & ES8388   | I2S PCM Audio In (Microphone Streams)      |
 | 17  | I2C_SDA        | GPIO 8 (I2C SDA)     | BMI270 & ES8388    | I2C Data Line Sensor & Codec               |
@@ -399,7 +399,7 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 25  | BAT_NTC        | GPIO 15 (ADC2_CH4)   | Header J5 (Pin 3)   | UPS Battery NTC Temperature Sensing        |
 | 26  | GND_PWR        | GND                  | System Ground      | Power Ground                               |
 | 27  | ESP_BOOT       | GPIO 0 (Boot Mode)   | Pushbutton SW1     | Bootloader Activation on Reset              |
-| 28  | RGB_LED_DATA   | GPIO 48              | Header J4 & D1     | WS2812B RGB Smart-LED Data Line            |
+| 28  | RGB_LED_DATA   | GPIO 48              | D1                 | WS2812B RGB Smart-LED Data Line            |
 | 29  | UART_RXD0      | U0RXD                | Debug Header       | Serial Console RX                           |
 | 30  | I2S_BCLK       | GPIO 16 (I2S BCLK)   | QCC3084 & ES8388   | I2S Bit Clock (3.072 MHz)                  |
 | 31  | BAT_SENSE      | GPIO 10 (ADC1_CH9)   | Divider R12/R13     | Analog UPS Battery Voltage Monitoring       |
@@ -411,8 +411,14 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 37  | SD_DAT0        | GPIO 37 (SDIO D0)    | MicroSD J2 (Pin 7)  | MicroSD 4-Bit Data Line 0                   |
 | 38  | SD_DAT3        | GPIO 38 (SDIO D3)    | MicroSD J2 (Pin 2)  | MicroSD 4-Bit Data Line 3                   |
 | 39  | SD_CD          | GPIO 39              | MicroSD J2 (Pin 9)  | Card Detect (MicroSD Card Inserted)         |
-| 40  | BLE_RF_2G4     | RF 2.4G (50 Ohm)     | ANT3 (Johanson)    | 2.4 GHz BLE 5.4 RF Feed to Ceramic Antenna  |
+| 40  | GND_PWR        | GND (Shield/RF)      | System Ground      | Module Ground (S31 Datasheet Pin 40 = GND)  |
 | 41  | GND_PWR        | Thermal EP (13 Vias) | GND_PWR Plane      | Central Thermal Ground Pad                  |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|42..53| NC / RESERVED  | S31 Inner LGA Array  | Reserved           | Not Connected (Bottom-side pads)           |
+| 54  | ESP_USB_DM     | USB HS PHY D-        | USB2517I (Pin 16)  | Native 480 Mbps High-Speed USB PHY D-      |
+| 55  | ESP_USB_DP     | USB HS PHY D+        | USB2517I (Pin 17)  | Native 480 Mbps High-Speed USB PHY D+      |
+|56..63| NC / RESERVED  | S31 Inner LGA Array  | Reserved           | Not Connected (Pad 63 optional ANT2)       |
+| 64  | GND_PWR        | Inner Corner GND     | GND_PWR Plane      | Bottom Termination Ground                  |
 +-----+----------------+----------------------+--------------------+--------------------------------------------+
 ```
 
@@ -598,18 +604,18 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * High-speed link to host MCU `ESP32-S31` via a 4-bit SDIO 3.0 bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
   * **Strict 5/6 GHz Frequency Isolation:** Cockpit Wi-Fi and telemetry operate exclusively on 5/6 GHz, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3084 / S31 Bluetooth / BLE mesh.
 * **USB Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
-  * Upstream Port: Connected to `J1` Backbone (4-wire automotive harness to Central Box).
+  * Upstream Port: Connected to `J1` Backbone (4-wire automotive harness to Central Box for bus-wide flashing, DFU, and telemetry).
   * Port 1 (`USB_DN1`): Glovebox / 30W USB-PD fast-charge controller (SW3526).
-  * Port 2 (`USB_DN2`): JST-GH 4-pin receptacle (`J_DONGLE`) with TPS2051B power-gating (`CP2AA_PWR_EN`) for wireless CarPlay/Android-Auto dongles.
-  * Port 3 (`USB_DN3`): Glovebox media hub extension (`J4`).
-  * Port 4 (`USB_HS`): Dedicated 480 Mbps point-to-point interconnect to the `ESP32-S31` native USB HS PHY.
-  * Service & DFU Architecture: Flashed centrally via Bus-DFU (`0x50`/`0x51`) over the vehicle backbone `J1`.
+  * Port 2 (`USB_DN2`): JST-GH 4-pin receptacle (`J_DONGLE` / `J5`) with TPS2051B power-gating (`CP2AA_PWR_EN`) for wireless CarPlay/Android-Auto dongles (**Active in Scenario B: Universal / Aftermarket Display**; sealed with form-fitting TPU blind plug in Scenario A Touring).
+  * Port 3 (`USB_DN3`): Glovebox media hub extension (`J4` header to `PCBA 05B` in glovebox).
+  * Port 4 (`USB_HS`): Dedicated 480 Mbps point-to-point interconnect to the `ESP32-S31` native USB HS PHY (for digital headset emulation towards Skyline OS and CDC-NCM Ethernet tethering).
+  * Service & DFU Architecture: Flashed centrally via Bus-DFU (`0x50`/`0x51`) over the vehicle backbone `J1` directly from the Central Box.
 * **Automotive Backbone Connection (`J1`, Branch 1):** Shielded 4-wire cable from Central Box (12V-20V vehicle power, GND, USB 2.0 D+/D-) routed through the Harley backbone wire caddy (**ZERO tank lifting required!**).
-* **60W Power Engine:**
+* **60W Power Engine (Power Master):**
   * TPS54302 Synchronous Buck Converter (`U3`): Regulates clean +5V (up to 3A) for cockpit peripherals, mirror pods, and WS2812B LEDs.
   * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Up to 30W USB-PD (PPS, QC4+, AFC, FCP) for driver smartphone fast charging.
   * TLV75533P Low-Noise LDO (`U7`): Dedicated +3.3V system rail for ESP32-S31, ESP32-E22, and onboard sensors.
-  * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle with overcurrent fault reporting.
+  * TPS2051B Load Switch (`U4`): Software-managed power gating for CP2AA wireless dongle at `J5` (Scenario B) with overcurrent fault reporting and 0.0 µA deep sleep.
   * TPS1H100 Smart High-Side Switch (`Q2`): Switched 12V high-side output (`J_AUX_LIGHT`) for auxiliary light pods or heated grips.
 * **Modular Sensor-Puck ("Basket") Interface (`J_SENSOR_EXT` / 6-Pin JST-GH):**
   * Routes I2C (`SCL`, `SDA`, `3V3`, `GND`) and I2S (`I2S_SD`, `I2S_WS`) to the snap-on sensor cradle ([`sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad)).
@@ -663,6 +669,66 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 ---
 
+### 7.1.2 ESP32-S31-WROOM-1U (`U1`) Complete Pinout Matrix on PCBA 05
+
+```
++---------------------------------------------------------------------------------------------------------------+
+| ESP32-S31-WROOM-1U (64-PAD MODULE) PINOUT & GPIO ALLOCATION ON PCBA 05                                        |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+| Pad | Signal Name    | ESP32 GPIO / Type    | Peripheral / IC    | Function & Description                     |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|  1  | GND            | GND                  | System Ground      | Power Ground                               |
+|  2  | VCC_3V3        | 3V3                  | 3.3V Power Rail    | Operating Voltage ESP32-S31                |
+|  3  | ESP_EN         | CHIP_PU              | RC Network/Reset   | Hardware Enable / Chip Reset               |
+|  4  | GPIO4          | GPIO 4               | Reserved / Test    | Free I/O                                   |
+|  5  | GPIO5          | GPIO 5               | Reserved / Test    | Free I/O                                   |
+|  6  | MIC_I2S_WS     | GPIO 6 (I2S WS)      | Knowles SPH0645    | MEMS Microphone Word Select / Frame Sync   |
+|  7  | MIC_I2S_BCLK   | GPIO 7 (I2S BCLK)    | Knowles SPH0645    | MEMS Microphone Bit Clock                  |
+|  8  | BTN_SIG_L_N    | GPIO 8               | J_POD_L (Pin 3)    | Left Mirror Pod Thumb Button               |
+|  9  | BTN_SIG_R_N    | GPIO 9               | J_POD_R (Pin 3)    | Right Mirror Pod Thumb Button              |
+| 10  | GPIO10         | GPIO 10              | Reserved / Test    | Free I/O                                   |
+| 11  | GPIO11         | GPIO 11              | Reserved / Test    | Free I/O                                   |
+| 12  | MIC_I2S_DATA   | GPIO 12 (I2S DIN)    | Knowles SPH0645    | MEMS Microphone Data (Wind Noise Sensing)  |
+| 13  | NC_GPIO33      | GPIO 33 (USB-JTAG D-)| Not Connected (NC) | S31 USB-Serial/JTAG D- (reserved)          |
+| 14  | NC_GPIO34      | GPIO 34 (USB-JTAG D+)| Not Connected (NC) | S31 USB-Serial/JTAG D+ (reserved)          |
+| 15  | GPIO15         | GPIO 15              | Reserved / Test    | Free I/O                                   |
+| 16  | GPIO16         | GPIO 16              | Reserved / Test    | Free I/O                                   |
+| 17  | I2C_SDA        | GPIO 17 (I2C SDA)    | J_SENSOR_EXT / I2C | I2C Data Bus Sensor Puck & Displays        |
+| 18  | I2C_SCL        | GPIO 18 (I2C SCL)    | J_SENSOR_EXT / I2C | I2C Clock Bus Sensor Puck & Displays       |
+| 19  | WS2812B_DIN    | GPIO 19              | RGB Status LEDs    | WS2812B Data Stream                        |
+| 20  | BSD_LED_LEFT   | GPIO 20              | Q_BSD_L Gate       | Left Mirror BSD Amber LED Drive            |
+| 21  | BSD_LED_RIGHT  | GPIO 21              | Q_BSD_R Gate       | Right Mirror BSD Amber LED Drive           |
+| 22  | AUX_LIGHT_EN   | GPIO 22              | TPS1H100 Gate      | Switched 12V AUX High-Side Output          |
+| 23  | GPIO23         | GPIO 23              | Reserved / Test    | Free I/O                                   |
+| 24  | GPIO24         | GPIO 24              | Reserved / Test    | Free I/O                                   |
+| 25  | GPIO25         | GPIO 25              | Reserved / Test    | Free I/O                                   |
+| 26  | GPIO26         | GPIO 26              | Reserved / Test    | Free I/O                                   |
+| 27  | ESP_BOOT       | GPIO 0 (Boot Mode)   | Pushbutton SW1     | Bootloader Activation on Reset              |
+| 28  | GPIO28         | GPIO 28              | Reserved / Test    | Free I/O                                   |
+| 29  | GPIO29         | GPIO 29              | Reserved / Test    | Free I/O                                   |
+| 30  | SDIO_CLK       | GPIO 30 (SDIO CLK)   | ESP32-E22 Radio    | SDIO 3.0 Bus Clock to Wi-Fi 6E Radio        |
+| 31  | SDIO_CMD       | GPIO 31 (SDIO CMD)   | ESP32-E22 Radio    | SDIO 3.0 Command / Response Line            |
+| 32  | SDIO_D0        | GPIO 32 (SDIO D0)    | ESP32-E22 Radio    | SDIO 3.0 Data Line 0                       |
+| 33  | SDIO_D1        | GPIO 35 (SDIO D1)    | ESP32-E22 Radio    | SDIO 3.0 Data Line 1                       |
+| 34  | SDIO_D2        | GPIO 36 (SDIO D2)    | ESP32-E22 Radio    | SDIO 3.0 Data Line 2                       |
+| 35  | SDIO_D3        | GPIO 37 (SDIO D3)    | ESP32-E22 Radio    | SDIO 3.0 Data Line 3                       |
+| 36  | E22_EN         | GPIO 38              | ESP32-E22 CHIP_PU  | Wi-Fi 6E Companion Chip Enable             |
+| 37  | E22_IRQ        | GPIO 39              | ESP32-E22 IRQ      | Wi-Fi 6E Interrupt Request                 |
+| 38  | CP2AA_FAULT_N  | GPIO 40              | TPS2051B FAULT     | CarPlay Dongle Overcurrent Sense            |
+| 39  | CP2AA_PWR_EN   | GPIO 41              | TPS2051B EN        | CarPlay Dongle Power-Gating                 |
+| 40  | GND            | GND (Shield/RF)      | System Ground      | Module Ground (S31 Datasheet Pin 40 = GND)  |
+| 41  | GND            | Thermal EP (13 Vias) | GND Plane          | Central Thermal Ground Pad                  |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+|42..53| NC / RESERVED  | S31 Inner LGA Array  | Reserved           | Not Connected (Bottom-side pads)           |
+| 54  | USB_HS_DM      | USB HS PHY D-        | USB2514Bi (Port 4) | Native 480 Mbps High-Speed USB PHY D-      |
+| 55  | USB_HS_DP      | USB HS PHY D+        | USB2514Bi (Port 4) | Native 480 Mbps High-Speed USB PHY D+      |
+|56..63| NC / RESERVED  | S31 Inner LGA Array  | Reserved           | Not Connected                              |
+| 64  | GND            | Inner Corner GND     | GND Plane          | Bottom Termination Ground                  |
++-----+----------------+----------------------+--------------------+--------------------------------------------+
+```
+
+---
+
 ### 7.2 PCBA 05B: Glovebox Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
 
 ![PCBA 05B Glovebox Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
@@ -674,8 +740,11 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 #### 7.2.1 Technical Board Specifications & Port Topology
 * **Dimensions:** $50.0 \times 20.0 \times 1.6\,\text{mm}$, 2 Layers FR-4 High-TG150, ENIG gold finish (2x M2.5 mounting holes spaced 42 mm).
 * **Hub Controller (`U1`):** Microchip `USB2514Bi-AEZG` (QFN-36, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 4-port High-Speed 480 Mbps USB Hub.
-* **Dual-Edge USB-C Architecture:**
-  * **North Edge (Uplink / Host):** 2x USB-C receptacles (`J1 SKYLINE_HOST` to OEM head unit and `J2 FRONT_NODE` to Universal Front Node `PCBA 05`).
+* **Master Role Allocation:**
+  * **Data Master (USB 2.0 Host):** **Skyline OS** connected at `J1 SKYLINE_HOST` is the sole Host for all data traffic.
+  * **Power Master:** The Universal Front Node (`PCBA 05`) feeds the hub via `J2 FRONT_NODE` with regulated power from its 60W power engine.
+* **Dual-Edge USB-C Architecture (5x USB-C Receptacles):**
+  * **North Edge (Uplink / Host):** 2x USB-C receptacles (`J1 SKYLINE_HOST` to OEM head unit and `J2 FRONT_NODE` to Universal Front Node `PCBA 05` for headset emulation & power).
   * **South Edge (Glovebox Device Ports):** 3x USB-C receptacles (`J4 DONGLE` for wireless CarPlay/AA, `J5 MEDIA` for USB thumbdrives, `J3 PHONE_CHARGE` for smartphone fast charging).
 
 #### 7.2.2 Pinout of the 5 USB-C Receptacles on PCBA 05B
@@ -772,13 +841,13 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 
 ![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
 
-*Figure 7.7: 3D board render of the ultra-compact PCBA 07 carrier board ($38.0 \times 19.0\,\text{mm}$) hosting the Nordic nRF52840 SoC, Semtech SX1262 LoRa transceiver, TI DRV2605L haptic driver, BQ51003 Qi receiver, and BQ25100 LiPo charger.*
+*Figure 7.7: 3D board render of the ultra-compact PCBA 07 carrier board ($38.0 \times 19.0\,\text{mm}$, 4-layer FR-4 ENIG) hosting the Nordic nRF52832 SoC, Semtech SX1262 LoRa transceiver, TI DRV2605L haptic driver, BQ51003 Qi receiver, and BQ25100 LiPo charger.*
 
 ```
                                 PCBA 07 SYSTEM ARCHITECTURE
 +----------------------------------------------------------------------------------------+
-|                        NORDIC nRF52840 BLUETOOTH LE 5.4 SoC                           |
-| * ARM Cortex-M4F @ 64 MHz, 1 MB Flash, 256 KB RAM * Hardware AES-128 Crypto Engine    |
+|                        NORDIC nRF52832 BLUETOOTH LE 5.4 SoC                           |
+| * ARM Cortex-M4F @ 64 MHz, 512 KB Flash, 64 KB RAM * QFN-48 6x6mm * Crypto Engine     |
 | * Manages BLE rider presence token, pager state, battery telemetry & smartphone bridge |
 +--------------+-------------------------+-------------------------+---------------------+
                | SPI                     | I2C                     | PWM / GPIO
@@ -796,62 +865,75 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | * 180-200 mAh 1S LiPo pouch cell (25 x 18 x 3.8 mm) with PCM protection board          |
 | * TI BQ51003 Qi Wireless Power Receiver: Charges inductively on PCBA 06 Cockpit Dock   |
 | * TI BQ25100 Linear LiPo charger with quiescent current < 50 nA (Months of standby)    |
-| * 2x Gold-plated pogo contact pads on bottom face for optional direct charging         |
+| * 100% solderless JST-SH connections for battery (J1), SWD (J2) and Qi coil (J3)       |
 +----------------------------------------------------------------------------------------+
 ```
 
 ### 9.1 Technical Board Characteristics
-* **Dimensions:** $38.0 \times 19.0 \times 1.0\,\text{mm}$ (Ultra-compact 2-layer FR-4, $35\,\mu\text{m}$ Cu, ENIG gold finish, corner radius $R = 3\,\text{mm}$).
+* **Dimensions:** $38.0 \times 19.0 \times 1.0\,\text{mm}$ (Ultra-compact 4-layer FR-4, $35\,\mu\text{m}$ Cu, ENIG gold finish, corner radius $R = 3\,\text{mm}$).
+* **Core Silicon:**
+  * Nordic `nRF52832-QFxx` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, QFN-48 $6 \times 6\,\text{mm}$, LCSC `C80252`).
+  * Semtech `SX1262` LoRa Transceiver (868.5 MHz Channel 3, receives emergency alerts up to 4.5 km range).
+  * Texas Instruments `DRV2605L` Haptic Driver for Vybronics 10x3.6mm LRA linear actuator.
+  * Texas Instruments `BQ51003` Qi Wireless Power Receiver & `BQ25100` LiPo Charger.
 * **Magnetic Flux Shielding:** Adjacent to the PCB sits the pocket for the $20 \times 10 \times 5\,\text{mm}$ N52 neodymium key. A $0.5\,\text{mm}$ soft-iron / mu-metal shield isolates RF traces, the LRA actuator, and the LiPo cell from magnetic saturation.
 * **LRA Haptic Signatures:** The TI DRV2605L generates distinct, crisp tactile patterns:
   * *Pre-Alarm (Minor Shock):* 2 short clicks ($150\,\text{Hz}$).
   * *Theft / Cartridge Tamper:* Piercing crescendo staccato (readily felt through heavy leather motorcycle jackets or on a nightstand).
-* **100% Solderless Assembly (`J_QI` & `J_BAT`):**
-  * The 24–28 mm Qi inductive receiver coil plugs into an ultra-low-profile **2-pin JST-ACH SMD header (`J_QI`)** (1.2 mm pitch, only 1.4 mm height).
-  * The 180–200 mAh LiPo pouch battery (with integrated PCM) plugs directly into an identical **2-pin JST-ACH SMD header (`J_BAT`)** (1.2 mm pitch, 1.4 mm height).
+* **100% Solderless Assembly (`J3`, `J1` & `J2`):**
+  * The 24–28 mm Qi inductive receiver coil plugs into an ultra-low-profile **2-pin JST-SH SMD header (`J3`, `BM02B-SRSS-TB`, 1.00 mm pitch)**.
+  * The 180–200 mAh LiPo pouch battery (with integrated PCM) plugs directly into an identical **2-pin JST-SH SMD header (`J1`, `BM02B-SRSS-TB`, 1.00 mm pitch)**.
+  * The 4-pin **JST-SH SMD header (`J2`, `BM04B-SRSS-TB`, 1.00 mm pitch)** provides the SWD programming interface (`VCC_3V3`, `SWDIO`, `SWDCLK`, `GND`).
   * No manual soldering is required during keyfob assembly, strictly adhering to the 100% solderless IKEA assembly principle.
 
-### 9.2 Complete Interface & Pin-Mapping of Nordic nRF52840 SoC (PCBA 07 `U1`)
+### 9.2 Complete Interface & Pin-Mapping of Nordic nRF52832 SoC (PCBA 07 `U1`)
 
-| SoC Pad | Signal Name | Signal Type | Function & Peripheral Assignment |
-| :---: | :--- | :--- | :--- |
-| **A8** | `BLE_ANT_50R` | RF 2.4G | 50 Ohm trace to Johanson 2450AT ceramic chip antenna (`ANT1`) |
-| **A12 / A14** | `XTAL1` / `XTAL2` | Analog | 32.000 MHz precision RF crystal |
-| **F23 / H23** | `RTC1` / `RTC2` | Analog | 32.768 kHz watch crystal (deep sleep timer & RTC) |
-| **H2 / AC24** | `SWDCLK` / `SWDIO` | Digital In/Out | 4-Pin SWD programming header `J_SWD` |
-| **B1** | `VCC_3V3` | Power | +3.3V System Power Rail (BQ25100 / LDO) |
-| **B9, B11, EP** | `GND` | Power | System & RF Ground Reference |
-| **C1** | `LORA_SCK` | Digital Out | SPI Serial Clock to Semtech SX1262 (`U2`) |
-| **R1** | `LORA_NSS` | Digital Out | SPI Chip-Select (Active-Low) to SX1262 (`U2`) |
-| **T2** | `LORA_MOSI` | Digital Out | SPI Master-Out Slave-In to SX1262 (`U2`) |
-| **U1** | `LORA_MISO` | Digital In | SPI Master-In Slave-Out from SX1262 (`U2`) |
-| **W1** | `LORA_BUSY` | Digital In | Busy status line from SX1262 (`U2`) |
-| **D2** | `LORA_DIO1` | Digital In | IRQ line from SX1262 (Received 0xFE emergency packet) |
-| **Y2** | `LORA_RESET` | Digital Out | Hardware Reset to SX1262 (`U2`) |
-| **F2** | `BUZZER_PWM` | Digital Out | PWM drive (2.7 kHz / 4.0 kHz) for Murata SMD piezo transducer (`BZ1`) |
-| **G1** | `BTN_ARM_N` | Digital In | Arm/Disarm tactile push-button `SW1` (Active-Low) |
-| **J1** | `BTN_SOS_N` | Digital In | SOS/Emergency panic push-button `SW2` (Active-Low) |
-| **K2** | `CHG_STAT` | Digital In | Charge status indicator from TI BQ25100 (Low = Charging, High = Done) |
-| **L1** | `LED_DATA` | Digital Out | Data signal for onboard WS2812B-2020 RGB status LED (`D1`) |
-| **M2** | `DRV_EN` | Digital Out | Hardware Enable for TI DRV2605L haptic driver (`U3`) |
-| **N1** | `I2C_SDA` | Open-Drain | I2C Data line to TI DRV2605L haptic driver (`U3`) |
-| **P2** | `I2C_SCL` | Open-Drain | I2C Clock line to TI DRV2605L haptic driver (`U3`) |
+| QFN-48 Pin | Signal Name | Signal Type | Zephyr GPIO | Function & Peripheral Assignment |
+| :---: | :--- | :---: | :---: | :--- |
+| **2** | `RTC1` | Analog | `P0.00` | 32.768 kHz watch crystal XL1 |
+| **3** | `RTC2` | Analog | `P0.01` | 32.768 kHz watch crystal XL2 |
+| **4** | `LORA_SCK` | Digital Out | `P0.02` | SPI Serial Clock to Semtech SX1262 (`U2`) |
+| **5** | `LORA_MOSI` | Digital Out | `P0.03` | SPI Master-Out Slave-In to SX1262 (`U2`) |
+| **6** | `LORA_MISO` | Digital In | `P0.04` | SPI Master-In Slave-Out from SX1262 (`U2`) |
+| **7** | `LORA_NSS` | Digital Out | `P0.05` | SPI Chip-Select (Active-Low) to SX1262 (`U2`) |
+| **8** | `LORA_DIO1` | Digital In | `P0.06` | IRQ line from SX1262 (Received 0xFE emergency packet) |
+| **9** | `LORA_BUSY` | Digital In | `P0.07` | Busy status line from SX1262 (`U2`) |
+| **10** | `LORA_RESET` | Digital Out | `P0.08` | Hardware Reset to SX1262 (`U2`) |
+| **13** | `VCC_3V3` | Power In | - | +3.3V VDD Main Supply |
+| **22** | `CHG_STAT` | Digital In | `P0.19` | Charge status indicator from TI BQ25100 (Low = Charging, High = Done) |
+| **23** | `BTN_ARM_N` | Digital In | `P0.20` | Arm/Disarm tactile push-button `SW1` (Active-Low, 10k Pull-Up) |
+| **25** | `SWDCLK` | Digital In | SWDCLK | SWD programming clock to `J2` Pin 3 |
+| **26** | `SWDIO` | Bi-Dir | SWDIO | SWD programming data to `J2` Pin 2 |
+| **27** | `BTN_SOS_N` | Digital In | `P0.22` | SOS/Emergency panic push-button `SW2` (Active-Low, 10k Pull-Up) |
+| **28** | `LED_DATA` | Digital Out | `P0.23` | Data signal for onboard WS2812B-2020 RGB status LED (`D1`) |
+| **29** | `BUZZER_PWM` | Digital Out | `P0.24` | PWM drive (2.7 kHz / 4.0 kHz) for Murata SMD piezo transducer (`BZ1`) |
+| **30** | `BLE_ANT_50R` | RF 2.4G | - | 50 Ohm trace to Johanson 2450AT ceramic chip antenna (`ANT1`) |
+| **31** | `GND` | Power | - | System & RF Ground Reference VSS |
+| **34** | `XTAL1` | Analog | - | 32.000 MHz precision RF crystal XC1 |
+| **35** | `XTAL2` | Analog | - | 32.000 MHz precision RF crystal XC2 |
+| **36** | `VCC_3V3` | Power In | - | +3.3V VDD Supply |
+| **40** | `DRV_EN` | Digital Out | `P0.28` | Hardware Enable for TI DRV2605L haptic driver (`U3`) |
+| **41** | `I2C_SDA` | Open-Drain | `P0.29` | I2C Data line to TI DRV2605L haptic driver (`U3`) |
+| **42** | `I2C_SCL` | Open-Drain | `P0.30` | I2C Clock line to TI DRV2605L haptic driver (`U3`) |
+| **45** | `GND` | Power | - | System Ground VSS |
+| **48** | `VCC_3V3` | Power In | - | +3.3V VDD Supply |
+| **49 (EP)** | `GND` | Power | - | Exposed Thermal & Ground Pad |
 
 ### 9.3 Bill of Materials (BOM) PCBA 07
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52840-QIAA-R | aQFN-73 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, NFC & Crypto | `C190767` |
+| **`U1`** | nRF52832-QFxx | QFN-48 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, 512KB Flash, 64KB RAM | `C80252` |
 | **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
 | **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with embedded effect waveform library | `C61633` |
 | **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
 | **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charger with 50 nA quiescent current | `C144857` |
 | **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz resonance) | Custom / Distrelec |
 | **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`J_SWD`**| 1x04 1.27mm PinHeader | SMD 1.27mm Vert. | SWD programming header (3V3/SWDIO/SWDCLK/GND; populate for prototypes) | `C2883733` |
+| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD (1.00mm) | SWD programming header (3V3/SWDIO/SWDCLK/GND) | `C160404` |
 | **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Tactile IP67 micro push-buttons (Arm/Disarm, SOS/Aux) | `C115358` |
 | **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED under PMMA lightpipe | `C2843785` |
-| **`J_QI`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.4 mm profile) | `C2843552` |
-| **`J_BAT`**| BM02B-ACHSS-GAN-ETF | JST-ACH 2-Pin SMD (1.2mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C2843552` |
+| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.0 mm pitch) | `C160402` |
+| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C160402` |
 
 ---
 
@@ -924,23 +1006,20 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | :---: | :--- | :--- | :--- |
 | **1** | `GND` | Ground | System ground return |
 | **2** | `VCC_3V3` | Power In | +3.3V supply from TI TPS7A0533 (`U2`) |
-| **3** | *NC* | GPIO2 | Unconnected |
-| **4** | `MR20_TX` | GPIO3 / U0RXD | Radar UART RX (receives 20 Hz target vectors from J2 Pin 3) |
-| **5** | `MR20_RX` | GPIO4 / U0TXD | Radar UART TX (transmits config packets to J2 Pin 4) |
-| **6** | *NC* | GPIO5 | Unconnected |
-| **7** | `ESP_EN` | CHIP_PU | Chip enable with $10\,\text{k}\Omega$ pull-up `R1` and $100\,\text{nF}$ `C3` |
-| **8** | `WS2812_DATA` | GPIO8 | High-speed RMT/SPI data stream to DIN of first halo LED `D1` |
-| **9** | `GND` | Ground | System ground |
-| **10** | *NC* | GPIO6 | Unconnected |
-| **11** | *NC* | GPIO7 | Unconnected |
-| **12** | *NC* | NC | Unconnected |
-| **13** | `ESP_IO9_BOOT`| GPIO9 | Boot strapping pin with $10\,\text{k}\Omega$ pull-up `R2` and push-button `SW1` |
-| **14** | *NC* | GPIO10 | Unconnected |
-| **15** | *NC* | GPIO11 | Unconnected |
-| **16** | `BUS_DM` | GPIO18 / USB_D- | Native USB 2.0 D- to Central Box (`J1` Pin 4) |
-| **17** | `BUS_DP` | GPIO19 / USB_D+ | Native USB 2.0 D+ to Central Box (`J1` Pin 3) |
-| **18** | `GND` | Ground | System ground |
-| **19** | `GND` | Thermal EP | Bottom thermal exposed pad / RF ground |
+| **3** | `ESP_EN` | CHIP_PU | Chip enable with $10\,\text{k}\Omega$ pull-up `R1` and $100\,\text{nF}$ `C3` |
+| **4** | `MR20_TX` | GPIO2 / U0RXD | Radar UART RX (receives 20 Hz target vectors from J2 Pin 3) |
+| **5** | `MR20_RX` | GPIO3 / U0TXD | Radar UART TX (transmits config packets to J2 Pin 4) |
+| **6** | `WS2812_DATA` | GPIO10 | High-speed RMT/SPI data stream to DIN of first halo LED `D1` |
+| **7..12** | *NC* | Reserved | Not connected / reserved |
+| **13** | `BUS_DM` | GPIO13 / USB_D- | Native USB 2.0 D- to Central Box (`J1` Pin 4) |
+| **14** | `BUS_DP` | GPIO14 / USB_D+ | Native USB 2.0 D+ to Central Box (`J1` Pin 3) |
+| **15** | `ESP_IO28_BOOT`| GPIO28 / BOOT | Boot strapping pin with $10\,\text{k}\Omega$ pull-up `R2` and push-button `SW1` |
+| **16** | `GND` | Ground | System ground |
+| **17..28** | *NC* | Reserved | Not connected / reserved |
+| **29** | `GND` | Thermal EP | Bottom thermal exposed pad / RF ground |
+| **30** | `GND` | Ground | Perimeter termination ground |
+| **31** | *NC* | Reserved | Not connected |
+| **32** | `GND` | Ground | Perimeter termination ground |
 
 ---
 

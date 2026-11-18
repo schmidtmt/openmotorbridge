@@ -528,8 +528,10 @@ In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks
 2. **Evolution of the Cockpit Satellite into the 5-Port Glovebox Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
    - The former cockpit distributor has evolved into the specialized, compact **5-Port Glovebox USB-C Media & Power-Injection Hub (PCBA 05B)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)), tailored for the right glovebox (Media Compartment) of modern touring baggers (Road Glide, Street Glide, CVO, CVO ST 2024+).
    - **Outer Dimensions:** Compact $55.0 \times 25.0 \times 15.0\,\text{mm}$ enclosure (outer envelope $55.0 \times 25.0 \times 17.0\,\text{mm}$ with mounting flanges, HP MJF PA12 housing the $50.0 \times 20.0\,\text{mm}$ opposing dual-edge USB-C `PCBA 05B` with **5x USB-C sockets `J1..J5`**), secured tool-free via an integrated 3M Dual-Lock channel on the compartment floor.
-   - **Functional Interfaces (`J1..J5`):**
-     - **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Downstream power & High-Speed USB 2.0 feed from Universal Front Node (`PCBA 05` `J7`).
+   - **Functional Interfaces & Master Role Allocation:**
+     - **Data Master:** **Skyline OS** connected to `J1` (`HOST`) is the sole USB 2.0 Host for all data.
+     - **Power Master:** The Front Node (`PCBA 05`) powers the hub via `J2` (`FRONT`) from its 60W power engine.
+     - **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Feed line from Universal Front Node (`PCBA 05`, Header `J4` to USB-C) carrying headset emulation data and power.
      - **`J1` (`HOST`, North Edge, X = 27.18 mm):** Uplink connecting to the OEM Harley USB-C lead to the head unit (Skyline OS / Boom! Box GTS) with digital Harley headset emulation for native Apple CarPlay.
      - **`J3` (`PHONE`, South Edge, X = 7.82 mm):** Thermally managed 15W/30W USB-PD fast charging (prevents battery heat buildup in the closed glovebox).
      - **`J4` (`DONGLE`, South Edge, X = 19.82 mm):** 10W switched VBUS (`TPS2051B`) for wireless CarPlay/Android Auto adapters (Ottocast / CarlinKit) with remote cold-restart from WebUI.

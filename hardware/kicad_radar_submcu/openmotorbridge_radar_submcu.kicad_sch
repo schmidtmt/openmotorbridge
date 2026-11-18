@@ -49,6 +49,9 @@
 			(pin bidirectional line (at 10.16 13.97 180) (length 2.54) (name "IO26" (effects (font (size 1.27 1.27)))) (number "27" (effects (font (size 1.27 1.27)))))
 			(pin power_in line (at 10.16 16.51 180) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "28" (effects (font (size 1.27 1.27)))))
 			(pin power_in line (at 0 -19.05 90) (length 2.54) (name "GND_EP" (effects (font (size 1.27 1.27)))) (number "29" (effects (font (size 1.27 1.27)))))
+			(pin power_in line (at -2.54 -19.05 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "30" (effects (font (size 1.27 1.27)))))
+			(pin no_connect line (at 0 -21.59 90) (length 2.54) (name "NC" (effects (font (size 1.27 1.27)))) (number "31" (effects (font (size 1.27 1.27)))))
+			(pin power_in line (at 2.54 -19.05 90) (length 2.54) (name "GND" (effects (font (size 1.27 1.27)))) (number "32" (effects (font (size 1.27 1.27)))))
 		)
 		(symbol "U2_sym"
 			(in_bom yes) (on_board yes)
@@ -750,6 +753,9 @@
 		(pin "27" (uuid "f5000000-0000-0000-0000-00000000001b"))
 		(pin "28" (uuid "f5000000-0000-0000-0000-00000000001c"))
 		(pin "29" (uuid "f5000000-0000-0000-0000-00000000001d"))
+		(pin "30" (uuid "f5000000-0000-0000-0000-00000000001e"))
+		(pin "31" (uuid "f5000000-0000-0000-0000-00000000001f"))
+		(pin "32" (uuid "f5000000-0000-0000-0000-000000000020"))
 	)
 	
 	(global_label "VCC_5V" (shape bidirectional) (at 20.32 101.60 180) (effects (font (size 1.27 1.27))))

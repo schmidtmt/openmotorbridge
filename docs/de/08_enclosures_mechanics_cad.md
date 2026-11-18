@@ -577,8 +577,10 @@ In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satelli
 2. **Aufgehen des Cockpit-Satelliten im 5-Port Handschuhfach-Hub (PCBA 05B / `glovebox_power_injection_hub.scad`):**
    - Der vormalige Cockpit-Verteiler ist als spezialisierter, kompakter **5-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`)** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad)) für das rechte Handschuhfach (Media Compartment) moderner Touring-Bagger (Road Glide, Street Glide, CVO, CVO ST 2024+) aufgegangen.
    - **Abmessungen:** Flache **$55{,}0 \times 25{,}0 \times 15{,}0\,\text{mm}$** (Bauhülle inkl. Montageflanschen $55{,}0 \times 25{,}0 \times 17{,}0\,\text{mm}$, Platine $50{,}0 \times 20{,}0\,\text{mm}$, HP MJF PA12 für die Dual-Edge USB-C Platine `PCBA 05B` mit **5× USB-C Buchsen**), werkzeuglos fixierbar über die integrierte 3M Dual-Lock Klettnut auf dem Fachboden.
-   - **Funktionale Schnittstellen (Nord- & Südkante):**
-     - **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Downstream-Zuleitung vom Universal Front-Node (`PCBA 05` `J7`).
+   - **Funktionale Schnittstellen & Rollenverteilung:**
+     - **Daten-Master:** **Skyline OS** an `J1` (`HOST`) ist der alleinige USB 2.0 Host.
+     - **Power-Master:** Der Front-Node (`PCBA 05`) speist den Hub über `J2` (`FRONT`) mit Leistung aus seiner 60W Power-Engine.
+     - **`J2` (`FRONT`, Nordkante, X = 13,68 mm):** Zuleitung vom Universal Front-Node (`PCBA 05`, Header `J4` zu USB-C) für Headset-Emulation und Versorgungsleistung.
      - **`J1` (`HOST`, Nordkante, X = 27,18 mm):** Verbindet sich mit dem werksseitigen Harley USB-C Medienkabel zur Head Unit (Skyline OS / Boom! Box GTS) inkl. digitaler Harley Headset-Emulation für Apple CarPlay.
      - **`J3` (`PHONE`, Südkante, X = 7,82 mm):** Thermisch optimierter 15W/30W USB-PD Schnellladeport (verhindert Akkuhitzestau im geschlossenen Fach).
      - **`J4` (`DONGLE`, Südkante, X = 19,82 mm):** 10W geschalteter VBUS (`TPS2051B`) für drahtlose CarPlay/Android Auto Adapter (Ottocast / CarlinKit) mit fernsteuerbarem Kaltstart-Reset über WebUI.

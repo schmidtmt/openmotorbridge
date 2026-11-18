@@ -160,12 +160,19 @@ Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\te
 +----------------------------------------------------------------------------------------+
 ```
 
-### 2.1 Mechatronic Smart Pod & 4-Channel MOSFET Drivers (PCBA 03 Rev 3.0)
+### 2.1 Digital Direct Control, Mechatronic Cold-Start & Monocoque Enclosure Concept (v10.0)
 
-* **Physically Infinite Galvanic Isolation:** Mechatronic plungers actuate original rubber buttons from the outside without electrical connection to motorcycle power. Optocouplers on the mainboard are completely eliminated!
-* **Ultra-Low Loss N-Channel MOSFETs (`AO3400A`):** Four power MOSFETs ($R_{\text{ON}} < 28\,\text{m}\Omega$) on `B.Cu` drive miniature direct digital controls bounce-free with $< 1\,\mu\text{s}$ response time.
-* **100% Preservation of Factory Warranty & IPX Rating:** Headsets remain brand-new and sealed. Factory seals and rubber gaskets are untouched.
-* **Form-Fit Retention Resisting $20\,\text{g}$ Vibration:** The 3D-printed PA12-MJF cradle nests the intercom with damping EPDM liners with zero play, ensuring plungers consistently strike buttons on-center with calibrated $1.0\dots 1.2\,\text{mm}$ travel.
+In OpenMotorBridge v10.0, the legacy dual-wall cassette sliding system has been superseded by the streamlined **monocoque pod enclosure with form-fitting cradles**. Operation and control are structured into two distinct operational phases:
+
+* **1. Cold-Boot on Ignition ON (`KL15` Wake-Up):**
+  * Commercial OEM communicators (Cardo Packtalk Edge/Pro, Sena SPIDER X Slim/50S) feature **no Bluetooth wake-up when powered off** (internal processor is unpowered).
+  * To wake the headset reliably from its zero-watt dormant state upon ignition ON, the modular **dual-strut actuator system** ([`012_universal_actuator_slide_bracket.scad`](../../hardware/cad/scad/02_pod_base/parts/012_universal_actuator_slide_bracket.scad)) applies a single, calibrated $2.0$-second actuation pulse via soft Shore-A50 silicone plunger tips to the power keys.
+* **2. Ride-Time Operation (100% Digital & Wear-Free):**
+  * Once the communicator has booted, all operational functions (Mesh on/off, channel switching, volume, PTT, mute) are handled **100% digitally over BLE GATT and the digital audio path** via the programmable under-perch mirror pod switches.
+  * During the ride, **zero mechanical plunger actuations take place** -- zero wear and tear during continuous operation.
+* **100% Preservation of Factory Warranty & IP67 Rating:** The communicator rests factory-sealed in the upper chamber of the monocoque pod.
+* **OptoMOS PTT Keying (`CPC1017N`):** Switches PTT to ground in $< 10\,\mu\text{s}$ with galvanic isolation for PMR446 radios or analog intercom bridges.
+* **Native OMB Transceiver (OMM 2.4 GHz UCS):** Features native **USB-Power-On** and boots automatically whenever 5V power is applied, requiring no mechanical plunger pulses whatsoever.
 
 ### 2.2 Symmetrical Dual Under-Perch 5-Gesture Engine
 

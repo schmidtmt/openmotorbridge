@@ -29,7 +29,7 @@ BOARDS = {
         "pcb": "hardware/kicad_main_box/openmotorbridge_main.kicad_pcb",
         "sch": "hardware/kicad_main_box/openmotorbridge_main.kicad_sch",
         "mcu_ref": "U2",
-        "mcu_type": "ESP32-S3-WROOM-1U",
+        "mcu_type": "ESP32-S31-WROOM-1U",
         "fw_headers": [
             "firmware/main_controller/src/main.cpp",
             "firmware/main_controller/src/audio_dsp_pipeline.cpp"
@@ -50,7 +50,7 @@ BOARDS = {
         "pcb": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
         "sch": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_sch",
         "mcu_ref": "U1",
-        "mcu_type": "ESP32-S3-WROOM-1U",
+        "mcu_type": "ESP32-S31-WROOM-1U",
         "fw_headers": [
             "firmware/front_node/src/front_node_config.h"
         ]
@@ -294,7 +294,25 @@ def audit_board(board_id, cfg):
     mcu_pads = {p.GetNumber(): p.GetNetname() for p in mcu.Pads()}
     
     # Strapping pins per MCU type
-    if "ESP32-S3" in cfg["mcu_type"]:
+    if "ESP32-S31" in cfg["mcu_type"]:
+        # ESP32-S31: High-Speed USB 2.0 PHY on inner LGA pads 54 & 55. Pads 13 & 14 are GPIO33 & GPIO34.
+        pad27_net = mcu_pads.get("27", "")
+        pad26_net = mcu_pads.get("26", "")
+        pad16_net = mcu_pads.get("16", "")
+        pad13_net = mcu_pads.get("13", "")
+        pad14_net = mcu_pads.get("14", "")
+        pad54_net = mcu_pads.get("54", "")
+        pad55_net = mcu_pads.get("55", "")
+        
+        print(f"    - Pad 27 (GPIO 0  / BOOT):     Net = '{pad27_net}' -> " + ("✅ OK" if "BOOT" in pad27_net or pad27_net == "" else "⚠️  Check pullup/button"))
+        print(f"    - Pad 26 (GPIO 45 / VDD_SPI):  Net = '{pad26_net}' -> " + ("⚠️  DANGER: Connected to active signal! If high at boot, SPI flash will brownout!" if pad26_net not in ["", "GND", "GND_PWR"] else "✅ Safe (Low/Float)"))
+        print(f"    - Pad 16 (GPIO 46 / ROM_LOG):  Net = '{pad16_net}' -> " + ("ℹ️  Assigned to " + pad16_net if pad16_net else "Float"))
+        print(f"    - Pad 13 (GPIO 33 / NC):       Net = '{pad13_net}' -> ✅ OK (S31 NC/GPIO)")
+        print(f"    - Pad 14 (GPIO 34 / NC):       Net = '{pad14_net}' -> ✅ OK (S31 NC/GPIO)")
+        print(f"    - Pad 54 (HS USB D- / PHY):    Net = '{pad54_net}' -> " + ("✅ USB D-" if "DM" in pad54_net or "D_N" in pad54_net else f"⚠️  Mismatch: Net '{pad54_net}' on USB D- hardware pin!"))
+        print(f"    - Pad 55 (HS USB D+ / PHY):    Net = '{pad55_net}' -> " + ("✅ USB D+" if "DP" in pad55_net or "D_P" in pad55_net else f"⚠️  Mismatch: Net '{pad55_net}' on USB D+ hardware pin!"))
+
+    elif "ESP32-S3" in cfg["mcu_type"]:
         # ESP32-S3 Strapping:
         # GPIO0 (Pad 27): Boot Mode. Must be HIGH for flash boot.
         # GPIO45 (Pad 26): VDD_SPI Voltage. Must NOT be pulled high for 3.3V flash!
