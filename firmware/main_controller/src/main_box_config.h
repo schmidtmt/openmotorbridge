@@ -42,8 +42,8 @@
 // 4. Shared Internal I2C Bus (U3 ES8388 Codec, U5 Bosch BMI270 IMU)
 // -----------------------------------------------------------------------------
 #define MAIN_I2C_PORT                   I2C_NUM_0
-#define PIN_MAIN_I2C_SDA                GPIO_NUM_8   // U2 Pad 17 -> U3 Pin 28, U5 Pin 13 (I2C_SDA)
-#define PIN_MAIN_I2C_SCL                GPIO_NUM_9   // U2 Pad 18 -> U3 Pin 27, U5 Pin 12 (I2C_SCL)
+#define PIN_MAIN_I2C_SDA                GPIO_NUM_22  // U2 Pad 17 (GPIO22) -> U3 Pin 28, U5 Pin 13 (I2C_SDA)
+#define PIN_MAIN_I2C_SCL                GPIO_NUM_23  // U2 Pad 18 (GPIO23) -> U3 Pin 27, U5 Pin 12 (I2C_SCL)
 #define I2C_ADDR_ES8388_CODEC           0x10         // U3 Everest ES8388 24-Bit Audio Codec
 #define I2C_ADDR_BMI270_IMU             0x68         // U5 Bosch BMI270 6-Axis IMU + Hardware Step/Shock Interrupt
 
@@ -87,12 +87,12 @@
 // 7b. On-Board 2.4 GHz BLE Control Antenna (ANT3 Johanson 2450AT18D0100)
 // Dedicated SMD ceramic chip antenna (3.2 x 1.6 mm) on left board edge
 // at KiCad (X=117.80, Y=88.25, rot=180 deg) with feed pad facing inward.
-// Driven directly from U2 ESP32-S31-WROOM-1U Pin 40 (BLE_RF_2G4).
+// Driven directly from U2 ESP32-S31-WROOM-1U Pin 63 (BLE_RF_2G4).
 // Handles vehicle control: Pods, Action Cam, TPMS & Smart Keyfob proximity.
 // Separated by >65 mm from ANT1 (LoRa) and ANT2 (Helmaudio) to prevent desense.
 // -----------------------------------------------------------------------------
 #define MAIN_BLE_ANTENNA_TYPE           "Johanson_2450AT18D0100_Ceramic_SMD"
-#define MAIN_BLE_RF_PIN_U2_PAD          40           // ESP32-S31 Pad 40 (BLE_RF_2G4)
+#define MAIN_BLE_RF_PIN_U2_PAD          63           // ESP32-S31 Pad 63 (BLE_RF_2G4)
 
 // -----------------------------------------------------------------------------
 // 8. Automotive CAN-FD Transceiver (U6 TI TCAN334GDCNT -> J1 Pin 3/4)

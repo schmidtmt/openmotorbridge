@@ -45,11 +45,13 @@
 #define PIN_PTT_IN2_N           PIN_BTN_SIG_R_N
 #define PIN_PTT_IN3_N           GPIO_NUM_15  // Optional 3rd Handlebar Input
 
-// Shared I2C Bus: J_SENSOR_EXT Pin 3/4 (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
-#define PIN_I2C_SDA             GPIO_NUM_17  // U1 Pad 17 -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
-#define PIN_I2C_SCL             GPIO_NUM_18  // U1 Pad 18 -> J_SENSOR_EXT Pin 4, J_DISP_L/R Pin 3 (I2C_SCL)
+// Shared I2C Bus: J_SENSOR_EXT Pin 3/4 (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44, BMP390 0x76) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
+#define PIN_I2C_SDA             GPIO_NUM_22  // U1 Pad 17 (GPIO22) -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
+#define PIN_I2C_SCL             GPIO_NUM_23  // U1 Pad 18 (GPIO23) -> J_SENSOR_EXT Pin 4, J_DISP_L/R Pin 3 (I2C_SCL)
+#define PIN_GNSS_RESET_N        GPIO_NUM_11  // U1 Pad 11 (GPIO11) -> J_SENSOR_EXT Pin 8 (GNSS_RESET_N, Active-Low)
 #define I2C_ADDR_OLED_LEFT      0x3C         // J_DISP_L Left Speaker-Corner Cockpit OLED
 #define I2C_ADDR_OLED_RIGHT     0x3D         // J_DISP_R Right Speaker-Corner Cockpit OLED
+#define I2C_ADDR_BMP390_BARO    0x76         // Sensor Puck BMP390 Barometer/Altimeter
 
 // LED1 (WS2812B-2020), Q1 (DMN63D8 Dual MOSFET Mirror BSD LEDs) & Q2 (TPS1H100 Aux Light)
 #define PIN_WS2812B_DIN         GPIO_NUM_11  // U1 Pad 19 -> LED1 Pin 4 (WS2812B_DIN)

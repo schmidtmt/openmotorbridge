@@ -33,7 +33,6 @@ void power_supervisor_poll(OmmPowerStatus_t *status) {
     // NTC Temperature Approximation
     status->temp_celsius = 22.0f; // Nominal ambient
     status->jeita_fault = false;   // Normal 0..45°C operation
-}
     status->is_vbus_present = status->is_charging || (status->v_bat >= 4.18f);
 }
 

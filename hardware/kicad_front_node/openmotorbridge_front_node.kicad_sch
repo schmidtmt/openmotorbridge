@@ -1880,8 +1880,6 @@
 	(global_label "GND" (shape bidirectional) (at 245.24 662.54 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "75a61f89-8cec-43e5-910a-1d742a24bf65"))
 	(wire (pts (xy 325.16 662.54) (xy 330.24 662.54)) (stroke (width 0) (type default)) (uuid "5f6bd62d-1cba-4155-9d39-7f48b46bc04f"))
 	(global_label "GND" (shape bidirectional) (at 330.24 662.54 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "a4464127-8d81-4d13-9439-39810f121ad6"))
-	(wire (pts (xy 410.16 662.54) (xy 415.24 662.54)) (stroke (width 0) (type default)) (uuid "45c17cef-8945-4c16-b2e4-1c5f20646ad4"))
-	(global_label "GND" (shape bidirectional) (at 415.24 662.54 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "4671ab17-e97f-4b93-a04b-be7dd6a362ec"))
 	(wire (pts (xy 495.16 662.54) (xy 500.24 662.54)) (stroke (width 0) (type default)) (uuid "8f2f86af-f281-4954-8314-4f16f09bd2ae"))
 	(global_label "GND" (shape bidirectional) (at 500.24 662.54 0) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7cb60da7-b667-4a6b-9c3e-177aae2bea47"))
 	(wire (pts (xy 580.16 662.54) (xy 585.24 662.54)) (stroke (width 0) (type default)) (uuid "e8cbdd19-03e4-4f98-8e2d-dd9fb6c39935"))

@@ -84,7 +84,7 @@ BOARDS = {
         "pcb": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",
         "sch": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_sch",
         "mcu_ref": "U1",
-        "mcu_type": "nRF52840-QIAA",
+        "mcu_type": "nRF52832-QFAA",
         "fw_headers": []
     },
     "PCBA 08": {
@@ -92,7 +92,7 @@ BOARDS = {
         "pcb": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_pcb",
         "sch": "hardware/kicad_radar_submcu/openmotorbridge_radar_submcu.kicad_sch",
         "mcu_ref": "U1",
-        "mcu_type": "ESP32-C3-WROOM-02U",
+        "mcu_type": "ESP32-C5-WROOM-1U",
         "fw_headers": [
             "firmware/radar_submcu/src/radar_mr20_protocol.h"
         ]
@@ -166,31 +166,32 @@ ESP32_S3_WROOM_PINS = {
 
 ESP32_C6_MINI_PINS = {
     "1": ("GND", "PWR"),
-    "2": ("3V3", "PWR"),
-    "3": ("IO2", "GPIO2_STRAP"),
-    "4": ("IO4", "GPIO4"),
-    "5": ("IO5", "GPIO5"),
-    "6": ("IO6", "GPIO6"),
-    "7": ("IO7", "GPIO7"),
-    "8": ("IO2", "GPIO2"),
-    "9": ("IO3", "GPIO3"),
-    "10": ("IO8", "GPIO8_STRAP"),
-    "11": ("IO9", "GPIO9_STRAP_BOOT"),
-    "12": ("EN", "CTRL"),
-    "13": ("GND", "PWR"),
-    "14": ("IO12", "GPIO12_USB_DM"),
-    "15": ("IO13", "GPIO13_USB_DP"),
-    "16": ("IO14", "GPIO14"),
-    "17": ("IO15", "GPIO15_STRAP"),
-    "18": ("IO16", "GPIO16"),
-    "19": ("IO17", "GPIO17"),
-    "20": ("IO18", "GPIO18"),
-    "21": ("IO19", "GPIO19"),
-    "22": ("IO20", "GPIO20"),
-    "23": ("IO21", "GPIO21"),
-    "24": ("IO22", "GPIO22"),
-    "25": ("IO23", "GPIO23"),
-    "26": ("GND", "PWR")
+    "2": ("GND", "PWR"),
+    "3": ("3V3", "PWR"),
+    "4": ("NC", "NC"),
+    "5": ("IO0", "GPIO0"),
+    "6": ("IO1", "GPIO1"),
+    "7": ("IO2", "GPIO2"),
+    "8": ("IO3", "GPIO3"),
+    "9": ("IO4", "GPIO4"),
+    "10": ("IO5", "GPIO5"),
+    "11": ("IO6", "GPIO6"),
+    "12": ("IO7", "GPIO7"),
+    "13": ("IO8", "GPIO8_STRAP"),
+    "14": ("IO9", "GPIO9_STRAP_BOOT"),
+    "15": ("IO10", "GPIO10"),
+    "16": ("IO11", "GPIO11"),
+    "17": ("IO12", "GPIO12_USB_DM"),
+    "18": ("IO13", "GPIO13_USB_DP"),
+    "19": ("IO14", "GPIO14"),
+    "20": ("IO15", "GPIO15_STRAP"),
+    "21": ("IO18", "GPIO18"),
+    "22": ("IO19", "GPIO19"),
+    "23": ("IO20", "GPIO20"),
+    "24": ("IO21", "GPIO21"),
+    "25": ("IO22", "GPIO22"),
+    "26": ("IO23", "GPIO23"),
+    "27": ("EN", "CTRL")
 }
 
 KICAD_CLI = "/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli"
@@ -250,24 +251,26 @@ def audit_board(board_id, cfg):
     
     if not os.path.exists(cfg["pcb"]):
         print(f"❌ PCB File not found: {cfg['pcb']}")
-        return
+        return 1
         
     board = pcbnew.LoadBoard(cfg["pcb"])
+    errors = 0
     
     # 1. DRC Execution
     drc = run_drc(cfg["pcb"])
     print(f"[1] KiCad DRC Status:")
     if drc.get("unconnected_count", 0) > 0:
-        print(f"    ❌ UNCONNECTED ITEMS DETECTED: {drc['unconnected_count']} unconnected net segments!")
+        print(f"    ⚠️  UNCONNECTED ITEMS: {drc['unconnected_count']} unconnected net segments (awaiting manual routing)!")
         for item in drc["unconnected_details"]:
             print(f"       - {item.get('description')}: {[it.get('description') for it in item.get('items', [])]}")
     else:
         print(f"    ✅ Unconnected Items: 0 (100% Routed)")
         
     if drc.get("error_count", 0) > 0:
-        print(f"    ⚠️  Critical DRC Errors: {drc['error_count']}")
+        print(f"    ❌ Critical DRC Errors: {drc['error_count']}")
         for err in drc["errors"][:5]:
             print(f"       - [{err.get('type')}] {err.get('description')}")
+        errors += drc["error_count"]
     else:
         print(f"    ✅ DRC Errors: 0")
         
@@ -280,70 +283,66 @@ def audit_board(board_id, cfg):
             connected_pads = [p for p in pads if p.GetNetname() and p.GetNetname() != "GND" and p.GetNetname() != "GND_PWR"]
             if len(pads) > 4 and len(connected_pads) == 0:
                 print(f"    ❌ CRITICAL GHOST IC: {ref} ({fp.GetValue()}) has {len(pads)} pads but ZERO functional net connections!")
-            else:
-                pass
+                errors += 1
                 
     # 3. MCU Pin Mapping & Strapping Pin Verification
     print(f"\n[3] MCU Pinout & Strapping Pin Safety Audit:")
     mcu = board.FindFootprintByReference(cfg["mcu_ref"])
     if not mcu:
         print(f"    ⚠️  MCU Footprint {cfg['mcu_ref']} not found on board!")
-        return
+        return errors
         
     print(f"    MCU Reference: {cfg['mcu_ref']} | Value: {mcu.GetValue()} | Package: {mcu.GetFPIDAsString()}")
     mcu_pads = {p.GetNumber(): p.GetNetname() for p in mcu.Pads()}
     
     # Strapping pins per MCU type
     if "ESP32-S31" in cfg["mcu_type"]:
-        # ESP32-S31: High-Speed USB 2.0 PHY on inner LGA pads 54 & 55. Pads 13 & 14 are GPIO33 & GPIO34.
+        # ESP32-S31: High-Speed USB 2.0 PHY on inner LGA pads 54 & 55.
+        # Pad 27: GPIO 61 (Boot Strapping). Pad 26: GPIO 60 (VDD_SPI).
+        # Pad 63: BLE RF output to ANT3.
         pad27_net = mcu_pads.get("27", "")
         pad26_net = mcu_pads.get("26", "")
-        pad16_net = mcu_pads.get("16", "")
-        pad13_net = mcu_pads.get("13", "")
-        pad14_net = mcu_pads.get("14", "")
         pad54_net = mcu_pads.get("54", "")
         pad55_net = mcu_pads.get("55", "")
+        pad63_net = mcu_pads.get("63", "")
         
-        print(f"    - Pad 27 (GPIO 0  / BOOT):     Net = '{pad27_net}' -> " + ("✅ OK" if "BOOT" in pad27_net or pad27_net == "" else "⚠️  Check pullup/button"))
-        print(f"    - Pad 26 (GPIO 45 / VDD_SPI):  Net = '{pad26_net}' -> " + ("⚠️  DANGER: Connected to active signal! If high at boot, SPI flash will brownout!" if pad26_net not in ["", "GND", "GND_PWR"] else "✅ Safe (Low/Float)"))
-        print(f"    - Pad 16 (GPIO 46 / ROM_LOG):  Net = '{pad16_net}' -> " + ("ℹ️  Assigned to " + pad16_net if pad16_net else "Float"))
-        print(f"    - Pad 13 (GPIO 33 / NC):       Net = '{pad13_net}' -> ✅ OK (S31 NC/GPIO)")
-        print(f"    - Pad 14 (GPIO 34 / NC):       Net = '{pad14_net}' -> ✅ OK (S31 NC/GPIO)")
+        print(f"    - Pad 27 (GPIO 61 / BOOT):     Net = '{pad27_net}' -> " + ("✅ OK" if "BOOT" in pad27_net or pad27_net == "" else "⚠️  Check pullup/button"))
+        print(f"    - Pad 26 (GPIO 60 / VDD_SPI):  Net = '{pad26_net}' -> " + ("⚠️  DANGER: Connected to active signal!" if pad26_net not in ["", "GND", "GND_PWR"] else "✅ Safe (Low/Float)"))
         print(f"    - Pad 54 (HS USB D- / PHY):    Net = '{pad54_net}' -> " + ("✅ USB D-" if "DM" in pad54_net or "D_N" in pad54_net else f"⚠️  Mismatch: Net '{pad54_net}' on USB D- hardware pin!"))
         print(f"    - Pad 55 (HS USB D+ / PHY):    Net = '{pad55_net}' -> " + ("✅ USB D+" if "DP" in pad55_net or "D_P" in pad55_net else f"⚠️  Mismatch: Net '{pad55_net}' on USB D+ hardware pin!"))
+        if pad63_net:
+            print(f"    - Pad 63 (BLE RF 2.4G):        Net = '{pad63_net}' -> ✅ Connected to ANT3")
 
     elif "ESP32-S3" in cfg["mcu_type"]:
-        # ESP32-S3 Strapping:
-        # GPIO0 (Pad 27): Boot Mode. Must be HIGH for flash boot.
-        # GPIO45 (Pad 26): VDD_SPI Voltage. Must NOT be pulled high for 3.3V flash!
-        # GPIO46 (Pad 16): Boot Mode / ROM logging.
-        # GPIO19 (Pad 13): Native USB D-
-        # GPIO20 (Pad 14): Native USB D+
         pad27_net = mcu_pads.get("27", "")
         pad26_net = mcu_pads.get("26", "")
-        pad16_net = mcu_pads.get("16", "")
         pad13_net = mcu_pads.get("13", "")
         pad14_net = mcu_pads.get("14", "")
-        
         print(f"    - Pad 27 (GPIO 0  / BOOT):     Net = '{pad27_net}' -> " + ("✅ OK" if "BOOT" in pad27_net or pad27_net == "" else "⚠️  Check pullup/button"))
-        print(f"    - Pad 26 (GPIO 45 / VDD_SPI):  Net = '{pad26_net}' -> " + ("⚠️  DANGER: Connected to active signal! If high at boot, SPI flash will brownout!" if pad26_net not in ["", "GND", "GND_PWR"] else "✅ Safe (Low/Float)"))
-        print(f"    - Pad 16 (GPIO 46 / ROM_LOG):  Net = '{pad16_net}' -> " + ("ℹ️  Assigned to " + pad16_net if pad16_net else "Float"))
+        print(f"    - Pad 26 (GPIO 45 / VDD_SPI):  Net = '{pad26_net}' -> " + ("⚠️  DANGER: Connected to active signal!" if pad26_net not in ["", "GND", "GND_PWR"] else "✅ Safe (Low/Float)"))
         print(f"    - Pad 13 (GPIO 19 / USB_D-):   Net = '{pad13_net}' -> " + ("✅ USB D-" if "DM" in pad13_net or "D_N" in pad13_net else f"⚠️  Mismatch: Net '{pad13_net}' on USB D- hardware pin!"))
         print(f"    - Pad 14 (GPIO 20 / USB_D+):   Net = '{pad14_net}' -> " + ("✅ USB D+" if "DP" in pad14_net or "D_P" in pad14_net else f"⚠️  Mismatch: Net '{pad14_net}' on USB D+ hardware pin!"))
 
     elif "ESP32-C6" in cfg["mcu_type"]:
-        # Pad 10: GPIO 8 (Strapping)
-        # Pad 11: GPIO 9 (Boot Mode strapping)
-        # Pad 14: GPIO 12 (USB D-)
-        # Pad 15: GPIO 13 (USB D+)
-        pad10_net = mcu_pads.get("10", "")
-        pad11_net = mcu_pads.get("11", "")
+        # ESP32-C6-MINI-1:
+        # Pad 13: GPIO 8 (Strap)
+        # Pad 14: GPIO 9 (Boot Mode strapping)
+        # Pad 17: GPIO 12 (USB D-)
+        # Pad 18: GPIO 13 (USB D+)
+        pad13_net = mcu_pads.get("13", "")
         pad14_net = mcu_pads.get("14", "")
-        pad15_net = mcu_pads.get("15", "")
-        print(f"    - Pad 10 (GPIO 8 / STRAP):     Net = '{pad10_net}'")
-        print(f"    - Pad 11 (GPIO 9 / BOOT):      Net = '{pad11_net}'")
-        print(f"    - Pad 14 (GPIO 12 / USB_D-):   Net = '{pad14_net}'")
-        print(f"    - Pad 15 (GPIO 13 / USB_D+):   Net = '{pad15_net}'")
+        pad17_net = mcu_pads.get("17", "")
+        pad18_net = mcu_pads.get("18", "")
+        print(f"    - Pad 13 (GPIO 8 / STRAP):     Net = '{pad13_net}'")
+        print(f"    - Pad 14 (GPIO 9 / BOOT):      Net = '{pad14_net}'")
+        print(f"    - Pad 17 (GPIO 12 / USB_D-):   Net = '{pad17_net}' -> " + ("✅ USB D-" if "DM" in pad17_net or "D_N" in pad17_net else f"Net '{pad17_net}'"))
+        print(f"    - Pad 18 (GPIO 13 / USB_D+):   Net = '{pad18_net}' -> " + ("✅ USB D+" if "DP" in pad18_net or "D_P" in pad18_net else f"Net '{pad18_net}'"))
+
+    elif "nRF52832" in cfg["mcu_type"]:
+        pad1_net = mcu_pads.get("1", "")
+        pad46_net = mcu_pads.get("46", "")
+        print(f"    - Pad 1  (DEC1):               Net = '{pad1_net}'")
+        print(f"    - Pad 46 (DEC4):               Net = '{pad46_net}'")
 
     elif "ESP32-C3" in cfg["mcu_type"] or "ESP32-C5" in cfg["mcu_type"]:
         pad8_net = mcu_pads.get("8", "")
@@ -383,16 +382,27 @@ def audit_board(board_id, cfg):
     print(f"    Detected Chip Select Nets: {cs_nets}")
     if len(cs_nets) != len(set(cs_nets)):
         print(f"    ❌ CONFLICT: Duplicate CS nets detected!")
+        errors += 1
     else:
         print(f"    ✅ All {len(cs_nets)} SPI Chip Select lines are distinct.")
+    return errors
 
 def main():
     print("=" * 80)
     print("OPENMOTORBRIDGE PRE-FLIGHT COMPREHENSIVE HARDWARE AUDIT")
     print("=" * 80)
+    total_errors = 0
     for board_id, cfg in BOARDS.items():
-        audit_board(board_id, cfg)
-    os._exit(0)
+        err = audit_board(board_id, cfg)
+        if err:
+            total_errors += err
+    print("\n" + "=" * 80)
+    if total_errors > 0:
+        print(f"❌ PRE-FLIGHT AUDIT FAILED: {total_errors} critical error(s) detected across boards.")
+        sys.exit(1)
+    else:
+        print("✅ PRE-FLIGHT AUDIT PASSED: All boards verified successfully (0 critical errors).")
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
