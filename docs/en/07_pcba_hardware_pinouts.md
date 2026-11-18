@@ -41,9 +41,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Snap-On Basket for FrontNode)| (Snap-Fit)    | (ENIG)  | TMP117, OPT3001,     |
 |       | I2C/UART/1PPS Env & GNSS      | 100% SMT      |         | JST-GH 8P In (SM08B) |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Layer | Nordic nRF52832 SoC, |
-|       | (Silent Pager, N52 Key & Qi)  | (Pocket M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
-|       | Opens Pod Slide-in Lid Latch  |               |         | BQ51003 Qi, JST-SH   |
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Layer | ESP32-C3FH4 RISC-V,   |
+|       | (Silent Pager, N52 Key & Qi)  | (Pocket M2)   | (ENIG)  | SX1262 LoRa, BQ51050B |
+|       | Opens Pod Slide-in Lid Latch  |               |         | 9mm Piezo Buzzer, Qi  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Layer | ESP32-C3/C5 Sub-MCU, |
 |       | (Wheeltec 77GHz & V2X Patch)  | (Wing M3)     | (ENIG)  | Wheeltec MR20 (AoP), |
@@ -873,99 +873,105 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 
 ![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
 
-*Figure 7.7: 3D board render of the ultra-compact PCBA 07 carrier board ($38.0 \times 19.0\,\text{mm}$, 4-layer FR-4 ENIG) hosting the Nordic nRF52832 SoC, Semtech SX1262 LoRa transceiver, TI DRV2605L haptic driver, BQ51003 Qi receiver, and BQ25100 LiPo charger.*
+*Figure 7.7: 3D board render of the ultra-compact PCBA 07 carrier board ($38.0 \times 19.0\,\text{mm}$, 4-layer FR-4 ENIG) hosting the ESP32-C3FH4 RISC-V MCU (embedded 4MB Flash), Semtech SX1262 LoRa transceiver, TI BQ51050BRHLR all-in-one Qi direct-to-battery charger, CUI 9mm piezo buzzer, and centered 3-element control cluster.*
 
 ```
                                 PCBA 07 SYSTEM ARCHITECTURE
 +----------------------------------------------------------------------------------------+
-|                        NORDIC nRF52832 BLUETOOTH LE 5.4 SoC                           |
-| * ARM Cortex-M4F @ 64 MHz, 512 KB Flash, 64 KB RAM * QFN-48 6x6mm * Crypto Engine     |
-| * Manages BLE rider presence token, pager state, battery telemetry & smartphone bridge |
+|                      ESPRESSIF ESP32-C3FH4 RISC-V BLUETOOTH LE 5.0 SoC                 |
+| * 32-bit RISC-V core @ 160 MHz * Embedded 4 MB Flash * QFN-32 5x5mm (0.5mm pitch)      |
+| * Unified ESP-IDF firmware stack, internal calibrated RTC (zero external 32kHz crystal)|
 +--------------+-------------------------+-------------------------+---------------------+
-               | SPI                     | I2C                     | PWM / GPIO
+               | SPI                     | Power / LDO             | PWM / GPIO
                v                         v                         v
 +---------------------------+ +---------------------+ +----------------------------------+
-| SEMTECH SX1262 LoRa       | | TI DRV2605L HAPTICS | | STATUS & ACOUSTICS               |
-| * 868 MHz Emergency RX    | | * I2C Haptic Driver | | * WS2812B RGB Status LED         |
-| * Up to 4.5 km range      | | * 10x3.6mm LRA Coin | | * Murata SMD Piezo Buzzer (85 dB)|
-| * Receives 0xFE packets   | |   (Vybronics LRA)   | | * Diffuse lightpipe lens         |
+| SEMTECH SX1262 LoRa       | | TI TPS7A0233 LDO    | | STATUS & ACOUSTICS               |
+| * 868 MHz Emergency RX    | | * Ultra-Low-Iq LDO  | | * WS2812B RGB Status LED (D1)    |
+| * Up to 4.5 km range      | | * 25 nA Quiescent   | | * CUI CPT-9019S 9mm Piezo 85dBA  |
+| * Receives 0xFE packets   | | * 3.3V / 200mA Rail | | * 11mm tactile button separation |
 +---------------------------+ +---------------------+ +----------------------------------+
                ^
-               | DC 3.3V Power Rail
+               | Direct LiPo Battery Bus (VBAT)
 +--------------+-------------------------------------------------------------------------+
-|                           POWER & INDUCTIVE CHARGING SUB-SYSTEM                        |
-| * 180-200 mAh 1S LiPo pouch cell (25 x 18 x 3.8 mm) with PCM protection board          |
-| * TI BQ51003 Qi Wireless Power Receiver: Charges inductively on PCBA 06 Cockpit Dock   |
-| * TI BQ25100 Linear LiPo charger with quiescent current < 50 nA (Months of standby)    |
-| * 100% solderless JST-SH connections for battery (J1), SWD (J2) and Qi coil (J3)       |
+|                    ALL-IN-ONE QI WIRELESS CHARGING & LIPO SUB-SYSTEM                   |
+| * 180-200 mAh 1S LiPo pouch cell with integrated PCM protection board                  |
+| * TI BQ51050BRHLR: All-in-one Qi Wireless Receiver & Direct LiPo CC/CV Charger (VQFN-20)|
+| * Eliminates separate 5V regulator & charger ICs; direct connection to battery (J1)    |
+| * 100% solderless JST-SH connections for battery (J1), USB debug (J2) and Qi coil (J3) |
 +----------------------------------------------------------------------------------------+
 ```
 
 ### 9.1 Technical Board Characteristics
 * **Dimensions:** $38.0 \times 19.0 \times 1.0\,\text{mm}$ (Ultra-compact 4-layer FR-4, $35\,\mu\text{m}$ Cu, ENIG gold finish, corner radius $R = 3\,\text{mm}$).
 * **Core Silicon:**
-  * Nordic `nRF52832-QFxx` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, QFN-48 $6 \times 6\,\text{mm}$, LCSC `C80252`).
+  * Espressif `ESP32-C3FH4` SoC (32-bit RISC-V @ 160 MHz, Bluetooth Low Energy 5.0, embedded 4 MB SPI Flash, internal LDO decoupling, QFN-32 $5 \times 5\,\text{mm}$, 0.5 mm pitch).
   * Semtech `SX1262` LoRa Transceiver (868.5 MHz Channel 3, receives emergency alerts up to 4.5 km range).
-  * Texas Instruments `DRV2605L` Haptic Driver for Vybronics 10x3.6mm LRA linear actuator.
-  * Texas Instruments `BQ51003` Qi Wireless Power Receiver & `BQ25100` LiPo Charger.
-* **Magnetic Flux Shielding:** Adjacent to the PCB sits the pocket for the $20 \times 10 \times 5\,\text{mm}$ N52 neodymium key. A $0.5\,\text{mm}$ soft-iron / mu-metal shield isolates RF traces, the LRA actuator, and the LiPo cell from magnetic saturation.
-* **LRA Haptic Signatures:** The TI DRV2605L generates distinct, crisp tactile patterns:
-  * *Pre-Alarm (Minor Shock):* 2 short clicks ($150\,\text{Hz}$).
-  * *Theft / Cartridge Tamper:* Piercing crescendo staccato (readily felt through heavy leather motorcycle jackets or on a nightstand).
+  * Texas Instruments `BQ51050BRHLR` All-in-One Qi Wireless Receiver & Direct Li-Ion Charger (VQFN-20 $3.5 \times 4.5\,\text{mm}$).
+  * Texas Instruments `TPS7A0233PDBVR` Ultra-Low-$I_q$ 3.3V LDO (`U6`, SOT-23-5, $I_q = 25\,\text{nA}$).
+  * CUI Devices `CPT-9019S-SMT` 9mm Piezo Buzzer (`LS1`, 85 dBA @ 10 cm, 2.7–4.0 kHz) for penetrating acoustic alert through thick motorcycle leather jackets.
+* **Centered 3-Element Control Cluster Ergonomics:**
+  * `SW1` (Arm / Disarm): $X = 117.0\,\text{mm}$.
+  * `D1` (WS2812B-2020 RGB Status LED): $X = 122.5\,\text{mm}$ – centered precisely between switches beneath PMMA light pipe.
+  * `SW2` (Panic / SOS): $X = 128.0\,\text{mm}$.
+  * **$11.0\,\text{mm}$ physical tactile separation** prevents accidental trigger while wearing thick gloves; the 9mm buzzer `LS1` is isolated on the right board half ($X = 133.5\,\text{mm}$).
 * **100% Solderless Assembly (`J3`, `J1` & `J2`):**
-  * The 24–28 mm Qi inductive receiver coil plugs into an ultra-low-profile **2-pin JST-SH SMD header (`J3`, `BM02B-SRSS-TB`, 1.00 mm pitch)**.
-  * The 180–200 mAh LiPo pouch battery (with integrated PCM) plugs directly into an identical **2-pin JST-SH SMD header (`J1`, `BM02B-SRSS-TB`, 1.00 mm pitch)**.
-  * The 4-pin **JST-SH SMD header (`J2`, `BM04B-SRSS-TB`, 1.00 mm pitch)** provides the SWD programming interface (`VCC_3V3`, `SWDIO`, `SWDCLK`, `GND`).
-  * No manual soldering is required during keyfob assembly, strictly adhering to the 100% solderless IKEA assembly principle.
+  * The 24–28 mm Qi inductive receiver coil plugs into an ultra-low-profile **2-pin JST-SH SMD header (`J3`, `BM02B-SRSS-TB`, 1.00 mm pitch)** on `B.Cu`.
+  * The 180–200 mAh LiPo pouch battery plugs directly into an identical **2-pin JST-SH SMD header (`J1`, `BM02B-SRSS-TB`, 1.00 mm pitch)** on `B.Cu`.
+  * The 4-pin **JST-SH SMD header (`J2`, `BM04B-SRSS-TB`, 1.00 mm pitch)** provides the native USB CDC / JTAG programming interface (`VCC_3V3`, `USB_DM`, `USB_DP`, `GND`).
 
-### 9.2 Complete Interface & Pin-Mapping of Nordic nRF52832 SoC (PCBA 07 `U1`)
+### 9.2 Complete Interface & Pin-Mapping of ESP32-C3FH4 SoC (PCBA 07 `U1`)
 
-| QFN-48 Pin | Signal Name | Signal Type | Zephyr GPIO | Function & Peripheral Assignment |
+| QFN-32 Pin | Signal Name | Signal Type | ESP-IDF GPIO | Function & Peripheral Assignment |
 | :---: | :--- | :---: | :---: | :--- |
-| **2** | `RTC1` | Analog | `P0.00` | 32.768 kHz watch crystal XL1 |
-| **3** | `RTC2` | Analog | `P0.01` | 32.768 kHz watch crystal XL2 |
-| **4** | `LORA_SCK` | Digital Out | `P0.02` | SPI Serial Clock to Semtech SX1262 (`U2`) |
-| **5** | `LORA_MOSI` | Digital Out | `P0.03` | SPI Master-Out Slave-In to SX1262 (`U2`) |
-| **6** | `LORA_MISO` | Digital In | `P0.04` | SPI Master-In Slave-Out from SX1262 (`U2`) |
-| **7** | `LORA_NSS` | Digital Out | `P0.05` | SPI Chip-Select (Active-Low) to SX1262 (`U2`) |
-| **8** | `LORA_DIO1` | Digital In | `P0.06` | IRQ line from SX1262 (Received 0xFE emergency packet) |
-| **9** | `LORA_BUSY` | Digital In | `P0.07` | Busy status line from SX1262 (`U2`) |
-| **10** | `LORA_RESET` | Digital Out | `P0.08` | Hardware Reset to SX1262 (`U2`) |
-| **13** | `VCC_3V3` | Power In | - | +3.3V VDD Main Supply |
-| **22** | `CHG_STAT` | Digital In | `P0.19` | Charge status indicator from TI BQ25100 (Low = Charging, High = Done) |
-| **23** | `BTN_ARM_N` | Digital In | `P0.20` | Arm/Disarm tactile push-button `SW1` (Active-Low, 10k Pull-Up) |
-| **25** | `SWDCLK` | Digital In | SWDCLK | SWD programming clock to `J2` Pin 3 |
-| **26** | `SWDIO` | Bi-Dir | SWDIO | SWD programming data to `J2` Pin 2 |
-| **27** | `BTN_SOS_N` | Digital In | `P0.22` | SOS/Emergency panic push-button `SW2` (Active-Low, 10k Pull-Up) |
-| **28** | `LED_DATA` | Digital Out | `P0.23` | Data signal for onboard WS2812B-2020 RGB status LED (`D1`) |
-| **29** | `BUZZER_PWM` | Digital Out | `P0.24` | PWM drive (2.7 kHz / 4.0 kHz) for Murata SMD piezo transducer (`BZ1`) |
-| **30** | `BLE_ANT_50R` | RF 2.4G | - | 50 Ohm trace to Johanson 2450AT ceramic chip antenna (`ANT1`) |
-| **31** | `GND` | Power | - | System & RF Ground Reference VSS |
-| **34** | `XTAL1` | Analog | - | 32.000 MHz precision RF crystal XC1 |
-| **35** | `XTAL2` | Analog | - | 32.000 MHz precision RF crystal XC2 |
-| **36** | `VCC_3V3` | Power In | - | +3.3V VDD Supply |
-| **40** | `DRV_EN` | Digital Out | `P0.28` | Hardware Enable for TI DRV2605L haptic driver (`U3`) |
-| **41** | `I2C_SDA` | Open-Drain | `P0.29` | I2C Data line to TI DRV2605L haptic driver (`U3`) |
-| **42** | `I2C_SCL` | Open-Drain | `P0.30` | I2C Clock line to TI DRV2605L haptic driver (`U3`) |
-| **45** | `GND` | Power | - | System Ground VSS |
-| **48** | `VCC_3V3` | Power In | - | +3.3V VDD Supply |
-| **49 (EP)** | `GND` | Power | - | Exposed Thermal & Ground Pad |
+| **1** | `BLE_ANT_50R` | RF 2.4G | LNA_IN | 50 Ohm feedline to Johanson 2450AT ceramic chip antenna (`ANT2`) |
+| **2, 3** | `VCC_3V3` | Power In | VDD3P3 | +3.3V VDD Main Supply |
+| **4** | `BAT_SENSE` | Analog In | `GPIO0` (ADC1_CH0) | LiPo battery voltage divider (100k/100k) for state-of-charge tracking |
+| **5** | `LORA_DIO1` | Digital In | `GPIO1` | IRQ interrupt line from Semtech SX1262 (`U2`) |
+| **6** | `LORA_MISO` | Digital In | `GPIO2` (FSPIQ) | SPI Master-In Slave-Out from Semtech SX1262 (`U2`) |
+| **7** | `CHIP_EN` | Reset In | CHIP_PU | Chip Enable / Reset (10k pull-up to 3.3V, 100nF to GND) |
+| **8** | `LORA_MOSI` | Digital Out | `GPIO3` (FSPID) | SPI Master-Out Slave-In to Semtech SX1262 (`U2`) |
+| **9** | `LORA_SCK` | Digital Out | `GPIO4` (FSPIHD) | SPI Serial Clock to Semtech SX1262 (`U2`) |
+| **10** | `LORA_NSS` | Digital Out | `GPIO5` (FSPIWP) | SPI Chip-Select (Active-Low) to Semtech SX1262 (`U2`) |
+| **11** | `VCC_3V3` | Power In | VDD3P3_RTC | +3.3V RTC Supply |
+| **12** | `LORA_BUSY` | Digital In | `GPIO6` (FSPICLK) | Busy status line from Semtech SX1262 (`U2`) |
+| **13** | `LORA_RESET` | Digital Out | `GPIO7` (FSPICS0) | Hardware reset line to Semtech SX1262 (`U2`) |
+| **14** | `LED_DATA` | Digital Out | `GPIO8` (Strapping) | Serial data line for WS2812B-2020 RGB Status LED (`D1`) |
+| **15** | `BTN_ARM_N` | Digital In | `GPIO9` (Strapping Boot) | Arm / Disarm switch `SW1` (Active-Low, 10k pull-up; bootloader strap on reset) |
+| **16** | `BTN_SOS_N` | Digital In | `GPIO10` | Emergency / Panic switch `SW2` (Active-Low, 10k pull-up) |
+| **17** | `VCC_3V3` | Power In | VDD3P3_CPU | +3.3V CPU Core Supply |
+| **18–24** | `NC` | Internal | - | Internal SIP Flash connections (embedded 4 MB Flash, left NC) |
+| **25** | `USB_DM` | USB D- | `GPIO18` | Native USB CDC / JTAG D- connection to `J2` Pin 2 |
+| **26** | `USB_DP` | USB D+ | `GPIO19` | Native USB CDC / JTAG D+ connection to `J2` Pin 3 |
+| **27** | `BUZZER_PWM` | PWM Out | `GPIO20` | 2.7 kHz / 4.0 kHz PWM drive for CUI 9mm piezo buzzer (`LS1`) |
+| **28** | `CHG_STAT` | Digital In | `GPIO21` | Charge status input from TI BQ51050B Pin 14 (Active-Low / Open-Drain) |
+| **29** | `XTAL_N` | Analog | - | 40.000 MHz RF crystal `Y1` Pin 3 |
+| **30** | `XTAL_P` | Analog | - | 40.000 MHz RF crystal `Y1` Pin 1 |
+| **31, 32**| `VCC_3V3` | Power In | VDDA | +3.3V Analog Supply |
+| **33 (EP)**| `GND` | Power | - | Exposed Ground & Thermal Pad |
 
 ### 9.3 Bill of Materials (BOM) PCBA 07
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52832-QFxx | QFN-48 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, 512KB Flash, 64KB RAM | `C80252` |
-| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
-| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with embedded effect waveform library | `C61633` |
-| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
-| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charger with 50 nA quiescent current | `C144857` |
-| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz resonance) | Custom / Distrelec |
-| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Transducer (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD (1.00mm) | SWD programming header (3V3/SWDIO/SWDCLK/GND) | `C160404` |
-| **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Tactile IP67 micro push-buttons (Arm/Disarm, SOS/Aux) | `C115358` |
-| **`D1`** | WS2812B-2020 | SMD 2020 | Intelligent RGB Status LED under PMMA lightpipe | `C2843785` |
-| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.0 mm pitch) | `C160402` |
-| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C160402` |
+| **`U1`** | ESP32-C3FH4 | QFN-32 (5x5mm) | 32-Bit RISC-V SoC with BLE 5.0, 4MB embedded Flash, 160MHz | `C2877543` |
+| **`U2`** | SX1262IMLTRT | QFN-24 (4x4mm) | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C908200` |
+| **`U4`** | BQ51050BRHLR | VQFN-20 (3.5x4.5mm) | TI 5W Qi Wireless Receiver & integrated LiPo Direct Charger (4.2V) | `C89715` |
+| **`U6`** | TPS7A0233PDBVR | SOT-23-5 | TI Ultra-Low-Iq (25 nA) 3.3V / 200mA LDO Linear Regulator | `C444645` |
+| **`LS1`** | CPT-9019S-SMT | SMD 9x9mm | CUI Devices Piezo Sounder (85 dBA @ 10 cm, 2.7–4.0 kHz) | `C966804` |
+| **`ANT1`** | 868MHz Ceramic Antenna | SMD 0805 | 868 MHz SMD chip antenna for SX1262 LoRa | `C2909988` |
+| **`ANT2`** | 2.4GHz Ceramic Antenna | SMD 0805 | 2.4 GHz SMD chip antenna for ESP32-C3 BLE 5.0 | `C2909988` |
+| **`Y1`** | 40.000 MHz 10ppm | SMD 2016 (4-Pin) | Precision RF crystal for ESP32-C3FH4 | `C386341` |
+| **`Y3`** | 32.000 MHz ±0.5ppm | SMD 2016 (4-Pin) | Temperature Compensated Crystal Oscillator (TCXO) for SX1262 | `C2836473` |
+| **`SW1`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Tactile IP67 micro push-button: ARM / Alarm System (GPIO 9 Boot) | `C115357` |
+| **`SW2`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Tactile IP67 micro push-button: SOS / Panic Alert (GPIO 10) | `C115357` |
+| **`D1`** | WS2812B-2020 | SMD 2020 (PLCC-4) | Digital RGB status LED (centered below PMMA lightpipe, GPIO 8) | `C2843785` |
+| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertical | 100% solderless plug connection for 180–200 mAh LiPo pouch battery (with PCM) | `C145956` |
+| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD Vertical | USB CDC / JTAG Flashing & Telemetry (3V3, USB_DM, USB_DP, GND) | `C145958` |
+| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertical | 100% solderless plug connection for 24 mm Qi receiver coil (AC1/AC2) | `C145956` |
+| **`C1`** | 10µF 10V X5R | SMD 0603 | LiPo battery buffer capacitor (VBAT) for BQ51050B & LDO | `C19702` |
+| **`C2`** | 10µF 6.3V X5R | SMD 0603 | 3.3V VDD main bulk capacitor for ESP32-C3 | `C19702` |
+| **`C3`** | 100nF 16V X7R | SMD 0402 | ESP32-C3 MCU decoupling capacitor | `C1525` |
+| **`C4`** | 100nF 16V X7R | SMD 0402 | SX1262 LoRa RF decoupling capacitor | `C1525` |
+| **`R1, R2`** | 10kΩ 1% | SMD 0402 | Pull-up resistors for tactile buttons SW1 (ARM) and SW2 (SOS) | `C25744` |
 
 ---
 

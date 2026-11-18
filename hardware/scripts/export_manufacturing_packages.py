@@ -93,8 +93,8 @@ BOARDS = [
         "title": "OpenMotorBridge 2-in-1 LoRa Smart-Keyfob & Pager PCB",
         "sch": os.path.join(BASE_DIR, "kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_sch"),
         "pcb": os.path.join(BASE_DIR, "kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"),
-        "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
-        "is_4layer": False
+        "layers": "F.Cu,B.Cu,In1.Cu,In2.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
+        "is_4layer": True
     },
     {
         "name": "08_radar_submcu_pcba",
@@ -160,6 +160,25 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
         if not lcsc:
             known_lcsc = {
                 "ESP32-C6-MINI-1U": "C5267233",
+                "ESP32-C3FH4": "C2877543",
+                "SX1262IMLTRT": "C908200",
+                "BQ51050BRHLR": "C89715",
+                "TPS7A0233PDBVR": "C444645",
+                "CPT-9019S_BUZZER": "C966804",
+                "CPT-9019S-SMT": "C966804",
+                "868MHz_CHIP_ANT": "C2909988",
+                "2.4GHz_BLE_ANT": "C2909988",
+                "10uF_VBAT": "C19702",
+                "10uF_3V3": "C19702",
+                "100nF_MCU": "C1525",
+                "100nF_LORA": "C1525",
+                "10k_PULLUP": "C25744",
+                "BTN_ARM": "C115357",
+                "BTN_SOS": "C115357",
+                "BM02B-SRSS-TB": "C145956",
+                "BM04B-SRSS-TB": "C145958",
+                "40.000MHz": "C386341",
+                "32MHz_TCXO": "C2836473",
                 "BQ24075RGTR": "C96825",
                 "XC6206P332MR": "C5446",
                 "ES8388": "C365736",
@@ -259,12 +278,14 @@ def export_jlcpcb_bom(pcb_file, sch_file, output_csv):
         for (comment, footprint, lcsc), refs in sorted(grouped.items(), key=lambda x: x[1][0]):
             writer.writerow([", ".join(sorted(refs)), comment, footprint, lcsc, len(refs)])
 
-def export_pcb_packages():
+def export_pcb_packages(board_filter=None):
     print("=" * 75)
     print("🚀 EXPORTING PCB GERBERS, DRILL, BOM & CPL FOR JLCPCB")
     print("=" * 75)
 
     for b in BOARDS:
+        if board_filter and board_filter not in b["name"]:
+            continue
         board_dir = os.path.join(OUTPUT_BASE, b["name"])
         gerber_tmp = os.path.join(board_dir, "gerbers_temp")
         os.makedirs(gerber_tmp, exist_ok=True)
@@ -486,6 +507,7 @@ if __name__ == "__main__":
     parser.add_argument("--render-pcba", action="store_true", help="Render KiCad 3D PCBA views and sync to docs")
     parser.add_argument("--with-renders", action="store_true", help="Compile CAD models, render CAD and render all PCBAs")
     parser.add_argument("--only-renders", action="store_true", help="Only run CAD and PCBA render generation without packaging")
+    parser.add_argument("--board", type=str, default=None, help="Filter export to a specific board name (e.g. 07_smart_keyfob_pcba)")
     args = parser.parse_args()
 
     if args.with_renders or args.only_renders or args.build_cad:
@@ -496,9 +518,10 @@ if __name__ == "__main__":
 
     if not args.only_renders:
         os.makedirs(OUTPUT_BASE, exist_ok=True)
-        export_pcb_packages()
-        export_wiring_harness_package()
-        package_3d_print_stls()
+        export_pcb_packages(board_filter=args.board)
+        if not args.board:
+            export_wiring_harness_package()
+            package_3d_print_stls()
         print("\n" + "=" * 75)
         print(f"🎉 ALL MANUFACTURING PACKAGES SUCCESSFULLY CREATED IN:")
         print(f"   {OUTPUT_BASE}")

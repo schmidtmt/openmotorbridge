@@ -780,8 +780,8 @@
         "en": "Smart Keyfob Assembly"
       },
       "desc": {
-        "de": "Drahtloser Schlüsselanhänger mit PCBA 07, LRA-Haptik und TPU-Bumper",
-        "en": "Wireless keyfob with PCBA 07, LRA haptic and TPU protective bumper"
+        "de": "Drahtloser Schlüsselanhänger mit PCBA 07, Piezo-Akustik-Pager und TPU-Bumper",
+        "en": "Wireless keyfob with PCBA 07, acoustic piezo pager and TPU protective bumper"
       },
       "parts": [
         {

@@ -1,6 +1,14 @@
 #include "ws2812b_led.h"
 #include "keyfob_config.h"
 #include <math.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_log.h"
+#include "esp_cpu.h"
+#include "driver/gpio.h"
+#include "esp_rom_sys.h"
+
+static const char* TAG = "Ws2812bLed";
 
 Ws2812bLed& Ws2812bLed::instance() {
     static Ws2812bLed s_instance;
@@ -14,15 +22,71 @@ Ws2812bLed::Ws2812bLed()
       m_r(0), m_g(0), m_b(0) {}
 
 void Ws2812bLed::transmit_pixel(uint8_t r, uint8_t g, uint8_t b) {
-    // Hardware NRZ 800 kHz PWM/SPI single-wire stream to KEYFOB_PIN_LED_DATA (Pad L1)
     m_r = r;
     m_g = g;
     m_b = b;
+
+    // WS2812B expects GRB order, MSB first
+    uint32_t grb = ((uint32_t)g << 16) | ((uint32_t)r << 8) | ((uint32_t)b);
+
+    // CPU clock cycles calculation for 160 MHz ESP32-C3 RISC-V:
+    // Period = 1.25 us = 200 cycles @ 160 MHz
+    // T0H = 0.35 us (~56 cycles),  T0L = 0.90 us (~144 cycles)
+    // T1H = 0.70 us (~112 cycles), T1L = 0.55 us (~88 cycles)
+    const uint32_t c_t0h = 56;
+    const uint32_t c_t0l = 144;
+    const uint32_t c_t1h = 112;
+    const uint32_t c_t1l = 88;
+
+    portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+    taskENTER_CRITICAL(&mux);
+
+    for (int i = 23; i >= 0; i--) {
+        bool bit = (grb >> i) & 0x01;
+        uint32_t high_cycles = bit ? c_t1h : c_t0h;
+        uint32_t low_cycles  = bit ? c_t1l : c_t0l;
+
+        // Drive HIGH
+        gpio_set_level(KEYFOB_PIN_LED_DATA, 1);
+        uint32_t start = esp_cpu_get_cycle_count();
+        while ((esp_cpu_get_cycle_count() - start) < high_cycles) {
+            // busy wait
+        }
+
+        // Drive LOW
+        gpio_set_level(KEYFOB_PIN_LED_DATA, 0);
+        start = esp_cpu_get_cycle_count();
+        while ((esp_cpu_get_cycle_count() - start) < low_cycles) {
+            // busy wait
+        }
+    }
+
+    taskEXIT_CRITICAL(&mux);
+
+    // Latch reset pulse (> 50 us)
+    esp_rom_delay_us(60);
 }
 
 bool Ws2812bLed::init() {
-    transmit_pixel(0, 0, 0);
+    gpio_config_t io_conf = {};
+    io_conf.pin_bit_mask = (1ULL << KEYFOB_PIN_LED_DATA);
+    io_conf.mode         = GPIO_MODE_OUTPUT;
+    io_conf.pull_up_en   = GPIO_PULLUP_DISABLE;
+    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
+    io_conf.intr_type    = GPIO_INTR_DISABLE;
+
+    esp_err_t err = gpio_config(&io_conf);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to configure LED_DATA pin: %d", err);
+        return false;
+    }
+
+    gpio_set_level(KEYFOB_PIN_LED_DATA, 0);
+    esp_rom_delay_us(80);
+
     m_initialized = true;
+    transmit_pixel(0, 0, 0);
+    ESP_LOGI(TAG, "WS2812B RGB LED initialized on GPIO %d", KEYFOB_PIN_LED_DATA);
     return true;
 }
 
@@ -70,7 +134,7 @@ void Ws2812bLed::update(uint32_t delta_ms) {
         }
 
         case KEYFOB_LED_CHARGING_AMBER: {
-            // Pulsing amber/yellow when on Qi wireless pad (Pad K2 CHG_STAT active)
+            // Pulsing amber/yellow when on Qi wireless pad (CHG_STAT active)
             float phase = (float)(m_anim_time_ms % 1200) / 1200.0f;
             float brightness = 0.3f + 0.7f * 0.5f * (1.0f + sinf(phase * 2.0f * (float)M_PI));
             uint8_t r = (uint8_t)(brightness * 200.0f);

@@ -13,12 +13,15 @@ public:
     bool is_charging() const;
     uint16_t get_battery_voltage_mv() const;
     uint8_t get_battery_percentage() const;
+    bool is_low_battery() const;
 
-    void enter_ultra_low_power_sleep();
+    void enter_light_sleep(uint32_t sleep_time_ms);
+    void enter_deep_sleep();
 
 private:
     KeyfobPowerManager();
     void read_sensors();
+    void configure_sleep_wakeups();
 
     bool m_initialized;
     bool m_is_charging;

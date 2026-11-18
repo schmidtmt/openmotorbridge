@@ -1393,7 +1393,7 @@ const BOM_PARTS = {
       "de": "PCBA 07: Smart-Keyfob",
       "en": "PCBA 07: Smart Keyfob"
     },
-    "spec": "38.0x19.0 mm 4-Layer, Nordic nRF52832, SX1262 LoRa, DRV2605L LRA, BQ51003 Qi, JST-SH",
+    "spec": "38.0x19.0 mm 4-Layer, ESP32-C3FH4 (BLE 5.0), SX1262 LoRa, TI BQ51050B Qi-Charger, Piezo-Buzzer, JST-SH",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1401,8 +1401,8 @@ const BOM_PARTS = {
       7.5
     ],
     "desc": {
-      "de": "2-in-1 LoRa Smart-Keyfob & Silent Pager mit haptischem Feedback, Qi-Ladung & N52-Key",
-      "en": "2-in-1 LoRa smart keyfob & silent pager with haptic feedback, Qi charging & N52 key"
+      "de": "2-in-1 LoRa Smart-Keyfob & Pager mit akustischem Piezo-Alarm, Qi-Direktladung & N52-Key",
+      "en": "2-in-1 LoRa smart keyfob & pager with acoustic piezo alarm, Qi direct charging & N52 key"
     },
     "id_kicad": "kicad_smart_keyfob",
     "pkg_qty": 5,
@@ -3172,8 +3172,8 @@ const BOM_ASSEMBLIES = {
       "en": "Smart Keyfob Assembly"
     },
     "desc": {
-      "de": "Drahtloser Schlüsselanhänger mit PCBA 07, LRA-Haptik und TPU-Bumper",
-      "en": "Wireless keyfob with PCBA 07, LRA haptic and TPU protective bumper"
+      "de": "Drahtloser Schlüsselanhänger mit PCBA 07, Piezo-Akustik-Pager und TPU-Bumper",
+      "en": "Wireless keyfob with PCBA 07, acoustic piezo pager and TPU protective bumper"
     },
     "parts": [
       {

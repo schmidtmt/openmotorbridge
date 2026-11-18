@@ -41,9 +41,9 @@ OpenMotorBridge v10.0 ersetzt das frühere experimentelle UWB-Funkbackbone durch
 |       | (Schnappkorb für Front-Node)  | (Schnapprast) | (ENIG)  | TMP117, OPT3001,     |
 |       | I2C/UART/1PPS Umwelt & GNSS   | 100% SMT      |         | JST-GH 8P In (SM08B) |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Lagen | Nordic nRF52832 SoC, |
-|       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, DRV2605L|
-|       | Öffnet Pod-Slide-in Deckel    |               |         | BQ51003 Qi, JST-SH   |
+| **PCBA 07**| **2-in-1 LoRa Smart-Keyfob**  | 38 x 19 mm    | 4 Lagen | ESP32-C3FH4 RISC-V,   |
+|       | (Silent Pager, N52 Key & Qi)  | (Tasche M2)   | (ENIG)  | SX1262 LoRa, BQ51050B |
+|       | Öffnet Pod-Slide-in Deckel    |               |         | 9mm Piezo-Summer, Qi  |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 08**| **Radar 2.0 Sub-MCU & Wings** | 115 x 65 mm   | 2 Lagen | ESP32-C3/C5 Sub-MCU, |
 |       | (Wheeltec 77GHz & V2X Patch)  | (Flügel M3)   | (ENIG)  | Wheeltec MR20 (AoP), |
@@ -877,54 +877,56 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 
 ![PCBA 07 2-in-1 LoRa Smart-Keyfob](../images/pcba/pcba07_smart_keyfob_3d.png)
 
-*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine (38,0 x 19,0 mm, 4 Lagen) mit Nordic nRF52832 SoC, Semtech SX1262 LoRa Transceiver, TI DRV2605L Haptik-Treiber, BQ51003 Qi-Ladecontroller und JST-SH Induktions-Spulen-, Akku- und SWD-Anschlüssen.*
+*Abbildung 7.7: 3D-Render der ultrakompakten PCBA 07 Trägerplatine (38,0 x 19,0 mm, 4 Lagen) mit ESP32-C3FH4 RISC-V MCU (embedded 4MB Flash), Semtech SX1262 LoRa Transceiver, TI BQ51050BRHLR All-in-One Qi-Empfänger- & LiPo-Direktladeregler, CUI CPT-9019S 9mm Piezo-Summer und zentriertem 3-Element-Bedienfeld (SW1, RGB-LED, SW2).*
 
 ### 9.1 Technische Platinen-Kenndaten & Lötfreie Qi-Montage
 * **Abmessungen:** $38{,}0 \times 19{,}0 \times 1{,}0\,\text{mm}$ (4-Lagen FR-4, ENIG-Goldfinish).
 * **Kern-Chips:**
-  * Nordic `nRF52832-QFxx` SoC (Bluetooth Low Energy 5.4, ARM Cortex-M4F @ 64 MHz, QFN-48 $6 \times 6\,\text{mm}$, LCSC `C80252`).  
-    *(BLE gewährleistet einen extrem sparsamen Ruhestrom von $< 25\,\mu\text{A}$, sodass die 200-mAh-Zelle monatelang betriebsbereit bleibt).*
+  * Espressif `ESP32-C3FH4` SoC (32-bit RISC-V @ 160 MHz, Bluetooth Low Energy 5.0, integrierter 4 MB SPI-Flash, internes LDO-Decoupling, QFN-32 $5 \times 5\,\text{mm}$, 0,5 mm Pitch).  
+    *(100 % einheitlicher ESP-IDF Toolchain-Stack wie alle anderen OMB-Knoten; interner kalibrierter RTC-Oszillator eliminiert den externen 32-kHz-Uhrenquarz; einziger HF-Quarz ist `Y1` 40.000 MHz).*
   * Semtech `SX1262` LoRa Transceiver (868.5 MHz Kanal 3, empfängt Alarme bis zu 4,5 km Reichweite).
-  * Texas Instruments `DRV2605L` Haptiktreiber für Vybronics 10x3.6mm LRA Linearmotor.
-  * Texas Instruments `BQ51003` Qi Wireless Power Receiver Controller & `BQ25100` LiPo-Lademanager.
+  * Texas Instruments `BQ51050BRHLR` All-in-One Qi-Wireless-Receiver & integrierter Li-Ion/LiPo-Direktlader (VQFN-20 $3{,}5 \times 4{,}5\,\text{mm}$). Ersetzt den bisherigen BQ51003 BGA und separaten BQ25100 Lade-IC vollständig – lädt die LiPo-Zelle direkt ohne 5V-Zwischenwandler.
+  * CUI Devices `CPT-9019S-SMT` 9-mm-Piezo-Summer (`LS1`, 85 dBA @ 10 cm, 2.7–4.0 kHz Resonanzfrequenz) zur durchdringenden akustischen Alarmierung durch dicke Motorrad-Lederjacken.
+  * Texas Instruments `TPS7A0233PDBVR` Ultra-Low-$I_q$ 3.3V LDO (`U6`, SOT-23-5, $I_q = 25\,\text{nA}$).
+* **Zentrierte 3-Element-Bedienfeld-Ergonomie:**
+  * `SW1` (Arm / Disarm): $X = 117{,}0\,\text{mm}$.
+  * `D1` (WS2812B-2020 RGB-Status-LED): $X = 122{,}5\,\text{mm}$ – exakt zentriert zwischen den beiden Tastern unter dem PMMA-Lichtleiter.
+  * `SW2` (Panic / SOS): $X = 128{,}0\,\text{mm}$.
+  * **$11{,}0\,\text{mm}$ echter Fingerabstand** zwischen SW1 und SW2 verhindert Fehlbedienungen mit Motorradhandschuhen; der 9-mm-Piezo-Summer `LS1` liegt frei und isoliert auf der rechten Platinenhälfte ($X = 133{,}5\,\text{mm}$).
 * **100 % Lötfreie Induktionsspulen- & Akku-Montage (`J3`, `J1` & `J2`):**
-  * Die 24–28 mm Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-SH SMD-Header (`J3`, `BM02B-SRSS-TB`, 1.00 mm Raster)** vibrationsfest angesteckt.
-  * Der 180–200 mAh LiPo-Pouch-Akku (mit integrierter PCM-Schutzschaltung) wird über einen baugleichen **2-poligen JST-SH SMD-Header (`J1`, `BM02B-SRSS-TB`, 1.00 mm Raster)** angesteckt.
-  * Der 4-polige **JST-SH SMD-Header (`J2`, `BM04B-SRSS-TB`, 1.00 mm Raster)** dient als SWD-Programmierschnittstelle (`VCC_3V3`, `SWDIO`, `SWDCLK`, `GND`).
-  * Beim Zusammenbau des Smart-Keyfobs sind somit keinerlei manuelle Lötarbeiten erforderlich (100 % lötfreies IKEA-Montageprinzip).
+  * Die 24–28 mm Qi-Empfängerspule wird über einen ultrakompakten **2-poligen JST-SH SMD-Header (`J3`, `BM02B-SRSS-TB`, 1.00 mm Raster)** vibrationsfest auf `B.Cu` angesteckt.
+  * Der 180–200 mAh LiPo-Pouch-Akku (mit integrierter PCM-Schutzschaltung) wird über einen baugleichen **2-poligen JST-SH SMD-Header (`J1`, `BM02B-SRSS-TB`, 1.00 mm Raster)** auf `B.Cu` angesteckt.
+  * Der 4-polige **JST-SH SMD-Header (`J2`, `BM04B-SRSS-TB`, 1.00 mm Raster)** dient als native USB/UART-Programmierschnittstelle (`VCC_3V3`, `USB_DM`, `USB_DP`, `GND`).
 
-### 9.2 Vollständige Pinbelegung des Nordic nRF52832 SoC (PCBA 07 `U1`)
+### 9.2 Vollständige Pinbelegung des ESP32-C3FH4 SoC (PCBA 07 `U1`)
 
-| QFN-48 Pin | Signalname | Signal-Typ | Zephyr GPIO | Funktion / Hardware-Verbindung |
+| QFN-32 Pin | Signalname | Signal-Typ | ESP-IDF GPIO | Funktion / Hardware-Verbindung |
 | :---: | :--- | :---: | :---: | :--- |
-| **2** | `RTC1` | Analog | `P0.00` | 32.768 kHz Uhrenquarz XL1 |
-| **3** | `RTC2` | Analog | `P0.01` | 32.768 kHz Uhrenquarz XL2 |
-| **4** | `LORA_SCK` | Digital Out | `P0.02` | SPI Serial Clock zu Semtech SX1262 (`U2`) |
-| **5** | `LORA_MOSI` | Digital Out | `P0.03` | SPI Master-Out Slave-In zu SX1262 (`U2`) |
-| **6** | `LORA_MISO` | Digital In | `P0.04` | SPI Master-In Slave-Out von SX1262 (`U2`) |
-| **7** | `LORA_NSS` | Digital Out | `P0.05` | SPI Chip-Select (Active-Low) zu SX1262 (`U2`) |
-| **8** | `LORA_DIO1` | Digital In | `P0.06` | IRQ-Leitung von SX1262 (Empfang 0xFE Alarmpaket) |
-| **9** | `LORA_BUSY` | Digital In | `P0.07` | Busy-Statusleitung von SX1262 (`U2`) |
-| **10** | `LORA_RESET` | Digital Out | `P0.08` | Hardware-Reset zu SX1262 (`U2`) |
-| **13** | `VCC_3V3` | Power In | - | +3.3V VDD Hauptversorgung |
-| **22** | `CHG_STAT` | Digital In | `P0.19` | Ladezustandsanzeige von TI BQ25100 (Low = Lädt, High = Voll) |
-| **23** | `BTN_ARM_N` | Digital In | `P0.20` | Scharfschalt-Taster `SW1` (Arm/Disarm, Active-Low, 10k Pull-Up) |
-| **25** | `SWDCLK` | Digital In | SWDCLK | SWD Programmiertakt zu `J2` Pin 3 |
-| **26** | `SWDIO` | Bi-Dir | SWDIO | SWD Programmierdaten zu `J2` Pin 2 |
-| **27** | `BTN_SOS_N` | Digital In | `P0.22` | Notfall-Paniktaster `SW2` (SOS/Alarm, Active-Low, 10k Pull-Up) |
-| **28** | `LED_DATA` | Digital Out | `P0.23` | Datenleitung für WS2812B-2020 RGB Status-LED (`D1`) |
-| **29** | `BUZZER_PWM` | Digital Out | `P0.24` | PWM-Ansteuerung (2.7 kHz / 4.0 kHz) für Murata SMD Piezo-Buzzer (`LS1`) |
-| **30** | `BLE_ANT_50R` | RF 2.4G | - | 50 Ohm Leitung zur Johanson 2450AT Keramik-Chipantenne (`ANT1`) |
-| **31** | `GND` | Power | - | System- und HF-Masse VSS |
-| **34** | `XTAL1` | Analog | - | 32.000 MHz HF-Präzisionsquarz XC1 |
-| **35** | `XTAL2` | Analog | - | 32.000 MHz HF-Präzisionsquarz XC2 |
-| **36** | `VCC_3V3` | Power In | - | +3.3V VDD Versorgung |
-| **40** | `DRV_EN` | Digital Out | `P0.28` | Hardware-Enable für TI DRV2605L Haptiktreiber (`U3`) |
-| **41** | `I2C_SDA` | Open-Drain | `P0.29` | I2C Datenleitung zu DRV2605L Haptiktreiber (`U3`) |
-| **42** | `I2C_SCL` | Open-Drain | `P0.30` | I2C Taktleitung zu DRV2605L Haptiktreiber (`U3`) |
-| **45** | `GND` | Power | - | Systemmasse VSS |
-| **48** | `VCC_3V3` | Power In | - | +3.3V VDD Versorgung |
-| **49 (EP)** | `GND` | Power | - | Exposed Thermal & Ground Pad |
+| **1** | `BLE_ANT_50R` | RF 2.4G | LNA_IN | 50-Ohm-Leitung zur Johanson 2450AT Keramik-Chipantenne (`ANT2`) |
+| **2, 3** | `VCC_3V3` | Power In | VDD3P3 | +3.3V VDD Hauptversorgung |
+| **4** | `BAT_SENSE` | Analog In | `GPIO0` (ADC1_CH0) | LiPo-Akkuspannungsteiler (100k/100k) zur Ladezustandsmessung |
+| **5** | `LORA_DIO1` | Digital In | `GPIO1` | IRQ-Interruptleitung von SX1262 (Empfang 0xFE Alarmpaket) |
+| **6** | `LORA_MISO` | Digital In | `GPIO2` (FSPIQ) | SPI Master-In Slave-Out von Semtech SX1262 (`U2`) |
+| **7** | `CHIP_EN` | Reset In | CHIP_PU | Reset / Enable (10k Pull-Up an 3.3V, 100nF an GND) |
+| **8** | `LORA_MOSI` | Digital Out | `GPIO3` (FSPID) | SPI Master-Out Slave-In zu SX1262 (`U2`) |
+| **9** | `LORA_SCK` | Digital Out | `GPIO4` (FSPIHD) | SPI Serial Clock zu SX1262 (`U2`) |
+| **10** | `LORA_NSS` | Digital Out | `GPIO5` (FSPIWP) | SPI Chip-Select (Active-Low) zu SX1262 (`U2`) |
+| **11** | `VCC_3V3` | Power In | VDD3P3_RTC | +3.3V RTC-Versorgung |
+| **12** | `LORA_BUSY` | Digital In | `GPIO6` (FSPICLK) | Busy-Statusleitung von SX1262 (`U2`) |
+| **13** | `LORA_RESET` | Digital Out | `GPIO7` (FSPICS0) | Hardware-Resetleitung zu SX1262 (`U2`) |
+| **14** | `LED_DATA` | Digital Out | `GPIO8` (Strapping) | Datenleitung für WS2812B-2020 RGB-Status-LED (`D1`) |
+| **15** | `BTN_ARM_N` | Digital In | `GPIO9` (Strapping Boot) | Scharfschalt-Taster `SW1` (Arm/Disarm, Active-Low, 10k Pull-Up; Bootloader-Einsprung bei Reset) |
+| **16** | `BTN_SOS_N` | Digital In | `GPIO10` | Notfall-Paniktaster `SW2` (SOS/Alarm, Active-Low, 10k Pull-Up) |
+| **17** | `VCC_3V3` | Power In | VDD3P3_CPU | +3.3V CPU-Core-Versorgung |
+| **18–24** | `NC` | Internal | - | Interne 4 MB Flash-Verbindungen (FH4 SIP Package, extern offen gelassen) |
+| **25** | `USB_DM` | USB D- | `GPIO18` | Nativer USB CDC / JTAG D- Datenanschluss zu `J2` Pin 2 |
+| **26** | `USB_DP` | USB D+ | `GPIO19` | Nativer USB CDC / JTAG D+ Datenanschluss zu `J2` Pin 3 |
+| **27** | `BUZZER_PWM` | PWM Out | `GPIO20` | 2.7 kHz / 4.0 kHz PWM für CUI 9mm Piezo-Summer (`LS1`) |
+| **28** | `CHG_STAT` | Digital In | `GPIO21` | Ladezustandsmeldung von TI BQ51050B Pin 14 (Active-Low / Open-Drain) |
+| **29** | `XTAL_N` | Analog | - | 40.000 MHz HF-Präzisionsquarz `Y1` Pin 3 |
+| **30** | `XTAL_P` | Analog | - | 40.000 MHz HF-Präzisionsquarz `Y1` Pin 1 |
+| **31, 32**| `VCC_3V3` | Power In | VDDA | +3.3V Analog-Versorgung |
+| **33 (EP)**| `GND` | Power | - | Exposed Ground & Thermal Pad (auf GND-Innenlage durchkontaktiert) |
 
 ---
 

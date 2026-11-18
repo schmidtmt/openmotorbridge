@@ -3,20 +3,58 @@
 tools/sync_keyfob_sch.py
 ========================
 Generates a 100% synchronized schematic for PCBA 07 (Smart Keyfob):
-Matches all 25 footprints and all pad nets from openmotorbridge_smart_keyfob.kicad_pcb.
+Matches all footprints, FPIDs, pad nets, and attributes from openmotorbridge_smart_keyfob.kicad_pcb.
+Ensures parity checks in KiCad DRC pass 100%.
 """
 
-import json
+import sys
 import uuid
+import pcbnew
 
+PCB_PATH = "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb"
 SCH_PATH = "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_sch"
 
 def u():
     return str(uuid.uuid4())
 
 def main():
-    with open('/tmp/pcba07_pcb_exact.json') as f:
-        comps = json.load(f)
+    board = pcbnew.LoadBoard(PCB_PATH)
+    comps = []
+    
+    for f in board.GetFootprints():
+        ref = f.GetReference()
+        val = f.GetValue()
+        fp = str(f.GetFPID().GetUniStringLibId())
+        in_bom = not f.IsExcludedFromBOM()
+        on_board = True
+        dnp = f.IsDNP()
+        
+        seen_pnums = set()
+        unique_pads = []
+        
+        sorted_pads = sorted(
+            list(f.Pads()),
+            key=lambda p: (0, int(p.GetNumber())) if p.GetNumber().isdigit() else (1, p.GetNumber())
+        )
+        for p in sorted_pads:
+            pnum = p.GetNumber()
+            if not pnum or pnum in seen_pnums:
+                continue
+            seen_pnums.add(pnum)
+            unique_pads.append({
+                "number": pnum,
+                "net": p.GetNetname()
+            })
+            
+        comps.append({
+            "ref": ref,
+            "val": val,
+            "fp": fp,
+            "in_bom": in_bom,
+            "on_board": on_board,
+            "dnp": dnp,
+            "pads": unique_pads
+        })
 
     sch = []
     sch.append('(kicad_sch')
@@ -24,14 +62,13 @@ def main():
     sch.append('\t(generator "eeschema")')
     sch.append('\t(generator_version "10.0")')
     sch.append(f'\t(uuid "{u()}")')
-    sch.append('\t(paper "A2")')
+    sch.append('\t(paper "A1")')
     sch.append('\t(title_block')
     sch.append('\t\t(title "OpenMotorBridge PCBA 07 - 2-in-1 LoRa Smart-Keyfob & Pager")')
-    sch.append('\t\t(date "2026-10-16")')
-    sch.append('\t\t(rev "v2.0")')
+    sch.append('\t\t(date "2026-11-18")')
+    sch.append('\t\t(rev "v3.0")')
     sch.append('\t\t(company "OpenMotorBridge Open Source Hardware")')
-    sch.append('\t\t(comment 1 "Nordic nRF52840 SoC, Semtech SX1262 LoRa, TI DRV2605L Haptics")')
-    sch.append('\t\t(comment 2 "TI BQ51003 Qi Wireless RX, TI BQ25100 Charger, CUI Buzzer")')
+    sch.append('\t\t(comment 1 "ESP32-C3FH4 MCU, Semtech SX1262 LoRa, TI BQ51050B Qi Charger, CUI 9mm Buzzer")')
     sch.append('\t)')
 
     # --- LIB SYMBOLS ---
@@ -66,8 +103,8 @@ def main():
     sch.append('\t)')
 
     # --- SYMBOL INSTANCES & GLOBAL LABELS ---
-    cols = 5
-    grid_x = 80.0
+    cols = 6
+    grid_x = 85.0
     grid_y = 100.0
     start_x = 60.0
     start_y = 60.0
@@ -78,6 +115,9 @@ def main():
         ref = c['ref']
         val = c['val']
         fp = c['fp']
+        in_bom_str = "yes" if c['in_bom'] else "no"
+        on_board_str = "yes" if c['on_board'] else "no"
+        dnp_str = "yes" if c['dnp'] else "no"
         pads = c['pads']
 
         col = idx % cols
@@ -87,7 +127,7 @@ def main():
         pos_y = start_y + row * grid_y
 
         sch.append(f'\t(symbol (lib_id "{ref}_sym") (at {pos_x:.2f} {pos_y:.2f} 0) (unit 1)')
-        sch.append('\t\t(in_bom yes) (on_board yes) (dnp no)')
+        sch.append(f'\t\t(in_bom {in_bom_str}) (on_board {on_board_str}) (dnp {dnp_str})')
         sch.append(f'\t\t(uuid "{u()}")')
         sch.append(f'\t\t(property "Reference" "{ref}" (at {pos_x:.2f} {pos_y - 25:.2f} 0) (effects (font (size 1.27 1.27))))')
         sch.append(f'\t\t(property "Value" "{val}" (at {pos_x:.2f} {pos_y - 22:.2f} 0) (effects (font (size 1.27 1.27))))')
@@ -121,7 +161,6 @@ def main():
 
         sch.append('\t)')
 
-    # Add all wires and labels outside the symbols
     for item in wires_and_labels:
         sch.append(item)
 

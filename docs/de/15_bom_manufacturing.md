@@ -156,22 +156,30 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 
 ---
 
-## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`, 4-Layer FR4 TG150, 38 x 19 mm)
+## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob & Pager (`openmotorbridge_smart_keyfob`, 4-Layer FR4 TG150, 38 x 19 mm)
 
 | Ref | Bauteil / Typ | Gehäuse | Spezifikation & Funktion | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52832-QFxx | QFN-48 | 32-Bit ARM Cortex-M4F SoC mit Bluetooth 5.4, 512KB Flash, 64KB RAM | `C80252` |
-| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
-| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver mit integrierter Effekt-Bibliothek | `C61633` |
-| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
-| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linearer LiPo-Ladecontroller mit 50 nA Ruhestrom | `C144857` |
-| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linearmotor (235 Hz Resonanzfrequenz) | Custom / Distrelec |
-| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD-Piezo-Schallwandler (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD (1.00mm) | SWD-Programmierstecker (3V3/SWDIO/SWDCLK/GND) | `C160404` |
-| **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Taktile IP67 Mikrotaster (Alarm/Arm, Aux/Licht) | `C115358` |
-| **`D1`** | WS2812B-2020 | SMD 2020 | RGB-Status-LED unter PMMA-Lichtleiter | `C2843785` |
-| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100 % lötfreie Steckverbindung für 24 mm Qi-Empfängerspule (1,0 mm Raster) | `C160402` |
-| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100 % lötfreie Steckverbindung für 180–200 mAh LiPo Pouch-Akku mit PCM | `C160402` |
+| **`U1`** | ESP32-C3FH4 | QFN-32 (5x5mm) | 32-Bit RISC-V SoC mit BLE 5.0, 4MB embedded Flash, 160MHz | `C2877543` |
+| **`U2`** | SX1262IMLTRT | QFN-24 (4x4mm) | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C908200` |
+| **`U4`** | BQ51050BRHLR | VQFN-20 (3.5x4.5mm) | TI 5W Qi Wireless Receiver & integrierter LiPo-Direktladeregler (4.2V) | `C89715` |
+| **`U6`** | TPS7A0233PDBVR | SOT-23-5 | TI Ultra-Low-Iq (25 nA) 3.3V / 200mA LDO-Linearregler | `C444645` |
+| **`LS1`** | CPT-9019S-SMT | SMD 9x9mm | CUI Devices Piezo-Schallwandler (85 dBA @ 10 cm, 2.7–4.0 kHz) | `C966804` |
+| **`ANT1`** | 868MHz Keramik-Antenne | SMD 0805 | 868 MHz SMD-Chipantenne für SX1262 LoRa | `C2909988` |
+| **`ANT2`** | 2.4GHz Keramik-Antenne | SMD 0805 | 2.4 GHz SMD-Chipantenne für ESP32-C3 BLE 5.0 | `C2909988` |
+| **`Y1`** | 40.000 MHz 10ppm | SMD 2016 (4-Pin) | Präzisions-HF-Quarz für ESP32-C3FH4 | `C386341` |
+| **`Y3`** | 32.000 MHz ±0.5ppm | SMD 2016 (4-Pin) | Temperaturkompensierter Quarzoszillator (TCXO) für SX1262 | `C2836473` |
+| **`SW1`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Taktiler IP67 Mikrotaster: ARM / Scharfschaltung (GPIO 9 Boot) | `C115357` |
+| **`SW2`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Taktiler IP67 Mikrotaster: SOS / Panikalarm (GPIO 10) | `C115357` |
+| **`D1`** | WS2812B-2020 | SMD 2020 (PLCC-4) | Digital-RGB-Status-LED (mittig unter PMMA-Lichtleiter, GPIO 8) | `C2843785` |
+| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertikal | 100 % lötfreier Steckkontakt für 180–200 mAh LiPo-Pouch-Akku (mit PCM) | `C145956` |
+| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD Vertikal | USB CDC / JTAG Flashing & Telemetrie (3V3, USB_DM, USB_DP, GND) | `C145958` |
+| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertikal | 100 % lötfreier Steckkontakt für 24 mm Qi-Empfängerspule (AC1/AC2) | `C145956` |
+| **`C1`** | 10µF 10V X5R | SMD 0603 | LiPo-Akkupufferung (VBAT) für BQ51050B & LDO | `C19702` |
+| **`C2`** | 10µF 6.3V X5R | SMD 0603 | 3.3V VDD Hauptstützkondensator für ESP32-C3 | `C19702` |
+| **`C3`** | 100nF 16V X7R | SMD 0402 | ESP32-C3 MCU Entkopplungskondensator | `C1525` |
+| **`C4`** | 100nF 16V X7R | SMD 0402 | SX1262 LoRa HF-Entkopplungskondensator | `C1525` |
+| **`R1, R2`** | 10kΩ 1% | SMD 0402 | Pull-Up-Widerstände für Taster SW1 (ARM) und SW2 (SOS) | `C25744` |
 
 ---
 

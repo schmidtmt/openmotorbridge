@@ -84,7 +84,7 @@ BOARDS = {
         "pcb": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_pcb",
         "sch": "hardware/kicad_smart_keyfob/openmotorbridge_smart_keyfob.kicad_sch",
         "mcu_ref": "U1",
-        "mcu_type": "nRF52832-QFAA",
+        "mcu_type": "ESP32-C3FH4",
         "fw_headers": []
     },
     "PCBA 08": {
@@ -344,7 +344,22 @@ def audit_board(board_id, cfg):
         print(f"    - Pad 1  (DEC1):               Net = '{pad1_net}'")
         print(f"    - Pad 46 (DEC4):               Net = '{pad46_net}'")
 
-    elif "ESP32-C3" in cfg["mcu_type"] or "ESP32-C5" in cfg["mcu_type"]:
+    elif "ESP32-C3" in cfg["mcu_type"]:
+        # ESP32-C3 (QFN-32 chip pinout):
+        # Pad 10: GPIO 8 (DATA / LED)
+        # Pad 11: GPIO 9 (BOOT strapping / VCC_3V3 pullup)
+        # Pad 18: GPIO 18 (USB D-)
+        # Pad 19: GPIO 19 (USB D+)
+        pad10_net = mcu_pads.get("10", "")
+        pad11_net = mcu_pads.get("11", "")
+        pad18_net = mcu_pads.get("18", "")
+        pad19_net = mcu_pads.get("19", "")
+        print(f"    - Pad 10 (GPIO 8 / DATA):      Net = '{pad10_net}' -> " + ("✅ LED_DATA" if "LED" in pad10_net else f"Net '{pad10_net}'"))
+        print(f"    - Pad 11 (GPIO 9 / BOOT):      Net = '{pad11_net}' -> " + ("✅ BOOT/VCC" if "VCC" in pad11_net or "BOOT" in pad11_net or "ARM" in pad11_net else f"Net '{pad11_net}'"))
+        print(f"    - Pad 18 (GPIO 18 / USB_D-):   Net = '{pad18_net}' -> " + ("✅ USB D-" if "DM" in pad18_net or "D_N" in pad18_net or "SWDIO" in pad18_net else f"Net '{pad18_net}'"))
+        print(f"    - Pad 19 (GPIO 19 / USB_D+):   Net = '{pad19_net}' -> " + ("✅ USB D+" if "DP" in pad19_net or "D_P" in pad19_net or "SWDCLK" in pad19_net else f"Net '{pad19_net}'"))
+
+    elif "ESP32-C5" in cfg["mcu_type"]:
         pad8_net = mcu_pads.get("8", "")
         pad13_net = mcu_pads.get("13", "")
         pad16_net = mcu_pads.get("16", "")

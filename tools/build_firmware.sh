@@ -14,7 +14,8 @@
 #   radar_submcu              | radar
 #   omm_module                | omm
 #   omm446_module             | omm446
-#   all                       (Builds all 6 ESP-IDF targets sequentially)
+#   smart_keyfob              | keyfob
+#   all                       (Builds all 7 ESP-IDF targets sequentially)
 #
 # Actions:
 #   build (default) | flash | monitor | menuconfig | fullclean | size
@@ -84,11 +85,15 @@ case "$TARGET" in
         TARGET_DIR="$FIRMWARE_DIR/omm446_module"
         TARGET_NAME="OMM 446 MHz PMR/DMR v10.0 (PCBA 10: ESP32-C6 + SA818-DMR)"
         ;;
+    keyfob|smart_keyfob)
+        TARGET_DIR="$FIRMWARE_DIR/smart_keyfob"
+        TARGET_NAME="Smart Keyfob & Pager v10.0 (PCBA 07: ESP32-C3FH4 + SX1262 + BQ51050B)"
+        ;;
     all)
         echo "========================================================================"
         echo "🏍️  OpenMotorBridge - Building ALL Firmware Targets"
         echo "========================================================================"
-        TARGETS=(main_controller front_node smart_cartridge radar_submcu omm_module omm446_module)
+        TARGETS=(main_controller front_node smart_cartridge radar_submcu omm_module omm446_module smart_keyfob)
         FAILED=0
         for t in "${TARGETS[@]}"; do
             echo ""

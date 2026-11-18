@@ -152,22 +152,30 @@ This document serves as the master reference (Single Source of Truth) for the co
 
 ---
 
-## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob (`openmotorbridge_smart_keyfob`, 4-Layer FR4 TG150, 38 x 19 mm)
+## 7. PCBA 07: 2-in-1 LoRa Smart-Keyfob & Pager (`openmotorbridge_smart_keyfob`, 4-Layer FR4 TG150, 38 x 19 mm)
 
 | Ref | Component / Type | Package | Specification & Function | LCSC Part |
 | :--- | :--- | :--- | :--- | :--- |
-| **`U1`** | nRF52832-QFxx | QFN-48 | 32-Bit ARM Cortex-M4F SoC with Bluetooth 5.4, 512KB Flash, 64KB RAM | `C80252` |
-| **`U2`** | SX1262IMLTRT | QFN-24 | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C90039` |
-| **`U3`** | DRV2605LDGSR | VSSOP-10 | TI ERM/LRA Haptic Driver with Integrated Effect Library | `C61633` |
-| **`U4`** | BQ51003YFPR | DSBGA-28 | TI 2.5W Qi Wireless Power Receiver Controller | `C144862` |
-| **`U5`** | BQ25100YFPR | DSBGA-6 | TI Linear LiPo Charge Controller with 50 nA Quiescent Current | `C144857` |
-| **`M1`** | VG1036001D | Coin 10x3.6mm | Vybronics LRA Linear Resonant Actuator (235 Hz Resonant Frequency) | Custom / Distrelec |
-| **`BZ1`**| PKLCS1212E4001 | SMD 12x12mm | Murata SMD Piezo Sounder (85 dB @ 10 cm, 4 kHz) | `C94511` |
-| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD (1.00mm) | SWD programming header (3V3/SWDIO/SWDCLK/GND) | `C160404` |
-| **`SW1..2`**| Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | 2x Tactile IP67 micro push-buttons (Arm/Disarm, Aux/Light) | `C115358` |
-| **`D1`** | WS2812B-2020 | SMD 2020 | RGB status LED under PMMA lightpipe | `C2843785` |
-| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 24 mm Qi receiver coil (1.0 mm pitch) | `C160402` |
-| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD (1.00mm) | 100% solderless plug connection for 180–200 mAh LiPo pouch battery with PCM | `C160402` |
+| **`U1`** | ESP32-C3FH4 | QFN-32 (5x5mm) | 32-Bit RISC-V SoC with BLE 5.0, 4MB embedded Flash, 160MHz | `C2877543` |
+| **`U2`** | SX1262IMLTRT | QFN-24 (4x4mm) | Semtech 868 MHz LoRa Transceiver (+22 dBm, TCXO) | `C908200` |
+| **`U4`** | BQ51050BRHLR | VQFN-20 (3.5x4.5mm) | TI 5W Qi Wireless Receiver & integrated LiPo Direct Charger (4.2V) | `C89715` |
+| **`U6`** | TPS7A0233PDBVR | SOT-23-5 | TI Ultra-Low-Iq (25 nA) 3.3V / 200mA LDO Linear Regulator | `C444645` |
+| **`LS1`** | CPT-9019S-SMT | SMD 9x9mm | CUI Devices Piezo Sounder (85 dBA @ 10 cm, 2.7–4.0 kHz) | `C966804` |
+| **`ANT1`** | 868MHz Ceramic Antenna | SMD 0805 | 868 MHz SMD chip antenna for SX1262 LoRa | `C2909988` |
+| **`ANT2`** | 2.4GHz Ceramic Antenna | SMD 0805 | 2.4 GHz SMD chip antenna for ESP32-C3 BLE 5.0 | `C2909988` |
+| **`Y1`** | 40.000 MHz 10ppm | SMD 2016 (4-Pin) | Precision RF crystal for ESP32-C3FH4 | `C386341` |
+| **`Y3`** | 32.000 MHz ±0.5ppm | SMD 2016 (4-Pin) | Temperature Compensated Crystal Oscillator (TCXO) for SX1262 | `C2836473` |
+| **`SW1`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Tactile IP67 micro push-button: ARM / Alarm System (GPIO 9 Boot) | `C115357` |
+| **`SW2`** | Alps SKRK / EVQ-P2 | SMD 3.9x2.9mm | Tactile IP67 micro push-button: SOS / Panic Alert (GPIO 10) | `C115357` |
+| **`D1`** | WS2812B-2020 | SMD 2020 (PLCC-4) | Digital RGB status LED (centered below PMMA lightpipe, GPIO 8) | `C2843785` |
+| **`J1`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertical | 100% solderless plug connection for 180–200 mAh LiPo pouch battery (with PCM) | `C145956` |
+| **`J2`** | BM04B-SRSS-TB | JST-SH 4-Pin SMD Vertical | USB CDC / JTAG Flashing & Telemetry (3V3, USB_DM, USB_DP, GND) | `C145958` |
+| **`J3`** | BM02B-SRSS-TB | JST-SH 2-Pin SMD Vertical | 100% solderless plug connection for 24 mm Qi receiver coil (AC1/AC2) | `C145956` |
+| **`C1`** | 10µF 10V X5R | SMD 0603 | LiPo battery buffer capacitor (VBAT) for BQ51050B & LDO | `C19702` |
+| **`C2`** | 10µF 6.3V X5R | SMD 0603 | 3.3V VDD main bulk capacitor for ESP32-C3 | `C19702` |
+| **`C3`** | 100nF 16V X7R | SMD 0402 | ESP32-C3 MCU decoupling capacitor | `C1525` |
+| **`C4`** | 100nF 16V X7R | SMD 0402 | SX1262 LoRa RF decoupling capacitor | `C1525` |
+| **`R1, R2`** | 10kΩ 1% | SMD 0402 | Pull-up resistors for tactile buttons SW1 (ARM) and SW2 (SOS) | `C25744` |
 
 ---
 

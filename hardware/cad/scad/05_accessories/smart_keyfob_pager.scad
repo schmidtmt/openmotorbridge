@@ -60,18 +60,20 @@ EYELET_THICK = 4.5;
 // KiCad Origin (100.0, 70.0) -> Fob Origin (PCB_X, PCB_Y)
 // X_fob = PCB_X + (X_kicad - 100.0)
 // Y_fob = PCB_Y + (Y_kicad - 70.0)
-// SW1 (BTN_ARM): KiCad (125.5, 86.75) -> Fob (30.5, 20.75) -> inverted Y for outer ergonomic layout
-SW1_X = PCB_X + 25.5; // 30.5 mm
-SW1_Y = PCB_Y + 5.5;  // 9.5 mm (Ergonomic outer edge placement)
+// SW1 (BTN_ARM): KiCad (111.65, 79.39) -> Fob (16.65, 13.39) -> Centered horizontal ergonomic layout
+SW1_X = PCB_X + 11.65; // 16.65 mm
+SW1_Y = PCB_Y + 9.39;  // 13.39 mm (Centerline placement)
 
-SW2_X = PCB_X + 34.0; // 39.0 mm
-SW2_Y = PCB_Y + 5.5;  // 9.5 mm (Ergonomic outer edge placement)
+// SW2 (BTN_SOS): KiCad (122.65, 79.39) -> Fob (27.65, 13.39) -> 11.0 mm tactile separation
+SW2_X = PCB_X + 22.65; // 27.65 mm
+SW2_Y = PCB_Y + 9.39;  // 13.39 mm (Centerline placement)
 
-LED_X = PCB_X + 35.9; // 40.9 mm (Near SW2)
-LED_Y = PCB_Y + 11.5; // 15.5 mm
+// LED (RGB Status): KiCad (117.15, 79.39) -> Fob (22.15, 13.39) -> Centered between SW1 and SW2
+LED_X = PCB_X + 17.15; // 22.15 mm (Centered between SW1 and SW2)
+LED_Y = PCB_Y + 9.39;  // 13.39 mm (Co-linear with switches)
 
-BUZZER_X = PCB_X + 31.25; // 36.25 mm
-BUZZER_Y = PCB_Y + 16.5;  // 20.5 mm
+BUZZER_X = PCB_X + 33.0; // 38.0 mm (Right acoustic chamber)
+BUZZER_Y = PCB_Y + 9.6;  // 13.6 mm (Centered vertically in cavity)
 
 // P_BAT Battery Solder Pads (KiCad 132.34, 81.0 on F.Cu)
 P_BAT_X = PCB_X + 32.34; // 37.34 mm
@@ -227,9 +229,14 @@ module fob_upper_shell() {
 // 3. Dual Tactile Silicone / TPU Sealing Membrane with Plungers (IP67 Sealed Keypad)
 module silicone_button_keypad() {
     color("#ff9f0a") { // High-visibility waterproof orange elastomer
-        // Base Sealing Gasket (0.8 mm thick sealing membrane)
-        translate([SW1_X - 4.2, SW1_Y - 3.8, 0])
-            rounded_box(SW2_X - SW1_X + 8.4, 7.6, 0.8, 1.5);
+        // Base Sealing Gasket (0.8 mm thick sealing membrane with pass-through for light guide)
+        difference() {
+            translate([SW1_X - 4.2, SW1_Y - 3.8, 0])
+                rounded_box(SW2_X - SW1_X + 8.4, 7.6, 0.8, 1.5);
+            // Center pass-through aperture for optical PMMA light guide
+            translate([LED_X, LED_Y, -0.2])
+                cylinder(r=1.2, h=1.5, $fn=24);
+        }
 
         // Button 1 (ARM / MUTE) - Raised tactile convex button cap
         translate([SW1_X, SW1_Y, 0.8]) {
