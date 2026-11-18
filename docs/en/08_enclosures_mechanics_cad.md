@@ -468,7 +468,7 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 
 1. **Cockpit Wall (Facing Rider / Handlebars, 3x Identical Oval Ports $11.0 \times 5.5\,\text{mm}$):**
    - **`CKPT 1` ($X = 33.5\,\text{mm}$):** Carries wiring for Right Mirror Pod (`J_POD_R`) and optional Right Speaker Corner Display (`J_DISP_R`). Uses either a dual-cable or single-cable TPU grommet.
-   - **`SENSOR` ($X = 46.5\,\text{mm}$):** Routes the 6-pin JST-GH ribbon cable for `J_SENSOR_EXT` upward directly into the top-docked Sensor Puck.
+   - **`SENSOR` ($X = 46.5\,\text{mm}$):** Routes the 8-pin JST-GH ribbon cable for `J_SENSOR_EXT` upward directly into the top-docked Sensor Puck.
    - **`CKPT 2` ($X = 70.5\,\text{mm}$):** Carries wiring for Left Mirror Pod (`J_POD_L`) and optional Left Speaker Corner Display (`J_DISP_L`).
    - **Software-Defined Inversion:** Ports `CKPT 1` and `CKPT 2` can be swapped symmetrically in firmware via a single click in the WebUI.
 2. **Vehicle & Accessory Wall (Facing Forward / Downward):**
@@ -1363,9 +1363,9 @@ The **5-Port Glove Box USB-C Media & Power-Injection Hub** ([`glovebox_power_inj
    * **PC Mode Prevention:** Data lines `D+` and `D-` are shorted ($R < 200\,\Omega$) inside the camera connector with zero host connection, ensuring the camera starts loop recording upon ignition ON and never freezes in a PC connection / webcam dialog!
    * On-handlebar smartphone Qi charging is handled via proven COTS brackets (SP Connect / QuadLock Wireless Charging Head).
 4. **Modular Snap-On Environmental Sensor Puck ("Körbchen", `sensor_puck_environmental.scad`, `PCBA 05D`):**
-   * High-accuracy environmental sensing on the 4-layer `PCBA 05D` ($34 \times 34\,\text{mm}$: u-blox SAM-M10Q GNSS `U1`, thermally isolated TI TMP117 temperature sensor `U2`, and TI OPT3001 ambient light sensor `U3` via 6-pin JST-GH `J1`) is housed in a **two-piece modular snap-on puck** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) / [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl) & [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl)), while the Knowles I2S MEMS microphone (`MK1`) sits directly behind the acoustic floor vent on `PCBA 05`.
+   * High-accuracy environmental sensing on the 4-layer `PCBA 05D` ($34 \times 34\,\text{mm}$: u-blox SAM-M10Q GNSS `U1`, thermally isolated TI TMP117 temperature sensor `U2`, TI OPT3001 ambient light sensor `U3`, and Bosch BMP390 altimeter `U4` via 8-pin JST-GH `J1`) is housed in a **two-piece modular snap-on puck** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) / [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl) & [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl)), while the Knowles I2S MEMS microphone (`MK1`) sits directly behind the acoustic floor vent on `PCBA 05`.
    * On motorcycles, it clicks securely onto the Front Node slide lid via dual bottom snap arms.
-   * In support vehicles (Car-Kit) or custom builds, it unclips in one second and connects via a 1.5 m 6-pin JST-GH lead to an ideal windshield location ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)).
+   * In support vehicles (Car-Kit) or custom builds, it unclips in one second and connects via a 1.5 m 8-pin JST-GH lead to an ideal windshield location ([`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)).
 
 ---
 

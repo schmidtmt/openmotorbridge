@@ -98,7 +98,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **L1** | 4.7 µH Automotive Inductor | Sunlord / Wurth | SMD 5x5 mm | `C2843490` | Speicherdrossel für TPS54302 5V-Hauptregler |
 | **L2** | 10 µH Automotive Inductor | Coilcraft / Wurth | SMD 7x7 mm | `C2843525` | Speicherdrossel für SW3526 30W USB-PD Fast-Charge Regler |
 | **J_BUS** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | 4-Draht Automotive Backbone (`VCC_BUS`, `GND`, `USB_D-`, `USB_D+`) zur Zentralbox (Strang 1) |
-| **J_SENSOR_EXT**| SM06B-GHS-TB | JST | 6-Pin 1.25mm SMD | `C2897372` | Modulares Sensor-Puck Interface zu `PCBA 05D` (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TX`, `GNSS_RX`) |
+| **J_SENSOR_EXT**| SM08B-GHS-TB | JST | 8-Pin 1.25mm SMD | `C2897374` | Modulares Sensor-Puck Interface zu `PCBA 05D` (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TIMEPULSE`, `GNSS_TX`, `GNSS_RX`, `GNSS_RESET_N`) |
 | **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung linker Spiegel-Pod (`PCBA 05C`: BSD LED, PTT/Geste) |
 | **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung rechter Spiegel-Pod (`PCBA 05C`: BSD LED, Cam-Tag/Geste) |
 | **J7** | TYPE-C-31-M-12 | Korean HRO | SMD Hybrid IP67 | `C2765186` | USB-C Service-, Flash- & Downstream-Port zum Handschuhfach-Hub (`PCBA 05B`) |
@@ -379,7 +379,7 @@ Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, dem Handschuhf
 | **Zusatzscheinwerfer (Aux Light)** | Front-Node `J_AUX_LIGHT` (`AUX 12V`)| JST-PH 2-Pin (2.0 mm) | Zusatzscheinwerfer / Nebelleuchten | 40 cm | COTS JST-PH 2P Pigtail (geschaltete 12V / 3.5A via TPS1H100) |
 | **Linker Spiegel-Pod (PTT & BSD)**| Front-Node `J_POD_L` | JST-GH 4-Pin (1.25 mm Latch) | `PCBA 05C` im linken Under-Perch Spiegel-Pod (`J1`) | 45 cm | COTS JST-GH 4P Kabel (PTT-Taster & 2x bernsteinfarbene BSD-LEDs) |
 | **Rechter Spiegel-Pod (CAM & BSD)**| Front-Node `J_POD_R` | JST-GH 4-Pin (1.25 mm Latch) | `PCBA 05C` im rechten Under-Perch Spiegel-Pod (`J1`) | 45 cm | COTS JST-GH 4P Kabel (Action-Cam Taster & 2x BSD-LEDs) |
-| **Sensor-Puck (GNSS / Klima / Licht)** | Front-Node `J_SENSOR_EXT` | JST-GH 6-Pin (1.25 mm Latch) | `PCBA 05D` im Sensor-Puck Gehäuse (`J1`) | 15–30 cm | COTS JST-GH 6P Kabel (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TX`, `GNSS_RX`) |
+| **Sensor-Puck (GNSS / Klima / Licht / Baro)** | Front-Node `J_SENSOR_EXT` | JST-GH 8-Pin (1.25 mm Latch) | `PCBA 05D` im Sensor-Puck Gehäuse (`J1`) | 15–30 cm | COTS JST-GH 8P Kabel (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TIMEPULSE`, `GNSS_TX`, `GNSS_RX`, `GNSS_RESET_N`) |
 | **MR20 Radar-Interconnect** | Radar `PCBA 08` `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH Stecker direkt in das Wheeltec MR20 Sensormodul | 40–50 mm | COTS JST-SH 4P zu JST-SH 4P |
 | **Zentralbox Service/CarPlay Port**| Zentralbox `PCBA 01` `J3` | USB-C SMD Buchse | Wasserdichte USB-C Buchse (IP67) am Stirndeckel | Direkt | Integriert im `020_slide_lid.stl` |
 | **USV LiPo-Akku Anschluss**| Zentralbox `PCBA 01` `J5` | Micro-Lock Plus 4-Pin (1.25 mm) | Anschlusskabel mit 10k NTC-Sensor des 2.200 mAh LiPo Flat-Packs | 8 cm | Am LiPo-Pouch vorkonfektioniert |

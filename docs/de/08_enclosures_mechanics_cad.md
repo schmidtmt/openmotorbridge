@@ -517,7 +517,7 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 
 1. **Cockpit-Wand (zum Lenker / Fahrer, 3x identische Oval-Ausbrüche $11{,}0 \times 5{,}5\,\text{mm}$):**
    - **`CKPT 1` ($X = 33{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Rechts (`J_POD_R`) und optional Speaker Corner Display Rechts (`J_DISP_R`) auf. Verwendet entweder den 2-Kabel-Dichteinsatz oder einen 1-Kabel-Einsatz.
-   - **`SENSOR` ($X = 46{,}5\,\text{mm}$):** Führt das 6-polige JST-GH Flachbandkabel für `J_SENSOR_EXT` nach oben direkt in den aufgerasteten Sensor-Puck.
+   - **`SENSOR` ($X = 46{,}5\,\text{mm}$):** Führt das 8-polige JST-GH Flachbandkabel für `J_SENSOR_EXT` nach oben direkt in den aufgerasteten Sensor-Puck.
    - **`CKPT 2` ($X = 70{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Links (`J_POD_L`) und optional Speaker Corner Display Links (`J_DISP_L`) auf.
    - **Software-Defined Zuweisung:** Die Cockpit-Ports `CKPT 1` und `CKPT 2` sind in der Firmware symmetrisch tauschbar (1-Klick Swap in WebUI). Ein Überkreuzen von Kabeln am Riser ist ausgeschlossen.
 
@@ -1628,9 +1628,9 @@ Der **5-Port Handschuhfach USB-C Media- & Power-Injection Hub** ([`glovebox_powe
    * **Schutz vor PC-Modus:** Die Datenleitungen `D+` und `D-` sind im Kamerastecker kurzgeschlossen ($R < 200\,\Omega$) und besitzen keinerlei Verbindung zum Host-Hub. Die Kamera erkennt ein reines Bordnetz-Ladegerät, startet bei Zündung-AN sofort die Schleifenaufnahme und blockiert niemals in einem "PC verbunden / Webcam / MTP"-Dialog!
    * Smartphone-Qi-Ladung erfolgt bei Bedarf am Lenker über industrieerprobte COTS-Halterungen (SP Connect / QuadLock Wireless Charging Head).
 4. **Modulares Schnapp-Sensor-Puck ("Körbchen", `sensor_puck_environmental.scad`, `PCBA 05D`):**
-   * Die hochsensible Umgebungssensorik auf der 4-Lagen `PCBA 05D` ($34 \times 34\,\text{mm}$: u-blox SAM-M10Q GNSS `U1`, thermisch isolierter TI TMP117 Temperatursensor `U2` und TI OPT3001 Umgebungslichtsensor `U3`, angebunden über den 6-poligen JST-GH Stecker `J1`) ist in einer **zweiteiligen modularen Schnapp-Kapsel** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) bzw. [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl) & [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl)) untergebracht, während das Knowles I2S MEMS Mikrofon (`MK1`) direkt vor dem Akustik-Vent im Boden des Front-Knotens (`PCBA 05`) sitzt.
+   * Die hochsensible Umgebungssensorik auf der 4-Lagen `PCBA 05D` ($34 \times 34\,\text{mm}$: u-blox SAM-M10Q GNSS `U1`, thermisch isolierter TI TMP117 Temperatursensor `U2`, TI OPT3001 Umgebungslichtsensor `U3` und Bosch BMP390 Barometer `U4`, angebunden über den 8-poligen JST-GH Stecker `J1`) ist in einer **zweiteiligen modularen Schnapp-Kapsel** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) bzw. [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl) & [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl)) untergebracht, während das Knowles I2S MEMS Mikrofon (`MK1`) direkt vor dem Akustik-Vent im Boden des Front-Knotens (`PCBA 05`) sitzt.
    * Auf dem Motorrad rastet das Körbchen über zwei untere Schnapplaschen direkt auf dem L-Schiebedeckel des Front-Knotens ein.
-   * Im Begleitfahrzeug (Car-Kit) oder bei Sonderbauten kann das Körbchen mit einem Griff ausgeklinkt und über ein 1,5 m langes 6-Pin JST-GH Verbindungskabel an optimal exponierter Stelle (z. B. an der Frontscheibenbasis via [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) platziert werden.
+   * Im Begleitfahrzeug (Car-Kit) oder bei Sonderbauten kann das Körbchen mit einem Griff ausgeklinkt und über ein 1,5 m langes 8-Pin JST-GH Verbindungskabel an optimal exponierter Stelle (z. B. an der Frontscheibenbasis via [`car_dashboard_wedge_dock.scad`](../../hardware/cad/scad/05_accessories/car_dashboard_wedge_dock.scad)) platziert werden.
 
 ---
 
