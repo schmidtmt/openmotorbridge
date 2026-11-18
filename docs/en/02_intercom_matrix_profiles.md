@@ -155,7 +155,7 @@ Classic handlebar Bluetooth remotes suffer from high latency ($80 \dots 250\,\te
 |                                        v                                               |
 | 4. INTERFACE TRIGGER (PCBA 03 in Satellite Pod):                               |
 |    * Host MCU on PCBA 03 switches AO3400A N-MOSFET (< 1 µs)                            |
-|    * Direct OptoMOS PTT keying (< 10 µs) or digital USB Audio Class               |
+|    * Direct OptoMOS PTT keying (< 10 µs) or digital ES8388 Codec Audio           |
 |    * Total glass-to-glass latency from switch press to physical button actuation: ~0.54|
 +----------------------------------------------------------------------------------------+
 ```

@@ -84,7 +84,7 @@ enum UsbBackbonePktType : uint8_t {
     USB_CMD_POD_CONTROL        = 0x21,  // Central Box -> Pod: PTT Trigger, BLE Command, Audio Routing
     USB_PKT_POD_ACK            = 0x22,  // Pod -> Central Box: Execution Acknowledgment & Status
 
-    // --- Digital USB Audio Class Backbone (Bidirectional, 48 kHz / 24-Bit PCM) ---
+    // --- Digital Automotive-USB Backbone (DFU, CDC Telemetry & Codec Audio) ---
     USB_PKT_AUDIO_STREAM_DOWN  = 0x24,  // Central Box -> Pods: Master Mix to Headsets (Mic + Navigation + TTS)
     USB_PKT_AUDIO_STREAM_UP    = 0x25,  // Pods -> Central Box: Intercom Spk-Out / Helmet Audio to Central Box
     USB_PKT_AUDIO_MEDIA_UP     = 0x26,  // Front Node -> Central Box: Music / Navigation Prompts
@@ -168,14 +168,14 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 ### 5.1 Dynamic Pod & Model Identification (Hardware Descriptors & Profile Matrix)
 To flexibly interface modern OEM communicators without brittle mechatronic solenoids, `PCBA 03` uses a pure digital and electrical identification scheme:
 1. **USB 2.0 Descriptor Handshake:** On boot, the carrier board reports its 16-bit model ID, hardware class, and 64-bit UID natively over USB 2.0 to the Central Box.
-2. **Harness Auto-Sense:** Automatically identifies whether a Sena SPIDER X Slim (micro-cable whip at `J_AUDIO_PWR`), Cardo Packtalk Edge (Air-Mount & USB-C port), OMM UCS 2.4 GHz module (USB Audio Class), analog radio (Midland PMR446), or hermetic dry-box is installed.
+2. **Harness Auto-Sense:** Automatically identifies whether a Sena SPIDER X Slim (micro-cable whip at `J_AUDIO_PWR`), Cardo Packtalk Edge (Air-Mount & USB-C port), OMM UCS 2.4 GHz module (ES8388 Codec / USB-CDC), analog radio (Midland PMR446), or hermetic dry-box is installed.
 
 | Model ID | Base Class | Model Name | Physical Interface | Control & Audio Characteristics |
 | :---: | :---: | :--- | :--- | :--- |
 | **`0x0101`** | Class A | **Sena SPIDER X Slim** | Micro-cable whip at `J_AUDIO_PWR` | 3.85V Direct-DC, ES8388 Line-In/Out, BLE GATT |
 | **`0x0102`** | Class A | **Sena +Mesh Adapter** | Internal USB-C charging port | Pure Bluetooth/Audio gateway; USB-PD charging |
 | **`0x0201`** | Class B | **Cardo Packtalk Edge / Pro**| Air-Mount & USB-C charging port | DMC Gen2, USB-PD charging ("Charge while Riding") |
-| **`0x0301`** | Class C | **OMM UCS 2.4 GHz Module** | Native USB 2.0 Port | Full-digital USB Audio Class 2.0, IPv6-Mesh |
+| **`0x0301`** | Class C | **OMM UCS 2.4 GHz Module** | Native USB 2.0 Port | Hardware-Codec ES8388 Audio, USB-CDC/DFU, IPv6-Mesh |
 | **`0x0401`** | Class D | **Midland PMR446 (G9 Pro)** | 2-Pin dual jack pigtail | OptoMOS PTT keying (`CPC1017N`), galvanically isolated |
 | **`0x0000`** | Class 0 | **Dry-Box / Luggage Bay** | Zero audio peripherals | Pure 30W/60W USB-PD charge port for phone/powerbank |
 

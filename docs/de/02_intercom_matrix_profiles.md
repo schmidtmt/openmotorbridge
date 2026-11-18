@@ -157,7 +157,7 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 |                                        v                                               |
 | 4. INTERFACE TRIGGER (PCBA 03 im Satelliten-Pod):                                       |
 |    * Direkte elektrische OptoMOS PTT-Tastung (`PTT_KEY`) in < 10 µs oder               |
-|    * Digitaler USB Audio Class Stream / BLE GATT Befehl (< 2 ms)                       |
+|    * Digitaler ES8388 Codec Audio Stream / BLE GATT Befehl (< 2 ms)                   |
 |    * Gesamtlatenz vom Lenkertaster bis zum aktiven Mesh-TX: < 0,20 ms                  |
 +----------------------------------------------------------------------------------------+
 ```

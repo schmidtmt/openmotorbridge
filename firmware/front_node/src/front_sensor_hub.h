@@ -25,6 +25,7 @@ public:
     uint8_t get_satellites_used() const { return m_satellites_used; }
     int16_t get_temperature_c_100() const { return m_temp_c_100; }
     uint32_t get_ambient_lux() const { return m_ambient_lux; }
+    uint32_t get_baro_pressure_pa() const { return m_baro_pressure_pa; }
 
 private:
     FrontSensorHub();
@@ -34,6 +35,7 @@ private:
     void poll_ublox_gnss();
     void poll_tmp117_temp();
     void poll_opt3001_lux();
+    void poll_bmp390_baro();
 
     bool m_i2c_initialized;
 
@@ -49,4 +51,5 @@ private:
     // Environmental sensors
     int16_t  m_temp_c_100;
     uint32_t m_ambient_lux;
+    uint32_t m_baro_pressure_pa;
 };

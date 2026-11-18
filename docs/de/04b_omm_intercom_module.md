@@ -24,13 +24,13 @@ Um Missverständnissen zwischen der Träger-Mechatronik und dem universellen Int
 +----------------------------------------------------+----------------------------------------------+
 | * Verbleibt dauerhaft am Boden des Koffer-Pods     | * Entnehmbares ECE 22.06 UCS-Modul           |
 | * 4-Ader Automotive-USB-Bus (12V/PD, USB 2.0)      | * Gehäusemaße: 68.0 x 36.0 x 16.0 mm         |
-| * Nativer USB Audio Class 2.0 Link zur Zentralbox  | * Integrierter 1000-mAh-LiPo-Akku (3.7 Wh)   |
+| * Dedizierter Audio-Signalpfad & CDC/DFU-Link       | * Integrierter 1000-mAh-LiPo-Akku (3.7 Wh)   |
 |   (Latenz < 0.2 ms, jitterfrei)                    | * BAT1 auf B.Cu direkt unter USB-C Port (J1) |
 | * Everest Semi ES8388 24-Bit / 48 kHz Audio-Codec  | * 4x taktile IP67-Taster an Gehäuseoberseite |
 | * Null Mechatronik-Verschleiß (keine Hubmagnete!)  | * Wasserdichte stirnseitige USB-C Buchse     |
 | * Interner 30W/60W USB-PD Schnellladeport          | * 3 Funk-Engines: OMM 2.4G + BT + 446 MHz    |
 | * 8-Pin Kelvin Audio & Power Interface (J_AUDIO)   | * 100 % Software-Umschaltung & Kombimodi     |
-| * Null 2.4-GHz/446-MHz-Funk auf Trägerplatine!     | * Nativ digitales USB Audio Class Streaming  |
+| * Null 2.4-GHz/446-MHz-Funk auf Trägerplatine!     | * Hardware-Codec Audio (ES8388) & USB-DFU    |
 +----------------------------------------------------+----------------------------------------------+
 ```
 

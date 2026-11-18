@@ -10,6 +10,7 @@ static const char* TAG = "FRONT_SENSOR_HUB";
 #define UBLOX_I2C_ADDR          0x42
 #define TMP117_I2C_ADDR         0x48
 #define OPT3001_I2C_ADDR        0x44
+#define BMP390_I2C_ADDR         0x76
 
 FrontSensorHub& FrontSensorHub::instance() {
     static FrontSensorHub s_instance;
@@ -26,7 +27,8 @@ FrontSensorHub::FrontSensorHub()
       m_satellites_used(0),
       m_gnss_fix_type(0),
       m_temp_c_100(2150),
-      m_ambient_lux(1200) {
+      m_ambient_lux(1200),
+      m_baro_pressure_pa(101325) {
 }
 
 esp_err_t FrontSensorHub::init_i2c() {
@@ -65,7 +67,15 @@ esp_err_t FrontSensorHub::init() {
     };
     inject_assistnow_mga(ubx_cfg_rate_10hz, sizeof(ubx_cfg_rate_10hz));
 
-    ESP_LOGI(TAG, "Cockpit Sensor Hub initialized successfully.");
+    // 3. Configure Bosch BMP390 Barometer (0x76 on Sensor Puck PCBA 05D)
+    // PWR_CTRL: Press EN (bit 0), Temp EN (bit 1), Mode normal (bits 4-5 = 0b11) -> 0x33
+    uint8_t bmp_pwr[2] = {0x1B, 0x33};
+    i2c_master_write_to_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, bmp_pwr, sizeof(bmp_pwr), pdMS_TO_TICKS(50));
+    // OSR: Pressure oversampling 4x (0x02)
+    uint8_t bmp_osr[2] = {0x1C, 0x02};
+    i2c_master_write_to_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, bmp_osr, sizeof(bmp_osr), pdMS_TO_TICKS(50));
+
+    ESP_LOGI(TAG, "Cockpit Sensor Hub initialized successfully (SAM-M10Q, TMP117, OPT3001, BMP390).");
     return ESP_OK;
 }
 
@@ -153,10 +163,26 @@ void FrontSensorHub::poll_opt3001_lux() {
     }
 }
 
+void FrontSensorHub::poll_bmp390_baro() {
+    if (!m_i2c_initialized) return;
+
+    uint8_t reg_addr = 0x04; // DATA_0 (Pressure XLSB, LSB, MSB)
+    uint8_t buf[3] = {0, 0, 0};
+    if (i2c_master_write_read_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, &reg_addr, 1,
+                                     buf, 3, pdMS_TO_TICKS(20)) == ESP_OK) {
+        uint32_t raw_press = ((uint32_t)buf[2] << 16) | ((uint32_t)buf[1] << 8) | buf[0];
+        if (raw_press > 0) {
+            // BMP390 raw pressure in 1/256 Pa -> Pa
+            m_baro_pressure_pa = raw_press / 256;
+        }
+    }
+}
+
 void FrontSensorHub::update() {
     poll_ublox_gnss();
     poll_tmp117_temp();
     poll_opt3001_lux();
+    poll_bmp390_baro();
 }
 
 void FrontSensorHub::populate_telemetry(UwbFrontTelemetryPkt& pkt) {
@@ -169,4 +195,5 @@ void FrontSensorHub::populate_telemetry(UwbFrontTelemetryPkt& pkt) {
     pkt.gnss_fix_type      = m_gnss_fix_type;
     pkt.ambient_temp_c_100 = m_temp_c_100;
     pkt.ambient_lux        = m_ambient_lux;
+    pkt.baro_pressure_pa   = m_baro_pressure_pa;
 }

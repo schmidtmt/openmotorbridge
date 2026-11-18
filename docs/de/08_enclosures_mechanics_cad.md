@@ -379,11 +379,11 @@ In der folgenden 4-Varianten-Inspektionsansicht (mit ergonomisch angeschnittener
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * Das UCS-Modul ($78 \times 44 \times 14\,\text{mm}$) und der 5V RF-Power-Booster ($32 \times 24 \times 9\,\text{mm}$) ruhen in einem maßgefertigten, formschlüssigen EPDM-Equipmentbett ($90 \times 52\,\text{mm}$).
    * Das OMM-System beherrscht echtes **USB-Power-On**: Sobald die Zentralbox bei KL15 die 5V/12V-Bordbusspannung freigibt, bootet der Transceiver vollautomatisch ohne jegliche mechanische Tasterbetätigung.
-   * Die Audio- und Datenübertragung erfolgt verlustfrei und volldigital über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB Audio Class 2.0). Ein internes Koaxialkabel verbindet den SMA-Ausgang direkt mit der Rückwand-Antennendurchführung.
+   * Die Audio- und Signalverarbeitung erfolgt über den integrierten ES8388 Audio-Codec; Steuerdaten, Telemetrie und DFU-Updates laufen über ein kurzes 90° USB-C Flachbandkabel direkt an `PCBA 03` (USB CDC/DFU). Ein internes Koaxialkabel verbindet den SMA-Ausgang direkt mit der Rückwand-Antennendurchführung.
 
 ![OMM 2.4 GHz UCS Transceiver im Monocoque-Pod](../images/cad/pod_variant_omm_cad.png)
 
-*Abbildung 8.16: OMM 2.4 GHz UCS Transceiver mit 5V RF-Power-Booster im maßgeschneiderten EPDM-Dämpfungsbett des Monocoque-Pods. Das System nutzt 100 % digitales USB Audio Class 2.0 direkt zur PCBA 03 und unterstützt vollautomatisches USB-Power-On beim Einschalten der Bordspannung.*
+*Abbildung 8.16: OMM 2.4 GHz UCS Transceiver mit 5V RF-Power-Booster im maßgeschneiderten EPDM-Dämpfungsbett des Monocoque-Pods. Das System nutzt den dedizierten ES8388 Audio-Codec mit direkter Signalanbindung an PCBA 03 und unterstützt vollautomatisches USB-Power-On beim Einschalten der Bordspannung.*
 
 4. **PMR446 Handfunkgeräte & Midland Intercoms:**
    * Kompakte PMR446-Funkgeräte oder Midland-Module (BTR1 / BT Mini) werden über vorkonfektionierte Spiralkabel-Adapterpeitschen an `PCBA 03` angebunden.

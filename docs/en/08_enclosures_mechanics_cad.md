@@ -342,7 +342,7 @@ In the following 4-variant inspection view (featuring an ergonomically cut-open 
 3. **OpenMotorMesh (OMM 2.4 GHz UCS Transceiver Bed):**
    * The full-scale UCS transceiver module ($78 \times 44 \times 14\,\text{mm}$) and the 5V RF power booster ($32 \times 24 \times 9\,\text{mm}$) rest securely inside a tailored high-density EPDM equipment bed ($90 \times 52\,\text{mm}$).
    * The OMM system natively supports **USB-Power-On**: As soon as the Central Box energizes the 5V/12V bus at KL15, the transceiver boots automatically without requiring any physical button presses.
-   * Digital USB audio and power route over a short 90° USB-C ribbon cable directly to `PCBA 03` (USB Audio Class 2.0). An internal coaxial pigtail connects the gold SMA output directly to the rear bulkhead antenna fitting.
+   * Audio is processed via the onboard ES8388 codec; telemetry, control data and DFU updates route over a short 90° USB-C ribbon cable directly to `PCBA 03` (USB CDC/DFU). An internal coaxial pigtail connects the gold SMA output directly to the rear bulkhead antenna fitting.
 
 4. **PMR446 Radios & Midland Communicators:**
    * Compact PMR446 radios or Midland devices (BTR1 / BT Mini) connect via pre-terminated spiral adapter whips to `PCBA 03`.

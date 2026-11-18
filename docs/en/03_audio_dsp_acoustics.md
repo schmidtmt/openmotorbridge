@@ -34,7 +34,7 @@ In traditional motorcycle audio installations, ground loops, ignition interferen
 
 1. **Complete Elimination of Analogue Bike Harness Lines:**
    * **Zero analogue audio lines** run through the chassis wiring.
-   * All audio and control interconnects between Central Box (`PCBA 01`) and the saddlebag pods (Pod 1 Left & Pod 2 Right) run over the rugged **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) with native USB Audio Class 2.0 (UAC2) streaming ($< 0.2\,\text{ms}$ latency).
+   * All audio and control interconnects between Central Box (`PCBA 01`) and the saddlebag pods (Pod 1 Left & Pod 2 Right) run over the rugged **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) with local conversion via the dedicated **Everest Semi ES8388 Codec** and synchronous USB-DFU/CDC telemetry ($< 0.2\,\text{ms}$ latency). (Central USB Audio Class 2.0 streaming is handled by the Qualcomm QCC3084 on the Central Box and the ESP32-S31 on the Front Node).
    * Due to digital differential USB signaling and star grounding (`PGND` vs. `AGND`) on `PCBA 03`, ground loops and alternator whine are physically eliminated.
 2. **Dual-Helmet Bluetooth Audio Hub (Qualcomm QCC3084):**
    * Rider and pillion pair their helmets directly via Bluetooth 5.4 to the dedicated Qualcomm QCC3084 Audio SoC on the Central Box (`PCBA 01`).

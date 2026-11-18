@@ -90,7 +90,7 @@ For riders who prefer installation directly via the Google Play Store, automated
 ![PWA Tab 3: Saddlebag Pods & Charging](../images/pwa/pwa_tab3_cartridges_dle_status.png)
 
 * **Live Status:** Displays active pods in Bay 1 (Left) and Bay 2 (Right) with profile detection, slide-in lid status, and dry-flap monitoring.
-* **Pod Hardware Badging:** Highlights ESP32-C6 host MCU, USB Audio Class 2.0 streaming, USB-PD charging power (W), and WebUSB DFU status.
+* **Pod Hardware Badging:** Highlights ESP32-C6 host MCU, ES8388 Audio Codec, USB-PD charging power (W), and WebUSB DFU status.
 * **Pod Onboarding Wizard:** Interactive guide for inserting OEM devices (Sena, Cardo, OMM) or switching to the watertight Dry Box.
 * **Ground-Truth Sync & WebUSB Flashing:** Firmware update and profile sync directly across the 4-wire USB bus without opening enclosures.
 

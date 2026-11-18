@@ -4,7 +4,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
 
 > [!NOTE]
 > **v10.0 Standardized Node Architecture Testbench-Update:**  
-> OpenMotorBridge v10.0 ersetzt das frühere UWB-Backbone durch einen hochrobusten, geschirmten **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit bis zu 60W Ladeleistung und $< 0{,}2\,\text{ms}$ Latenz. Die Zentralbox (`PCBA 01`) integriert Dual-Power Input (12V Bordnetz via Deutsch DTM vs. 5V–20V USB-PD Sink via TI LM5050 Ideal-Dioden-OR-ing). Die Testbench simuliert das 7-Platinen-System (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`), die symmetrischen Spiegel-Pods mit 5-Gesten-Erkennung, kassettenfreie Monocoque-Pods mit EPDM-Dry-Flap und unterbrechungsfreie USB Audio Class 2.0 Streams.
+> OpenMotorBridge v10.0 ersetzt das frühere UWB-Backbone durch einen hochrobusten, geschirmten **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit bis zu 60W Ladeleistung und $< 0{,}2\,\text{ms}$ Latenz. Die Zentralbox (`PCBA 01`) integriert Dual-Power Input (12V Bordnetz via Deutsch DTM vs. 5V–20V USB-PD Sink via TI LM5050 Ideal-Dioden-OR-ing). Die Testbench simuliert das 7-Platinen-System (`PCBA 01`, `03`, `05`, `05B`, `07`, `08`, `09`, `10`), die symmetrischen Spiegel-Pods mit 5-Gesten-Erkennung, kassettenfreie Monocoque-Pods mit EPDM-Dry-Flap und unterbrechungsfreie digitale Audio-/Telemetrieströme.
 
 ---
 
@@ -63,7 +63,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   1. **Automotive Load Dump (ISO 7637-2 / 87V Impuls 5b):** Clamping durch SMBJ33CA TVS-Diode auf sichere $54{,}1\,\text{V}$ ($+10{,}9\,\text{V}$ Headroom zum $65\,\text{V}$-Limit des LM5164 Buck).
   2. **USV-Kaltstart (6.5V Cold Crank):** BQ24075 schaltet unterbrechungsfrei ($0\,\mu\text{s}$) auf LiPo-Pufferung um.
   3. **Staged Power Sequencing Inrush Profile:** T=0ms Core, T=200ms Radar, T=350ms Cartridge, T=500ms Audio/CAN ($I_{\text{peak}} = 1{,}45\,\text{A} < 3{,}0\,\text{A}$).
-  4. **Satelliten-Pod Interface (PCBA 03):** USB-PD Controller (`SW3516H`) bis 30W Schnellladen, ES8388 Audio-Codec via USB Audio Class 2.0, duale AO3400A MOSFET-Treiber für mechatronische Kaltstart-Hubmagnete (`JF-0530B`) sowie OptoMOS PTT-Keying Delay ($< 10\,\mu\text{s}$). (Das frühere 6.5-GHz-UWB-Funkmodul `DW3110` ist durch den geschirmten 4-Draht Automotive-USB-Backbone ersetzt.)
+  4. **Satelliten-Pod Interface (PCBA 03):** USB-PD Controller (`SW3516H`) bis 30W Schnellladen, dedizierter ES8388 Audio-Codec mit analogem/I2S-Signalpfad, duale AO3400A MOSFET-Treiber für mechatronische Kaltstart-Hubmagnete (`JF-0530B`) sowie OptoMOS PTT-Keying Delay ($< 10\,\mu\text{s}$). (Das frühere 6.5-GHz-UWB-Funkmodul `DW3110` ist durch den geschirmten 4-Draht Automotive-USB-Backbone ersetzt.)
   5. **Radar 2.0 Sub-MCU & Halo Wings (PCBA 08):** Wheeltec 77 GHz MR20 Radar Target Tracking, TTC-Mathematik und Stromversorgung der 36x WS2812B Halo Wings ($5\,\text{V} / 1{,}8\,\text{A}$ max).
   6. **Universal Front Node DCDC & Hub (PCBA 05):** TPS54302 Synchrongleichrichter mit $92{,}4\,\%$ Wirkungsgrad ($9{,}6\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Öffnung, SAM-M10Q 10 Hz PVT & AssistNow A-GPS ($1{,}8\,\text{s}$ TTFF), TMP117 Kaltluftsensor ($\pm 0{,}1^\circ\text{C}$), OPT3001 Lux-Sensor.
   7. **Geschirmter 4-Draht-Automotive-Kabelbaum & JST-GH:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).

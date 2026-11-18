@@ -234,6 +234,7 @@ typedef struct __attribute__((packed)) {
     uint8_t  wind_noise_dba;  // Knowles SPH0645LM4H MEMS Acoustic SPL (30..130 dB(A))
     int16_t  ambient_temp_c_100; // TI TMP117 High-Precision Temp * 100 (-4000..+12500)
     uint32_t ambient_lux;     // TI OPT3001 Ambient Light (0..83000 Lux)
+    uint32_t baro_pressure_pa; // Bosch BMP390 Barometric Pressure in Pa (30000..125000 Pa)
     uint16_t status_flags;    // FRONT_STAT_* bitmask
 } UsbFrontTelemetryPkt;
 

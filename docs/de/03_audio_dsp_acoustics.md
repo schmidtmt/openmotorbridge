@@ -10,7 +10,7 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 
 1. **Vollständiger Entfall analoger Fahrzeugleitungen:**
    * Es verlaufen **keinerlei analoge Audioleitungen** durch den Fahrzeugkabelbaum.
-   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Koffer-Pods (Pod 1 Links & Pod 2 Rechts) laufen volldigital über den **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit nativer USB Audio Class 2.0 (UAC2) Übertragung ($< 0{,}2\,\text{ms}$ Latenz).
+   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Koffer-Pods (Pod 1 Links & Pod 2 Rechts) laufen volldigital über den **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit lokaler Signalwandlung über den dedizierten **Everest Semi ES8388 Codec** und synchroner USB-DFU/CDC-Telemetrie ($< 0{,}2\,\text{ms}$ Latenz). (Zentrales USB Audio Class 2.0 Streaming erfolgt auf der Zentralbox über den Qualcomm QCC3084 bzw. am Front Node über den ESP32-S31).
    * Durch die rein digitale, differenzielle USB-Signalübertragung existiert galvanisch **keine analoge Masseschleife** zwischen Zentralbox und Pod-Headsets.
 2. **Dual-Helm Bluetooth Audio Hub (Qualcomm QCC3084):**
    * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth 5.4 an den dedizierten Qualcomm QCC3084 Audio SoC auf der Zentralbox (`PCBA 01`).

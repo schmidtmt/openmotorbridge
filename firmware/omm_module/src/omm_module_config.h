@@ -47,7 +47,7 @@
 #define OMM_PIN_CHG_STAT        GPIO_NUM_1   // U1 Pad 13 (IO1) <- BQ24075 /STAT (Low active when charging)
 // Note: Battery charging status is digitally monitored via /STAT on GPIO1.
 
-// 6. Native USB 2.0 PHY (J1 IP67 USB-C: Digital USB-Audio in Pod PCBA 03 & Central Bus-DFU, Pad 17/18)
+// 6. USB Serial/JTAG PHY (J1 IP67 USB-C: Central Bus-DFU, CDC Telemetry & Config; Audio processed via ES8388 Codec, Pad 17/18)
 #define OMM_PIN_USB_DN          GPIO_NUM_12  // U1 Pad 17 (IO12) -> J1 USB_DN (via D2 USBLC6-2SC6)
 #define OMM_PIN_USB_DP          GPIO_NUM_13  // U1 Pad 18 (IO13) -> J1 USB_DP (via D2 USBLC6-2SC6)
 

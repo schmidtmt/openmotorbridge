@@ -24,13 +24,13 @@ To prevent architectural confusion between motorcycle carrier mechatronics and t
 +----------------------------------------------------+----------------------------------------------+
 | * Remains permanently on pod enclosure floor       | * Detachable ECE 22.06 UCS module            |
 | * 4-Wire Automotive USB Bus (12V/PD, USB 2.0)      | * Enclosure dimensions: 68.0 x 36.0 x 16.0 mm|
-| * Native USB Audio Class 2.0 link to Central Box   | * Integrated 1000 mAh LiPo battery (3.7 Wh)  |
+| * Dedicated Audio Signal Path & CDC/DFU Link        | * Integrated 1000 mAh LiPo battery (3.7 Wh)  |
 |   (latency < 0.2 ms, jitter-free)                  | * BAT1 on B.Cu directly under USB-C port (J1)|
 | * Everest Semi ES8388 24-Bit / 48 kHz Audio Codec  | * 4x tactile IP67 pushbuttons on top face    |
 | * Zero mechatronic wear (no solenoids!)            | * Waterproof front USB-C interface port      |
 | * Internal 30W/60W USB-PD fast-charge port         | * 3 Radio Engines: OMM 2.4G + BT + 446 MHz   |
 | * 8-Pin Kelvin Audio & Power Interface (J_AUDIO)   | * 100% Software Mode Switching & Combo Modes |
-| * Zero 2.4-GHz/446-MHz RF on carrier board!        | * Native digital USB Audio Class streaming   |
+| * Zero 2.4-GHz/446-MHz RF on carrier board!        | * Hardware-Codec Audio (ES8388) & USB DFU     |
 +----------------------------------------------------+----------------------------------------------+
 ```
 
