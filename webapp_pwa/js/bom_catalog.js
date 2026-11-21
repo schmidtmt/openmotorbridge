@@ -1267,7 +1267,7 @@ const BOM_PARTS = {
       "de": "PCBA 01: Zentralbox Controller",
       "en": "PCBA 01: Central Box Controller"
     },
-    "spec": "ESP32-S31, QCC3084 BT, SX1262 LoRa, USV, Zwei-Kabel-Architektur (DTM-6 & 16-Pin)",
+    "spec": "ESP32-S31, QCC3084 BT, ESP32-PICO-V3-02 A2DP-Transmitter, SX1262 LoRa, USV, Zwei-Kabel-Architektur (DTM-6 & 16-Pin)",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [

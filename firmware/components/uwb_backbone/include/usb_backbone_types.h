@@ -323,15 +323,27 @@ typedef struct __attribute__((packed)) {
 typedef UsbPodAckPkt UwbCartridgeAckPkt;
 
 // -----------------------------------------------------------------------------
-// 4b. Digital USB Audio Class 2.0 (UAC2) Multi-Substream Downlink & Uplink
+// 4b. Digital USB Audio Multi-Stream Downlink & Uplink (Opus / Codec2 / DMR)
 // -----------------------------------------------------------------------------
-#define USB_AUDIO_DOWN_VOICE_SAMPLES  24   // 24x int16_t mono = 48 Bytes (0.5 ms @ 48 kHz)
-#define USB_AUDIO_DOWN_MUSIC_SAMPLES  18   // 18x stereo pairs = 72 Bytes (0.375 ms @ 48 kHz)
+// Audio Codec Types for Digital USB Backbone & RF Links
+typedef enum : uint8_t {
+    AUDIO_CODEC_OPUS_24K       = 0x01, // Opus Wideband 24 kHz (2.4 GHz Mesh Voice & Music Sharing)
+    AUDIO_CODEC_CODEC2_1200    = 0x02, // Codec2 1200 bps (LoRa Tactical Fallback)
+    AUDIO_CODEC_AMBE2_DMR      = 0x03, // DMR AMBE+2 Vocoder (446 MHz Digital DMR)
+    AUDIO_CODEC_OPUS_VOICE_8K  = 0x04, // Opus SILK/Voice Low-Bitrate 6-8 kbps (PMR446 Analog capture)
+    AUDIO_CODEC_PCM_LEGACY     = 0xFF  // Legacy uncompressed PCM (Analog OEM Headset ES8388 ADC)
+} AudioCodecType;
 
-#define USB_AUDIO_FLAG_DUCKING_ACTIVE (1 << 0) // Central Box DSP ducking active (-18 dB on music)
-#define USB_AUDIO_FLAG_VOICE_ACTIVE   (1 << 1) // Voice Activity Detected (VAD) on rider mic
-#define USB_AUDIO_FLAG_RADAR_ALERT    (1 << 2) // Priority-1 Radar audible warning active
-#define USB_AUDIO_FLAG_HFP_CALL_MUTE  (1 << 3) // Smartphone HFP Call active -> Mute group intercom mic!
+#define USB_AUDIO_DOWN_VOICE_SAMPLES  24   // 24x int16_t mono = 48 Bytes (Legacy PCM)
+#define USB_AUDIO_DOWN_MUSIC_SAMPLES  18   // 18x stereo pairs = 72 Bytes (Legacy PCM)
+
+#define USB_AUDIO_FLAG_DUCKING_ACTIVE   (1 << 0) // Central Box DSP ducking active (-18 dB on music)
+#define USB_AUDIO_FLAG_VOICE_ACTIVE     (1 << 1) // Voice Activity Detected (VAD) on rider mic
+#define USB_AUDIO_FLAG_RADAR_ALERT      (1 << 2) // Priority-1 Radar audible warning active
+#define USB_AUDIO_FLAG_HFP_CALL_MUTE    (1 << 3) // Smartphone HFP Call active -> Mute group intercom mic!
+#define USB_AUDIO_FLAG_PTT_ACTIVE       (1 << 4) // Driver Handlebar PTT active -> route driver voice to Funk
+#define USB_AUDIO_FLAG_TARGET_FUNK      (1 << 5) // Active transmit request for 446 MHz PMR/DMR
+#define USB_AUDIO_FLAG_PILLION_WHISPER  (1 << 6) // Pillion Private Cabin Whisper active -> Muted towards Mesh!
 
 #define UWB_AUDIO_DOWN_VOICE_SAMPLES  USB_AUDIO_DOWN_VOICE_SAMPLES
 #define UWB_AUDIO_DOWN_MUSIC_SAMPLES  USB_AUDIO_DOWN_MUSIC_SAMPLES
@@ -342,22 +354,68 @@ typedef UsbPodAckPkt UwbCartridgeAckPkt;
 typedef struct __attribute__((packed)) {
     uint16_t frame_seq;       // Monotonically increasing audio frame sequence counter
     uint8_t  flags;           // USB_AUDIO_FLAG_*
+    uint8_t  codec_type;      // AudioCodecType (default: AUDIO_CODEC_OPUS_24K)
     uint8_t  voice_gain_db;   // Master voice preamp gain set by Central Box DSP
     uint8_t  music_gain_db;   // Master music gain (with ducking already factored in)
-    int16_t  sub_voice[USB_AUDIO_DOWN_VOICE_SAMPLES]; // 48 Bytes
-    int16_t  sub_music_l[USB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes
-    int16_t  sub_music_r[USB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes
+    union {
+        struct {
+            int16_t  sub_voice[USB_AUDIO_DOWN_VOICE_SAMPLES]; // 48 Bytes legacy PCM
+            int16_t  sub_music_l[USB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes legacy PCM
+            int16_t  sub_music_r[USB_AUDIO_DOWN_MUSIC_SAMPLES]; // 36 Bytes legacy PCM
+        };
+        struct {
+            uint8_t  driver_voice_bytes;  // Compressed driver voice frame (Opus 24k: ~24..48 B)
+            uint8_t  pillion_voice_bytes; // Compressed pillion voice frame (Opus 24k: ~24..48 B, 0 = muted / whisper)
+            uint8_t  music_down_bytes;    // Compressed stereo media/nav frame (Opus Stereo: ~48..80 B)
+            union {
+                struct {
+                    uint8_t voice_mic_bytes; // Alias for backward compatibility
+                };
+                uint8_t compressed_payload[116]; // Packed [driver_bytes][pillion_bytes][music_bytes]
+            };
+        } compressed;
+    };
 } UsbAudioStreamDownPkt;
 
 typedef UsbAudioStreamDownPkt UwbAudioStreamDownPkt;
 
+// Upstream Audio Status Flags
+#define USB_AUDIO_UP_FLAG_STREAM_ACTIVE   (1 << 0) // Audio stream active
+#define USB_AUDIO_UP_FLAG_PTT_PRESSED     (1 << 1) // Physical PTT pressed on Pod/Headset
+#define USB_AUDIO_UP_FLAG_OMM_DIGITAL     (1 << 2) // OMM digital mode active
+#define USB_AUDIO_UP_FLAG_FUNK_CARRIER    (1 << 3) // 446 MHz PMR/DMR Carrier / Squelch open
+#define USB_AUDIO_UP_FLAG_MESH_VOICE      (1 << 4) // 2.4 GHz Mesh Voice packet active
+#define USB_AUDIO_UP_FLAG_MESH_MUSIC      (1 << 5) // 2.4 GHz Mesh Stereo Music packet active
+
 #define USB_AUDIO_UP_SAMPLES 48
 #define UWB_AUDIO_UP_SAMPLES USB_AUDIO_UP_SAMPLES
+
+#define USB_OMM_UP_VOICE_SAMPLES 16 // 16x int16_t mono = 32 Bytes
+#define USB_OMM_UP_MUSIC_SAMPLES 18 // 18x stereo pairs = 72 Bytes
+
 typedef struct __attribute__((packed)) {
     uint16_t frame_seq;
-    uint8_t  status_flags;    // Bit 0: Intercom active, Bit 1: Headset speaking, Bit 2: OMM digital mode
-    uint8_t  sample_count;    // Actual samples (up to USB_AUDIO_UP_SAMPLES)
-    int16_t  samples[USB_AUDIO_UP_SAMPLES];
+    uint8_t  status_flags;    // USB_AUDIO_UP_FLAG_*
+    uint8_t  sample_count;    // Actual samples for single mono (legacy / OEM analog: up to USB_AUDIO_UP_SAMPLES)
+    uint8_t  codec_type;      // AudioCodecType (AUDIO_CODEC_OPUS_24K, AUDIO_CODEC_AMBE2_DMR, etc.)
+    union {
+        int16_t  samples[USB_AUDIO_UP_SAMPLES]; // Legacy mono stream (e.g. from ES8388 ADC)
+        struct {
+            uint8_t rssi_dbm;            // Signal strength in -dBm
+            uint8_t voice_funk_count;    // Number of 446 MHz PMR/DMR samples or compressed bytes
+            uint8_t voice_mesh_count;    // Number of 2.4 GHz Mesh Voice samples or compressed bytes
+            uint8_t music_mesh_pairs;    // Number of 2.4 GHz Mesh Stereo Music pairs or compressed bytes
+            union {
+                struct {
+                    int16_t sub_voice_funk[USB_OMM_UP_VOICE_SAMPLES]; // 32 Bytes: Mono Voice from PMR/DMR
+                    int16_t sub_voice_mesh[USB_OMM_UP_VOICE_SAMPLES]; // 32 Bytes: Mono Voice from 2.4 GHz Mesh
+                    int16_t sub_music_l[USB_OMM_UP_MUSIC_SAMPLES];    // 36 Bytes: Stereo Music Left from Mesh
+                    int16_t sub_music_r[USB_OMM_UP_MUSIC_SAMPLES];    // 36 Bytes: Stereo Music Right from Mesh
+                };
+                uint8_t compressed_payload[100]; // Packed Opus & Vocoder bytes: [funk][mesh][music]
+            };
+        } multistream;
+    };
 } UsbAudioStreamUpPkt;
 
 typedef UsbAudioStreamUpPkt UwbAudioStreamUpPkt;

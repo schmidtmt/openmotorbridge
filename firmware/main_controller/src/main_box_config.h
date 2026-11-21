@@ -25,7 +25,7 @@
 // -----------------------------------------------------------------------------
 // 2. Ignition Sense (KL15), Pairing Button (SW1) & Status RGB LED (D1 / J4)
 // -----------------------------------------------------------------------------
-#define PIN_MAIN_KL15_SENSE             GPIO_NUM_4   // U2 Pad 5  -> R3/D4/Q1 Ignition Sense (KL15_SENSE)
+#define PIN_MAIN_KL15_SENSE             GPIO_NUM_3   // U2 Pad 5 (GPIO3) -> R3/D4/Q1 Ignition Sense (KL15_SENSE)
 #define PIN_MAIN_BOOT_PAIR_BTN          GPIO_NUM_0   // U2 Pad 27 -> SW1 Pairing / Boot Button (ESP_BOOT)
 #define PIN_MAIN_RGB_LED_DATA           GPIO_NUM_48  // U2 Pad 28 -> D1 & J4 WS2812B-2020 (RGB_LED_DATA)
 
@@ -50,7 +50,7 @@
 // -----------------------------------------------------------------------------
 // 5. Master TDM / I2S Audio Bus (Shared by U3 ES8388 & U9 Qualcomm QCC3084)
 // -----------------------------------------------------------------------------
-#define PIN_MAIN_I2S_MCLK               GPIO_NUM_0   // U2 Pad 12 -> U3 Pin 1 / U9 Pin 1 (I2S_MCLK)
+#define PIN_MAIN_I2S_MCLK               GPIO_NUM_35  // U2 Pad 12 (GPIO35) -> U3 Pin 1 / U9 Pin 1 (I2S_MCLK)
 #define PIN_MAIN_I2S_BCLK               GPIO_NUM_16  // U2 Pad 30 -> U3 Pin 2 / U9 Pin 2 (I2S_BCLK)
 #define PIN_MAIN_I2S_WS                 GPIO_NUM_47  // U2 Pad 32 -> U3 Pin 3 / U9 Pin 3 (I2S_WS)
 #define PIN_MAIN_I2S_DOUT               GPIO_NUM_17  // U2 Pad 15 -> U3 Pin 4 / U9 Pin 4 (I2S_DOUT)
@@ -75,9 +75,9 @@
 // at KiCad (X=176.03, Y=74.75) routed to external lid 868MHz dipole.
 // -----------------------------------------------------------------------------
 #define MAIN_LORA_SPI_HOST              SPI2_HOST
-#define PIN_MAIN_LORA_SCK               GPIO_NUM_12  // U2 Pad 4  -> U10 Pin 20 (SPI_SCK)
-#define PIN_MAIN_LORA_MISO              GPIO_NUM_13  // U2 Pad 6  -> U10 Pin 18 (SPI_MISO)
-#define PIN_MAIN_LORA_MOSI              GPIO_NUM_11  // U2 Pad 7  -> U10 Pin 19 (SPI_MOSI)
+#define PIN_MAIN_LORA_SCK               GPIO_NUM_2   // U2 Pad 4 (GPIO2) -> U10 Pin 20 (SPI_SCK)
+#define PIN_MAIN_LORA_MISO              GPIO_NUM_4   // U2 Pad 6 (GPIO4) -> U10 Pin 18 (SPI_MISO)
+#define PIN_MAIN_LORA_MOSI              GPIO_NUM_5   // U2 Pad 7 (GPIO5) -> U10 Pin 19 (SPI_MOSI)
 #define PIN_MAIN_LORA_NSS               GPIO_NUM_10  // U2 Pad 24 -> U10 Pin 21 (LORA_NSS)
 #define PIN_MAIN_LORA_RST               GPIO_NUM_7   // U2 Pad 23 -> U10 Pin 1  (LORA_RST)
 #define PIN_MAIN_LORA_BUSY              GPIO_NUM_21  // U2 Pad 20 -> U10 Pin 14 (LORA_BUSY)
@@ -97,19 +97,31 @@
 // -----------------------------------------------------------------------------
 // 8. Automotive CAN-FD Transceiver (U6 TI TCAN334GDCNT -> J1 Pin 3/4)
 // -----------------------------------------------------------------------------
-#define PIN_MAIN_CAN_TX                 GPIO_NUM_5   // U2 Pad 21 -> U6 Pin 1 (CAN_TX)
-#define PIN_MAIN_CAN_RX                 GPIO_NUM_6   // U2 Pad 22 -> U6 Pin 4 (CAN_RX)
+#define PIN_MAIN_CAN_TX                 GPIO_NUM_26  // U2 Pad 21 (GPIO 26) -> U6 Pin 1 (CAN_TX)
+#define PIN_MAIN_CAN_RX                 GPIO_NUM_27  // U2 Pad 22 (GPIO 27) -> U6 Pin 4 (CAN_RX)
 
 // -----------------------------------------------------------------------------
 // 9. High-Speed 4-Bit SDIO MicroSD Blackbox Slot (J2 Hirose DM3D-SF)
 // -----------------------------------------------------------------------------
 #define PIN_MAIN_SD_DAT1                GPIO_NUM_33  // U2 Pad 33 -> J2 Pin 8 (SD_DAT1)
 #define PIN_MAIN_SD_DAT2                GPIO_NUM_34  // U2 Pad 34 -> J2 Pin 1 (SD_DAT2)
-#define PIN_MAIN_SD_CLK                 GPIO_NUM_35  // U2 Pad 35 -> J2 Pin 5 (SD_CLK)
+#define PIN_MAIN_SD_CLK                 GPIO_NUM_55  // U2 Pad 35 (GPIO55) -> J2 Pin 5 (SD_CLK)
 #define PIN_MAIN_SD_CMD                 GPIO_NUM_36  // U2 Pad 36 -> J2 Pin 3 (SD_CMD)
 #define PIN_MAIN_SD_DAT0                GPIO_NUM_37  // U2 Pad 37 -> J2 Pin 7 (SD_DAT0)
 #define PIN_MAIN_SD_DAT3                GPIO_NUM_38  // U2 Pad 38 -> J2 Pin 2 (SD_DAT3)
 #define PIN_MAIN_SD_CD                  GPIO_NUM_39  // U2 Pad 39 -> J2 Pin 9 (SD_CD Card Detect)
+
+// -----------------------------------------------------------------------------
+// 10. ESP32-PICO-V3-02 Classic A2DP Music Sharing Transmitter (U13)
+// Dedicated A2DP transmitter feeding Pod OEM Intercoms (Sena/Cardo) for Mesh sharing.
+// Driven via I2S DOUT/BCLK/WS, controlled via UART and HW Enable / Boot strapping.
+// RF Output: Dedicated SMD Ceramic Chip Antenna ANT4 (Johanson 2450AT18x100) at South edge.
+// -----------------------------------------------------------------------------
+#define A2DP_PICO_UART_PORT             UART_NUM_2
+#define PIN_MAIN_A2DP_UART_TX           GPIO_NUM_33  // U2 Pad 13 (GPIO33) -> U13 Pin 41 (A2DP_UART_TX)
+#define PIN_MAIN_A2DP_UART_RX           GPIO_NUM_34  // U2 Pad 14 (GPIO34) -> U13 Pin 40 (A2DP_UART_RX)
+#define PIN_MAIN_A2DP_EN                GPIO_NUM_43  // U2 Pad 8  (GPIO43) -> U13 Pin 9  (A2DP_EN)
+#define PIN_MAIN_A2DP_BOOT              GPIO_NUM_44  // U2 Pad 29 (GPIO44) -> U13 Pin 23 (A2DP_BOOT)
 
 // -----------------------------------------------------------------------------
 // 10. Quad Automotive High-Side Switch Smart Power Distribution (U12 TI TPS4H160-Q1 -> J6)

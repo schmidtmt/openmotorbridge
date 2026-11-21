@@ -9,11 +9,11 @@
 include <../../00_common/parameters.scad>;
 
 // Mic acoustic port coordinates relative to chamber origin (0,0)
-// Knowles SPH0645 (MK1) is at KiCad (142.75, 83.00) -> PCB rel (42.75, 37.00) mm on the 82x50 mm board
-MIC_PCB_X     = 42.75; // KiCad X=142.75 - 100.00
-MIC_PCB_Y     = 37.00; // KiCad 120.00 - Y=83.00
-MIC_CHAMBER_X = (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L) / 2.0 + MIC_PCB_X; // 2.0 + 42.75 = 44.75 mm (X_tub = 50.75 mm)
-MIC_CHAMBER_Y = (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0 + MIC_PCB_Y; // 3.0 + 37.00 = 40.00 mm (Y_tub = 46.00 mm)
+// Knowles SPH0645 (MK1) is at KiCad (111.20, 116.30) -> PCB rel (11.20, 3.70) mm on the 82x50 mm board
+MIC_PCB_X     = 11.20; // KiCad X=111.20 - 100.00
+MIC_PCB_Y     = 3.70;  // CAD Y: 50.00 - (116.30 - 70.00) = 3.70 mm
+MIC_CHAMBER_X = (FRONT_NODE_CHAMBER_L - FRONT_NODE_PCB_L) / 2.0 + MIC_PCB_X; // 2.0 + 11.20 = 13.20 mm (X_tub = 19.20 mm)
+MIC_CHAMBER_Y = (FRONT_NODE_CHAMBER_W - FRONT_NODE_PCB_W) / 2.0 + MIC_PCB_Y; // 3.0 + 3.70 = 6.70 mm (Y_tub = 12.70 mm)
 
 // Subtractive module (cutout in enclosure floor)
 module front_node_acoustic_vent_cutout(floor_thickness = FRONT_NODE_WALL) {

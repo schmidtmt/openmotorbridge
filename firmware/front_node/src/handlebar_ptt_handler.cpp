@@ -36,10 +36,9 @@ void IRAM_ATTR HandlebarPttHandler::isr_handler(void* arg) {
     }
     self->m_last_edge_us = now;
 
-    // Read all 3 active-low inputs (0 = Pressed, 1 = Released)
+    // Read all active-low inputs (0 = Pressed, 1 = Released)
     int lvl1 = gpio_get_level(PIN_PTT_IN1_N);
     int lvl2 = gpio_get_level(PIN_PTT_IN2_N);
-    int lvl3 = gpio_get_level(PIN_PTT_IN3_N);
 
     uint8_t btn_id = BTN_INTERCOM_PTT;
     bool pressed = false;
@@ -49,9 +48,6 @@ void IRAM_ATTR HandlebarPttHandler::isr_handler(void* arg) {
         pressed = true;
     } else if (lvl2 == 0) {
         btn_id = BTN_CAM_HIGHLIGHT;
-        pressed = true;
-    } else if (lvl3 == 0) {
-        btn_id = BTN_MEDIA_VOICE;
         pressed = true;
     } else {
         // All released
@@ -85,8 +81,7 @@ bool HandlebarPttHandler::init() {
     }
 
     uint64_t pin_mask = (1ULL << PIN_PTT_IN1_N) |
-                        (1ULL << PIN_PTT_IN2_N) |
-                        (1ULL << PIN_PTT_IN3_N);
+                        (1ULL << PIN_PTT_IN2_N);
 
     gpio_config_t io_conf = {
         .pin_bit_mask = pin_mask,
@@ -104,14 +99,12 @@ bool HandlebarPttHandler::init() {
 
     // Read initial state
     m_is_pressed = (gpio_get_level(PIN_PTT_IN1_N) == 0) ||
-                   (gpio_get_level(PIN_PTT_IN2_N) == 0) ||
-                   (gpio_get_level(PIN_PTT_IN3_N) == 0);
+                   (gpio_get_level(PIN_PTT_IN2_N) == 0);
 
     // Install ISR service if not already present
     gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
     gpio_isr_handler_add(PIN_PTT_IN1_N, isr_handler, this);
     gpio_isr_handler_add(PIN_PTT_IN2_N, isr_handler, this);
-    gpio_isr_handler_add(PIN_PTT_IN3_N, isr_handler, this);
 
     ESP_LOGI(TAG, "Handlebar Multi-Button driver initialized (GPIO15/16/17, Active-Low, Interrupt-Driven). Initial: %s",
              m_is_pressed ? "PRESSED" : "RELEASED");

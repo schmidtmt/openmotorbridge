@@ -438,7 +438,7 @@ Das Gehäuse des Front-Knotens wurde in Version 10.0 analog zur Zentralbox (`01_
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Abbildung 8.19: 3D-Explosionsdarstellung des Front-Knotens: Monocoque-Unterwanne, PCBA 05 (82 x 50 mm), 2x Wi-Fi 6E Antennenebene, L-Slide Schiebedeckel und Sensor-Puck.*
+*Abbildung 8.19: 3D-Explosionsdarstellung des Front-Knotens: Monocoque-Unterwanne, PCBA 05 (82 x 50 mm), 2x Wi-Fi 6E Antennenebene, L-Slide Schiebedeckel und Sensor-Puck (Nordflanke Y=68 mm: Fahrzeug & Zubehör; Südflanke Y=0 mm: Cockpit & Sensorik).*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
@@ -502,47 +502,47 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 | * M4/M5 Silentblock-Flanschohr     | * 4x M2.5 Standoffs (75.0 x 43.0 mm Bohrbild)   |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | COCKPIT-WAND (SÜDFLANKE Y = 0 mm in Draufsicht / zum Fahrer):                                                               |
-|  * Port 1 [ CKPT 1 ] (X = 33.5 mm): Oval-Port (11.0 x 5.5 mm) für J_POD_R + J_DISP_R (Rechtes Cockpit)                      |
-|  * Port 2 [ SENSOR ] (X = 46.5 mm): Oval-Port (11.0 x 5.5 mm) für J_SENSOR_EXT (Sensor-Puck oben gerastet)                  |
-|  * Port 3 [ CKPT 2 ] (X = 70.5 mm): Oval-Port (11.0 x 5.5 mm) für J_POD_L + J_DISP_L (Linkes Cockpit)                       |
+|  * Port 1 [ CKPT 1 ] (X = 33.50 mm): Oval-Port (11.0 x 5.5 mm) für J3 Pod R (4P) + J11 Disp R (4P) (Rechtes Cockpit)         |
+|  * Port 2 [ SENSOR ] (X = 53.25 mm): Oval-Port (11.0 x 5.5 mm) für J6 Sensor-Puck (8P) (Sensor-Puck oben gerastet)            |
+|  * Port 3 [ CKPT 2 ] (X = 73.00 mm): Oval-Port (11.0 x 5.5 mm) für J9 Disp L (4P) + J2 Pod L (4P) (Linkes Cockpit)          |
 +-----------------------------------------------------------------------------------------------------------------------------+
 | FAHRZEUG- & ZUBEHÖR-WAND (NORDFLANKE Y = 68 mm / nach vorne/unten):                                                         |
-|  * Port 1 [ MAIN ]   (X = 35.0 mm): Oval-Port (11.0 x 5.5 mm) für J1 Backbone (4P) + J4 Hub / Lenkerlader (6P)              |
-|  * Port 2 [ DONGLE ] (X = 52.0 mm): Oval-Port (11.0 x 5.5 mm) für J_DONGLE (CarPlay/AA) - Standard: Bündiger Blindstopfen  |
-|  * Port 3 [ AUX 12V ] (X = 62.0 mm): Mini-Port (6.5 x 4.5 mm) für J_AUX_LIGHT 12V geschaltet (Zusatzscheinwerfer)           |
-|  * Port 4 [ NAV 12V ] (X = 70.25 mm): Mini-Port (6.5 x 4.5 mm) für J10 Navi-Power 12V (Garmin / Chigee AIO-5)                |
-|  * Port 5 [ CAM 5V ] (X = 78.25 mm): Mini-Port (6.5 x 4.5 mm) für J8 Action-Cam 5V (GoPro / Insta360)                      |
+|  * Port 1 [ MAIN ]   (X = 34.30 mm): Oval-Port (11.0 x 5.5 mm) für J1 Backbone (4P) + J4 Ext Hub (8P)                        |
+|  * Port 2 [ DONGLE ] (X = 54.00 mm): Oval-Port (11.0 x 5.5 mm) für J5 Dongle (4P, CarPlay/AA) - Bündiger Blindstopfen       |
+|  * Port 3 [ AUX 12V ] (X = 63.35 mm): Mini-Port (6.5 x 4.5 mm) für J7 Aux Light (2P, 12V geschaltet Zusatzscheinwerfer)     |
+|  * Port 4 [ NAV 12V ] (X = 71.48 mm): Mini-Port (6.5 x 4.5 mm) für J10 Navi-Power (2P, 12V Garmin / Chigee AIO-5)          |
+|  * Port 5 [ CAM 5V ] (X = 79.60 mm): Mini-Port (6.5 x 4.5 mm) für J8 Action-Cam (2P, 5V GoPro / Insta360)                   |
 +-----------------------------------------------------------------------------------------------------------------------------+
 ```
 
-1. **Cockpit-Wand (zum Lenker / Fahrer, 3x identische Oval-Ausbrüche $11{,}0 \times 5{,}5\,\text{mm}$):**
-   - **`CKPT 1` ($X = 33{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Rechts (`J_POD_R`) und optional Speaker Corner Display Rechts (`J_DISP_R`) auf. Verwendet entweder den 2-Kabel-Dichteinsatz oder einen 1-Kabel-Einsatz.
-   - **`SENSOR` ($X = 46{,}5\,\text{mm}$):** Führt das 8-polige JST-GH Flachbandkabel für `J_SENSOR_EXT` nach oben direkt in den aufgerasteten Sensor-Puck.
-   - **`CKPT 2` ($X = 70{,}5\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Links (`J_POD_L`) und optional Speaker Corner Display Links (`J_DISP_L`) auf.
+1. **Cockpit-Wand (zum Lenker / Fahrer, Südflanke Y = 0 mm, 3x identische Oval-Ausbrüche $11{,}0 \times 5{,}5\,\text{mm}$):**
+   - **`CKPT 1` ($X = 33{,}50\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Rechts (`J3`) und Corner Display Rechts (`J11`) auf. Verwendet entweder den 2-Kabel-Dichteinsatz oder einen 1-Kabel-Einsatz.
+   - **`SENSOR` ($X = 53{,}25\,\text{mm}$):** Führt das 8-polige JST-GH Flachbandkabel für `J6` nach oben direkt in den aufgerasteten Sensor-Puck.
+   - **`CKPT 2` ($X = 73{,}00\,\text{mm}$):** Nimmt die Zuleitungen für Spiegel-Pod Links (`J2`) und Corner Display Links (`J9`) auf.
    - **Software-Defined Zuweisung:** Die Cockpit-Ports `CKPT 1` und `CKPT 2` sind in der Firmware symmetrisch tauschbar (1-Klick Swap in WebUI). Ein Überkreuzen von Kabeln am Riser ist ausgeschlossen.
 
-2. **Fahrzeug- & Zubehör-Wand (nach vorne / unten):**
-   - **`MAIN` ($X = 35{,}0\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Nimmt das 4-adrige geschirmte Backbone-Kabel (`J1`) von der Zentralbox sowie das 6-polige Verbindungskabel zum Handschuhfach-Hub (`J4`) auf.
-   - **`DONGLE` ($X = 52{,}0\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Führt den USB-Downstream 2 mit fernsteuerbarem Kaltstart-Reset (`TPS2051B`). Bei Touring-Bikes (CarPlay-Dongle im Handschuhfach) mit planem TPU-Blindstopfen verschlossen. An RKS / GS bei Nachrüst-CarPlay-Display (Chigee/Carpuride) als 1-Kabel-Port belegt.
-   - **`AUX 12V` ($X = 62{,}0\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für Zusatzscheinwerfer oder Heizgriffe.
-   - **`NAV 12V` ($X = 70{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für 12V Garmin Zūmo XT2 / Tread / Chigee AIO-5 Speisung.
-   - **`CAM 5V` ($X = 78{,}25\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für entstörte 5V Action-Cam Speisung.
+2. **Fahrzeug- & Zubehör-Wand (nach vorne / unten, Nordflanke Y = 68 mm):**
+   - **`MAIN` ($X = 34{,}30\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Nimmt das 4-adrige geschirmte Backbone-Kabel (`J1`) von der Zentralbox sowie das 8-polige Verbindungskabel zum Handschuhfach-Hub (`J4`) auf.
+   - **`DONGLE` ($X = 54{,}00\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):** Führt den USB-Downstream 2 mit fernsteuerbarem Kaltstart-Reset (`TPS2051B`, `J5`). Bei Touring-Bikes (CarPlay-Dongle im Handschuhfach) mit planem TPU-Blindstopfen verschlossen. An RKS / GS bei Nachrüst-CarPlay-Display (Chigee/Carpuride) als 1-Kabel-Port belegt.
+   - **`AUX 12V` ($X = 63{,}35\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für Zusatzscheinwerfer oder Heizgriffe (`J7`).
+   - **`NAV 12V` ($X = 71{,}48\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für 12V Garmin Zūmo XT2 / Tread / Chigee AIO-5 Speisung (`J10`).
+   - **`CAM 5V` ($X = 79{,}60\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):** Für entstörte 5V Action-Cam Speisung (`J8`).
 
 3. **Poka-Yoke Gehäuseprägung & Dichteinsätze:**
-   - Direkt über allen Ports ist das HP MJF PA12 Gehäuse $0{,}5\,\text{mm}$ tief mit Beschriftung und Spannung geprägt (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN`, `CKPT 1`, `SENSOR`, `CKPT 2`).
+   - Direkt über allen Ports ist das HP MJF PA12 Gehäuse $0{,}6\,\text{mm}$ tief mit Beschriftung geprägt (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN` an der Nordwand; `CKPT 1`, `SENSOR`, `CKPT 2` an der Südwand).
    - Jeder TPU-Blindstopfen und Kabelstopfen besitzt dieselbe Kennzeichnung formgeprägt auf der Stirnfläche. Verwechslung und Überspannungsschäden sind ausgeschlossen.
 4. **Linke Schmalseite / Westflanke ($X = 0\,\text{mm}$):**
    - Horizontales Einschubportal für den Schiebedeckel mit integrierter $6{,}0\,\text{mm}$ hoher Bodenschwelle zum Schutz der Elektronik vor Schmutz- und Feuchtigkeitseintrag. Die Heckwand des Schiebedeckels überlappt die Schwelle mit einer umlaufenden Labyrinth-Tropfnase.
 5. **Gehäuseunterseite ($Z = 0\,\text{mm}$):**
-   - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Sipeed MSM261S4030 / Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
+   - **MEMS-Akustikkanal:** Schallkanal ($\varnothing 2{,}5\,\text{mm}$) mit wasserdichter, ölabweisender Gore ePTFE-Schutzmembran ($\varnothing 6{,}0 \times 0{,}8\,\text{mm}$) für das Knowles SPH0645 $I^2S$ Mikrofon (`MK1`) zur dynamischen Geschwindigkeits-Lautstärkeanpassung (Speed-Volume-Control).
 
-![Universal Front Node Cockpit Ports CAD](../images/cad/front_node_north_ports.png)
+![Universal Front Node Vehicle Ports CAD](../images/cad/front_node_north_ports.png)
 
-*Abbildung 8.22: Cockpit-Portwand des Front-Knotens (Y = 68 mm / fahrerzugewandt) mit bündigen TPU-Dichtmanschetten für Port 1 [ CKPT 1 ] (Spiegel-Pod / Display Rechts), Port 2 [ SENSOR ] (Sensor-Puck) und Port 3 [ CKPT 2 ] (Spiegel-Pod / Display Links) sowie aufgerastetem Sensor-Puck.*
+*Abbildung 8.22: Fahrzeug- & Zubehör-Portwand des Front-Knotens (Nordflanke Y = 68 mm / fahrzeugzugewandt) mit bündigen Ports für Port 1 [ MAIN ] (4P-Backbone & 8P-Handschuhfach-Hub), Port 2 [ DONGLE ] (CarPlay/AA) sowie den 3 Mini-Ports [ AUX 12V ], [ NAV 12V ] und [ CAM 5V ]. Verwechslungsfrei geprägt und mit formschlüssigen TPU-Blindstopfen abgedichtet.*
 
-![Universal Front Node Vehicle Ports CAD](../images/cad/front_node_south_ports.png)
+![Universal Front Node Cockpit Ports CAD](../images/cad/front_node_south_ports.png)
 
-*Abbildung 8.23: Fahrzeug- & Zubehör-Portwand des Front-Knotens (Y = 0 mm / fahrzeugzugewandt) mit bündigen Ports für Port 1 [ MAIN ] (4P-Backbone & 6P-Handschuhfach-Hub), Port 2 [ DONGLE ] (CarPlay/AA) sowie den 3 Mini-Ports [ AUX 12V ], [ NAV 12V ] und [ CAM 5V ]. Verwechslungsfrei geprägt und mit formschlüssigen TPU-Blindstopfen abgedichtet.*
+*Abbildung 8.23: Cockpit-Portwand des Front-Knotens (Südflanke Y = 0 mm / fahrerzugewandt) mit bündigen TPU-Dichtmanschetten für Port 1 [ CKPT 1 ] (Spiegel-Pod / Display Rechts), Port 2 [ SENSOR ] (Sensor-Puck) und Port 3 [ CKPT 2 ] (Spiegel-Pod / Display Links) sowie aufgerastetem Sensor-Puck.*
 
 ---
 

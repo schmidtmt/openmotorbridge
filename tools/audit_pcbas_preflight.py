@@ -55,6 +55,16 @@ BOARDS = {
             "firmware/front_node/src/front_node_config.h"
         ]
     },
+        "PCBA 05 Aux": {
+        "name": "Universal Front Node Auxiliary MCU (ESP32-C3FH4 USB Audio Bridge)",
+        "pcb": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
+        "sch": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_sch",
+        "mcu_ref": "U10",
+        "mcu_type": "ESP32-C3FH4",
+        "fw_headers": [
+            "firmware/front_node/src/front_node_config.h"
+        ]
+    },
     "PCBA 05B": {
         "name": "Glovebox Media & Power-Injection Hub (50 x 20 mm)",
         "pcb": "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb",
@@ -169,29 +179,29 @@ ESP32_C6_MINI_PINS = {
     "2": ("GND", "PWR"),
     "3": ("3V3", "PWR"),
     "4": ("NC", "NC"),
-    "5": ("IO0", "GPIO0"),
-    "6": ("IO1", "GPIO1"),
-    "7": ("IO2", "GPIO2"),
-    "8": ("IO3", "GPIO3"),
+    "5": ("IO2", "GPIO2"),
+    "6": ("IO3", "GPIO3"),
+    "7": ("NC", "NC"),
+    "8": ("EN", "CTRL"),
     "9": ("IO4", "GPIO4"),
     "10": ("IO5", "GPIO5"),
-    "11": ("IO6", "GPIO6"),
-    "12": ("IO7", "GPIO7"),
-    "13": ("IO8", "GPIO8_STRAP"),
-    "14": ("IO9", "GPIO9_STRAP_BOOT"),
-    "15": ("IO10", "GPIO10"),
-    "16": ("IO11", "GPIO11"),
+    "11": ("GND", "PWR"),
+    "12": ("IO0", "GPIO0"),
+    "13": ("IO1", "GPIO1"),
+    "14": ("GND", "PWR"),
+    "15": ("IO6", "GPIO6"),
+    "16": ("IO7", "GPIO7"),
     "17": ("IO12", "GPIO12_USB_DM"),
     "18": ("IO13", "GPIO13_USB_DP"),
     "19": ("IO14", "GPIO14"),
-    "20": ("IO15", "GPIO15_STRAP"),
-    "21": ("IO18", "GPIO18"),
-    "22": ("IO19", "GPIO19"),
-    "23": ("IO20", "GPIO20"),
-    "24": ("IO21", "GPIO21"),
-    "25": ("IO22", "GPIO22"),
-    "26": ("IO23", "GPIO23"),
-    "27": ("EN", "CTRL")
+    "20": ("IO15", "GPIO15"),
+    "21": ("NC", "NC"),
+    "22": ("IO8", "GPIO8_STRAP"),
+    "23": ("IO9", "GPIO9_STRAP_BOOT"),
+    "24": ("IO18", "GPIO18"),
+    "25": ("IO19", "GPIO19"),
+    "26": ("IO20", "GPIO20"),
+    "27": ("IO21", "GPIO21")
 }
 
 KICAD_CLI = "/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli"
@@ -201,9 +211,10 @@ def run_drc(pcb_path):
     if os.path.exists(json_path):
         os.remove(json_path)
     cmd = [KICAD_CLI, "pcb", "drc", "--format", "json", "--output", json_path, pcb_path]
-    subprocess.run(cmd, capture_output=True, text=True)
+    res = subprocess.run(cmd, capture_output=True, text=True)
     if not os.path.exists(json_path):
-        return {"error": "Failed to run DRC"}
+        err_msg = res.stderr.strip() if res.stderr else f"Exit code {res.returncode}"
+        return {"error": f"Failed to run DRC: {err_msg}"}
     with open(json_path) as f:
         data = json.load(f)
     unconnected = len(data.get("unconnected_items", []))
@@ -259,20 +270,24 @@ def audit_board(board_id, cfg):
     # 1. DRC Execution
     drc = run_drc(cfg["pcb"])
     print(f"[1] KiCad DRC Status:")
-    if drc.get("unconnected_count", 0) > 0:
-        print(f"    ⚠️  UNCONNECTED ITEMS: {drc['unconnected_count']} unconnected net segments (awaiting manual routing)!")
-        for item in drc["unconnected_details"]:
-            print(f"       - {item.get('description')}: {[it.get('description') for it in item.get('items', [])]}")
+    if "error" in drc:
+        print(f"    ❌ DRC EXECUTION FAILED: {drc['error']}")
+        errors += 1
     else:
-        print(f"    ✅ Unconnected Items: 0 (100% Routed)")
-        
-    if drc.get("error_count", 0) > 0:
-        print(f"    ❌ Critical DRC Errors: {drc['error_count']}")
-        for err in drc["errors"][:5]:
-            print(f"       - [{err.get('type')}] {err.get('description')}")
-        errors += drc["error_count"]
-    else:
-        print(f"    ✅ DRC Errors: 0")
+        if drc.get("unconnected_count", 0) > 0:
+            print(f"    ⚠️  UNCONNECTED ITEMS: {drc['unconnected_count']} unconnected net segments (awaiting manual routing)!")
+            for item in drc.get("unconnected_details", []):
+                print(f"       - {item.get('description')}: {[it.get('description') for it in item.get('items', [])]}")
+        else:
+            print(f"    ✅ Unconnected Items: 0 (100% Routed)")
+            
+        if drc.get("error_count", 0) > 0:
+            print(f"    ❌ Critical DRC Errors: {drc['error_count']}")
+            for err in drc.get("errors", [])[:5]:
+                print(f"       - [{err.get('type')}] {err.get('description')}")
+            errors += drc["error_count"]
+        else:
+            print(f"    ✅ DRC Errors: 0")
         
     # 2. Ghost IC Footprints Check (placed ICs with 0 connected nets)
     print(f"\n[2] IC Footprint Integrity & Ghost Component Audit:")
@@ -345,19 +360,28 @@ def audit_board(board_id, cfg):
         print(f"    - Pad 46 (DEC4):               Net = '{pad46_net}'")
 
     elif "ESP32-C3" in cfg["mcu_type"]:
-        # ESP32-C3 (QFN-32 chip pinout):
-        # Pad 10: GPIO 8 (DATA / LED)
-        # Pad 11: GPIO 9 (BOOT strapping / VCC_3V3 pullup)
-        # Pad 18: GPIO 18 (USB D-)
-        # Pad 19: GPIO 19 (USB D+)
-        pad10_net = mcu_pads.get("10", "")
-        pad11_net = mcu_pads.get("11", "")
-        pad18_net = mcu_pads.get("18", "")
-        pad19_net = mcu_pads.get("19", "")
-        print(f"    - Pad 10 (GPIO 8 / DATA):      Net = '{pad10_net}' -> " + ("✅ LED_DATA" if "LED" in pad10_net else f"Net '{pad10_net}'"))
-        print(f"    - Pad 11 (GPIO 9 / BOOT):      Net = '{pad11_net}' -> " + ("✅ BOOT/VCC" if "VCC" in pad11_net or "BOOT" in pad11_net or "ARM" in pad11_net else f"Net '{pad11_net}'"))
-        print(f"    - Pad 18 (GPIO 18 / USB_D-):   Net = '{pad18_net}' -> " + ("✅ USB D-" if "DM" in pad18_net or "D_N" in pad18_net or "SWDIO" in pad18_net else f"Net '{pad18_net}'"))
-        print(f"    - Pad 19 (GPIO 19 / USB_D+):   Net = '{pad19_net}' -> " + ("✅ USB D+" if "DP" in pad19_net or "D_P" in pad19_net or "SWDCLK" in pad19_net else f"Net '{pad19_net}'"))
+        # ESP32-C3 (QFN-32 chip pinout per Espressif datasheet):
+        # Pad 14: GPIO 8 (Strapping / LED)
+        # Pad 15: GPIO 9 (BOOT strapping / VCC_3V3 pullup)
+        # Pad 18-24: SPI Flash (NC on C3FH4 with embedded SIP flash)
+        # Pad 25: GPIO 18 (USB D-)
+        # Pad 26: GPIO 19 (USB D+)
+        pad14_net = mcu_pads.get("14", "")
+        pad15_net = mcu_pads.get("15", "")
+        pad25_net = mcu_pads.get("25", "")
+        pad26_net = mcu_pads.get("26", "")
+        print(f"    - Pad 14 (GPIO 8 / LED):       Net = '{pad14_net}' -> " + ("✅ LED/DATA" if "LED" in pad14_net or "DATA" in pad14_net else f"Net '{pad14_net}'"))
+        print(f"    - Pad 15 (GPIO 9 / BOOT):      Net = '{pad15_net}' -> " + ("✅ BOOT/VCC" if "VCC" in pad15_net or "BOOT" in pad15_net or "ARM" in pad15_net else f"Net '{pad15_net}'"))
+        print(f"    - Pad 25 (GPIO 18 / USB_D-):   Net = '{pad25_net}' -> " + ("✅ USB D-" if "DM" in pad25_net or "D_N" in pad25_net else f"Net '{pad25_net}'"))
+        print(f"    - Pad 26 (GPIO 19 / USB_D+):   Net = '{pad26_net}' -> " + ("✅ USB D+" if "DP" in pad26_net or "D_P" in pad26_net else f"Net '{pad26_net}'"))
+        
+        # Verify SIP Flash pins 18-24 are NC on C3FH4
+        sip_flash_pads = [mcu_pads.get(str(p), "") for p in range(18, 25)]
+        connected_sip = [p for p in sip_flash_pads if p and p not in ["GND", "VCC_3V3"]]
+        if connected_sip:
+            print(f"    ⚠️  C3FH4 Warning: Pads 18-24 (SIP Flash) connected to external signals: {connected_sip}")
+        else:
+            print(f"    ✅ C3FH4 SIP Flash Pads 18-24: Isolated / NC")
 
     elif "ESP32-C5" in cfg["mcu_type"]:
         pad8_net = mcu_pads.get("8", "")
@@ -400,6 +424,61 @@ def audit_board(board_id, cfg):
         errors += 1
     else:
         print(f"    ✅ All {len(cs_nets)} SPI Chip Select lines are distinct.")
+
+    # 6. Single Source of Truth (SSOT) Pinout Matrix Cross-Audit
+    ssot_key = board_id.replace(" ", "_")
+    ssot_path = os.path.join(os.path.dirname(__file__), "..", "data", "pcba_pinouts.json")
+    if os.path.exists(ssot_path):
+        with open(ssot_path) as f:
+            ssot_data = json.load(f)
+        b_ssot = ssot_data.get("boards", {}).get(ssot_key)
+        if b_ssot:
+            print(f"\n[6] SSOT Pinout & Firmware Cross-Audit (data/pcba_pinouts.json):")
+            ds = b_ssot.get("datasheet", {})
+            print(f"    Datasheet: {ds.get('title')} ({ds.get('table_ref')})")
+            print(f"    URL:       {ds.get('url')}")
+            
+            pins = b_ssot.get("pins", [])
+            pcb_ok = 0
+            pcb_err = 0
+            for pin in pins:
+                pad_num = str(pin["pad"])
+                exp_net = pin.get("net")
+                actual_net = mcu_pads.get(pad_num, "")
+                if exp_net and exp_net != "NC":
+                    if exp_net == actual_net:
+                        pcb_ok += 1
+                    else:
+                        pcb_err += 1
+                        print(f"    ❌ PCB Net Mismatch: Pad {pad_num} expected '{exp_net}', got '{actual_net}'")
+            if pcb_err == 0:
+                print(f"    ✅ PCB Pads: All {pcb_ok} mapped nets match SSOT exactly.")
+            else:
+                print(f"    ⚠️  PCB Pads: {pcb_err} mismatch(es) against SSOT (Review required).")
+                
+            hdr_file = b_ssot.get("header_file")
+            if hdr_file and os.path.exists(hdr_file):
+                with open(hdr_file) as hf:
+                    hdr_text = hf.read()
+                fw_ok = 0
+                fw_err = 0
+                for pin in pins:
+                    fw_def = pin.get("fw_define")
+                    exp_gpio = pin.get("gpio")
+                    if fw_def and exp_gpio is not None:
+                        m = re.search(rf'#define\s+{fw_def}\s+(?:GPIO_NUM_)?(\d+)', hdr_text)
+                        if m:
+                            act_gpio = int(m.group(1))
+                            if act_gpio == exp_gpio:
+                                fw_ok += 1
+                            else:
+                                fw_err += 1
+                                print(f"    ❌ Firmware Header Mismatch: {fw_def} in {hdr_file} defined as GPIO {act_gpio}, expected GPIO {exp_gpio}")
+                if fw_err == 0:
+                    print(f"    ✅ Firmware Header ({hdr_file}): All {fw_ok} GPIO defines match SSOT.")
+                else:
+                    print(f"    ⚠️  Firmware Header: {fw_err} GPIO mismatch(es) against SSOT!")
+
     return errors
 
 def main():

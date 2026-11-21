@@ -6,6 +6,7 @@
 #include "esp_system.h"
 #include "esp_mac.h"
 #include "driver/gpio.h"
+#include "driver/uart.h"
 #include "nvs_flash.h"
 #include "nvs.h"
 
@@ -25,7 +26,26 @@ static bool s_omm_digital_mode = false;
 static bool s_ptt_pressed = false;
 
 // -----------------------------------------------------------------------------
-// Detect Bay ID from Hardware Strap & OMM_DETECT Mode (`U4` TS5A3159 Auto-Sense)
+// Initialize High-Speed UART Bridge to U7 (CH554E USB 2.0 Host Controller)
+// -----------------------------------------------------------------------------
+static void init_ch554_uart_bridge(void) {
+    uart_config_t uart_cfg = {
+        .baud_rate = CH554_UART_BAUDRATE,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    ESP_ERROR_CHECK(uart_param_config(UART_NUM_1, &uart_cfg));
+    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_1, PIN_CH554_UART_TX, PIN_CH554_UART_RX, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_1, 2048, 2048, 0, NULL, 0));
+    ESP_LOGI(TAG, "✓ CH554E 3.0 Mbps High-Speed UART Bridge initialized on TX=GPIO%d, RX=GPIO%d",
+             PIN_CH554_UART_TX, PIN_CH554_UART_RX);
+}
+
+// -----------------------------------------------------------------------------
+// Detect Bay ID from Hardware Strap & OMM_DETECT Mode (`U4` TS5A23157 Auto-Sense)
 // -----------------------------------------------------------------------------
 static UsbNodeType detect_bay_and_mode() {
     gpio_config_t conf = {
@@ -38,17 +58,17 @@ static UsbNodeType detect_bay_and_mode() {
     };
     gpio_config(&conf);
 
-    // 1. Check OMM_DETECT (U1 Pad 12 / GPIO 0 -> J_AUDIO_PWR Pin 6 & U4 TS5A3159 IN):
-    //    LOW (0V):    OEM Harness grounds Pin 6 -> U4 stays on NC (ES8388 Analog Voice Out)
-    //    HIGH (3.3V): OMM Module leaves Pin 6 open (R9 10k pull-up) -> U4 switches to NO (Digital USB-Audio)
+    // 1. Check OMM_DETECT (U1 Pad 12 / GPIO 0 -> J_AUDIO_PWR Pin 6 & U4 TS5A23157):
+    //    HIGH (3.3V, R9 100k Pull-Up): OEM Harness open/floating -> TS5A23157 NO connects to COM (ES8388 Analog Audio & PTT)
+    //    LOW (0V, GND bridge in OMM cable): OMM Module pulls Pin 6 low -> TS5A23157 NC connects to COM (U7 CH554E USB Host)
     int omm_lvl = gpio_get_level(PIN_OMM_DETECT);
-    s_omm_digital_mode = (omm_lvl != 0);
+    s_omm_digital_mode = (omm_lvl == 0);
     if (s_omm_digital_mode) {
         s_model_id = 0x0401; // OMM Universal Tri-Band Module (PCBA 09/10)
-        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is HIGH -> U4 TS5A3159 in DIGITAL USB-AUDIO Mode (OMM Tri-Band 0x0401)");
+        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is LOW  -> TS5A23157 in DIGITAL USB-HOST Mode (OMM Tri-Band 0x0401 via U7 CH554E)");
     } else {
         s_model_id = 0x0101; // Analog OEM Intercom (Sena / Cardo / Midland via ES8388 + Q1..Q4 Actuators)
-        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is LOW  -> U4 TS5A3159 in ANALOG ES8388 Mode (OEM Intercom 0x0101)");
+        ESP_LOGI(TAG, "OMM_DETECT (GPIO 0) is HIGH -> TS5A23157 in ANALOG ES8388 Mode (OEM Intercom 0x0101)");
     }
 
     // 2. Bay Assignment: Read from NVS (defaulting to Pod Bay 1 Left, 0x03)
@@ -148,7 +168,7 @@ static void on_generic_packet_received(UsbBackbonePktType type, const uint8_t* p
     if (type == USB_PKT_AUDIO_STREAM_DOWN && len >= sizeof(UsbAudioStreamDownPkt)) {
         const UsbAudioStreamDownPkt* down = reinterpret_cast<const UsbAudioStreamDownPkt*>(payload);
 
-        // In Analog OEM Mode (OMM_DETECT == LOW), route voice & stereo media to ES8388 DAC
+        // In Analog OEM Mode (OMM_DETECT == HIGH), route voice & stereo media to ES8388 DAC
         if (!s_omm_digital_mode) {
             int16_t voice_buf[USB_AUDIO_DOWN_VOICE_SAMPLES];
             memcpy(voice_buf, down->sub_voice, sizeof(voice_buf));
@@ -159,33 +179,51 @@ static void on_generic_packet_received(UsbBackbonePktType type, const uint8_t* p
             memcpy(music_l_buf, down->sub_music_l, sizeof(music_l_buf));
             memcpy(music_r_buf, down->sub_music_r, sizeof(music_r_buf));
             CartridgeAudioCodec::instance().push_music_samples(music_l_buf, music_r_buf, USB_AUDIO_DOWN_MUSIC_SAMPLES);
+        } else {
+            // In Digital OMM Mode (OMM_DETECT == LOW), forward downlink packet over 3.0 Mbps UART to U7 CH554E
+            uart_write_bytes(UART_NUM_1, payload, sizeof(UsbAudioStreamDownPkt));
         }
     }
 }
 
 // -----------------------------------------------------------------------------
-// Real-Time Audio Upstream Task (Intercom Headset Out -> USB Central Box)
+// Real-Time Audio Upstream Task (Intercom Headset Out / OMM -> USB Central Box)
 // -----------------------------------------------------------------------------
 static void pod_audio_upstream_task(void* pvParameters) {
     ESP_LOGI(TAG, "Pod Audio Upstream Task started (100 Hz over USB 2.0 Backbone)");
     int16_t rx_buf[USB_AUDIO_UP_SAMPLES];
     uint16_t up_seq = 0;
+    uint8_t uart_rx_buf[sizeof(UsbAudioStreamUpPkt) + 4];
 
     while (1) {
         if (!s_omm_digital_mode) {
+            // Analog OEM Mode: Read from ES8388 ADC
             size_t samples_read = CartridgeAudioCodec::instance().read_audio_frames(rx_buf, USB_AUDIO_UP_SAMPLES);
             if (samples_read > 0) {
                 UsbAudioStreamUpPkt up_pkt = {};
                 up_pkt.frame_seq = ++up_seq;
-                up_pkt.status_flags = s_ptt_pressed ? 0x03 : 0x01; // Bit 0 = stream active, Bit 1 = PTT pressed
+                up_pkt.status_flags = s_ptt_pressed ? (USB_AUDIO_UP_FLAG_STREAM_ACTIVE | USB_AUDIO_UP_FLAG_PTT_PRESSED)
+                                                    : USB_AUDIO_UP_FLAG_STREAM_ACTIVE;
                 up_pkt.sample_count = static_cast<uint8_t>(samples_read > USB_AUDIO_UP_SAMPLES ? USB_AUDIO_UP_SAMPLES : samples_read);
                 memcpy(up_pkt.samples, rx_buf, up_pkt.sample_count * sizeof(int16_t));
 
                 UsbVehicleBackbone::instance().send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_AUDIO_STREAM_UP,
                                                            &up_pkt, sizeof(up_pkt));
             }
+            vTaskDelay(pdMS_TO_TICKS(10));
+        } else {
+            // Digital OMM Mode: Read multi-stream packets from U7 CH554E USB-Host via 3.0 Mbps UART
+            int len = uart_read_bytes(UART_NUM_1, uart_rx_buf, sizeof(UsbAudioStreamUpPkt), pdMS_TO_TICKS(10));
+            if (len >= (int)sizeof(UsbAudioStreamUpPkt)) {
+                UsbAudioStreamUpPkt* up_pkt = reinterpret_cast<UsbAudioStreamUpPkt*>(uart_rx_buf);
+                up_pkt->status_flags |= USB_AUDIO_UP_FLAG_OMM_DIGITAL;
+                if (s_ptt_pressed) {
+                    up_pkt->status_flags |= USB_AUDIO_UP_FLAG_PTT_PRESSED;
+                }
+                UsbVehicleBackbone::instance().send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_AUDIO_STREAM_UP,
+                                                           up_pkt, sizeof(UsbAudioStreamUpPkt));
+            }
         }
-        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
@@ -198,19 +236,19 @@ static void pod_supervisor_task(void* pvParameters) {
     uint32_t heartbeat_counter = 0;
 
     while (1) {
-        // 1. Advance mechatronics pulse state machine (Q1..Q4 AO3400A on GPIO 18, 19, 4, 5)
+        // 1. Advance mechatronics pulse state machine (Q1..Q4 AO3400A on GPIO 5, 8, 3, 4)
         CartridgeMechatronics::instance().update();
 
         // 2. BLE Central connection supervision & reconnect
         CartridgeBleClient::instance().update();
 
-        // 3. Live hot-plug check on OMM_DETECT (GPIO 14) & PTT_BTN (GPIO 9)
-        bool omm_now = (gpio_get_level(PIN_OMM_DETECT) != 0);
+        // 3. Live hot-plug check on OMM_DETECT (GPIO 0, Low = OMM via GND bridge, High = OEM Headset)
+        bool omm_now = (gpio_get_level(PIN_OMM_DETECT) == 0);
         if (omm_now != s_omm_digital_mode) {
             s_omm_digital_mode = omm_now;
             s_model_id = s_omm_digital_mode ? 0x0401 : 0x0101;
             ESP_LOGI(TAG, "OMM_DETECT hot-plug change -> Mode is now %s",
-                     s_omm_digital_mode ? "DIGITAL USB-AUDIO (OMM)" : "ANALOG ES8388 (OEM Headset)");
+                     s_omm_digital_mode ? "DIGITAL USB-HOST (OMM via U7 CH554E)" : "ANALOG ES8388 (OEM Headset)");
             send_pod_announce();
         }
         s_ptt_pressed = (gpio_get_level(PIN_POD_PTT_BTN) == 0);
@@ -243,20 +281,24 @@ extern "C" void app_main(void) {
         nvs_flash_init();
     }
 
-    // 1. Detect Bay (Pod 1 Left or Pod 2 Right) & OMM_DETECT Mode (U4 TS5A3159)
+    // 1. Detect Bay (Pod 1 Left or Pod 2 Right) & OMM_DETECT Mode (U4 TS5A23157)
     s_local_bay_node = detect_bay_and_mode();
 
-    // 2. Initialize Mechatronics Actuator Gates (Q1-Q4 AO3400A on GPIO 18, 19, 4, 5)
+    // 2. Initialize Mechatronics Actuator Gates (Q1-Q4 AO3400A on GPIO 5, 8, 3, 4)
     CartridgeMechatronics::instance().init();
 
-    // 3. Initialize Audio Codec (ES8388 on I2C GPIO 23/15, I2S GPIO 16/17/20/21/22)
+    // 3. Initialize Audio Codec (ES8388 on I2C GPIO 1/9, I2S GPIO 6/7/14/15/18)
     CartridgeAudioCodec::instance().init();
 
-    // 4. Initialize BLE Client Subsystem & apply initial profile config
-    CartridgeBleClient::instance().init();
-    CartridgeBleClient::instance().configure(s_active_ble_config);
+    // 4. Initialize High-Speed 3.0 Mbps UART Bridge to U7 CH554E USB Host
+    init_ch554_uart_bridge();
 
-    // 5. Initialize 4-Wire USB 2.0 Automotive Backbone (J_BUS: USB D- GPIO 12, D+ GPIO 13)
+    // 5. Initialize BLE Client Subsystem (CP-07: Disabled by default to prevent RF congestion in pod bay)
+    // CartridgeBleClient::instance().init();
+    // CartridgeBleClient::instance().configure(s_active_ble_config);
+    ESP_LOGI(TAG, "CP-07 Compliance: On-board 2.4 GHz BLE radio is disabled to prevent RF congestion with helmet intercoms.");
+
+    // 6. Initialize 4-Wire USB 2.0 Automotive Backbone (J_BUS: USB D- GPIO 12, D+ GPIO 13)
     UsbHubPortId hub_port = (s_local_bay_node == USB_NODE_POD_BAY1) ?
                             USB_HUB_PORT_3_POD_BAY1 : USB_HUB_PORT_4_POD_BAY2;
     usb_backbone_hw_config_t usb_cfg = {
@@ -271,14 +313,14 @@ extern "C" void app_main(void) {
     UsbVehicleBackbone::instance().set_generic_packet_callback(on_generic_packet_received);
     UsbVehicleBackbone::instance().start_task(22, 0);
 
-    // 6. Send initial Announce frame to Central Box
+    // 7. Send initial Announce frame to Central Box
     send_pod_announce();
 
-    // 7. Spawn Supervisor Task & Real-Time Audio Upstream Task
+    // 8. Spawn Supervisor Task & Real-Time Audio Upstream Task
     xTaskCreate(pod_supervisor_task, "pod_sup", 3072, NULL, 5, NULL);
     xTaskCreate(pod_audio_upstream_task, "pod_audio_up", 4096, NULL, 10, NULL);
 
     ESP_LOGI(TAG, "Satellite Pod PCBA 03 v10.0 operational in %s (%s).",
              s_local_bay_node == USB_NODE_POD_BAY1 ? "POD BAY 1 (Links)" : "POD BAY 2 (Rechts)",
-             s_omm_digital_mode ? "Digital OMM Mode" : "Analog OEM Mode");
+             s_omm_digital_mode ? "Digital OMM Mode (CH554E Host)" : "Analog OEM Mode");
 }

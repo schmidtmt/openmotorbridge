@@ -56,6 +56,12 @@ OpenMotorBridge löst dieses Problem durch eine konsequent modulare **Zwei-Stufe
     - 100% ohne neue Signal- oder Videokabel durch den Lenkkopf!
 ```
 
+> [!IMPORTANT]
+> **Verbindliche USB-Systemarchitektur & Dual-Client Mode-Switch:**  
+> Für die verbindlichen Topologie-Vorgaben bezüglich Single USB-Master (Zentralbox S31) und Front-Node Dual-Client mit Hardware-Mux (SkylineOS vs. Nachrüst-AA) siehe:  
+> **[OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md](../../OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md)**.  
+> Jede Schaltungs- oder Layoutänderung an PCBA 05 muss zwingend gegen diese Vorgaben validiert werden.
+
 ---
 
 ## 2. Architekturentscheidung: Warum kein Onboard-Linux-SOM auf PCBA 05? (Evaluation & verworfene Ansätze)

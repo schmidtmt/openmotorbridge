@@ -4,8 +4,14 @@
 // File: hardware/cad/scad/04_front_node/parts/006_dummy_front_node_pcb.scad
 // Description: Exact 1:1 3D dummy of openmotorbridge_front_node.kicad_pcb
 //              (82.0 x 50.0 x 1.6 mm, 4-Layer FR4) reflecting the v10.0 routed
-//              board with ESP32-E22 Dual Wi-Fi 6E (ANT1 & ANT2 U.FL sockets),
-//              USB2514B Hub, SW3526 20W PD, Knowles MEMS, and JST connector rails.
+//              board with ESP32-S31 + ESP32-C3, Dual Wi-Fi (ANT1 & ANT2 U.FL),
+//              Dual USB2514B Hubs (U2 & U10), SW3526 20W PD, Knowles MEMS,
+//              and all 11 horizontal JST GH connectors.
+//
+// Axis convention:
+//   X: West (0 mm) -> East (82 mm)
+//   Y: South (0 mm, Cockpit) -> North (50 mm, Vehicle / Front)
+//   Z: Bottom (0 mm) -> Top (1.6 mm substrate + components)
 // =============================================================================
 
 include <../../00_common/parameters.scad>;
@@ -29,90 +35,108 @@ module dummy_front_node_pcb() {
             translate([3.50, FRONT_NODE_PCB_W - 3.50, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=24);
             translate([FRONT_NODE_PCB_L - 3.50, FRONT_NODE_PCB_W - 3.50, -0.1]) cylinder(r=1.35, h=FRONT_NODE_PCB_H + 0.2, $fn=24);
             
-            // Knowles MEMS Acoustic sound port hole (Ø 0.8 mm) at (11.20, 46.30)
-            translate([11.20, 46.30, -0.1]) cylinder(r=0.4, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
+            // Knowles MEMS Acoustic sound port hole (Ø 0.8 mm) at (11.20, 3.70)
+            translate([11.20, 3.70, -0.1]) cylinder(r=0.4, h=FRONT_NODE_PCB_H + 0.2, $fn=16);
         }
     }
 
-    // 2. Dual U.FL Antenna Ports for ESP32-E22 (2x2 MIMO 5/6 GHz Wi-Fi 6E)
-    // ANT1 at (12.20, 2.00) and ANT2 at (8.50, 2.00)
+    // 2. Dual U.FL Antenna Ports for Wi-Fi (ANT1 at 12.20, 48.00 and ANT2 at 8.50, 48.00)
     color("gold") {
-        translate([12.20, 2.00, FRONT_NODE_PCB_H]) {
+        translate([12.20, 48.00, FRONT_NODE_PCB_H]) {
             cylinder(r=1.2, h=1.4, $fn=16);
             translate([0, 0, 1.4]) cylinder(r=0.6, h=0.4, $fn=16);
         }
-        translate([8.50, 2.00, FRONT_NODE_PCB_H]) {
+        translate([8.50, 48.00, FRONT_NODE_PCB_H]) {
             cylinder(r=1.2, h=1.4, $fn=16);
             translate([0, 0, 1.4]) cylinder(r=0.6, h=0.4, $fn=16);
         }
     }
 
-    // 3. ESP32-S3 / ESP32-E22 Radio & Core Controller Module (U1 at 10.34, 25.45)
+    // 3. ESP32-S31-WROOM-1U Core Controller Module (U1 at 10.34, 24.55)
     color("silver") {
-        translate([10.34 - 9.0, 25.45 - 9.0, FRONT_NODE_PCB_H])
-            cube(size=[18.0, 18.0, 3.0], center=false); // Shield can
+        translate([10.34 - 9.0, 24.55 - 12.75, FRONT_NODE_PCB_H])
+            cube(size=[18.0, 25.5, 3.2], center=false); // Shield can
     }
 
-    // 4. Microchip USB2514B Automotive 4-Port USB 2.0 Hub (U2 at 30.41, 21.50)
+    // 4. ESP32-C3-FN4 Sub-Controller (U9 at 9.00, 43.25)
     color("darkslategray") {
-        translate([30.41 - 3.0, 21.50 - 3.0, FRONT_NODE_PCB_H])
+        translate([9.00 - 1.5, 43.25 - 1.5, FRONT_NODE_PCB_H])
+            cube(size=[3.0, 3.0, 0.9], center=false); // QFN-16
+    }
+
+    // 5. Microchip USB2514B Automotive 4-Port USB Hub #1 (U2 at 30.16, 21.25)
+    color("darkslategray") {
+        translate([30.16 - 3.0, 21.25 - 3.0, FRONT_NODE_PCB_H])
             cube(size=[6.0, 6.0, 0.9], center=false); // QFN-36
     }
 
-    // 5. SW3526 Synchronous Step-Down USB-PD Controller (U5 at 42.56, 12.45)
+    // 6. Microchip USB2514B Automotive 4-Port USB Hub #2 (U10 at 53.00, 22.00)
     color("darkslategray") {
-        translate([42.56 - 2.0, 12.45 - 2.0, FRONT_NODE_PCB_H])
+        translate([53.00 - 2.5, 22.00 - 2.5, FRONT_NODE_PCB_H])
+            cube(size=[5.0, 5.0, 0.9], center=false); // QFN-32
+    }
+
+    // 7. SW3526 Synchronous Step-Down USB-PD Controller (U5 at 42.56, 37.55)
+    color("darkslategray") {
+        translate([42.56 - 2.0, 37.55 - 2.0, FRONT_NODE_PCB_H])
             cube(size=[4.0, 4.0, 0.85], center=false); // QFN-28
     }
 
-    // 6. Knowles SPH0645 Digital I2S MEMS Microphone (MK1 at 11.20, 46.30)
+    // 8. Knowles SPH0645 Digital I2S MEMS Microphone (MK1 at 11.20, 3.70)
     color("goldenrod") {
-        translate([11.20 - 1.75, 46.30 - 1.32, FRONT_NODE_PCB_H])
+        translate([11.20 - 1.75, 3.70 - 1.32, FRONT_NODE_PCB_H])
             cube(size=[3.5, 2.65, 1.0], center=false);
     }
 
-    // 7. Tactical Switches: SW1 (Boot at 2.25, 11.10) & SW2 (Reset at 2.25, 40.50)
+    // 9. Tactical Switches: SW1 (Boot at 2.25, 38.90) & SW2 (Reset at 2.25, 9.50)
     color("dimgray") {
-        translate([2.25 - 1.5, 11.10 - 1.5, FRONT_NODE_PCB_H])
+        translate([2.25 - 1.5, 38.90 - 1.5, FRONT_NODE_PCB_H])
             cube(size=[3.0, 3.0, 1.6], center=false);
-        translate([2.25 - 1.5, 40.50 - 1.5, FRONT_NODE_PCB_H])
+        translate([2.25 - 1.5, 9.50 - 1.5, FRONT_NODE_PCB_H])
             cube(size=[3.0, 3.0, 1.6], center=false);
     }
 
-    // 8. Status RGB LED (LED1 WS2812B-2020 at 80.20, 37.08)
+    // 10. Status RGB LED (LED1 WS2812B-2020 at 80.20, 12.92)
     color("white") {
-        translate([80.20 - 1.0, 37.08 - 1.0, FRONT_NODE_PCB_H])
+        translate([80.20 - 1.0, 12.92 - 1.0, FRONT_NODE_PCB_H])
             cube(size=[2.0, 2.0, 0.9], center=false);
     }
 
-    // 9. North Edge Connectors (J1, J4, J_DONGLE, J_AUX_LIGHT, J10, J8)
-    color("ghostwhite") {
-        // J1 (JST GH 4P at 19.73, 3.35)
-        translate([19.73 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J4 (JST GH 8P at 32.97, 3.35)
-        translate([32.97 - 6.0, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([12.0, 4.0, 4.5], center=false);
-        // J_DONGLE (JST GH 4P at 46.22, 3.35)
-        translate([46.22 - 3.5, 3.35 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J_AUX_LIGHT (JST PH 2P at 55.68, 7.00)
-        translate([55.68 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
-        // J10 (JST PH 2P at 63.87, 7.00)
-        translate([63.87 - 3.0, 7.00 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
-        // J8 (JST PH 2P at 72.05, 6.95)
-        translate([72.05 - 3.0, 6.95 - 2.5, FRONT_NODE_PCB_H]) cube([6.0, 5.0, 5.5], center=false);
+    // 11. Power Regulators: U3 (TPS54302 at 74.14, 37.50), U4 (TPS2051B at 25.61, 38.55), U7 (TLV75533 at 6.80, 9.86)
+    color("darkslategray") {
+        translate([74.14 - 1.5, 37.50 - 1.5, FRONT_NODE_PCB_H]) cube([3.0, 3.0, 1.4], center=false);
+        translate([25.61 - 1.5, 38.55 - 1.5, FRONT_NODE_PCB_H]) cube([3.0, 3.0, 1.4], center=false);
+        translate([6.80 - 1.5, 9.86 - 1.5, FRONT_NODE_PCB_H]) cube([3.0, 3.0, 1.4], center=false);
     }
 
-    // 10. South Edge Connectors (J_POD_R, J_DISP_R, J_SENSOR_EXT, J_DISP_L, J_POD_L)
+    // 12. NORTH EDGE CONNECTORS (Vehicle & Accessories: J1, J4, J5, J7, J10, J8 at Y = 46.65 mm, facing +Y)
     color("ghostwhite") {
-        // J_POD_R (JST GH 4P at 19.73, 46.50)
-        translate([19.73 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
-        // J_DISP_R (JST SH 4P at 31.24, 46.50)
-        translate([31.24 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
-        // J_SENSOR_EXT (JST GH 8P at 45.25, 46.50)
-        translate([45.25 - 6.0, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([12.0, 4.0, 4.5], center=false);
-        // J_DISP_L (JST SH 4P at 59.26, 46.50)
-        translate([59.26 - 3.0, 46.50 - 1.5, FRONT_NODE_PCB_H]) cube([6.0, 3.0, 3.2], center=false);
-        // J_POD_L (JST GH 4P at 70.77, 46.50)
-        translate([70.77 - 3.5, 46.50 - 2.0, FRONT_NODE_PCB_H]) cube([7.0, 4.0, 4.5], center=false);
+        // J1: Backbone 4P JST GH (19.73, 46.65)
+        translate([19.73 - 3.5, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
+        // J4: Ext Hub 8P JST GH (32.85, 46.65)
+        translate([32.85 - 6.0, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([12.0, 4.25, 4.5], center=false);
+        // J5: Dongle 4P JST GH (45.98, 46.65)
+        translate([45.98 - 3.5, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
+        // J7: Aux Light 2P JST GH (55.35, 46.65)
+        translate([55.35 - 2.25, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([4.5, 4.25, 4.5], center=false);
+        // J10: Navi Power 2P JST GH (63.48, 46.65)
+        translate([63.48 - 2.25, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([4.5, 4.25, 4.5], center=false);
+        // J8: Cam Power 2P JST GH (71.60, 46.65)
+        translate([71.60 - 2.25, 46.65 - 0.25, FRONT_NODE_PCB_H]) cube([4.5, 4.25, 4.5], center=false);
+    }
+
+    // 13. SOUTH EDGE CONNECTORS (Cockpit: J3, J11, J6, J9, J2 at Y = 3.50 mm, facing -Y)
+    color("ghostwhite") {
+        // J3: Pod R 4P JST GH (19.73, 3.50)
+        translate([19.73 - 3.5, 3.50 - 4.0, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
+        // J11: Disp R 4P JST GH (31.24, 3.50)
+        translate([31.24 - 3.5, 3.50 - 4.0, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
+        // J6: Sensor Puck 8P JST GH (45.25, 3.50)
+        translate([45.25 - 6.0, 3.50 - 4.0, FRONT_NODE_PCB_H]) cube([12.0, 4.25, 4.5], center=false);
+        // J9: Disp L 4P JST GH (59.26, 3.50)
+        translate([59.26 - 3.5, 3.50 - 4.0, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
+        // J2: Pod L 4P JST GH (70.77, 3.50)
+        translate([70.77 - 3.5, 3.50 - 4.0, FRONT_NODE_PCB_H]) cube([7.0, 4.25, 4.5], center=false);
     }
 }
 

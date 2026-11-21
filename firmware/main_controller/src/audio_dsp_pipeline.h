@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "esp_err.h"
+#include "usb_backbone_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -127,6 +128,33 @@ bool audio_get_privacy_mute_active(void);
  * @brief Aktualisiert Stillstands- und Proximity-Status zur automatischen Mute-Steuerung
  */
 void audio_update_standstill_proximity(float speed_kmh, int8_t partner_rssi);
+
+/**
+ * @brief Konfiguriert den Private Cabin Whisper Modus des Sozius.
+ * Bei Aktivierung wird das Sozius-Mikrofon zum Mesh schlagartig gemutet (pillion_bytes = 0),
+ * während es lokal mit -12 dB Ducking auf das Gruppen-Mesh exklusiv in den Fahrerhelm geleitet wird.
+ */
+void audio_set_pillion_whisper_mode(bool active);
+
+/**
+ * @brief Gibt zurück, ob der Private Cabin Whisper Modus aktuell aktiv ist
+ */
+bool audio_get_pillion_whisper_mode(void);
+
+/**
+ * @brief Meldet dem DSP den Status der Fahrer-PTT (z. B. BMW Lenkertaste)
+ * @param active PTT gedrückt / aktiv
+ * @param target_funk true = 446 MHz PMR/DMR Funk-TX, false = 2.4 GHz Mesh Priority
+ */
+void audio_trigger_driver_ptt(bool active, bool target_funk);
+
+/**
+ * @brief Führt dem DSP ein Upstream-Audiopaket von Satelliten-Pod 1/2 oder OMM zu.
+ * Verarbeitet sowohl klassische Mono-Streams (Sena/Cardo Analog-OEM) als auch
+ * getrennte Multi-Streams (sub_voice_funk, sub_voice_mesh, sub_music_l/r)
+ * für unabhängiges Ducking (-18 dB), Gain und 3D-Spatial-Panning im Zentralbox-Mixer.
+ */
+void audio_dsp_feed_cartridge_upstream(UsbNodeType source, const UsbAudioStreamUpPkt *pkt);
 
 /**
  * @brief FreeRTOS Task für Echtzeit-Audioverarbeitung (Core 1)

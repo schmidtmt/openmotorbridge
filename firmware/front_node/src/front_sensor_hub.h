@@ -52,4 +52,23 @@ private:
     int16_t  m_temp_c_100;
     uint32_t m_ambient_lux;
     uint32_t m_baro_pressure_pa;
+
+    // Bosch BMP390 Calibration Parameters (NVM 0x31..0x45)
+    struct Bmp390Calib {
+        double par_t1;
+        double par_t2;
+        double par_t3;
+        double par_p1;
+        double par_p2;
+        double par_p3;
+        double par_p4;
+        double par_p5;
+        double par_p6;
+        double par_p7;
+        double par_p8;
+        double par_p9;
+        double par_p10;
+        double par_p11;
+        bool   valid;
+    } m_bmp_calib;
 };

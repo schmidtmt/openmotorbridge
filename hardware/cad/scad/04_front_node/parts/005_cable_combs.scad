@@ -4,8 +4,8 @@
 // File: hardware/cad/scad/04_front_node/parts/005_cable_combs.scad
 // Description: Flush, low-profile TPU sealing plugs (no protruding thorns/horns)
 //              and tub cutouts for Front Node PCBA 05:
-//              - Cockpit Wall (North, Y=68 mm): 3x Standard Oval Ports (CKPT 1, SENSOR, CKPT 2)
-//              - Vehicle Wall (South, Y=0 mm):  2x Oval Ports (MAIN, DONGLE) +
+//              - Cockpit Wall (South, Y=0 mm):  3x Standard Oval Ports (CKPT 1, SENSOR, CKPT 2)
+//              - Vehicle Wall (North, Y=68 mm): 2x Oval Ports (MAIN, DONGLE) +
 //                                               3x Mini Ports (AUX 12V, NAV 12V, CAM 5V)
 //              - Poka-Yoke debossed lettering on PA12 tub wall and TPU plugs.
 // =============================================================================
@@ -103,38 +103,38 @@ module front_node_mini_u_slot_cutout(
 // 2. Combined Cutouts for Tub Lower Wall
 // -----------------------------------------------------------------------------
 
-// All Cockpit Ports on North Wall (Y = 68.0 mm)
+// All Cockpit Ports on South Wall (Y = 0.0 mm, facing rider / cockpit)
 module front_node_cockpit_ports_cutout() {
-    y_north = FRONT_NODE_OUTER_W; // 68.0 mm
-    
-    // CKPT 1 (X = 33.5 mm): Oval Port for J_POD_R (27.7) + J_DISP_R (39.2)
-    front_node_oval_u_slot_cutout(x_center = 33.5, y_wall = y_north, is_north = true);
-    
-    // SENSOR (X = 53.25 mm): Oval Port for J_SENSOR_EXT (53.25) to top puck
-    front_node_oval_u_slot_cutout(x_center = 53.25, y_wall = y_north, is_north = true);
-    
-    // CKPT 2 (X = 73.0 mm): Oval Port for J_DISP_L (67.3) + J_POD_L (78.8)
-    front_node_oval_u_slot_cutout(x_center = 73.0, y_wall = y_north, is_north = true);
-}
-
-// All Vehicle & Accessory Ports on South Wall (Y = 0.0 mm)
-module front_node_vehicle_ports_cutout() {
     y_south = 0.0;
     
-    // Port 1 [ MAIN ] (X = 34.5 mm): J1 Backbone (27.7) + J4 Hub (41.0)
-    front_node_oval_u_slot_cutout(x_center = 34.5, y_wall = y_south, is_north = false);
+    // CKPT 1 (X = 33.50 mm): Oval Port for J3 (Pod R, 27.73) + J11 (Disp R, 39.24)
+    front_node_oval_u_slot_cutout(x_center = 33.50, y_wall = y_south, is_north = false);
     
-    // Port 2 [ DONGLE ] (X = 54.2 mm): J_DONGLE (54.2)
-    front_node_oval_u_slot_cutout(x_center = 54.2, y_wall = y_south, is_north = false);
+    // SENSOR (X = 53.25 mm): Oval Port for J6 (Sensor Puck, 53.25) to top puck
+    front_node_oval_u_slot_cutout(x_center = 53.25, y_wall = y_south, is_north = false);
     
-    // Port 3 [ AUX 12V ] (X = 63.7 mm): J_AUX_LIGHT (63.7)
-    front_node_mini_u_slot_cutout(x_center = 63.7, y_wall = y_south, is_north = false);
+    // CKPT 2 (X = 73.00 mm): Oval Port for J9 (Disp L, 67.26) + J2 (Pod L, 78.77)
+    front_node_oval_u_slot_cutout(x_center = 73.00, y_wall = y_south, is_north = false);
+}
+
+// All Vehicle & Accessory Ports on North Wall (Y = 68.0 mm, facing vehicle / front)
+module front_node_vehicle_ports_cutout() {
+    y_north = FRONT_NODE_OUTER_W; // 68.0 mm
     
-    // Port 4 [ NAV 12V ] (X = 71.9 mm): J10 Navi (71.9)
-    front_node_mini_u_slot_cutout(x_center = 71.9, y_wall = y_south, is_north = false);
+    // Port 1 [ MAIN ] (X = 34.30 mm): J1 Backbone (27.73) + J4 Ext Hub (40.85)
+    front_node_oval_u_slot_cutout(x_center = 34.30, y_wall = y_north, is_north = true);
     
-    // Port 5 [ CAM 5V ] (X = 80.1 mm): J8 Cam (80.1)
-    front_node_mini_u_slot_cutout(x_center = 80.1, y_wall = y_south, is_north = false);
+    // Port 2 [ DONGLE ] (X = 54.00 mm): J5 Dongle (53.98)
+    front_node_oval_u_slot_cutout(x_center = 54.00, y_wall = y_north, is_north = true);
+    
+    // Port 3 [ AUX 12V ] (X = 63.35 mm): J7 Aux Light (63.35)
+    front_node_mini_u_slot_cutout(x_center = 63.35, y_wall = y_north, is_north = true);
+    
+    // Port 4 [ NAV 12V ] (X = 71.48 mm): J10 Navi Power (71.48)
+    front_node_mini_u_slot_cutout(x_center = 71.48, y_wall = y_north, is_north = true);
+    
+    // Port 5 [ CAM 5V ] (X = 79.60 mm): J8 Action Cam (79.60)
+    front_node_mini_u_slot_cutout(x_center = 79.60, y_wall = y_north, is_north = true);
 }
 
 // All Cutouts Master Module
@@ -160,7 +160,7 @@ module front_node_usbc_service_cutout(
 }
 
 // -----------------------------------------------------------------------------
-// 3. Poka-Yoke Debossed Labels in Outer PA12 Tub Wall (0.5 mm deep)
+// 3. Poka-Yoke Debossed Labels in Outer PA12 Tub Wall (0.6 mm deep)
 // -----------------------------------------------------------------------------
 module front_node_all_port_labels_deboss() {
     y_north = FRONT_NODE_OUTER_W; // 68.0 mm
@@ -168,47 +168,47 @@ module front_node_all_port_labels_deboss() {
     z_lbl   = 16.2; // Above C-rail centerline, on upper tub rim
     depth   = 0.6;  // 0.6 mm debossed into PA12 wall
 
-    // Cockpit Wall Labels (Facing North / Rider)
-    translate([33.5, y_north - depth + 0.1, z_lbl])
-        rotate([90, 0, 180])
+    // Cockpit Wall Labels (Facing South / Rider)
+    translate([33.50, -0.1, z_lbl])
+        rotate([90, 0, 0])
             linear_extrude(height = depth + 0.2)
                 text("CKPT 1", size = 2.0, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([53.25, y_north - depth + 0.1, z_lbl])
-        rotate([90, 0, 180])
+    translate([53.25, -0.1, z_lbl])
+        rotate([90, 0, 0])
             linear_extrude(height = depth + 0.2)
                 text("SENSOR", size = 2.0, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([73.0, y_north - depth + 0.1, z_lbl])
-        rotate([90, 0, 180])
+    translate([73.00, -0.1, z_lbl])
+        rotate([90, 0, 0])
             linear_extrude(height = depth + 0.2)
                 text("CKPT 2", size = 2.0, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    // Vehicle Wall Labels (Facing South / Vehicle Front)
-    translate([34.5, -0.1, z_lbl])
-        rotate([90, 0, 0])
+    // Vehicle Wall Labels (Facing North / Vehicle Front)
+    translate([34.30, y_north - depth + 0.1, z_lbl])
+        rotate([90, 0, 180])
             linear_extrude(height = depth + 0.2)
                 text("MAIN", size = 2.0, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([54.2, -0.1, z_lbl])
-        rotate([90, 0, 0])
+    translate([54.00, y_north - depth + 0.1, z_lbl])
+        rotate([90, 0, 180])
             linear_extrude(height = depth + 0.2)
                 text("DONGLE", size = 1.8, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([63.7, -0.1, z_lbl])
-        rotate([90, 0, 0])
+    translate([63.35, y_north - depth + 0.1, z_lbl])
+        rotate([90, 0, 180])
             linear_extrude(height = depth + 0.2)
-                text("AUX 12V", size = 1.4, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
+                text("AUX 12V", size = 1.3, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([71.9, -0.1, z_lbl])
-        rotate([90, 0, 0])
+    translate([71.48, y_north - depth + 0.1, z_lbl])
+        rotate([90, 0, 180])
             linear_extrude(height = depth + 0.2)
-                text("NAV 12V", size = 1.4, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
+                text("NAV 12V", size = 1.3, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 
-    translate([80.1, -0.1, z_lbl])
-        rotate([90, 0, 0])
+    translate([79.60, y_north - depth + 0.1, z_lbl])
+        rotate([90, 0, 180])
             linear_extrude(height = depth + 0.2)
-                text("CAM 5V", size = 1.4, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
+                text("CAM 5V", size = 1.3, halign = "center", valign = "center", font = "Liberation Sans:style=Bold");
 }
 
 // -----------------------------------------------------------------------------
@@ -465,23 +465,28 @@ module front_node_cable_glands_pair() {
 
 // Backwards-compatible aliases for legacy assembly files
 module south_round_cable_gland_cutout(x_center=35.5, z_center=9.5, bore_r=4.5, collar_r=6.0, z_top=15.1) {
-    front_node_vehicle_ports_cutout();
-}
-module north_round_cable_gland_cutout(x_center=35.5, z_center=9.5, bore_r=4.5, collar_r=6.0, z_top=15.1) {
     front_node_cockpit_ports_cutout();
 }
-module front_node_south_cable_boot_installed() {
-    translate([34.5, 0, 0]) front_node_tpu_oval_dual_gland();
-    translate([54.2, 0, 0]) front_node_tpu_oval_blind_plug("DONGLE");
-    translate([62.0, 0, 0]) front_node_tpu_mini_blind_plug("AUX");
-    translate([70.25, 0, 0]) front_node_tpu_mini_blind_plug("NAV");
-    translate([78.25, 0, 0]) front_node_tpu_mini_blind_plug("CAM");
+module north_round_cable_gland_cutout(x_center=35.5, z_center=9.5, bore_r=4.5, collar_r=6.0, z_top=15.1) {
+    front_node_vehicle_ports_cutout();
 }
+
+// Installed TPU Plugs on North Wall (Y = FRONT_NODE_OUTER_W = 68.0 mm / Vehicle & Accessories)
 module front_node_north_cable_boot_installed() {
-    translate([35.5, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_oval_dual_gland();
-    translate([54.5, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_oval_sensor_gland();
-    translate([73.0, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_oval_dual_gland();
+    translate([34.30, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_oval_dual_gland();
+    translate([54.00, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_oval_blind_plug("DONGLE");
+    translate([63.35, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_mini_blind_plug("AUX");
+    translate([71.48, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_mini_blind_plug("NAV");
+    translate([79.60, FRONT_NODE_OUTER_W, 0]) rotate([0, 0, 180]) front_node_tpu_mini_blind_plug("CAM");
 }
+
+// Installed TPU Plugs on South Wall (Y = 0.0 mm / Cockpit)
+module front_node_south_cable_boot_installed() {
+    translate([33.50, 0, 0]) front_node_tpu_oval_dual_gland();
+    translate([53.25, 0, 0]) front_node_tpu_oval_sensor_gland();
+    translate([73.00, 0, 0]) front_node_tpu_oval_dual_gland();
+}
+
 module south_epdm_cable_comb() { front_node_south_cable_boot_installed(); }
 module north_epdm_cable_comb() { front_node_north_cable_boot_installed(); }
 

@@ -3,6 +3,32 @@
 #include <stdint.h>
 #include "driver/gpio.h"
 
+// Forward compatibility definitions for ESP32-S31 extended GPIOs when building under ESP32-S3 target
+#ifndef GPIO_NUM_22
+#define GPIO_NUM_22 ((gpio_num_t)22)
+#endif
+#ifndef GPIO_NUM_23
+#define GPIO_NUM_23 ((gpio_num_t)23)
+#endif
+#ifndef GPIO_NUM_24
+#define GPIO_NUM_24 ((gpio_num_t)24)
+#endif
+#ifndef GPIO_NUM_25
+#define GPIO_NUM_25 ((gpio_num_t)25)
+#endif
+#ifndef GPIO_NUM_56
+#define GPIO_NUM_56 ((gpio_num_t)56)
+#endif
+#ifndef GPIO_NUM_57
+#define GPIO_NUM_57 ((gpio_num_t)57)
+#endif
+#ifndef GPIO_NUM_59
+#define GPIO_NUM_59 ((gpio_num_t)59)
+#endif
+#ifndef GPIO_NUM_60
+#define GPIO_NUM_60 ((gpio_num_t)60)
+#endif
+
 // =============================================================================
 // OpenMotorBridge v10.0 - Universal Front-Node (PCBA 05) Ground-Truth Pinout
 // Extracted 1:1 from hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb
@@ -28,40 +54,50 @@
 #define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot / Service Mode Sense
 
 // U4 (TI TPS2051BDBVR) High-Side Power Switch for J_DONGLE (CarPlay / Android Auto)
-#define PIN_CP2AA_PWR_EN        GPIO_NUM_1   // U1 Pad 39 -> U4 Pin 3 (CP2AA_PWR_EN)
-#define PIN_CP2AA_FAULT_N       GPIO_NUM_2   // U1 Pad 38 -> U4 Pin 4 (CP2AA_FAULT_N, Active Low)
+#define PIN_CP2AA_PWR_EN        GPIO_NUM_57  // U1 Pad 39 (GPIO57) -> U4 Pin 3 (CP2AA_PWR_EN)
+#define PIN_CP2AA_FAULT_N       GPIO_NUM_56  // U1 Pad 38 (GPIO56) -> U4 Pin 4 (CP2AA_FAULT_N, Active Low)
 #define PIN_OTTOCAST_PWR_EN     PIN_CP2AA_PWR_EN
 #define PIN_OTTOCAST_FAULT_N    PIN_CP2AA_FAULT_N
 
 // MK1 (Knowles SPH0645LM4H-B) & J_SENSOR_EXT (6-Pin: 1=3V3, 2=GND, 3=SDA, 4=SCL, 5=MIC_DATA, 6=MIC_WS)
-#define PIN_MIC_I2S_WS          GPIO_NUM_6   // U1 Pad 6  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_7   // U1 Pad 7  -> MK1 Pin 3 (MIC_I2S_BCLK)
-#define PIN_MIC_I2S_DATA        GPIO_NUM_12  // U1 Pad 12 -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
+#define PIN_MIC_I2S_WS          GPIO_NUM_4   // U1 Pad 6  (GPIO4)  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_5   // U1 Pad 7  (GPIO5)  -> MK1 Pin 3 (MIC_I2S_BCLK)
+#define PIN_MIC_I2S_DATA        GPIO_NUM_35  // U1 Pad 12 (GPIO35) -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
 
 // J_POD_L & J_POD_R Wired Handlebar / Mirror Pod Buttons (Active Low)
 #define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 Pad 8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)
 #define PIN_BTN_SIG_R_N         GPIO_NUM_9   // U1 Pad 9  -> J_POD_R Pin 3 (BTN_SIG_R_N: Action-Cam / Mode)
 #define PIN_PTT_IN1_N           PIN_BTN_SIG_L_N
 #define PIN_PTT_IN2_N           PIN_BTN_SIG_R_N
-#define PIN_PTT_IN3_N           GPIO_NUM_15  // Optional 3rd Handlebar Input
+// Auxiliary MCU U10 (ESP32-C3FH4) Wired Audio / Harley SkylineOS Headset Bridge Control
+#define PIN_C3_EN               GPIO_NUM_15  // U1 Pad 15 (GPIO15) -> U10 Pin 7 (CHIP_EN)
+#define PIN_C3_BOOT             GPIO_NUM_16  // U1 Pad 16 (GPIO16) -> U10 Pin 15 (GPIO9_BOOT)
+#define PIN_C3_UART_RX          GPIO_NUM_33  // U1 Pad 13 (GPIO33) -> U10 Pin 21 (U0TXD)
+#define PIN_C3_UART_TX          GPIO_NUM_34  // U1 Pad 14 (GPIO34) -> U10 Pin 20 (U0RXD)
+
+// Digital I2S Audio Bus: S31 (U1) <-> C3 (U10) for Harley Speaker Streaming & Headset Emulation
+#define PIN_C3_I2S_BCLK         GPIO_NUM_7   // U1 Pad 23 (GPIO7)  -> U10 Pin 6 (GPIO2, I2S Bit Clock)
+#define PIN_C3_I2S_WS           GPIO_NUM_10  // U1 Pad 24 (GPIO10) -> U10 Pin 8 (GPIO3, I2S Word Select)
+#define PIN_C3_I2S_SDO          GPIO_NUM_15  // U1 Pad 25 (GPIO15) -> U10 Pin 9 (GPIO4, I2S Data Out to Speakers)
+#define PIN_C3_I2S_SDI          GPIO_NUM_48  // U1 Pad 28 (GPIO48) -> U10 Pin 10 (GPIO5, I2S Data In from Mic)
 
 // Shared I2C Bus: J_SENSOR_EXT Pin 3/4 (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44, BMP390 0x76) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
 #define PIN_I2C_SDA             GPIO_NUM_22  // U1 Pad 17 (GPIO22) -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
 #define PIN_I2C_SCL             GPIO_NUM_23  // U1 Pad 18 (GPIO23) -> J_SENSOR_EXT Pin 4, J_DISP_L/R Pin 3 (I2C_SCL)
-#define PIN_GNSS_RESET_N        GPIO_NUM_11  // U1 Pad 11 (GPIO11) -> J_SENSOR_EXT Pin 8 (GNSS_RESET_N, Active-Low)
+#define PIN_GNSS_RESET_N        GPIO_NUM_7   // U1 Pad 11 (GPIO7)  -> J_SENSOR_EXT Pin 8 (GNSS_RESET_N, Active-Low)
 #define I2C_ADDR_OLED_LEFT      0x3C         // J_DISP_L Left Speaker-Corner Cockpit OLED
 #define I2C_ADDR_OLED_RIGHT     0x3D         // J_DISP_R Right Speaker-Corner Cockpit OLED
 #define I2C_ADDR_BMP390_BARO    0x76         // Sensor Puck BMP390 Barometer/Altimeter
 
 // LED1 (WS2812B-2020), Q1 (DMN63D8 Dual MOSFET Mirror BSD LEDs) & Q2 (TPS1H100 Aux Light)
-#define PIN_WS2812B_DIN         GPIO_NUM_11  // U1 Pad 19 -> LED1 Pin 4 (WS2812B_DIN)
-#define PIN_BSD_LED_LEFT        GPIO_NUM_13  // U1 Pad 20 -> Q1 Pin 2 -> J_POD_L Pin 2 (BSD_LED_LEFT)
-#define PIN_BSD_LED_RIGHT       GPIO_NUM_16  // U1 Pad 21 -> Q1 Pin 5 -> J_POD_R Pin 2 (BSD_LED_RIGHT)
-#define PIN_AUX_LIGHT_EN        GPIO_NUM_14  // U1 Pad 22 -> Q2 Pin 3 -> J_AUX_LIGHT Pin 1 (AUX_LIGHT_EN)
+#define PIN_WS2812B_DIN         GPIO_NUM_24  // U1 Pad 19 (GPIO24) -> LED1 Pin 4 (WS2812B_DIN)
+#define PIN_BSD_LED_LEFT        GPIO_NUM_25  // U1 Pad 20 (GPIO25) -> Q1 Pin 2 -> J_POD_L Pin 2 (BSD_LED_LEFT)
+#define PIN_BSD_LED_RIGHT       GPIO_NUM_26  // U1 Pad 21 (GPIO26) -> Q1 Pin 5 -> J_POD_R Pin 2 (BSD_LED_RIGHT)
+#define PIN_AUX_LIGHT_EN        GPIO_NUM_27  // U1 Pad 22 (GPIO27) -> Q2 Pin 3 -> J_AUX_LIGHT Pin 1 (AUX_LIGHT_EN)
 
-// U1 Native High-Speed USB 2.0 PHY -> U2 (USB2514Bi-AEZG Port 4) -> J1 (Central Box)
-#define PIN_USB_HS_DM           GPIO_NUM_19  // U1 Pad 13 -> U2 Pin 7 (USB_HS_DM)
-#define PIN_USB_HS_DP           GPIO_NUM_20  // U1 Pad 14 -> U2 Pin 8 (USB_HS_DP)
+// U1 Native High-Speed USB 2.0 PHY (480 Mbps) -> J1 Pins 3 & 4 (Direct 4-Wire Central Box Backbone)
+#define PIN_USB_HS_DM           GPIO_NUM_19  // U1 Pad 54 -> J1 Pin 4 (USB_HS_DM)
+#define PIN_USB_HS_DP           GPIO_NUM_20  // U1 Pad 55 -> J1 Pin 3 (USB_HS_DP)
 
 // U9 (ESP32-E22-WROOM-2X2) 4-Bit SDIO 3.0 Wi-Fi 6E (5 GHz / 6 GHz) Co-Processor Interface
 #define PIN_E22_SDIO_CLK        GPIO_NUM_35  // U1 Pad 30 -> U9 Pin 10 (SDIO_CLK)
@@ -70,8 +106,8 @@
 #define PIN_E22_SDIO_D1         GPIO_NUM_33  // U1 Pad 33 -> U9 Pin 13 (SDIO_D1)
 #define PIN_E22_SDIO_D2         GPIO_NUM_34  // U1 Pad 34 -> U9 Pin 14 (SDIO_D2)
 #define PIN_E22_SDIO_D3         GPIO_NUM_38  // U1 Pad 35 -> U9 Pin 15 (SDIO_D3)
-#define PIN_E22_IRQ             GPIO_NUM_39  // U1 Pad 37 -> U9 Pin 16 (E22_IRQ)
-#define PIN_E22_EN              GPIO_NUM_40  // U1 Pad 40 -> U9 Pin 3  (E22_EN)
+#define PIN_E22_IRQ             GPIO_NUM_60  // U1 Pad 37 (GPIO60) -> U9 Pin 16 (E22_IRQ)
+#define PIN_E22_EN              GPIO_NUM_59  // U1 Pad 36 (GPIO59) -> U9 Pin 3 (E22_EN)
 
 // --- 2. ESP32-E22 Wi-Fi 6E (5 GHz / 6 GHz) Cockpit Gateway Configuration ---
 #define COCKPIT_WIFI_AP_SSID        "OpenMotorBridge-6E"

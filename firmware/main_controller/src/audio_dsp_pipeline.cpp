@@ -50,6 +50,40 @@ static float s_radar_f1 = 880.0f;
 static float s_radar_f2 = 1760.0f;
 
 // -----------------------------------------------------------------------------
+// OMM Multi-Stream Buffers & Upstream Feed
+// -----------------------------------------------------------------------------
+static int16_t s_omm_voice_funk_buf[USB_OMM_UP_VOICE_SAMPLES] = {0};
+static int16_t s_omm_voice_mesh_buf[USB_OMM_UP_VOICE_SAMPLES] = {0};
+static int16_t s_omm_music_l_buf[USB_OMM_UP_MUSIC_SAMPLES] = {0};
+static int16_t s_omm_music_r_buf[USB_OMM_UP_MUSIC_SAMPLES] = {0};
+static uint8_t s_omm_funk_count = 0;
+static uint8_t s_omm_mesh_count = 0;
+static uint8_t s_omm_music_pairs = 0;
+static uint8_t s_omm_stream_flags = 0;
+static portMUX_TYPE s_omm_audio_spinlock = portMUX_INITIALIZER_UNLOCKED;
+
+static bool s_pillion_whisper_active = false;
+static bool s_driver_ptt_active = false;
+static bool s_driver_ptt_funk = false;
+
+void audio_set_pillion_whisper_mode(bool active) {
+    s_pillion_whisper_active = active;
+    ESP_LOGI("AUDIO_DSP", "🤫 Pillion Private Cabin Whisper: %s (Muted to Mesh, Local -12 dB Ducking to Driver)",
+             active ? "ACTIVE" : "INACTIVE");
+}
+
+bool audio_get_pillion_whisper_mode(void) {
+    return s_pillion_whisper_active;
+}
+
+void audio_trigger_driver_ptt(bool active, bool target_funk) {
+    s_driver_ptt_active = active;
+    s_driver_ptt_funk = target_funk;
+    ESP_LOGI("AUDIO_DSP", "⚡ Driver Handlebar PTT: Active=%d, Target=%s",
+             active, target_funk ? "446 MHz PMR/DMR" : "2.4 GHz Mesh Priority");
+}
+
+// -----------------------------------------------------------------------------
 // Biquad IIR Filter Definition & Presets (Transposed Direct Form II)
 // -----------------------------------------------------------------------------
 typedef struct {
@@ -447,16 +481,19 @@ void task_audio_dsp(void *pvParameters) {
 
             // G. Ducking Engine State Machine
             bool nav_active = s_nav_ducking_active || s_nav_auto_sense_active;
+            bool omm_voice_active = (s_omm_stream_flags & (USB_AUDIO_UP_FLAG_MESH_VOICE | USB_AUDIO_UP_FLAG_FUNK_CARRIER)) != 0;
+
             if (s_radar_alert_active) {
                 // Priorität 1: Sofortiges Absenken auf -18 dB (0.125f) bei Annäherungsgefahr
                 if (s_ducking_factor > 0.125f) {
                     s_ducking_factor -= (DUCKING_ATTACK * 2.5f);
                     if (s_ducking_factor < 0.125f) s_ducking_factor = 0.125f;
                 }
-            } else if (nav_active) {
-                if (s_ducking_factor > 0.25f) { // -12 dB Ducking
+            } else if (nav_active || omm_voice_active || s_vox_active) {
+                // Navigation oder Sprache (Mesh/Funk/VOX) aktiv: -18 dB Ducking auf Musik
+                if (s_ducking_factor > 0.125f) {
                     s_ducking_factor -= DUCKING_ATTACK;
-                    if (s_ducking_factor < 0.25f) s_ducking_factor = 0.25f;
+                    if (s_ducking_factor < 0.125f) s_ducking_factor = 0.125f;
                 }
             } else {
                 if (s_ducking_factor < 1.0f) {
@@ -524,7 +561,39 @@ void task_audio_dsp(void *pvParameters) {
                     break;
             }
 
-            // K. Soft-Knee Peak Limiting / Brickwall Overdrive Protection
+            // K. OMM Digital Multi-Stream Injection (Mesh Mono Voice, 446MHz Funk Mono Voice, Mesh Stereo Music)
+            float omm_mesh_s = 0.0f;
+            float omm_funk_s = 0.0f;
+            float omm_music_l_s = 0.0f;
+            float omm_music_r_s = 0.0f;
+
+            if (s_omm_mesh_count > 0 && i < s_omm_mesh_count) {
+                omm_mesh_s = (float)s_omm_voice_mesh_buf[i] * s_port1_gain;
+            }
+            if (s_omm_funk_count > 0 && i < s_omm_funk_count) {
+                omm_funk_s = (float)s_omm_voice_funk_buf[i] * s_port1_gain;
+            }
+            if (s_omm_music_pairs > 0 && i < s_omm_music_pairs) {
+                omm_music_l_s = (float)s_omm_music_l_buf[i];
+                omm_music_r_s = (float)s_omm_music_r_buf[i];
+            }
+
+            // If Pillion Private Cabin Whisper is active: duck group mesh by -12 dB (0.25) and route pillion voice directly to driver
+            if (s_pillion_whisper_active) {
+                omm_mesh_s *= 0.25f;
+                omm_funk_s *= 0.25f;
+                out_l += filtered_p2 * 1.25f; // Pillion mic directly in driver ear
+                out_r += filtered_p2 * 1.25f;
+            }
+
+            // 3D Spatial Pan & Ducking:
+            // - Mesh Voice: Center (50% L / 50% R)
+            // - Funk Voice: 3D Spatial Pan (70% L / 30% R) zur intuitiven akustischen Ortung
+            // - Music Sharing: Stereo geduckt durch s_ducking_factor (-18 dB bei Funk/Mesh/VOX)
+            out_l += (omm_mesh_s + (omm_funk_s * 0.70f) + (omm_music_l_s * s_ducking_factor));
+            out_r += (omm_mesh_s + (omm_funk_s * 0.30f) + (omm_music_r_s * s_ducking_factor));
+
+            // L. Soft-Knee Peak Limiting / Brickwall Overdrive Protection
             if (out_l > 30000.0f) {
                 out_l = 30000.0f + tanhf((out_l - 30000.0f) / 5000.0f) * 2767.0f;
             } else if (out_l < -30000.0f) {
@@ -589,4 +658,39 @@ void audio_update_standstill_proximity(float speed_kmh, int8_t partner_rssi) {
         s_privacy_mute_active = false;
         ESP_LOGI("AUDIO_DSP", "🔓 Moving (v = %.1f km/h) -> Privacy Mute RELEASED.", speed_kmh);
     }
+}
+
+void audio_dsp_feed_cartridge_upstream(UsbNodeType source, const UsbAudioStreamUpPkt *pkt) {
+    if (!pkt) return;
+    (void)source;
+
+    taskENTER_CRITICAL(&s_omm_audio_spinlock);
+    s_omm_stream_flags = pkt->status_flags;
+
+    if (pkt->status_flags & USB_AUDIO_UP_FLAG_OMM_DIGITAL) {
+        // Digital OMM Multi-Stream Mode
+        s_omm_funk_count = pkt->multistream.voice_funk_count > USB_OMM_UP_VOICE_SAMPLES ? USB_OMM_UP_VOICE_SAMPLES : pkt->multistream.voice_funk_count;
+        s_omm_mesh_count = pkt->multistream.voice_mesh_count > USB_OMM_UP_VOICE_SAMPLES ? USB_OMM_UP_VOICE_SAMPLES : pkt->multistream.voice_mesh_count;
+        s_omm_music_pairs = pkt->multistream.music_mesh_pairs > USB_OMM_UP_MUSIC_SAMPLES ? USB_OMM_UP_MUSIC_SAMPLES : pkt->multistream.music_mesh_pairs;
+
+        if (s_omm_funk_count > 0) {
+            memcpy(s_omm_voice_funk_buf, pkt->multistream.sub_voice_funk, s_omm_funk_count * sizeof(int16_t));
+        }
+        if (s_omm_mesh_count > 0) {
+            memcpy(s_omm_voice_mesh_buf, pkt->multistream.sub_voice_mesh, s_omm_mesh_count * sizeof(int16_t));
+        }
+        if (s_omm_music_pairs > 0) {
+            memcpy(s_omm_music_l_buf, pkt->multistream.sub_music_l, s_omm_music_pairs * sizeof(int16_t));
+            memcpy(s_omm_music_r_buf, pkt->multistream.sub_music_r, s_omm_music_pairs * sizeof(int16_t));
+        }
+    } else {
+        // Legacy Analog Single-Mono Stream (Sena / Cardo OEM)
+        s_omm_funk_count = 0;
+        s_omm_mesh_count = pkt->sample_count > USB_OMM_UP_VOICE_SAMPLES ? USB_OMM_UP_VOICE_SAMPLES : pkt->sample_count;
+        s_omm_music_pairs = 0;
+        if (s_omm_mesh_count > 0) {
+            memcpy(s_omm_voice_mesh_buf, pkt->samples, s_omm_mesh_count * sizeof(int16_t));
+        }
+    }
+    taskEXIT_CRITICAL(&s_omm_audio_spinlock);
 }

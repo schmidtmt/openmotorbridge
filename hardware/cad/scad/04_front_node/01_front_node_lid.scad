@@ -169,8 +169,8 @@ module front_node_upper_lid() {
             }
 
             // 12. Status LED Light-Pipe Aperture (Ø 3.0 mm over LED1 at East side)
-            // KiCad LED1 is at relative X=80.20 mm, Y=37.08 mm
-            translate([ch_x_start + 2.0 + 80.20 - 4.0, ch_y_start + 3.0 + (50.0 - 37.08), lid_top_z - 3.0]) {
+            // KiCad LED1 is at relative X=80.20 mm, CAD Y=12.92 mm
+            translate([ch_x_start + 2.0 + 80.20, ch_y_start + 3.0 + 12.92, lid_top_z - 3.0]) {
                 cylinder(r=1.6, h=4.0, center=false, $fn=24);
                 // Counterbore dome for light diffuser
                 cylinder(r=2.5, h=1.5, center=false, $fn=24);

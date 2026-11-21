@@ -195,6 +195,13 @@ static void on_usb_front_telemetry(const UsbFrontTelemetryPkt &telem) {
     }
 }
 
+static void on_usb_generic_packet(UsbBackbonePktType type, const uint8_t *payload, size_t len, UsbNodeType source) {
+    if (type == USB_PKT_AUDIO_STREAM_UP && len >= sizeof(UsbAudioStreamUpPkt)) {
+        const UsbAudioStreamUpPkt* up_pkt = reinterpret_cast<const UsbAudioStreamUpPkt*>(payload);
+        audio_dsp_feed_cartridge_upstream(source, up_pkt);
+    }
+}
+
 void task_power_supervisor(void *pvParameters) {
     ESP_LOGI(TAG, "v10.0 Power Supervisor Task started (KL15 GPIO 4, TPS4H160-Q1 Quad Smart Switch, LM66100 Dual-Power & NTC JEITA)...");
     uint32_t ignition_off_timer_sec = 0;
@@ -339,6 +346,7 @@ extern "C" void app_main(void) {
     UsbVehicleBackbone::instance().init(USB_NODE_CENTRAL_BOX);
     UsbVehicleBackbone::instance().set_ptt_callback(on_usb_ptt_event);
     UsbVehicleBackbone::instance().set_telemetry_callback(on_usb_front_telemetry);
+    UsbVehicleBackbone::instance().set_generic_packet_callback(on_usb_generic_packet);
     UsbVehicleBackbone::instance().start_task(22, 0);
 
     uwb_cartridge_dispatcher_init();

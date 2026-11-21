@@ -11,7 +11,13 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 * **HF-Übersteuerungen & De-Sensing:** Der gleichzeitige Betrieb mehrerer 2,4-GHz-Mesh-Transceiver an einem einzigen Montagepunkt (z. B. am selben Helm oder in einer gemeinsamen Box) führt zu massiver Empfänger-Desensibilisierung (*De-Sensing*), Intermodulation und Reichweiteneinbrüchen von bis zu $80\,\%$.
 * **Proprietäre Infotainment-Sperren:** Systeme wie Harley-Davidson Boom! Box GTS / Skyline OS oder BMW ConnectedRide verlangen teure, herstellereigene Schnittstellenmodule (z. B. HD WHIM), um Apple CarPlay oder Android Auto freizuschalten.
 
-**OpenMotorBridge v10.0** löst diese Probleme durch eine modular entkoppelte **Satelliten-Topologie**, angebunden über einen **robusten 4-Draht Automotive USB-PD & USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)**, kombiniert mit dem **ESP32-S31** (Edge-AI Audio) und dem dedizierten **Qualcomm QCC3084** Bluetooth-Audio-SoC:
+**OpenMotorBridge v10.0** löst diese Probleme durch eine modular entkoppelte **Satelliten-Topologie**, angebunden über einen **robusten 4-Draht Automotive USB-PD & USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)**, kombiniert mit dem **ESP32-S31** (Edge-AI Audio) und dem dedizierten **Qualcomm QCC3084** Bluetooth-Audio-SoC.
+
+> [!IMPORTANT]
+> **Verbindliche USB-Systemarchitektur & Grundprinzipien:**  
+> Für die verbindlichen Topologie-Vorgaben bezüglich USB-Master (ausschließlich Zentralbox S31), Front-Node Dual-Client mit Mode-Switch (SkylineOS vs. Nachrüst-AA) sowie Pod Single-Client-Identifikation mit Hybrid-Audio/PTT-Umschaltung siehe:  
+> **[OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md](../../OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md)**.  
+> Jede Änderung an Schaltung, Routing oder Firmware muss zwingend gegen diese Grundprinzipien validiert werden.
 
 ```
                                   GESAMTSYSTEM-TOPOLOGIE (v10.0)

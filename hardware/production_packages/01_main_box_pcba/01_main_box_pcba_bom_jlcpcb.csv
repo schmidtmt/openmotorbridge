@@ -3,7 +3,7 @@ ANT1,Taoglas_FXP895_868MHz_Lid,U.FL_Hirose_U.FL-R-SMT-1_Vertical,C2834595,1
 ANT2,Taoglas_BT_Helmaudio_Lid,U.FL_Hirose_U.FL-R-SMT-1_Vertical,,1
 ANT3,Johanson_2450AT18x100,RF_Antenna:Johanson_2450AT18x100,,1
 C1,10uF_100V,Capacitor_SMD:C_0805_2012Metric,,1
-C10,100nF_MCU,Capacitor_SMD:C_0603_1608Metric,,1
+C10,100nF_MCU,Capacitor_SMD:C_0603_1608Metric,C1525,1
 C11,10uF_MCU,Capacitor_SMD:C_0805_2012Metric,,1
 C12,100nF_IMU,Capacitor_SMD:C_0603_1608Metric,,1
 C13,4.7uF_CHG_IN,Capacitor_SMD:C_0603_1608Metric,,1
@@ -16,6 +16,7 @@ C5,100nF_ESP_EN,Capacitor_SMD:C_0603_1608Metric,,1
 D1,WS2812B_RGB,LED_SMD:LED_WS2812B-2020,,1
 D2,SMBJ33CA_TVS,Diode_SMD:D_SMB,,1
 D3,LM66100_Ideal_Diode,Package_TO_SOT_SMD:SOT-23-6,,1
+D4,PMEG4050EP,Diode_SMD:D_SOD-128,,1
 J1,MicroLock_Plus_6Pin_Vertical,Connector_Molex:Molex_Micro-Lock_Plus_505568-0671_1x06_P1.25mm_Vertical,,1
 J2,MicroSD_Card,Connector_Card:microSD_HC_Hirose_DM3D-SF,,1
 J3,USB_C_Service_Port,Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12_16P,,1

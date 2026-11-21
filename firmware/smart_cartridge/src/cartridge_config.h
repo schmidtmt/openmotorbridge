@@ -20,22 +20,27 @@
 #define PIN_POD_USB_DP          GPIO_NUM_13  // U1 Pad 18 (GPIO13) -> J_BUS Pin 3 (USB D+)
 
 // --- 3. J_AUDIO_PWR (8-Pin JST-SH 1.0mm) Control & Auto-Sense Signals ---
-// OMM_DETECT (J_AUDIO_PWR Pin 6 & U4 TS5A3159DBVR Pin 6 IN):
-//   LOW (0V)    = Analog OEM Intercom (Sena / Cardo / Midland via U3 ES8388)
-//   HIGH (3.3V) = Digital OMM Tri-Band Module (PCBA 09/10 via U4 NO USB-Audio)
-#define PIN_OMM_DETECT          GPIO_NUM_0   // U1 Pad 12 (GPIO0)  -> OMM_DETECT (10k R9 Pull-Up)
-#define PIN_POD_PTT_BTN         GPIO_NUM_2   // U1 Pad 5  (GPIO2)  -> J_AUDIO_PWR Pin 8 (Physical PTT, Active-Low)
+// OMM_DETECT (J_AUDIO_PWR Pin 6 & U4 TS5A23157 Dual-SPDT IN1/IN2 Pins 1 & 5):
+//   HIGH (3.3V) = Analog OEM Intercom (Sena / Cardo / Midland via U3 ES8388 Codec + PTT Pin 8)
+//   LOW (0V)    = Digital OMM Tri-Band Module (PCBA 09/10 via U7 CH554E USB-Host + Dual-SPDT to J4 Pins 4 & 5)
+#define PIN_OMM_DETECT          GPIO_NUM_0   // U1 Pad 12 (GPIO0)  -> OMM_DETECT (100k R9 Pull-Up to 3.3V)
+#define PIN_POD_PTT_BTN         GPIO_NUM_2   // U1 Pad 5  (GPIO2)  -> J_AUDIO_PWR Pin 8 (Physical PTT to Sena, Active-Low)
 
-// --- 4. Bay ID Configuration & Status ---
+// --- 4. High-Speed UART to U7 (CH554E USB 2.0 Host Controller for OMM) ---
+#define PIN_CH554_UART_TX       GPIO_NUM_20  // U1 Pad 26 (GPIO20) -> U7 Pin 3 (CH554E RXD1, 3.0 Mbps)
+#define PIN_CH554_UART_RX       GPIO_NUM_21  // U1 Pad 27 (GPIO21) <- U7 Pin 4 (CH554E TXD1, 3.0 Mbps)
+#define CH554_UART_BAUDRATE     3000000      // 3.0 Mbps High-Speed UART (Fsys/8 on CH554E @ 24MHz, APB on ESP32-C6)
+
+// --- 5. Bay ID Configuration & Status ---
 // Note: PCBA 03 uses 100% identical symmetric hardware for Pod 1 (Left, 0x03) and Pod 2 (Right, 0x04).
-// Bay assignment is determined via NVS configuration / USB Hub Port enumeration (U1 Pads 25 and 26 are NC).
+// Bay assignment is determined via NVS configuration / USB Hub Port enumeration (U1 Pads 25 and 28 are NC).
 #define CARTRIDGE_DEFAULT_BAY_ID  0x03        // Default: Pod 1 (Left Bay, 0x03)
 
-// --- 5. Everest Semi ES8388 Audio-Codec (U3) & SW3516 30W USB-PD (U_PD) ---
+// --- 6. Everest Semi ES8388 Audio-Codec (U3) & SW3516 30W USB-PD (U_PD) ---
 #define PIN_CODEC_I2C_SCL       GPIO_NUM_1   // U1 Pad 13 (GPIO1)  -> ES8388 Pin 27 & SW3516 SCL
 #define PIN_CODEC_I2C_SDA       GPIO_NUM_9   // U1 Pad 23 (GPIO9)  -> ES8388 Pin 28 & SW3516 SDA
 #define PIN_I2S_MCLK            GPIO_NUM_6   // U1 Pad 15 (GPIO6)  -> ES8388 Master Clock (12.288 MHz)
-#define PIN_I2S_BCLK            GPIO_NUM_7   // U1 Pad 16 (GPIO7)  -> ES8388 Bit Clock (3.072 MHz)
-#define PIN_I2S_WS              GPIO_NUM_14  // U1 Pad 19 (GPIO14) -> ES8388 Word Select / LRCLK (48 kHz)
-#define PIN_I2S_DOUT            GPIO_NUM_15  // U1 Pad 20 (GPIO15) -> ES8388 DAC In (to OEM Mic-In via U4 NC)
-#define PIN_I2S_DIN             GPIO_NUM_18  // U1 Pad 24 (GPIO18) -> ES8388 ADC Out (from OEM Spk-Out L/R)
+#define PIN_I2S_BCLK            GPIO_NUM_7   // U1 Pad 16 (GPIO7)  -> ES8388 Bit Clock & TMUX1574 CH1 Bank 1 (3.072 MHz)
+#define PIN_I2S_WS              GPIO_NUM_14  // U1 Pad 19 (GPIO14) -> ES8388 Word Select / LRCLK & TMUX1574 CH2 Bank 1 (48 kHz)
+#define PIN_I2S_DOUT            GPIO_NUM_15  // U1 Pad 20 (GPIO15) -> ES8388 DAC In & TMUX1574 CH3 Bank 1 (to OMM Mesh)
+#define PIN_I2S_DIN             GPIO_NUM_18  // U1 Pad 24 (GPIO18) <- ES8388 ADC Out & TMUX1574 CH4 Bank 1 (from OMM Mesh)

@@ -389,7 +389,7 @@ In Version 10.0, the Front Node enclosure transitions to the **screwless v10 Mon
 
 ![Universal Front Node Exploded 3D](../images/cad/front_node_exploded_3d.png)
 
-*Figure 8.19: 3D exploded view of the Front Node: Monocoque lower tub, PCBA 05 (82 x 50 mm), dual Wi-Fi 6E antenna tier, L-Slide Lid, and Sensor Puck.*
+*Figure 8.19: 3D exploded view of the Front Node: Monocoque lower tub, PCBA 05 (82 x 50 mm), dual Wi-Fi 6E antenna tier, L-Slide Lid, and Sensor Puck (North flank Y=68 mm: Vehicle & Accessories; South flank Y=0 mm: Cockpit & Sensors).*
 
 ![Universal Front Node Cutaway 3D](../images/cad/front_node_cutaway_3d.png)
 
@@ -453,32 +453,32 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 | * M4/M5 Silentblock Flange Ear     | * 4x M2.5 Standoffs (75.0 x 43.0 mm pitch)      |                                      |
 +------------------------------------+-------------------------------------------------+--------------------------------------+
 | COCKPIT WALL (SOUTH FLANK Y = 0 mm in top view / facing rider):                                                             |
-|  * Port 1 [ CKPT 1 ] (X = 33.5 mm): Oval port (11.0 x 5.5 mm) for J_POD_R + J_DISP_R (Right Cockpit)                       |
-|  * Port 2 [ SENSOR ] (X = 46.5 mm): Oval port (11.0 x 5.5 mm) for J_SENSOR_EXT (Sensor Puck top docked)                    |
-|  * Port 3 [ CKPT 2 ] (X = 70.5 mm): Oval port (11.0 x 5.5 mm) for J_POD_L + J_DISP_L (Left Cockpit)                        |
+|  * Port 1 [ CKPT 1 ] (X = 33.50 mm): Oval port (11.0 x 5.5 mm) for J3 Pod R (4P) + J11 Disp R (4P) (Right Cockpit)         |
+|  * Port 2 [ SENSOR ] (X = 53.25 mm): Oval port (11.0 x 5.5 mm) for J6 Sensor Puck (8P) (Sensor Puck top docked)            |
+|  * Port 3 [ CKPT 2 ] (X = 73.00 mm): Oval port (11.0 x 5.5 mm) for J9 Disp L (4P) + J2 Pod L (4P) (Left Cockpit)          |
 +-----------------------------------------------------------------------------------------------------------------------------+
 | VEHICLE & ACCESSORY WALL (NORTH FLANK Y = 68 mm / facing forward/downward):                                                 |
-|  * Port 1 [ MAIN ]   (X = 35.0 mm): Oval port (11.0 x 5.5 mm) for J1 Backbone (4P) + J4 Hub / Handlebar Charger (6P)       |
-|  * Port 2 [ DONGLE ] (X = 52.0 mm): Oval port (11.0 x 5.5 mm) for J_DONGLE (CarPlay/AA) - Standard: Flush blanking plug    |
-|  * Port 3 [ AUX 12V ] (X = 62.0 mm): Mini port (6.5 x 4.5 mm) for J_AUX_LIGHT 12V switched (Auxiliary Spotlights)           |
-|  * Port 4 [ NAV 12V ] (X = 70.25 mm): Mini port (6.5 x 4.5 mm) for J10 Navi Power 12V (Garmin / Chigee AIO-5)               |
-|  * Port 5 [ CAM 5V ] (X = 78.25 mm): Mini port (6.5 x 4.5 mm) for J8 Action Cam 5V (GoPro / Insta360)                       |
+|  * Port 1 [ MAIN ]   (X = 34.30 mm): Oval port (11.0 x 5.5 mm) for J1 Backbone (4P) + J4 Ext Hub (8P)                        |
+|  * Port 2 [ DONGLE ] (X = 54.00 mm): Oval port (11.0 x 5.5 mm) for J5 Dongle (4P, CarPlay/AA) - Flush blanking plug        |
+|  * Port 3 [ AUX 12V ] (X = 63.35 mm): Mini port (6.5 x 4.5 mm) for J7 Aux Light (2P, 12V switched Auxiliary Spotlights)     |
+|  * Port 4 [ NAV 12V ] (X = 71.48 mm): Mini port (6.5 x 4.5 mm) for J10 Navi Power (2P, 12V Garmin / Chigee AIO-5)          |
+|  * Port 5 [ CAM 5V ] (X = 79.60 mm): Mini port (6.5 x 4.5 mm) for J8 Action Cam (2P, 5V GoPro / Insta360)                   |
 +-----------------------------------------------------------------------------------------------------------------------------+
 ```
 
-1. **Cockpit Wall (Facing Rider / Handlebars, 3x Identical Oval Ports $11.0 \times 5.5\,\text{mm}$):**
-   - **`CKPT 1` ($X = 33.5\,\text{mm}$):** Carries wiring for Right Mirror Pod (`J_POD_R`) and optional Right Speaker Corner Display (`J_DISP_R`). Uses either a dual-cable or single-cable TPU grommet.
-   - **`SENSOR` ($X = 46.5\,\text{mm}$):** Routes the 8-pin JST-GH ribbon cable for `J_SENSOR_EXT` upward directly into the top-docked Sensor Puck.
-   - **`CKPT 2` ($X = 70.5\,\text{mm}$):** Carries wiring for Left Mirror Pod (`J_POD_L`) and optional Left Speaker Corner Display (`J_DISP_L`).
+1. **Cockpit Wall (Facing Rider / Handlebars, South Flank Y = 0 mm, 3x Identical Oval Ports $11.0 \times 5.5\,\text{mm}$):**
+   - **`CKPT 1` ($X = 33.50\,\text{mm}$):** Carries wiring for Right Mirror Pod (`J3`) and optional Right Corner Display (`J11`). Uses either a dual-cable or single-cable TPU grommet.
+   - **`SENSOR` ($X = 53.25\,\text{mm}$):** Routes the 8-pin JST-GH ribbon cable for `J6` upward directly into the top-docked Sensor Puck.
+   - **`CKPT 2` ($X = 73.00\,\text{mm}$):** Carries wiring for Left Mirror Pod (`J2`) and optional Left Corner Display (`J9`).
    - **Software-Defined Inversion:** Ports `CKPT 1` and `CKPT 2` can be swapped symmetrically in firmware via a single click in the WebUI.
-2. **Vehicle & Accessory Wall (Facing Forward / Downward):**
-   - **`MAIN` ($X = 35.0\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):** Accommodates the 4-wire shielded backbone cable (`J1`) from Central Box and the 6-pin harness to Glovebox Hub (`J4`).
-   - **`DONGLE` ($X = 52.0\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):** Downstream USB port 2 with remote cold-boot power gate (`TPS2051B`). On faired touring baggers (dongle in glovebox), sealed with flush TPU blanking plug. On naked bikes with retrofit CarPlay screens, used as 1-cable exit.
-   - **`AUX 12V` ($X = 62.0\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Switched 12V auxiliary lighting or heated grips.
-   - **`NAV 12V` ($X = 70.25\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Dedicated 12V supply for Garmin Zūmo XT2 / Tread / Chigee AIO-5.
-   - **`CAM 5V` ($X = 78.25\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Filtered 5V supply for action cameras.
+2. **Vehicle & Accessory Wall (Facing Forward / Downward, North Flank Y = 68 mm):**
+   - **`MAIN` ($X = 34.30\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):** Accommodates the 4-wire shielded backbone cable (`J1`) from Central Box and the 8-pin harness to Glovebox Hub (`J4`).
+   - **`DONGLE` ($X = 54.00\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):** Downstream USB port 2 with remote cold-boot power gate (`TPS2051B`, `J5`). On faired touring baggers (dongle in glovebox), sealed with flush TPU blanking plug. On naked bikes with retrofit CarPlay screens, used as 1-cable exit.
+   - **`AUX 12V` ($X = 63.35\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Switched 12V auxiliary lighting or heated grips (`J7`).
+   - **`NAV 12V` ($X = 71.48\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Dedicated 12V supply for Garmin Zūmo XT2 / Tread / Chigee AIO-5 (`J10`).
+   - **`CAM 5V` ($X = 79.60\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):** Filtered 5V supply for action cameras (`J8`).
 3. **Poka-Yoke Embossing & Sealing Plugs:**
-   - Directly above each port, the HP MJF PA12 housing is laser/CAD-embossed $0.5\,\text{mm}$ deep (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN`, `CKPT 1`, `SENSOR`, `CKPT 2`).
+   - Directly above each port, the HP MJF PA12 housing is laser/CAD-embossed $0.6\,\text{mm}$ deep (`CAM 5V`, `NAV 12V`, `AUX 12V`, `DONGLE`, `MAIN` on North wall; `CKPT 1`, `SENSOR`, `CKPT 2` on South wall).
    - Each TPU plug features matching embossed labels on its outer face.
 4. **Right Short Flank / East Flank ($X = 98.0\,\text{mm}$):**
    - IP67 waterproof USB-C service receptacle (`J7`) with tethered TPU sealing plug (`front_node_usbc_cap_tpu.stl`) for firmware updates and WebSerial configuration without tools.
@@ -487,13 +487,13 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 6. **Bottom Face ($Z = 0\,\text{mm}$):**
    - Acoustic canal ($\varnothing 2.5\,\text{mm}$) with waterproof Gore ePTFE membrane ($\varnothing 6.0 \times 0.8\,\text{mm}$) for Knowles SPH0645 $I^2S$ microphone (`MK1`) for dynamic Speed-Volume-Control.
 
-![Universal Front Node Cockpit Ports CAD](../images/cad/front_node_north_ports.png)
+![Universal Front Node Vehicle Ports CAD](../images/cad/front_node_north_ports.png)
 
-*Figure 8.22: Cockpit port wall of the Front Node (Y = 68 mm / facing rider) showing flush TPU sealing grommets for Port 1 [ CKPT 1 ] (Mirror Pod / Display Right), Port 2 [ SENSOR ] (Sensor Puck), and Port 3 [ CKPT 2 ] (Mirror Pod / Display Left) with top-docked Sensor Puck.*
+*Figure 8.22: Vehicle & accessory port wall of the Front Node (North flank Y = 68 mm / facing vehicle) with flush ports for Port 1 [ MAIN ] (4P backbone & 8P glovebox hub), Port 2 [ DONGLE ] (CarPlay/AA), and the three mini ports [ AUX 12V ], [ NAV 12V ], and [ CAM 5V ]. Clearly embossed and sealed with flush TPU plugs.*
 
-![Universal Front Node Vehicle Ports CAD](../images/cad/front_node_south_ports.png)
+![Universal Front Node Cockpit Ports CAD](../images/cad/front_node_south_ports.png)
 
-*Figure 8.23: Vehicle & accessory port wall of the Front Node (Y = 0 mm / facing vehicle) with flush ports for Port 1 [ MAIN ] (4P backbone & 6P glovebox hub), Port 2 [ DONGLE ] (CarPlay/AA), and the three mini ports [ AUX 12V ], [ NAV 12V ], and [ CAM 5V ]. Clearly embossed and sealed with flush TPU plugs.*
+*Figure 8.23: Cockpit port wall of the Front Node (South flank Y = 0 mm / facing rider) showing flush TPU sealing grommets for Port 1 [ CKPT 1 ] (Mirror Pod / Display Right), Port 2 [ SENSOR ] (Sensor Puck), and Port 3 [ CKPT 2 ] (Mirror Pod / Display Left) with top-docked Sensor Puck.*
 
 ---
 

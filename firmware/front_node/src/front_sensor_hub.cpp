@@ -28,7 +28,9 @@ FrontSensorHub::FrontSensorHub()
       m_gnss_fix_type(0),
       m_temp_c_100(2150),
       m_ambient_lux(1200),
-      m_baro_pressure_pa(101325) {
+      m_baro_pressure_pa(101325),
+      m_bmp_calib{} {
+    m_bmp_calib.valid = false;
 }
 
 esp_err_t FrontSensorHub::init_i2c() {
@@ -68,10 +70,51 @@ esp_err_t FrontSensorHub::init() {
     inject_assistnow_mga(ubx_cfg_rate_10hz, sizeof(ubx_cfg_rate_10hz));
 
     // 3. Configure Bosch BMP390 Barometer (0x76 on Sensor Puck PCBA 05D)
+    // Read 21 bytes calibration data from NVM 0x31..0x45
+    uint8_t calib_addr = 0x31;
+    uint8_t c_buf[21] = {0};
+    if (i2c_master_write_read_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, &calib_addr, 1,
+                                     c_buf, sizeof(c_buf), pdMS_TO_TICKS(50)) == ESP_OK) {
+        uint16_t raw_t1 = (uint16_t)c_buf[0] | ((uint16_t)c_buf[1] << 8);
+        uint16_t raw_t2 = (uint16_t)c_buf[2] | ((uint16_t)c_buf[3] << 8);
+        int8_t   raw_t3 = (int8_t)c_buf[4];
+        int16_t  raw_p1 = (int16_t)((uint16_t)c_buf[5] | ((uint16_t)c_buf[6] << 8));
+        int16_t  raw_p2 = (int16_t)((uint16_t)c_buf[7] | ((uint16_t)c_buf[8] << 8));
+        int8_t   raw_p3 = (int8_t)c_buf[9];
+        int8_t   raw_p4 = (int8_t)c_buf[10];
+        uint16_t raw_p5 = (uint16_t)c_buf[11] | ((uint16_t)c_buf[12] << 8);
+        uint16_t raw_p6 = (uint16_t)c_buf[13] | ((uint16_t)c_buf[14] << 8);
+        int8_t   raw_p7 = (int8_t)c_buf[15];
+        int8_t   raw_p8 = (int8_t)c_buf[16];
+        int16_t  raw_p9 = (int16_t)((uint16_t)c_buf[17] | ((uint16_t)c_buf[18] << 8));
+        int8_t   raw_p10 = (int8_t)c_buf[19];
+        int8_t   raw_p11 = (int8_t)c_buf[20];
+
+        // Bosch floating-point quantization factors
+        m_bmp_calib.par_t1 = (double)raw_t1 * 256.0;                    // / 2^-8
+        m_bmp_calib.par_t2 = (double)raw_t2 / 1073741824.0;             // / 2^30
+        m_bmp_calib.par_t3 = (double)raw_t3 / 281474976710656.0;        // / 2^48
+        m_bmp_calib.par_p1 = ((double)raw_p1 - 16384.0) / 1048576.0;    // (raw - 2^14) / 2^20
+        m_bmp_calib.par_p2 = ((double)raw_p2 - 16384.0) / 536870912.0;  // (raw - 2^14) / 2^29
+        m_bmp_calib.par_p3 = (double)raw_p3 / 4294967296.0;             // / 2^32
+        m_bmp_calib.par_p4 = (double)raw_p4 / 137438953472.0;           // / 2^37
+        m_bmp_calib.par_p5 = (double)raw_p5 * 8.0;                      // / 2^-3
+        m_bmp_calib.par_p6 = (double)raw_p6 / 64.0;                     // / 2^6
+        m_bmp_calib.par_p7 = (double)raw_p7 / 256.0;                    // / 2^8
+        m_bmp_calib.par_p8 = (double)raw_p8 / 32768.0;                  // / 2^15
+        m_bmp_calib.par_p9 = (double)raw_p9 / 281474976710656.0;        // / 2^48
+        m_bmp_calib.par_p10 = (double)raw_p10 / 281474976710656.0;      // / 2^48
+        m_bmp_calib.par_p11 = (double)raw_p11 / 36893488147419103232.0; // / 2^65
+        m_bmp_calib.valid = true;
+        ESP_LOGI(TAG, "BMP390 factory NVM calibration loaded successfully.");
+    } else {
+        ESP_LOGW(TAG, "Failed to read BMP390 calibration registers (NVM 0x31..0x45)!");
+    }
+
     // PWR_CTRL: Press EN (bit 0), Temp EN (bit 1), Mode normal (bits 4-5 = 0b11) -> 0x33
     uint8_t bmp_pwr[2] = {0x1B, 0x33};
     i2c_master_write_to_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, bmp_pwr, sizeof(bmp_pwr), pdMS_TO_TICKS(50));
-    // OSR: Pressure oversampling 4x (0x02)
+    // OSR: Pressure oversampling 4x (0x02), Temp oversampling 1x (0x00) -> 0x02
     uint8_t bmp_osr[2] = {0x1C, 0x02};
     i2c_master_write_to_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, bmp_osr, sizeof(bmp_osr), pdMS_TO_TICKS(50));
 
@@ -166,15 +209,55 @@ void FrontSensorHub::poll_opt3001_lux() {
 void FrontSensorHub::poll_bmp390_baro() {
     if (!m_i2c_initialized) return;
 
-    uint8_t reg_addr = 0x04; // DATA_0 (Pressure XLSB, LSB, MSB)
-    uint8_t buf[3] = {0, 0, 0};
+    // Burst read 6 bytes: DATA_0..5 (Press XLSB/LSB/MSB at 0x04..0x06, Temp XLSB/LSB/MSB at 0x07..0x09)
+    uint8_t reg_addr = 0x04;
+    uint8_t buf[6] = {0};
     if (i2c_master_write_read_device(I2C_MASTER_NUM, BMP390_I2C_ADDR, &reg_addr, 1,
-                                     buf, 3, pdMS_TO_TICKS(20)) == ESP_OK) {
-        uint32_t raw_press = ((uint32_t)buf[2] << 16) | ((uint32_t)buf[1] << 8) | buf[0];
-        if (raw_press > 0) {
-            // BMP390 raw pressure in 1/256 Pa -> Pa
-            m_baro_pressure_pa = raw_press / 256;
-        }
+                                     buf, sizeof(buf), pdMS_TO_TICKS(20)) != ESP_OK) {
+        return;
+    }
+
+    uint32_t raw_press = ((uint32_t)buf[2] << 16) | ((uint32_t)buf[1] << 8) | buf[0];
+    uint32_t raw_temp  = ((uint32_t)buf[5] << 16) | ((uint32_t)buf[4] << 8) | buf[3];
+
+    if (raw_press == 0 || raw_temp == 0) return;
+
+    if (!m_bmp_calib.valid) {
+        // Fallback if calibration read failed
+        m_baro_pressure_pa = raw_press / 256;
+        return;
+    }
+
+    // 1. Bosch temperature compensation -> t_lin in deg C
+    double p_t1 = (double)raw_temp - m_bmp_calib.par_t1;
+    double p_t2 = p_t1 * m_bmp_calib.par_t2;
+    double t_lin = p_t2 + (p_t1 * p_t1) * m_bmp_calib.par_t3;
+
+    // 2. Bosch pressure compensation -> comp_press in Pa
+    double t_sq = t_lin * t_lin;
+    double t_cube = t_sq * t_lin;
+
+    double p_out1 = m_bmp_calib.par_p5 +
+                    m_bmp_calib.par_p6 * t_lin +
+                    m_bmp_calib.par_p7 * t_sq +
+                    m_bmp_calib.par_p8 * t_cube;
+
+    double p_sens = m_bmp_calib.par_p1 +
+                    m_bmp_calib.par_p2 * t_lin +
+                    m_bmp_calib.par_p3 * t_sq +
+                    m_bmp_calib.par_p4 * t_cube;
+    double p_out2 = (double)raw_press * p_sens;
+
+    double pr_sq = (double)raw_press * (double)raw_press;
+    double pr_cube = pr_sq * (double)raw_press;
+    double p_out3 = pr_sq * (m_bmp_calib.par_p9 + m_bmp_calib.par_p10 * t_lin) +
+                    pr_cube * m_bmp_calib.par_p11;
+
+    double comp_press = p_out1 + p_out2 + p_out3;
+
+    // Plausibility check for atmospheric pressure (300 hPa to 1250 hPa)
+    if (comp_press >= 30000.0 && comp_press <= 125000.0) {
+        m_baro_pressure_pa = (uint32_t)(comp_press + 0.5);
     }
 }
 

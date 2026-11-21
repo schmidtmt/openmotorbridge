@@ -54,9 +54,9 @@ module front_node_exploded_assembly() {
     color([0.16, 0.18, 0.20])
         front_node_lower_tub();
         
-    // 2. Gore ePTFE Acoustic Vent Membrane (under the tub floor, aligned with MK1 at 11.20, 46.30)
+    // 2. Gore ePTFE Acoustic Vent Membrane (under the tub floor, aligned with MK1 at 11.20, 3.70)
     color("white")
-        translate([pcb_x + 11.20, pcb_y + 46.30, -1.0])
+        translate([pcb_x + 11.20, pcb_y + 3.70, -1.0])
             cylinder(r=FRONT_NODE_MIC_MEMB_R, h=0.2, center=false);
             
     // 3. Universal Front Node PCB Assembly (centered on standoffs)
@@ -72,11 +72,11 @@ module front_node_exploded_assembly() {
     translate([ch_x_start + 15.0, ch_y_start + 2.5, EXPLODE_ANTENNA_Z])
         dummy_wifi_flex_antenna();
 
-    // 5. South Cockpit TPU Cable Boot (floating forwards along Y)
+    // 5. South Cockpit TPU Cable Boot (floating forwards along -Y)
     translate([0, -18.0, 0])
         front_node_south_cable_boot_installed();
         
-    // 6. North Vehicle TPU Cable Boot (floating rearwards along Y)
+    // 6. North Vehicle TPU Cable Boot (floating rearwards along +Y)
     translate([0, 18.0, 0])
         front_node_north_cable_boot_installed();
         
@@ -90,9 +90,9 @@ module front_node_exploded_assembly() {
         translate([0, 0, EXPLODE_LID_Z])
             front_node_upper_lid();
 
-    // 9. Modular Snap-On Environmental Sensor Puck (u-blox SAM-M10Q, TMP117, OPT3001, rotated 90 deg so port faces North)
+    // 9. Modular Snap-On Environmental Sensor Puck (u-blox SAM-M10Q, TMP117, OPT3001, rotated so port faces South towards SENSOR port)
     translate([ch_x_start + 55.0, ch_y_start + 28.0, EXPLODE_PUCK_Z])
-        rotate([0, 0, 90])
+        rotate([0, 0, -90])
             translate([-19.0, -19.0, 0])
                 sensor_puck_environmental_assembly();
 }

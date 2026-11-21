@@ -70,9 +70,27 @@ static void on_mesh_audio_received(const int16_t *audio_data, size_t samples, ui
         UsbAudioStreamUpPkt up_pkt = {};
         static uint16_t s_up_seq = 0;
         up_pkt.frame_seq = ++s_up_seq;
-        up_pkt.status_flags = 0x01;
-        up_pkt.sample_count = static_cast<uint8_t>(samples > USB_AUDIO_UP_SAMPLES ? USB_AUDIO_UP_SAMPLES : samples);
-        memcpy(up_pkt.samples, audio_data, up_pkt.sample_count * sizeof(int16_t));
+        up_pkt.status_flags = USB_AUDIO_UP_FLAG_STREAM_ACTIVE | USB_AUDIO_UP_FLAG_OMM_DIGITAL | USB_AUDIO_UP_FLAG_MESH_VOICE;
+        if (s_sa818_present && gpio_get_level(OMM_PIN_SA818_SQL) == 0) {
+            up_pkt.status_flags |= USB_AUDIO_UP_FLAG_FUNK_CARRIER;
+        }
+        if (omm_transceiver_is_ptt()) {
+            up_pkt.status_flags |= USB_AUDIO_UP_FLAG_PTT_PRESSED;
+        }
+
+        up_pkt.sample_count = 0; // 0 denotes multistream layout
+        up_pkt.multistream.rssi_dbm = 65; // Nominal -65 dBm
+        up_pkt.multistream.voice_mesh_count = static_cast<uint8_t>(samples > USB_OMM_UP_VOICE_SAMPLES ? USB_OMM_UP_VOICE_SAMPLES : samples);
+        memcpy(up_pkt.multistream.sub_voice_mesh, audio_data, up_pkt.multistream.voice_mesh_count * sizeof(int16_t));
+
+        // If SA818 446 MHz squelch is open, populate sub_voice_funk from carrier audio
+        if (up_pkt.status_flags & USB_AUDIO_UP_FLAG_FUNK_CARRIER) {
+            up_pkt.multistream.voice_funk_count = up_pkt.multistream.voice_mesh_count;
+            for (size_t f = 0; f < up_pkt.multistream.voice_funk_count; f++) {
+                up_pkt.multistream.sub_voice_funk[f] = audio_data[f];
+            }
+        }
+
         UsbVehicleBackbone::instance().send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_AUDIO_STREAM_UP,
                                                    &up_pkt, sizeof(up_pkt));
     }
@@ -221,7 +239,20 @@ extern "C" void app_main(void) {
             (void)source;
             if (type == USB_PKT_AUDIO_STREAM_DOWN && len >= sizeof(UsbAudioStreamDownPkt)) {
                 const UsbAudioStreamDownPkt* down = reinterpret_cast<const UsbAudioStreamDownPkt*>(payload);
-                if (omm_transceiver_is_ptt()) {
+
+                // 1. Driver Handlebar PTT towards 446 MHz PMR/DMR Funk: Key SA818 PTT
+                if ((down->flags & USB_AUDIO_FLAG_PTT_ACTIVE) && (down->flags & USB_AUDIO_FLAG_TARGET_FUNK)) {
+                    if (s_sa818_present) {
+                        gpio_set_level(OMM_PIN_SA818_PTT, 0); // Key SA818 446 MHz PTT for TX
+                    }
+                } else if (s_sa818_present) {
+                    gpio_set_level(OMM_PIN_SA818_PTT, 1); // Release SA818 PTT to RX
+                }
+
+                // 2. Transmit to 2.4 GHz Mesh
+                // Note: If Pillion Private Whisper is active (USB_AUDIO_FLAG_PILLION_WHISPER),
+                // pillion microphone is already muted by Central Box DSP (only driver transmitted).
+                if (omm_transceiver_is_ptt() || (down->flags & USB_AUDIO_FLAG_VOICE_ACTIVE)) {
                     int16_t voice_buf[USB_AUDIO_DOWN_VOICE_SAMPLES];
                     memcpy(voice_buf, down->sub_voice, sizeof(voice_buf));
                     omm_transceiver_send_audio(voice_buf, USB_AUDIO_DOWN_VOICE_SAMPLES);
