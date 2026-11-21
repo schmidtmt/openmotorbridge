@@ -149,6 +149,54 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 
 ### 3.2 PCB Connectors & Exact Pinout Tables
 
+<!-- AUTO_CONNECTORS_START: PCBA_01 -->
+
+#### Connector `J1`: Fahrzeug-Stromversorgung & CAN-Bus Eingang
+> **Type:** `Molex MicroLock Plus 6-Pin 1.25mm SMD Vertikal (5055680671)` | **Mating Connector:** `Molex 5055650601 (Crimp 5054311000 AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `KL30_IN` | **Power In (+12V Dauer)** | Batterie-Dauerplus über externe Sicherung (5A) |
+| **2** | `KL15_IN` | **Power In (+12V Zündung)** | Zündungsplus für Aufwach-Logik & Sleep-Trigger |
+| **3** | `GND_PWR` | **Power Return** | Fahrzeugmasse Leistungsrückstrom |
+| **4** | `CAN_H` | **Automotive CAN High** | Fahrzeug-CAN Bus Signal High (HD-LAN) |
+| **5** | `CAN_L` | **Automotive CAN Low** | Fahrzeug-CAN Bus Signal Low (HD-LAN) |
+| **6** | `GND_SHIELD` | **Shield** | Kabelbaum-Schirmungsanschluss |
+
+#### Connector `J6`: Automotive 4-Strang USB-Backbone & Power Hub
+> **Type:** `Molex MicroLock Plus 16-Pin 2x08 1.25mm SMD Vertikal (5054331671)` | **Mating Connector:** `Molex 5054321601 (Crimp 5054311000 AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VBUS_FRONT` | **Power Out (+12V/60W)** | Strang 1: Front-Knoten Stromversorgung (eFuse CH1) |
+| **2** | `GND_PWR` | **Power Return** | Strang 1: Masse Rückstrom |
+| **3** | `BUS1_DM` | **USB 2.0 D-** | Strang 1: Front-Knoten USB 2.0 Datenleitung D- |
+| **4** | `BUS1_DP` | **USB 2.0 D+** | Strang 1: Front-Knoten USB 2.0 Datenleitung D+ |
+| **5** | `VBUS_POD1` | **Power Out (+12V/30W)** | Strang 2: Koffer-Pod 1 Links Stromversorgung (eFuse CH2) |
+| **6** | `GND_PWR` | **Power Return** | Strang 2: Masse Rückstrom |
+| **7** | `BUS2_DM` | **USB 2.0 D-** | Strang 2: Pod 1 USB 2.0 Datenleitung D- |
+| **8** | `BUS2_DP` | **USB 2.0 D+** | Strang 2: Pod 1 USB 2.0 Datenleitung D+ |
+| **9** | `VBUS_POD2` | **Power Out (+12V/30W)** | Strang 3: Koffer-Pod 2 Rechts Stromversorgung (eFuse CH3) |
+| **10** | `GND_PWR` | **Power Return** | Strang 3: Masse Rückstrom |
+| **11** | `BUS3_DM` | **USB 2.0 D-** | Strang 3: Pod 2 USB 2.0 Datenleitung D- |
+| **12** | `BUS3_DP` | **USB 2.0 D+** | Strang 3: Pod 2 USB 2.0 Datenleitung D+ |
+| **13** | `VBUS_RADAR` | **Power Out (+12V/15W)** | Strang 4: Heck-Radar 2.0 Stromversorgung (eFuse CH4) |
+| **14** | `GND_PWR` | **Power Return** | Strang 4: Masse Rückstrom |
+| **15** | `BUS4_DM` | **USB 2.0 D-** | Strang 4: Heck-Radar USB 2.0 Datenleitung D- |
+| **16** | `BUS4_DP` | **USB 2.0 D+** | Strang 4: Heck-Radar USB 2.0 Datenleitung D+ |
+
+#### Connector `J5`: USV Li-Ion Puffer-Akku & NTC-Temperatursensor
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `BAT_PLUS` | **Power (3.7V Li-Ion)** | Puffer-Akku Pluspol (3.0V - 4.2V) |
+| **2** | `GND_PWR` | **Power Return** | Puffer-Akku Masse |
+| **3** | `BAT_NTC` | **Analog In** | 10k NTC Thermistor zu GND zur Lade-Temperaturüberwachung |
+| **4** | `GND_PWR` | **Power Return** | NTC Referenzmasse |
+
+<!-- AUTO_CONNECTORS_END: PCBA_01 -->
+
 #### 3.2.1 Header J1: Vehicle Power & CAN Bus (Molex Micro-Lock Plus 1.25mm 6-Pin SMD Vertical)
 Connects via internal silicone wire harness to the external Deutsch DTM04-6P bulkhead connector:
 
@@ -288,7 +336,77 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 
 ---
 
-### 3.3 Microchip USB2517I-JZX 7-Port Hub Architecture (`U8`)
+### 3.3 Sub-Chips & Peripheral Components (USB2517I, QCC3084, SX1262, TCAN334G)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_01 -->
+
+#### Sub-Chip `U8`: Microchip USB2517I 7-Port Automotive USB 2.0 Hub (QFN-64 (9x9 mm))
+> **Manufacturer Datasheet:** [Microchip USB2517I 7-Port Automotive USB 2.0 Hub](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf) | **Pin Definitions:** [Table 3-1: 64-Pin QFN Pin Descriptions](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf#page=12)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 2 | `RESET_N` | `HUB_RESET_N` | **Control In** | U2 (ESP32-S31) | Active-Low Hardware Reset via GPIO |
+| 8 | `USBDN_DM7` | `USBC_DM` | **USB D-** | J3 (USB-C Service) | Port 7 Downstream USB D- |
+| 9 | `USBDN_DP7` | `USBC_DP` | **USB D+** | J3 (USB-C Service) | Port 7 Downstream USB D+ |
+| 16 | `USBUP_DM` | `ESP_USB_DM` | **USB D-** | U2.54 (ESP32-S31) | Upstream Port USB High-Speed D- |
+| 17 | `USBUP_DP` | `ESP_USB_DP` | **USB D+** | U2.55 (ESP32-S31) | Upstream Port USB High-Speed D+ |
+| 24 | `USBDN_DM1` | `BUS1_DM` | **USB D-** | J6.3 (Strang 1 Front) | Port 1 Downstream USB D- |
+| 25 | `USBDN_DP1` | `BUS1_DP` | **USB D+** | J6.4 (Strang 1 Front) | Port 1 Downstream USB D+ |
+| 32 | `USBDN_DM2` | `BUS2_DM` | **USB D-** | J6.7 (Strang 2 Pod L) | Port 2 Downstream USB D- |
+| 33 | `USBDN_DP2` | `BUS2_DP` | **USB D+** | J6.8 (Strang 2 Pod L) | Port 2 Downstream USB D+ |
+| 40 | `USBDN_DM3` | `BUS3_DM` | **USB D-** | J6.11 (Strang 3 Pod R) | Port 3 Downstream USB D- |
+| 41 | `USBDN_DP3` | `BUS3_DP` | **USB D+** | J6.12 (Strang 3 Pod R) | Port 3 Downstream USB D+ |
+| 48 | `USBDN_DM4` | `BUS4_DM` | **USB D-** | J6.15 (Strang 4 Radar) | Port 4 Downstream USB D- |
+| 49 | `USBDN_DP4` | `BUS4_DP` | **USB D+** | J6.16 (Strang 4 Radar) | Port 4 Downstream USB D+ |
+| 56 | `USBDN_DM5` | `BT_USB_DM` | **USB D-** | U9.13 (QCC3084) | Port 5 Downstream USB D- an Qualcomm BT Audio SoC |
+| 57 | `USBDN_DP5` | `BT_USB_DP` | **USB D+** | U9.14 (QCC3084) | Port 5 Downstream USB D+ an Qualcomm BT Audio SoC |
+| 60 | `USBDN_DM6` | `RES_USB_DM` | **USB D-** | J7.3 (Reserve) | Port 6 Downstream USB D- |
+| 61 | `USBDN_DP6` | `RES_USB_DP` | **USB D+** | J7.4 (Reserve) | Port 6 Downstream USB D+ |
+
+#### Sub-Chip `U9`: Qualcomm QCC3084 Bluetooth 5.4 Audio SoC (WLCSP / BGA Module)
+> **Manufacturer Datasheet:** [Qualcomm QCC3084 Bluetooth 5.4 Audio SoC](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084) | **Pin Definitions:** [Pin Definitions & Audio Interface Routing](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 3 | `I2S_MCLK` | `I2S_MCLK` | **Clock In** | U2 (ESP32-S31) | I2S Master Clock 12.288 MHz |
+| 4 | `I2S_BCLK` | `I2S_BCLK` | **Clock In** | U2 (ESP32-S31) | I2S Bit Clock 3.072 MHz |
+| 5 | `I2S_WS` | `I2S_WS` | **Sync In** | U2 (ESP32-S31) | I2S Word Select / LRCLK 48 kHz |
+| 6 | `I2S_DOUT` | `I2S_DOUT` | **Audio In** | U2 (ESP32-S31) | Digital Audio Stream vom ESP32-S31 DSP zum Helm |
+| 7 | `I2S_DIN` | `I2S_DIN` | **Audio Out** | U2 (ESP32-S31) | Helmmikrofon-Audio Stream an den DSP |
+| 9 | `UART_TX` | `BT_UART_TX` | **UART Out** | U2 (ESP32-S31) | HCI / AT-Befehle TX zum ESP32-S31 |
+| 10 | `UART_RX` | `BT_UART_RX` | **UART In** | U2 (ESP32-S31) | HCI / AT-Befehle RX vom ESP32-S31 |
+| 11 | `CHIP_EN` | `BT_EN` | **Control In** | U2 (ESP32-S31) | Power Enable Active High |
+| 13 | `USB_DM` | `BT_USB_DM` | **USB D-** | U8.56 (Hub Port 5) | USB Audio Class 2.0 / DFU Datenleitung D- |
+| 14 | `USB_DP` | `BT_USB_DP` | **USB D+** | U8.57 (Hub Port 5) | USB Audio Class 2.0 / DFU Datenleitung D+ |
+| 15 | `RF_ANT` | `BT_RF_AUDIO` | **RF 2.4 GHz** | ANT2 (U.FL) | Bluetooth 5.4 Dual-A2DP / Auracast Antennenport |
+
+#### Sub-Chip `U10`: Semtech SX1262 LoRa 868 MHz Transceiver (QFN-24 (4x4 mm))
+> **Manufacturer Datasheet:** [Semtech SX1262 LoRa 868 MHz Transceiver](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4) | **Pin Definitions:** [Section 4: Pinout & Pin Description (QFN-24)](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `NRESET` | `LORA_RST` | **Control In** | U2 (ESP32-S31) | Hardware Reset Active Low |
+| 10 | `RFI_P / RFO` | `LORA_RF_868` | **RF 868 MHz** | ANT1 (U.FL) | LoRa HF-Ausgang (+22 dBm PA) |
+| 14 | `BUSY` | `LORA_BUSY` | **Digital Out** | U2 (ESP32-S31) | LoRa Modem Busy Indicator |
+| 15 | `DIO1` | `LORA_DIO1` | **Digital Out** | U2 (ESP32-S31) | LoRa Paket-Interrupt / TX-Done IRQ |
+| 18 | `MISO` | `SPI_MISO` | **SPI MISO** | U2 (ESP32-S31) | SPI Serial Data Out |
+| 19 | `MOSI` | `SPI_MOSI` | **SPI MOSI** | U2 (ESP32-S31) | SPI Serial Data In |
+| 20 | `SCK` | `SPI_SCK` | **SPI CLK** | U2 (ESP32-S31) | SPI Serial Clock |
+| 21 | `NSS` | `LORA_NSS` | **SPI CS** | U2 (ESP32-S31) | SPI Chip Select Active Low |
+
+#### Sub-Chip `U6`: TI TCAN334G Automotive 3.3V CAN-FD Transceiver (SOIC-8)
+> **Manufacturer Datasheet:** [TI TCAN334G Automotive 3.3V CAN-FD Transceiver](https://www.ti.com/lit/ds/symlink/tcan334g.pdf) | **Pin Definitions:** [Pin Functions (SOIC-8)](https://www.ti.com/lit/ds/symlink/tcan334g.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `TXD` | `CAN_TX` | **Digital In** | U2 (ESP32-S31) | CAN Sendedaten von ESP32-S31 TWAI |
+| 4 | `RXD` | `CAN_RX` | **Digital Out** | U2 (ESP32-S31) | CAN Empfangsdaten an ESP32-S31 TWAI |
+| 6 | `CANL` | `CAN_L` | **CAN Bus** | J1.5 | Differenzielle CAN-Bus-Leitung LOW |
+| 7 | `CANH` | `CAN_H` | **CAN Bus** | J1.4 | Differenzielle CAN-Bus-Leitung HIGH |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_01 -->
+
+### 3.4 Microchip USB2517I-JZX 7-Port Hub Architecture (`U8`)
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
@@ -368,7 +486,7 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 
 <!-- AUTO_PINOUT_START: PCBA_01 -->
 
-| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Description |
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | 3 | `ESP_EN` | - | - | R2 / C1 / SW1 | **Power/Reset** – Chip Enable / Hardware Reset (Active High with RC delay) |
 | 4 | `SPI_SCK` | GPIO 2 | `PIN_MAIN_LORA_SCK` | U10.20 | **SPI2_CLK** – LoRa Semtech SX1262 SPI Serial Clock |
@@ -518,7 +636,145 @@ In OpenMotorBridge v10.0, the legacy cartridge bay system is completely supersed
   * `Q1..Q4`: 4x N-channel power MOSFETs (`AO3400A`, 30V/4A) with 4x flyback diodes (`1N4148WS`, D1..D4) for 4 independent actuator driver channels.
   * `F1`: 1812 SMD Polyfuse (PPTC) for protected 5V actuator and peripheral supply (`VCC_5V_PROT`).
 
-### 5.2 Pinout of 4-Pin Bus Input (`J_BUS` / 4-Pin JST-GH 1.25mm)
+### 5.2 External Connectors & Interfaces (J_BUS, J_USB_OUT, J_ACT, J_AUDIO_PWR)
+
+<!-- AUTO_CONNECTORS_START: PCBA_03 -->
+
+#### Connector `J1`: J_BUS (Backbone Bus-Eingang von Zentralbox)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_BUS` | **Power In (+12V...+20V)** | Bordnetz-/PD-Speisung von Zentralbox (abgesichert 30W) |
+| **2** | `GND` | **Power Return** | Leistungs- und Signalmasse |
+| **3** | `USB_DP` | **USB 2.0 D+** | USB 2.0 High-Speed D+ zur Zentralbox |
+| **4** | `USB_DM` | **USB 2.0 D-** | USB 2.0 High-Speed D- zur Zentralbox |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse-Plane gelegt |
+
+#### Connector `J2`: J_USB_OUT (In-Bag 30W USB-PD Ladedose)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VBUS_30W` | **Power Out (+5V..+20V)** | Geregelte 30W USB-PD Ladespannung (SW3516) |
+| **2** | `GND` | **Power Return** | Ladeleistungs-Rückstrom |
+| **3** | `CC1` | **PD Config** | Configuration Channel 1 für USB-PD Aushandlung |
+| **4** | `CC2` | **PD Config** | Configuration Channel 2 für USB-PD Aushandlung |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse-Plane |
+
+#### Connector `J3`: J_ACT (4-Kanal Mechatronik-Aktuatorschiene)
+> **Type:** `JST-SH 8-Pin 1.0mm SMD Vertikal (BM08B-SRSS-TB)` | **Mating Connector:** `JST SHR-08V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `GND` | **Power Return** | Massebezug |
+| **2** | `GND` | **Power Return** | Massebezug |
+| **3** | `ACT_4` | **Open-Drain Out** | Aktuator 4 (Mesh-Taste, geschaltet via Q4 AO3400A) |
+| **4** | `ACT_3` | **Open-Drain Out** | Aktuator 3 (Center-Taste, geschaltet via Q3 AO3400A) |
+| **5** | `ACT_2` | **Open-Drain Out** | Aktuator 2 (Minus-Taste, geschaltet via Q2 AO3400A) |
+| **6** | `ACT_1` | **Open-Drain Out** | Aktuator 1 (Plus-Taste, geschaltet via Q1 AO3400A) |
+| **7** | `VCC_5V_PROT` | **Power Out (+5V)** | Polyfuse-geschützte 5V Speisung für Aktuatoren |
+| **8** | `VCC_5V_PROT` | **Power Out (+5V)** | Polyfuse-geschützte 5V Speisung für Aktuatoren |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J4`: J_AUDIO_PWR (Hybrid Intercom & OMM Module Header)
+> **Type:** `JST-SH 8-Pin 1.0mm SMD Vertikal (BM08B-SRSS-TB)` | **Mating Connector:** `JST SHR-08V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `GND` | **Power Return** | Gemeinsame Signal- und Lastmasse |
+| **2** | `VCC_5V_PROT` | **Power Out (+5V)** | Polyfuse-geschützte 5V Speisung (F1 1.1A gesichert) |
+| **3** | `GND` | **Power Return** | Massebezug |
+| **4** | `POD_IO_DP_L` | **Dual-Mode I/O** | Modus A: Line-In Links / Modus B: OMM USB D+ |
+| **5** | `POD_IO_DM_R` | **Dual-Mode I/O** | Modus A: Line-In Rechts / Modus B: OMM USB D- |
+| **6** | `OMM_DETECT` | **Control In** | Mode-Sense (HIGH 3.3V = Analog-Codec, LOW 0V = Digital-OMM USB Host) |
+| **7** | `VOICE_OUT` | **Analog Audio Out** | Modus A: Sprache vom ES8388 DAC an Headset Mic-In |
+| **8** | `PTT_BTN` | **Digital In** | Hardware PTT-Taster (Active-Low gegen Masse, 10k PU) |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+<!-- AUTO_CONNECTORS_END: PCBA_03 -->
+
+### 5.3 Sub-Chips & Peripheral Components (CH554E, TS5A23157, ES8388)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_03 -->
+
+#### Sub-Chip `U7`: WCH CH554E USB 2.0 Full-Speed Host Controller (MSOP-10)
+> **Manufacturer Datasheet:** [WCH CH554E USB 2.0 Full-Speed Host Controller](https://www.wch-ic.com/downloads/CH554DS1_PDF.html) | **Pin Definitions:** [Section 3: Pin Definitions (MSOP-10)](https://www.wch-ic.com/downloads/CH554DS1_PDF.html#page=5)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 3 | `RXD1 / P1.6` | `CH554_UART_TX` | **UART In** | U1.26 (ESP32-C6 GPIO20) | 3.0 Mbps UART RX vom ESP32-C6 (TX) |
+| 4 | `TXD1 / P1.7` | `CH554_UART_RX` | **UART Out** | U1.27 (ESP32-C6 GPIO21) | 3.0 Mbps UART TX zum ESP32-C6 (RX) |
+| 5 | `GND` | `GND` | **Power Return** | GND Plane | Massebezug |
+| 6 | `UDM` | `OMM_USB_DM` | **USB D-** | U4.7 (TS5A23157) | USB 2.0 Host Datenleitung D- zum OMM-Modul via U4/J4 |
+| 7 | `UDP` | `OMM_USB_DP` | **USB D+** | U4.9 (TS5A23157) | USB 2.0 Host Datenleitung D+ zum OMM-Modul via U4/J4 |
+| 8 | `GND` | `GND` | **Power Return** | GND Plane | Massebezug |
+| 9 | `V33` | `VCC_3V3` | **Power In** | 3.3V Rail (C8 100nF) | 3.3V Versorgungsspannung |
+| 10 | `VCC` | `VCC_3V3` | **Power In** | 3.3V Rail | 3.3V Versorgungsspannung |
+
+#### Sub-Chip `U4`: TI TS5A23157 Dual SPDT Analog/USB-Switch (MSOP-10)
+> **Manufacturer Datasheet:** [TI TS5A23157 Dual SPDT Analog/USB-Switch](https://www.ti.com/lit/ds/symlink/ts5a23157.pdf) | **Pin Definitions:** [Pin Functions (MSOP-10 / VSSOP-10)](https://www.ti.com/lit/ds/symlink/ts5a23157.pdf#page=3)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `1IN` | `OMM_DETECT` | **Control In** | J4.6 / R9 Pull-Up | Steuereingang Schalter 1 (HIGH=Analog Codec, LOW=Digital OMM) |
+| 2 | `1NO` | `AUDIO_IN_L` | **Analog Audio In** | U3.8 (ES8388 LIN1) | Schließer 1: Analog Line-In Links vom OEM Headset |
+| 3 | `GND` | `GND` | **Power Return** | GND Plane | Massebezug |
+| 4 | `2NO` | `AUDIO_IN_R` | **Analog Audio In** | U3.9 (ES8388 RIN1) | Schließer 2: Analog Line-In Rechts vom OEM Headset |
+| 5 | `2IN` | `OMM_DETECT` | **Control In** | J4.6 / R9 Pull-Up | Steuereingang Schalter 2 |
+| 6 | `2COM` | `POD_IO_DM_R` | **Dual-Mode I/O** | J4.5 | Gemeinsamer Kontakt 2 zu Pin 5 des Hybrid-Steckers J4 |
+| 7 | `2NC` | `OMM_USB_DM` | **USB D-** | U7.6 (CH554E UDM) | Öffner 2: Digital USB D- Verbindung zum CH554E Host |
+| 8 | `V+` | `VCC_3V3` | **Power In** | 3.3V Rail | 3.3V Versorgungsspannung |
+| 9 | `1NC` | `OMM_USB_DP` | **USB D+** | U7.7 (CH554E UDP) | Öffner 1: Digital USB D+ Verbindung zum CH554E Host |
+| 10 | `1COM` | `POD_IO_DP_L` | **Dual-Mode I/O** | J4.4 | Gemeinsamer Kontakt 1 zu Pin 4 des Hybrid-Steckers J4 |
+
+#### Sub-Chip `U3`: Everest Semi ES8388 24-Bit Audio Codec (QFN-28 (4x4 mm))
+> **Manufacturer Datasheet:** [Everest Semi ES8388 24-Bit Audio Codec](http://www.everest-semi.com/pdf/ES8388%20DS.pdf) | **Pin Definitions:** [Pin Configuration & Description (QFN-28)](http://www.everest-semi.com/pdf/ES8388%20DS.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `MCLK` | `I2S_MCLK` | **Clock In** | U1.15 (ESP32-C6) | I2S Master Clock (12.288 MHz) |
+| 2 | `BCLK` | `I2S_BCLK` | **Clock In** | U1.16 (ESP32-C6) | I2S Bit Clock (3.072 MHz) |
+| 3 | `LRCK` | `I2S_WS` | **Sync In** | U1.19 (ESP32-C6) | I2S Word Select / Frame Sync (48 kHz) |
+| 4 | `DSOUT` | `I2S_DIN` | **Audio Out** | U1.24 (ESP32-C6) | Digitalisiertes Mikrofon-Signal an MCU |
+| 5 | `DSIN` | `I2S_DOUT` | **Audio In** | U1.20 (ESP32-C6) | Downlink Audio vom DSP zum DAC |
+| 8 | `LIN1` | `AUDIO_IN_L` | **Analog In** | U4.2 (via J4.4) | Analoger Audio-Eingang Links vom OEM-Intercom |
+| 9 | `RIN1` | `AUDIO_IN_R` | **Analog In** | U4.4 (via J4.5) | Analoger Audio-Eingang Rechts vom OEM-Intercom |
+| 12 | `LOUT1` | `VOICE_OUT` | **Analog Out** | J4.7 | Analoger Mikrofon-Pegel Ausgang an OEM-Headset Mic-In |
+| 20 | `SCL` | `I2C_SCL` | **I2C SCL** | U1.13 (ESP32-C6) | I2C Taktleitung zur Codec-Registerprogrammierung |
+| 21 | `SDA` | `I2C_SDA` | **I2C SDA** | U1.23 (ESP32-C6) | I2C Datenleitung zur Codec-Registerprogrammierung |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_03 -->
+
+### 5.4 ESP32-C6-MINI-1U (`U1`) Complete Pinout Matrix
+
+<!-- AUTO_PINOUT_START: PCBA_03 -->
+
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| 3 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung ESP32-C6 (3.0V - 3.6V) |
+| 5 | `PTT_BTN` | GPIO 2 | `PIN_POD_PTT_BTN` | J4.8 | **Digital In** – Hardware PTT-Taster Eingang (Active Low, 10k Pull-Up) |
+| 6 | `ACT3_GATE` | GPIO 3 | `PIN_ACT3_CENTER` | Q3 Gate (AO3400A) | **Digital Out** – Mechatronik Aktuator 3 Gate (Center / Phone Taste) |
+| 8 | `VCC_3V3` | - | - | VCC_3V3 Pull-Up | **Power/Reset** – Chip Enable / Hardware Reset |
+| 9 | `ACT4_GATE` | GPIO 4 | `PIN_ACT4_MESH` | Q4 Gate (AO3400A) | **Digital Out** – Mechatronik Aktuator 4 Gate (Mesh Taste) |
+| 10 | `ACT1_GATE` | GPIO 5 | `PIN_ACT1_PLUS` | Q1 Gate (AO3400A) | **Digital Out** – Mechatronik Aktuator 1 Gate (Plus / Vol+ Taste, Active High via Q1 AO3400A) |
+| 12 | `OMM_DETECT` | GPIO 0 | `PIN_OMM_DETECT` | J4.6 / U4.1, U4.5 / R9 Pull-Up | **Digital In** – OMM Kabelerkennung (HIGH = Sena/Cardo via Codec, LOW = OMM via CH554E USB-Host) |
+| 13 | `I2C_SCL` | GPIO 1 | `PIN_CODEC_I2C_SCL` | U3.27 / SW3516 | **I2C_SCL** – I2C Taktleitung (SCL) für ES8388 Audio-Codec & SW3516 30W Ladecontroller |
+| 15 | `I2S_MCLK` | GPIO 6 | `PIN_I2S_MCLK` | U3.1 | **I2S_MCLK** – I2S Master-Clock (12.288 MHz an ES8388 Audio-Codec) |
+| 16 | `I2S_BCLK` | GPIO 7 | `PIN_I2S_BCLK` | U3.2 / J4 | **I2S_BCLK** – I2S Bit-Clock (3.072 MHz) |
+| 17 | `USB_DM` | GPIO 12 | `PIN_POD_USB_DM` | J1.4 | **USB_D-** – Backbone USB 2.0 D- (J_BUS Pin 4) |
+| 18 | `USB_DP` | GPIO 13 | `PIN_POD_USB_DP` | J1.3 | **USB_D+** – Backbone USB 2.0 D+ (J_BUS Pin 3) |
+| 19 | `I2S_WS` | GPIO 14 | `PIN_I2S_WS` | U3.3 / J4 | **I2S_WS** – I2S Word Select / Frame Sync (48 kHz LRCLK an ES8388 & J4) |
+| 20 | `I2S_DOUT` | GPIO 15 | `PIN_I2S_DOUT` | U3.4 / J4 | **I2S_DOUT** – I2S Serial Data Out (DAC Data an ES8388 & OMM via TMUX1574) |
+| 22 | `ACT2_GATE` | GPIO 8 | `PIN_ACT2_MINUS` | Q2 Gate (AO3400A) | **Digital Out** – Mechatronik Aktuator 2 Gate (Minus / Vol- Taste, Active High via Q2 AO3400A) |
+| 23 | `I2C_SDA` | GPIO 9 | `PIN_CODEC_I2C_SDA` | U3.28 / SW3516 | **I2C_SDA** – I2C Datenleitung (SDA) für ES8388 Audio-Codec & SW3516 |
+| 24 | `I2S_DIN` | GPIO 18 | `PIN_I2S_DIN` | U3.5 / J4 | **I2S_DIN** – I2S Serial Data In (ADC Data vom ES8388 & OMM via TMUX1574) |
+| 26 | `CH554_UART_TX` | GPIO 20 | `PIN_CH554_UART_TX` | U7.3 (CH554E RXD1) | **UART_TX** – High-Speed UART TX (2 Mbps) zu CH554E USB-Host Controller |
+| 27 | `CH554_UART_RX` | GPIO 21 | `PIN_CH554_UART_RX` | U7.4 (CH554E TXD1) | **UART_RX** – High-Speed UART RX (2 Mbps) vom CH554E USB-Host Controller |
+
+<!-- AUTO_PINOUT_END: PCBA_03 -->
+
+### 5.5 Hardware Switching & 3.0 Mbps Bridge Operation
 
 | Pin | Signal Name | Signal Type | Function & Specification (internal pigtail to Port A) |
 | :---: | :--- | :---: | :--- |
@@ -663,7 +919,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 <!-- AUTO_PINOUT_START: PCBA_05 -->
 
-| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Description |
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | 3 | `ESP_EN` | - | - | R1 / C3 / SW1 | **Power/Reset** – Chip Enable / Hardware Reset |
 | 4 | `GNSS_TIMEPULSE` | GPIO 2 | - | J6.7 | **Digital In** – u-blox SAM-M10Q 1-PPS Timepulse Synchronization |
@@ -705,11 +961,83 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 <!-- AUTO_PINOUT_END: PCBA_05 -->
 
+### 7.1.4 External Connectors & Interfaces (J1..J11)
+
+<!-- AUTO_CONNECTORS_START: PCBA_05 -->
+
+#### Connector `J1`: Backbone Bus-Eingang von Zentralbox (Molex J6.1-4)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_BUS` | **Power In (+12V/60W)** | Bordnetz-/PD-Speisung von Zentralbox |
+| **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
+| **3** | `USB_DP` | **USB 2.0 D+** | USB 2.0 High-Speed D+ zur Zentralbox |
+| **4** | `USB_DM` | **USB 2.0 D-** | USB 2.0 High-Speed D- zur Zentralbox |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J10`: Navi-Stromversorgungsbuchse (Garmin Zūmo / TomTom)
+> **Type:** `JST-GH 2-Pin 1.25mm SMD Vertikal (BM02B-GHS-TBT)` | **Mating Connector:** `JST GHR-02V-S (AWG24-28)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_12V_PROT` | **Power Out (+12V/2A)** | Polyfuse-geschützte 12V Speisung für Navi-Cradle |
+| **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J6`: GNSS & Umweltsensor-Puck Interconnect (PCBA 05D)
+> **Type:** `JST-GH 8-Pin 1.25mm SMD Vertikal (BM08B-GHS-TBT)` | **Mating Connector:** `JST GHR-08V-S (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_3V3` | **Power Out (+3.3V)** | Sensor-Versorgung 3.3V LDO |
+| **2** | `GND` | **Power Return** | Sensor-Masse |
+| **3** | `I2C_SDA` | **I2C SDA** | I2C Datenleitung für TMP117 / OPT3001 / BMP390 |
+| **4** | `I2C_SCL` | **I2C SCL** | I2C Taktleitung für Umweltsensoren |
+| **5** | `GNSS_TX` | **UART In** | u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX |
+| **6** | `GNSS_RX` | **UART Out** | ESP32-S31 TX an u-blox SAM-M10Q RX |
+| **7** | `GNSS_1PPS` | **Sync In** | u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt |
+| **8** | `GND` | **Power Return** | Schirm-Masse |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+<!-- AUTO_CONNECTORS_END: PCBA_05 -->
+
+### 7.1.5 Sub-Chips & Peripherals (USB2514Bi, C3-Bridge)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_05 -->
+
+#### Sub-Chip `U10`: ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU (QFN-32 (5x5 mm))
+> **Manufacturer Datasheet:** [ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU](https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf) | **Pin Definitions:** [Table 2-2: Pin Description (QFN-32)](https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf#page=17)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 12 | `GPIO18 / USB_D-` | `C3_USB_DM` | **USB D-** | U8 (TS3USB221) | USB 2.0 Client D- zu Boom! Box / Nachrüst-AA |
+| 13 | `GPIO19 / USB_D+` | `C3_USB_DP` | **USB D+** | U8 (TS3USB221) | USB 2.0 Client D+ zu Boom! Box / Nachrüst-AA |
+| 18 | `GPIO4 / I2S_MCLK` | `C3_I2S_MCLK` | **Clock In** | U1 (ESP32-S31) | I2S Master Clock vom S31 |
+| 19 | `GPIO5 / I2S_BCLK` | `C3_I2S_BCLK` | **Clock In** | U1 (ESP32-S31) | I2S Bit Clock vom S31 |
+| 20 | `GPIO6 / I2S_WS` | `C3_I2S_WS` | **Sync In** | U1 (ESP32-S31) | I2S Word Select vom S31 |
+| 21 | `GPIO7 / I2S_SDO` | `C3_I2S_SDO` | **Audio In** | U1 (ESP32-S31) | Audio Playback Stream für Boom! Box Bordlautsprecher |
+| 22 | `GPIO8 / I2S_SDI` | `C3_I2S_SDI` | **Audio Out** | U1 (ESP32-S31) | Mikrofon-Rückkanal an Zentralbox DSP |
+
+#### Sub-Chip `U2`: Microchip USB2514Bi 4-Port USB 2.0 Hub (QFN-36 (6x6 mm))
+> **Manufacturer Datasheet:** [Microchip USB2514Bi 4-Port USB 2.0 Hub](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf) | **Pin Definitions:** [Table 3-1: 36-Pin QFN Pin Descriptions](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf#page=12)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 15 | `USBUP_DM` | `HUB_UP_DM` | **USB D-** | U1 (ESP32-S31) | Upstream USB D- vom ESP32-S31 Host |
+| 16 | `USBUP_DP` | `HUB_UP_DP` | **USB D+** | U1 (ESP32-S31) | Upstream USB D+ vom ESP32-S31 Host |
+| 20 | `USBDN_DM1` | `HUB_P1_DM` | **USB D-** | J4 (Hub Ext JST-GH) | Port 1 D- zu PCBA 05B Handschuhfach |
+| 21 | `USBDN_DP1` | `HUB_P1_DP` | **USB D+** | J4 (Hub Ext JST-GH) | Port 1 D+ zu PCBA 05B Handschuhfach |
+| 24 | `USBDN_DM2` | `HUB_P2_DM` | **USB D-** | J5 (Wireless Dongle) | Port 2 D- an CP2AA CarPlay/AA Dongle |
+| 25 | `USBDN_DP2` | `HUB_P2_DP` | **USB D+** | J5 (Wireless Dongle) | Port 2 D+ an CP2AA CarPlay/AA Dongle |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_05 -->
+
 ### 7.1.3 ESP32-C3FH4 (`U10`) Auxiliary MCU Pinout Matrix (USB Audio / SkylineOS Headset Bridge)
 
 <!-- AUTO_PINOUT_START: PCBA_05_AUX -->
 
-| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Description |
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | 1 | `GND` | - | - | GND | **RF_GND** – HF-Masse / LNA Ground (Reine USB-Kabel-Headset-Emulation, kein RF/BLE aktiv) |
 | 2 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – Analoge Versorgungsspannung 3.3V (VDD3P3) |
@@ -941,6 +1269,98 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 
 ### 9.2 Complete Interface & Pin-Mapping of ESP32-C3FH4 SoC (PCBA 07 `U1`)
 
+<!-- AUTO_PINOUT_START: PCBA_07 -->
+
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| 1 | `BLE_ANT_50R` | - | - | ANT2 (2.4 GHz Antenna) | **RF_50_OHM** – 2.4 GHz BLE HF-Antennenausgang (LNA_IN) |
+| 2 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Analoge Betriebsspannung 3.3V |
+| 3 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Analoge Betriebsspannung 3.3V |
+| 4 | `BAT_SENSE` | GPIO 0 | `KEYFOB_PIN_BAT_SENSE` | R10/R11 (100k/100k) | **ADC1_CH0** – Analoge Akkuspannungsmessung LiPo |
+| 5 | `LORA_DIO1` | GPIO 1 | `KEYFOB_PIN_LORA_DIO1` | U2.15 (SX1262) | **Digital In / IRQ** – SX1262 LoRa Packet RX/TX Interrupt |
+| 6 | `LORA_MISO` | GPIO 2 | `KEYFOB_PIN_LORA_MISO` | U2.18 (SX1262) | **FSPI_MISO** – SX1262 LoRa SPI Master In Slave Out (FSPIQ) |
+| 7 | `ESP_EN` | - | - | R3/C3 | **Power/Reset** – Chip Enable / Hardware Reset |
+| 8 | `LORA_MOSI` | GPIO 3 | `KEYFOB_PIN_LORA_MOSI` | U2.19 (SX1262) | **FSPI_MOSI** – SX1262 LoRa SPI Master Out Slave In (FSPID) |
+| 9 | `LORA_SCK` | GPIO 4 | `KEYFOB_PIN_LORA_SCK` | U2.20 (SX1262) | **FSPI_CLK** – SX1262 LoRa SPI Serial Clock (FSPIHD/CLK) |
+| 10 | `LORA_NSS` | GPIO 5 | `KEYFOB_PIN_LORA_NSS` | U2.21 (SX1262) | **FSPI_CS** – SX1262 LoRa Chip Select (Active Low) |
+| 11 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung RTC Domäne |
+| 12 | `LORA_BUSY` | GPIO 6 | `KEYFOB_PIN_LORA_BUSY` | U2.14 (SX1262) | **Digital In** – SX1262 LoRa Transceiver Busy Line |
+| 13 | `LORA_RESET` | GPIO 7 | `KEYFOB_PIN_LORA_RESET` | U2.1 (SX1262) | **Digital Out** – SX1262 LoRa Transceiver Hardware Reset |
+| 14 | `LED_DATA` | GPIO 8 | `KEYFOB_PIN_LED_DATA` | D1.4 | **Digital Out** – WS2812B-2020 Smart RGB Status-LED Datenleitung |
+| 15 | `BTN_ARM_N` | GPIO 9 | `KEYFOB_PIN_BTN_ARM_N` | SW1 | **Digital In** – Arm / Disarm Taster (Active-Low, Boot Strapping) |
+| 16 | `BTN_SOS_N` | GPIO 10 | `KEYFOB_PIN_BTN_SOS_N` | SW2 | **Digital In** – SOS Panik-Alarm Taster (Active-Low) |
+| 17 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung CPU Domäne |
+| 18 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 19 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 20 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 21 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 22 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 23 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 24 | `NC` | - | - | NC | **SIP_FLASH_NC** – Intern für C3FH4 SIP Flash belegt (darf extern nicht kontaktiert werden) |
+| 25 | `USB_DM` | GPIO 18 | `KEYFOB_PIN_USB_DM` | J2.2 (USB D-) | **USB_D-** – Nativer USB Serial/JTAG Controller D- |
+| 26 | `USB_DP` | GPIO 19 | `KEYFOB_PIN_USB_DP` | J2.3 (USB D+) | **USB_D+** – Nativer USB Serial/JTAG Controller D+ |
+| 27 | `BUZZER_PWM` | GPIO 20 | `KEYFOB_PIN_BUZZER_PWM` | LS1 (CPT-9019S) | **LEDC_PWM** – Akustischer Pager 9mm Piezo-Summer PWM |
+| 28 | `CHG_STAT` | GPIO 21 | `KEYFOB_PIN_CHG_STAT` | U3.5 (BQ51050B) | **Digital In** – Qi Wireless Ladestatus (Active-Low) |
+| 29 | `XTAL2` | - | - | Y1.3 (40 MHz) | **Oscillator** – 40 MHz Quarz Oszillator Eingang N |
+| 30 | `XTAL1` | - | - | Y1.1 (40 MHz) | **Oscillator** – 40 MHz Quarz Oszillator Eingang P |
+| 31 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Analoge Versorgungsspannung 3.3V |
+| 32 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Analoge Versorgungsspannung 3.3V |
+| 33 | `GND` | - | - | GND Plane mit Thermal Vias | **Power Ground** – Zentrales Massepads & Kühlung |
+
+<!-- AUTO_PINOUT_END: PCBA_07 -->
+
+### 9.3 Sub-Chips & Peripherals (SX1262 LoRa & BQ51050B Qi Charger)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_07 -->
+
+#### Sub-Chip `U2`: Semtech SX1262 LoRa 868 MHz Transceiver (QFN-24 (4x4 mm))
+> **Manufacturer Datasheet:** [Semtech SX1262 LoRa 868 MHz Transceiver](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4) | **Pin Definitions:** [Section 4: Pinout & Pin Description (QFN-24)](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `NRESET` | `LORA_RST` | **Control In** | U1 (ESP32-C3) | Hardware Reset Active Low |
+| 10 | `RFI_P / RFO` | `LORA_RF_868` | **RF 868 MHz** | Johanson 868M Chip-Antenne | LoRa HF-Ausgang |
+| 14 | `BUSY` | `LORA_BUSY` | **Digital Out** | U1 (ESP32-C3) | LoRa Busy Status |
+| 15 | `DIO1` | `LORA_DIO1` | **Digital Out** | U1 (ESP32-C3) | LoRa Interrupt IRQ |
+| 18 | `MISO` | `SPI_MISO` | **SPI MISO** | U1 (ESP32-C3) | SPI Data Out |
+| 19 | `MOSI` | `SPI_MOSI` | **SPI MOSI** | U1 (ESP32-C3) | SPI Data In |
+| 20 | `SCK` | `SPI_SCK` | **SPI CLK** | U1 (ESP32-C3) | SPI Clock |
+| 21 | `NSS` | `LORA_NSS` | **SPI CS** | U1 (ESP32-C3) | SPI Chip Select Active Low |
+
+#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (QFN-28 (4.5x3.5 mm))
+> **Manufacturer Datasheet:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin Definitions:** [Pin Functions (QFN-28)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 |
+| 2 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 |
+| 12 | `BAT` | `BAT_3V7` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom |
+| 15 | `CHG_STAT` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3) | Qi Ladestatus (Active Low = lädt) |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_07 -->
+
+### 9.4 External Connectors (J1 LiPo, J3 Qi Coil)
+
+<!-- AUTO_CONNECTORS_START: PCBA_07 -->
+
+#### Connector `J1`: LiPo Akku-Anschluss (150 mAh Zelle)
+> **Type:** `JST-SH 2-Pin 1.0mm SMD Vertikal (BM02B-SRSS-TB)` | **Mating Connector:** `JST SHR-02V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `BAT_3V7` | **Power (+3.7V)** | LiPo Akku Pluspol |
+| **2** | `GND` | **Power Return** | LiPo Akku Masse |
+
+#### Connector `J3`: Qi Drahtlos-Ladespule Eingang
+> **Type:** `JST-SH 2-Pin 1.0mm SMD Vertikal (BM02B-SRSS-TB)` | **Mating Connector:** `JST SHR-02V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `QI_COIL_AC1` | **AC In** | Resonanz-Empfangsspule Anschluss 1 |
+| **2** | `QI_COIL_AC2` | **AC In** | Resonanz-Empfangsspule Anschluss 2 |
+
+<!-- AUTO_CONNECTORS_END: PCBA_07 -->
+
 | QFN-32 Pin | Signal Name | Signal Type | ESP-IDF GPIO | Function & Peripheral Assignment |
 | :---: | :--- | :---: | :---: | :--- |
 | **1** | `BLE_ANT_50R` | RF 2.4G | LNA_IN | 50 Ohm feedline to Johanson 2450AT ceramic chip antenna (`ANT2`) |
@@ -1038,6 +1458,31 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 
 ### 10.3 Connector Pinout Definitions
 
+<!-- AUTO_CONNECTORS_START: PCBA_08 -->
+
+#### Connector `J1`: Backbone Bus-Eingang von Zentralbox (Molex J6.13-16)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_BUS` | **Power In (+12V/15W)** | Bordnetz-Speisung von Zentralbox (eFuse CH4) |
+| **2** | `GND` | **Power Return** | Leistungs- und Signalmasse |
+| **3** | `USB_DP` | **USB 2.0 D+** | USB 2.0 High-Speed D+ zur Zentralbox |
+| **4** | `USB_DM` | **USB 2.0 D-** | USB 2.0 High-Speed D- zur Zentralbox |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J2`: MR20 77 GHz Radar-Modul Verbindung
+> **Type:** `JST-SH 4-Pin 1.0mm SMD Vertikal (BM04B-SRSS-TB)` | **Mating Connector:** `JST SHR-04V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | **Power Out (+5V)** | +5V Radar-Sensor Versorgung |
+| **2** | `GND` | **Power Return** | Sensor-Masse |
+| **3** | `RADAR_TX` | **UART In** | Objekt-Target Stream vom Radar-Modul |
+| **4** | `RADAR_RX` | **UART Out** | Konfigurationsbefehle an Radar-Modul |
+
+<!-- AUTO_CONNECTORS_END: PCBA_08 -->
+
 #### Header `J1` -- Central Box Bus & Vehicle Power Link (JST-GH 4-Pin Vertical)
 | Pin | Signal Name | Signal Type | Description |
 | :---: | :--- | :---: | :--- |
@@ -1059,6 +1504,38 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 ---
 
 ### 10.4 Complete Pinout of Host MCU U1 (ESP32-C5-WROOM-1U)
+
+<!-- AUTO_PINOUT_START: PCBA_08 -->
+
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| 1 | `GND` | - | - | Systemmasse | **Power Ground** – Power Ground |
+| 2 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung ESP32-C5 |
+| 3 | `ESP_EN` | - | - | R1 / C1 / SW1 | **Power/Reset** – Chip Enable / Hardware Reset |
+| 4 | `MR20_TX` | GPIO 2 | `PIN_MR20_RX` | J2.3 (MR20 TX) | **UART_RX** – Radar Zielvektoren Datenstrom vom Wheeltec MR20 mmWave Modul (115200 Baud) |
+| 5 | `MR20_RX` | GPIO 3 | `PIN_MR20_TX` | J2.4 (MR20 RX) | **UART_TX** – Radar Konfigurationsbefehle zum Wheeltec MR20 mmWave Modul |
+| 12 | `WS2812_DATA` | GPIO 10 | `PIN_NEOPIXEL` | D1..D36 (Halo Wings) | **Digital Out** – 36-LED Warnflügel Bitstream (18 Links / 18 Rechts für Brems-, Warn- & Abstands-Glow) |
+| 13 | `BUS_DM` | GPIO 13 | `PIN_RADAR_USB_DM` | J1.4 | **USB_D-** – Backbone USB 2.0 Client Data Minus zur Zentralbox |
+| 14 | `BUS_DP` | GPIO 14 | `PIN_RADAR_USB_DP` | J1.3 | **USB_D+** – Backbone USB 2.0 Client Data Plus zur Zentralbox |
+| 15 | `ESP_IO28_BOOT` | GPIO 28 | `PIN_RADAR_BOOT` | SW1 | **Digital In** – Boot Mode Strapping Pin / Manueller Service-Taster |
+
+<!-- AUTO_PINOUT_END: PCBA_08 -->
+
+### 10.4.1 Sub-Chips (Wheeltec MR20 77GHz Radar)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_08 -->
+
+#### Sub-Chip `U_MR20`: Wheeltec MR20 77 GHz mmWave FMCW Radar Sensor (Antenna-on-Package (AoP))
+> **Manufacturer Datasheet:** [Wheeltec MR20 77 GHz mmWave FMCW Radar Sensor](https://wheeltec.net) | **Pin Definitions:** [MR20 4-Pin Interface Header](https://wheeltec.net)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `VCC_5V` | `VCC_5V` | **Power In** | U3.3 (TPS54302) | +5V Speisung für 77GHz Radar-Frontend |
+| 2 | `GND` | `GND` | **Power Return** | GND Plane | Massebezug |
+| 3 | `TX` | `RADAR_TX` | **UART Out** | U1 (ESP32-C5 RX) | 20 Hz Radar Objekt-Target Stream (921.6 kbps) |
+| 4 | `RX` | `RADAR_RX` | **UART In** | U1 (ESP32-C5 TX) | Radar Konfigurations- und Schwellenwerte |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_08 -->
 
 | Module Pad | Signal Name | MCU GPIO / Function | Description / Hardware Interconnect |
 | :---: | :--- | :--- | :--- |
@@ -1211,6 +1688,57 @@ The **`PCBA 09`** and **`PCBA 10`** boards share the exact same unified $60.0 \t
 
 ### 11.3 Complete GPIO Pinout (ESP32-C6-MINI-1U)
 
+<!-- AUTO_PINOUT_START: PCBA_09 -->
+
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| 3 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung ESP32-C6 |
+| 5 | `BTN_1` | GPIO 2 | `OMM_PIN_SW_POWER` | SW1 / J_HELMET.6 | **Digital In** – Multifunktionstaster 1 (Power / PTT / MFB, Active Low) |
+| 6 | `BTN_2` | GPIO 3 | `OMM_PIN_SW_MESH` | SW2 | **Digital In** – Mesh Taster 2 (Tri-Band Betriebsmodus-Umschaltung) |
+| 8 | `VCC_3V3` | - | - | VCC_3V3 Pull-Up | **Power/Reset** – Chip Enable / Hardware Reset |
+| 9 | `BTN_3` | GPIO 4 | `OMM_PIN_SW_VOL_UP` | SW3 | **Digital In** – Taster 3 (Lautstärke + / Kanal +) |
+| 10 | `BTN_4` | GPIO 5 | `OMM_PIN_SW_VOL_DOWN` | SW4 | **Digital In** – Taster 4 (Lautstärke - / Kanal -) |
+| 12 | `WS2812_DATA` | GPIO 0 | `OMM_PIN_WS2812B` | D1.4 | **Digital Out** – Onboard WS2812B-2020 Smart RGB Status-LED |
+| 13 | `CHG_STAT` | GPIO 1 | `OMM_PIN_CHG_STAT` | U5.5 (BQ24075) | **Digital In** – Akku-Ladestatus BQ24075 (/STAT Active-Low) |
+| 15 | `I2C_SCL` | GPIO 6 | `OMM_PIN_I2C_SCL` | U2.27 (ES8388) | **I2C_SCL** – ES8388 Audio-Codec I2C Taktleitung |
+| 16 | `I2C_SDA` | GPIO 7 | `OMM_PIN_I2C_SDA` | U2.28 (ES8388) | **I2C_SDA** – ES8388 Audio-Codec I2C Datenleitung |
+| 17 | `USB_DN` | GPIO 12 | `OMM_PIN_USB_DN` | J1.A7/B7 | **USB_D-** – USB Data Minus (UAC Audio / CDC Telemetrie) |
+| 18 | `USB_DP` | GPIO 13 | `OMM_PIN_USB_DP` | J1.A6/B6 | **USB_D+** – USB Data Plus (UAC Audio / CDC Telemetrie) |
+| 25 | `I2S_MCLK` | GPIO 19 | `OMM_PIN_I2S_MCLK` | U2.1 (ES8388) | **I2S_MCLK** – ES8388 Audio-Codec Master-Clock (12.288 MHz) |
+| 26 | `I2S_BCLK` | GPIO 20 | `OMM_PIN_I2S_BCLK` | U2.2 (ES8388) | **I2S_BCLK** – ES8388 Audio-Codec Bit-Clock |
+| 27 | `I2S_WS` | GPIO 21 | `OMM_PIN_I2S_WS` | U2.3 (ES8388) | **I2S_WS** – ES8388 Audio-Codec Word Select / Frame Sync (48 kHz) |
+| 28 | `I2S_DOUT` | GPIO 22 | `OMM_PIN_I2S_DOUT` | U2.4 (ES8388) | **I2S_DOUT** – ES8388 Audio-Codec DAC Serial Data Out (Headphone Left/Right) |
+| 29 | `I2S_DIN` | GPIO 23 | `OMM_PIN_I2S_DIN` | U2.5 (ES8388) | **I2S_DIN** – ES8388 Audio-Codec ADC Serial Data In (Mikrofon-Signal) |
+
+<!-- AUTO_PINOUT_END: PCBA_09 -->
+
+### 11.3.1 Sub-Chips (ES8388 Codec & BQ24075 Charger)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_09 -->
+
+#### Sub-Chip `U4`: Everest Semi ES8388 24-Bit Audio Codec (QFN-28 (4x4 mm))
+> **Manufacturer Datasheet:** [Everest Semi ES8388 24-Bit Audio Codec](http://www.everest-semi.com/pdf/ES8388%20DS.pdf) | **Pin Definitions:** [Pin Configuration & Description (QFN-28)](http://www.everest-semi.com/pdf/ES8388%20DS.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `MCLK` | `I2S_MCLK` | **Clock In** | U1 (ESP32-C6) | I2S Master Clock (12.288 MHz) |
+| 2 | `BCLK` | `I2S_BCLK` | **Clock In** | U1 (ESP32-C6) | I2S Bit Clock (3.072 MHz) |
+| 3 | `LRCK` | `I2S_WS` | **Sync In** | U1 (ESP32-C6) | I2S Word Select (48 kHz) |
+| 4 | `DSOUT` | `I2S_DIN` | **Audio Out** | U1 (ESP32-C6) | Digitalisiertes Mikrofon-Signal an MCU |
+| 5 | `DSIN` | `I2S_DOUT` | **Audio In** | U1 (ESP32-C6) | Mesh/Funk Audio Stream zum Kopfhörer DAC |
+
+#### Sub-Chip `U2`: TI BQ24075 Li-Ion Akkulader & Power-Path PMIC (QFN-16 (3x3 mm))
+> **Manufacturer Datasheet:** [TI BQ24075 Li-Ion Akkulader & Power-Path PMIC](https://www.ti.com/lit/ds/symlink/bq24075.pdf) | **Pin Definitions:** [Pin Functions (QFN-16)](https://www.ti.com/lit/ds/symlink/bq24075.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 13 | `IN` | `VBUS_USB` | **Power In (+5V)** | J1 (USB-C) | 5V Ladespannungseingang über USB-C |
+| 2 | `OUT` | `SYS_PWR` | **Power Out** | LDO / System Rail | System-Betriebsspannung mit unterbrechungsfreier Umschaltung |
+| 3 | `BAT` | `BAT_3V7` | **Power (3.7V)** | LiPo Akku | Li-Ion Akku Lade- und Entladeanschluss |
+| 11 | `CHG` | `CHG_STAT` | **Digital Out** | U1 (ESP32-C6) | Ladestatusanzeige (Active Low) |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_09 -->
+
 | Module Pad | ESP32-C6 GPIO | Net Name | Signal Type | Function / Hardware Connection |
 | :---: | :---: | :--- | :--- | :--- |
 | **Pad 8** | **`GPIO 2`** | `BTN_PWR` | Digital In (Pullup) | SW1 (Power / MFB tactile switch, active-low, boot pin) |
@@ -1229,7 +1757,35 @@ The **`PCBA 09`** and **`PCBA 10`** boards share the exact same unified $60.0 \t
 | **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC Data In (Microphone) |
 | **U.FL** | **RF 2.4G** | `RF_ANT` | 50 Ohm Coaxial | ESP32-C6 integrated U.FL -> Coax pigtail -> IP67 SMA bulkhead |
 
-### 11.4 16-Pin Multi-Use USB-C Connector Pinout (`J1`)
+### 11.4 External Connectors (J1 USB-C & J2 Helmet Audio)
+
+<!-- AUTO_CONNECTORS_START: PCBA_09 -->
+
+#### Connector `J1`: USB-C IP67 Service- & Ladeport
+> **Type:** `USB-C 12-Pin IP67 Wasserdicht SMD (TYPE-C-31-M-12)` | **Mating Connector:** `Standard USB-C Kabel`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **A1/B12** | `GND` | **Power Return** | Massebezug |
+| **A4/B9** | `VBUS_USB` | **Power In (+5V)** | 5V USB Ladespannung für BQ24075 |
+| **A6/B6** | `USB_DP` | **USB D+** | USB 2.0 Full-Speed D+ zu ESP32-C6 |
+| **A7/B7** | `USB_DM` | **USB D-** | USB 2.0 Full-Speed D- zu ESP32-C6 |
+
+#### Connector `J2`: UCS ECE 22.06 Helm-Headset Audio-Interface
+> **Type:** `JST-SH 6-Pin 1.0mm SMD Vertikal (BM06B-SRSS-TB)` | **Mating Connector:** `JST SHR-06V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `HELMET_SPK_L` | **Analog Out** | Lautsprecher Links (32 Ohm Treiber) |
+| **2** | `HELMET_SPK_R` | **Analog Out** | Lautsprecher Rechts (32 Ohm Treiber) |
+| **3** | `GND` | **Power Return** | Gemeinsame Lautsprecher- und Mikrofonmasse |
+| **4** | `HELMET_MIC_P` | **Analog In** | Mikrofonsignal Positiv (Bias 2.2V) |
+| **5** | `HELMET_PTT` | **Digital In** | Helm PTT-Taster gegen Masse |
+| **6** | `GND` | **Power Return** | Schirmmasse |
+
+<!-- AUTO_CONNECTORS_END: PCBA_09 -->
+
+#### 11.4.1 Multi-Use USB-C Details (`J1`)
 
 The front-facing USB-C port `J1` (`TYPE-C-31-M-12_IP67`) serves as a universal multi-use interface for **charging**, **WebUSB/DFU flashing**, and **cartridge sled docking**:
 
@@ -1290,6 +1846,66 @@ The **`PCBA 10`** board is the unified **Universal Tri-Band open-source hardware
 
 ### 12.3 Complete GPIO Pinout (ESP32-C6 to SA818-DMR & Periphery)
 
+<!-- AUTO_PINOUT_START: PCBA_10 -->
+
+| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
+| :---: | :--- | :---: | :--- | :--- | :--- |
+| 3 | `VCC_3V3` | - | - | 3.3V Power Rail | **Power** – Betriebsspannung ESP32-C6 |
+| 5 | `BTN_1` | GPIO 2 | `OMM_PIN_SW_POWER` | SW1 / J_HELMET.6 | **Digital In** – Multifunktionstaster 1 (Power / Funk-PTT / MFB, Active Low) |
+| 6 | `BTN_2` | GPIO 3 | `OMM_PIN_SW_MESH` | SW2 | **Digital In** – Funk-Modustaster 2 (PMR446 Analog / DMR Tier I Digital Umschaltung) |
+| 8 | `VCC_3V3` | - | - | VCC_3V3 Pull-Up | **Power/Reset** – Chip Enable / Hardware Reset |
+| 9 | `BTN_3` | GPIO 5 | `OMM_PIN_SW_VOL_UP` | SW3 | **Digital In** – Taster 3 (Funk-Kanal Up / Lautstärke +) |
+| 10 | `BTN_4` | - | `OMM_PIN_SW_VOL_DOWN` | SW4 | **Digital In** – Taster 4 (Funk-Kanal Down / Lautstärke -) |
+| 12 | `WS2812_DATA` | GPIO 4 | `OMM_PIN_WS2812B` | D1.4 | **Digital Out** – Onboard WS2812B-2020 Smart RGB Status-LED |
+| 13 | `CHG_STAT` | GPIO 6 | `OMM_PIN_CHG_STAT` | U5.5 (BQ24075) | **Digital In** – Akku-Ladestatus BQ24075 (/STAT Active-Low) |
+| 15 | `I2C_SCL` | - | `OMM_PIN_I2C_SCL` | U2.27 (ES8388) | **I2C_SCL** – ES8388 Audio-Codec I2C Taktleitung |
+| 16 | `I2C_SDA` | GPIO 7 | `OMM_PIN_I2C_SDA` | U2.28 (ES8388) | **I2C_SDA** – ES8388 Audio-Codec I2C Datenleitung |
+| 17 | `USB_DN` | GPIO 8 | `OMM_PIN_USB_DN` | J1.A7/B7 | **USB_D-** – USB Data Minus (UAC Audio / CDC Telemetrie) |
+| 18 | `USB_DP` | GPIO 9 | `OMM_PIN_USB_DP` | J1.A6/B6 | **USB_D+** – USB Data Plus (UAC Audio / CDC Telemetrie) |
+| 19 | `SA818_TXD` | - | `OMM_PIN_SA818_TXD` | U3.17 (SA818 RXD) | **UART_TX** – SA818-DMR Transceiver AT-Kommando Schnittstelle TXD |
+| 20 | `SA818_RXD` | GPIO 12 | `OMM_PIN_SA818_RXD` | U3.18 (SA818 TXD) | **UART_RX** – SA818-DMR Transceiver Status / Telemetrie RXD |
+| 22 | `SA818_PTT` | GPIO 0 | `OMM_PIN_SA818_PTT` | U3.15 (SA818 PTT) | **Digital Out** – SA818 Funk-Sendeaktivierung (Hardware PTT, Active Low) |
+| 23 | `SA818_SQL` | GPIO 1 | `OMM_PIN_SA818_SQL` | U3.14 (SA818 SQL) | **Digital In** – SA818 Funk-Rauschsperre / Carrier Trägererkennung (Squelch, Active Low) |
+| 24 | `SA818_PWR_HL` | GPIO 17 | `OMM_PIN_SA818_PWR_HL` | U3.16 (SA818 H/L) | **Digital Out** – SA818 Sendeleistungsumschaltung (0 = 0.2W Helm / 1 = 0.5W Bike Pod) |
+| 25 | `I2S_MCLK` | - | `OMM_PIN_I2S_MCLK` | U2.1 (ES8388) | **I2S_MCLK** – ES8388 Audio-Codec Master-Clock (12.288 MHz) |
+| 26 | `I2S_BCLK` | GPIO 16 | `OMM_PIN_I2S_BCLK` | U2.2 (ES8388) | **I2S_BCLK** – ES8388 Audio-Codec Bit-Clock |
+| 27 | `I2S_WS` | - | `OMM_PIN_I2S_WS` | U2.3 (ES8388) | **I2S_WS** – ES8388 Audio-Codec Word Select / Frame Sync (48 kHz) |
+| 28 | `I2S_DOUT` | GPIO 18 | `OMM_PIN_I2S_DOUT` | U2.4 (ES8388) | **I2S_DOUT** – ES8388 Audio-Codec DAC Serial Data Out |
+| 29 | `I2S_DIN` | GPIO 19 | `OMM_PIN_I2S_DIN` | U2.5 (ES8388) | **I2S_DIN** – ES8388 Audio-Codec ADC Serial Data In |
+
+<!-- AUTO_PINOUT_END: PCBA_10 -->
+
+### 12.3.1 Sub-Chips (SA818-DMR & ES8388 Codec)
+
+<!-- AUTO_SUBCHIPS_START: PCBA_10 -->
+
+#### Sub-Chip `U3`: NiceRF SA818-DMR Tier I & Analog PMR446 Funk-Transceiver (18-Pad SMD Module)
+> **Manufacturer Datasheet:** [NiceRF SA818-DMR Tier I & Analog PMR446 Funk-Transceiver](https://www.nicerf.com/item/dmr-walkie-talkie-module-sa818-dmr) | **Pin Definitions:** [Section 3: Pin Definitions (18-Pad Module)](https://www.nicerf.com/item/dmr-walkie-talkie-module-sa818-dmr)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `ANT` | `RF_446M_ANT` | **RF 446 MHz** | J3 (U.FL / Helix) | 446 MHz Funk-Antennenanschluss (1W TX / RX) |
+| 4 | `PTT` | `SA818_PTT` | **Digital In** | U1 (ESP32-C6) | Sendetaste PTT (Active Low = Senden) |
+| 5 | `PD / SLEEP` | `SA818_PD` | **Digital In** | U1 (ESP32-C6) | Power Down / Sleep Mode |
+| 6 | `AUDIO_IN` | `VOICE_MIC_DMR` | **Analog Audio In** | U4.12 (ES8388) | Sprach-Modulationseingang vom Codec |
+| 7 | `AUDIO_OUT` | `VOICE_RX_DMR` | **Analog Audio Out** | U4.8 (ES8388) | Empfangenes Sprachsignal an Codec ADC |
+| 8 | `SQ / CARRIER` | `SA818_SQ` | **Digital Out** | U1 (ESP32-C6) | Squelch / Trägererkennung (Carrier Detect) |
+| 9 | `UART_TX` | `SA818_UART_TX` | **UART Out** | U1 (ESP32-C6) | Konfigurations-UART TX (Kanal, CTCSS, DMR ID) |
+| 10 | `UART_RX` | `SA818_UART_RX` | **UART In** | U1 (ESP32-C6) | Konfigurations-UART RX |
+
+#### Sub-Chip `U4`: Everest Semi ES8388 24-Bit Audio Codec (QFN-28 (4x4 mm))
+> **Manufacturer Datasheet:** [Everest Semi ES8388 24-Bit Audio Codec](http://www.everest-semi.com/pdf/ES8388%20DS.pdf) | **Pin Definitions:** [Pin Configuration & Description (QFN-28)](http://www.everest-semi.com/pdf/ES8388%20DS.pdf#page=4)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | `MCLK` | `I2S_MCLK` | **Clock In** | U1 (ESP32-C6) | I2S Master Clock (12.288 MHz) |
+| 2 | `BCLK` | `I2S_BCLK` | **Clock In** | U1 (ESP32-C6) | I2S Bit Clock (3.072 MHz) |
+| 3 | `LRCK` | `I2S_WS` | **Sync In** | U1 (ESP32-C6) | I2S Word Select (48 kHz) |
+| 4 | `DSOUT` | `I2S_DIN` | **Audio Out** | U1 (ESP32-C6) | Empfangenes Funk-Audio digital an ESP32-C6 |
+| 5 | `DSIN` | `I2S_DOUT` | **Audio In** | U1 (ESP32-C6) | Sendesprache digital vom ESP32-C6 zum Funkmodul |
+
+<!-- AUTO_SUBCHIPS_END: PCBA_10 -->
+
 | Module Pad | ESP32-C6 GPIO | Net Name | Signal Type | Function / Hardware Connection |
 | :---: | :---: | :--- | :--- | :--- |
 | **Pad 8** | **`GPIO 2`** | `BTN_PTT` | Digital In (Pullup) | Button SW1: Push-To-Talk / MFB (active-low, boot pin) |
@@ -1314,7 +1930,35 @@ The **`PCBA 10`** board is the unified **Universal Tri-Band open-source hardware
 | **Pad 25** | **`GPIO 23`** | `I2S_DIN` | Digital In | ES8388 ADC In (Microphone from helmet / central DSP) |
 | **J_RF** | **RF 446M** | `RF_ANT` | 50 Ohm Coaxial | U.FL socket (`B.Cu`) -> Coax pigtail -> IP67 SMA bulkhead |
 
-### 12.4 16-Pin Multi-Use USB-C Connector Pinout (`J1`)
+### 12.4 External Connectors (J1 USB-C & J2 Helmet Audio)
+
+<!-- AUTO_CONNECTORS_START: PCBA_10 -->
+
+#### Connector `J1`: USB-C IP67 Service- & Ladeport
+> **Type:** `USB-C 12-Pin IP67 Wasserdicht SMD (TYPE-C-31-M-12)` | **Mating Connector:** `Standard USB-C Kabel`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **A1/B12** | `GND` | **Power Return** | Massebezug |
+| **A4/B9** | `VBUS_USB` | **Power In (+5V)** | 5V USB Ladespannung für BQ24075 |
+| **A6/B6** | `USB_DP` | **USB D+** | USB 2.0 Full-Speed D+ zu ESP32-C6 |
+| **A7/B7** | `USB_DM` | **USB 2.0 D-** | USB 2.0 Full-Speed D- zu ESP32-C6 |
+
+#### Connector `J2`: UCS ECE 22.06 Helm-Headset Audio-Interface
+> **Type:** `JST-SH 6-Pin 1.0mm SMD Vertikal (BM06B-SRSS-TB)` | **Mating Connector:** `JST SHR-06V-S-B (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `HELMET_SPK_L` | **Analog Out** | Lautsprecher Links (32 Ohm Treiber) |
+| **2** | `HELMET_SPK_R` | **Analog Out** | Lautsprecher Rechts (32 Ohm Treiber) |
+| **3** | `GND` | **Power Return** | Gemeinsame Lautsprecher- und Mikrofonmasse |
+| **4** | `HELMET_MIC_P` | **Analog In** | Mikrofonsignal Positiv (Bias 2.2V) |
+| **5** | `HELMET_PTT` | **Digital In** | Helm PTT-Taster gegen Masse |
+| **6** | `GND` | **Power Return** | Schirmmasse |
+
+<!-- AUTO_CONNECTORS_END: PCBA_10 -->
+
+#### 12.4.1 Multi-Use USB-C Details (`J1`)
 
 Identical to PCBA 09: Universal interface for **charging (5V bike / powerbank)**, **WebUSB/DFU flashing**, and **cartridge sled docking** in Smart Cartridge (`PCBA 03`).
 

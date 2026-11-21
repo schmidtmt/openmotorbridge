@@ -11,7 +11,7 @@ Supports automated injection of:
   - External Connectors:         <!-- AUTO_CONNECTORS_START: BOARD_ID --> ... <!-- AUTO_CONNECTORS_END: BOARD_ID -->
 
 Usage:
-  python3 tools/generate_pinout_docs.py         # Syncs docs/de/07_pcba_hardware_pinouts.md
+  python3 tools/generate_pinout_docs.py         # Syncs docs/de/07_pcba_hardware_pinouts.md & docs/en/07_pcba_hardware_pinouts.md
 """
 
 import json
@@ -21,6 +21,7 @@ import sys
 
 JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/pcba_pinouts.json")
 OUTPUT_DE = os.path.join(os.path.dirname(__file__), "../docs/de/07_pcba_hardware_pinouts.md")
+OUTPUT_EN = os.path.join(os.path.dirname(__file__), "../docs/en/07_pcba_hardware_pinouts.md")
 
 def render_mcu_table(b, lang="de"):
     pins = b.get("pins", [])
@@ -70,11 +71,18 @@ def render_subchips_tables(b, lang="de"):
         
         lines.append(f"#### Sub-Chip `{ref}`: {name} ({pkg})")
         if ds_url:
-            lines.append(f"> **Hersteller-Datenblatt:** [{name}]({ds_url}) | **Pin-Definition:** [{table_ref}]({pin_url})  ")
+            if lang == "de":
+                lines.append(f"> **Hersteller-Datenblatt:** [{name}]({ds_url}) | **Pin-Definition:** [{table_ref}]({pin_url})  ")
+            else:
+                lines.append(f"> **Manufacturer Datasheet:** [{name}]({ds_url}) | **Pin Definitions:** [{table_ref}]({pin_url})  ")
         lines.append("")
         
-        lines.append("| Pad | Pin-Name | Signal / KiCad Net | Signal-Typ | Ziel / Quelle | Funktion & Elektr. Spezifikation |")
-        lines.append("| :---: | :--- | :--- | :---: | :--- | :--- |")
+        if lang == "de":
+            lines.append("| Pad | Pin-Name | Signal / KiCad Net | Signal-Typ | Ziel / Quelle | Funktion & Elektr. Spezifikation |")
+            lines.append("| :---: | :--- | :--- | :---: | :--- | :--- |")
+        else:
+            lines.append("| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |")
+            lines.append("| :---: | :--- | :--- | :---: | :--- | :--- |")
         
         for p in sc.get("pins", []):
             pad = str(p.get("pad", "-"))
@@ -102,18 +110,25 @@ def render_connectors_tables(b, lang="de"):
         ctype = c.get("type", "")
         mating = c.get("mating", "")
         
-        lines.append(f"#### Stecker `{ref}`: {name}")
+        if lang == "de":
+            lines.append(f"#### Stecker `{ref}`: {name}")
+        else:
+            lines.append(f"#### Connector `{ref}`: {name}")
         meta_info = []
         if ctype:
-            meta_info.append(f"**Typ:** `{ctype}`")
+            meta_info.append(f"**Typ:** `{ctype}`" if lang == "de" else f"**Type:** `{ctype}`")
         if mating:
-            meta_info.append(f"**Gegenstecker:** `{mating}`")
+            meta_info.append(f"**Gegenstecker:** `{mating}`" if lang == "de" else f"**Mating Connector:** `{mating}`")
         if meta_info:
             lines.append(f"> {' | '.join(meta_info)}  ")
         lines.append("")
         
-        lines.append("| Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |")
-        lines.append("| :---: | :--- | :---: | :--- |")
+        if lang == "de":
+            lines.append("| Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |")
+            lines.append("| :---: | :--- | :---: | :--- |")
+        else:
+            lines.append("| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |")
+            lines.append("| :---: | :--- | :---: | :--- |")
         
         for p in c.get("pins", []):
             pin = str(p.get("pin", "-"))
@@ -165,7 +180,8 @@ def sync_markdown_file(doc_path, boards_data, lang="de"):
             return f"{tag_start}\n\n{table_md}\n\n{tag_end}"
         elif b:
             replacements += 1
-            return f"{tag_start}\n\n*Keine separaten Sub-Chips auf dieser Baugruppe.*\n\n{tag_end}"
+            empty_msg = "*Keine separaten Sub-Chips auf dieser Baugruppe.*" if lang == "de" else "*No separate sub-chips on this assembly.*"
+            return f"{tag_start}\n\n{empty_msg}\n\n{tag_end}"
         return match.group(0)
     content = pattern_sc.sub(_replace_sc, content)
 
@@ -183,7 +199,8 @@ def sync_markdown_file(doc_path, boards_data, lang="de"):
             return f"{tag_start}\n\n{table_md}\n\n{tag_end}"
         elif b:
             replacements += 1
-            return f"{tag_start}\n\n*Keine externen Steckverbinder auf dieser Baugruppe.*\n\n{tag_end}"
+            empty_msg = "*Keine externen Steckverbinder auf dieser Baugruppe.*" if lang == "de" else "*No external connectors on this assembly.*"
+            return f"{tag_start}\n\n{empty_msg}\n\n{tag_end}"
         return match.group(0)
     content = pattern_conn.sub(_replace_conn, content)
 
@@ -203,6 +220,8 @@ def main():
 
     boards = data.get("boards", {})
     sync_markdown_file(OUTPUT_DE, boards, lang="de")
+    if os.path.exists(OUTPUT_EN):
+        sync_markdown_file(OUTPUT_EN, boards, lang="en")
 
 if __name__ == "__main__":
     main()
