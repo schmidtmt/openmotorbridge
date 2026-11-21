@@ -17,6 +17,8 @@
 #include "usb_ethernet_tethering.h"
 #include "usb_vehicle_backbone.h"
 #include "front_sensor_hub.h"
+#include "front_c3_bridge.h"
+#include "remote_sd_client.h"
 
 static const char* TAG = "FRONT_NODE_V10";
 
@@ -76,9 +78,29 @@ static void on_ptt_action(PttClickType click_type) {
     if (click_type == PTT_CLICK_DOUBLE) {
         usb_evt = USB_PTT_CLICK_DOUBLE;
         dur_ms = 250;
+
+        // COMM_51: Forward Action-Cam Rec Toggle over USB Backbone
+        UsbCamTriggerPkt cam_trig = {
+            .trigger_type = CAM_TRIGGER_REC_TOGGLE,
+            .trigger_reason = CAM_REASON_MANUAL_PTT,
+            .reserved = 0,
+            .timestamp_us = (uint32_t)esp_timer_get_time()
+        };
+        UsbVehicleBackbone::instance().send_cam_trigger(cam_trig);
+        ESP_LOGI(TAG, "📷 Dispatched COMM_51 Action-Cam REC Toggle to Central Box!");
     } else if (click_type == PTT_CLICK_LONG) {
         usb_evt = USB_PTT_CLICK_LONG;
         dur_ms = 900;
+
+        // COMM_51: Forward Action-Cam HiLight Marker over USB Backbone
+        UsbCamTriggerPkt cam_trig = {
+            .trigger_type = CAM_TRIGGER_HILIGHT_TAG,
+            .trigger_reason = CAM_REASON_MANUAL_PTT,
+            .reserved = 0,
+            .timestamp_us = (uint32_t)esp_timer_get_time()
+        };
+        UsbVehicleBackbone::instance().send_cam_trigger(cam_trig);
+        ESP_LOGI(TAG, "🔖 Dispatched COMM_51 Action-Cam HiLight Tag to Central Box!");
     }
 
     ESP_LOGI(TAG, "⚡ Handlebar Multi-Click (%d) on J_POD_L/R -> Forwarding via 4-Wire USB HID (0x03) to Central Box!", (int)click_type);
@@ -195,8 +217,9 @@ static void supervisor_task(void* pvParameters) {
         }
         rgb.update(100);
 
-        // 7. Update USB CDC-NCM Ethernet Tethering & OTA Health Checks
+        // 7. Update USB CDC-NCM Ethernet Tethering, Inter-Chip C3 Bridge & OTA Health Checks
         usb_ethernet_update(100);
+        front_c3_bridge_update_tick();
         OtaServiceManager::instance().update_health_check(100);
 
         vTaskDelay(pdMS_TO_TICKS(100));
@@ -251,10 +274,20 @@ extern "C" void app_main(void) {
                               (cmd.right_bsd_state == 1) ? BSD_LEVEL_SOLID_AMBER : BSD_LEVEL_OFF;
         CockpitSwitchesManager::instance().set_bsd_warning(l_act, l_lvl, r_act, r_lvl);
     });
+    UsbVehicleBackbone::instance().set_cam_status_callback([](const UsbCamStatusFeedPkt &stat, UsbNodeType source) {
+        if (stat.connected) {
+            ESP_LOGI(TAG, "📷 Action-Cam Feed: Brand %d, Bat %d%%, Rec %d (%u min left)",
+                     stat.brand, stat.battery_pct, stat.recording, stat.remaining_min);
+        }
+    });
     UsbVehicleBackbone::instance().set_generic_packet_callback([](UsbBackbonePktType type, const uint8_t *payload, size_t len, UsbNodeType source) {
         handle_usb_command(type, payload, len);
     });
     UsbVehicleBackbone::instance().start_task(22, 0);
+
+    // 4b. Initialize Inter-Chip C3 Infotainment Bridge & Remote SD Client
+    front_c3_bridge_init();
+    remote_sd_client_init();
 
     // 5. Spawn Real-Time FreeRTOS Tasks
     xTaskCreate(ptt_task, "ptt_task", 3072, NULL, 10, NULL);

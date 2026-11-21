@@ -348,6 +348,30 @@ void UsbVehicleBackbone::process_received_frame(const uint8_t *frame_data, size_
             }
             break;
 
+        case USB_PKT_SD_BLOCK_REQ:
+            if (payload_len >= sizeof(UsbSdBlockReqPkt) && m_sd_req_cb) {
+                m_sd_req_cb(*(const UsbSdBlockReqPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
+        case USB_PKT_SD_BLOCK_DATA:
+            if (payload_len >= sizeof(UsbSdBlockDataPkt) && m_sd_data_cb) {
+                m_sd_data_cb(*(const UsbSdBlockDataPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
+        case USB_PKT_CAM_TRIGGER:
+            if (payload_len >= sizeof(UsbCamTriggerPkt) && m_cam_trig_cb) {
+                m_cam_trig_cb(*(const UsbCamTriggerPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
+        case USB_PKT_CAM_STATUS:
+            if (payload_len >= sizeof(UsbCamStatusFeedPkt) && m_cam_stat_cb) {
+                m_cam_stat_cb(*(const UsbCamStatusFeedPkt *)payload, (UsbNodeType)hdr->source_node);
+            }
+            break;
+
         default:
             break;
     }
@@ -512,6 +536,22 @@ esp_err_t UsbVehicleBackbone::send_fw_update_push(UsbNodeType target_node, const
 
 esp_err_t UsbVehicleBackbone::send_fw_update_done(const UsbFwUpdateDonePkt &done_pkt) {
     return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_FW_UPDATE_DONE, &done_pkt, sizeof(done_pkt));
+}
+
+esp_err_t UsbVehicleBackbone::send_sd_block_req(const UsbSdBlockReqPkt &req) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_SD_BLOCK_REQ, &req, sizeof(req));
+}
+
+esp_err_t UsbVehicleBackbone::send_sd_block_data(UsbNodeType target_node, const UsbSdBlockDataPkt &data) {
+    return send_packet(target_node, USB_PKT_SD_BLOCK_DATA, &data, sizeof(data));
+}
+
+esp_err_t UsbVehicleBackbone::send_cam_trigger(const UsbCamTriggerPkt &trig) {
+    return send_packet(USB_NODE_CENTRAL_BOX, USB_PKT_CAM_TRIGGER, &trig, sizeof(trig));
+}
+
+esp_err_t UsbVehicleBackbone::send_cam_status(const UsbCamStatusFeedPkt &status) {
+    return send_packet(USB_NODE_FRONT_NODE, USB_PKT_CAM_STATUS, &status, sizeof(status));
 }
 
 bool UsbVehicleBackbone::is_peer_online(UsbNodeType node) const {

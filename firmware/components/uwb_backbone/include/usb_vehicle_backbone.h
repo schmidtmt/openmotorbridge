@@ -64,6 +64,10 @@ public:
     esp_err_t send_power_cycle_cmd(UsbNodeType target_node, uint8_t sub_target = 0, uint16_t off_duration_ms = 2500);
     esp_err_t send_fw_update_push(UsbNodeType target_node, const UsbFwUpdatePushPkt &dfu_pkt);
     esp_err_t send_fw_update_done(const UsbFwUpdateDonePkt &done_pkt);
+    esp_err_t send_sd_block_req(const UsbSdBlockReqPkt &req);
+    esp_err_t send_sd_block_data(UsbNodeType target_node, const UsbSdBlockDataPkt &data);
+    esp_err_t send_cam_trigger(const UsbCamTriggerPkt &trig);
+    esp_err_t send_cam_status(const UsbCamStatusFeedPkt &status);
 
     /**
      * @brief Universelles Senden eines beliebigen USB-Backbone-Pakets
@@ -92,6 +96,10 @@ public:
     void set_pairing_confirm_callback(std::function<void(const UsbPairingConfirmPkt&, UsbNodeType source)> cb) { m_pair_cnf_cb = cb; }
     void set_fw_update_push_callback(std::function<void(const UsbFwUpdatePushPkt&, UsbNodeType source)> cb) { m_dfu_push_cb = cb; }
     void set_fw_update_done_callback(std::function<void(const UsbFwUpdateDonePkt&, UsbNodeType source)> cb) { m_dfu_done_cb = cb; }
+    void set_sd_block_req_callback(std::function<void(const UsbSdBlockReqPkt&, UsbNodeType source)> cb) { m_sd_req_cb = cb; }
+    void set_sd_block_data_callback(std::function<void(const UsbSdBlockDataPkt&, UsbNodeType source)> cb) { m_sd_data_cb = cb; }
+    void set_cam_trigger_callback(std::function<void(const UsbCamTriggerPkt&, UsbNodeType source)> cb) { m_cam_trig_cb = cb; }
+    void set_cam_status_callback(std::function<void(const UsbCamStatusFeedPkt&, UsbNodeType source)> cb) { m_cam_stat_cb = cb; }
     void set_generic_packet_callback(std::function<void(UsbBackbonePktType type, const uint8_t *payload, size_t len, UsbNodeType source)> cb) { m_generic_cb = cb; }
 
     // -------------------------------------------------------------------------
@@ -154,6 +162,10 @@ private:
     std::function<void(const UsbPairingConfirmPkt&, UsbNodeType source)> m_pair_cnf_cb;
     std::function<void(const UsbFwUpdatePushPkt&, UsbNodeType source)> m_dfu_push_cb;
     std::function<void(const UsbFwUpdateDonePkt&, UsbNodeType source)> m_dfu_done_cb;
+    std::function<void(const UsbSdBlockReqPkt&, UsbNodeType source)> m_sd_req_cb;
+    std::function<void(const UsbSdBlockDataPkt&, UsbNodeType source)> m_sd_data_cb;
+    std::function<void(const UsbCamTriggerPkt&, UsbNodeType source)> m_cam_trig_cb;
+    std::function<void(const UsbCamStatusFeedPkt&, UsbNodeType source)> m_cam_stat_cb;
     std::function<void(UsbBackbonePktType type, const uint8_t *payload, size_t len, UsbNodeType source)> m_generic_cb;
 };
 

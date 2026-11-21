@@ -252,6 +252,19 @@ void task_power_supervisor(void *pvParameters) {
             sdio_track_lock_incident("RADAR_COLLISION_ALERT");
         }
 
+        // Broadcast Action-Cam status to Front-Node Cockpit OLED/HUD (COMM_54)
+        CentralCamAndBeaconStatus_t cam_st = action_cam_get_status();
+        UsbCamStatusFeedPkt cam_feed = {
+            .connected = (uint8_t)(cam_st.connected ? 1 : 0),
+            .recording = (uint8_t)(cam_st.recording ? 1 : 0),
+            .brand = (uint8_t)cam_st.brand,
+            .battery_pct = cam_st.battery_pct,
+            .remaining_min = cam_st.remaining_min,
+            .hilight_count = (uint16_t)cam_st.hilight_tags_count,
+            .rssi_dbm = -65
+        };
+        UsbVehicleBackbone::instance().send_cam_status(cam_feed);
+
         // Tier-2 Park Sentry Deep Sleep Transition after 15-min Rundown
         if (!s_ignition_active && !power_sequencer_get_diagnostics().benchtop_usb_only_mode) {
             ignition_off_timer_sec++;
@@ -347,6 +360,16 @@ extern "C" void app_main(void) {
     UsbVehicleBackbone::instance().set_ptt_callback(on_usb_ptt_event);
     UsbVehicleBackbone::instance().set_telemetry_callback(on_usb_front_telemetry);
     UsbVehicleBackbone::instance().set_generic_packet_callback(on_usb_generic_packet);
+    UsbVehicleBackbone::instance().set_sd_block_req_callback([](const UsbSdBlockReqPkt &req, UsbNodeType source) {
+        sdio_serve_sector_request(&req, (uint8_t)source);
+    });
+    UsbVehicleBackbone::instance().set_cam_trigger_callback([](const UsbCamTriggerPkt &trig, UsbNodeType source) {
+        if (trig.trigger_type == CAM_TRIGGER_HILIGHT_TAG) {
+            action_cam_trigger_hilight_tag("MANUAL_PTT");
+        } else if (trig.trigger_type == CAM_TRIGGER_REC_TOGGLE) {
+            action_cam_toggle_rec();
+        }
+    });
     UsbVehicleBackbone::instance().start_task(22, 0);
 
     uwb_cartridge_dispatcher_init();

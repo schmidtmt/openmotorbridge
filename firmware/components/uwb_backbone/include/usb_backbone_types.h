@@ -95,6 +95,14 @@ enum UsbBackbonePktType : uint8_t {
     USB_PKT_RADAR_LED_CMD       = 0x31,  // Zentralbox -> Radar-C5: 36x WS2812B Matrix Makro-Befehl
     USB_PKT_V2X_CITS_EVENT      = 0x32,  // Radar-C5 -> Zentralbox: 5.9 GHz 802.11p OCB C-ITS Paket (SPATEM/DENM/CAM)
 
+    // --- Remote SD-Card Zugriff & Asset-Transfer (COMM_05 / COMM_06) ---
+    USB_PKT_SD_BLOCK_REQ        = 0x40,  // Front-Node -> Zentralbox: Sektor-/Asset-Anforderung
+    USB_PKT_SD_BLOCK_DATA       = 0x41,  // Zentralbox -> Front-Node: Roh-Sektordaten (512B segmentiert)
+
+    // --- Action-Cam BLE Trigger & Telemetrie (COMM_51 / COMM_54) ---
+    USB_PKT_CAM_TRIGGER         = 0x44,  // Front-Node -> Zentralbox: Shutter- / Bookmark-Event
+    USB_PKT_CAM_STATUS          = 0x45,  // Zentralbox -> Front-Node: Kamera-Status-Feed (Akku, Rec-State)
+
     // --- Zero-Disassembly Central USB-Bus DFU & OTA Firmware-Verteilung ---
     USB_PKT_FW_UPDATE_PUSH      = 0x50,  // Zentralbox -> USB-Node: Blockweises Firmware-Update / DFU-Steuerung
     USB_PKT_FW_UPDATE_DONE      = 0x51   // USB-Node -> Zentralbox: Flash-Quittung / CRC32-OK / Reboot-Ready
@@ -488,6 +496,60 @@ typedef struct __attribute__((packed)) {
     uint8_t  denm_cause_code;     // ETSI EN 302 637-3 CauseCode (e.g. 95=EmergencyVehicle, 91=Breakdown, 3=Roadworks)
     int8_t   rssi_dbm;            // 5.9 GHz 802.11p OCB signal strength
 } UsbV2xCitsEventPkt;
+
+// -----------------------------------------------------------------------------
+// 5b. Remote SD-Card Block Access & Asset Transfer (COMM_05 / COMM_06)
+// -----------------------------------------------------------------------------
+typedef struct __attribute__((packed)) {
+    uint32_t sector_num;      // LBA 512-Byte Sektoradresse
+    uint16_t req_tag;         // Eindeutige Request-ID für Antwort-Matching
+    uint8_t  chunk_index;     // Chunk 0..3 (für 4x 128B = 512B Block)
+    uint8_t  flags;           // Bit 0: Cache-Priorität, Bit 1: Vektorkarte, Bit 2: HUD-Grafik
+} UsbSdBlockReqPkt;
+
+typedef struct __attribute__((packed)) {
+    uint32_t sector_num;      // Antwort auf Sektoradresse
+    uint16_t req_tag;         // Zugehörige Request-ID
+    uint8_t  chunk_index;     // Chunk 0..3
+    uint8_t  total_chunks;    // 4 Chunks à 128 Bytes pro 512B-Sektor
+    uint8_t  status;          // 0=OK, 1=Read-Fehler, 2=Busy, 3=Keine SD-Karte
+    uint8_t  data_len;        // Gültige Bytes in data[] (0..128)
+    uint8_t  data[128];       // Sektordaten-Segment
+} UsbSdBlockDataPkt;
+
+// -----------------------------------------------------------------------------
+// 5c. Multi-Vendor Action-Cam BLE Trigger & Telemetrie-Feed (COMM_51 / COMM_54)
+// -----------------------------------------------------------------------------
+typedef enum : uint8_t {
+    CAM_TRIGGER_HILIGHT_TAG = 0x01,  // Bookmark-Marker im Video (GoPro/Insta360)
+    CAM_TRIGGER_REC_START   = 0x02,  // Videoaufnahme starten
+    CAM_TRIGGER_REC_STOP    = 0x03,  // Videoaufnahme stoppen
+    CAM_TRIGGER_REC_TOGGLE  = 0x04   // Aufnahme umschalten
+} UsbCamTriggerType;
+
+typedef enum : uint8_t {
+    CAM_REASON_MANUAL_PTT   = 0x01,  // Lenker-Doppelklick / Long-Press
+    CAM_REASON_ESS_BRAKE    = 0x02,  // Notbremsung (< -0.60g)
+    CAM_REASON_RADAR_TTC    = 0x03,  // Akute Kollisionsgefahr (< 2.5s TTC)
+    CAM_REASON_ECALL        = 0x04   // Unfall / Sturzsensorik
+} UsbCamTriggerReason;
+
+typedef struct __attribute__((packed)) {
+    uint8_t  trigger_type;    // UsbCamTriggerType
+    uint8_t  trigger_reason;  // UsbCamTriggerReason
+    uint16_t reserved;
+    uint32_t timestamp_us;    // Präziser Auslösezeitstempel
+} UsbCamTriggerPkt;
+
+typedef struct __attribute__((packed)) {
+    uint8_t  connected;       // 0=Getrennt, 1=Verbunden
+    uint8_t  recording;       // 0=Standby, 1=Aufnahme aktiv
+    uint8_t  brand;           // 0=None, 1=GoPro, 2=Insta360, 3=DJI
+    uint8_t  battery_pct;     // Akku-Ladestand 0..100%
+    uint16_t remaining_min;   // Verbleibende Aufnahmezeit in Minuten
+    uint16_t hilight_count;   // Gesetzte Bookmark-Tags
+    int8_t   rssi_dbm;        // BLE Signalstärke
+} UsbCamStatusFeedPkt;
 
 // -----------------------------------------------------------------------------
 // 6. Pairing, Cryptographic Binding & Roaming

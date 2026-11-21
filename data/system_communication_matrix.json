@@ -224,7 +224,7 @@
         "Byte_Count"
       ],
       "purpose": "Frontnode liest HUD-Grafiken, Offline-Karten-Tiles oder Update-Blobs von der SD-Karte der Zentralbox",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_06_REMOTE_SD_READ_RESP",
@@ -242,7 +242,7 @@
         "Status"
       ],
       "purpose": "Liefert angeforderte SD-Karten-Datenblöcke von der Zentralbox an den Frontnode",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_07_MIRROR_BSD_TRIGGER",
@@ -369,7 +369,7 @@
         "Master_Mix_Audio"
       ],
       "purpose": "Verlustfreie Übergabe des Lautsprecher-Audiosignals von Chip 1 an Chip 2",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_15_INTERCHIP_UART_FLASH",
@@ -386,7 +386,7 @@
         "Mem_Data"
       ],
       "purpose": "Chip 1 flasht Chip 2 vollautomatisch über UART, gesteuert von der Zentralbox",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_16_INTERCHIP_MEDIA_CONTROLS",
@@ -400,7 +400,7 @@
         "Opcode (Next_Track, Prev_Track, Play_Pause, Vol_Up, Vol_Down, Voice_Trigger)"
       ],
       "purpose": "Leitet Lenkertaster-Eingaben für Musik und Sprachassistent an Chip 2 weiter",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_17_INTERCHIP_MUX_CONTROL",
@@ -415,7 +415,7 @@
         "Dongle_Power_Enable"
       ],
       "purpose": "Schaltet den TS3USB221 USB-Mux zwischen OEM-Display und Nachrüst-AA an J4 um",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_18_INTERCHIP_INFOTAINMENT_STATUS",
@@ -433,7 +433,7 @@
         "Fault_Flags"
       ],
       "purpose": "Rückmeldung des aktuellen Infotainment-Betriebszustands an Chip 1 zur Weiterleitung an die Zentralbox",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_19_UAC_SPEAKER_STREAM",
@@ -447,7 +447,7 @@
         "Speaker_Sound_Output"
       ],
       "purpose": "Wiedergabe von OpenMotorBridge Audio über die werksseitigen Motorrad-Lautsprecher der Harley",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_20_WHIM_HEADSET_BYPASS",
@@ -462,7 +462,7 @@
         "Mic_Active_State"
       ],
       "purpose": "Gaukelt SkylineOS ein verbundenes OEM-Headset vor, um kabelgebundenes Apple CarPlay sofort freizuschalten",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_21_HID_MEDIA_CONTROLS",
@@ -480,7 +480,7 @@
         "Volume_Decrement"
       ],
       "purpose": "Steuerung des Musik-Playbacks auf dem Werks-Display über die OpenMotorBridge Daumentaster am Lenker",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_22_CDC_NCM_TRAFFIC_TETHER",
@@ -1008,7 +1008,7 @@
         "Fuel_Stop_Hold (10-min grace period on KL15 OFF)"
       ],
       "purpose": "Drahtlose Steuerung von Helmkamera oder Lenker-Actioncam: Automatischer Aufnahmestart bei Fahrtbeginn (> 10 km/h), Shutter-Toggle per Lenkertaster und 10-Minuten-Nachlauf bei Tankstopps",
-      "fw_status": "partial"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_52_CAM_BLE_HILIGHT_TAG",
@@ -1024,7 +1024,7 @@
         "Timestamp_ms (Relative Videozeit)"
       ],
       "purpose": "Setzt Bookmark-Marker direkt in den laufenden Videostream der Actioncam bei Gefahrensituationen (Heckradar-Kollisionsgefahr, Notbremsung) oder manuellem Klick am Lenkertaster",
-      "fw_status": "partial"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_53_CAM_BLE_STATUS_FEEDBACK",
@@ -1042,7 +1042,7 @@
         "Error_State (SD Full, Overheating, None)"
       ],
       "purpose": "Uebermittelt den Aufnahmestatus und Batteriestand der Actioncam an die Zentralbox fuer HUD-Visualisierung und Systemueberwachung",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_54_CAM_HUD_STATUS_FORWARD",
@@ -1059,7 +1059,7 @@
         "Hilight_Tags_Count (uint16)"
       ],
       "purpose": "Visualisiert den Aufnahmestatus der Helmkamera (REC-Icon, rot blinkend bei Aufnahme, Batteriebalken) auf den Cockpit-OLEDs J9/J11",
-      "fw_status": "missing"
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_55_CAM_GNSS_1PPS_SYNC",

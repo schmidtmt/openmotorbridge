@@ -328,3 +328,45 @@ uint32_t sdio_get_free_space_mb(void) {
     }
     return 0;
 }
+
+#include "usb_vehicle_backbone.h"
+
+esp_err_t sdio_serve_sector_request(const UsbSdBlockReqPkt *req, uint8_t target_node) {
+    if (!req) return ESP_ERR_INVALID_ARG;
+
+    UsbSdBlockDataPkt resp = {
+        .sector_num = req->sector_num,
+        .req_tag = req->req_tag,
+        .chunk_index = 0,
+        .total_chunks = 4,
+        .status = 0,
+        .data_len = 128
+    };
+
+    if (!s_card || !s_is_mounted) {
+        resp.status = 3; // No card
+        resp.data_len = 0;
+        return UsbVehicleBackbone::instance().send_sd_block_data((UsbNodeType)target_node, resp);
+    }
+
+    uint8_t sector_buf[512];
+    esp_err_t err = sdmmc_read_sectors(s_card, sector_buf, req->sector_num, 1);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to read SD sector %lu: %s", (unsigned long)req->sector_num, esp_err_to_name(err));
+        resp.status = 1; // Read error
+        resp.data_len = 0;
+        return UsbVehicleBackbone::instance().send_sd_block_data((UsbNodeType)target_node, resp);
+    }
+
+    for (uint8_t c = 0; c < 4; c++) {
+        resp.chunk_index = c;
+        resp.status = 0;
+        resp.data_len = 128;
+        memcpy(resp.data, &sector_buf[c * 128], 128);
+        UsbVehicleBackbone::instance().send_sd_block_data((UsbNodeType)target_node, resp);
+    }
+
+    ESP_LOGD(TAG, "Served Remote SD Sector %lu in 4 chunks to Node 0x%02X", (unsigned long)req->sector_num, target_node);
+    return ESP_OK;
+}
+

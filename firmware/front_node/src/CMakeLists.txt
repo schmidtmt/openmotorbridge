@@ -11,6 +11,8 @@ idf_component_register(
         "cockpit_wifi_fallback.cpp"
         "usb_ethernet_tethering.cpp"
         "front_sensor_hub.cpp"
+        "front_c3_bridge.cpp"
+        "remote_sd_client.cpp"
     INCLUDE_DIRS
         "."
     REQUIRES

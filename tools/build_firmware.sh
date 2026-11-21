@@ -67,7 +67,11 @@ case "$TARGET" in
         ;;
     front|front_node)
         TARGET_DIR="$FIRMWARE_DIR/front_node"
-        TARGET_NAME="Front Node v10.0 (PCBA 05: ESP32-P4 + ESP32-E22 + Dual OLEDs)"
+        TARGET_NAME="Front Node v10.0 (PCBA 05: ESP32-S31 + ESP32-E22 + Dual OLEDs)"
+        ;;
+    front_c3|front_node_c3)
+        TARGET_DIR="$FIRMWARE_DIR/front_node_c3"
+        TARGET_NAME="Front Node Chip 2 Infotainment Bridge v10.0 (PCBA 05 U10: ESP32-C3FH4 + WHIM Bypass)"
         ;;
     cartridge|smart_cartridge)
         TARGET_DIR="$FIRMWARE_DIR/smart_cartridge"
@@ -93,7 +97,7 @@ case "$TARGET" in
         echo "========================================================================"
         echo "🏍️  OpenMotorBridge - Building ALL Firmware Targets"
         echo "========================================================================"
-        TARGETS=(main_controller front_node smart_cartridge radar_submcu omm_module omm446_module smart_keyfob)
+        TARGETS=(main_controller front_node front_node_c3 smart_cartridge radar_submcu omm_module omm446_module smart_keyfob)
         FAILED=0
         for t in "${TARGETS[@]}"; do
             echo ""
