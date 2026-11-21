@@ -56,24 +56,52 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 | **Signal-Rausch-Abstand (SNR)**| **$> 96\,\text{dB}$** | A-gewichtet | Rauschfreier Standby ohne Zischen im Helm |
 | **Kanaltrennung (Stereo)** | **$> 95\,\text{dB}$** | $1\,\text{kHz}$ L/R | Perfektes 3D-Klangbild für Warnungen & Musik |
 
-### 1.2 USB-Bus Mehrkanal-Audio-Routing & Streaming (Central DSP Single Source of Truth)
+### 1.2 Die 5 komprimierten Audio-Slots & Deterministisches USB-Backbone-Routing (SSOT)
 
-Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth** für sämtliche Audioströme im Gesamtsystem. Um Latenzen und Protokollbrüche zwischen Bordnetz, Helm und externen Mesh-Gateways zu eliminieren, ist die digitale 4-Draht-USB-Busverbindung in getrennte logische Audio-Endpunkte (USB Audio Class 2.0) unterteilt:
+Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth** für sämtliche Audioströme im Gesamtsystem. Um Latenzen, Buskollisionen und Bandbreitenüberlastungen des 4-Ader-USB-Busses physikalisch zu eliminieren, streamt OpenMotorBridge **kein unkomprimiertes Roh-PCM** über das Fahrzeugnetz, sondern arbeitet mit **fünf deterministischen, komprimierten Audio-Slots**:
 
-1. **Upstream-Kanal (Gateway-Pod $\rightarrow$ Zentralbox):**
-   * **Stereo-Summensignal vom Headphone-Abgriff:** Da das Audiosignal am 3,5-mm-Klinkenausgang des Fremd-Intercoms (Sena, Cardo, Midland) abgegriffen wird, erhält das Pod-Interface (`PCBA 03`) das fertige, vom Headset gemixte Gruppensignal. Der lokale **ES8388 Stereo-ADC** tastet dieses Signal zweikanalig (Stereo L/R) mit $48\,\text{kHz} / 24\,\text{Bit}$ ab.
-   * **Kanalbelegung im USB-Stream:** Der USB-Upstream überträgt **exakt die beiden Audiokanäle (Stereo L und R)** an den ESP32-S31 AI Core 1 DSP der Zentralbox (Latenz $< 0{,}2\,\text{ms}$).
-     * Bei Stereo-Quellen (Cardo DMC / Sena Mesh mit Music-Sharing oder 3D-Voice) bleibt die volle Stereotrennung bis in die Helme erhalten.
-     * Bei Mono-Quellen (PMR446 Funk) sorgt die Brückung im Adapterkabel für sauberes Dual-Mono ohne Phasenauslöschungen.
-   * Der Zentralbox-DSP übernimmt das Stereosignal als separate Quelle, unterzieht es der Prioritäts- und Raised-Cosine-Ducking-Matrix und verteilt es an die per Bluetooth (A2DP / LE Audio LC3) angebundenen Helme von Fahrer und Sozius.
-2. **Downstream-Kanal (Zentralbox $\rightarrow$ Gateway-Pod):**
-   * **Voice Sub-Channel (Mono, Ultra-Low-Latency $< 1\,\text{ms}$):**
-     * Das vom Fahrer-Helm erfasste Sprachsignal wird im Zentral-DSP (ESP32-S31 AI mit Vektor-Rauschunterdrückung) entrauscht, mit höchster Priorität in einen USB-Echtzeitframe verpackt und an den jeweiligen Pod gesendet.
-     * Auf `PCBA 03` wandelt der ES8388 DAC das Signal unmittelbar in ein analoges Differenzsignal und speist es direkt in den Mikrofoneingang des Sena/Cardo-Geräts ein.
-     * **Vorteil:** Die Gesamtlatenz vom Helm-Mikrofon bis in das externe Mesh-Gateway beträgt $< 1{,}0\,\text{ms}$. Dadurch entstehen keinerlei Sprechverzögerungen, Echo-Effekte oder Phasenkammfilterungen im Gruppen-Intercom.
-   * **Music Sub-Channel (Stereo L/R A2DP / LE Audio):**
-     * Soll Musik vom Smartphone oder Navigationssystem in das externe Mesh-Netzwerk übertragen werden (natives Mesh Music Sharing bei Sena/Cardo), wird dieser Stream separat über A2DP-Quellprofile oder hochauflösende USB-UAC2-Stereo-Frames übertragen.
-     * Der Sprachkanal behält dabei stets absolute Priorität und verdrängt die Musikübertragung unterbrechungsfrei über den Raised-Cosine-Ducking-Algorithmus.
+```
++---------------------------------------------------------------------------------------------------+
+|               DIE 5 KOMPRIMIERTEN AUDIO-SLOTS IM OPENMOTORBRIDGE GESAMTSYSTEM                     |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| Slot   | Bezeichnung & Quelle     | Codec & Bitrate     | Übertragungspfad  | Routing & Funktion  |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| **1**  | **Driver Voice Up**      | Opus HD 24k / HFP   | Bluetooth 5.4     | Fahrer-Sprache an   |
+|        | (Fahrer-Helm Mikrofon)   | (16-24 kbps)        | QCC3084 -> DSP    | Mesh/Funk-Gateways  |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| **2**  | **Pillion Voice Up**     | Opus HD 24k / HFP   | Bluetooth 5.4     | Sozius-Sprache oder |
+|        | (Sozius-Helm Mikrofon)   | (16-24 kbps)        | QCC3084 -> DSP    | Private Cabin Mute  |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| **3**  | **Pod 1 Gateway Audio**  | Opus HD 24k         | 4-Ader USB-Bus    | Bucht 1 Stream      |
+|        | (Sena Mesh 3.0 / OMM)    | (24-32 kbps)        | Strang 2 (PCBA 03)| (Up & Downlink)     |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| **4**  | **Pod 2 Gateway Audio**  | Vocoder / Opus 24k  | 4-Ader USB-Bus    | Bucht 2 Stream      |
+|        | (Cardo DMC / PMR446)     | (6-8 bzw. 24 kbps)  | Strang 3 (PCBA 03)| (Up & Downlink)     |
++--------+--------------------------+---------------------+-------------------+---------------------+
+| **5**  | **Media / Navigation**   | Opus HD 24k / A2DP  | USB / Bluetooth   | Kontinuierliche     |
+|        | (Smartphone Musik/Navi)  | (32 kbps)           | QCC3084 -> DSP    | Hintergrund-Quelle  |
++--------+--------------------------+---------------------+-------------------+---------------------+
+```
+
+1. **WCH CH554E USB-Host & $3{,}0\,\text{Mbps}$ UART-Brücke auf `PCBA 03`:**
+   * Jedes Pod-Interface (`PCBA 03`) besitzt einen dedizierten **WCH CH554E USB 2.0 Host-Controller (`U7`)** für digitale Kassetten-Module (OMM Tri-Band `PCBA 09/10`) sowie einen schnellen **TI TS5A23157 Dual-SPDT Schalter (`U4`)**.
+   * Die Audiodaten werden vom CH554E über eine **$3{,}0\,\text{Mbps}$ High-Speed UART-Verbindung** (`CH554_UART_TX/RX` an GPIO 20/21) an den ESP32-C6 (`U1`) übergeben.
+   * Auf dem USB-Backbone werden die Audioframes in deterministischen 10-ms-Paketen (`USB_PKT_AUDIO_STREAM_DOWN` 0x24 / `USB_PKT_AUDIO_STREAM_UP` 0x25) übertragen.
+   * **Busauslastung:** Selbst bei gleichzeitiger Vollauslastung aller 5 Audiokanäle liegt die Buslast bei **unter $8\,\%$ der USB 2.0 Full-Speed Bandbreite** – absolut jitterfrei und mit einer Latenz von $< 0{,}2\,\text{ms}$.
+
+2. **Fahrer- und Sozius-Akustik & Private Cabin Whisper:**
+   * **Physische Wind-Asymmetrie:** Der Fahrer sitzt im frontalen Staudruck und den Abrisswirbeln des Windschilds ($\approx 70\dots 85\,\text{dBA}$). Der Sozius sitzt geschützt im Windschatten des Fahrers. Der DSP wendet getrennte VAD-Schwellwerte (Voice Activity Detection) und fahrerspezifische Fahrtwind-Dämpfung an, basierend auf dem digitalen I2S Knowles MEMS Sensor (Front-Node).
+   * **Private Cabin Whisper (Sozius-Flüstermodus via PTT):**
+     * Drückt der Sozius seinen PTT-Taster (am Helm oder Koffergriff), schaltet der Zentralbox-DSP sofort in den privaten Kabinenmodus:
+     * Die Sozius-Sprache wird **ausschließlich ins Headset des Fahrers gemischt**.
+     * Die Einspeisung in das externe Gruppen-Mesh (Sena/Cardo/OMM) wird **vollständig stummgeschaltet (Mute)**. Private Bemerkungen verlassen das Motorrad nicht!
+     * Im Fahrer-Headset wird das Gruppen-Mesh währenddessen mit **$-12\,\text{dB}$ geduckt**, damit der Beifahrer mühelos und glasklar verständlich ist.
+
+3. **Spatial Panning (Räumliche 3D-Bühne im Helm):**
+   * **Externer Funkverkehr (446 MHz PMR / DMR):** Pan-asymmetrisch links positioniert ($70\,\% \text{Links} / 30\,\% \text{Rechts}$).
+   * **Lokales Intercom-Mesh (OMM 2.4G / Sena / Cardo):** Räumlich zentriert ($50/50$).
+   * **Musik-Streaming:** Belegt kontinuierlich Slot 5 im Hintergrund. Bei einsetzender Funk- oder Intercom-Sprache senkt der Raised-Cosine-Ducking-Algorithmus die Musik sanft um **$-18\,\text{dB}$** ab.
+   * **Vorteil:** Der Fahrer weiß sofort intuitiv ohne Hinschauen am Richtungshören, wer spricht (Streckenposten links vs. Kollege zentriert).
 
 ---
 

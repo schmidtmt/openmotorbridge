@@ -52,3 +52,4 @@ bool remote_sd_client_is_ready(void);
 #ifdef __cplusplus
 }
 #endif
+

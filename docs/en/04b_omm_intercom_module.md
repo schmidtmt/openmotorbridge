@@ -444,32 +444,48 @@ To eliminate buffeting wind noise, snag hazards, and charger ground-loop hum whi
 
 ## 8. Audio Frontend, PTT Keying & 8-Pin Kelvin Grounding
 
-### 8.1 Common-Impedance Coupling Prevention
+### 8.1 Common-Impedance Coupling Prevention & Dual-Mode Audio Switching
 During $0.5\,\text{W}$ transmissions, the SA818 RF power amplifier draws pulses of up to **$600\,\text{mA}$**.
 * Sharing power ground with audio return would induce an $I \times R$ drop of $48\,\text{mV}$ across the microphone line ($5\dots 15\,\text{mV}$ signal), causing unbearable buzzing and motorboating noise.
-* **Solution: 8-Pin Kelvin Grounding on `J_AUDIO_PWR`:**
-  - `Pin 1: PGND` routes all $600\,\text{mA}$ power transients directly back to the DC-DC converter.
-  - `Pin 3: AGND_SPK` and `Pin 6: AGND_MIC` carry strictly zero return current ($I = 0\,\text{mA}$), guaranteeing $\Delta V = 0\,\text{mV}$ and crystal-clear audio!
+* **Solution: 8-Pin Kelvin Grounding & Dual-Mode Switching on Header `J_AUDIO_PWR` (`J4` on `PCBA 03`):**
+  - `Pin 1: GND` dumps power transients directly back to the LM5164 DC-DC converter.
+  - `Pin 2: VCC_5V_PROT` feeds the module through the resettable polyfuse `F1` (1.1 A trip rating).
+  - `Pin 3: GND` serves as clean, dedicated audio ground reference.
+  - `Pin 4: POD_IO_DP_L` (Dual-Mode I/O) operates as analog Line-In Left (`AUDIO_IN_L`) or digital `OMM_USB_DP`.
+  - `Pin 5: POD_IO_DM_R` (Dual-Mode I/O) operates as analog Line-In Right (`AUDIO_IN_R`) or digital `OMM_USB_DM`.
+  - `Pin 6: OMM_DETECT` provides automatic mode-sensing: When an OMM module is inserted, the adapter grounds Pin 6 (**LOW / 0V**). This switches the high-speed dual SPDT analog/USB switch `U4` (`TI TS5A23157`), routing Pins 4 & 5 to the on-board **WCH CH554E USB 2.0 Full-Speed Host Controller (`U7`)**! With legacy analog OEM adapters (Sena/Cardo), Pin 6 remains open and is pulled to **HIGH (3.3V)** by $10\,\text{k}\Omega$ resistor `R9`, routing Pins 4 & 5 directly to the **Everest Semi ES8388 Codec** (`U3`).
+  - `Pin 7: VOICE_OUT` routes analog speech from the ES8388 DAC to the headset microphone input.
+  - `Pin 8: PTT_BTN` is the active-low hardware PTT button sense input with internal pull-up.
+  - **Digital Audio Bridge via WCH CH554E USB Host (`U7`):** Because the ESP32-C6 (`U1` on `PCBA 03`) operates as a USB device on the 4-wire backbone, `U7` acts as a dedicated USB host for the OMM module. A **3.0 Mbps High-Speed UART bridge** (`CH554_UART_TX/RX` on GPIO 20/21) links `U7` and `U1`. Audio packets are streamed fully digitally with zero double D/A conversions!
 
 ```
 +---------------------------------------------------------------------------------------------------+
-|               8-PIN KELVIN GROUNDING DURING PCBA 10 TRANSMISSION (SA818-DMR TX BURST)              |
+|               8-PIN KELVIN GROUNDING & DUAL-MODE AUDIO ROUTING (J_AUDIO_PWR ON PCBA 03)           |
 +---------------------------------------------------------------------------------------------------+
 |                                                                                                   |
-|  [ PCBA 10 OMM 446 MODULE ]                                         [ SMART CARTRIDGE PCBA 03 ]   |
+|  [ PCBA 09 / 10 OMM MODULE ]                                        [ SMART CARTRIDGE PCBA 03 ]   |
 |                                                                                                   |
-|  SA818 PA Return (600 mA Peak) ----(Pin 1: PGND)------------------> LM5164 DC-DC Return Plane      |
-|  5V UPS Charging & PA Supply <-----(Pin 2: VCC_5V)----------------- 5V Vehicle Supply (1.5 A)     |
+|  USB-C GND (Return up to 600 mA) ---(Pin 1: GND)-------------------> LM5164 DC-DC Return Plane      |
+|  5V UPS Charging & Speisung <-------(Pin 2: VCC_5V_PROT)----------- 5V Supply via F1 Polyfuse      |
+|  Clean Audio/USB Reference GND -----(Pin 3: GND)-------------------> Clean Audio GND Reference    |
 |                                                                                                   |
-|  ES8388 Speaker DAC Ground --------(Pin 3: AGND_SPK, I = 0 mA)----> Clean Audio Ground (ES8388)   |
-|  ES8388 Demodulated Audio Left ----(Pin 4: AUDIO_L_IN)------------> ES8388 Codec Line-In Left     |
-|  ES8388 Demodulated Audio Right ---(Pin 5: AUDIO_R_IN)------------> ES8388 Codec Line-In Right    |
+|  [ Mode A: Analog Sena / Cardo Adapter ]                                                          |
+|  Headset Audio Out Left ------------(Pin 4: POD_IO_DP_L)-----------> U4 (TS5A23157) -> ES8388 LIN1|
+|  Headset Audio Out Right -----------(Pin 5: POD_IO_DM_R)-----------> U4 (TS5A23157) -> ES8388 RIN1|
+|  Open (10k R9 pulls HIGH 3.3V) -----(Pin 6: OMM_DETECT)------------> U4 Control Input = HIGH       |
+|  Headset Mic-In <-------------------(Pin 7: VOICE_OUT)-------------- ES8388 DAC Analog Voice Out  |
+|  Handlebar / Pod PTT Button <-------(Pin 8: PTT_BTN)---------------- ESP32-C6 GPIO (PTT Sense)    |
 |                                                                                                   |
-|  ES8388 Mic ADC Ground ------------(Pin 6: AGND_MIC, I = 0 mA)----> Low-Noise Mic Ground Plane    |
-|  Mic Voice from Central DSP -------(Pin 7: MIC_OUT)---------------> Differential Preamp Input    |
-|                                                                                                   |
-|  SA818 Hardware PTT Keying --------(Pin 8: PTT_IO)----------------- Q4 Open-Drain PTT MOSFET     |
-|                                                                                                   |
+|  [ Mode B: Digital OMM Tri-Band Module PCBA 09/10 ]                                              |
+|  OMM USB D+ (Full-Speed) -----------(Pin 4: POD_IO_DP_L)-----------> U4 (TS5A23157) -> CH554E UDP |
+|  OMM USB D- (Full-Speed) -----------(Pin 5: POD_IO_DM_R)-----------> U4 (TS5A23157) -> CH554E UDM |
+|  GND Bridge in Adapter -------------(Pin 6: OMM_DETECT)------------> U4 Control Input = LOW (0V)   |
+|                                                                      |                            |
+|                                                                      v (3.0 Mbps UART Bridge)     |
+|                                                            [ ESP32-C6 (U1) ] <-> [ CH554E (U7) ]  |
+|                                                                      ^                            |
+|                                                                      v (4-Wire USB Backbone)      |
+|                                                            [ CENTRAL BOX PCBA 01 DSP ]            |
 +---------------------------------------------------------------------------------------------------+
 ```
 
@@ -507,29 +523,74 @@ When docked in the bike pod, all physical knobs are eliminated. Configuration is
 
 ## 10. Cross-Bridging Matrix: OMM 446 to Sena, Cardo, and OMM 2.4 GHz
 
-When Bay 1 hosts a Sena SPIDER X Slim and Bay 2 hosts the OMM 446 module (`PCBA 10`), OpenMotorBridge acts as a seamless gateway:
+## 10. Cross-Bridging, Multi-Channel Audio Routing & Rider/Pillion Dynamics
+
+When Bay 1 hosts a Sena SPIDER X Slim and Bay 2 hosts the OMM Universal Tri-Band module (`PCBA 09/10`), OpenMotorBridge acts as a seamless translation and DSP mixing hub:
 
 ```mermaid
-flowchart LR
-    subgraph PMR["446 MHz Radio Cell (Public Handheld Radios)"]
-        G9["Midland G9 Pro\n(Analog FM Handheld)"] <-->|446.09375 MHz| P10["OMM 446 Module\n(PCBA 10 in Bay 2)"]
-        D10["Midland D-10\n(Digital DMR Handheld)"] <-->|DMR TDMA 4FSK| P10
+flowchart TB
+    subgraph PMR["446 MHz Radio Cell (Public Handheld Radios / Track Marshals)"]
+        G9["Midland G9 Pro\n(Analog FM)"] <-->|446.09375 MHz| P10["OMM Tri-Band Module\n(PCBA 09/10 in Bay 2)"]
+        D10["Midland D-10\n(Digital DMR)"] <-->|DMR Tier I 4FSK| P10
+    end
+
+    subgraph Pod2["Luggage Pod 2 (Gateway Right, PCBA 03)"]
+        P10 <-->|USB Full-Speed Host| CH554E["WCH CH554E (U7)\nUSB 2.0 Host"]
+        CH554E <-->|3.0 Mbps UART| C6_2["ESP32-C6 (U1)\nPod 2 Controller"]
     end
 
     subgraph Central["Central Box (PCBA 01) DSP Routing Matrix"]
-        P10 <-->|4-Wire USB Bus UAC2 (< 0.2 ms)| DSP["ESP32-S31 AI RISC-V DSP\n* Raised-Cosine Filter\n* Ducking (-12 dB)\n* Voice Activity Detection (VAD)"]
+        DSP["ESP32-S31 AI RISC-V DSP\n* 5 Compressed Audio Slots\n* Private Cabin Whisper (-12 dB)\n* Spatial Panning (70/30 L/R)\n* Raised-Cosine Ducking (-18 dB)\n* First-Receiver-Wins Arbitration"]
+        QCC["Qualcomm QCC3084 BT 5.4 SoC\n* Dual-A2DP Stereo\n* LE Audio Auracast / HFP 1.8"]
+        DSP <--> QCC
+    end
+
+    subgraph Helmets["100% Wireless Helmets (Bluetooth 5.4)"]
+        H_RIDER["Rider Helmet (Direct BT 5.4)\n* Head-on wind (70-85 dBA)\n* Handlebar PTT (J_POD_L)"] <-->|Bluetooth HD| QCC
+        H_PAX["Pillion Helmet (Direct BT 5.4)\n* Draft / Slipstream sheltered\n* Pillion PTT Whisper Mode"] <-->|Bluetooth HD| QCC
+    end
+
+    subgraph Pod1["Luggage Pod 1 (Gateway Left, PCBA 03)"]
+        C6_1["ESP32-C6 (U1)\nPod 1 Controller"] <-->|Line-In / DAC Mic| SLED["Sena SPIDER X Slim\n(OEM Cartridge Adapter)"]
     end
 
     subgraph SenaNet["Motorcycle Riding Group (Sena Mesh 3.0)"]
-        DSP <-->|4-Wire USB Bus UAC2| SLED["Sena SPIDER X Slim\n(PCBA 03 in Pod 1)"]
         SLED <-->|2.4 GHz Sena Mesh| BIKES["Group (15 Riders on Sena 50S / 60S / Spider)"]
     end
+
+    C6_2 <-->|4-Wire USB Backbone (Opus HD 24k / Vocoder)| DSP
+    DSP <-->|4-Wire USB Backbone (Opus HD 24k / Vocoder)| C6_1
 ```
 
-* An analog **Midland G9 Pro** or digital **Midland D-10** user transmits on Channel 8.
-* `PCBA 10` demodulates the signal in $< 4\,\text{ms}$ and streams digital audio across the 4-wire automotive USB bus (UAC2) to the Central Box (`PCBA 01`).
-* The central DSP applies bandpass filtering and injects the voice into the Sena SPIDER X Slim cartridge with $< 1\,\text{ms}$ latency.
-* **The Entire Group Hears the Transmission in Sena Mesh 3.0** without any rider needing to mount a handheld radio!
+### 10.1 The 5 Compressed Audio Slots & 3.0 Mbps USB-Host Architecture
+Rather than transmitting uncompressed raw PCM, OpenMotorBridge uses **pure compressed audio codecs**:
+* **Codecs:** **Opus HD 24k** ($24\dots 32\,\text{kbps}$) for crystal-clear group mesh and downlink music, and **AMBE+2 / Codec2 / Opus Voice ($6\dots 8\,\text{kbps}$)** for 446 MHz PMR/DMR radio traffic.
+* **5 Deterministic Audio Slots Across the System:**
+  1. `Slot 1: Driver Voice Up` (Rider helmet microphone via Bluetooth HFP 1.8 to Central Box)
+  2. `Slot 2: Pillion Voice Up` (Pillion helmet microphone via Bluetooth HFP 1.8 to Central Box)
+  3. `Slot 3: Pod 1 Gateway Audio Down/Up` (Sena Mesh 3.0 stream over Branch 2)
+  4. `Slot 4: Pod 2 Gateway Audio Down/Up` (OMM Tri-Band / Cardo DMC stream over Branch 3)
+  5. `Slot 5: Media / Navigation Down` (Smartphone music / CarPlay announcements via QCC3084)
+* **WCH CH554E USB Host & UART Bridge (`PCBA 03`):**
+  The docked OMM module is polled by the on-board `CH554E` host (`U7`) via USB Full-Speed. Audio flows over a **3.0 Mbps UART bridge** (`CH554_UART_TX/RX` on GPIO 20/21) into the ESP32-C6 (`U1`), which packs them into 10 ms backbone frames (`USB_PKT_AUDIO_STREAM_UP/DOWN`).
+* **Bus Utilization:** All 5 audio streams occupy **less than 8% of the USB 2.0 bandwidth**—zero bottlenecks, zero jitter, and $< 0.2\,\text{ms}$ transport latency.
+
+### 10.2 Rider vs. Pillion Dynamics: Wind Asymmetry & Private Cabin Whisper
+1. **Wireless Helmet Topology:**
+   Rider and pillion helmets connect 100% wirelessly via Bluetooth 5.4 to the Qualcomm QCC3084 SoC on the Central Box. The saddlebag pods (Bays 1 & 2) are **general bike gateways** with **no static mapping to rider or pillion**.
+2. **Acoustic Wind Asymmetry:**
+   * The **rider** faces direct wind pressure and turbulence from the windscreen ($\approx 70\dots 85\,\text{dBA}$). The Central Box DSP compensates dynamically via the Knowles MEMS acoustic sensor on the Front Node and adaptive spectral filtering.
+   * The **pillion** sits protected in the laminar slipstream of the rider with minimal wind noise. The Central Box maintains separate VAD (Voice Activity Detection) instances for each headset to prevent clipping or overdriving.
+3. **Private Cabin Whisper (Pillion Whisper Mode via PTT):**
+   * When the pillion presses their PTT button (on helmet or luggage grab handle), the DSP immediately activates Private Cabin Whisper:
+     - Pillion speech is **routed exclusively and privately into the rider's helmet**.
+     - Outbound transmission to the external group mesh (Sena, Cardo, OMM) is **completely muted**—confidential remarks stay on the motorcycle!
+     - In the rider's headset, the external group mesh is ducked by **$-12\,\text{dB}$** for effortless speech clarity.
+4. **Spatial Panning (3D Soundstage in Helmet):**
+   * **External Public Radio (PMR446 / DMR):** Panned asymmetrically left ($70\,\% \text{Left} / 30\,\% \text{Right}$).
+   * **Local Intercom Mesh (OMM 2.4G / Sena / Cardo):** Panned center ($50/50$).
+   * **Downlink Music:** Continuous background on Slot 5, ducked by **$-18\,\text{dB}$** upon incoming speech.
+   * The rider intuitively identifies who is speaking by directional hearing alone.
 
 ---
 

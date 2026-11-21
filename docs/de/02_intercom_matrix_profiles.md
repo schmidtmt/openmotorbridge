@@ -62,6 +62,22 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 3. **Modus 2: Cruise Mode (Bordlautsprecher-Ausgabe):**  
    Intercom-Signale werden um $-6\,\text{dB}$ bedämpft und auf die Bordlautsprecher (Harley-Davidson Boom! Box GTS / BMW Soundanlage) geroutet.
 
+### 1.1b Die 5 komprimierten Audio-Slots, Private Cabin Whisper & Spatial Panning
+OpenMotorBridge arbeitet im gesamten Fahrzeugnetzwerk nicht mit unkomprimiertem Roh-Audio, sondern mit **fünf dedizierten, komprimierten Audio-Slots** (Opus HD 24k für Mesh/Musik sowie AMBE+2 / Codec2 / Opus Voice für PMR/DMR-Funk):
+* **Die 5 Audio-Slots:**
+  1. `Slot 1: Driver Voice Up` (Fahrer-Helm via Bluetooth 5.4 HFP 1.8 an Zentralbox)
+  2. `Slot 2: Pillion Voice Up` (Sozius-Helm via Bluetooth 5.4 HFP 1.8 an Zentralbox)
+  3. `Slot 3: Pod 1 Gateway Audio Down/Up` (Sena Mesh 3.0 / OMM 2.4G via USB-Backbone Strang 2)
+  4. `Slot 4: Pod 2 Gateway Audio Down/Up` (Cardo DMC / 446 MHz PMR/DMR via USB-Backbone Strang 3)
+  5. `Slot 5: Media / Navigation Down` (Smartphone-Musik / CarPlay via QCC3084)
+* **Bus-Performance:** Über die $3{,}0\,\text{Mbps}$ UART-Brücke zum WCH CH554E USB-Host auf `PCBA 03` belegen alle 5 Ströme zusammen **unter $8\,\%$ der USB-Bandbreite** ($< 0{,}2\,\text{ms}$ Latenz).
+* **Private Cabin Whisper (Sozius-Flüstermodus via PTT):**
+  Drückt der Sozius seinen PTT-Taster, schaltet der Zentralbox-DSP blitzschnell in den vertraulichen Kabinenmodus: Die Sprache des Sozius wird **exklusiv und privat nur dem Fahrer ins Headset gemischt**. Die Übertragung in das externe Gruppen-Mesh (Sena/Cardo/OMM) wird **vollständig stummgeschaltet (Mute)**, während das Gruppen-Mesh im Fahrer-Headset mit **$-12\,\text{dB}$ geduckt** wird. Private Bemerkungen zwischen Fahrer und Sozius verlassen das Motorrad nicht!
+* **Spatial Panning (Räumliche 3D-Bühne im Helm):**
+  Externer Funk (PMR446 / DMR) wird asymmetrisch links geroutet ($70\,\% \text{L} / 30\,\% \text{R}$), lokales Mesh liegt zentriert ($50/50$), und Musik auf Slot 5 wird bei Sprache mit $-18\,\text{dB}$ adaptiv abgesenkt. Der Fahrer erkennt sofort intuitiv an der Richtung, wer spricht.
+* **Akustische Wind-Asymmetrie:**
+  Der Fahrer sitzt im vollen Staudruck des Windschilds ($\approx 70\dots 85\,\text{dBA}$), während der Sozius geschützt im laminaren Windschatten reist. Die Zentralbox trennt beide Signale über getrennte VAD-Schwellwerte und gleicht den Fahrer-Pegel dynamisch über den Knowles MEMS Sensor am Front-Knoten an.
+
 ### 1.2 Cross-Intercom Bridge (Bucht 1 ↔ Bucht 2) mit Anti-Feedback Loopback-Gate
 * **Bidirektionale Kopplung:** Ermöglicht die nahtlose Audio-Brücke zwischen inkompatiblen Herstellern (z. B. Sena Spider X Slim Mesh 3.0 in Bucht 1 und Cardo DMC Gen2 in Bucht 2).
 * **Einstellbare Überblend-Dämpfung:** Bleed-Pegel stufenlos von $-18\,\text{dB}$ bis $0\,\text{dB}$ (Standard: $-6\,\text{dB}$) in der WebApp konfigurierbar.

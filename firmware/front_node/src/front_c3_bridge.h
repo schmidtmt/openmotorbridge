@@ -74,3 +74,4 @@ FrontC3BridgeStatus_t front_c3_bridge_get_status(void);
 #ifdef __cplusplus
 }
 #endif
+

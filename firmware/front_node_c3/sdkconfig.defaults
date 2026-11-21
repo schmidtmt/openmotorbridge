@@ -30,3 +30,4 @@ CONFIG_WIFI_ENABLED=n
 
 # Compiler Optimization for Low Latency
 CONFIG_COMPILER_OPTIMIZATION_PERF=y
+

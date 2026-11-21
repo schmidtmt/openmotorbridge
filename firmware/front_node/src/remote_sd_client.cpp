@@ -158,3 +158,4 @@ bool remote_sd_client_read_cache(uint32_t sector_num, uint8_t *out_buffer, size_
 bool remote_sd_client_is_ready(void) {
     return UsbVehicleBackbone::instance().is_peer_online(USB_NODE_CENTRAL_BOX);
 }
+

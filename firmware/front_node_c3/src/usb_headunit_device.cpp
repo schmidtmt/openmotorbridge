@@ -161,3 +161,4 @@ void usb_headunit_update_tick(void) {
         s_state.packets_sent++;
     }
 }
+

@@ -180,17 +180,18 @@ Sind in einer Gruppe unterschiedliche Headset-Ökosysteme vertreten (z. B. Fahre
 ```
 
 ### 3.1 Entkopplung vom klassischen DLE & Precomputed Routing Matrizen
-* In der v10.0 Architektur ist OMM 2.4 GHz (`PCBA 09`) ein optionales Pod-Modul. Die Brücken-Entscheidung darf daher **nicht von einem zentralen OMM-Leader abhängen**.
-* Jeder Knoten ermittelt autonom seine angebundenen Kassetten-Klassen (Sena, Cardo, OMM 2.4, Midland) und berechnet daraus seinen **Capability-Score**:
+* In der v10.0 Architektur ist das **OMM Universal Tri-Band Modul (`PCBA 09/10`)** (2.4 GHz HD-Mesh, BT-Bridge & 446 MHz PMR/DMR) ein optionales Kassetten-Modul für Bucht 1 oder Bucht 2 (`PCBA 03`). Die Brücken-Entscheidung darf daher **nicht von einem zentralen OMM-Leader abhängen**.
+* Jeder Knoten ermittelt autonom seine angebundenen Kassetten-Klassen (Sena Mesh, Cardo DMC, OMM 2.4G HD-Mesh, Midland PMR446/DMR) und berechnet daraus seinen **Capability-Score**:
   $$\text{Score}_{\text{Bridge}} = S_{\text{HW\_Kombi}} + S_{\text{RSSI}} + S_{\text{PWR}} + S_{\text{HYST}}$$
-* Im Speicher jedes ESP32-S3 liegt eine **offline vorberechnete Link-State Matrix**, die für jede denkbare Gruppenkonstellation vorab festlegt, welche Knoten als primäre und sekundäre Brücken fungieren.
+* Im Speicher jedes ESP32-S31 liegt eine **offline vorberechnete Link-State Matrix**, die für jede denkbare Gruppenkonstellation vorab festlegt, welche Knoten als primäre und sekundäre Brücken fungieren.
+* **Trennung von Fahrer/Sozius & Gateways:** Fahrer- und Sozius-Helme sind zu $100\,\%$ drahtlos via Bluetooth 5.4 direkt an der Zentralbox angebunden. Im **Private Cabin Whisper Modus** (Sozius-PTT) ist die Sprache des Sozius strikt lokal gebunden (nur Fahrer-Headset) und wird unter keinen Umständen über die Brücken oder das LoRa-Netzwerk repliziert.
 
 ### 3.2 First-Receiver-Wins (FRW) Arbitrierung via LoRa
-Trifft ein Sprachpaket an zwei Bikes gleichzeitig ein, die beide zwischen Sena und Cardo übersetzen könnten:
-1. **Erster Empfänger gewinnt:** Der Knoten, dessen Audio-ADC/Codec die Sprache zuerst detektiert, sendet in **$< 8\,\text{ms}$** ein kurzes Arbitrierungs-Paket auf LoRa Kanal 2:
+Trifft ein Sprachpaket an zwei Bikes gleichzeitig ein, die beide zwischen Sena und Cardo bzw. OMM und PMR/DMR übersetzen könnten:
+1. **Erster Empfänger gewinnt:** Der Knoten, dessen Audio-Pipeline die Sprache zuerst detektiert, sendet in **$< 8\,\text{ms}$** ein kurzes Arbitrierungs-Paket auf LoRa Kanal 2:
    `LORA_PKT_BRIDGING_ACTIVE { Source: SENA, Target: CARDO, Node: 0x4A, Seq: 1042 }`
-2. **Unterdrückung bei Nachbarknoten:** Alle anderen Dual-Kassetten-Bikes empfangen diesen LoRa-Hinweis und sperren ihre eigene Audio-Weiterleitung von Sena nach Cardo für die Dauer der Sprachaktivität ($+ 400\,\text{ms}$ Hangover-Zeit).
-3. **Ergebnis:** Es übersetzt zu jedem Zeitpunkt exakt ein einziger Knoten. Doppeleinspeisungen und Phasenverzögerungen sind ausgeschlossen.
+2. **Unterdrückung bei Nachbarknoten:** Alle anderen Dual-Kassetten-Bikes empfangen diesen LoRa-Hinweis und sperren ihre eigene Audio-Weiterleitung zwischen den Zielnetzen für die Dauer der Sprachaktivität ($+ 400\,\text{ms}$ Hangover-Zeit).
+3. **Ergebnis:** Es übersetzt zu jedem Zeitpunkt exakt ein einziger Knoten. Doppeleinspeisungen, Phasenverzögerungen und Busüberlastungen im 5-Slot Audio-Backbone sind ausgeschlossen.
 
 ### 3.3 Do-Not-Translate (DNT) Header-Flag & Anti-Loop Schutz
 * Wird ein Audiosignal von einem Netzwerk ins andere übersetzt (z. B. Sena -> Cardo), injiziert der übersetzende Knoten ein digitales Kontroll-Flag (`FLAG_DO_NOT_TRANSLATE`).

@@ -77,3 +77,4 @@ typedef struct {
     uint8_t  headunit_vol_pct;
     uint8_t  current_mux_target; // 0=SkylineOS, 1=Aftermarket
 } C3HeadunitState;
+

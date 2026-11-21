@@ -205,3 +205,4 @@ void front_c3_bridge_update_tick(void) {
 FrontC3BridgeStatus_t front_c3_bridge_get_status(void) {
     return s_bridge.status;
 }
+

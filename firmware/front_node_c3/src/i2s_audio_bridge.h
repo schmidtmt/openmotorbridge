@@ -32,3 +32,4 @@ void i2s_audio_bridge_set_speakers_active(bool active);
 #ifdef __cplusplus
 }
 #endif
+
