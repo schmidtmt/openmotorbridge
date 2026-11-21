@@ -1335,15 +1335,24 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 | 20 | `SCK` | `SPI_SCK` | **SPI CLK** | U1 (ESP32-C3) | SPI Clock |
 | 21 | `NSS` | `LORA_NSS` | **SPI CS** | U1 (ESP32-C3) | SPI Chip Select Active Low |
 
-#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (QFN-28 (4.5x3.5 mm))
-> **Hersteller-Datenblatt:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin-Definition:** [Pin Functions (QFN-28)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
+#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (VQFN-20 / RHL-20 (3.5x4.5 mm))
+> **Hersteller-Datenblatt:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin-Definition:** [Pin Functions (VQFN-20 RHL Package)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
 
 | Pad | Pin-Name | Signal / KiCad Net | Signal-Typ | Ziel / Quelle | Funktion & Elektr. Spezifikation |
 | :---: | :--- | :--- | :---: | :--- | :--- |
-| 1 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 |
-| 2 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 |
-| 12 | `BAT` | `BAT_3V7` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom |
-| 15 | `CHG_STAT` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3) | Qi Ladestatus (Active Low = lädt) |
+| 1 | `PGND` | `GND` | **Power Return** | Massebezug | Leistungsmasse (Power Ground) |
+| 2 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 (Pin 1/2) |
+| 3 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 (Pin 2/2) |
+| 4 | `BOOT1` | `QI_BOOT1` | **Bootstrap** | C_BOOT1 (10nF zu AC1) | High-Side Bootstrap Kondensator 1 |
+| 7 | `CHG` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3 Pad 28) | Qi Ladestatus (Active Low = lädt) |
+| 11 | `BAT` | `VBAT` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 1/2) |
+| 12 | `BAT` | `VBAT` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 2/2) |
+| 14 | `RECT` | `QI_RECT` | **Output** | C_RECT (10uF Puffer zu GND) | Gleichgerichtete Qi-Ausgangsspannung |
+| 17 | `BOOT2` | `QI_BOOT2` | **Bootstrap** | C_BOOT2 (10nF zu AC2) | High-Side Bootstrap Kondensator 2 |
+| 18 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 (Pin 1/2) |
+| 19 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 (Pin 2/2) |
+| 20 | `PGND` | `GND` | **Power Return** | Massebezug | Leistungsmasse (Power Ground) |
+| 21 | `EP` | `GND` | **Power Return / Thermal** | GND Plane | Thermal Pad Massebezug |
 
 <!-- AUTO_SUBCHIPS_END: PCBA_07 -->
 

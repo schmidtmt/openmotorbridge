@@ -40,7 +40,7 @@
 #define PIN_CODEC_I2C_SCL       GPIO_NUM_1   // U1 Pad 13 (GPIO1)  -> ES8388 Pin 27 & SW3516 SCL
 #define PIN_CODEC_I2C_SDA       GPIO_NUM_9   // U1 Pad 23 (GPIO9)  -> ES8388 Pin 28 & SW3516 SDA
 #define PIN_I2S_MCLK            GPIO_NUM_6   // U1 Pad 15 (GPIO6)  -> ES8388 Master Clock (12.288 MHz)
-#define PIN_I2S_BCLK            GPIO_NUM_7   // U1 Pad 16 (GPIO7)  -> ES8388 Bit Clock & TMUX1574 CH1 Bank 1 (3.072 MHz)
-#define PIN_I2S_WS              GPIO_NUM_14  // U1 Pad 19 (GPIO14) -> ES8388 Word Select / LRCLK & TMUX1574 CH2 Bank 1 (48 kHz)
-#define PIN_I2S_DOUT            GPIO_NUM_15  // U1 Pad 20 (GPIO15) -> ES8388 DAC In & TMUX1574 CH3 Bank 1 (to OMM Mesh)
-#define PIN_I2S_DIN             GPIO_NUM_18  // U1 Pad 24 (GPIO18) <- ES8388 ADC Out & TMUX1574 CH4 Bank 1 (from OMM Mesh)
+#define PIN_I2S_BCLK            GPIO_NUM_7   // U1 Pad 16 (GPIO7)  -> ES8388 Bit Clock (3.072 MHz)
+#define PIN_I2S_WS              GPIO_NUM_14  // U1 Pad 19 (GPIO14) -> ES8388 Word Select / LRCLK (48 kHz)
+#define PIN_I2S_DOUT            GPIO_NUM_15  // U1 Pad 20 (GPIO15) -> ES8388 DAC In (Headset Left/Right Audio)
+#define PIN_I2S_DIN             GPIO_NUM_18  // U1 Pad 24 (GPIO18) <- ES8388 ADC Out (Headset Microphone Audio)

@@ -212,8 +212,8 @@
         "datasheet_title": "BQ51050B Highly Integrated Wireless Power Receiver and Battery Charger (Qi v1.2)",
         "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
         "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-        "table_ref": "Pin Functions (QFN-28)",
-        "package": "QFN-28 (4.5x3.5 mm)",
+        "table_ref": "Pin Functions (VQFN-20 RHL Package)",
+        "package": "VQFN-20 / RHL-20 (3.5x4.5 mm)",
         "core": "Wireless Power Consortium (WPC) Qi v1.2 Receiver & Li-Ion Charger",
         "used_in_boards": [
           "PCBA_07"
@@ -2870,42 +2870,114 @@
           "ref": "U4",
           "chip_key": "BQ51050B",
           "name": "TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger",
-          "package": "QFN-28 (4.5x3.5 mm)",
+          "package": "VQFN-20 / RHL-20 (3.5x4.5 mm)",
           "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
           "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-          "table_ref": "Pin Functions (QFN-28)",
+          "table_ref": "Pin Functions (VQFN-20 RHL Package)",
           "pins": [
             {
               "pad": "1",
+              "pin_name": "PGND",
+              "net": "GND",
+              "type": "Power Return",
+              "target": "Massebezug",
+              "spec": "Leistungsmasse (Power Ground)"
+            },
+            {
+              "pad": "2",
               "pin_name": "AC1",
               "net": "QI_COIL_AC1",
               "type": "AC In",
               "target": "J3.1 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC1"
+              "spec": "Drahtlose Qi-Empfangsspule AC1 (Pin 1/2)"
             },
             {
-              "pad": "2",
-              "pin_name": "AC2",
-              "net": "QI_COIL_AC2",
+              "pad": "3",
+              "pin_name": "AC1",
+              "net": "QI_COIL_AC1",
               "type": "AC In",
-              "target": "J3.2 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC2"
+              "target": "J3.1 (Qi Spule)",
+              "spec": "Drahtlose Qi-Empfangsspule AC1 (Pin 2/2)"
+            },
+            {
+              "pad": "4",
+              "pin_name": "BOOT1",
+              "net": "QI_BOOT1",
+              "type": "Bootstrap",
+              "target": "C_BOOT1 (10nF zu AC1)",
+              "spec": "High-Side Bootstrap Kondensator 1"
+            },
+            {
+              "pad": "7",
+              "pin_name": "CHG",
+              "net": "QI_CHG_STAT",
+              "type": "Digital Out",
+              "target": "U1 (ESP32-C3 Pad 28)",
+              "spec": "Qi Ladestatus (Active Low = lädt)"
+            },
+            {
+              "pad": "11",
+              "pin_name": "BAT",
+              "net": "VBAT",
+              "type": "Power Out",
+              "target": "J1.1 (LiPo Akku)",
+              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 1/2)"
             },
             {
               "pad": "12",
               "pin_name": "BAT",
-              "net": "BAT_3V7",
+              "net": "VBAT",
               "type": "Power Out",
               "target": "J1.1 (LiPo Akku)",
-              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom"
+              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 2/2)"
             },
             {
-              "pad": "15",
-              "pin_name": "CHG_STAT",
-              "net": "QI_CHG_STAT",
-              "type": "Digital Out",
-              "target": "U1 (ESP32-C3)",
-              "spec": "Qi Ladestatus (Active Low = lädt)"
+              "pad": "14",
+              "pin_name": "RECT",
+              "net": "QI_RECT",
+              "type": "Output",
+              "target": "C_RECT (10uF Puffer zu GND)",
+              "spec": "Gleichgerichtete Qi-Ausgangsspannung"
+            },
+            {
+              "pad": "17",
+              "pin_name": "BOOT2",
+              "net": "QI_BOOT2",
+              "type": "Bootstrap",
+              "target": "C_BOOT2 (10nF zu AC2)",
+              "spec": "High-Side Bootstrap Kondensator 2"
+            },
+            {
+              "pad": "18",
+              "pin_name": "AC2",
+              "net": "QI_COIL_AC2",
+              "type": "AC In",
+              "target": "J3.2 (Qi Spule)",
+              "spec": "Drahtlose Qi-Empfangsspule AC2 (Pin 1/2)"
+            },
+            {
+              "pad": "19",
+              "pin_name": "AC2",
+              "net": "QI_COIL_AC2",
+              "type": "AC In",
+              "target": "J3.2 (Qi Spule)",
+              "spec": "Drahtlose Qi-Empfangsspule AC2 (Pin 2/2)"
+            },
+            {
+              "pad": "20",
+              "pin_name": "PGND",
+              "net": "GND",
+              "type": "Power Return",
+              "target": "Massebezug",
+              "spec": "Leistungsmasse (Power Ground)"
+            },
+            {
+              "pad": "21",
+              "pin_name": "EP",
+              "net": "GND",
+              "type": "Power Return / Thermal",
+              "target": "GND Plane",
+              "spec": "Thermal Pad Massebezug"
             }
           ]
         }

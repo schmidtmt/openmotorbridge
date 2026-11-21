@@ -339,17 +339,17 @@ def audit_board(board_id, cfg):
         print(f"    - Pad 14 (GPIO 20 / USB_D+):   Net = '{pad14_net}' -> " + ("✅ USB D+" if "DP" in pad14_net or "D_P" in pad14_net else f"⚠️  Mismatch: Net '{pad14_net}' on USB D+ hardware pin!"))
 
     elif "ESP32-C6" in cfg["mcu_type"]:
-        # ESP32-C6-MINI-1:
-        # Pad 13: GPIO 8 (Strap)
-        # Pad 14: GPIO 9 (Boot Mode strapping)
+        # ESP32-C6-MINI-1 / MINI-1U (Datasheet Section 3: Pin Definitions):
         # Pad 17: GPIO 12 (USB D-)
         # Pad 18: GPIO 13 (USB D+)
-        pad13_net = mcu_pads.get("13", "")
-        pad14_net = mcu_pads.get("14", "")
+        # Pad 22: GPIO 8 (Strapping / ACT2)
+        # Pad 23: GPIO 9 (Boot Mode strapping / I2C_SDA with pull-up)
         pad17_net = mcu_pads.get("17", "")
         pad18_net = mcu_pads.get("18", "")
-        print(f"    - Pad 13 (GPIO 8 / STRAP):     Net = '{pad13_net}'")
-        print(f"    - Pad 14 (GPIO 9 / BOOT):      Net = '{pad14_net}'")
+        pad22_net = mcu_pads.get("22", "")
+        pad23_net = mcu_pads.get("23", "")
+        print(f"    - Pad 22 (GPIO 8 / STRAP):     Net = '{pad22_net}'")
+        print(f"    - Pad 23 (GPIO 9 / BOOT):      Net = '{pad23_net}' -> " + ("✅ BOOT/PULLUP" if "SDA" in pad23_net or "VCC" in pad23_net or "BOOT" in pad23_net else f"Net '{pad23_net}'"))
         print(f"    - Pad 17 (GPIO 12 / USB_D-):   Net = '{pad17_net}' -> " + ("✅ USB D-" if "DM" in pad17_net or "D_N" in pad17_net else f"Net '{pad17_net}'"))
         print(f"    - Pad 18 (GPIO 13 / USB_D+):   Net = '{pad18_net}' -> " + ("✅ USB D+" if "DP" in pad18_net or "D_P" in pad18_net else f"Net '{pad18_net}'"))
 
