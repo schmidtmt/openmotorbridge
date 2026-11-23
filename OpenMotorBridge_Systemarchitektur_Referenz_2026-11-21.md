@@ -226,3 +226,89 @@ Das Audio-Mischpult im ESP32-S31 verarbeitet alle Audioströme mit **Raised-Cosi
 * `PCBA 05B` (Glovebox Hub) als historisch archiviert.
 * Koffer-Pods (`PCBA 03`) Mechatronik und AD/DA-Wandler bleiben unverändert hardware-kompatibel für Stufe 1 & 2.
 
+---
+
+## 7. Smartphone-Schnittstellen, Datenflüsse & Protokolle (SSOT)
+
+Mit der Umstellung auf den Qualcomm QCC3086 (`U9`) und der Bereinigung der Systemarchitektur ist die Schnittstelle zwischen Smartphone und OpenMotorBridge (OMB) verbindlich wie folgt definiert:
+
+### 7.1 Was komplett entfällt (Architektur-Bereinigung)
+* **Apple CarPlay & Android Auto Video-Tunneling:**
+  * Vollständiger Ausbau. Keine instabilen H.264/H.265-Videostreams über 5 GHz Wi-Fi Direct, keine Dongle-Hacks, keine Display-Spiegelungs-Abstürze.
+  * Verhindert zuverlässig die thermische Notabschaltung des Smartphones im geschlossenen Handschuhfach.
+* **USB-Datenleitung ins Handschuhfach:**
+  * Keine geschirmten USB-Differenzialdatenpaare mehr im Kabelbaum zum Handschuhfach.
+  * Vollständiger Wegfall des 5-Port-Hubs (`PCBA 05B`) und der Kaltstart-Reset-Schaltung (`TPS2051B`).
+
+### 7.2 Aktive Kommunikations- & Audio-Kanäle zum Smartphone
+
+| Kanal / Protokoll | Physischer Chip & Antenne | Datenrichtung | Funktion & Spezifikation |
+| :--- | :--- | :---: | :--- |
+| **Musik-Streaming (A2DP Sink)** | QCC3086 (`U9`) an Taoglas FXP73 (`ANT2`) | Phone ➔ OMB | Hi-Fi Stereo Audio (aptX Adaptive / Lossless, AAC, SBC) mit minimaler Latenz. DSP-Mischung mit Raised-Cosine Ducking (-12 dB bei Navi, -18 dB bei Radar). |
+| **Mediensteuerung (AVRCP 1.6)** | QCC3086 (`U9`) UART an ESP32-S31 | Bidirektional | Lenkertaster-Steuerung: Play, Pause, Track Next/Prev. Textuelle Übertragung von Metadaten (Titel, Interpret, Album). |
+| **Vollduplex-Telefonie (HFP 1.8)** | QCC3086 (`U9`) an Taoglas FXP73 (`ANT2`) | Bidirektional | **Downlink:** Anruferstimme via I2S in den DSP und auf die Helme.<br>**Uplink (Voice-Rückkanal):** Helmmikrofone (Fahrer `U13`, Sozius `U14`) werden mit < 20 ms Latenz windgeräuschkompensiert ans Telefon übertragen. Freisprechen ohne Anhalten oder Helmabsetzen! |
+| **Anrufsteuerung (HFP AT-Cmds)** | QCC3086 (`U9`) UART an ESP32-S31 | OMB ➔ Phone | Anruf annehmen (`ATA`), ablehnen/beenden (`AT+CHUP`), Sprachassistent triggern (Siri / Google Assistant). |
+| **Pfeilnavigation (BLE GATT `COMM_48`)** | ESP32-S31 (`U2`) an Onboard Keramik (`ANT3`) | Phone ➔ OMB | Übertragung kompakter Turn-by-Turn Navigationsdaten (Manöver-Icon, Distanz in Metern, Straßenname, Tempolimit, ETA) aus Smartphone-Apps (Kurviger, Calimoto, Google Maps) **für das native/optionale OMB-Cockpit-Display**. |
+| **Telemetrie & Companion App** | ESP32-S31 (`U2`) an Onboard Keramik (`ANT3`) | Bidirektional | Live-Übertragung von Schräglage (IMU), Reifendruck & -temperatur (TPMS), Bordspannung, Radar-Objekten sowie Audio-Mixer-Profilen an die OMB-App. |
+| **eCall-Unfallnotruf (BLE GATT)** | ESP32-S31 (`U2`) an Onboard Keramik (`ANT3`) | OMB ➔ Phone | Bei schwerem Sturz/Überschlag (IMU-Crash-Erkennung) sendet OMB ein Notfall-Telegramm; Smartphone-App setzt Notruf mit GPS-Koordinaten ab. |
+| **SOCKS5-Proxy & Daten-Tethering** | QCC3086 (`U9`, SPP/PAN) oder ESP32-S31 (Wi-Fi) | Bidirektional | Internet-Gateway über Mobilfunk des Smartphones: Backend-Upload von Tourendaten, Wetterabfrage und OTA-Updates. |
+
+### 7.3 Lade-Architektur im Handschuhfach (Echter Fast-Charger)
+* **Reine 2-adrige DC-Speisung:** Keine Datenleitungen, keine EMV-Störungen im Handschuhfach.
+* **Leistung & Fast-Charging-Regler:**
+  * Gespeist über einen automotiven Fast-Charging-Buck-Controller (z. B. SW3526 / MPQ4228) mit bis zu **30–36 W Gesamt-Eingangsleistung**.
+  * **Echter Fast-Charger:** Unterstützt USB Power Delivery 3.0 (PD) und QuickCharge 4.0 (5V, 9V, 12V Verhandlung).
+* **Magnetischer Qi-Ladepuck (Qi2 / MagSafe kompatibel):**
+  * Verhandelt per USB-PD 9V/12V Eingangsspannung.
+  * Liefert die **nach WPC-Standard maximal genormten 15 Watt induktive Ladeleistung** an das Smartphone.
+  * Aufgrund des induktiven Wirkungsgrads ($\approx 70\,\%$) zieht der Puck 20–22 W auf der DC-Seite.
+  * Da kein CarPlay-Videostreaming auf dem Smartphone läuft, bleibt das Gerät im geschlossenen Fach thermisch stabil.
+* **Zusatz-Ladeanschluss:**
+  * Parallele USB-C PD Buchse im Handschuhfach mit bis zu 20–30 W Fast-Charging für Dashcam, Action-Cam, Powerbank oder Zweitgerät.
+
+---
+
+## 8. Ergonomie-, Navigations- & Display-Realität: GS/GSA vs. Harley-Davidson
+
+In der praktischen Fahrzeug-Integration unterscheiden sich Adventure-Bikes (BMW GS) und Tourer (Harley-Davidson Road Glide / Street Glide) grundlegend. Das System trägt dieser Realität Rechnung:
+
+### 8.1 Werks-Headunits & Navigation (Geschlossene Systeme)
+* **Die Realität der OEM-Systeme:**
+  * Weder Harley-Davidson (Boom! Box GTS / SkylineOS) noch BMW (ConnectedRide TFT) erlauben das Einspeisen externer Drittanbieter-Pfeile oder Kartengrafiken über offene Schnittstellen.
+* **Architektonische Lösung:**
+  1. **Werks-Bordnavi (Harley / BMW):**
+     * Das Motorrad nutzt seine bordeigene Navigation auf dem Werksbildschirm.
+     * Die Sprachansagen werden über den Bluetooth-Chip der Frontnode (`PCBA 05`, FSC-BT802) digital abgegriffen und im Zentralbox-DSP mit -12 dB Musik-Ducking glasklar in die Helme eingespielt.
+  2. **Smartphone-Navigation (Kurviger / Calimoto / Google Maps):**
+     * Läuft auf dem Smartphone im Hintergrund. Die Audio-Führung wird über den QCC3086 (`U9`) synchron in die Helme gestreamt.
+  3. **BLE-Pfeilnavigation (`COMM_48`):**
+     * Ist dediziert für das **native/optionale OMB-Cockpit-Display** (z. B. an Custom Bikes, Naked Bikes oder als Zusatzinstrument).
+
+### 8.2 Werks-Lenkertasten-Bedienung (CAN-Bus Integration)
+* **Harley-Davidson:** Taster der Lenkerarmaturen (LHCM / RHCM: Lautstärke, Track, PTT, Phone) werden auf dem Fahrzeug-CAN-Bus über den `TCAN334G` Transceiver der Zentralbox in Echtzeit mitgelesen.
+* **BMW Motorrad:** Multi-Controller (Wonderwheel) CAN/LIN-Telegramme werden ebenfalls nativ ausgewertet.
+* **Umsetzung:**
+  * **Musik:** Lautstärke (`Vol+`/`Vol-`), Track Vor/Zurück, Play/Pause ➔ Direkte Übersetzung in AVRCP 1.6 Befehle an den QCC3086 (`U9`).
+  * **Telefonie:** Eingehender Anruf im Helm ➔ Druck auf die Werks-Taste am Lenker sendet `ATA` (Anruf annehmen). Langer Druck sendet `AT+CHUP` (Auflegen/Ablehnen).
+  * **Bikes ohne CAN:** Diskrete Tastereingänge (`BTN_L`, `BTN_R`, PTT) an der Frontnode (`PCBA 05`).
+
+### 8.3 Das Display-Dilemma & der bewusste Kompromiss (Harley Road Glide vs. BMW GS)
+Hier besteht ein unumgänglicher ergonomischer Unterschied zwischen den Fahrzeugtypen:
+
+* **Fall A: BMW GS / GSA & Adventure Bikes (Smartphone am Lenker sichtbar)**
+  * Das Smartphone wird an einer Lenkerhalterung (z. B. QuadLock / SP Connect) im direkten Sichtfeld montiert.
+  * **Ergebnis:** Die OMB Companion App (Live-Schräglage, Reifendruck, Radar-Warnanzeige) oder Navigationskarten (Kurviger) sind permanent im Blick.
+  * **Stromversorgung:** Die 30W-Ladeleitung (`J4`) kann flexibel zum Lenker-Ladekopf geführt werden.
+
+* **Fall B: Harley-Davidson Touring (Road Glide / Street Glide)**
+  * Am Lenker einer modernen Road Glide / Street Glide ist kaum Platz für eine Smartphone-Halterung, und das Motorrad besitzt bereits ein riesiges Werksdisplay (6.5" bzw. 12.3" SkylineOS).
+  * Das Smartphone liegt unsichtbar im geschlossenen Handschuhfach auf dem Qi-Schnellladepuck.
+  * **Der ehrliche, bewusste Kompromiss durch den Entfall von Android Auto / CarPlay:**
+    * **Das Smartphone-Display bzw. die OMB Companion App kann auf der Harley NICHT auf den großen Werksbildschirm gespiegelt werden.**
+    * Der Fahrer sieht unsere App während der Fahrt nicht.
+    * **Die reale Praxis-Bedienung auf der Road Glide:**
+      1. Für die visuelle Kartennavigation nutzt der Fahrer das verlässliche **Harley-Bordnavi auf dem großen Bildschirm**.
+      2. Für Musik, Telefonie und Touren-Tracking läuft das Smartphone als robuster Server im Handschuhfach.
+      3. Für Audio-geführte Kurviger-/Calimoto-Touren erfolgt die präzise Navigation **rein über das Gehör im Helm** (mit automatischem Musik-Ducking).
+      4. Radar-Gefahrenwarnungen erfolgen akustisch mit Priorität 1 (-18 dB Ducking) im Helm sowie optional über dezente Warn-LEDs im Cockpit.
+
