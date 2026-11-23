@@ -11,44 +11,44 @@
     "NODE_CENTRAL_BOX": {
       "id": "PCBA 01",
       "name": "Zentralbox Coordinator (Main Box)",
-      "controller": "ESP32-S31-WROOM-1U (U2) + QCC3084 (U9)",
+      "controller": "ESP32-S31-WROOM-1U (U2) + 3x QCC3086 (U9, U13, U14)",
       "role": "Alleiniger USB-Master (USB2517I Hub U8), zentraler Audio-DSP & einziges CAN-Gateway im Fahrzeug"
     },
     "NODE_FRONT_CHIP1": {
-      "id": "PCBA 05 - Chip 1",
-      "name": "Frontnode Backbone-Client",
+      "id": "PCBA 05 - MCU",
+      "name": "Frontnode Main Controller",
       "controller": "ESP32-S31-WROOM-1U (U1)",
-      "role": "Sensor-Aggregation, Fahrtwind-Mikrofon, Daumentaster, Backbone-Uplink zur Zentralbox"
+      "role": "Sensor-Aggregation, Fahrtwind-Mikrofon, Daumentaster, Backbone-Uplink zur Zentralbox, Bluetooth Audio & AT-Control"
     },
     "NODE_FRONT_CHIP2": {
-      "id": "PCBA 05 - Chip 2",
-      "name": "Frontnode Infotainment-Client",
-      "controller": "ESP32-C3FH4 (U10)",
-      "role": "USB-Client für Infotainment (SkylineOS / Nachrüst-AA), WHIM Headset-Emulation, Bord-Lautsprecher UAC"
+      "id": "PCBA 05 - BT Transceiver",
+      "name": "Frontnode Bluetooth Audio Gateway",
+      "controller": "Feasycom FSC-BT802 (Qualcomm CSR8670, U2)",
+      "role": "Dual-Mode Bluetooth 5.1 Audio Gateway zu SkylineOS / OEM-Headset / Navigation / Smartphone"
     },
     "NODE_SKYLINE_OS": {
       "id": "OEM Infotainment",
       "name": "Harley-Davidson Boom! Box GTS / SkylineOS",
       "controller": "Harley OEM Touchscreen Headunit",
-      "role": "USB-Master für Infotainment, Display, Bord-Lautsprecher und kabelgebundenes Apple CarPlay"
+      "role": "Bluetooth-Gegenstelle für Infotainment, Bord-Lautsprecher (Cruise Mode) und Audio-Navigation"
     },
     "NODE_AFTERMARKET_AA": {
-      "id": "Aftermarket Display",
-      "name": "Nachrüst-Android Auto / CarPlay Display an J4",
-      "controller": "Carpuride / Chigee / COTS Display",
-      "role": "Alternativer USB-Master an Stecker J4 (exklusiv zu SkylineOS via Hardware-Mux)"
+      "id": "Universal Cockpit Display",
+      "name": "Natives Cockpit / Dashboard Display",
+      "controller": "Natives TFT / OLED Dashboard (Optional COTS)",
+      "role": "Anzeige für Fahrzeug-Telemetrie, Radar-Visualisierung, Reifendruck und BLE-Pfeilnavigation"
     },
     "NODE_POD_L": {
       "id": "PCBA 03 - Bay 1",
       "name": "Universal Smart Cartridge Bay 1 (Koffer Links)",
       "controller": "ESP32-C6-MINI-1U (U1) + ES8388 Codec (U2) + CH554E (U7)",
-      "role": "USB-Client an Zentralbox Strang 2, Audio DAC/ADC & Mechatronik-Steuerung für Cartridge/Gateway Bucht 1"
+      "role": "USB-Client an Zentralbox Strang 2, Mechatronik-Steuerung 1:1 aktiv; Stufe 1: Onboard ES8388 Audio DAC/ADC aktiv; Stufe 2 (Upgrade mit Radar PCBA 08): Drahtlose BT-Anbindung via QCC3086, ES8388 im Cold Standby"
     },
     "NODE_POD_R": {
       "id": "PCBA 03 - Bay 2",
       "name": "Universal Smart Cartridge Bay 2 (Koffer Rechts)",
       "controller": "ESP32-C6-MINI-1U (U1) + ES8388 Codec (U2) + CH554E (U7)",
-      "role": "USB-Client an Zentralbox Strang 3, Audio DAC/ADC & Mechatronik-Steuerung für Cartridge/Gateway Bucht 2"
+      "role": "USB-Client an Zentralbox Strang 3, Mechatronik-Steuerung 1:1 aktiv; Stufe 1: Onboard ES8388 Audio DAC/ADC aktiv; Stufe 2 (Upgrade mit Radar PCBA 08): Drahtlose BT-Anbindung via QCC3086, ES8388 im Cold Standby"
     },
     "NODE_OEM_ADAPTER_L": {
       "id": "Cartridge Slot 1",
@@ -75,21 +75,21 @@
       "role": "Nativer digitaler USB Audio-Pfad + digitale PTT/Mesh Steuerung via CH554E Host an J4"
     },
     "NODE_RADAR": {
-      "id": "PCBA 08",
-      "name": "Heck-Radar 2.0 & 5.9 GHz V2X Sub-MCU",
-      "controller": "ESP32-C5-WROOM-1U (U1) + MR20 77GHz Radar",
-      "role": "USB-Client an Zentralbox Strang 4, 20 Hz Radar Target Stream, C-ITS V2X, 36x RGB Matrix"
+      "id": "PCBA 08 (Optional)",
+      "name": "Heck-Radar 2.0 & Audio-Upgrade Sub-MCU",
+      "controller": "ESP32-C5-WROOM-1U (U1) + MR20 77GHz Radar + 2x QCC3086 (U4, U5)",
+      "role": "Modulares Stufe 2 Upgrade: USB-Client an Zentralbox Strang 4, 20 Hz Radar Target Stream, C-ITS V2X, 36x RGB Matrix, 2x QCC3086 für drahtlose Pod-Anbindung & Music-Sharing"
     },
     "NODE_HELMET_DRIVER": {
       "id": "Helm 1",
       "name": "Fahrer-Helm (Headset Lautsprecher & Mikrofon)",
-      "controller": "Bluetooth 5.4 Dual-A2DP / Auracast / HFP Headset am Qualcomm QCC3084 (PCBA 01)",
+      "controller": "Bluetooth 5.4 Dual-A2DP / Auracast / HFP Headset am Qualcomm QCC3086 (PCBA 01)",
       "role": "Drahtlose Sprachaufnahme & Audiowiedergabe Fahrer via Bluetooth 5.4 direkt an Zentralbox"
     },
     "NODE_HELMET_PILLION": {
       "id": "Helm 2",
       "name": "Sozius-Helm (Headset Lautsprecher & Mikrofon)",
-      "controller": "Bluetooth 5.4 Dual-A2DP / Auracast / HFP Headset am Qualcomm QCC3084 (PCBA 01)",
+      "controller": "Bluetooth 5.4 Dual-A2DP / Auracast / HFP Headset am Qualcomm QCC3086 (PCBA 01)",
       "role": "Drahtlose Sprachaufnahme & Audiowiedergabe Sozius via Bluetooth 5.4 direkt an Zentralbox (inkl. privater Kabinen-Flüster-Funktion)"
     },
     "NODE_EXT_MESH_GROUP": {
@@ -128,19 +128,21 @@
     "BUS_USB_BACKBONE_CH2": "Geschirmter 4-Draht USB 2.0 High-Speed Backbone (Zentralbox Host -> Pod Links Client, Molex J6.7/8)",
     "BUS_USB_BACKBONE_CH3": "Geschirmter 4-Draht USB 2.0 High-Speed Backbone (Zentralbox Host -> Pod Rechts Client, Molex J6.11/12)",
     "BUS_USB_BACKBONE_CH4": "Geschirmter 4-Draht USB 2.0 High-Speed Backbone (Zentralbox Host -> Heck-Radar Client, Molex J6.15/16)",
-    "BUS_FRONT_INTER_CHIP": "Lokaler Inter-Chip Bus auf PCBA 05 (Chip 1 <-> Chip 2: I2S Digital Audio + UART Flasher + SPI/GPIO Control)",
+    "BUS_FRONT_INTER_CHIP": "Inter-Chip Schnittstelle auf PCBA 05 zwischen ESP32-S31 (U1) und Feasycom FSC-BT802 (U2): I2S Digital Audio (BCLK, WS, DIN, DOUT) + AT-Command UART + EN/RST Control",
     "BUS_FRONT_INFOTAINMENT_MUX": "High-Speed USB 2.0 Mux (TS3USB221 auf PCBA 05: Chip 2 Client -> Pos A SkylineOS / Pos B Nachrüst-AA J4)",
     "BUS_POD_J4_HYBRID_L": "8-poliger Hybrid-Schnittstellenstecker J4 an Pod Links (TS5A23157: Analog Audio/PTT vs. Digital CH554E USB Host / OMM)",
     "BUS_POD_J4_HYBRID_R": "8-poliger Hybrid-Schnittstellenstecker J4 an Pod Rechts (TS5A23157: Analog Audio/PTT vs. Digital CH554E USB Host / OMM)",
     "BUS_RF_INTERCOM_L": "Drahtlose Funk-/Mesh-Verbindung Bay 1 (Sena Mesh 2.0 / Cardo DMC / OMM 2.4G Mesh / PMR446 DMR von Bucht 1 zu externen Gruppen-Teilnehmern)",
     "BUS_RF_INTERCOM_R": "Drahtlose Funk-/Mesh-Verbindung Bay 2 (Sena Mesh 2.0 / Cardo DMC / OMM 2.4G Mesh / PMR446 DMR von Bucht 2 zu externen Gruppen-Teilnehmern)",
-    "BUS_BLUETOOTH_CENTRAL": "Drahtlose Bluetooth 5.4 Verbindung (Zentralbox QCC3084 <-> Smartphone, Fahrer-Helm & Sozius-Helm: Dual-A2DP, LE Audio Auracast, HFP 1.8 Wideband Voice, BLE Telemetrie)",
-    "BUS_WIFI_BT_DONGLE": "Drahtlose 5 GHz Wi-Fi + BT Verbindung (Onboard CP2AA-Dongle an Frontnode <-> Smartphone: Wireless CarPlay / AA)",
+    "BUS_BLUETOOTH_CENTRAL": "Drahtlose Bluetooth 5.4 Verbindung (Zentralbox 3x QCC3086 <-> Smartphone, Fahrer-Helm & Sozius-Helm: A2DP Sink, LE Audio Auracast, HFP 1.8 Low-Latency Voice Backchannel, BLE Telemetrie)",
+    "BUS_BLE_NAVIGATION": "Drahtlose Bluetooth Low Energy 5.4 Verbindung (Smartphone App <-> Frontnode ESP32-S31: Turn-by-Turn Pfeilnavigation, Telemetrie, Mediensteuerung)",
     "BUS_VEHICLE_CAN": "Zweiadriger verdrillter Automotive CAN-Bus (Motorrad-Kabelbaum <-> Zentralbox U6 TCAN334G)",
     "BUS_POWER_NAVI_J10": "2-polige abgesicherte +12V_PROT Stromleitung (Frontnode J10 -> Garmin/TomTom Cradle)",
     "BUS_BLE_ACTIONCAM": "Drahtlose Bluetooth Low Energy 5.0 Funkverbindung (Zentralbox ANT3 / Frontnode <-> Actioncam: GATT Shutter Control, Hilight-Tags, Telemetrie)",
-    "BUS_A2DP_POD_MESH": "Drahtlose Classic Bluetooth A2DP Audio-Verbindung (Zentralbox U13 ESP32-PICO-V3-02 ANT4 -> OEM-Adapter Sena/Cardo im Koffer-Pod: Stereo A2DP Musikstream fuer natives Mesh-Music-Sharing)",
-    "BUS_FRONT_I2S": "4-Draht synchroner I2S Digital-Audiobus auf PCBA 05 (U1 ESP32-S31 <-> U10 ESP32-C3FH4): C3_I2S_BCLK, C3_I2S_WS, C3_I2S_SDO, C3_I2S_SDI fuer latenzfreie Audioübertragung zu den Bordlautsprechern und Mikrofon-Rückkanal"
+    "BUS_A2DP_POD_MESH": "Drahtlose Classic Bluetooth A2DP Audio-Verbindung (Radar PCBA 08 2x QCC3086 U4/U5 -> OEM-Adapter Sena/Cardo im Koffer-Pod: Stereo A2DP Musikstream für natives Mesh-Music-Sharing in Stufe 2)",
+    "BUS_FRONT_I2S": "4-Draht synchroner I2S Digital-Audiobus auf PCBA 05 (U1 ESP32-S31 <-> U2 FSC-BT802): BT_I2S_BCLK, BT_I2S_WS, BT_I2S_DOUT, BT_I2S_DIN für latenzfreie Audioübertragung zu SkylineOS / Bordlautsprechern und Mikrofon-Rückkanal",
+    "BUS_BT_RF_FRONT": "2.45 GHz Bluetooth 5.1 RF Verbindung von U2 (FSC-BT802) über 50-Ohm Microstrip und Keramik-Chipantenne ANT3 (Johanson 2450AT18A100) zu SkylineOS / Helm / Smartphone",
+    "BUS_POWER_GLOVEBOX_J4": "Reine DC-Versorgung Handschuhfach (J4): 20W DC-Speisung für magnetischen Qi-Ladepuck (15W/20W MagSafe/Qi2) + integrierten USB-C PD Schnellladeanschluss für Zubehör"
   },
   "channels": [
     {
@@ -295,18 +297,18 @@
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_10_DONGLE_HARD_RESET",
+      "id": "COMM_10_ACCESSORY_POWER_CONTROL",
       "source": "NODE_CENTRAL_BOX",
       "target": "NODE_FRONT_CHIP1",
       "bus": "BUS_USB_BACKBONE_CH1",
       "protocol": "USB-CDC Command",
       "pkt_type": "USB_CMD_POWER_CYCLE (0x10)",
-      "rate": "On-Demand bei Fehler",
+      "rate": "On-Demand bei Fehler oder Standby",
       "payload": [
-        "Target_Port (0: CP2AA Dongle U4, 1: Hub U2)",
-        "Off_Duration_ms (2500 ms)"
+        "Target_Port (0: Qi-Ladepuck / USB-C PD J4, 1: Navigation J10)",
+        "Power_State (0: Off, 1: On, 2: Cycle)"
       ],
-      "purpose": "2.5 s Kaltstart-Reset des CarPlay/AA-Dongles via TPS2051B bei Verbindungsabbruch oder Hänger",
+      "purpose": "Schaltet oder resettet die Spannungsversorgung des Handschuhfach-Qi-Ladepucks oder Navi-Cradles bei Überhitzung oder Standby",
       "fw_status": "implemented"
     },
     {
@@ -362,30 +364,31 @@
       "source": "NODE_FRONT_CHIP1",
       "target": "NODE_FRONT_CHIP2",
       "bus": "BUS_FRONT_INTER_CHIP",
-      "protocol": "I2S Digital Audio Bus (BCLK, WS, DOUT)",
+      "protocol": "I2S Digital Audio Bus (BCLK, WS, DIN, DOUT)",
       "pkt_type": "48 kHz 16-bit Stereo PCM",
       "rate": "Kontinuierlicher Audio-Stream",
       "payload": [
         "Master_Mix_Audio"
       ],
-      "purpose": "Verlustfreie Übergabe des Lautsprecher-Audiosignals von Chip 1 an Chip 2",
+      "purpose": "Verlustfreie bidirektionale Übergabe des Audiosignals zwischen ESP32-S31 (U1) und Feasycom FSC-BT802 (U2)",
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_15_INTERCHIP_UART_FLASH",
+      "id": "COMM_15_INTERCHIP_UART_CTRL",
       "source": "NODE_FRONT_CHIP1",
       "target": "NODE_FRONT_CHIP2",
       "bus": "BUS_FRONT_INTER_CHIP",
-      "protocol": "UART ROM Bootloader (esp-serial-flasher) + GPIO EN/BOOT",
-      "pkt_type": "SLIP-Framed Espressif Bootloader Packets",
-      "rate": "On-Demand während Update (921.600 Baud)",
+      "protocol": "UART AT-Command Interface (115.200 Baud)",
+      "pkt_type": "Feasycom ASCII AT-Commands & Responses",
+      "rate": "Event-basiert / Setup",
       "payload": [
-        "Flash_Write_Block",
-        "Sync",
-        "Mem_Begin",
-        "Mem_Data"
+        "AT_Config",
+        "AT_Connect",
+        "AT_A2DP",
+        "AT_HFP",
+        "AT_Status"
       ],
-      "purpose": "Chip 1 flasht Chip 2 vollautomatisch über UART, gesteuert von der Zentralbox",
+      "purpose": "ESP32-S31 steuert den FSC-BT802 vollautomatisch über AT-Befehle (Pairing, Verbindungsaufbau, Status)",
       "fw_status": "implemented"
     },
     {
@@ -393,28 +396,28 @@
       "source": "NODE_FRONT_CHIP1",
       "target": "NODE_FRONT_CHIP2",
       "bus": "BUS_FRONT_INTER_CHIP",
-      "protocol": "UART / SPI Control Channel",
-      "pkt_type": "MEDIA_CTRL_EVENT",
+      "protocol": "UART AT-Commands (AVRCP Controls)",
+      "pkt_type": "AT+TRACK_NEXT, AT+TRACK_PREV, AT+PLAY_PAUSE, AT+VOL",
       "rate": "Event-basiert",
       "payload": [
         "Opcode (Next_Track, Prev_Track, Play_Pause, Vol_Up, Vol_Down, Voice_Trigger)"
       ],
-      "purpose": "Leitet Lenkertaster-Eingaben für Musik und Sprachassistent an Chip 2 weiter",
+      "purpose": "Leitet Lenkertaster-Eingaben für Musik und Sprachassistent an FSC-BT802 weiter",
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_17_INTERCHIP_MUX_CONTROL",
+      "id": "COMM_17_BT_HARDWARE_CONTROL",
       "source": "NODE_FRONT_CHIP1",
       "target": "NODE_FRONT_CHIP2",
       "bus": "BUS_FRONT_INTER_CHIP",
-      "protocol": "Hardware GPIO + Quittung via UART",
-      "pkt_type": "GPIO Level (0 = SkylineOS, 1 = J4 Nachrüst-AA)",
+      "protocol": "Hardware GPIO Control (BT_EN / BT_RST)",
+      "pkt_type": "GPIO Level (U1.39 -> BT_EN, U1.38 -> BT_RST)",
       "rate": "Bei Modus-Umschaltung",
       "payload": [
-        "Mux_Select_State",
-        "Dongle_Power_Enable"
+        "BT_Enable_State",
+        "BT_Reset_Pulse"
       ],
-      "purpose": "Schaltet den TS3USB221 USB-Mux zwischen OEM-Display und Nachrüst-AA an J4 um",
+      "purpose": "Hardware Power-Management und Kaltstart-Reset des FSC-BT802 durch den ESP32-S31",
       "fw_status": "implemented"
     },
     {
@@ -422,55 +425,56 @@
       "source": "NODE_FRONT_CHIP2",
       "target": "NODE_FRONT_CHIP1",
       "bus": "BUS_FRONT_INTER_CHIP",
-      "protocol": "UART Status Telemetrie",
-      "pkt_type": "INFOTAINMENT_STATUS_REPORT",
+      "protocol": "UART AT Status Telemetrie",
+      "pkt_type": "BT_STATUS_REPORT",
       "rate": "1 Hz / Event-basiert",
       "payload": [
-        "CarPlay_Active (bool)",
-        "AndroidAuto_Active (bool)",
-        "Headset_Emulation_State",
-        "Mux_Feedback",
-        "Fault_Flags"
+        "A2DP_Connected (bool)",
+        "HFP_Connected (bool)",
+        "Streaming_Active",
+        "Battery_Level",
+        "RSSI"
       ],
-      "purpose": "Rückmeldung des aktuellen Infotainment-Betriebszustands an Chip 1 zur Weiterleitung an die Zentralbox",
+      "purpose": "Rückmeldung des Bluetooth-Betriebszustands an ESP32-S31 zur Weiterleitung an die Zentralbox",
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_19_UAC_SPEAKER_STREAM",
+      "id": "COMM_19_BT_A2DP_SPEAKER_STREAM",
       "source": "NODE_FRONT_CHIP2",
       "target": "NODE_SKYLINE_OS",
-      "bus": "BUS_FRONT_INFOTAINMENT_MUX",
-      "protocol": "USB Audio Class (UAC Out)",
-      "pkt_type": "Standard USB Audio Streaming Interface",
-      "rate": "48 kHz Stereo PCM",
+      "bus": "BUS_BT_RF_FRONT",
+      "protocol": "Bluetooth A2DP Sink / SBC Audio Stream via ANT3",
+      "pkt_type": "Standard A2DP Audio Streaming Packets",
+      "rate": "44.1 / 48 kHz Stereo Audio",
       "payload": [
-        "Speaker_Sound_Output"
+        "Navi_Voice_Audio",
+        "Intercom_Mix_Audio"
       ],
-      "purpose": "Wiedergabe von OpenMotorBridge Audio über die werksseitigen Motorrad-Lautsprecher der Harley",
+      "purpose": "Drahtlose Audio-Wiedergabe von Navi-Ansagen und Intercom über das Harley SkylineOS / Boom! Box Bord-Audiosystem",
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_20_WHIM_HEADSET_BYPASS",
+      "id": "COMM_20_BT_HFP_HEADSET_PROFILE",
       "source": "NODE_FRONT_CHIP2",
       "target": "NODE_SKYLINE_OS",
-      "bus": "BUS_FRONT_INFOTAINMENT_MUX",
-      "protocol": "USB UAC + HID Headset Emulation / Apple Accessory Handshake",
-      "pkt_type": "Headset Feature Descriptor & State Machine",
+      "bus": "BUS_BT_RF_FRONT",
+      "protocol": "Bluetooth HFP 1.7 Handsfree Profile",
+      "pkt_type": "HFP Audio & AT Commands",
       "rate": "Beim Start & Dauerverbindung",
       "payload": [
-        "Headset_Present_Flag",
-        "Mic_Active_State"
+        "Call_Audio",
+        "Voice_Recognition_Trigger"
       ],
-      "purpose": "Gaukelt SkylineOS ein verbundenes OEM-Headset vor, um kabelgebundenes Apple CarPlay sofort freizuschalten",
+      "purpose": "Bluetooth Headset-Kopplung mit SkylineOS für Telefonie, Sprachassistent und WHIM-Kompatibilität",
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_21_HID_MEDIA_CONTROLS",
+      "id": "COMM_21_BT_AVRCP_MEDIA_CONTROLS",
       "source": "NODE_FRONT_CHIP2",
       "target": "NODE_SKYLINE_OS",
-      "bus": "BUS_FRONT_INFOTAINMENT_MUX",
-      "protocol": "USB HID Consumer Control Endpoint",
-      "pkt_type": "HID Consumer Control Report",
+      "bus": "BUS_BT_RF_FRONT",
+      "protocol": "Bluetooth AVRCP 1.6 Controller Profile",
+      "pkt_type": "AVRCP Control Commands",
       "rate": "Event-basiert",
       "payload": [
         "Play_Pause",
@@ -479,7 +483,7 @@
         "Volume_Increment",
         "Volume_Decrement"
       ],
-      "purpose": "Steuerung des Musik-Playbacks auf dem Werks-Display über die OpenMotorBridge Daumentaster am Lenker",
+      "purpose": "Steuerung des Musik-Playbacks auf dem Werks-Display über die OpenMotorBridge Daumentaster via Bluetooth",
       "fw_status": "implemented"
     },
     {
@@ -498,19 +502,18 @@
     },
     {
       "id": "COMM_23_AFTERMARKET_AA_DATAPATH",
-      "source": "NODE_FRONT_CHIP2",
+      "source": "NODE_FRONT_CHIP1",
       "target": "NODE_AFTERMARKET_AA",
-      "bus": "BUS_FRONT_INFOTAINMENT_MUX",
-      "protocol": "Nativer USB 2.0 High-Speed Pfad via Stecker J4",
-      "pkt_type": "CarPlay / Android Auto Video/Audio Framing",
-      "rate": "Vollständige USB-Verbindung",
+      "bus": "BUS_POWER_GLOVEBOX_J4",
+      "protocol": "30W USB Power Delivery (SW3526) & 5V/3A DC (TPS54302)",
+      "pkt_type": "USB-PD Negotiation & DC Power Feed",
+      "rate": "Dauerhafte Speisung bis 30W",
       "payload": [
-        "H.264/H.265_Video_Frames",
-        "Touch_Events",
-        "UAC_Audio"
+        "VBUS_PD (5V-20V)",
+        "VCC_5V (Aux)"
       ],
-      "purpose": "Direkte Anbindung von Nachrüst-Displays (Carpuride/Chigee) oder COTS-Sticks an Stecker J4 (Pos B des Mux)",
-      "fw_status": "missing"
+      "purpose": "Schnellladung und Stromversorgung für Handschuhfach-Geräte, Qi-Ladeschale oder Nachrüst-Displays an J4",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_24_NAVI_POWER_FEED",
@@ -735,7 +738,7 @@
         "Stream 2 Up: Voice-Funk (446 MHz PMR/DMR via AMBE+2 / Codec2 / Opus Voice, 1.2-6 kbps)",
         "Stream 3 Up: Audio-Mesh (Opus Stereo Music-Sharing, 48-64 kbps)",
         "Stream 4 Down: Voice-Mic-TX (Getrennt: driver_bytes & pillion_bytes mit Private Cabin Whisper Mute)",
-        "Stream 5 Down: Audio-Master-Mix (CarPlay/Navigation/Radar zu OMM/Helm, Opus Stereo, 48-64 kbps)",
+        "Stream 5 Down: Audio-Master-Mix (Smartphone-Musik/Navigation/Radar zu OMM/Helm, Opus Stereo, 48-64 kbps)",
         "Embedded Flags: PTT_ACTIVE, TARGET_FUNK, PILLION_WHISPER, Squelch/Carrier & RSSI"
       ],
       "purpose": "Verlustfreie volldigitale 3.0 Mbps USB-Host-Audiobrücke. Überträgt getrennte komprimierte Audioströme (Opus 24k & DMR/Codec2 Vocoder; max. 5 Streams, da 2 zeitgleiche Musikeinspeisungen ins selbe Gehör sinnlos sind) mit 'Private Cabin Whisper' (Sozius spricht per Taster rein privat in den Fahrerhelm mit -12 dB Mesh-Ducking) zur individuellen DSP-Mischung, 3D Spatial Panning und autonomem -18 dB Musik-Ducking in der Zentralbox.",
@@ -752,7 +755,7 @@
       "payload": [
         "Master_Audio_Mix (Spatial Panning: Funk 70/30 L/R, Mesh Center, Ducked Music -18 dB, Navi -12 dB, Radar-Alerts -18 dB)"
       ],
-      "purpose": "Drahtlose Stereo-Audiowiedergabe für den Fahrer-Helm mit individueller DSP-Mischung über den Qualcomm QCC3084 SoC",
+      "purpose": "Drahtlose Stereo-Audiowiedergabe für den Fahrer-Helm mit individueller DSP-Mischung über den Qualcomm QCC3086 SoC",
       "fw_status": "implemented"
     },
     {
@@ -767,7 +770,7 @@
         "Fahrer_Helmmikrofon_Signal",
         "VAD_State"
       ],
-      "purpose": "Drahtlose Sprachaufnahme vom Fahrer-Helmmikrofon direkt an den Qualcomm QCC3084 / ESP32-S31 DSP zur Fahrtwindkompensation, VOX und Weiterleitung an Mesh/Funk",
+      "purpose": "Drahtlose Sprachaufnahme vom Fahrer-Helmmikrofon direkt an den Qualcomm QCC3086 / ESP32-S31 DSP zur Fahrtwindkompensation, VOX und Weiterleitung an Mesh/Funk",
       "fw_status": "implemented"
     },
     {
@@ -781,7 +784,7 @@
       "payload": [
         "Sozius_Audio_Mix (Fahrer-Stimme, Mesh-Gruppe, Musik ungeduckt/geduckt, exklusiver privater Flüster-Rückkanal)"
       ],
-      "purpose": "Drahtlose individuelle Stereo-Audiowiedergabe für den Sozius-Helm über den Qualcomm QCC3084 SoC",
+      "purpose": "Drahtlose individuelle Stereo-Audiowiedergabe für den Sozius-Helm über den Qualcomm QCC3086 SoC",
       "fw_status": "implemented"
     },
     {
@@ -903,7 +906,7 @@
       "source": "NODE_SMARTPHONE",
       "target": "NODE_CENTRAL_BOX",
       "bus": "BUS_BLUETOOTH_CENTRAL",
-      "protocol": "Bluetooth A2DP Sink (Qualcomm QCC3084)",
+      "protocol": "Bluetooth A2DP Sink / HFP 1.8 (Qualcomm QCC3086)",
       "pkt_type": "aptX Adaptive / AAC / SBC Audio Stream",
       "rate": "Kontinuierlicher Audio-Stream",
       "payload": [
@@ -944,20 +947,22 @@
       "fw_status": "implemented"
     },
     {
-      "id": "COMM_48_SMARTPHONE_WIRELESS_CP_AA",
+      "id": "COMM_48_SMARTPHONE_BLE_NAVIGATION",
       "source": "NODE_SMARTPHONE",
-      "target": "NODE_FRONT_CHIP2",
-      "bus": "BUS_WIFI_BT_DONGLE",
-      "protocol": "5 GHz Wi-Fi Direct (802.11ac) + Bluetooth 5.0 Handshake",
-      "pkt_type": "Wireless Apple CarPlay & Wireless Android Auto Tunnel",
-      "rate": "Dauerhaft während Fahrt",
+      "target": "NODE_FRONT_CHIP1",
+      "bus": "BUS_BLE_NAVIGATION",
+      "protocol": "Bluetooth Low Energy 5.4 GATT (Turn-by-Turn Navigation)",
+      "pkt_type": "BLE_NAV_TBT_UPDATE",
+      "rate": "Event-basiert bei Richtungswechsel (1-5 s vor Manöver)",
       "payload": [
-        "H.264_Screen_Video",
-        "Multi_Touch_Events",
-        "UAC_Navigation_Audio"
+        "Maneuver_Icon_Code (Turn Left/Right, Roundabout, Keep Straight)",
+        "Distance_To_Turn_m",
+        "Next_Road_Name_UTF8",
+        "Speed_Limit_kph",
+        "ETA_Minutes"
       ],
-      "purpose": "Kabellose Spiegelung von Smartphone-Apps (Google Maps, Waze, Kurviger, Calimoto) auf das Motorrad-Display",
-      "fw_status": "implemented (via COTS Dongle)"
+      "purpose": "Kompakte Pfeilnavigation aus Smartphone-Apps (Google Maps, Kurviger, Calimoto) direkt auf das native Cockpit-Display (bewusst ohne energiehungriges CarPlay/AA Videostreaming)",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_49_VEHICLE_CAN_TELEMETRY_IN",
@@ -1087,19 +1092,19 @@
       "pkt_type": "USB_PKT_AUDIO_MEDIA_UP (0x26) [UsbAudioMediaUpPkt]",
       "rate": "100 Hz Frames (10 ms Intervall)",
       "payload": [
-        "source_id (0x01 = CP2AA Dongle, 0x02 = USB Stick)",
-        "media_l[28] & media_r[28] (Stereo Navigation / Musik von CarPlay/Android Auto)",
+        "source_id (0x01 = FSC-BT802 SkylineOS/Navi, 0x02 = USB Stick)",
+        "media_l[28] & media_r[28] (Stereo Navigation von SkylineOS / BMW Navigator via Front Node)",
         "sample_pairs & frame_seq"
       ],
-      "purpose": "Einspeisung von Navigations-Sprachansagen und Medien-Audio von CarPlay / Android Auto am Frontnode in den zentralen DSP der Zentralbox",
-      "fw_status": "partial"
+      "purpose": "Einspeisung von Navigations-Sprachansagen von SkylineOS / BMW Navigator am Frontnode in den zentralen DSP der Zentralbox",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_57_POD_A2DP_MUSIC_SHARE",
-      "source": "NODE_CENTRAL_BOX",
+      "source": "NODE_RADAR",
       "target": "NODE_OEM_ADAPTER_L",
       "bus": "BUS_A2DP_POD_MESH",
-      "protocol": "Classic Bluetooth 5.0 A2DP Source (SBC / AAC)",
+      "protocol": "Classic Bluetooth 5.4 A2DP Source (aptX / AAC / SBC via QCC3086 U4/U5)",
       "pkt_type": "A2DP Stereo Media Audio Stream",
       "rate": "Dauerhafter Audio-Stream bei aktivem Music-Sharing",
       "payload": [
@@ -1107,8 +1112,8 @@
         "AVRCP_Playback_State",
         "Track_Metadata"
       ],
-      "purpose": "Drahtlose Einspeisung des Stereo-Musikstreams von der Zentralbox (ANT4 Suedseite) in den OEM-Adapter im Koffer-Pod zur Weiterverteilung in das Gruppen-Mesh via herstellereigenes Music-Sharing",
-      "fw_status": "partial"
+      "purpose": "Stufe 2 Upgrade: Radar PCBA 08 streamt über seine QCC3086 (U4, U5) drahtlos A2DP Musik an die Sena/Cardo Adapter im Koffer-Pod, wodurch die gesamte externe Mesh-Gruppe Hi-Fi Music-Sharing empfängt (Pod AD/DA-Wandler im Cold Standby)",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_58_FRONT_INTERCHIP_I2S_AUDIO",
@@ -1116,7 +1121,7 @@
       "target": "NODE_FRONT_CHIP2",
       "bus": "BUS_FRONT_I2S",
       "protocol": "Bidirektionaler I2S Stereo PCM Audiobus (Hardware-I2S)",
-      "pkt_type": "48 kHz 16/24-Bit Stereo PCM Stream (C3_I2S_SDO: S31->C3 Lautsprecher; C3_I2S_SDI: C3->S31 Mic/Siri)",
+      "pkt_type": "48 kHz 16/24-Bit Stereo PCM Stream (BT_I2S_DOUT: S31->BT802 Lautsprecher; BT_I2S_DIN: BT802->S31 Mic)",
       "rate": "Kontinuierlicher I2S Stream (Double-Buffered DMA, < 2.5 ms Latenz)",
       "payload": [
         "Audio-Playback Stream (Zentralbox/Intercom/Navi -> C3 UAC Out an Boom! Box Bordlautsprecher)",

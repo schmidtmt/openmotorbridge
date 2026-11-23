@@ -72,50 +72,30 @@ Auf dem PCB (`openmotorbridge_smart_keyfob.kicad_pcb`) führt Pad 4 das Netz `BA
 
 ---
 
-### V08 · P1 · Warum der Front Node (`PCBA 05`) im aktuellen Zustand NICHT funktionieren kann
-**Detaillierte Schaltungs- und Systemanalyse von PCBA 05:**
+### V08 · P1 · Front Node (`PCBA 05`): Reale Architektur & Schaltungsbefunde
+**Klarstellung zur Systemarchitektur (S31 vs. C3 vs. Hub U2):**
+- **Der ESP32-S31 (`U1`) darf und soll nicht mit dem internen USB-Hub (`U2`) verbunden sein.**
+- Der S31 ist der dedizierte Node-Controller für Sensorik, Schalter und Fahrzeug-Backbone. Seine einzige USB-Schnittstelle führt über Stecker J1 als 4-Draht-Lifeline direkt zur Zentralbox (`PCBA 01`).
+- Der S31 liefert Audiodaten **ausschließlich digital über I2S** (`C3_I2S_BCLK`, `C3_I2S_WS`, `C3_I2S_SDO`, `C3_I2S_SDI`) und Steuerbefehle über UART an den Hilfs-Controller `ESP32-C3FH4` (`U10`).
+- Der `ESP32-C3FH4` (`U10`) agiert als USB-Audio-Bridge (Headset-Emulation / UAC-Client) gegenüber dem Motorrad-Infotainment (SkylineOS / Boom! Box).
+- Der Hub `U2` (`USB2514Bi`) bedient ausschließlich die Infotainment-Domäne: Sein Upstream-Port liegt an J4 (Verbindung zum Medienfach-Breakout `PCBA 05B`), wo die externe Headunit als USB-Host fungiert. An den Downstream-Ports von U2 hängen U10 (C3 Audio-Bridge) und J5 (CarPlay/AA-Dongle).
 
-1. **Power-Kollaps durch Reihenschaltung D5 + U3:**
-   - Am Eingang J1 kommt bei USB-Speisung $\approx 4{,}3\,\text{V}$ an.
-   - Diode **D5 (`SS34_REV_POL`)** liegt direkt in Serie vor `+12V_PROT` und frisst weitere $0{,}45\,\text{V}$.
-   - An U3 (`TPS54302`) liegen damit nur noch **$\approx 3{,}85\,\text{V}$** an!
-   - Der TPS54302 verlangt laut TI-Datenblatt zwingend $V_{\text{IN}} \ge 4{,}5\,\text{V}$ (UVLO). Er schaltet sofort ab!
-   - Dadurch ist `VCC_5V` = 0 V. LDO U7 (`TLV75533P`) erzeugt 0 V. **Kein einziger Chip (weder ESP32-S31 noch C3 noch E22 noch Sensoren) bekommt Versorgungsspannung. Der Front Node bootet bei USB-Speisung gar nicht.**
-
-2. **Fehlender 2:1 USB-Multiplexer (`TS3USB221` / `FSUSB42`):**
-   - In `OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md`, Abschnitt 3.3, ist zwingend festgeschrieben: Der Front Node muss über einen 2:1 High-Speed USB-Mux verfügen, um den Infotainment-Client zwischen Boom! Box / SkylineOS (OEM-Betrieb) und dem Nachrüst-CarPlay/AA-Dongle an J5 umzuschalten.
-   - In `docs/de/07_pcba_hardware_pinouts.md`, Tabelle 7.1.5, wird behauptet, U10 sei mit `U8 (TS3USB221)` verbunden.
-   - **Auf dem realen PCB existiert der Baustein `TS3USB221` überhaupt nicht!**
-
-3. **Verdrehte USB-Hub-Architektur & Upstream-Isolation:**
-   - Auf PCBA 05 ist stattdessen ein Microchip `USB2514Bi` Hub (`U2`) verbaut.
-   - Der Upstream-Port von U2 (Pins 20/21) ist verdrahtet mit `USB_HOST_EXT_DP/DM` an Stecker **`J4`** (Verbindung zum Medienfach/Breakout `PCBA 05B`).
-   - Die Downstream-Ports von U2 sind verdrahtet mit:
-     - Port 1: `J5` (`JST_GH_04P_DONGLE`)
-     - Port 2: `U10` (`ESP32-C3FH4`)
-     - Port 3 & 4: Unbeschaltet (`NC`)
-   - **Das fatale Problem:** U1 (`ESP32-S31`) ist **überhaupt nicht mit U2 verbunden!** (U1 Pins 54/55 gehen direkt an J1 Backbone zur Zentralbox).
-   - Wenn kein externer Host (SkylineOS über PCBA 05B) an J4 angeschlossen und aktiv ist, **hat der Hub U2 keinen Upstream-Host**. U10 und Dongle J5 können weder enumerieren noch kommunizieren!
-   - Widerspruch zur Doku: Kap. 7.1.5 behauptet, U2 Upstream liege an U1 (ESP32-S31). Im Schaltplan und Layout liegt er an J4!
-
-4. **Doppelter Hub-Konflikt zwischen PCBA 05 und PCBA 05B:**
-   - Auf `PCBA 05B` (Cockpit Breakout) sitzt **bereits ein vollständiger `USB2514Bi` Hub (`U1`)**!
-   - Auf `PCBA 05` sitzt **ein zweiter `USB2514Bi` Hub (`U2`)**!
-   - Stecker J2 auf PCBA 05B ist eine USB-C Buchse (Downstream Port 3 des Hubs 05B).
-   - Stecker J4 auf PCBA 05 ist ein 8-Pin JST-GH Header (Upstream Port des Hubs 05).
-   - Dies ergibt eine sinnlose Kaskadierung zweier 4-Port Hubs, bei der unklar ist, welcher Host welches Device sieht, und beide Platinen redundante Dongle-Anschlüsse besitzen (`J4` auf 05B, `J5` auf 05).
-
-5. **Pinout-Widerspruch an Stecker J6 (Sensor Puck) Pin 8:**
-   - Im KiCad-Schaltplan und PCB wurde J6 Pin 8 auf `GNSS_RESET_N` gelegt.
-   - In der offiziellen Dokumentation (`docs/de/07_pcba_hardware_pinouts.md`, Zeile 1077) steht unverändert: `Pin 8: GND / Power Return / Schirm-Masse`.
-
-6. **Konzeptionelle Verwechslung der Anschlüsse J2 / J3:**
-   - J2 und J3 sind im Schaltplan und Layout als `J_POD_L` und `J_POD_R` deklariert.
-   - Elektrisch führen sie jedoch `BSD_LED_LEFT/RIGHT` und `BTN_SIG_L/R_N` (für die Spiegelblinker und Lenkertaster PCBA 05C).
-   - Die echten System-Pods sind die Cartridges PCBA 03 an der Zentralbox J6. Diese Fehlbenennung führt zu permanenter Verwirrung in Schaltplan, BOM und Gehäuse-Port-Matrizen.
-
-7. **Fehlende Firmware für U10 (ESP32-C3FH4):**
-   - Für die als "Headset-Emulation / SkylineOS Audio-Bridge" deklarierte Sub-MCU U10 existiert im gesamten Repository `firmware/` kein Firmware-Projekt, kein Build-Target und keine UAC/HID-Implementierung.
+**Tatsächliche Schaltungs- und System-Showstopper auf PCBA 05:**
+1. **Power-Kollaps durch Reihenschaltung D5 + U3 (Drop-Out & UVLO):**
+   - Bei 5V-USB-Werkstattspeisung kommen an J1 nach Leitungsverlusten ca. 4,3 V an (`VIN_60W`).
+   - Diode **D5 (`SS34_REV_POL`)** liegt direkt in Serie und frisst weitere 0,45 V $\rightarrow$ `+12V_PROT` sinkt auf ca. 3,85 V.
+   - Der Step-Down-Wandler U3 (`TPS54302`) schaltet unter 4,5 V im UVLO komplett ab.
+   - `VCC_5V` und `VCC_3V3` brechen auf 0 V zusammen. Die gesamte Platine (S31, C3, E22, Hub, Sensoren) bleibt stromlos.
+   - *Lösung:* Ersatz von D5 durch P-Kanal-MOSFET / Ideal-Diode (Drop $< 5\,\text{mV}$) plus 5V-Bypass-Pfad an U3 vorbei für den Werkstattbetrieb.
+2. **Stecker J6 (Sensor-Puck) Pin 8 Dokumentationsfehler:**
+   - Im KiCad-Schaltplan und PCB liegt Pin 8 korrekt an `GNSS_RESET_N`.
+   - In `07_pcba_hardware_pinouts.md` (Zeile 1077) steht fälschlicherweise immer noch `Pin 8: GND / Schirm-Masse`.
+3. **Bezeichnungs-Verwirrung bei J2 und J3:**
+   - J2 und J3 heißen im Schaltplan `J_POD_L` / `J_POD_R`, sind aber elektrisch für die Under-Perch Spiegel-Pods `PCBA 05C` (Blinker-LEDs und Lenkertaster). Konsistente Umbenennung zu `CKPT_1` / `CKPT_2` erforderlich.
+4. **Kaskadierung & Klärung mit Handschuhfach-Breakout (`PCBA 05B`):**
+   - Auf PCBA 05B sitzt bereits ein USB2514Bi-Hub. Die Schnittstelle zwischen J4 (05) und J2 (05B) muss sauber als reine Durchleitung bzw. Host-Einspeisung dokumentiert und verschaltet sein.
+5. **Fehlendes Firmware-Projekt für U10 (`ESP32-C3FH4`):**
+   - Die UAC-Headset-Emulation auf dem C3 existiert bisher nur als Header-Deklaration, benötigt aber ein eigenes Firmware-Subprojekt.
 
 ---
 

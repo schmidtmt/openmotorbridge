@@ -358,27 +358,59 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 | 41 | `USBDN_DP3` | `BUS3_DP` | **USB D+** | J6.12 (Strang 3 Pod R) | Port 3 Downstream USB D+ |
 | 48 | `USBDN_DM4` | `BUS4_DM` | **USB D-** | J6.15 (Strang 4 Radar) | Port 4 Downstream USB D- |
 | 49 | `USBDN_DP4` | `BUS4_DP` | **USB D+** | J6.16 (Strang 4 Radar) | Port 4 Downstream USB D+ |
-| 56 | `USBDN_DM5` | `BT_USB_DM` | **USB D-** | U9.13 (QCC3084) | Port 5 Downstream USB D- an Qualcomm BT Audio SoC |
-| 57 | `USBDN_DP5` | `BT_USB_DP` | **USB D+** | U9.14 (QCC3084) | Port 5 Downstream USB D+ an Qualcomm BT Audio SoC |
+| 56 | `USBDN_DM5` | `BT_USB_DM` | **USB D-** | U9.13 (QCC3086) | Port 5 Downstream USB D- an Qualcomm BT Audio SoC |
+| 57 | `USBDN_DP5` | `BT_USB_DP` | **USB D+** | U9.14 (QCC3086) | Port 5 Downstream USB D+ an Qualcomm BT Audio SoC |
 | 60 | `USBDN_DM6` | `RES_USB_DM` | **USB D-** | J7.3 (Reserve) | Port 6 Downstream USB D- |
 | 61 | `USBDN_DP6` | `RES_USB_DP` | **USB D+** | J7.4 (Reserve) | Port 6 Downstream USB D+ |
 
-#### Sub-Chip `U9`: Qualcomm QCC3084 Bluetooth 5.4 Audio SoC (WLCSP / BGA Module)
-> **Manufacturer Datasheet:** [Qualcomm QCC3084 Bluetooth 5.4 Audio SoC](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084) | **Pin Definitions:** [Pin Definitions & Audio Interface Routing](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084)  
+#### Sub-Chip `U9`: Qualcomm QCC3086 Bluetooth 5.4 Audio Transceiver (Phone Link) (WLCSP / BGA Module)
+> **Manufacturer Datasheet:** [Qualcomm QCC3086 Bluetooth 5.4 Audio Transceiver (Phone Link)](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086) | **Pin Definitions:** [Pin Definitions & Audio Interface Routing](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086)  
 
 | Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
 | :---: | :--- | :--- | :---: | :--- | :--- |
 | 3 | `I2S_MCLK` | `I2S_MCLK` | **Clock In** | U2 (ESP32-S31) | I2S Master Clock 12.288 MHz |
 | 4 | `I2S_BCLK` | `I2S_BCLK` | **Clock In** | U2 (ESP32-S31) | I2S Bit Clock 3.072 MHz |
 | 5 | `I2S_WS` | `I2S_WS` | **Sync In** | U2 (ESP32-S31) | I2S Word Select / LRCLK 48 kHz |
-| 6 | `I2S_DOUT` | `I2S_DOUT` | **Audio In** | U2 (ESP32-S31) | Digital Audio Stream vom ESP32-S31 DSP zum Helm |
-| 7 | `I2S_DIN` | `I2S_DIN` | **Audio Out** | U2 (ESP32-S31) | Helmmikrofon-Audio Stream an den DSP |
+| 6 | `I2S_DOUT` | `I2S_DOUT` | **Audio In** | U2 (ESP32-S31) | Digital Audio Stream vom Smartphone (A2DP / Anrufer) an ESP32-S31 DSP |
+| 7 | `I2S_DIN` | `I2S_DIN` | **Audio Out** | U2 (ESP32-S31) | Helmmikrofon-Audio Stream an QCC3086 Voice-Backchannel zum Smartphone |
 | 9 | `UART_TX` | `BT_UART_TX` | **UART Out** | U2 (ESP32-S31) | HCI / AT-Befehle TX zum ESP32-S31 |
 | 10 | `UART_RX` | `BT_UART_RX` | **UART In** | U2 (ESP32-S31) | HCI / AT-Befehle RX vom ESP32-S31 |
 | 11 | `CHIP_EN` | `BT_EN` | **Control In** | U2 (ESP32-S31) | Power Enable Active High |
 | 13 | `USB_DM` | `BT_USB_DM` | **USB D-** | U8.56 (Hub Port 5) | USB Audio Class 2.0 / DFU Datenleitung D- |
 | 14 | `USB_DP` | `BT_USB_DP` | **USB D+** | U8.57 (Hub Port 5) | USB Audio Class 2.0 / DFU Datenleitung D+ |
-| 15 | `RF_ANT` | `BT_RF_AUDIO` | **RF 2.4 GHz** | ANT2 (U.FL) | Bluetooth 5.4 Dual-A2DP / Auracast Antennenport |
+| 15 | `RF_ANT` | `BT_RF_AUDIO` | **RF 2.4 GHz** | ANT2 (U.FL) | Bluetooth 5.4 Antennenport an ANT2 Deckelantenne (Smartphone-Link) |
+
+#### Sub-Chip `U13`: Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Sozius Helm 1) (WLCSP / BGA Module)
+> **Manufacturer Datasheet:** [Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Sozius Helm 1)](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086) | **Pin Definitions:** [Pin Definitions & Audio Interface Routing](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 4 | `I2S_BCLK` | `I2S_BCLK` | **Clock In** | U2 (ESP32-S31) | I2S Bit Clock 3.072 MHz |
+| 5 | `I2S_WS` | `I2S_WS` | **Sync In** | U2 (ESP32-S31) | I2S Word Select / LRCLK 48 kHz |
+| 6 | `I2S_DOUT` | `HELM1_I2S_DOUT` | **Audio In** | U2 (ESP32-S31) | Audio-Stream vom DSP an Helm 1 |
+| 7 | `I2S_DIN` | `HELM1_I2S_DIN` | **Audio Out** | U2 (ESP32-S31) | Helm 1 Mikrofon-Rückkanal an DSP |
+| 9 | `UART_TX` | `HELM1_BT_UART_TX` | **UART Out** | U2 (ESP32-S31) | HCI / AT TX Helm 1 |
+| 10 | `UART_RX` | `HELM1_BT_UART_RX` | **UART In** | U2 (ESP32-S31) | HCI / AT RX Helm 1 |
+| 11 | `CHIP_EN` | `HELM1_BT_EN` | **Control In** | U2 (ESP32-S31) | Power Enable Helm 1 |
+| 13 | `USB_DM` | `HELM1_USB_DM` | **USB D-** | U8 (Hub) | USB D- Helm 1 |
+| 14 | `USB_DP` | `HELM1_USB_DP` | **USB D+** | U8 (Hub) | USB D+ Helm 1 |
+| 15 | `RF_ANT` | `BT_RF_HELM1` | **RF 2.4 GHz** | ANT3 (Keramik) | BT 5.4 RF Port an Keramikantenne ANT3 |
+
+#### Sub-Chip `U14`: Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Fahrer Helm 2) (WLCSP / BGA Module)
+> **Manufacturer Datasheet:** [Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Fahrer Helm 2)](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086) | **Pin Definitions:** [Pin Definitions & Audio Interface Routing](https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086)  
+
+| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 4 | `I2S_BCLK` | `I2S_BCLK` | **Clock In** | U2 (ESP32-S31) | I2S Bit Clock 3.072 MHz |
+| 5 | `I2S_WS` | `I2S_WS` | **Sync In** | U2 (ESP32-S31) | I2S Word Select / LRCLK 48 kHz |
+| 6 | `I2S_DOUT` | `HELM2_I2S_DOUT` | **Audio In** | U2 (ESP32-S31) | Audio-Stream vom DSP an Helm 2 |
+| 7 | `I2S_DIN` | `HELM2_I2S_DIN` | **Audio Out** | U2 (ESP32-S31) | Helm 2 Mikrofon-Rückkanal an DSP |
+| 9 | `UART_TX` | `HELM2_BT_UART_TX` | **UART Out** | U2 (ESP32-S31) | HCI / AT TX Helm 2 |
+| 10 | `UART_RX` | `HELM2_BT_UART_RX` | **UART In** | U2 (ESP32-S31) | HCI / AT RX Helm 2 |
+| 11 | `CHIP_EN` | `HELM2_BT_EN` | **Control In** | U2 (ESP32-S31) | Power Enable Helm 2 |
+| 13 | `USB_DM` | `HELM2_USB_DM` | **USB D-** | U8 (Hub) | USB D- Helm 2 |
+| 14 | `USB_DP` | `HELM2_USB_DP` | **USB D+** | U8 (Hub) | USB D+ Helm 2 |
+| 15 | `RF_ANT` | `BT_RF_HELM2` | **RF 2.4 GHz** | ANT4 (Keramik) | BT 5.4 RF Port an Keramikantenne ANT4 |
 
 #### Sub-Chip `U10`: Semtech SX1262 LoRa 868 MHz Transceiver (QFN-24 (4x4 mm))
 > **Manufacturer Datasheet:** [Semtech SX1262 LoRa 868 MHz Transceiver](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4) | **Pin Definitions:** [Section 4: Pinout & Pin Description (QFN-24)](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R000000HT76/bvyK.51kF34K_iR49Q04kHjG4s3E2_q2kM8Q6u2k7d4)  
@@ -922,42 +954,43 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 | Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | 3 | `ESP_EN` | - | - | R1 / C3 / SW1 | **Power/Reset** – Chip Enable / Hardware Reset |
-| 4 | `GNSS_TIMEPULSE` | GPIO 2 | - | J6.7 | **Digital In** – u-blox SAM-M10Q 1-PPS Timepulse Synchronization |
-| 5 | `GNSS_TXD` | GPIO 3 | - | J6.5 | **UART_RX** – u-blox SAM-M10Q Primary NMEA / UBX Stream |
-| 6 | `MIC_I2S_WS` | GPIO 4 | `PIN_MIC_I2S_WS` | MK1.2 / J6.6 | **I2S_WS** – Fahrtwindmikrofon Knowles SPH0645 Word Select |
+| 4 | `GNSS_TIMEPULSE` | GPIO 2 | - | J6.5 | **Digital In** – u-blox SAM-M10Q 1-PPS Timepulse Synchronization |
+| 5 | `GNSS_TXD` | GPIO 3 | - | J6.6 | **UART_RX** – u-blox SAM-M10Q Primary NMEA / UBX Stream RX |
+| 6 | `MIC_I2S_WS` | GPIO 4 | `PIN_MIC_I2S_WS` | MK1.2 | **I2S_WS** – Fahrtwindmikrofon Knowles SPH0645 Word Select |
 | 7 | `MIC_I2S_BCLK` | GPIO 5 | `PIN_MIC_I2S_BCLK` | MK1.3 | **I2S_BCLK** – Fahrtwindmikrofon Knowles SPH0645 Bit Clock |
-| 8 | `BTN_SIG_L_N` | GPIO 8 | `PIN_BTN_SIG_L_N` | J2.3 | **Digital In** – Linker Spiegeltaster (PTT / Intercom / HFP) |
-| 9 | `BTN_SIG_R_N` | GPIO 9 | `PIN_BTN_SIG_R_N` | J3.3 | **Digital In** – Rechter Spiegeltaster (Action-Cam Tagging / Mode) |
-| 10 | `GNSS_RXD` | GPIO 6 | - | J6.6 | **UART_TX** – u-blox SAM-M10Q Configuration Stream |
-| 11 | `GNSS_RESET_N` | GPIO 7 | `PIN_GNSS_RESET_N` | J6.8 | **Digital Out** – u-blox SAM-M10Q Hardware Reset (Active Low) |
-| 12 | `MIC_I2S_DATA` | GPIO 35 | `PIN_MIC_I2S_DATA` | MK1.1 / J6.5 | **I2S_DATA** – Fahrtwindmikrofon Knowles SPH0645 Serial Data |
-| 13 | `C3_UART_RX` | GPIO 33 | `PIN_C3_UART_RX` | U10.28 | **UART_RX** – Auxiliary MCU (ESP32-C3) UART RX (Audio/SkylineOS Headset Bridge, U10 Pin 28 U0TXD) |
-| 14 | `C3_UART_TX` | GPIO 34 | `PIN_C3_UART_TX` | U10.27 | **UART_TX** – Auxiliary MCU (ESP32-C3) UART TX (Audio/SkylineOS Headset Bridge, U10 Pin 27 U0RXD) |
-| 15 | `C3_EN` | GPIO 15 | `PIN_C3_EN` | U10.7 | **GPIO_OUT** – Auxiliary MCU (ESP32-C3) Hardware Reset / Enable |
-| 16 | `C3_BOOT` | GPIO 16 | `PIN_C3_BOOT` | U10.15 | **GPIO_OUT** – Auxiliary MCU (ESP32-C3) Boot Strap Mode Select |
+| 8 | `BTN_SIG_L_N` | GPIO 8 | `PIN_BTN_SIG_L` | J2.3 | **Digital In** – Linker Spiegeltaster (PTT / Intercom / HFP) |
+| 9 | `BTN_SIG_R_N` | GPIO 9 | `PIN_BTN_SIG_R` | J3.3 | **Digital In** – Rechter Spiegeltaster (Action-Cam Tagging / Mode) |
+| 10 | `GNSS_RXD` | GPIO 6 | - | J6.7 | **UART_TX** – u-blox SAM-M10Q Configuration Stream TX |
+| 11 | `GNSS_RESET_N` | GPIO 7 | - | J6.8 | **Control Out** – u-blox SAM-M10Q Hardware Reset (Active Low) |
+| 12 | `MIC_I2S_DATA` | GPIO 35 | `PIN_MIC_I2S_DATA` | MK1.1 | **I2S_DATA** – Fahrtwindmikrofon Knowles SPH0645 Serial Data |
+| 13 | `BT_UART_TX` | GPIO 33 | `PIN_BT_UART_TX` | U2.18 | **UART_TX** – AT Command TX an Feasycom FSC-BT802 Pin 18 (CSR8670) |
+| 14 | `BT_UART_RX` | GPIO 34 | `PIN_BT_UART_RX` | U2.17 | **UART_RX** – AT Command RX von Feasycom FSC-BT802 Pin 17 (CSR8670) |
+| 15 | `GPIO15` | GPIO 15 | - | Testpunkt | **GPIO** – General Purpose I/O (Reserve) |
+| 16 | `GPIO16` | GPIO 16 | - | Testpunkt | **GPIO** – General Purpose I/O (Reserve) |
 | 17 | `I2C_SDA` | GPIO 22 | `PIN_I2C_SDA` | J6.3 / J9.4 / J11.4 | **I2C_SDA** – Cockpit I2C Data (Sensoren & Dual OLEDs) |
 | 18 | `I2C_SCL` | GPIO 23 | `PIN_I2C_SCL` | J6.4 / J9.3 / J11.3 | **I2C_SCL** – Cockpit I2C Clock (400 kHz Fast-Mode) |
-| 19 | `WS2812B_DIN` | GPIO 24 | `PIN_WS2812B_DIN` | LED1.4 | **Digital Out** – Onboard Status-LED WS2812B-2020 Data |
-| 20 | `BSD_LED_LEFT` | GPIO 25 | `PIN_BSD_LED_LEFT` | Q1.2 -> J2.2 | **Digital Out** – Toter-Winkel-Warn-LED Spiegel Links (BSD) |
-| 21 | `BSD_LED_RIGHT` | GPIO 26 | `PIN_BSD_LED_RIGHT` | Q1.5 -> J3.2 | **Digital Out** – Toter-Winkel-Warn-LED Spiegel Rechts (BSD) |
-| 22 | `AUX_LIGHT_EN` | GPIO 27 | `PIN_AUX_LIGHT_EN` | Q2.3 -> J7.1 | **Digital Out** – Zusatzscheinwerfer High-Side Switch Enable (TPS1H100) |
-| 23 | `C3_I2S_BCLK` | GPIO 7 | `PIN_C3_I2S_BCLK` | U10.6 | **I2S_BCLK** – Digital Audio I2S Bit Clock an U10 ESP32-C3 (Harley Headset-Emulation / Speaker Audio Streaming) |
-| 24 | `C3_I2S_WS` | GPIO 10 | `PIN_C3_I2S_WS` | U10.8 | **I2S_WS** – Digital Audio I2S Word Select / Frame Sync an U10 ESP32-C3 |
-| 25 | `C3_I2S_SDO` | GPIO 15 | `PIN_C3_I2S_SDO` | U10.9 | **I2S_DOUT** – Digital Audio I2S Serial Data Out an U10 (Lautsprecher-Wiedergabe Skyline OS / Boom! Box) |
-| 27 | `ESP_BOOT` | GPIO 0 | `PIN_BOOT_BUTTON` | SW2 | **Digital In** – Boot Mode Strapping Pin / Service Taster |
-| 28 | `C3_I2S_SDI` | GPIO 48 | `PIN_C3_I2S_SDI` | U10.10 | **I2S_DIN** – Digital Audio I2S Serial Data In von U10 (Mikrofon-/Sprachkanal von Skyline OS) |
-| 30 | `SDIO_CLK` | GPIO 35 | `PIN_E22_SDIO_CLK` | U9.10 | **SDIO_CLK** – ESP32-E22 Wi-Fi 6E SDIO Clock (50 MHz) |
-| 31 | `SDIO_CMD` | GPIO 36 | `PIN_E22_SDIO_CMD` | U9.11 | **SDIO_CMD** – ESP32-E22 Wi-Fi 6E SDIO Command Line |
-| 32 | `SDIO_D0` | GPIO 37 | `PIN_E22_SDIO_D0` | U9.12 | **SDIO_D0** – ESP32-E22 Wi-Fi 6E SDIO Data Line 0 |
-| 33 | `SDIO_D1` | GPIO 33 | `PIN_E22_SDIO_D1` | U9.13 | **SDIO_D1** – ESP32-E22 Wi-Fi 6E SDIO Data Line 1 |
-| 34 | `SDIO_D2` | GPIO 34 | `PIN_E22_SDIO_D2` | U9.14 | **SDIO_D2** – ESP32-E22 Wi-Fi 6E SDIO Data Line 2 |
-| 35 | `SDIO_D3` | GPIO 38 | `PIN_E22_SDIO_D3` | U9.15 | **SDIO_D3** – ESP32-E22 Wi-Fi 6E SDIO Data Line 3 |
-| 36 | `E22_EN` | GPIO 59 | `PIN_E22_EN` | U9.3 | **Digital Out** – ESP32-E22 Wi-Fi 6E Chip Enable / Power Gate |
-| 37 | `E22_IRQ` | GPIO 60 | `PIN_E22_IRQ` | U9.16 | **Digital In / IRQ** – ESP32-E22 Wi-Fi 6E Interrupt Request |
-| 38 | `CP2AA_FAULT_N` | GPIO 56 | `PIN_CP2AA_FAULT_N` | U4.4 | **Digital In** – CarPlay / Android Auto USB Power Switch Fault (Active Low) |
-| 39 | `CP2AA_PWR_EN` | GPIO 57 | `PIN_CP2AA_PWR_EN` | U4.3 | **Digital Out** – CarPlay / Android Auto USB 5V VBUS Power Enable |
-| 54 | `USB_HS_DM` | - | `PIN_USB_HS_DM` | J1.4 | **USB_HS_DM** – Native USB 2.0 Device Controller Data Minus (Direct 4-Wire Backbone) |
-| 55 | `USB_HS_DP` | - | `PIN_USB_HS_DP` | J1.3 | **USB_HS_DP** – Native USB 2.0 Device Controller Data Plus (Direct 4-Wire Backbone) |
+| 19 | `WS2812B_DIN` | GPIO 24 | `PIN_WS2812B_DIN` | LED1.4 | **Digital Out** – Onboard RGB-Status-LED WS2812B-2020 Data |
+| 20 | `BSD_LED_LEFT` | GPIO 25 | `PIN_BSD_LED_L` | Q1.2 -> J2.2 | **Digital Out** – Toter-Winkel-Warn-LED Spiegel Links (BSD) |
+| 21 | `BSD_LED_RIGHT` | GPIO 26 | `PIN_BSD_LED_R` | Q1.5 -> J3.2 | **Digital Out** – Toter-Winkel-Warn-LED Spiegel Rechts (BSD) |
+| 22 | `AUX_LIGHT_EN` | GPIO 27 | `PIN_AUX_LIGHT_EN` | Q2.3 -> J7.1 | **Digital Out** – Zusatzscheinwerfer High-Power Schaltausgang (12V/10A via MOSFET) |
+| 23 | `BT_I2S_BCLK` | GPIO 7 | `PIN_BT_I2S_BCLK` | U2.15 | **I2S_BCLK** – Digital Audio I2S Bit Clock an U2 Feasycom FSC-BT802 (CSR8670) |
+| 24 | `BT_I2S_WS` | GPIO 10 | `PIN_BT_I2S_WS` | U2.12 | **I2S_WS** – Digital Audio I2S Word Select / Frame Sync an U2 Feasycom FSC-BT802 |
+| 25 | `BT_I2S_DOUT` | GPIO 15 | `PIN_BT_I2S_DOUT` | U2.13 | **I2S_DOUT** – Digital Audio I2S Serial Data Out an U2 (PCM_IN vom FSC-BT802) |
+| 27 | `ESP_BOOT` | GPIO 0 | - | SW2 | **Strapping** – Boot Mode Strapping Pin / Service Taster |
+| 28 | `BT_I2S_DIN` | GPIO 48 | `PIN_BT_I2S_DIN` | U2.14 | **I2S_DIN** – Digital Audio I2S Serial Data In von U2 (PCM_OUT vom FSC-BT802) |
+| 29 | `GPIO29` | GPIO 29 | - | Testpunkt | **GPIO** – General Purpose I/O (Reserve) |
+| 30 | `SDIO_CLK` | GPIO 35 | - | U9.10 | **SDIO_CLK** – ESP32-E22 Wi-Fi 6E SDIO Clock (50 MHz) |
+| 31 | `SDIO_CMD` | GPIO 36 | - | U9.11 | **SDIO_CMD** – ESP32-E22 Wi-Fi 6E SDIO Command Line |
+| 32 | `SDIO_D0` | GPIO 37 | - | U9.12 | **SDIO_D0** – ESP32-E22 Wi-Fi 6E SDIO Data Line 0 |
+| 33 | `SDIO_D1` | GPIO 33 | - | U9.13 | **SDIO_D1** – ESP32-E22 Wi-Fi 6E SDIO Data Line 1 |
+| 34 | `SDIO_D2` | GPIO 34 | - | U9.14 | **SDIO_D2** – ESP32-E22 Wi-Fi 6E SDIO Data Line 2 |
+| 35 | `SDIO_D3` | GPIO 38 | - | U9.15 | **SDIO_D3** – ESP32-E22 Wi-Fi 6E SDIO Data Line 3 |
+| 36 | `E22_EN` | GPIO 59 | - | U9.3 | **Digital Out** – ESP32-E22 Wi-Fi 6E Chip Enable / Power Gate |
+| 37 | `E22_IRQ` | GPIO 60 | - | U9.16 | **Digital In** – ESP32-E22 Wi-Fi 6E Interrupt Request |
+| 38 | `BT_RST` | GPIO 56 | `PIN_BT_RST` | U2.4 | **Digital Out** – Feasycom FSC-BT802 Hardware Reset Active Low (RESETB) |
+| 39 | `BT_EN` | GPIO 57 | `PIN_BT_EN` | U2.3 | **Digital Out** – Feasycom FSC-BT802 Power Enable Active High (VREGENABLE) |
+| 54 | `USB_UP_DM` | - | - | J1.4 | **USB_DM** – Native USB 2.0 High-Speed D- (Direct 4-Wire Backbone zu Zentralbox) |
+| 55 | `USB_UP_DP` | - | - | J1.3 | **USB_DP** – Native USB 2.0 High-Speed D+ (Direct 4-Wire Backbone zu Zentralbox) |
 
 <!-- AUTO_PINOUT_END: PCBA_05 -->
 
@@ -966,27 +999,80 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 <!-- AUTO_CONNECTORS_START: PCBA_05 -->
 
 #### Connector `J1`: Backbone Bus-Eingang von Zentralbox (Molex J6.1-4)
-> **Type:** `JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Mating Connector:** `JST GHR-04V-S (AWG26-30)`  
 
 | Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
 | :---: | :--- | :---: | :--- |
-| **1** | `VCC_BUS` | **Power In (+12V/60W)** | Bordnetz-/PD-Speisung von Zentralbox |
+| **1** | `VIN_60W` | **Power In (+12V/60W)** | Bordnetz-/PD-Speisung von Zentralbox |
 | **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
-| **3** | `USB_DP` | **USB 2.0 D+** | USB 2.0 High-Speed D+ zur Zentralbox |
-| **4** | `USB_DM` | **USB 2.0 D-** | USB 2.0 High-Speed D- zur Zentralbox |
+| **3** | `USB_UP_DP` | **USB 2.0 D+** | USB 2.0 High-Speed D+ direkt zu ESP32-S31 (U1.55) |
+| **4** | `USB_UP_DM` | **USB 2.0 D-** | USB 2.0 High-Speed D- direkt zu ESP32-S31 (U1.54) |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J4`: Handschuhfach Qi / 5V Aux Power Receptacle
+> **Type:** `JST-GH 6-Pin 1.25mm SMD Horizontal (SM06B-GHS-TB)` | **Mating Connector:** `JST GHR-06V-S (AWG24-28)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VBUS_PD1_OUT` | **Power Out (5-20V/30W)** | USB Power Delivery von SW3526 (U5) für Handschuhfach |
+| **2** | `GND` | **Power Return** | Masse Leistungsrückstrom für USB-PD |
+| **3** | `USB_DN1_CC1` | **USB-PD CC1** | Configuration Channel 1 von SW3526 (U5) |
+| **4** | `USB_DN1_CC2` | **USB-PD CC2** | Configuration Channel 2 von SW3526 (U5) |
+| **5** | `VCC_5V` | **Power Out (+5V/3A)** | Dauerhafte 5V Hilfsspannung von TPS54302 (U3) |
+| **6** | `GND` | **Power Return** | Gemeinsame Signal- und Lastmasse |
+| **MP** | `SHIELD` | **Shield** | Gehäuseschirmung |
+
+#### Connector `J7`: Zusatzscheinwerfer High-Power Schaltausgang (Aux Lights)
+> **Type:** `JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)` | **Mating Connector:** `JST GHR-02V-S (AWG20-24)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `+12V_AUX` | **Power Out (+12V/10A)** | Geschaltete 12V für High-Power LED Scheinwerfer |
+| **2** | `GND` | **Power Return** | Lastmasse Rückstrom |
 | **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
 #### Connector `J10`: Navi-Stromversorgungsbuchse (Garmin Zūmo / TomTom)
-> **Type:** `JST-GH 2-Pin 1.25mm SMD Vertikal (BM02B-GHS-TBT)` | **Mating Connector:** `JST GHR-02V-S (AWG24-28)`  
+> **Type:** `JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)` | **Mating Connector:** `JST GHR-02V-S (AWG24-28)`  
 
 | Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
 | :---: | :--- | :---: | :--- |
-| **1** | `VCC_12V_PROT` | **Power Out (+12V/2A)** | Polyfuse-geschützte 12V Speisung für Navi-Cradle |
+| **1** | `+12V_PROT` | **Power Out (+12V/2A)** | Polyfuse-geschützte 12V Speisung für Navi-Cradle |
 | **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
 | **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
+#### Connector `J8`: Action-Cam 5V Stromversorgung (GoPro / Insta360)
+> **Type:** `JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)` | **Mating Connector:** `JST GHR-02V-S (AWG24-28)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | **Power Out (+5V/3A)** | Dauerhafte 5V Speisung für Cockpit Action-Cam |
+| **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J2`: Under-Perch Spiegel-Pod Links (PCBA 05C)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Mating Connector:** `JST GHR-04V-S (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | **Power Out (+5V)** | Speisespannung für bernsteinfarbene BSD Warn-LEDs |
+| **2** | `BSD_LED_L_N` | **Open-Drain Out** | Geschaltete Masse für linke BSD Warn-LED |
+| **3** | `BTN_SIG_L_N` | **Digital In** | Daumentaster Links (Active Low, interner Pull-Up) |
+| **4** | `GND` | **Power Return** | Gemeinsame Schalter- und Signalmasse |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J3`: Under-Perch Spiegel-Pod Rechts (PCBA 05C)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Mating Connector:** `JST GHR-04V-S (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_5V` | **Power Out (+5V)** | Speisespannung für bernsteinfarbene BSD Warn-LEDs |
+| **2** | `BSD_LED_R_N` | **Open-Drain Out** | Geschaltete Masse für rechte BSD Warn-LED |
+| **3** | `BTN_SIG_R_N` | **Digital In** | Daumentaster Rechts (Active Low, interner Pull-Up) |
+| **4** | `GND` | **Power Return** | Gemeinsame Schalter- und Signalmasse |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
 #### Connector `J6`: GNSS & Umweltsensor-Puck Interconnect (PCBA 05D)
-> **Type:** `JST-GH 8-Pin 1.25mm SMD Vertikal (BM08B-GHS-TBT)` | **Mating Connector:** `JST GHR-08V-S (AWG28-30)`  
+> **Type:** `JST-GH 8-Pin 1.25mm SMD Horizontal (SM08B-GHS-TB)` | **Mating Connector:** `JST GHR-08V-S (AWG28-30)`  
 
 | Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
 | :---: | :--- | :---: | :--- |
@@ -994,10 +1080,32 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 | **2** | `GND` | **Power Return** | Sensor-Masse |
 | **3** | `I2C_SDA` | **I2C SDA** | I2C Datenleitung für TMP117 / OPT3001 / BMP390 |
 | **4** | `I2C_SCL` | **I2C SCL** | I2C Taktleitung für Umweltsensoren |
-| **5** | `GNSS_TX` | **UART In** | u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX |
-| **6** | `GNSS_RX` | **UART Out** | ESP32-S31 TX an u-blox SAM-M10Q RX |
-| **7** | `GNSS_1PPS` | **Sync In** | u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt |
-| **8** | `GND` | **Power Return** | Schirm-Masse |
+| **5** | `GNSS_TIMEPULSE` | **Sync In** | u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt |
+| **6** | `GNSS_TXD` | **UART In** | u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX (U1.5) |
+| **7** | `GNSS_RXD` | **UART Out** | ESP32-S31 TX (U1.10) an u-blox SAM-M10Q RX |
+| **8** | `GNSS_RESET_N` | **Control Out** | Hardware Reset für SAM-M10Q |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J9`: OLED / HUD Displayanschluss Links (Optional)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Mating Connector:** `JST GHR-04V-S (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_3V3` | **Power Out (+3.3V)** | Display-Speisung |
+| **2** | `GND` | **Power Return** | Display-Masse |
+| **3** | `I2C_SCL` | **I2C SCL** | I2C Takt für linkes Cockpit-Display |
+| **4** | `I2C_SDA` | **I2C SDA** | I2C Daten für linkes Cockpit-Display |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
+
+#### Connector `J11`: OLED / HUD Displayanschluss Rechts (Optional)
+> **Type:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Mating Connector:** `JST GHR-04V-S (AWG28-30)`  
+
+| Pin | Signal / KiCad Net | Signal Type | Electrical Specification & Function |
+| :---: | :--- | :---: | :--- |
+| **1** | `VCC_3V3` | **Power Out (+3.3V)** | Display-Speisung |
+| **2** | `GND` | **Power Return** | Display-Masse |
+| **3** | `I2C_SCL` | **I2C SCL** | I2C Takt für rechtes Cockpit-Display |
+| **4** | `I2C_SDA` | **I2C SDA** | I2C Daten für rechtes Cockpit-Display |
 | **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
 <!-- AUTO_CONNECTORS_END: PCBA_05 -->
@@ -1006,74 +1114,33 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 
 <!-- AUTO_SUBCHIPS_START: PCBA_05 -->
 
-#### Sub-Chip `U10`: ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU (QFN-32 (5x5 mm))
-> **Manufacturer Datasheet:** [ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU](https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf) | **Pin Definitions:** [Table 2-2: Pin Description (QFN-32)](https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf#page=17)  
+#### Sub-Chip `U2`: Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Modul (CSR8670) (27-Pad SMD Module (9.7x11.5 mm))
+> **Manufacturer Datasheet:** [Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Modul (CSR8670)](https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf) | **Pin Definitions:** [Table 3-1: Pin Descriptions](https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf#page=6)  
 
 | Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
 | :---: | :--- | :--- | :---: | :--- | :--- |
-| 12 | `GPIO18 / USB_D-` | `C3_USB_DM` | **USB D-** | U8 (TS3USB221) | USB 2.0 Client D- zu Boom! Box / Nachrüst-AA |
-| 13 | `GPIO19 / USB_D+` | `C3_USB_DP` | **USB D+** | U8 (TS3USB221) | USB 2.0 Client D+ zu Boom! Box / Nachrüst-AA |
-| 18 | `GPIO4 / I2S_MCLK` | `C3_I2S_MCLK` | **Clock In** | U1 (ESP32-S31) | I2S Master Clock vom S31 |
-| 19 | `GPIO5 / I2S_BCLK` | `C3_I2S_BCLK` | **Clock In** | U1 (ESP32-S31) | I2S Bit Clock vom S31 |
-| 20 | `GPIO6 / I2S_WS` | `C3_I2S_WS` | **Sync In** | U1 (ESP32-S31) | I2S Word Select vom S31 |
-| 21 | `GPIO7 / I2S_SDO` | `C3_I2S_SDO` | **Audio In** | U1 (ESP32-S31) | Audio Playback Stream für Boom! Box Bordlautsprecher |
-| 22 | `GPIO8 / I2S_SDI` | `C3_I2S_SDI` | **Audio Out** | U1 (ESP32-S31) | Mikrofon-Rückkanal an Zentralbox DSP |
-
-#### Sub-Chip `U2`: Microchip USB2514Bi 4-Port USB 2.0 Hub (QFN-36 (6x6 mm))
-> **Manufacturer Datasheet:** [Microchip USB2514Bi 4-Port USB 2.0 Hub](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf) | **Pin Definitions:** [Table 3-1: 36-Pin QFN Pin Descriptions](https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf#page=12)  
-
-| Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
-| :---: | :--- | :--- | :---: | :--- | :--- |
-| 15 | `USBUP_DM` | `HUB_UP_DM` | **USB D-** | U1 (ESP32-S31) | Upstream USB D- vom ESP32-S31 Host |
-| 16 | `USBUP_DP` | `HUB_UP_DP` | **USB D+** | U1 (ESP32-S31) | Upstream USB D+ vom ESP32-S31 Host |
-| 20 | `USBDN_DM1` | `HUB_P1_DM` | **USB D-** | J4 (Hub Ext JST-GH) | Port 1 D- zu PCBA 05B Handschuhfach |
-| 21 | `USBDN_DP1` | `HUB_P1_DP` | **USB D+** | J4 (Hub Ext JST-GH) | Port 1 D+ zu PCBA 05B Handschuhfach |
-| 24 | `USBDN_DM2` | `HUB_P2_DM` | **USB D-** | J5 (Wireless Dongle) | Port 2 D- an CP2AA CarPlay/AA Dongle |
-| 25 | `USBDN_DP2` | `HUB_P2_DP` | **USB D+** | J5 (Wireless Dongle) | Port 2 D+ an CP2AA CarPlay/AA Dongle |
+| 1 | `GND` | `GND` | **Power Return** | Ground Plane | Modul-Masse |
+| 2 | `VDD_IO` | `VCC_3V3` | **Power In (+3.3V)** | 3.3V Rail | I/O Versorgungsspannung |
+| 3 | `VREGENABLE` | `BT_EN` | **Control In** | U1.39 (ESP32-S31) | Power Enable Active High |
+| 4 | `RESETB` | `BT_RST` | **Control In** | U1.38 (ESP32-S31) | Hardware Reset Active Low |
+| 6 | `VBAT` | `VCC_3V3` | **Power In (+3.3V)** | 3.3V Rail | Batterie-/Hauptversorgung |
+| 12 | `PCM_SYNC` | `BT_I2S_WS` | **Clock In** | U1.24 (ESP32-S31) | I2S Word Select / Frame Sync |
+| 13 | `PCM_IN` | `BT_I2S_DOUT` | **Audio In** | U1.25 (ESP32-S31) | I2S Audio RX von S31 MCU |
+| 14 | `PCM_OUT` | `BT_I2S_DIN` | **Audio Out** | U1.28 (ESP32-S31) | I2S Audio TX zur S31 MCU |
+| 15 | `PCM_CLK` | `BT_I2S_BCLK` | **Clock In** | U1.23 (ESP32-S31) | I2S Bit Clock |
+| 17 | `UART_RX` | `BT_UART_RX` | **UART In** | U1.14 (ESP32-S31) | AT Command RX |
+| 18 | `UART_TX` | `BT_UART_TX` | **UART Out** | U1.13 (ESP32-S31) | AT Command TX |
+| 19 | `RF_ANT` | `BT_RF_ANT` | **RF 2.4 GHz** | ANT3 (Johanson 2450AT18A100) | 50 Ohm RF-Ausgang an Keramikantenne |
+| 25 | `GND` | `GND` | **Power Return** | Ground Plane | HF/Modul Masse |
+| 27 | `GND` | `GND` | **Power Return** | Ground Plane | HF Ground Return |
 
 <!-- AUTO_SUBCHIPS_END: PCBA_05 -->
 
-### 7.1.3 ESP32-C3FH4 (`U10`) Auxiliary MCU Pinout Matrix (USB Audio / SkylineOS Headset Bridge)
+### 7.1.3 Single-Chip Bluetooth 5.1 Architecture (FSC-BT802 / CSR8670)
 
-<!-- AUTO_PINOUT_START: PCBA_05_AUX -->
-
-| Pad | Signal / KiCad Net | ESP32 GPIO | Firmware Define | Target / IC | Signal Type & Electrical Spec |
-| :---: | :--- | :---: | :--- | :--- | :--- |
-| 1 | `GND` | - | - | GND | **RF_GND** – HF-Masse / LNA Ground (Reine USB-Kabel-Headset-Emulation, kein RF/BLE aktiv) |
-| 2 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – Analoge Versorgungsspannung 3.3V (VDD3P3) |
-| 3 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – RTC Versorgungsspannung 3.3V (VDD3P3_RTC) |
-| 4 | `C3_NC_GPIO0` | GPIO 0 | - | NC | **GPIO/NC** – Unbelegt / Nicht kontaktiert (XTAL_32K_P) |
-| 5 | `C3_NC_GPIO1` | GPIO 1 | - | NC | **GPIO/NC** – Unbelegt / Nicht kontaktiert (XTAL_32K_N) |
-| 6 | `C3_I2S_BCLK` | GPIO 2 | - | U1.23 | **I2S_BCLK** – Digital Audio I2S Bit Clock von U1 (ESP32-S31) |
-| 7 | `C3_EN` | - | - | U1.15 | **Power/Reset** – Chip Enable / Hardware Reset von U1 (ESP32-S31 GPIO15, 10k PU / 100nF) |
-| 8 | `C3_I2S_WS` | GPIO 3 | - | U1.24 | **I2S_WS** – Digital Audio I2S Word Select von U1 (ESP32-S31) |
-| 9 | `C3_I2S_SDO` | GPIO 4 | - | U1.25 | **I2S_DIN** – Digital Audio I2S Serial Data In von U1 (Lautsprecher-Audio Streaming) |
-| 10 | `C3_I2S_SDI` | GPIO 5 | - | U1.28 | **I2S_DOUT** – Digital Audio I2S Serial Data Out an U1 (Mikrofon-/Siri-Audio) |
-| 11 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – CPU Kern-Versorgungsspannung 3.3V (VDD3P3_CPU) |
-| 12 | `C3_NC_GPIO6` | GPIO 6 | - | NC | **GPIO/NC** – Unbelegt / Nicht kontaktiert (MTCK) |
-| 13 | `C3_NC_GPIO7` | GPIO 7 | - | NC | **GPIO/NC** – Unbelegt / Nicht kontaktiert (MTDO) |
-| 14 | `C3_NC_GPIO8` | GPIO 8 | - | NC | **GPIO/NC** – Unbelegt / Strapping Pin (Logisch HIGH) |
-| 15 | `C3_BOOT` | GPIO 9 | - | U1.16 | **Digital In** – Boot Mode Strapping Pin (GPIO9) von U1 (ESP32-S31 GPIO16, 10k PU) |
-| 16 | `C3_NC_GPIO10` | GPIO 10 | - | NC | **GPIO/NC** – Unbelegt / Nicht kontaktiert (FSPICS0) |
-| 17 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – SPI Flash Betriebsspannung 3.3V (VDD_SPI) |
-| 18 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash VDD_SPI) – darf extern nicht kontaktiert werden |
-| 19 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPIHD) – darf extern nicht kontaktiert werden |
-| 20 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPIWP) – darf extern nicht kontaktiert werden |
-| 21 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPICS0) – darf extern nicht kontaktiert werden |
-| 22 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPICLK) – darf extern nicht kontaktiert werden |
-| 23 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPID) – darf extern nicht kontaktiert werden |
-| 24 | `NC` | - | - | NC | **SIP_FLASH** – Intern belegt (C3FH4 SiP Flash SPIQ) – darf extern nicht kontaktiert werden |
-| 25 | `USB_DN2_DM` | GPIO 18 | - | U2.11 | **USB_FS_DM** – Nativer Full-Speed USB Controller Data Minus (UAC / HID Headset Emulation) |
-| 26 | `USB_DN2_DP` | GPIO 19 | - | U2.12 | **USB_FS_DP** – Nativer Full-Speed USB Controller Data Plus (UAC / HID Headset Emulation) |
-| 27 | `C3_UART_TX` | GPIO 20 | - | U1.14 | **UART_RX** – C3 UART0 Receive Data (U0RXD) von U1 (ESP32-S31 GPIO34 / C3_UART_TX) |
-| 28 | `C3_UART_RX` | GPIO 21 | - | U1.13 | **UART_TX** – C3 UART0 Transmit Data (U0TXD) an U1 (ESP32-S31 GPIO33 / C3_UART_RX) |
-| 29 | `C3_XTAL_OUT` | - | - | Y2.3 | **Oscillator** – 40 MHz Quarz Oszillator Ausgang (XTAL_N) |
-| 30 | `C3_XTAL_IN` | - | - | Y2.1 | **Oscillator** – 40 MHz Quarz Oszillator Eingang (XTAL_P) |
-| 31 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – Analoge Versorgungsspannung 3.3V (VDDA) |
-| 32 | `VCC_3V3` | - | - | VCC_3V3 | **Power** – Analoge Versorgungsspannung 3.3V (VDDA) |
-| 33 | `GND` | - | - | GND | **Ground** – Zentrales Massepads & Thermische Anbindung (EP) |
-
-<!-- AUTO_PINOUT_END: PCBA_05_AUX -->
+> [!NOTE]
+> **Architecture Upgrade to Single-Chip Bluetooth Transceiver:**  
+> The legacy auxiliary MCU `U10` (ESP32-C3FH4) and USB hub `U2` (`USB2514Bi`) were completely removed and consolidated on `PCBA 05`. Infotainment, headset, and speaker audio streaming to Harley-Davidson SkylineOS / Boom! Box is now handled directly and wirelessly via the **Feasycom FSC-BT802** (Qualcomm CSR8670 dual-mode BT 5.1 audio transceiver, `U2`) paired with onboard ceramic chip antenna `ANT3` (`Johanson 2450AT18A100`).
 
 #### 7.1.3 Header J4 Pinout: Glovebox Hub Lifeline (JST-GH 1.25mm 8-Pin Horizontal)
 Connects the Universal Front Node (`PCBA 05`) directly to the Glovebox Breakout Hub (`PCBA 05B`) over an 8-conductor shielded automotive harness:
@@ -1327,24 +1394,15 @@ The PCBA 07 assembly constitutes the electronics core inside the pocket keyfob e
 | 20 | `SCK` | `SPI_SCK` | **SPI CLK** | U1 (ESP32-C3) | SPI Clock |
 | 21 | `NSS` | `LORA_NSS` | **SPI CS** | U1 (ESP32-C3) | SPI Chip Select Active Low |
 
-#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (VQFN-20 / RHL-20 (3.5x4.5 mm))
-> **Manufacturer Datasheet:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin Definitions:** [Pin Functions (VQFN-20 RHL Package)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
+#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (QFN-28 (4.5x3.5 mm))
+> **Manufacturer Datasheet:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin Definitions:** [Pin Functions (QFN-28)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
 
 | Pad | Pin Name | Signal / KiCad Net | Signal Type | Target / Source | Function & Electrical Spec |
 | :---: | :--- | :--- | :---: | :--- | :--- |
-| 1 | `PGND` | `GND` | **Power Return** | Massebezug | Leistungsmasse (Power Ground) |
-| 2 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 (Pin 1/2) |
-| 3 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 (Pin 2/2) |
-| 4 | `BOOT1` | `QI_BOOT1` | **Bootstrap** | C_BOOT1 (10nF zu AC1) | High-Side Bootstrap Kondensator 1 |
-| 7 | `CHG` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3 Pad 28) | Qi Ladestatus (Active Low = lädt) |
-| 11 | `BAT` | `VBAT` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 1/2) |
-| 12 | `BAT` | `VBAT` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 2/2) |
-| 14 | `RECT` | `QI_RECT` | **Output** | C_RECT (10uF Puffer zu GND) | Gleichgerichtete Qi-Ausgangsspannung |
-| 17 | `BOOT2` | `QI_BOOT2` | **Bootstrap** | C_BOOT2 (10nF zu AC2) | High-Side Bootstrap Kondensator 2 |
-| 18 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 (Pin 1/2) |
-| 19 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 (Pin 2/2) |
-| 20 | `PGND` | `GND` | **Power Return** | Massebezug | Leistungsmasse (Power Ground) |
-| 21 | `EP` | `GND` | **Power Return / Thermal** | GND Plane | Thermal Pad Massebezug |
+| 1 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 |
+| 2 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 |
+| 12 | `BAT` | `BAT_3V7` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom |
+| 15 | `CHG_STAT` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3) | Qi Ladestatus (Active Low = lädt) |
 
 <!-- AUTO_SUBCHIPS_END: PCBA_07 -->
 

@@ -4,6 +4,18 @@
     "description": "OpenMotorBridge Hardware & Firmware Pinout Matrix (SSOT)",
     "generated_at": "2026-11-19",
     "official_chips": {
+      "FSC-BT802": {
+        "manufacturer": "Feasycom / Qualcomm",
+        "datasheet_title": "Feasycom FSC-BT802 CSR8670 Bluetooth 5.1 Dual-Mode Audio Module Datasheet",
+        "datasheet_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf",
+        "pin_description_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf#page=6",
+        "table_ref": "Table 3-1: Pin Descriptions",
+        "package": "27-Pad SMD Module (9.7x11.5x1.8 mm)",
+        "core": "Qualcomm CSR8670 Dual-Mode Bluetooth 5.1 Audio SoC @ 80 MHz with DSP & 16-Bit Stereo Codec",
+        "used_in_boards": [
+          "PCBA_05"
+        ]
+      },
       "ESP32-S31-WROOM-1U": {
         "manufacturer": "Espressif Systems",
         "datasheet_title": "ESP32-S31-WROOM-1 & ESP32-S31-WROOM-1U Datasheet",
@@ -40,7 +52,6 @@
         "package": "QFN-32 (5x5 mm) with 4 MB In-Package Flash (C3FH4)",
         "core": "32-Bit RISC-V @ 160 MHz with 2.4 GHz Wi-Fi 4 & BLE 5.0",
         "used_in_boards": [
-          "PCBA_05",
           "PCBA_07"
         ]
       },
@@ -89,20 +100,20 @@
         "package": "QFN-36 (6x6 mm)",
         "core": "4-Port Automotive USB 2.0 High-Speed Hub Controller",
         "used_in_boards": [
-          "PCBA_05",
           "PCBA_05B"
         ]
       },
-      "QCC3084": {
+      "QCC3086": {
         "manufacturer": "Qualcomm Technologies, Inc.",
-        "datasheet_title": "Qualcomm QCC3084 Bluetooth 5.4 Audio SoC Device Specification",
-        "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
-        "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
+        "datasheet_title": "Qualcomm QCC3086 Bluetooth 5.4 Audio SoC Device Specification",
+        "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+        "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
         "table_ref": "Pin Definitions & Audio Interface Routing",
         "package": "WLCSP / BGA Module",
-        "core": "Dual-Core 32-Bit Audio App Core @ 240 MHz, Dual 120 MHz Kalimba Audio DSPs, Bluetooth 5.4 LE Audio & aptX Adaptive",
+        "core": "Tri-Core 32-Bit Audio App Processor @ 240 MHz, 240 MHz Kalimba Audio DSP, Bluetooth 5.4 LE Audio, aptX Adaptive, Low-Latency Voice Backchannel",
         "used_in_boards": [
-          "PCBA_01"
+          "PCBA_01",
+          "PCBA_08"
         ]
       },
       "SX1262": {
@@ -212,8 +223,8 @@
         "datasheet_title": "BQ51050B Highly Integrated Wireless Power Receiver and Battery Charger (Qi v1.2)",
         "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
         "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-        "table_ref": "Pin Functions (VQFN-20 RHL Package)",
-        "package": "VQFN-20 / RHL-20 (3.5x4.5 mm)",
+        "table_ref": "Pin Functions (QFN-28)",
+        "package": "QFN-28 (4.5x3.5 mm)",
         "core": "Wireless Power Consortium (WPC) Qi v1.2 Receiver & Li-Ion Charger",
         "used_in_boards": [
           "PCBA_07"
@@ -735,7 +746,7 @@
               "pin_name": "USBDN_DM5",
               "net": "BT_USB_DM",
               "type": "USB D-",
-              "target": "U9.13 (QCC3084)",
+              "target": "U9.13 (QCC3086)",
               "spec": "Port 5 Downstream USB D- an Qualcomm BT Audio SoC"
             },
             {
@@ -743,7 +754,7 @@
               "pin_name": "USBDN_DP5",
               "net": "BT_USB_DP",
               "type": "USB D+",
-              "target": "U9.14 (QCC3084)",
+              "target": "U9.14 (QCC3086)",
               "spec": "Port 5 Downstream USB D+ an Qualcomm BT Audio SoC"
             },
             {
@@ -766,11 +777,11 @@
         },
         "U9": {
           "ref": "U9",
-          "chip_key": "QCC3084",
-          "name": "Qualcomm QCC3084 Bluetooth 5.4 Audio SoC",
+          "chip_key": "QCC3086",
+          "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Transceiver (Phone Link)",
           "package": "WLCSP / BGA Module",
-          "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
-          "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
+          "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+          "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
           "table_ref": "Pin Definitions & Audio Interface Routing",
           "pins": [
             {
@@ -803,7 +814,7 @@
               "net": "I2S_DOUT",
               "type": "Audio In",
               "target": "U2 (ESP32-S31)",
-              "spec": "Digital Audio Stream vom ESP32-S31 DSP zum Helm"
+              "spec": "Digital Audio Stream vom Smartphone (A2DP / Anrufer) an ESP32-S31 DSP"
             },
             {
               "pad": "7",
@@ -811,7 +822,7 @@
               "net": "I2S_DIN",
               "type": "Audio Out",
               "target": "U2 (ESP32-S31)",
-              "spec": "Helmmikrofon-Audio Stream an den DSP"
+              "spec": "Helmmikrofon-Audio Stream an QCC3086 Voice-Backchannel zum Smartphone"
             },
             {
               "pad": "9",
@@ -859,7 +870,189 @@
               "net": "BT_RF_AUDIO",
               "type": "RF 2.4 GHz",
               "target": "ANT2 (U.FL)",
-              "spec": "Bluetooth 5.4 Dual-A2DP / Auracast Antennenport"
+              "spec": "Bluetooth 5.4 Antennenport an ANT2 Deckelantenne (Smartphone-Link)"
+            }
+          ]
+        },
+        "U13": {
+          "ref": "U13",
+          "chip_key": "QCC3086",
+          "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Sozius Helm 1)",
+          "package": "WLCSP / BGA Module",
+          "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+          "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+          "table_ref": "Pin Definitions & Audio Interface Routing",
+          "pins": [
+            {
+              "pad": "4",
+              "pin_name": "I2S_BCLK",
+              "net": "I2S_BCLK",
+              "type": "Clock In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "I2S Bit Clock 3.072 MHz"
+            },
+            {
+              "pad": "5",
+              "pin_name": "I2S_WS",
+              "net": "I2S_WS",
+              "type": "Sync In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "I2S Word Select / LRCLK 48 kHz"
+            },
+            {
+              "pad": "6",
+              "pin_name": "I2S_DOUT",
+              "net": "HELM1_I2S_DOUT",
+              "type": "Audio In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Audio-Stream vom DSP an Helm 1"
+            },
+            {
+              "pad": "7",
+              "pin_name": "I2S_DIN",
+              "net": "HELM1_I2S_DIN",
+              "type": "Audio Out",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Helm 1 Mikrofon-Rückkanal an DSP"
+            },
+            {
+              "pad": "9",
+              "pin_name": "UART_TX",
+              "net": "HELM1_BT_UART_TX",
+              "type": "UART Out",
+              "target": "U2 (ESP32-S31)",
+              "spec": "HCI / AT TX Helm 1"
+            },
+            {
+              "pad": "10",
+              "pin_name": "UART_RX",
+              "net": "HELM1_BT_UART_RX",
+              "type": "UART In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "HCI / AT RX Helm 1"
+            },
+            {
+              "pad": "11",
+              "pin_name": "CHIP_EN",
+              "net": "HELM1_BT_EN",
+              "type": "Control In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Power Enable Helm 1"
+            },
+            {
+              "pad": "13",
+              "pin_name": "USB_DM",
+              "net": "HELM1_USB_DM",
+              "type": "USB D-",
+              "target": "U8 (Hub)",
+              "spec": "USB D- Helm 1"
+            },
+            {
+              "pad": "14",
+              "pin_name": "USB_DP",
+              "net": "HELM1_USB_DP",
+              "type": "USB D+",
+              "target": "U8 (Hub)",
+              "spec": "USB D+ Helm 1"
+            },
+            {
+              "pad": "15",
+              "pin_name": "RF_ANT",
+              "net": "BT_RF_HELM1",
+              "type": "RF 2.4 GHz",
+              "target": "ANT3 (Keramik)",
+              "spec": "BT 5.4 RF Port an Keramikantenne ANT3"
+            }
+          ]
+        },
+        "U14": {
+          "ref": "U14",
+          "chip_key": "QCC3086",
+          "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Fahrer Helm 2)",
+          "package": "WLCSP / BGA Module",
+          "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+          "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+          "table_ref": "Pin Definitions & Audio Interface Routing",
+          "pins": [
+            {
+              "pad": "4",
+              "pin_name": "I2S_BCLK",
+              "net": "I2S_BCLK",
+              "type": "Clock In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "I2S Bit Clock 3.072 MHz"
+            },
+            {
+              "pad": "5",
+              "pin_name": "I2S_WS",
+              "net": "I2S_WS",
+              "type": "Sync In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "I2S Word Select / LRCLK 48 kHz"
+            },
+            {
+              "pad": "6",
+              "pin_name": "I2S_DOUT",
+              "net": "HELM2_I2S_DOUT",
+              "type": "Audio In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Audio-Stream vom DSP an Helm 2"
+            },
+            {
+              "pad": "7",
+              "pin_name": "I2S_DIN",
+              "net": "HELM2_I2S_DIN",
+              "type": "Audio Out",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Helm 2 Mikrofon-Rückkanal an DSP"
+            },
+            {
+              "pad": "9",
+              "pin_name": "UART_TX",
+              "net": "HELM2_BT_UART_TX",
+              "type": "UART Out",
+              "target": "U2 (ESP32-S31)",
+              "spec": "HCI / AT TX Helm 2"
+            },
+            {
+              "pad": "10",
+              "pin_name": "UART_RX",
+              "net": "HELM2_BT_UART_RX",
+              "type": "UART In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "HCI / AT RX Helm 2"
+            },
+            {
+              "pad": "11",
+              "pin_name": "CHIP_EN",
+              "net": "HELM2_BT_EN",
+              "type": "Control In",
+              "target": "U2 (ESP32-S31)",
+              "spec": "Power Enable Helm 2"
+            },
+            {
+              "pad": "13",
+              "pin_name": "USB_DM",
+              "net": "HELM2_USB_DM",
+              "type": "USB D-",
+              "target": "U8 (Hub)",
+              "spec": "USB D- Helm 2"
+            },
+            {
+              "pad": "14",
+              "pin_name": "USB_DP",
+              "net": "HELM2_USB_DP",
+              "type": "USB D+",
+              "target": "U8 (Hub)",
+              "spec": "USB D+ Helm 2"
+            },
+            {
+              "pad": "15",
+              "pin_name": "RF_ANT",
+              "net": "BT_RF_HELM2",
+              "type": "RF 2.4 GHz",
+              "target": "ANT4 (Keramik)",
+              "spec": "BT 5.4 RF Port an Keramikantenne ANT4"
             }
           ]
         },
@@ -1195,7 +1388,7 @@
           "net": "GNSS_TIMEPULSE",
           "fw_define": null,
           "signal_type": "Digital In",
-          "target": "J6.7",
+          "target": "J6.5",
           "description": "u-blox SAM-M10Q 1-PPS Timepulse Synchronization"
         },
         {
@@ -1204,8 +1397,8 @@
           "net": "GNSS_TXD",
           "fw_define": null,
           "signal_type": "UART_RX",
-          "target": "J6.5",
-          "description": "u-blox SAM-M10Q Primary NMEA / UBX Stream"
+          "target": "J6.6",
+          "description": "u-blox SAM-M10Q Primary NMEA / UBX Stream RX"
         },
         {
           "pad": "6",
@@ -1213,7 +1406,7 @@
           "net": "MIC_I2S_WS",
           "fw_define": "PIN_MIC_I2S_WS",
           "signal_type": "I2S_WS",
-          "target": "MK1.2 / J6.6",
+          "target": "MK1.2",
           "description": "Fahrtwindmikrofon Knowles SPH0645 Word Select"
         },
         {
@@ -1229,7 +1422,7 @@
           "pad": "8",
           "gpio": 8,
           "net": "BTN_SIG_L_N",
-          "fw_define": "PIN_BTN_SIG_L_N",
+          "fw_define": "PIN_BTN_SIG_L",
           "signal_type": "Digital In",
           "target": "J2.3",
           "description": "Linker Spiegeltaster (PTT / Intercom / HFP)"
@@ -1238,7 +1431,7 @@
           "pad": "9",
           "gpio": 9,
           "net": "BTN_SIG_R_N",
-          "fw_define": "PIN_BTN_SIG_R_N",
+          "fw_define": "PIN_BTN_SIG_R",
           "signal_type": "Digital In",
           "target": "J3.3",
           "description": "Rechter Spiegeltaster (Action-Cam Tagging / Mode)"
@@ -1249,15 +1442,15 @@
           "net": "GNSS_RXD",
           "fw_define": null,
           "signal_type": "UART_TX",
-          "target": "J6.6",
-          "description": "u-blox SAM-M10Q Configuration Stream"
+          "target": "J6.7",
+          "description": "u-blox SAM-M10Q Configuration Stream TX"
         },
         {
           "pad": "11",
           "gpio": 7,
           "net": "GNSS_RESET_N",
-          "fw_define": "PIN_GNSS_RESET_N",
-          "signal_type": "Digital Out",
+          "fw_define": null,
+          "signal_type": "Control Out",
           "target": "J6.8",
           "description": "u-blox SAM-M10Q Hardware Reset (Active Low)"
         },
@@ -1267,44 +1460,44 @@
           "net": "MIC_I2S_DATA",
           "fw_define": "PIN_MIC_I2S_DATA",
           "signal_type": "I2S_DATA",
-          "target": "MK1.1 / J6.5",
+          "target": "MK1.1",
           "description": "Fahrtwindmikrofon Knowles SPH0645 Serial Data"
         },
         {
           "pad": "13",
           "gpio": 33,
-          "net": "C3_UART_RX",
-          "fw_define": "PIN_C3_UART_RX",
-          "signal_type": "UART_RX",
-          "target": "U10.28",
-          "description": "Auxiliary MCU (ESP32-C3) UART RX (Audio/SkylineOS Headset Bridge, U10 Pin 28 U0TXD)"
+          "net": "BT_UART_TX",
+          "fw_define": "PIN_BT_UART_TX",
+          "signal_type": "UART_TX",
+          "target": "U2.18",
+          "description": "AT Command TX an Feasycom FSC-BT802 Pin 18 (CSR8670)"
         },
         {
           "pad": "14",
           "gpio": 34,
-          "net": "C3_UART_TX",
-          "fw_define": "PIN_C3_UART_TX",
-          "signal_type": "UART_TX",
-          "target": "U10.27",
-          "description": "Auxiliary MCU (ESP32-C3) UART TX (Audio/SkylineOS Headset Bridge, U10 Pin 27 U0RXD)"
+          "net": "BT_UART_RX",
+          "fw_define": "PIN_BT_UART_RX",
+          "signal_type": "UART_RX",
+          "target": "U2.17",
+          "description": "AT Command RX von Feasycom FSC-BT802 Pin 17 (CSR8670)"
         },
         {
           "pad": "15",
           "gpio": 15,
-          "net": "C3_EN",
-          "fw_define": "PIN_C3_EN",
-          "signal_type": "GPIO_OUT",
-          "target": "U10.7",
-          "description": "Auxiliary MCU (ESP32-C3) Hardware Reset / Enable"
+          "net": "GPIO15",
+          "fw_define": null,
+          "signal_type": "GPIO",
+          "target": "Testpunkt",
+          "description": "General Purpose I/O (Reserve)"
         },
         {
           "pad": "16",
           "gpio": 16,
-          "net": "C3_BOOT",
-          "fw_define": "PIN_C3_BOOT",
-          "signal_type": "GPIO_OUT",
-          "target": "U10.15",
-          "description": "Auxiliary MCU (ESP32-C3) Boot Strap Mode Select"
+          "net": "GPIO16",
+          "fw_define": null,
+          "signal_type": "GPIO",
+          "target": "Testpunkt",
+          "description": "General Purpose I/O (Reserve)"
         },
         {
           "pad": "17",
@@ -1331,13 +1524,13 @@
           "fw_define": "PIN_WS2812B_DIN",
           "signal_type": "Digital Out",
           "target": "LED1.4",
-          "description": "Onboard Status-LED WS2812B-2020 Data"
+          "description": "Onboard RGB-Status-LED WS2812B-2020 Data"
         },
         {
           "pad": "20",
           "gpio": 25,
           "net": "BSD_LED_LEFT",
-          "fw_define": "PIN_BSD_LED_LEFT",
+          "fw_define": "PIN_BSD_LED_L",
           "signal_type": "Digital Out",
           "target": "Q1.2 -> J2.2",
           "description": "Toter-Winkel-Warn-LED Spiegel Links (BSD)"
@@ -1346,7 +1539,7 @@
           "pad": "21",
           "gpio": 26,
           "net": "BSD_LED_RIGHT",
-          "fw_define": "PIN_BSD_LED_RIGHT",
+          "fw_define": "PIN_BSD_LED_R",
           "signal_type": "Digital Out",
           "target": "Q1.5 -> J3.2",
           "description": "Toter-Winkel-Warn-LED Spiegel Rechts (BSD)"
@@ -1358,58 +1551,67 @@
           "fw_define": "PIN_AUX_LIGHT_EN",
           "signal_type": "Digital Out",
           "target": "Q2.3 -> J7.1",
-          "description": "Zusatzscheinwerfer High-Side Switch Enable (TPS1H100)"
+          "description": "Zusatzscheinwerfer High-Power Schaltausgang (12V/10A via MOSFET)"
         },
         {
           "pad": "23",
           "gpio": 7,
-          "net": "C3_I2S_BCLK",
-          "fw_define": "PIN_C3_I2S_BCLK",
+          "net": "BT_I2S_BCLK",
+          "fw_define": "PIN_BT_I2S_BCLK",
           "signal_type": "I2S_BCLK",
-          "target": "U10.6",
-          "description": "Digital Audio I2S Bit Clock an U10 ESP32-C3 (Harley Headset-Emulation / Speaker Audio Streaming)"
+          "target": "U2.15",
+          "description": "Digital Audio I2S Bit Clock an U2 Feasycom FSC-BT802 (CSR8670)"
         },
         {
           "pad": "24",
           "gpio": 10,
-          "net": "C3_I2S_WS",
-          "fw_define": "PIN_C3_I2S_WS",
+          "net": "BT_I2S_WS",
+          "fw_define": "PIN_BT_I2S_WS",
           "signal_type": "I2S_WS",
-          "target": "U10.8",
-          "description": "Digital Audio I2S Word Select / Frame Sync an U10 ESP32-C3"
+          "target": "U2.12",
+          "description": "Digital Audio I2S Word Select / Frame Sync an U2 Feasycom FSC-BT802"
         },
         {
           "pad": "25",
           "gpio": 15,
-          "net": "C3_I2S_SDO",
-          "fw_define": "PIN_C3_I2S_SDO",
+          "net": "BT_I2S_DOUT",
+          "fw_define": "PIN_BT_I2S_DOUT",
           "signal_type": "I2S_DOUT",
-          "target": "U10.9",
-          "description": "Digital Audio I2S Serial Data Out an U10 (Lautsprecher-Wiedergabe Skyline OS / Boom! Box)"
+          "target": "U2.13",
+          "description": "Digital Audio I2S Serial Data Out an U2 (PCM_IN vom FSC-BT802)"
         },
         {
           "pad": "27",
           "gpio": 0,
           "net": "ESP_BOOT",
-          "fw_define": "PIN_BOOT_BUTTON",
-          "signal_type": "Digital In",
+          "fw_define": null,
+          "signal_type": "Strapping",
           "target": "SW2",
           "description": "Boot Mode Strapping Pin / Service Taster"
         },
         {
           "pad": "28",
           "gpio": 48,
-          "net": "C3_I2S_SDI",
-          "fw_define": "PIN_C3_I2S_SDI",
+          "net": "BT_I2S_DIN",
+          "fw_define": "PIN_BT_I2S_DIN",
           "signal_type": "I2S_DIN",
-          "target": "U10.10",
-          "description": "Digital Audio I2S Serial Data In von U10 (Mikrofon-/Sprachkanal von Skyline OS)"
+          "target": "U2.14",
+          "description": "Digital Audio I2S Serial Data In von U2 (PCM_OUT vom FSC-BT802)"
+        },
+        {
+          "pad": "29",
+          "gpio": 29,
+          "net": "GPIO29",
+          "fw_define": null,
+          "signal_type": "GPIO",
+          "target": "Testpunkt",
+          "description": "General Purpose I/O (Reserve)"
         },
         {
           "pad": "30",
           "gpio": 35,
           "net": "SDIO_CLK",
-          "fw_define": "PIN_E22_SDIO_CLK",
+          "fw_define": null,
           "signal_type": "SDIO_CLK",
           "target": "U9.10",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Clock (50 MHz)"
@@ -1418,7 +1620,7 @@
           "pad": "31",
           "gpio": 36,
           "net": "SDIO_CMD",
-          "fw_define": "PIN_E22_SDIO_CMD",
+          "fw_define": null,
           "signal_type": "SDIO_CMD",
           "target": "U9.11",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Command Line"
@@ -1427,7 +1629,7 @@
           "pad": "32",
           "gpio": 37,
           "net": "SDIO_D0",
-          "fw_define": "PIN_E22_SDIO_D0",
+          "fw_define": null,
           "signal_type": "SDIO_D0",
           "target": "U9.12",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 0"
@@ -1436,7 +1638,7 @@
           "pad": "33",
           "gpio": 33,
           "net": "SDIO_D1",
-          "fw_define": "PIN_E22_SDIO_D1",
+          "fw_define": null,
           "signal_type": "SDIO_D1",
           "target": "U9.13",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 1"
@@ -1445,7 +1647,7 @@
           "pad": "34",
           "gpio": 34,
           "net": "SDIO_D2",
-          "fw_define": "PIN_E22_SDIO_D2",
+          "fw_define": null,
           "signal_type": "SDIO_D2",
           "target": "U9.14",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 2"
@@ -1454,7 +1656,7 @@
           "pad": "35",
           "gpio": 38,
           "net": "SDIO_D3",
-          "fw_define": "PIN_E22_SDIO_D3",
+          "fw_define": null,
           "signal_type": "SDIO_D3",
           "target": "U9.15",
           "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 3"
@@ -1463,7 +1665,7 @@
           "pad": "36",
           "gpio": 59,
           "net": "E22_EN",
-          "fw_define": "PIN_E22_EN",
+          "fw_define": null,
           "signal_type": "Digital Out",
           "target": "U9.3",
           "description": "ESP32-E22 Wi-Fi 6E Chip Enable / Power Gate"
@@ -1472,173 +1674,170 @@
           "pad": "37",
           "gpio": 60,
           "net": "E22_IRQ",
-          "fw_define": "PIN_E22_IRQ",
-          "signal_type": "Digital In / IRQ",
+          "fw_define": null,
+          "signal_type": "Digital In",
           "target": "U9.16",
           "description": "ESP32-E22 Wi-Fi 6E Interrupt Request"
         },
         {
           "pad": "38",
           "gpio": 56,
-          "net": "CP2AA_FAULT_N",
-          "fw_define": "PIN_CP2AA_FAULT_N",
-          "signal_type": "Digital In",
-          "target": "U4.4",
-          "description": "CarPlay / Android Auto USB Power Switch Fault (Active Low)"
+          "net": "BT_RST",
+          "fw_define": "PIN_BT_RST",
+          "signal_type": "Digital Out",
+          "target": "U2.4",
+          "description": "Feasycom FSC-BT802 Hardware Reset Active Low (RESETB)"
         },
         {
           "pad": "39",
           "gpio": 57,
-          "net": "CP2AA_PWR_EN",
-          "fw_define": "PIN_CP2AA_PWR_EN",
+          "net": "BT_EN",
+          "fw_define": "PIN_BT_EN",
           "signal_type": "Digital Out",
-          "target": "U4.3",
-          "description": "CarPlay / Android Auto USB 5V VBUS Power Enable"
+          "target": "U2.3",
+          "description": "Feasycom FSC-BT802 Power Enable Active High (VREGENABLE)"
         },
         {
           "pad": "54",
           "gpio": null,
-          "net": "USB_HS_DM",
-          "fw_define": "PIN_USB_HS_DM",
-          "signal_type": "USB_HS_DM",
+          "net": "USB_UP_DM",
+          "fw_define": null,
+          "signal_type": "USB_DM",
           "target": "J1.4",
-          "description": "Native USB 2.0 Device Controller Data Minus (Direct 4-Wire Backbone)"
+          "description": "Native USB 2.0 High-Speed D- (Direct 4-Wire Backbone zu Zentralbox)"
         },
         {
           "pad": "55",
           "gpio": null,
-          "net": "USB_HS_DP",
-          "fw_define": "PIN_USB_HS_DP",
-          "signal_type": "USB_HS_DP",
+          "net": "USB_UP_DP",
+          "fw_define": null,
+          "signal_type": "USB_DP",
           "target": "J1.3",
-          "description": "Native USB 2.0 Device Controller Data Plus (Direct 4-Wire Backbone)"
+          "description": "Native USB 2.0 High-Speed D+ (Direct 4-Wire Backbone zu Zentralbox)"
         }
       ],
       "chip_key": "ESP32-S31-WROOM-1U",
       "sub_chips": {
-        "U10": {
-          "ref": "U10",
-          "chip_key": "ESP32-C3FH4",
-          "name": "ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU",
-          "package": "QFN-32 (5x5 mm)",
-          "datasheet_url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf",
-          "pin_description_url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf#page=17",
-          "table_ref": "Table 2-2: Pin Description (QFN-32)",
+        "U2": {
+          "ref": "U2",
+          "chip_key": "FSC-BT802",
+          "name": "Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Modul (CSR8670)",
+          "package": "27-Pad SMD Module (9.7x11.5 mm)",
+          "datasheet_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf",
+          "pin_description_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf#page=6",
+          "table_ref": "Table 3-1: Pin Descriptions",
           "pins": [
             {
+              "pad": "1",
+              "pin_name": "GND",
+              "net": "GND",
+              "type": "Power Return",
+              "target": "Ground Plane",
+              "spec": "Modul-Masse"
+            },
+            {
+              "pad": "2",
+              "pin_name": "VDD_IO",
+              "net": "VCC_3V3",
+              "type": "Power In (+3.3V)",
+              "target": "3.3V Rail",
+              "spec": "I/O Versorgungsspannung"
+            },
+            {
+              "pad": "3",
+              "pin_name": "VREGENABLE",
+              "net": "BT_EN",
+              "type": "Control In",
+              "target": "U1.39 (ESP32-S31)",
+              "spec": "Power Enable Active High"
+            },
+            {
+              "pad": "4",
+              "pin_name": "RESETB",
+              "net": "BT_RST",
+              "type": "Control In",
+              "target": "U1.38 (ESP32-S31)",
+              "spec": "Hardware Reset Active Low"
+            },
+            {
+              "pad": "6",
+              "pin_name": "VBAT",
+              "net": "VCC_3V3",
+              "type": "Power In (+3.3V)",
+              "target": "3.3V Rail",
+              "spec": "Batterie-/Hauptversorgung"
+            },
+            {
               "pad": "12",
-              "pin_name": "GPIO18 / USB_D-",
-              "net": "C3_USB_DM",
-              "type": "USB D-",
-              "target": "U8 (TS3USB221)",
-              "spec": "USB 2.0 Client D- zu Boom! Box / Nachrüst-AA"
+              "pin_name": "PCM_SYNC",
+              "net": "BT_I2S_WS",
+              "type": "Clock In",
+              "target": "U1.24 (ESP32-S31)",
+              "spec": "I2S Word Select / Frame Sync"
             },
             {
               "pad": "13",
-              "pin_name": "GPIO19 / USB_D+",
-              "net": "C3_USB_DP",
-              "type": "USB D+",
-              "target": "U8 (TS3USB221)",
-              "spec": "USB 2.0 Client D+ zu Boom! Box / Nachrüst-AA"
+              "pin_name": "PCM_IN",
+              "net": "BT_I2S_DOUT",
+              "type": "Audio In",
+              "target": "U1.25 (ESP32-S31)",
+              "spec": "I2S Audio RX von S31 MCU"
+            },
+            {
+              "pad": "14",
+              "pin_name": "PCM_OUT",
+              "net": "BT_I2S_DIN",
+              "type": "Audio Out",
+              "target": "U1.28 (ESP32-S31)",
+              "spec": "I2S Audio TX zur S31 MCU"
+            },
+            {
+              "pad": "15",
+              "pin_name": "PCM_CLK",
+              "net": "BT_I2S_BCLK",
+              "type": "Clock In",
+              "target": "U1.23 (ESP32-S31)",
+              "spec": "I2S Bit Clock"
+            },
+            {
+              "pad": "17",
+              "pin_name": "UART_RX",
+              "net": "BT_UART_RX",
+              "type": "UART In",
+              "target": "U1.14 (ESP32-S31)",
+              "spec": "AT Command RX"
             },
             {
               "pad": "18",
-              "pin_name": "GPIO4 / I2S_MCLK",
-              "net": "C3_I2S_MCLK",
-              "type": "Clock In",
-              "target": "U1 (ESP32-S31)",
-              "spec": "I2S Master Clock vom S31"
+              "pin_name": "UART_TX",
+              "net": "BT_UART_TX",
+              "type": "UART Out",
+              "target": "U1.13 (ESP32-S31)",
+              "spec": "AT Command TX"
             },
             {
               "pad": "19",
-              "pin_name": "GPIO5 / I2S_BCLK",
-              "net": "C3_I2S_BCLK",
-              "type": "Clock In",
-              "target": "U1 (ESP32-S31)",
-              "spec": "I2S Bit Clock vom S31"
-            },
-            {
-              "pad": "20",
-              "pin_name": "GPIO6 / I2S_WS",
-              "net": "C3_I2S_WS",
-              "type": "Sync In",
-              "target": "U1 (ESP32-S31)",
-              "spec": "I2S Word Select vom S31"
-            },
-            {
-              "pad": "21",
-              "pin_name": "GPIO7 / I2S_SDO",
-              "net": "C3_I2S_SDO",
-              "type": "Audio In",
-              "target": "U1 (ESP32-S31)",
-              "spec": "Audio Playback Stream für Boom! Box Bordlautsprecher"
-            },
-            {
-              "pad": "22",
-              "pin_name": "GPIO8 / I2S_SDI",
-              "net": "C3_I2S_SDI",
-              "type": "Audio Out",
-              "target": "U1 (ESP32-S31)",
-              "spec": "Mikrofon-Rückkanal an Zentralbox DSP"
-            }
-          ]
-        },
-        "U2": {
-          "ref": "U2",
-          "chip_key": "USB2514Bi",
-          "name": "Microchip USB2514Bi 4-Port USB 2.0 Hub",
-          "package": "QFN-36 (6x6 mm)",
-          "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf",
-          "pin_description_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf#page=12",
-          "table_ref": "Table 3-1: 36-Pin QFN Pin Descriptions",
-          "pins": [
-            {
-              "pad": "15",
-              "pin_name": "USBUP_DM",
-              "net": "HUB_UP_DM",
-              "type": "USB D-",
-              "target": "U1 (ESP32-S31)",
-              "spec": "Upstream USB D- vom ESP32-S31 Host"
-            },
-            {
-              "pad": "16",
-              "pin_name": "USBUP_DP",
-              "net": "HUB_UP_DP",
-              "type": "USB D+",
-              "target": "U1 (ESP32-S31)",
-              "spec": "Upstream USB D+ vom ESP32-S31 Host"
-            },
-            {
-              "pad": "20",
-              "pin_name": "USBDN_DM1",
-              "net": "HUB_P1_DM",
-              "type": "USB D-",
-              "target": "J4 (Hub Ext JST-GH)",
-              "spec": "Port 1 D- zu PCBA 05B Handschuhfach"
-            },
-            {
-              "pad": "21",
-              "pin_name": "USBDN_DP1",
-              "net": "HUB_P1_DP",
-              "type": "USB D+",
-              "target": "J4 (Hub Ext JST-GH)",
-              "spec": "Port 1 D+ zu PCBA 05B Handschuhfach"
-            },
-            {
-              "pad": "24",
-              "pin_name": "USBDN_DM2",
-              "net": "HUB_P2_DM",
-              "type": "USB D-",
-              "target": "J5 (Wireless Dongle)",
-              "spec": "Port 2 D- an CP2AA CarPlay/AA Dongle"
+              "pin_name": "RF_ANT",
+              "net": "BT_RF_ANT",
+              "type": "RF 2.4 GHz",
+              "target": "ANT3 (Johanson 2450AT18A100)",
+              "spec": "50 Ohm RF-Ausgang an Keramikantenne"
             },
             {
               "pad": "25",
-              "pin_name": "USBDN_DP2",
-              "net": "HUB_P2_DP",
-              "type": "USB D+",
-              "target": "J5 (Wireless Dongle)",
-              "spec": "Port 2 D+ an CP2AA CarPlay/AA Dongle"
+              "pin_name": "GND",
+              "net": "GND",
+              "type": "Power Return",
+              "target": "Ground Plane",
+              "spec": "HF/Modul Masse"
+            },
+            {
+              "pad": "27",
+              "pin_name": "GND",
+              "net": "GND",
+              "type": "Power Return",
+              "target": "Ground Plane",
+              "spec": "HF Ground Return"
             }
           ]
         }
@@ -1647,12 +1846,12 @@
         "J1": {
           "ref": "J1",
           "name": "Backbone Bus-Eingang von Zentralbox (Molex J6.1-4)",
-          "type": "JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)",
+          "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
           "mating": "JST GHR-04V-S (AWG26-30)",
           "pins": [
             {
               "pin": "1",
-              "net": "VCC_BUS",
+              "net": "VIN_60W",
               "type": "Power In (+12V/60W)",
               "spec": "Bordnetz-/PD-Speisung von Zentralbox"
             },
@@ -1664,15 +1863,91 @@
             },
             {
               "pin": "3",
-              "net": "USB_DP",
+              "net": "USB_UP_DP",
               "type": "USB 2.0 D+",
-              "spec": "USB 2.0 High-Speed D+ zur Zentralbox"
+              "spec": "USB 2.0 High-Speed D+ direkt zu ESP32-S31 (U1.55)"
             },
             {
               "pin": "4",
-              "net": "USB_DM",
+              "net": "USB_UP_DM",
               "type": "USB 2.0 D-",
-              "spec": "USB 2.0 High-Speed D- zur Zentralbox"
+              "spec": "USB 2.0 High-Speed D- direkt zu ESP32-S31 (U1.54)"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
+        "J4": {
+          "ref": "J4",
+          "name": "Handschuhfach Qi / 5V Aux Power Receptacle",
+          "type": "JST-GH 6-Pin 1.25mm SMD Horizontal (SM06B-GHS-TB)",
+          "mating": "JST GHR-06V-S (AWG24-28)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VBUS_PD1_OUT",
+              "type": "Power Out (5-20V/30W)",
+              "spec": "USB Power Delivery von SW3526 (U5) für Handschuhfach"
+            },
+            {
+              "pin": "2",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Masse Leistungsrückstrom für USB-PD"
+            },
+            {
+              "pin": "3",
+              "net": "USB_DN1_CC1",
+              "type": "USB-PD CC1",
+              "spec": "Configuration Channel 1 von SW3526 (U5)"
+            },
+            {
+              "pin": "4",
+              "net": "USB_DN1_CC2",
+              "type": "USB-PD CC2",
+              "spec": "Configuration Channel 2 von SW3526 (U5)"
+            },
+            {
+              "pin": "5",
+              "net": "VCC_5V",
+              "type": "Power Out (+5V/3A)",
+              "spec": "Dauerhafte 5V Hilfsspannung von TPS54302 (U3)"
+            },
+            {
+              "pin": "6",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Gemeinsame Signal- und Lastmasse"
+            },
+            {
+              "pin": "MP",
+              "net": "SHIELD",
+              "type": "Shield",
+              "spec": "Gehäuseschirmung"
+            }
+          ]
+        },
+        "J7": {
+          "ref": "J7",
+          "name": "Zusatzscheinwerfer High-Power Schaltausgang (Aux Lights)",
+          "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
+          "mating": "JST GHR-02V-S (AWG20-24)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "+12V_AUX",
+              "type": "Power Out (+12V/10A)",
+              "spec": "Geschaltete 12V für High-Power LED Scheinwerfer"
+            },
+            {
+              "pin": "2",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Lastmasse Rückstrom"
             },
             {
               "pin": "MP",
@@ -1685,12 +1960,12 @@
         "J10": {
           "ref": "J10",
           "name": "Navi-Stromversorgungsbuchse (Garmin Zūmo / TomTom)",
-          "type": "JST-GH 2-Pin 1.25mm SMD Vertikal (BM02B-GHS-TBT)",
+          "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
           "mating": "JST GHR-02V-S (AWG24-28)",
           "pins": [
             {
               "pin": "1",
-              "net": "VCC_12V_PROT",
+              "net": "+12V_PROT",
               "type": "Power Out (+12V/2A)",
               "spec": "Polyfuse-geschützte 12V Speisung für Navi-Cradle"
             },
@@ -1708,10 +1983,112 @@
             }
           ]
         },
+        "J8": {
+          "ref": "J8",
+          "name": "Action-Cam 5V Stromversorgung (GoPro / Insta360)",
+          "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
+          "mating": "JST GHR-02V-S (AWG24-28)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VCC_5V",
+              "type": "Power Out (+5V/3A)",
+              "spec": "Dauerhafte 5V Speisung für Cockpit Action-Cam"
+            },
+            {
+              "pin": "2",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Masse Leistungsrückstrom"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
+        "J2": {
+          "ref": "J2",
+          "name": "Under-Perch Spiegel-Pod Links (PCBA 05C)",
+          "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+          "mating": "JST GHR-04V-S (AWG28-30)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VCC_5V",
+              "type": "Power Out (+5V)",
+              "spec": "Speisespannung für bernsteinfarbene BSD Warn-LEDs"
+            },
+            {
+              "pin": "2",
+              "net": "BSD_LED_L_N",
+              "type": "Open-Drain Out",
+              "spec": "Geschaltete Masse für linke BSD Warn-LED"
+            },
+            {
+              "pin": "3",
+              "net": "BTN_SIG_L_N",
+              "type": "Digital In",
+              "spec": "Daumentaster Links (Active Low, interner Pull-Up)"
+            },
+            {
+              "pin": "4",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Gemeinsame Schalter- und Signalmasse"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
+        "J3": {
+          "ref": "J3",
+          "name": "Under-Perch Spiegel-Pod Rechts (PCBA 05C)",
+          "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+          "mating": "JST GHR-04V-S (AWG28-30)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VCC_5V",
+              "type": "Power Out (+5V)",
+              "spec": "Speisespannung für bernsteinfarbene BSD Warn-LEDs"
+            },
+            {
+              "pin": "2",
+              "net": "BSD_LED_R_N",
+              "type": "Open-Drain Out",
+              "spec": "Geschaltete Masse für rechte BSD Warn-LED"
+            },
+            {
+              "pin": "3",
+              "net": "BTN_SIG_R_N",
+              "type": "Digital In",
+              "spec": "Daumentaster Rechts (Active Low, interner Pull-Up)"
+            },
+            {
+              "pin": "4",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Gemeinsame Schalter- und Signalmasse"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
         "J6": {
           "ref": "J6",
           "name": "GNSS & Umweltsensor-Puck Interconnect (PCBA 05D)",
-          "type": "JST-GH 8-Pin 1.25mm SMD Vertikal (BM08B-GHS-TBT)",
+          "type": "JST-GH 8-Pin 1.25mm SMD Horizontal (SM08B-GHS-TB)",
           "mating": "JST GHR-08V-S (AWG28-30)",
           "pins": [
             {
@@ -1740,27 +2117,103 @@
             },
             {
               "pin": "5",
-              "net": "GNSS_TX",
-              "type": "UART In",
-              "spec": "u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX"
-            },
-            {
-              "pin": "6",
-              "net": "GNSS_RX",
-              "type": "UART Out",
-              "spec": "ESP32-S31 TX an u-blox SAM-M10Q RX"
-            },
-            {
-              "pin": "7",
-              "net": "GNSS_1PPS",
+              "net": "GNSS_TIMEPULSE",
               "type": "Sync In",
               "spec": "u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt"
             },
             {
+              "pin": "6",
+              "net": "GNSS_TXD",
+              "type": "UART In",
+              "spec": "u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX (U1.5)"
+            },
+            {
+              "pin": "7",
+              "net": "GNSS_RXD",
+              "type": "UART Out",
+              "spec": "ESP32-S31 TX (U1.10) an u-blox SAM-M10Q RX"
+            },
+            {
               "pin": "8",
+              "net": "GNSS_RESET_N",
+              "type": "Control Out",
+              "spec": "Hardware Reset für SAM-M10Q"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
+        "J9": {
+          "ref": "J9",
+          "name": "OLED / HUD Displayanschluss Links (Optional)",
+          "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+          "mating": "JST GHR-04V-S (AWG28-30)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VCC_3V3",
+              "type": "Power Out (+3.3V)",
+              "spec": "Display-Speisung"
+            },
+            {
+              "pin": "2",
               "net": "GND",
               "type": "Power Return",
-              "spec": "Schirm-Masse"
+              "spec": "Display-Masse"
+            },
+            {
+              "pin": "3",
+              "net": "I2C_SCL",
+              "type": "I2C SCL",
+              "spec": "I2C Takt für linkes Cockpit-Display"
+            },
+            {
+              "pin": "4",
+              "net": "I2C_SDA",
+              "type": "I2C SDA",
+              "spec": "I2C Daten für linkes Cockpit-Display"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
+            }
+          ]
+        },
+        "J11": {
+          "ref": "J11",
+          "name": "OLED / HUD Displayanschluss Rechts (Optional)",
+          "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+          "mating": "JST GHR-04V-S (AWG28-30)",
+          "pins": [
+            {
+              "pin": "1",
+              "net": "VCC_3V3",
+              "type": "Power Out (+3.3V)",
+              "spec": "Display-Speisung"
+            },
+            {
+              "pin": "2",
+              "net": "GND",
+              "type": "Power Return",
+              "spec": "Display-Masse"
+            },
+            {
+              "pin": "3",
+              "net": "I2C_SCL",
+              "type": "I2C SCL",
+              "spec": "I2C Takt für rechtes Cockpit-Display"
+            },
+            {
+              "pin": "4",
+              "net": "I2C_SDA",
+              "type": "I2C SDA",
+              "spec": "I2C Daten für rechtes Cockpit-Display"
             },
             {
               "pin": "MP",
@@ -2870,114 +3323,42 @@
           "ref": "U4",
           "chip_key": "BQ51050B",
           "name": "TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger",
-          "package": "VQFN-20 / RHL-20 (3.5x4.5 mm)",
+          "package": "QFN-28 (4.5x3.5 mm)",
           "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
           "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-          "table_ref": "Pin Functions (VQFN-20 RHL Package)",
+          "table_ref": "Pin Functions (QFN-28)",
           "pins": [
             {
               "pad": "1",
-              "pin_name": "PGND",
-              "net": "GND",
-              "type": "Power Return",
-              "target": "Massebezug",
-              "spec": "Leistungsmasse (Power Ground)"
+              "pin_name": "AC1",
+              "net": "QI_COIL_AC1",
+              "type": "AC In",
+              "target": "J3.1 (Qi Spule)",
+              "spec": "Drahtlose Qi-Empfangsspule AC1"
             },
             {
               "pad": "2",
-              "pin_name": "AC1",
-              "net": "QI_COIL_AC1",
+              "pin_name": "AC2",
+              "net": "QI_COIL_AC2",
               "type": "AC In",
-              "target": "J3.1 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC1 (Pin 1/2)"
-            },
-            {
-              "pad": "3",
-              "pin_name": "AC1",
-              "net": "QI_COIL_AC1",
-              "type": "AC In",
-              "target": "J3.1 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC1 (Pin 2/2)"
-            },
-            {
-              "pad": "4",
-              "pin_name": "BOOT1",
-              "net": "QI_BOOT1",
-              "type": "Bootstrap",
-              "target": "C_BOOT1 (10nF zu AC1)",
-              "spec": "High-Side Bootstrap Kondensator 1"
-            },
-            {
-              "pad": "7",
-              "pin_name": "CHG",
-              "net": "QI_CHG_STAT",
-              "type": "Digital Out",
-              "target": "U1 (ESP32-C3 Pad 28)",
-              "spec": "Qi Ladestatus (Active Low = lädt)"
-            },
-            {
-              "pad": "11",
-              "pin_name": "BAT",
-              "net": "VBAT",
-              "type": "Power Out",
-              "target": "J1.1 (LiPo Akku)",
-              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 1/2)"
+              "target": "J3.2 (Qi Spule)",
+              "spec": "Drahtlose Qi-Empfangsspule AC2"
             },
             {
               "pad": "12",
               "pin_name": "BAT",
-              "net": "VBAT",
+              "net": "BAT_3V7",
               "type": "Power Out",
               "target": "J1.1 (LiPo Akku)",
-              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom (Pin 2/2)"
+              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom"
             },
             {
-              "pad": "14",
-              "pin_name": "RECT",
-              "net": "QI_RECT",
-              "type": "Output",
-              "target": "C_RECT (10uF Puffer zu GND)",
-              "spec": "Gleichgerichtete Qi-Ausgangsspannung"
-            },
-            {
-              "pad": "17",
-              "pin_name": "BOOT2",
-              "net": "QI_BOOT2",
-              "type": "Bootstrap",
-              "target": "C_BOOT2 (10nF zu AC2)",
-              "spec": "High-Side Bootstrap Kondensator 2"
-            },
-            {
-              "pad": "18",
-              "pin_name": "AC2",
-              "net": "QI_COIL_AC2",
-              "type": "AC In",
-              "target": "J3.2 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC2 (Pin 1/2)"
-            },
-            {
-              "pad": "19",
-              "pin_name": "AC2",
-              "net": "QI_COIL_AC2",
-              "type": "AC In",
-              "target": "J3.2 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC2 (Pin 2/2)"
-            },
-            {
-              "pad": "20",
-              "pin_name": "PGND",
-              "net": "GND",
-              "type": "Power Return",
-              "target": "Massebezug",
-              "spec": "Leistungsmasse (Power Ground)"
-            },
-            {
-              "pad": "21",
-              "pin_name": "EP",
-              "net": "GND",
-              "type": "Power Return / Thermal",
-              "target": "GND Plane",
-              "spec": "Thermal Pad Massebezug"
+              "pad": "15",
+              "pin_name": "CHG_STAT",
+              "net": "QI_CHG_STAT",
+              "type": "Digital Out",
+              "target": "U1 (ESP32-C3)",
+              "spec": "Qi Ladestatus (Active Low = lädt)"
             }
           ]
         }
@@ -4058,634 +4439,6 @@
           ]
         }
       }
-    },
-    "PCBA_05_AUX": {
-      "pcba_id": "PCBA_05_AUX",
-      "name": "PCBA 05 Auxiliary MCU (ESP32-C3FH4 USB Audio/SkylineOS Bridge)",
-      "mcu_ref": "U10",
-      "mcu_type": "ESP32-C3FH4",
-      "chip_key": "ESP32-C3FH4",
-      "datasheet": {
-        "title": "ESP32-C3 Series Datasheet v1.4",
-        "table_ref": "Table 2-1: Pin Overview & Table 2-2: Pin Description",
-        "url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
-      },
-      "pcb_file": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
-      "sch_file": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_sch",
-      "header_file": null,
-      "pins": [
-        {
-          "pad": "1",
-          "net": "GND",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "RF_GND",
-          "target": "GND",
-          "description": "HF-Masse / LNA Ground (Reine USB-Kabel-Headset-Emulation, kein RF/BLE aktiv)"
-        },
-        {
-          "pad": "2",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDD3P3)"
-        },
-        {
-          "pad": "3",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "RTC Versorgungsspannung 3.3V (VDD3P3_RTC)"
-        },
-        {
-          "pad": "4",
-          "net": "C3_NC_GPIO0",
-          "gpio": 0,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (XTAL_32K_P)"
-        },
-        {
-          "pad": "5",
-          "net": "C3_NC_GPIO1",
-          "gpio": 1,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (XTAL_32K_N)"
-        },
-        {
-          "pad": "6",
-          "net": "C3_I2S_BCLK",
-          "gpio": 2,
-          "fw_define": null,
-          "signal_type": "I2S_BCLK",
-          "target": "U1.23",
-          "description": "Digital Audio I2S Bit Clock von U1 (ESP32-S31)"
-        },
-        {
-          "pad": "7",
-          "net": "C3_EN",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power/Reset",
-          "target": "U1.15",
-          "description": "Chip Enable / Hardware Reset von U1 (ESP32-S31 GPIO15, 10k PU / 100nF)"
-        },
-        {
-          "pad": "8",
-          "net": "C3_I2S_WS",
-          "gpio": 3,
-          "fw_define": null,
-          "signal_type": "I2S_WS",
-          "target": "U1.24",
-          "description": "Digital Audio I2S Word Select von U1 (ESP32-S31)"
-        },
-        {
-          "pad": "9",
-          "net": "C3_I2S_SDO",
-          "gpio": 4,
-          "fw_define": null,
-          "signal_type": "I2S_DIN",
-          "target": "U1.25",
-          "description": "Digital Audio I2S Serial Data In von U1 (Lautsprecher-Audio Streaming)"
-        },
-        {
-          "pad": "10",
-          "net": "C3_I2S_SDI",
-          "gpio": 5,
-          "fw_define": null,
-          "signal_type": "I2S_DOUT",
-          "target": "U1.28",
-          "description": "Digital Audio I2S Serial Data Out an U1 (Mikrofon-/Siri-Audio)"
-        },
-        {
-          "pad": "11",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "CPU Kern-Versorgungsspannung 3.3V (VDD3P3_CPU)"
-        },
-        {
-          "pad": "12",
-          "net": "C3_NC_GPIO6",
-          "gpio": 6,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (MTCK)"
-        },
-        {
-          "pad": "13",
-          "net": "C3_NC_GPIO7",
-          "gpio": 7,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (MTDO)"
-        },
-        {
-          "pad": "14",
-          "net": "C3_NC_GPIO8",
-          "gpio": 8,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Strapping Pin (Logisch HIGH)"
-        },
-        {
-          "pad": "15",
-          "net": "C3_BOOT",
-          "gpio": 9,
-          "fw_define": null,
-          "signal_type": "Digital In",
-          "target": "U1.16",
-          "description": "Boot Mode Strapping Pin (GPIO9) von U1 (ESP32-S31 GPIO16, 10k PU)"
-        },
-        {
-          "pad": "16",
-          "net": "C3_NC_GPIO10",
-          "gpio": 10,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (FSPICS0)"
-        },
-        {
-          "pad": "17",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "SPI Flash Betriebsspannung 3.3V (VDD_SPI)"
-        },
-        {
-          "pad": "18",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash VDD_SPI) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "19",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIHD) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "20",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIWP) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "21",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPICS0) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "22",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPICLK) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "23",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPID) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "24",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIQ) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "25",
-          "net": "USB_DN2_DM",
-          "gpio": 18,
-          "fw_define": null,
-          "signal_type": "USB_FS_DM",
-          "target": "U2.11",
-          "description": "Nativer Full-Speed USB Controller Data Minus (UAC / HID Headset Emulation)"
-        },
-        {
-          "pad": "26",
-          "net": "USB_DN2_DP",
-          "gpio": 19,
-          "fw_define": null,
-          "signal_type": "USB_FS_DP",
-          "target": "U2.12",
-          "description": "Nativer Full-Speed USB Controller Data Plus (UAC / HID Headset Emulation)"
-        },
-        {
-          "pad": "27",
-          "net": "C3_UART_TX",
-          "gpio": 20,
-          "fw_define": null,
-          "signal_type": "UART_RX",
-          "target": "U1.14",
-          "description": "C3 UART0 Receive Data (U0RXD) von U1 (ESP32-S31 GPIO34 / C3_UART_TX)"
-        },
-        {
-          "pad": "28",
-          "net": "C3_UART_RX",
-          "gpio": 21,
-          "fw_define": null,
-          "signal_type": "UART_TX",
-          "target": "U1.13",
-          "description": "C3 UART0 Transmit Data (U0TXD) an U1 (ESP32-S31 GPIO33 / C3_UART_RX)"
-        },
-        {
-          "pad": "29",
-          "net": "C3_XTAL_OUT",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Oscillator",
-          "target": "Y2.3",
-          "description": "40 MHz Quarz Oszillator Ausgang (XTAL_N)"
-        },
-        {
-          "pad": "30",
-          "net": "C3_XTAL_IN",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Oscillator",
-          "target": "Y2.1",
-          "description": "40 MHz Quarz Oszillator Eingang (XTAL_P)"
-        },
-        {
-          "pad": "31",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDDA)"
-        },
-        {
-          "pad": "32",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDDA)"
-        },
-        {
-          "pad": "33",
-          "net": "GND",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Ground",
-          "target": "GND",
-          "description": "Zentrales Massepads & Thermische Anbindung (EP)"
-        }
-      ]
-    },
-    "PCBA_05_Aux": {
-      "pcba_id": "PCBA_05_AUX",
-      "name": "PCBA 05 Auxiliary MCU (ESP32-C3FH4 USB Audio/SkylineOS Bridge)",
-      "mcu_ref": "U10",
-      "mcu_type": "ESP32-C3FH4",
-      "chip_key": "ESP32-C3FH4",
-      "datasheet": {
-        "title": "ESP32-C3 Series Datasheet v1.4",
-        "table_ref": "Table 2-1: Pin Overview & Table 2-2: Pin Description",
-        "url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf"
-      },
-      "pcb_file": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_pcb",
-      "sch_file": "hardware/kicad_front_node/openmotorbridge_front_node.kicad_sch",
-      "header_file": null,
-      "pins": [
-        {
-          "pad": "1",
-          "net": "GND",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "RF_GND",
-          "target": "GND",
-          "description": "HF-Masse / LNA Ground (Reine USB-Kabel-Headset-Emulation, kein RF/BLE aktiv)"
-        },
-        {
-          "pad": "2",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDD3P3)"
-        },
-        {
-          "pad": "3",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "RTC Versorgungsspannung 3.3V (VDD3P3_RTC)"
-        },
-        {
-          "pad": "4",
-          "net": "C3_NC_GPIO0",
-          "gpio": 0,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (XTAL_32K_P)"
-        },
-        {
-          "pad": "5",
-          "net": "C3_NC_GPIO1",
-          "gpio": 1,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (XTAL_32K_N)"
-        },
-        {
-          "pad": "6",
-          "net": "C3_I2S_BCLK",
-          "gpio": 2,
-          "fw_define": null,
-          "signal_type": "I2S_BCLK",
-          "target": "U1.23",
-          "description": "Digital Audio I2S Bit Clock von U1 (ESP32-S31)"
-        },
-        {
-          "pad": "7",
-          "net": "C3_EN",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power/Reset",
-          "target": "U1.15",
-          "description": "Chip Enable / Hardware Reset von U1 (ESP32-S31 GPIO15, 10k PU / 100nF)"
-        },
-        {
-          "pad": "8",
-          "net": "C3_I2S_WS",
-          "gpio": 3,
-          "fw_define": null,
-          "signal_type": "I2S_WS",
-          "target": "U1.24",
-          "description": "Digital Audio I2S Word Select von U1 (ESP32-S31)"
-        },
-        {
-          "pad": "9",
-          "net": "C3_I2S_SDO",
-          "gpio": 4,
-          "fw_define": null,
-          "signal_type": "I2S_DIN",
-          "target": "U1.25",
-          "description": "Digital Audio I2S Serial Data In von U1 (Lautsprecher-Audio Streaming)"
-        },
-        {
-          "pad": "10",
-          "net": "C3_I2S_SDI",
-          "gpio": 5,
-          "fw_define": null,
-          "signal_type": "I2S_DOUT",
-          "target": "U1.28",
-          "description": "Digital Audio I2S Serial Data Out an U1 (Mikrofon-/Siri-Audio)"
-        },
-        {
-          "pad": "11",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "CPU Kern-Versorgungsspannung 3.3V (VDD3P3_CPU)"
-        },
-        {
-          "pad": "12",
-          "net": "C3_NC_GPIO6",
-          "gpio": 6,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (MTCK)"
-        },
-        {
-          "pad": "13",
-          "net": "C3_NC_GPIO7",
-          "gpio": 7,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (MTDO)"
-        },
-        {
-          "pad": "14",
-          "net": "C3_NC_GPIO8",
-          "gpio": 8,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Strapping Pin (Logisch HIGH)"
-        },
-        {
-          "pad": "15",
-          "net": "C3_BOOT",
-          "gpio": 9,
-          "fw_define": null,
-          "signal_type": "Digital In",
-          "target": "U1.16",
-          "description": "Boot Mode Strapping Pin (GPIO9) von U1 (ESP32-S31 GPIO16, 10k PU)"
-        },
-        {
-          "pad": "16",
-          "net": "C3_NC_GPIO10",
-          "gpio": 10,
-          "fw_define": null,
-          "signal_type": "GPIO/NC",
-          "target": "NC",
-          "description": "Unbelegt / Nicht kontaktiert (FSPICS0)"
-        },
-        {
-          "pad": "17",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "SPI Flash Betriebsspannung 3.3V (VDD_SPI)"
-        },
-        {
-          "pad": "18",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash VDD_SPI) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "19",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIHD) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "20",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIWP) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "21",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPICS0) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "22",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPICLK) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "23",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPID) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "24",
-          "net": "NC",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "SIP_FLASH",
-          "target": "NC",
-          "description": "Intern belegt (C3FH4 SiP Flash SPIQ) – darf extern nicht kontaktiert werden"
-        },
-        {
-          "pad": "25",
-          "net": "USB_DN2_DM",
-          "gpio": 18,
-          "fw_define": null,
-          "signal_type": "USB_FS_DM",
-          "target": "U2.11",
-          "description": "Nativer Full-Speed USB Controller Data Minus (UAC / HID Headset Emulation)"
-        },
-        {
-          "pad": "26",
-          "net": "USB_DN2_DP",
-          "gpio": 19,
-          "fw_define": null,
-          "signal_type": "USB_FS_DP",
-          "target": "U2.12",
-          "description": "Nativer Full-Speed USB Controller Data Plus (UAC / HID Headset Emulation)"
-        },
-        {
-          "pad": "27",
-          "net": "C3_UART_TX",
-          "gpio": 20,
-          "fw_define": null,
-          "signal_type": "UART_RX",
-          "target": "U1.14",
-          "description": "C3 UART0 Receive Data (U0RXD) von U1 (ESP32-S31 GPIO34 / C3_UART_TX)"
-        },
-        {
-          "pad": "28",
-          "net": "C3_UART_RX",
-          "gpio": 21,
-          "fw_define": null,
-          "signal_type": "UART_TX",
-          "target": "U1.13",
-          "description": "C3 UART0 Transmit Data (U0TXD) an U1 (ESP32-S31 GPIO33 / C3_UART_RX)"
-        },
-        {
-          "pad": "29",
-          "net": "C3_XTAL_OUT",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Oscillator",
-          "target": "Y2.3",
-          "description": "40 MHz Quarz Oszillator Ausgang (XTAL_N)"
-        },
-        {
-          "pad": "30",
-          "net": "C3_XTAL_IN",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Oscillator",
-          "target": "Y2.1",
-          "description": "40 MHz Quarz Oszillator Eingang (XTAL_P)"
-        },
-        {
-          "pad": "31",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDDA)"
-        },
-        {
-          "pad": "32",
-          "net": "VCC_3V3",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Power",
-          "target": "VCC_3V3",
-          "description": "Analoge Versorgungsspannung 3.3V (VDDA)"
-        },
-        {
-          "pad": "33",
-          "net": "GND",
-          "gpio": null,
-          "fw_define": null,
-          "signal_type": "Ground",
-          "target": "GND",
-          "description": "Zentrales Massepads & Thermische Anbindung (EP)"
-        }
-      ]
     }
   }
 }

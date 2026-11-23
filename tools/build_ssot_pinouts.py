@@ -11,6 +11,16 @@ import pcbnew
 SSOT_PATH = "data/pcba_pinouts.json"
 
 OFFICIAL_CHIPS = {
+  "FSC-BT802": {
+    "manufacturer": "Feasycom / Qualcomm",
+    "datasheet_title": "Feasycom FSC-BT802 CSR8670 Bluetooth 5.1 Dual-Mode Audio Module Datasheet",
+    "datasheet_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf",
+    "pin_description_url": "https://www.feasycom.com/uploads/20210323/FSC-BT802-Datasheet.pdf#page=6",
+    "table_ref": "Table 3-1: Pin Descriptions",
+    "package": "27-Pad SMD Module (9.7x11.5x1.8 mm)",
+    "core": "Qualcomm CSR8670 Dual-Mode Bluetooth 5.1 Audio SoC @ 80 MHz with DSP & 16-Bit Stereo Codec",
+    "used_in_boards": ["PCBA_05"]
+  },
   "ESP32-S31-WROOM-1U": {
     "manufacturer": "Espressif Systems",
     "datasheet_title": "ESP32-S31-WROOM-1 & ESP32-S31-WROOM-1U Datasheet",
@@ -39,7 +49,7 @@ OFFICIAL_CHIPS = {
     "table_ref": "Table 2-2: Pin Description (QFN-32)",
     "package": "QFN-32 (5x5 mm) with 4 MB In-Package Flash (C3FH4)",
     "core": "32-Bit RISC-V @ 160 MHz with 2.4 GHz Wi-Fi 4 & BLE 5.0",
-    "used_in_boards": ["PCBA_05", "PCBA_07"]
+    "used_in_boards": ["PCBA_07"]
   },
   "ESP32-C5-WROOM-1U": {
     "manufacturer": "Espressif Systems",
@@ -79,17 +89,17 @@ OFFICIAL_CHIPS = {
     "table_ref": "Table 3-1: 36-Pin QFN Pin Descriptions",
     "package": "QFN-36 (6x6 mm)",
     "core": "4-Port Automotive USB 2.0 High-Speed Hub Controller",
-    "used_in_boards": ["PCBA_05", "PCBA_05B"]
+    "used_in_boards": ["PCBA_05B"]
   },
-  "QCC3084": {
+  "QCC3086": {
     "manufacturer": "Qualcomm Technologies, Inc.",
-    "datasheet_title": "Qualcomm QCC3084 Bluetooth 5.4 Audio SoC Device Specification",
-    "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
-    "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3084",
+    "datasheet_title": "Qualcomm QCC3086 Bluetooth 5.4 Audio SoC Device Specification",
+    "datasheet_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
+    "pin_description_url": "https://www.qualcomm.com/products/technology/audio/qcc30xx-series/qcc3086",
     "table_ref": "Pin Definitions & Audio Interface Routing",
     "package": "WLCSP / BGA Module",
-    "core": "Dual-Core 32-Bit Audio App Core @ 240 MHz, Dual 120 MHz Kalimba Audio DSPs, Bluetooth 5.4 LE Audio & aptX Adaptive",
-    "used_in_boards": ["PCBA_01"]
+    "core": "Tri-Core 32-Bit Audio App Processor @ 240 MHz, 240 MHz Kalimba Audio DSP, Bluetooth 5.4 LE Audio, aptX Adaptive, Low-Latency Voice Backchannel",
+    "used_in_boards": ["PCBA_01", "PCBA_08"]
   },
   "SX1262": {
     "manufacturer": "Semtech Corporation",
@@ -246,32 +256,74 @@ def update_ssot():
                     {"pad": "41", "pin_name": "USBDN_DP3", "net": "BUS3_DP", "type": "USB D+", "target": "J6.12 (Strang 3 Pod R)", "spec": "Port 3 Downstream USB D+"},
                     {"pad": "48", "pin_name": "USBDN_DM4", "net": "BUS4_DM", "type": "USB D-", "target": "J6.15 (Strang 4 Radar)", "spec": "Port 4 Downstream USB D-"},
                     {"pad": "49", "pin_name": "USBDN_DP4", "net": "BUS4_DP", "type": "USB D+", "target": "J6.16 (Strang 4 Radar)", "spec": "Port 4 Downstream USB D+"},
-                    {"pad": "56", "pin_name": "USBDN_DM5", "net": "BT_USB_DM", "type": "USB D-", "target": "U9.13 (QCC3084)", "spec": "Port 5 Downstream USB D- an Qualcomm BT Audio SoC"},
-                    {"pad": "57", "pin_name": "USBDN_DP5", "net": "BT_USB_DP", "type": "USB D+", "target": "U9.14 (QCC3084)", "spec": "Port 5 Downstream USB D+ an Qualcomm BT Audio SoC"},
+                    {"pad": "56", "pin_name": "USBDN_DM5", "net": "BT_USB_DM", "type": "USB D-", "target": "U9.13 (QCC3086)", "spec": "Port 5 Downstream USB D- an Qualcomm BT Audio SoC"},
+                    {"pad": "57", "pin_name": "USBDN_DP5", "net": "BT_USB_DP", "type": "USB D+", "target": "U9.14 (QCC3086)", "spec": "Port 5 Downstream USB D+ an Qualcomm BT Audio SoC"},
                     {"pad": "60", "pin_name": "USBDN_DM6", "net": "RES_USB_DM", "type": "USB D-", "target": "J7.3 (Reserve)", "spec": "Port 6 Downstream USB D-"},
                     {"pad": "61", "pin_name": "USBDN_DP6", "net": "RES_USB_DP", "type": "USB D+", "target": "J7.4 (Reserve)", "spec": "Port 6 Downstream USB D+"}
                 ]
             },
             "U9": {
                 "ref": "U9",
-                "chip_key": "QCC3084",
-                "name": "Qualcomm QCC3084 Bluetooth 5.4 Audio SoC",
+                "chip_key": "QCC3086",
+                "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Transceiver (Phone Link)",
                 "package": "WLCSP / BGA Module",
-                "datasheet_url": OFFICIAL_CHIPS["QCC3084"]["datasheet_url"],
-                "pin_description_url": OFFICIAL_CHIPS["QCC3084"]["pin_description_url"],
-                "table_ref": OFFICIAL_CHIPS["QCC3084"]["table_ref"],
+                "datasheet_url": OFFICIAL_CHIPS["QCC3086"]["datasheet_url"],
+                "pin_description_url": OFFICIAL_CHIPS["QCC3086"]["pin_description_url"],
+                "table_ref": OFFICIAL_CHIPS["QCC3086"]["table_ref"],
                 "pins": [
                     {"pad": "3", "pin_name": "I2S_MCLK", "net": "I2S_MCLK", "type": "Clock In", "target": "U2 (ESP32-S31)", "spec": "I2S Master Clock 12.288 MHz"},
                     {"pad": "4", "pin_name": "I2S_BCLK", "net": "I2S_BCLK", "type": "Clock In", "target": "U2 (ESP32-S31)", "spec": "I2S Bit Clock 3.072 MHz"},
                     {"pad": "5", "pin_name": "I2S_WS", "net": "I2S_WS", "type": "Sync In", "target": "U2 (ESP32-S31)", "spec": "I2S Word Select / LRCLK 48 kHz"},
-                    {"pad": "6", "pin_name": "I2S_DOUT", "net": "I2S_DOUT", "type": "Audio In", "target": "U2 (ESP32-S31)", "spec": "Digital Audio Stream vom ESP32-S31 DSP zum Helm"},
-                    {"pad": "7", "pin_name": "I2S_DIN", "net": "I2S_DIN", "type": "Audio Out", "target": "U2 (ESP32-S31)", "spec": "Helmmikrofon-Audio Stream an den DSP"},
+                    {"pad": "6", "pin_name": "I2S_DOUT", "net": "I2S_DOUT", "type": "Audio In", "target": "U2 (ESP32-S31)", "spec": "Digital Audio Stream vom Smartphone (A2DP / Anrufer) an ESP32-S31 DSP"},
+                    {"pad": "7", "pin_name": "I2S_DIN", "net": "I2S_DIN", "type": "Audio Out", "target": "U2 (ESP32-S31)", "spec": "Helmmikrofon-Audio Stream an QCC3086 Voice-Backchannel zum Smartphone"},
                     {"pad": "9", "pin_name": "UART_TX", "net": "BT_UART_TX", "type": "UART Out", "target": "U2 (ESP32-S31)", "spec": "HCI / AT-Befehle TX zum ESP32-S31"},
                     {"pad": "10", "pin_name": "UART_RX", "net": "BT_UART_RX", "type": "UART In", "target": "U2 (ESP32-S31)", "spec": "HCI / AT-Befehle RX vom ESP32-S31"},
                     {"pad": "11", "pin_name": "CHIP_EN", "net": "BT_EN", "type": "Control In", "target": "U2 (ESP32-S31)", "spec": "Power Enable Active High"},
                     {"pad": "13", "pin_name": "USB_DM", "net": "BT_USB_DM", "type": "USB D-", "target": "U8.56 (Hub Port 5)", "spec": "USB Audio Class 2.0 / DFU Datenleitung D-"},
                     {"pad": "14", "pin_name": "USB_DP", "net": "BT_USB_DP", "type": "USB D+", "target": "U8.57 (Hub Port 5)", "spec": "USB Audio Class 2.0 / DFU Datenleitung D+"},
-                    {"pad": "15", "pin_name": "RF_ANT", "net": "BT_RF_AUDIO", "type": "RF 2.4 GHz", "target": "ANT2 (U.FL)", "spec": "Bluetooth 5.4 Dual-A2DP / Auracast Antennenport"}
+                    {"pad": "15", "pin_name": "RF_ANT", "net": "BT_RF_AUDIO", "type": "RF 2.4 GHz", "target": "ANT2 (U.FL)", "spec": "Bluetooth 5.4 Antennenport an ANT2 Deckelantenne (Smartphone-Link)"}
+                ]
+            },
+            "U13": {
+                "ref": "U13",
+                "chip_key": "QCC3086",
+                "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Sozius Helm 1)",
+                "package": "WLCSP / BGA Module",
+                "datasheet_url": OFFICIAL_CHIPS["QCC3086"]["datasheet_url"],
+                "pin_description_url": OFFICIAL_CHIPS["QCC3086"]["pin_description_url"],
+                "table_ref": OFFICIAL_CHIPS["QCC3086"]["table_ref"],
+                "pins": [
+                    {"pad": "4", "pin_name": "I2S_BCLK", "net": "I2S_BCLK", "type": "Clock In", "target": "U2 (ESP32-S31)", "spec": "I2S Bit Clock 3.072 MHz"},
+                    {"pad": "5", "pin_name": "I2S_WS", "net": "I2S_WS", "type": "Sync In", "target": "U2 (ESP32-S31)", "spec": "I2S Word Select / LRCLK 48 kHz"},
+                    {"pad": "6", "pin_name": "I2S_DOUT", "net": "HELM1_I2S_DOUT", "type": "Audio In", "target": "U2 (ESP32-S31)", "spec": "Audio-Stream vom DSP an Helm 1"},
+                    {"pad": "7", "pin_name": "I2S_DIN", "net": "HELM1_I2S_DIN", "type": "Audio Out", "target": "U2 (ESP32-S31)", "spec": "Helm 1 Mikrofon-Rückkanal an DSP"},
+                    {"pad": "9", "pin_name": "UART_TX", "net": "HELM1_BT_UART_TX", "type": "UART Out", "target": "U2 (ESP32-S31)", "spec": "HCI / AT TX Helm 1"},
+                    {"pad": "10", "pin_name": "UART_RX", "net": "HELM1_BT_UART_RX", "type": "UART In", "target": "U2 (ESP32-S31)", "spec": "HCI / AT RX Helm 1"},
+                    {"pad": "11", "pin_name": "CHIP_EN", "net": "HELM1_BT_EN", "type": "Control In", "target": "U2 (ESP32-S31)", "spec": "Power Enable Helm 1"},
+                    {"pad": "13", "pin_name": "USB_DM", "net": "HELM1_USB_DM", "type": "USB D-", "target": "U8 (Hub)", "spec": "USB D- Helm 1"},
+                    {"pad": "14", "pin_name": "USB_DP", "net": "HELM1_USB_DP", "type": "USB D+", "target": "U8 (Hub)", "spec": "USB D+ Helm 1"},
+                    {"pad": "15", "pin_name": "RF_ANT", "net": "BT_RF_HELM1", "type": "RF 2.4 GHz", "target": "ANT3 (Keramik)", "spec": "BT 5.4 RF Port an Keramikantenne ANT3"}
+                ]
+            },
+            "U14": {
+                "ref": "U14",
+                "chip_key": "QCC3086",
+                "name": "Qualcomm QCC3086 Bluetooth 5.4 Audio Source (Fahrer Helm 2)",
+                "package": "WLCSP / BGA Module",
+                "datasheet_url": OFFICIAL_CHIPS["QCC3086"]["datasheet_url"],
+                "pin_description_url": OFFICIAL_CHIPS["QCC3086"]["pin_description_url"],
+                "table_ref": OFFICIAL_CHIPS["QCC3086"]["table_ref"],
+                "pins": [
+                    {"pad": "4", "pin_name": "I2S_BCLK", "net": "I2S_BCLK", "type": "Clock In", "target": "U2 (ESP32-S31)", "spec": "I2S Bit Clock 3.072 MHz"},
+                    {"pad": "5", "pin_name": "I2S_WS", "net": "I2S_WS", "type": "Sync In", "target": "U2 (ESP32-S31)", "spec": "I2S Word Select / LRCLK 48 kHz"},
+                    {"pad": "6", "pin_name": "I2S_DOUT", "net": "HELM2_I2S_DOUT", "type": "Audio In", "target": "U2 (ESP32-S31)", "spec": "Audio-Stream vom DSP an Helm 2"},
+                    {"pad": "7", "pin_name": "I2S_DIN", "net": "HELM2_I2S_DIN", "type": "Audio Out", "target": "U2 (ESP32-S31)", "spec": "Helm 2 Mikrofon-Rückkanal an DSP"},
+                    {"pad": "9", "pin_name": "UART_TX", "net": "HELM2_BT_UART_TX", "type": "UART Out", "target": "U2 (ESP32-S31)", "spec": "HCI / AT TX Helm 2"},
+                    {"pad": "10", "pin_name": "UART_RX", "net": "HELM2_BT_UART_RX", "type": "UART In", "target": "U2 (ESP32-S31)", "spec": "HCI / AT RX Helm 2"},
+                    {"pad": "11", "pin_name": "CHIP_EN", "net": "HELM2_BT_EN", "type": "Control In", "target": "U2 (ESP32-S31)", "spec": "Power Enable Helm 2"},
+                    {"pad": "13", "pin_name": "USB_DM", "net": "HELM2_USB_DM", "type": "USB D-", "target": "U8 (Hub)", "spec": "USB D- Helm 2"},
+                    {"pad": "14", "pin_name": "USB_DP", "net": "HELM2_USB_DP", "type": "USB D+", "target": "U8 (Hub)", "spec": "USB D+ Helm 2"},
+                    {"pad": "15", "pin_name": "RF_ANT", "net": "BT_RF_HELM2", "type": "RF 2.4 GHz", "target": "ANT4 (Keramik)", "spec": "BT 5.4 RF Port an Keramikantenne ANT4"}
                 ]
             },
             "U10": {
@@ -494,87 +546,208 @@ def update_ssot():
     # 4. Board PCBA_05: Front Node
     b05 = ssot["boards"].get("PCBA_05")
     if b05:
+        # Update U1 (ESP32-S31) MCU pins to match redesigned PCB & Schematic
+        b05["pins"] = [
+            {"pad": "3", "gpio": None, "net": "ESP_EN", "fw_define": None, "signal_type": "Power/Reset", "target": "R1 / C3 / SW1", "description": "Chip Enable / Hardware Reset"},
+            {"pad": "4", "gpio": 2, "net": "GNSS_TIMEPULSE", "fw_define": None, "signal_type": "Digital In", "target": "J6.5", "description": "u-blox SAM-M10Q 1-PPS Timepulse Synchronization"},
+            {"pad": "5", "gpio": 3, "net": "GNSS_TXD", "fw_define": None, "signal_type": "UART_RX", "target": "J6.6", "description": "u-blox SAM-M10Q Primary NMEA / UBX Stream RX"},
+            {"pad": "6", "gpio": 4, "net": "MIC_I2S_WS", "fw_define": "PIN_MIC_I2S_WS", "signal_type": "I2S_WS", "target": "MK1.2", "description": "Fahrtwindmikrofon Knowles SPH0645 Word Select"},
+            {"pad": "7", "gpio": 5, "net": "MIC_I2S_BCLK", "fw_define": "PIN_MIC_I2S_BCLK", "signal_type": "I2S_BCLK", "target": "MK1.3", "description": "Fahrtwindmikrofon Knowles SPH0645 Bit Clock"},
+            {"pad": "8", "gpio": 8, "net": "BTN_SIG_L_N", "fw_define": "PIN_BTN_SIG_L", "signal_type": "Digital In", "target": "J2.3", "description": "Linker Spiegeltaster (PTT / Intercom / HFP)"},
+            {"pad": "9", "gpio": 9, "net": "BTN_SIG_R_N", "fw_define": "PIN_BTN_SIG_R", "signal_type": "Digital In", "target": "J3.3", "description": "Rechter Spiegeltaster (Action-Cam Tagging / Mode)"},
+            {"pad": "10", "gpio": 6, "net": "GNSS_RXD", "fw_define": None, "signal_type": "UART_TX", "target": "J6.7", "description": "u-blox SAM-M10Q Configuration Stream TX"},
+            {"pad": "11", "gpio": 7, "net": "GNSS_RESET_N", "fw_define": None, "signal_type": "Control Out", "target": "J6.8", "description": "u-blox SAM-M10Q Hardware Reset (Active Low)"},
+            {"pad": "12", "gpio": 35, "net": "MIC_I2S_DATA", "fw_define": "PIN_MIC_I2S_DATA", "signal_type": "I2S_DATA", "target": "MK1.1", "description": "Fahrtwindmikrofon Knowles SPH0645 Serial Data"},
+            {"pad": "13", "gpio": 33, "net": "BT_UART_TX", "fw_define": "PIN_BT_UART_TX", "signal_type": "UART_TX", "target": "U2.18", "description": "AT Command TX an Feasycom FSC-BT802 Pin 18 (CSR8670)"},
+            {"pad": "14", "gpio": 34, "net": "BT_UART_RX", "fw_define": "PIN_BT_UART_RX", "signal_type": "UART_RX", "target": "U2.17", "description": "AT Command RX von Feasycom FSC-BT802 Pin 17 (CSR8670)"},
+            {"pad": "15", "gpio": 15, "net": "GPIO15", "fw_define": None, "signal_type": "GPIO", "target": "Testpunkt", "description": "General Purpose I/O (Reserve)"},
+            {"pad": "16", "gpio": 16, "net": "GPIO16", "fw_define": None, "signal_type": "GPIO", "target": "Testpunkt", "description": "General Purpose I/O (Reserve)"},
+            {"pad": "17", "gpio": 22, "net": "I2C_SDA", "fw_define": "PIN_I2C_SDA", "signal_type": "I2C_SDA", "target": "J6.3 / J9.4 / J11.4", "description": "Cockpit I2C Data (Sensoren & Dual OLEDs)"},
+            {"pad": "18", "gpio": 23, "net": "I2C_SCL", "fw_define": "PIN_I2C_SCL", "signal_type": "I2C_SCL", "target": "J6.4 / J9.3 / J11.3", "description": "Cockpit I2C Clock (400 kHz Fast-Mode)"},
+            {"pad": "19", "gpio": 24, "net": "WS2812B_DIN", "fw_define": "PIN_WS2812B_DIN", "signal_type": "Digital Out", "target": "LED1.4", "description": "Onboard RGB-Status-LED WS2812B-2020 Data"},
+            {"pad": "20", "gpio": 25, "net": "BSD_LED_LEFT", "fw_define": "PIN_BSD_LED_L", "signal_type": "Digital Out", "target": "Q1.2 -> J2.2", "description": "Toter-Winkel-Warn-LED Spiegel Links (BSD)"},
+            {"pad": "21", "gpio": 26, "net": "BSD_LED_RIGHT", "fw_define": "PIN_BSD_LED_R", "signal_type": "Digital Out", "target": "Q1.5 -> J3.2", "description": "Toter-Winkel-Warn-LED Spiegel Rechts (BSD)"},
+            {"pad": "22", "gpio": 27, "net": "AUX_LIGHT_EN", "fw_define": "PIN_AUX_LIGHT_EN", "signal_type": "Digital Out", "target": "Q2.3 -> J7.1", "description": "Zusatzscheinwerfer High-Power Schaltausgang (12V/10A via MOSFET)"},
+            {"pad": "23", "gpio": 7, "net": "BT_I2S_BCLK", "fw_define": "PIN_BT_I2S_BCLK", "signal_type": "I2S_BCLK", "target": "U2.15", "description": "Digital Audio I2S Bit Clock an U2 Feasycom FSC-BT802 (CSR8670)"},
+            {"pad": "24", "gpio": 10, "net": "BT_I2S_WS", "fw_define": "PIN_BT_I2S_WS", "signal_type": "I2S_WS", "target": "U2.12", "description": "Digital Audio I2S Word Select / Frame Sync an U2 Feasycom FSC-BT802"},
+            {"pad": "25", "gpio": 15, "net": "BT_I2S_DOUT", "fw_define": "PIN_BT_I2S_DOUT", "signal_type": "I2S_DOUT", "target": "U2.13", "description": "Digital Audio I2S Serial Data Out an U2 (PCM_IN vom FSC-BT802)"},
+            {"pad": "27", "gpio": 0, "net": "ESP_BOOT", "fw_define": None, "signal_type": "Strapping", "target": "SW2", "description": "Boot Mode Strapping Pin / Service Taster"},
+            {"pad": "28", "gpio": 48, "net": "BT_I2S_DIN", "fw_define": "PIN_BT_I2S_DIN", "signal_type": "I2S_DIN", "target": "U2.14", "description": "Digital Audio I2S Serial Data In von U2 (PCM_OUT vom FSC-BT802)"},
+            {"pad": "29", "gpio": 29, "net": "GPIO29", "fw_define": None, "signal_type": "GPIO", "target": "Testpunkt", "description": "General Purpose I/O (Reserve)"},
+            {"pad": "30", "gpio": 35, "net": "SDIO_CLK", "fw_define": None, "signal_type": "SDIO_CLK", "target": "U9.10", "description": "ESP32-E22 Wi-Fi 6E SDIO Clock (50 MHz)"},
+            {"pad": "31", "gpio": 36, "net": "SDIO_CMD", "fw_define": None, "signal_type": "SDIO_CMD", "target": "U9.11", "description": "ESP32-E22 Wi-Fi 6E SDIO Command Line"},
+            {"pad": "32", "gpio": 37, "net": "SDIO_D0", "fw_define": None, "signal_type": "SDIO_D0", "target": "U9.12", "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 0"},
+            {"pad": "33", "gpio": 33, "net": "SDIO_D1", "fw_define": None, "signal_type": "SDIO_D1", "target": "U9.13", "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 1"},
+            {"pad": "34", "gpio": 34, "net": "SDIO_D2", "fw_define": None, "signal_type": "SDIO_D2", "target": "U9.14", "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 2"},
+            {"pad": "35", "gpio": 38, "net": "SDIO_D3", "fw_define": None, "signal_type": "SDIO_D3", "target": "U9.15", "description": "ESP32-E22 Wi-Fi 6E SDIO Data Line 3"},
+            {"pad": "36", "gpio": 59, "net": "E22_EN", "fw_define": None, "signal_type": "Digital Out", "target": "U9.3", "description": "ESP32-E22 Wi-Fi 6E Chip Enable / Power Gate"},
+            {"pad": "37", "gpio": 60, "net": "E22_IRQ", "fw_define": None, "signal_type": "Digital In", "target": "U9.16", "description": "ESP32-E22 Wi-Fi 6E Interrupt Request"},
+            {"pad": "38", "gpio": 56, "net": "BT_RST", "fw_define": "PIN_BT_RST", "signal_type": "Digital Out", "target": "U2.4", "description": "Feasycom FSC-BT802 Hardware Reset Active Low (RESETB)"},
+            {"pad": "39", "gpio": 57, "net": "BT_EN", "fw_define": "PIN_BT_EN", "signal_type": "Digital Out", "target": "U2.3", "description": "Feasycom FSC-BT802 Power Enable Active High (VREGENABLE)"},
+            {"pad": "54", "gpio": None, "net": "USB_UP_DM", "fw_define": None, "signal_type": "USB_DM", "target": "J1.4", "description": "Native USB 2.0 High-Speed D- (Direct 4-Wire Backbone zu Zentralbox)"},
+            {"pad": "55", "gpio": None, "net": "USB_UP_DP", "fw_define": None, "signal_type": "USB_DP", "target": "J1.3", "description": "Native USB 2.0 High-Speed D+ (Direct 4-Wire Backbone zu Zentralbox)"}
+        ]
+
         b05["sub_chips"] = {
-            "U10": {
-                "ref": "U10",
-                "chip_key": "ESP32-C3FH4",
-                "name": "ESP32-C3FH4 Infotainment Client & WHIM Bypass Sub-MCU",
-                "package": "QFN-32 (5x5 mm)",
-                "datasheet_url": OFFICIAL_CHIPS["ESP32-C3FH4"]["datasheet_url"],
-                "pin_description_url": OFFICIAL_CHIPS["ESP32-C3FH4"]["pin_description_url"],
-                "table_ref": OFFICIAL_CHIPS["ESP32-C3FH4"]["table_ref"],
-                "pins": [
-                    {"pad": "12", "pin_name": "GPIO18 / USB_D-", "net": "C3_USB_DM", "type": "USB D-", "target": "U8 (TS3USB221)", "spec": "USB 2.0 Client D- zu Boom! Box / Nachrüst-AA"},
-                    {"pad": "13", "pin_name": "GPIO19 / USB_D+", "net": "C3_USB_DP", "type": "USB D+", "target": "U8 (TS3USB221)", "spec": "USB 2.0 Client D+ zu Boom! Box / Nachrüst-AA"},
-                    {"pad": "18", "pin_name": "GPIO4 / I2S_MCLK", "net": "C3_I2S_MCLK", "type": "Clock In", "target": "U1 (ESP32-S31)", "spec": "I2S Master Clock vom S31"},
-                    {"pad": "19", "pin_name": "GPIO5 / I2S_BCLK", "net": "C3_I2S_BCLK", "type": "Clock In", "target": "U1 (ESP32-S31)", "spec": "I2S Bit Clock vom S31"},
-                    {"pad": "20", "pin_name": "GPIO6 / I2S_WS", "net": "C3_I2S_WS", "type": "Sync In", "target": "U1 (ESP32-S31)", "spec": "I2S Word Select vom S31"},
-                    {"pad": "21", "pin_name": "GPIO7 / I2S_SDO", "net": "C3_I2S_SDO", "type": "Audio In", "target": "U1 (ESP32-S31)", "spec": "Audio Playback Stream für Boom! Box Bordlautsprecher"},
-                    {"pad": "22", "pin_name": "GPIO8 / I2S_SDI", "net": "C3_I2S_SDI", "type": "Audio Out", "target": "U1 (ESP32-S31)", "spec": "Mikrofon-Rückkanal an Zentralbox DSP"}
-                ]
-            },
             "U2": {
                 "ref": "U2",
-                "chip_key": "USB2514Bi",
-                "name": "Microchip USB2514Bi 4-Port USB 2.0 Hub",
-                "package": "QFN-36 (6x6 mm)",
-                "datasheet_url": OFFICIAL_CHIPS["USB2514Bi"]["datasheet_url"],
-                "pin_description_url": OFFICIAL_CHIPS["USB2514Bi"]["pin_description_url"],
-                "table_ref": OFFICIAL_CHIPS["USB2514Bi"]["table_ref"],
+                "chip_key": "FSC-BT802",
+                "name": "Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Modul (CSR8670)",
+                "package": "27-Pad SMD Module (9.7x11.5 mm)",
+                "datasheet_url": OFFICIAL_CHIPS["FSC-BT802"]["datasheet_url"],
+                "pin_description_url": OFFICIAL_CHIPS["FSC-BT802"]["pin_description_url"],
+                "table_ref": OFFICIAL_CHIPS["FSC-BT802"]["table_ref"],
                 "pins": [
-                    {"pad": "15", "pin_name": "USBUP_DM", "net": "HUB_UP_DM", "type": "USB D-", "target": "U1 (ESP32-S31)", "spec": "Upstream USB D- vom ESP32-S31 Host"},
-                    {"pad": "16", "pin_name": "USBUP_DP", "net": "HUB_UP_DP", "type": "USB D+", "target": "U1 (ESP32-S31)", "spec": "Upstream USB D+ vom ESP32-S31 Host"},
-                    {"pad": "20", "pin_name": "USBDN_DM1", "net": "HUB_P1_DM", "type": "USB D-", "target": "J4 (Hub Ext JST-GH)", "spec": "Port 1 D- zu PCBA 05B Handschuhfach"},
-                    {"pad": "21", "pin_name": "USBDN_DP1", "net": "HUB_P1_DP", "type": "USB D+", "target": "J4 (Hub Ext JST-GH)", "spec": "Port 1 D+ zu PCBA 05B Handschuhfach"},
-                    {"pad": "24", "pin_name": "USBDN_DM2", "net": "HUB_P2_DM", "type": "USB D-", "target": "J5 (Wireless Dongle)", "spec": "Port 2 D- an CP2AA CarPlay/AA Dongle"},
-                    {"pad": "25", "pin_name": "USBDN_DP2", "net": "HUB_P2_DP", "type": "USB D+", "target": "J5 (Wireless Dongle)", "spec": "Port 2 D+ an CP2AA CarPlay/AA Dongle"}
+                    {"pad": "1", "pin_name": "GND", "net": "GND", "type": "Power Return", "target": "Ground Plane", "spec": "Modul-Masse"},
+                    {"pad": "2", "pin_name": "VDD_IO", "net": "VCC_3V3", "type": "Power In (+3.3V)", "target": "3.3V Rail", "spec": "I/O Versorgungsspannung"},
+                    {"pad": "3", "pin_name": "VREGENABLE", "net": "BT_EN", "type": "Control In", "target": "U1.39 (ESP32-S31)", "spec": "Power Enable Active High"},
+                    {"pad": "4", "pin_name": "RESETB", "net": "BT_RST", "type": "Control In", "target": "U1.38 (ESP32-S31)", "spec": "Hardware Reset Active Low"},
+                    {"pad": "6", "pin_name": "VBAT", "net": "VCC_3V3", "type": "Power In (+3.3V)", "target": "3.3V Rail", "spec": "Batterie-/Hauptversorgung"},
+                    {"pad": "12", "pin_name": "PCM_SYNC", "net": "BT_I2S_WS", "type": "Clock In", "target": "U1.24 (ESP32-S31)", "spec": "I2S Word Select / Frame Sync"},
+                    {"pad": "13", "pin_name": "PCM_IN", "net": "BT_I2S_DOUT", "type": "Audio In", "target": "U1.25 (ESP32-S31)", "spec": "I2S Audio RX von S31 MCU"},
+                    {"pad": "14", "pin_name": "PCM_OUT", "net": "BT_I2S_DIN", "type": "Audio Out", "target": "U1.28 (ESP32-S31)", "spec": "I2S Audio TX zur S31 MCU"},
+                    {"pad": "15", "pin_name": "PCM_CLK", "net": "BT_I2S_BCLK", "type": "Clock In", "target": "U1.23 (ESP32-S31)", "spec": "I2S Bit Clock"},
+                    {"pad": "17", "pin_name": "UART_RX", "net": "BT_UART_RX", "type": "UART In", "target": "U1.14 (ESP32-S31)", "spec": "AT Command RX"},
+                    {"pad": "18", "pin_name": "UART_TX", "net": "BT_UART_TX", "type": "UART Out", "target": "U1.13 (ESP32-S31)", "spec": "AT Command TX"},
+                    {"pad": "19", "pin_name": "RF_ANT", "net": "BT_RF_ANT", "type": "RF 2.4 GHz", "target": "ANT3 (Johanson 2450AT18A100)", "spec": "50 Ohm RF-Ausgang an Keramikantenne"},
+                    {"pad": "25", "pin_name": "GND", "net": "GND", "type": "Power Return", "target": "Ground Plane", "spec": "HF/Modul Masse"},
+                    {"pad": "27", "pin_name": "GND", "net": "GND", "type": "Power Return", "target": "Ground Plane", "spec": "HF Ground Return"}
                 ]
             }
         }
+
         b05["connectors"] = {
             "J1": {
                 "ref": "J1",
                 "name": "Backbone Bus-Eingang von Zentralbox (Molex J6.1-4)",
-                "type": "JST-GH 4-Pin 1.25mm SMD Vertikal (BM04B-GHS-TBT)",
+                "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
                 "mating": "JST GHR-04V-S (AWG26-30)",
                 "pins": [
-                    {"pin": "1", "net": "VCC_BUS", "type": "Power In (+12V/60W)", "spec": "Bordnetz-/PD-Speisung von Zentralbox"},
+                    {"pin": "1", "net": "VIN_60W", "type": "Power In (+12V/60W)", "spec": "Bordnetz-/PD-Speisung von Zentralbox"},
                     {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Masse Leistungsrückstrom"},
-                    {"pin": "3", "net": "USB_DP", "type": "USB 2.0 D+", "spec": "USB 2.0 High-Speed D+ zur Zentralbox"},
-                    {"pin": "4", "net": "USB_DM", "type": "USB 2.0 D-", "spec": "USB 2.0 High-Speed D- zur Zentralbox"},
+                    {"pin": "3", "net": "USB_UP_DP", "type": "USB 2.0 D+", "spec": "USB 2.0 High-Speed D+ direkt zu ESP32-S31 (U1.55)"},
+                    {"pin": "4", "net": "USB_UP_DM", "type": "USB 2.0 D-", "spec": "USB 2.0 High-Speed D- direkt zu ESP32-S31 (U1.54)"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J4": {
+                "ref": "J4",
+                "name": "Handschuhfach Qi / 5V Aux Power Receptacle",
+                "type": "JST-GH 6-Pin 1.25mm SMD Horizontal (SM06B-GHS-TB)",
+                "mating": "JST GHR-06V-S (AWG24-28)",
+                "pins": [
+                    {"pin": "1", "net": "VBUS_PD1_OUT", "type": "Power Out (5-20V/30W)", "spec": "USB Power Delivery von SW3526 (U5) für Handschuhfach"},
+                    {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Masse Leistungsrückstrom für USB-PD"},
+                    {"pin": "3", "net": "USB_DN1_CC1", "type": "USB-PD CC1", "spec": "Configuration Channel 1 von SW3526 (U5)"},
+                    {"pin": "4", "net": "USB_DN1_CC2", "type": "USB-PD CC2", "spec": "Configuration Channel 2 von SW3526 (U5)"},
+                    {"pin": "5", "net": "VCC_5V", "type": "Power Out (+5V/3A)", "spec": "Dauerhafte 5V Hilfsspannung von TPS54302 (U3)"},
+                    {"pin": "6", "net": "GND", "type": "Power Return", "spec": "Gemeinsame Signal- und Lastmasse"},
+                    {"pin": "MP", "net": "SHIELD", "type": "Shield", "spec": "Gehäuseschirmung"}
+                ]
+            },
+            "J7": {
+                "ref": "J7",
+                "name": "Zusatzscheinwerfer High-Power Schaltausgang (Aux Lights)",
+                "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
+                "mating": "JST GHR-02V-S (AWG20-24)",
+                "pins": [
+                    {"pin": "1", "net": "+12V_AUX", "type": "Power Out (+12V/10A)", "spec": "Geschaltete 12V für High-Power LED Scheinwerfer"},
+                    {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Lastmasse Rückstrom"},
                     {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
                 ]
             },
             "J10": {
                 "ref": "J10",
                 "name": "Navi-Stromversorgungsbuchse (Garmin Zūmo / TomTom)",
-                "type": "JST-GH 2-Pin 1.25mm SMD Vertikal (BM02B-GHS-TBT)",
+                "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
                 "mating": "JST GHR-02V-S (AWG24-28)",
                 "pins": [
-                    {"pin": "1", "net": "VCC_12V_PROT", "type": "Power Out (+12V/2A)", "spec": "Polyfuse-geschützte 12V Speisung für Navi-Cradle"},
+                    {"pin": "1", "net": "+12V_PROT", "type": "Power Out (+12V/2A)", "spec": "Polyfuse-geschützte 12V Speisung für Navi-Cradle"},
                     {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Masse Leistungsrückstrom"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J8": {
+                "ref": "J8",
+                "name": "Action-Cam 5V Stromversorgung (GoPro / Insta360)",
+                "type": "JST-GH 2-Pin 1.25mm SMD Horizontal (SM02B-GHS-TB)",
+                "mating": "JST GHR-02V-S (AWG24-28)",
+                "pins": [
+                    {"pin": "1", "net": "VCC_5V", "type": "Power Out (+5V/3A)", "spec": "Dauerhafte 5V Speisung für Cockpit Action-Cam"},
+                    {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Masse Leistungsrückstrom"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J2": {
+                "ref": "J2",
+                "name": "Under-Perch Spiegel-Pod Links (PCBA 05C)",
+                "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+                "mating": "JST GHR-04V-S (AWG28-30)",
+                "pins": [
+                    {"pin": "1", "net": "VCC_5V", "type": "Power Out (+5V)", "spec": "Speisespannung für bernsteinfarbene BSD Warn-LEDs"},
+                    {"pin": "2", "net": "BSD_LED_L_N", "type": "Open-Drain Out", "spec": "Geschaltete Masse für linke BSD Warn-LED"},
+                    {"pin": "3", "net": "BTN_SIG_L_N", "type": "Digital In", "spec": "Daumentaster Links (Active Low, interner Pull-Up)"},
+                    {"pin": "4", "net": "GND", "type": "Power Return", "spec": "Gemeinsame Schalter- und Signalmasse"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J3": {
+                "ref": "J3",
+                "name": "Under-Perch Spiegel-Pod Rechts (PCBA 05C)",
+                "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+                "mating": "JST GHR-04V-S (AWG28-30)",
+                "pins": [
+                    {"pin": "1", "net": "VCC_5V", "type": "Power Out (+5V)", "spec": "Speisespannung für bernsteinfarbene BSD Warn-LEDs"},
+                    {"pin": "2", "net": "BSD_LED_R_N", "type": "Open-Drain Out", "spec": "Geschaltete Masse für rechte BSD Warn-LED"},
+                    {"pin": "3", "net": "BTN_SIG_R_N", "type": "Digital In", "spec": "Daumentaster Rechts (Active Low, interner Pull-Up)"},
+                    {"pin": "4", "net": "GND", "type": "Power Return", "spec": "Gemeinsame Schalter- und Signalmasse"},
                     {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
                 ]
             },
             "J6": {
                 "ref": "J6",
                 "name": "GNSS & Umweltsensor-Puck Interconnect (PCBA 05D)",
-                "type": "JST-GH 8-Pin 1.25mm SMD Vertikal (BM08B-GHS-TBT)",
+                "type": "JST-GH 8-Pin 1.25mm SMD Horizontal (SM08B-GHS-TB)",
                 "mating": "JST GHR-08V-S (AWG28-30)",
                 "pins": [
                     {"pin": "1", "net": "VCC_3V3", "type": "Power Out (+3.3V)", "spec": "Sensor-Versorgung 3.3V LDO"},
                     {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Sensor-Masse"},
                     {"pin": "3", "net": "I2C_SDA", "type": "I2C SDA", "spec": "I2C Datenleitung für TMP117 / OPT3001 / BMP390"},
                     {"pin": "4", "net": "I2C_SCL", "type": "I2C SCL", "spec": "I2C Taktleitung für Umweltsensoren"},
-                    {"pin": "5", "net": "GNSS_TX", "type": "UART In", "spec": "u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX"},
-                    {"pin": "6", "net": "GNSS_RX", "type": "UART Out", "spec": "ESP32-S31 TX an u-blox SAM-M10Q RX"},
-                    {"pin": "7", "net": "GNSS_1PPS", "type": "Sync In", "spec": "u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt"},
-                    {"pin": "8", "net": "GND", "type": "Power Return", "spec": "Schirm-Masse"},
+                    {"pin": "5", "net": "GNSS_TIMEPULSE", "type": "Sync In", "spec": "u-blox SAM-M10Q 1-PPS Hochpräzisions-Zeittakt"},
+                    {"pin": "6", "net": "GNSS_TXD", "type": "UART In", "spec": "u-blox SAM-M10Q NMEA/UBX TX an ESP32-S31 RX (U1.5)"},
+                    {"pin": "7", "net": "GNSS_RXD", "type": "UART Out", "spec": "ESP32-S31 TX (U1.10) an u-blox SAM-M10Q RX"},
+                    {"pin": "8", "net": "GNSS_RESET_N", "type": "Control Out", "spec": "Hardware Reset für SAM-M10Q"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J9": {
+                "ref": "J9",
+                "name": "OLED / HUD Displayanschluss Links (Optional)",
+                "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+                "mating": "JST GHR-04V-S (AWG28-30)",
+                "pins": [
+                    {"pin": "1", "net": "VCC_3V3", "type": "Power Out (+3.3V)", "spec": "Display-Speisung"},
+                    {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Display-Masse"},
+                    {"pin": "3", "net": "I2C_SCL", "type": "I2C SCL", "spec": "I2C Takt für linkes Cockpit-Display"},
+                    {"pin": "4", "net": "I2C_SDA", "type": "I2C SDA", "spec": "I2C Daten für linkes Cockpit-Display"},
+                    {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
+                ]
+            },
+            "J11": {
+                "ref": "J11",
+                "name": "OLED / HUD Displayanschluss Rechts (Optional)",
+                "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
+                "mating": "JST GHR-04V-S (AWG28-30)",
+                "pins": [
+                    {"pin": "1", "net": "VCC_3V3", "type": "Power Out (+3.3V)", "spec": "Display-Speisung"},
+                    {"pin": "2", "net": "GND", "type": "Power Return", "spec": "Display-Masse"},
+                    {"pin": "3", "net": "I2C_SCL", "type": "I2C SCL", "spec": "I2C Takt für rechtes Cockpit-Display"},
+                    {"pin": "4", "net": "I2C_SDA", "type": "I2C SDA", "spec": "I2C Daten für rechtes Cockpit-Display"},
                     {"pin": "MP", "net": "GND", "type": "Shield", "spec": "Rastlaschen auf Masse"}
                 ]
             }
         }
-
     # 5. Board PCBA_07: LoRa Smart-Keyfob
     b07 = ssot["boards"].get("PCBA_07")
     if b07:
@@ -837,4 +1010,5 @@ def append_remaining_boards():
     print("✅ Successfully appended PCBA_08 and PCBA_09 to SSOT!")
 
 if __name__ == "__main__":
+    update_ssot()
     append_remaining_boards()
