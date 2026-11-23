@@ -67,8 +67,8 @@ BOARDS = {
     },
     "PCBA 05B": {
         "name": "Glovebox Media & Power-Injection Hub (50 x 20 mm)",
-        "pcb": "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb",
-        "sch": "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch",
+        "pcb": "hardware/archive/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb",
+        "sch": "hardware/archive/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch",
         "mcu_ref": "U1",
         "mcu_type": "USB2514Bi-AEZG",
         "fw_headers": []

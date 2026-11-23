@@ -109,7 +109,7 @@ STL_TARGETS: List[Tuple] = [
     ("04_front_node/03_front_node_usbc_plug.scad", "04_front_node/front_node_usbc_cap_tpu.stl"),
     ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_block.stl"),
     ("04_front_node/cockpit_breakout_block.scad", "04_front_node/cockpit_breakout_clamp.stl", ["-D", 'part="clamp"']),
-    ("04_front_node/glovebox_power_injection_hub.scad", "04_front_node/glovebox_power_injection_hub.stl"),
+    # Note: 04_front_node/glovebox_power_injection_hub.scad retired (PCBA 05B obsolete; Qi puck is COTS)
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_block.stl"),
     ("04_front_node/vehicle_breakout_block.scad", "04_front_node/vehicle_breakout_lid.stl", ["-D", 'part="lid"']),
     ("04_front_node/parts/sensor_puck_environmental.scad", "04_front_node/sensor_puck_environmental.stl", ["-D", 'part="assembly"']),
@@ -601,12 +601,6 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "05_accessories/car_dashboard_wedge_dock.scad",
         os.path.join(CAD_IMG_DIR, "car_dashboard_wedge_dock_cad.png"),
         "0,0,20,55,0,320,380",
-        "Tomorrow"
-    ),
-    (
-        "04_front_node/glovebox_power_injection_hub.scad",
-        os.path.join(CAD_IMG_DIR, "glovebox_power_injection_hub_cad.png"),
-        "27.5,12.5,8,55,0,320,135",
         "Tomorrow"
     ),
 ]

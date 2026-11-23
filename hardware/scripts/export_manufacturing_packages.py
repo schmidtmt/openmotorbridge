@@ -59,8 +59,8 @@ BOARDS = [
     {
         "name": "05b_cockpit_breakout_pcba",
         "title": "OpenMotorBridge Glovebox Media & Power-Injection Hub PCB (PCBA 05B)",
-        "sch": os.path.join(BASE_DIR, "kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch"),
-        "pcb": os.path.join(BASE_DIR, "kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
+        "sch": os.path.join(BASE_DIR, "archive/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_sch"),
+        "pcb": os.path.join(BASE_DIR, "archive/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
         "layers": "F.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,Edge.Cuts",
         "is_4layer": False
     },

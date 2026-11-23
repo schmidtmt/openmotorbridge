@@ -71,8 +71,8 @@ BOARDS = [
     {
         "id": "pcba05b",
         "name": "05b_cockpit_breakout",
-        "pcb": os.path.join(BASE_DIR, "hardware/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
-        "dest_dir": os.path.join(BASE_DIR, "hardware/kicad_cockpit_breakout"),
+        "pcb": os.path.join(BASE_DIR, "hardware/archive/kicad_cockpit_breakout/openmotorbridge_cockpit_breakout.kicad_pcb"),
+        "dest_dir": os.path.join(BASE_DIR, "hardware/archive/kicad_cockpit_breakout"),
         "outputs": [
             ("pcba05b_cockpit_breakout_3d.png", ["--side", "top", "--rotate", "-45,0,45", "--quality", "high", "--perspective", "--zoom", "1.2"]),
             ("pcba05b_cockpit_breakout_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.1"]),
