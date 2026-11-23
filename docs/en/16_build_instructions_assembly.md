@@ -327,11 +327,15 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * Insert intercom module and slide the lid in until it locks magnetically.
 4. **Day-to-Day Operation (100% Breakaway):** When removing saddlebags (e.g. for hotel stops, tire changes, washing), **simply loosen both OEM lever knobs** and lift off the bag. The external magnetic coupler on the frame disconnects cleanly at $10\dots 15\,\text{N}$ axial tension ("MagSafe principle"). No internal connectors are touched! When remounting, the coupling snaps back together self-centering.
 
-#### Step 5.1.6: 77 GHz Rear Radar at License Plate Bracket
-1. Bolt the MR20 radar enclosure to the lower license plate bracket.
-2. Route the 4-wire lead from Branch 3 down along the rear fender strut.
-3. Always form a **$30\,\text{mm}$ radius drip loop** before entering the M8 cable gland to shed water away from the seal.
-4. Align the integrated roost deflector to shield the gland from road spray thrown by the rear tire.
+#### Step 5.1.6: 77 GHz Rear Radar at License Plate Bracket (Two-Tier Mounting)
+1. **Mount Swivel Cradle:** Insert the 3D printed cradle ([`radar_swivel_tilt_cradle.stl`](../../hardware/cad/stl/02_pod_base/radar_swivel_tilt_cradle.stl)) with its 36-tooth Hirth index tongue into the clevis fork of the license plate bracket ([`radar_license_plate_bracket.stl`](../../hardware/cad/stl/02_pod_base/radar_license_plate_bracket.stl)). Insert the DIN 912 M5 $\times$ 25 mm screw and loosely thread on the DIN 934 M5 nut.
+2. **Insert EPDM Vibration Damping Pad:** Place the **$58 \times 40 \times 2.0\,\text{mm}$ elastomer damping pad** ([`radar_vibration_damping_pad.stl`](../../hardware/cad/stl/02_pod_base/radar_vibration_damping_pad.stl), Shore 60A/70A EPDM or TPU 85A) onto the front mating face of the cradle plate, ensuring the M4 bores and Ø 34 mm Garmin well line up cleanly.
+3. **Bolt Radar 2.0 Enclosure (Vibration Isolation):** Place the sealed radar enclosure against the damping pad. From the rear of the cradle, thread two **DIN 912 M4 $\times$ 14 mm screws** (with EPDM damping washers under screw heads) through the plate and pad directly into the captive M4 nuts of the enclosure backwall.  
+   > [!IMPORTANT]
+   > **Torque Warning:** Tighten M4 screws hand-snug to approximately **$1.0\dots 1.2\,\text{Nm}$**. The elastomer pad must be resiliently compressed, not crushed solid, in order to isolate high-frequency engine harmonics ($50\dots 250\,\text{Hz}$) from reaching the 77-GHz MR20 antenna array!
+4. **Calibrate Pitch & Lock Hirth Rosette:** Settle the motorcycle with rider weight on a flat floor. Level the radar unit horizontally ($\pm 2^\circ$ to road surface). Firmly tighten the **M5 pivot bolt to approx. $4.0\,\text{Nm}$**: the 36-tooth Hirth rosettes interlock positively, preventing any pitch deflection under aerodynamic drag ($130+\,\text{km/h}$) or bumpy road rebound.
+5. **Cabling & Drip Loop:** Route the 4-wire lead from Branch 4 down along the rear frame. Form a **$30\,\text{mm}$ radius drip loop** before entering the M8 cable gland so road spray drips free by gravity. Secure the cable with a UV-resistant zip-tie to the saddle at the bottom of the cradle.
+6. **Roost Deflector Verification:** Confirm that the integrated monolithic roost deflector stands flush in front of the cable gland to physically deflect roost and gravel kicked up by the spinning rear tire.
 
 ---
 

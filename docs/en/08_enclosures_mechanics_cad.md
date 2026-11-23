@@ -1326,6 +1326,14 @@ The **Radar 2.0 Winged Housing** ([`radar_mr20_housing.scad`](../../hardware/cad
 
 *Figure 8.38c: 3D CAD view of the Heavy-Duty Swivel Tilt Cradle (`radar_swivel_tilt_cradle_cad.png`). Visible: massive $58 \times 40 \times 8.5\,\text{mm}$ PA12 adapter plate with 2x M4 counterbores ($40\,\text{mm}$ bolt pattern), centered $\varnothing 34\,\text{mm}$ Garmin clearance, bionic 36-tooth Hirth index tongue aligned at center of gravity ($Z = 0$), and integrated zip-tie strain relief.*
 
+![Radar 2.0 Vibration Isolation Pad CAD](../images/cad/radar_vibration_damping_pad_cad.png)
+
+*Figure 8.38d: 3D CAD view of the elastomeric vibration isolation pad (`radar_vibration_damping_pad_cad.png`, $58 \times 40 \times 2.0\,\text{mm}$, Shore 60A/70A EPDM or TPU 85A). Sandwiched between the PA12 adapter plate and radar housing backwall to decouple high-frequency engine harmonics ($50\dots 250\,\text{Hz}$) from the 77-GHz radar sensor.*
+
+![Radar 2.0 Complete Assembly CAD](../images/cad/radar_tilt_mount_assembly_cad.png)
+
+*Figure 8.38e: 3D CAD assembly view (`radar_tilt_mount_assembly_cad.png`): Complete two-tier mount consisting of license plate bracket (`radar_license_plate_bracket.scad`), form-fit 36-tooth Hirth pivot joint (pitch-rigid against wind/bumps), black EPDM vibration isolation pad, and bolted Radar 2.0 housing.*
+
 ### 8.4 Harley Touring: 5-Port Glove Box USB-C Media & Power-Hub (`glovebox_power_injection_hub.scad`) & Cockpit Periphery
 
 The **5-Port Glove Box USB-C Media & Power-Injection Hub** ([`glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad), housing `PCBA 05B` $50 \times 20\,\text{mm}$) solves power delivery and infotainment stability issues inside the right glove compartment (media compartment) of Harley-Davidson Touring Baggers (Street Glide, Road Glide, CVO, CVO ST) **with 100% zero drilled holes and zero paint damage**:

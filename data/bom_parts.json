@@ -1109,6 +1109,28 @@
       "pkg_qty": 1,
       "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
     },
+    "part3d_radar_vibration_pad": {
+      "type": "part_3d",
+      "name": {
+        "de": "Radar 2.0 Schwingungsdämpfer-Pad",
+        "en": "Radar 2.0 Vibration Damping Pad"
+      },
+      "spec": "Shore 60A/70A EPDM / TPU 85A (2.0 mm)",
+      "source": "3D-Druck (TPU) / EPDM-Zuschnitt",
+      "unit": "Stk.",
+      "cost_eur": [
+        0.5,
+        0.8
+      ],
+      "desc": {
+        "de": "Elastomer-Dämpfungsmatte (58 x 40 x 2,0 mm) zwischen Neigegelenk und Radargehäuse zur Entkopplung hochfrequenter Motorvibrationen (50-250 Hz)",
+        "en": "Elastomer damping pad (58 x 40 x 2.0 mm) between swivel cradle and radar housing for isolating high-frequency engine harmonics (50-250 Hz)"
+      },
+      "file": "radar_vibration_damping_pad.stl",
+      "group": "Radar 2.0",
+      "pkg_qty": 1,
+      "pkg_name": "TPU 3D-Druck bzw. EPDM-Zellkautschuk"
+    },
     "part3d_smart_keyfob_lower": {
       "type": "part_3d",
       "name": {

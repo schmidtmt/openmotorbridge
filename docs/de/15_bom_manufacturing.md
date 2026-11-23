@@ -303,15 +303,18 @@ Alle Hauptgehäuse (Zentralbox, Koffer-Pods, Front-Knoten) nutzen die **schraube
   * `adventure_underseat_cross_rail.stl` (1 Stk.): Verwindungssteife Unter-Sitzbank-Sattelbrücke zur 100 % verdrehsicheren Verbindung von links und rechts mit integrierter 2-Draht DC-Kabelrinne.
   * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Minimaler, schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke (Ø 18 mm Rohr) mit M5-Verschraubung von unten und integriertem Steinschlag-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung ins Radar 2.0 Gehäuse.
+  * `radar_vibration_damping_pad.stl` (1 Stk.): Elastomer-Schwingungsdämpfer-Pad ($58 \times 40 \times 2{,}0\,\text{mm}$, Shore 60A/70A EPDM / TPU 85A) zur Entkopplung hochfrequenter Motorvibrationen.
 * **Kit 2: BMW R1250 / R1300 GSA (Adventure mit Ø 18 mm Edelstahl-Alukofferträger):**
   * `adventure_gsa_cage_dock_body.stl` & `adventure_gsa_clamp_cap.stl` (je 2 Stk.): Schwerlast-Käfigdocks ("GSA Cage Dock") für Pod 1 & 2 im $45\,\text{mm}$ Totraum des Trägerrahmens mit $85\,\text{mm}$ Doppel-Rohrsattelbasis, 4x M5 Verschraubung, 4x Spanngurt-Freisparungen, Steinschlag-Gleitkeil & verdecktem 2-Draht DC-Kanal mit Kabelbinderbrücke im Rohrschatten.
   * `adventure_rack_radar_mount.stl` & `adventure_rack_radar_clamp_cap.stl` (je 1 Stk.): Schottergeschützter Heckradar-Rohrträger unter der Gepäckbrücke.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
+  * `radar_vibration_damping_pad.stl` (1 Stk.): Elastomer-Schwingungsdämpfer-Pad ($58 \times 40 \times 2{,}0\,\text{mm}$, Shore 60A/70A EPDM / TPU 85A).
 * **Kit 3: Harley-Davidson Touring & Classic Bagger (Street Glide, Road Glide, CVO, CVO ST, Road King Special):**
   * `saddlebag_lid_dock.stl` (2 Stk.): Kofferdeckel-Docks mit Scharnier-Torx-Flansch, 4x Spanngurt-Freisparungen & 4-Draht Automotive-Zugentlastung.
   * `010_saddlebag_hole_grommet_split.stl` (2 Stk.): Geteilte EPDM/TPU-Durchführung für Ø 4,2 mm 4-Draht Buskabel in OEM Ø 19,0 mm Kofferwandbohrung (100 % Zero-Drill, oberhalb Schwingenlager) inkl. U-geschlitzter Tunnel-Distanzscheibe.
   * `radar_license_plate_bracket.stl` (1 Stk.): Entkoppelter Kennzeichen-Radarhalter für Strang 4 (Radar).
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Radar 2.0 Schwerlast-Neigegelenk (Actioncam/GoPro-Hirth-Cradle) mit 2x M4-Verschraubung und 36-Zahn Hirth-Verzahnung.
+  * `radar_vibration_damping_pad.stl` (1 Stk.): Elastomer-Schwingungsdämpfer-Pad ($58 \times 40 \times 2{,}0\,\text{mm}$, Shore 60A/70A EPDM / TPU 85A) zur Entkopplung von V2-Motorvibrationen.
   * `radar_mr20_housing.stl` & `radar_mr20_radome.stl` (1 Stk.): Radar 2.0 PA12 Flügel-Gehäuse mit Spritzwasser-Schutzspoiler und PC-Radom.
   * `cots_magnetic_frame_dock_body.stl` (1 Stk.) & `cots_magnetic_frame_clamp.stl` (1 Stk.): COTS 4-Pin Magnet-Rahmendock für werkzeuglose Kofferabnahme am Ø 26 mm Rahmenrohr (optional; bei reinem Inline-Breakaway-Kabelstrang entfällt das Gehäuse).
   * `glovebox_power_injection_hub.stl` (1 Stk.): 4-Port Handschuhfach Media- & Power-Injection Hub für rechtes Handschuhfach (Zero-Drill Durchstich, Abgriff OEM USB-C zu Skyline OS / Boom! Box, 30W Phone Fast Charge, 10W geschalteter Dongle-Port, freier Media-Port; Action-Cam wird direkt am Front-Node versorgt).
@@ -319,6 +322,7 @@ Alle Hauptgehäuse (Zentralbox, Koffer-Pods, Front-Knoten) nutzen die **schraube
 * **Optionale Bobber & Custom-Kit Teile:**
   * `radar_center_underfender_mount.stl` (1 Stk.): Stealth Center Under-Fender Mount mit $46\,\text{mm}$ Tiefgang und integriertem $42\,\text{mm}$ Spritzwasser-Schmutzfänger-Spoiler.
   * `radar_swivel_tilt_cradle.stl` (1 Stk.): Schwerlast-Neigegelenk mit 2x M4-Verschraubung.
+  * `radar_vibration_damping_pad.stl` (1 Stk.): Elastomer-Schwingungsdämpfer-Pad ($58 \times 40 \times 2{,}0\,\text{mm}$, Shore 60A/70A EPDM / TPU 85A).
 * **Kit 4: Support-Car / Begleitfahrzeug Kolonnen-Kit (Car-Kit / Referenz-Kit 5):**
   * `car_sun_visor_pod_clip.stl` (2 Stk.): Schnellwechsel-Spannclips zur vibrationsfreien Befestigung von Pod 1 und Pod 2 an den beiden Sonnenblenden im Pkw/Van (Fahrer- und Beifahrerseite).
   * `glovebox_power_injection_hub.stl` (1 Stk.): Formschlüssiges Hub-Gehäuse für Mittelkonsole / Armlehne (Power-Injection & USB-Host Abgriff im Begleitfahrzeug).
@@ -509,8 +513,8 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **M2 Halteplattenschraube (Senkkopf)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
 | **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
 | **M2 UCS Modul-Schraube** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 10 Stk. | Verschraubung OMM UCS Gehäuseschalen (4x pro Modul) sowie Zentraldom H1 der Under-Perch Spiegel-Pods (1x pro Pod) |
-| **M2.5 Edelstahlmutter (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 16 Stk. | Formschlüssig eingelegt in Sechskanttaschen (4x PCBA 01 Slide-Tray, 4x PCBA 05 Front-Node, 4x Aktuator-Schlittenbrücke) |
-| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 Stk. | Befestigung der Platinen & Klemmen (4x PCBA 01, 4x PCBA 05, 2x OMM Helm-Klemmschelle) |
+| **M2.5 Edelstahlmutter (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 18 Stk. | Formschlüssig eingelegt in Sechskanttaschen (4x PCBA 01 Slide-Tray, 4x PCBA 05 Front-Node, 2x PCBA 05B Hub, 4x Aktuator-Schlittenbrücke) |
+| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 12 Stk. | Befestigung der Platinen & Klemmen (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B Handschuhfach-Hub, 2x OMM Helm-Klemmschelle) |
 | **M4 Edelstahlmutter (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 10 Stk. | 4x Zentralbox M4-Silentblöcke, 4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand |
 | **M4 Schraube (Radar-Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte radar_swivel_tilt_cradle an Radar 2.0 Gehäuse |
 | **M4 Silentblöcke / Gummipuffer** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz) |

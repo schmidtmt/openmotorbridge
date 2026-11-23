@@ -24,10 +24,11 @@
 include <../00_common/parameters.scad>;
 use <parts/011_gopro_hirth_lock.scad>;
 use <radar_license_plate_bracket.scad>;
+use <radar_vibration_damping_pad.scad>;
 use <../05_accessories/radar_mr20_housing.scad>;
 
 // --- Part Selector for Multi-Part STL Export & Assembly Rendering ---
-part = "cradle"; // "cradle", "assembly"
+part = "cradle"; // "cradle", "pad", "assembly"
 
 // --- Parametric Dimensions ---
 CRADLE_PLATE_W      = 58.0;  // Total adapter plate width in X (mm)
@@ -189,21 +190,26 @@ module radar_tilt_mount_assembly(tilt_angle = -5.0) {
                 color([0.18, 0.40, 0.46])
                     radar_swivel_tilt_cradle();
 
-                // 2x DIN 912 M4 Screws bolting cradle to radar housing
+                // EPDM Vibration Damping Pad (Shore 60A/70A, 2.0 mm)
+                translate([0, 0, 0])
+                    color([0.12, 0.12, 0.14, 0.95])
+                        radar_vibration_damping_pad();
+
+                // 2x DIN 912 M4 Screws bolting cradle through pad into radar housing
                 color([0.82, 0.82, 0.85]) {
                     for (dx = [-REAR_M4_PITCH/2.0, REAR_M4_PITCH/2.0]) {
                         translate([dx, -CRADLE_PLATE_THICK + 2.0, 0])
                             rotate([90, 0, 0]) {
                                 cylinder(r=3.5, h=3.8, center=false, $fn=24); // Screw head
-                                cylinder(r=2.0, h=14.0, center=false, $fn=20); // Screw shaft
+                                cylinder(r=2.0, h=16.0, center=false, $fn=20); // Screw shaft
                             }
                     }
                 }
 
                 // C. Radar 2.0 Housing Assembly
                 // Radar housing rear wall is at Y = -RADAR_HOUSING_D = -34.0 mm
-                // Cradle front face is at Y = 0 mm
-                translate([0, 34.0, 0]) {
+                // Cradle front face is at Y = 0 mm, EPDM pad is 2.0 mm -> housing at Y = 36.0 mm
+                translate([0, 36.0, 0]) {
                     radar_mr20_assembly();
                 }
             }
@@ -214,6 +220,8 @@ module radar_tilt_mount_assembly(tilt_angle = -5.0) {
 // Standalone preview and build target
 if (part == "assembly") {
     radar_tilt_mount_assembly();
+} else if (part == "pad") {
+    radar_vibration_damping_pad();
 } else {
     radar_swivel_tilt_cradle();
 }

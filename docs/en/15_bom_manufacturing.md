@@ -506,8 +506,8 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **M2 Retainer Plate Screw (Countersunk)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Retaining actuator clamping bridge plates (4x per gateway cartridge) |
 | **M2 Cartridge PCB Screw** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated) |
 | **M2 UCS Module Screw** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 10 pcs | Fastening OMM UCS housing shells (4x per module) and central boss H1 of under-perch mirror pods (1x per pod) |
-| **M2.5 Stainless Nut (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 16 pcs | Captive in hex nut pockets (4x PCBA 01 slide tray, 4x PCBA 05 Front Node, 4x actuator slide bracket) |
-| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 pcs | Fastening boards & clamps (4x PCBA 01, 4x PCBA 05, 2x OMM helmet rim clamp) |
+| **M2.5 Stainless Nut (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 18 pcs | Captive in hex nut pockets (4x PCBA 01 slide tray, 4x PCBA 05 Front Node, 2x PCBA 05B hub, 4x actuator slide bracket) |
+| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 12 pcs | Fastening boards & clamps (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B glovebox hub, 2x OMM helmet rim clamp) |
 | **M4 Stainless Nut (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 10 pcs | 4x Central Box M4 silentblocks, 4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing |
 | **M4 Screw (Radar Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 pcs | Securing adapter bracket radar_swivel_tilt_cradle to Radar 2.0 housing |
 | **M4 Anti-Vibration Silentblocks** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 pcs | Vibration-decoupled 4-point mounting of Central Box on bike frame (damps 10-100 Hz) |
@@ -546,7 +546,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Sensor Puck 8-Pin JST-GH Link Cable** | 8-Pin JST-GH 1.25 mm (SM08B-GHS-TB) geschirmte Silikon-/PUR-Leitung, 25 cm | COTS Standard | 1 pcs | Direct 8-pin link from Front Node (J6) to external Sensor Puck PCBA 05D (3V3, GND, I2C_SDA, I2C_SCL, TIMEPULSE, GNSS_TXD, GNSS_RXD, GNSS_RESET_N) |
 | **Mirror Pod 4-Pin JST-GH Lead (PUR)** | 4-Pin JST-GH 1.25 mm (SM04B-GHS-TB) auf geschirmtes Ø 2.8 mm PUR-Rundkabel, 60 cm | COTS Standard | 2 pcs | Connects left and right under-perch mirror pods (PCBA 05C J1) to Front Node (J_POD_L / J_POD_R: VCC_3V3, LED_CTRL, BTN_SIG, GND) |
 | **Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors |
-| **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | USB-C service & firmware flashing port on Central Box flank |
+| **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |
 | **Two-Cable Main Harness (6-Pin Power/CAN & 16-Pin Backbone)** | Molex Micro-Lock Plus 6-Pin (J1) + Molex Picoflex 16-Pin (J6) mit 4x 4-Ader Satellitensträngen | COTS / Deutsch | 1 pcs | Central v10 two-cable harness: J1 (bike power & CAN) and J6 (4x 4-wire star backbone to Front Node, Pod 1/2 & Radar) |
 
 <!-- AUTOGEN_BOM_TABLE_END -->

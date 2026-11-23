@@ -135,6 +135,7 @@ STL_TARGETS: List[Tuple] = [
     ("02_pod_base/radar_license_plate_bracket.scad", "02_pod_base/radar_license_plate_bracket.stl"),
     ("02_pod_base/radar_center_underfender_mount.scad", "02_pod_base/radar_center_underfender_mount.stl"),
     ("02_pod_base/radar_swivel_tilt_cradle.scad", "02_pod_base/radar_swivel_tilt_cradle.stl", ["-D", 'part="cradle"']),
+    ("02_pod_base/radar_vibration_damping_pad.scad", "02_pod_base/radar_vibration_damping_pad.stl"),
     ("02_pod_base/parts/006_fender_curved_saddle.scad", "02_pod_base/components/06_fender_curved_saddle.stl"),
     ("02_pod_base/parts/007_pod_slide_dock_core.scad", "02_pod_base/components/07_pod_slide_dock_core.stl"),
 
@@ -480,6 +481,12 @@ RENDER_TARGETS: List[Tuple[str, str, str, str]] = [
         "02_pod_base/radar_swivel_tilt_cradle.scad",
         os.path.join(CAD_IMG_DIR, "radar_swivel_tilt_cradle_cad.png"),
         "0,-12,0,55,0,310,160",
+        "Tomorrow"
+    ),
+    (
+        "02_pod_base/radar_vibration_damping_pad.scad",
+        os.path.join(CAD_IMG_DIR, "radar_vibration_damping_pad_cad.png"),
+        "0,1,0,55,0,310,130",
         "Tomorrow"
     ),
     (

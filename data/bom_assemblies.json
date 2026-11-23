@@ -124,6 +124,14 @@
           "qty": 1
         },
         {
+          "part_id": "ic_fsc_bt802",
+          "qty": 1
+        },
+        {
+          "part_id": "ant_johanson_2450",
+          "qty": 1
+        },
+        {
           "part_id": "pcba_05d",
           "qty": 1
         },
@@ -672,6 +680,10 @@
         },
         {
           "part_id": "part3d_radar_swivel_cradle",
+          "qty": 1
+        },
+        {
+          "part_id": "part3d_radar_vibration_pad",
           "qty": 1
         },
         {

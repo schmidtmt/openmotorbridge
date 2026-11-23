@@ -1107,6 +1107,28 @@ const BOM_PARTS = {
     "pkg_qty": 1,
     "pkg_name": "3D-Druck ASA/PETG bzw. JLCPCB SLS"
   },
+  "part3d_radar_vibration_pad": {
+    "type": "part_3d",
+    "name": {
+      "de": "Radar 2.0 Schwingungsdämpfer-Pad",
+      "en": "Radar 2.0 Vibration Damping Pad"
+    },
+    "spec": "Shore 60A/70A EPDM / TPU 85A (2.0 mm)",
+    "source": "3D-Druck (TPU) / EPDM-Zuschnitt",
+    "unit": "Stk.",
+    "cost_eur": [
+      0.5,
+      0.8
+    ],
+    "desc": {
+      "de": "Elastomer-Dämpfungsmatte (58 x 40 x 2,0 mm) zwischen Neigegelenk und Radargehäuse zur Entkopplung hochfrequenter Motorvibrationen (50-250 Hz)",
+      "en": "Elastomer damping pad (58 x 40 x 2.0 mm) between swivel cradle and radar housing for isolating high-frequency engine harmonics (50-250 Hz)"
+    },
+    "file": "radar_vibration_damping_pad.stl",
+    "group": "Radar 2.0",
+    "pkg_qty": 1,
+    "pkg_name": "TPU 3D-Druck bzw. EPDM-Zellkautschuk"
+  },
   "part3d_smart_keyfob_lower": {
     "type": "part_3d",
     "name": {
@@ -1267,7 +1289,7 @@ const BOM_PARTS = {
       "de": "PCBA 01: Zentralbox Controller",
       "en": "PCBA 01: Central Box Controller"
     },
-    "spec": "ESP32-S31, QCC3084 BT, ESP32-PICO-V3-02 A2DP-Transmitter, SX1262 LoRa, USV, Zwei-Kabel-Architektur (DTM-6 & 16-Pin)",
+    "spec": "ESP32-S31, 3x QCC3086 BT5.4 Transceiver, SX1262 LoRa, USV, Zwei-Kabel-Architektur (DTM-6 & 16-Pin)",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1309,7 +1331,7 @@ const BOM_PARTS = {
       "de": "PCBA 05: Universal Front-Knoten",
       "en": "PCBA 05: Universal Front Node"
     },
-    "spec": "82x50mm 4-Layer, ESP32-P4-NR16 + ESP32-E22 Wi-Fi 6E, USB2514B Hub, TPS54302, SW3526 30W USB-PD, SPH0645LM4H MEMS",
+    "spec": "82x50mm 4-Layer, ESP32-S31-WROOM-1U, Feasycom FSC-BT802 (CSR8670 BT 5.1 Audio), Johanson 2450AT18A100, TPS54302, SW3526 30W USB-PD, SPH0645LM4H MEMS",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
@@ -1317,8 +1339,8 @@ const BOM_PARTS = {
       13.2
     ],
     "desc": {
-      "de": "Cockpit-Hauptknoten für 30W USB-PD, CP2AA Wireless CarPlay/Android Auto Bridge, Knowles MEMS Wind-Tracking & BSD-Spiegelansteuerung",
-      "en": "Cockpit main node for 30W USB-PD, CP2AA Wireless CarPlay/Android Auto bridge, Knowles MEMS wind tracking & BSD mirror drive"
+      "de": "Cockpit-Hauptknoten für 30W USB-PD, Bluetooth 5.1 Dual-Mode Audio-Gateway (FSC-BT802), Knowles MEMS Wind-Tracking & BSD-Spiegelansteuerung",
+      "en": "Cockpit main node for 30W USB-PD, Bluetooth 5.1 dual-mode audio gateway (FSC-BT802), Knowles MEMS wind tracking & BSD mirror drive"
     },
     "id_kicad": "kicad_front_node",
     "pkg_qty": 5,
@@ -1327,23 +1349,23 @@ const BOM_PARTS = {
   "pcba_05b": {
     "type": "pcba",
     "name": {
-      "de": "PCBA 05B: Handschuhfach Media & Power-Injection Hub",
-      "en": "PCBA 05B: Glovebox Media & Power-Injection Hub"
+      "de": "PCBA 05B: Handschuhfach Hub [HISTORISCH ARCHIVIERT]",
+      "en": "PCBA 05B: Glovebox Hub [HISTORICALLY ARCHIVED]"
     },
-    "spec": "50.0x20.0 mm 2-Layer PCB mit USB2514Bi-AEZG 4-Port Hub & 5x USB-C Dual-Edge Buchsen (J1..J5)",
+    "spec": "Archiviert - Ersetzt durch magnetischen Qi-Ladepuck (15W/20W MagSafe/Qi2) + USB-C PD Zusatzanschluss",
     "source": "JLCPCB / SMT",
     "unit": "Stk.",
     "cost_eur": [
-      2.8,
-      3.4
+      0.0,
+      0.0
     ],
     "desc": {
-      "de": "Aktiver 4-Port USB-2.0- & Power-Injection-Hub für das Handschuhfach (North: J2 FRONT_NODE, J1 SKYLINE_HOST; South: J3 PHONE_CHARGE, J4 DONGLE, J5 MEDIA)",
-      "en": "Active 4-port USB 2.0 & power-injection hub for glovebox (North: J2 FRONT_NODE, J1 SKYLINE_HOST; South: J3 PHONE_CHARGE, J4 DONGLE, J5 MEDIA)"
+      "de": "Historischer USB-Hub für Handschuhfach; entfällt im Tabula-Rasa Redesign ersatzlos zugunsten eines magnetischen Qi-Ladepucks mit Zusatz-Schnellladeport",
+      "en": "Historical glovebox USB hub; obsoleted in Tabula Rasa redesign in favor of a magnetic Qi charging puck with additional fast charge port"
     },
     "id_kicad": "kicad_cockpit_breakout",
-    "pkg_qty": 5,
-    "pkg_name": "JLCPCB 5er SMT-Nutzen (MOQ 5)"
+    "pkg_qty": 0,
+    "pkg_name": "Archiviert"
   },
   "pcba_05c": {
     "type": "pcba",
@@ -2313,8 +2335,8 @@ const BOM_PARTS = {
   "cable_usbc_carplay_data": {
     "type": "cable",
     "name": {
-      "de": "USB-C CarPlay Datenkabel",
-      "en": "USB-C CarPlay Data Cable"
+      "de": "USB-C Wartungs- & DFU-Datenkabel",
+      "en": "USB-C Maintenance & DFU Data Cable"
     },
     "spec": "USB-C auf USB-A/C Datenkabel (1.0 m geschirmt)",
     "source": "COTS Standard",
@@ -2324,8 +2346,8 @@ const BOM_PARTS = {
       3.24
     ],
     "desc": {
-      "de": "Kabelgebundene Head-Unit Audio- & Display-Bridge (Apple CarPlay / Android Auto)",
-      "en": "Wired head unit audio & display bridge (Apple CarPlay / Android Auto)"
+      "de": "Wartungs-, Diagnose- und Firmware-Flashkabel für Zentralbox und Frontnode (DFU / Log-Streaming)",
+      "en": "Maintenance, diagnostic and firmware flashing cable for Central Box and Front Node (DFU / log streaming)"
     },
     "pkg_qty": 1,
     "pkg_name": "Einzelkabel (Amazon / COTS)"
@@ -2393,6 +2415,42 @@ const BOM_PARTS = {
     "group": "Pod-Basis",
     "pkg_qty": 1,
     "pkg_name": "3D-Druck TPU 95A bzw. JLCPCB"
+  },
+  "ic_fsc_bt802": {
+    "type": "ic",
+    "name": {
+      "de": "Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Modul (CSR8670)",
+      "en": "Feasycom FSC-BT802 Bluetooth 5.1 Dual-Mode Module (CSR8670)"
+    },
+    "spec": "SMD-27 (9.7x11.5 mm), Qualcomm CSR8670, A2DP Sink, HFP, AVRCP, I2S Digital Audio",
+    "source": "Feasycom / JLCPCB",
+    "unit": "Stk.",
+    "cost_eur": [
+      6.5,
+      7.8
+    ],
+    "desc": {
+      "de": "Dual-Mode Bluetooth 5.1 Audio-Transceiver für drahtlose SkylineOS / Helm-Anbindung auf PCBA 05",
+      "en": "Dual-mode Bluetooth 5.1 audio transceiver for wireless SkylineOS / helmet link on PCBA 05"
+    }
+  },
+  "ant_johanson_2450": {
+    "type": "component",
+    "name": {
+      "de": "Johanson 2450AT18A100 2.45 GHz Keramik-Chip-Antenne",
+      "en": "Johanson 2450AT18A100 2.45 GHz Ceramic Chip Antenna"
+    },
+    "spec": "EIA 1206 (3.2x1.6 mm) SMD, 2.4-2.5 GHz, 0.5 dBi Peak Gain, 50 Ohm",
+    "source": "Johanson Technology / Mouser / DigiKey",
+    "unit": "Stk.",
+    "cost_eur": [
+      0.45,
+      0.65
+    ],
+    "desc": {
+      "de": "Kompakte Onboard-Keramikantenne für Bluetooth-Transceiver U2 an der Ostkante von PCBA 05",
+      "en": "Compact onboard ceramic chip antenna for Bluetooth transceiver U2 at East edge of PCBA 05"
+    }
   }
 };
 
@@ -2513,6 +2571,14 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "pcba_05",
+        "qty": 1
+      },
+      {
+        "part_id": "ic_fsc_bt802",
+        "qty": 1
+      },
+      {
+        "part_id": "ant_johanson_2450",
         "qty": 1
       },
       {
@@ -3064,6 +3130,10 @@ const BOM_ASSEMBLIES = {
       },
       {
         "part_id": "part3d_radar_swivel_cradle",
+        "qty": 1
+      },
+      {
+        "part_id": "part3d_radar_vibration_pad",
         "qty": 1
       },
       {
