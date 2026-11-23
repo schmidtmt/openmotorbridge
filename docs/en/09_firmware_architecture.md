@@ -19,7 +19,7 @@ In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wir
 | * Core 0: USB2517I 7-Port Host Engine, SX1262 LoRa   | * Core 0: USB Backbone Client,  |
 |   868 MHz, Quad eFuse, BLE, Pod & Bus-DFU Dispatcher |   SAM-M10Q GNSS, CAN, SW3526 PD |
 | * Core 1: 48 kHz SIMD Audio-DSP, Raised-Cosine       | * Core 1: Knowles Wind-DSP,     |
-|   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   OLED UI, 5.9 GHz V2X Co-Proc  |
+|   Ducking, AGC, 3x Qualcomm QCC3086 BT 5.4 Hub        |   OLED UI, FSC-BT802 Headunit   |
 +------------------------------------------------------+---------------------------------+
 | 3. SATELLITE PODS (ESP32-C6-MINI-1U, PCBA 03)         | 4. REAR RADAR (ESP32-C5-WROOM-1U, PCBA 08)|
 +------------------------------------------------------+---------------------------------+
@@ -46,10 +46,14 @@ In v10.0, the overall system is standardized onto a ruggedized, shielded **4-wir
 - **SDIO Logging Task (`sdio_ring_buffer.cpp`):** 4-bit high-speed SD card logger (`GPIO 33..39`) with rolling BGH privacy auto-purge (`esp_vfs_fat_info`) and SHA-256 chain + hardware eFuse signature.
 - **ADR-EKF Filter (`adr_ekf_filter.cpp`):** 15-State sensor fusion fusing 10 Hz Multi-GNSS telemetry (from Front Node via USB) and onboard Bosch BMI270 6-axis IMU (`I2C 0x68`) for uninterrupted navigation through tunnels.
 
-#### CORE 1 (Realtime Edge-AI Audio DSP & Qualcomm QCC3084 Hub @ Highest Priority):
+#### CORE 1 (Realtime Edge-AI Audio DSP & Qualcomm QCC3086 Hub @ Highest Priority):
 - **128-bit SIMD Vector Accelerator:** Real-time filtering of wind noise, acoustic transients, and engine rumble, plus acoustic scene classification directly on silicon.
-- **Qualcomm QCC3084 Dual-Helmet Audio Hub (`bluetooth_audio_manager.cpp`):** Controls the dedicated QCC3084 BT 5.4 Audio SoC (`U9` on `PCBA 01`) via UART (GAIA/AT) for hardware-accelerated Dual-A2DP (aptX HD / Adaptive) to rider and pillion helmets, LE Audio Auracast, and synchronous HFP 1.8 Wideband voice channel.
-- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec (`I2C 0x10`) and Qualcomm QCC3084 ($f_s = 48\,\text{kHz}, 24\,\text{bit}$, double-buffer of 128 samples = $2.67\,\text{ms}$).
+- **Qualcomm QCC3086 Triple-Audio Hub (`bluetooth_audio_manager.cpp`):** Controls the 3 dedicated QCC3086 BT 5.4 transceivers (`U9`, `U13`, `U14` on `PCBA 01`) over separate UART channels:
+  - `U9`: Smartphone A2DP Sink, HFP 1.8 low-latency voice return (< 20 ms for calls/Siri) and AVRCP 1.6 handlebar controls.
+  - `U13`: Rider Helmet A2DP Source (aptX Adaptive low-latency < 20 ms) and HFP 1.8 microphone uplink.
+  - `U14`: Pillion Helmet A2DP Source (aptX / LC3) and HFP 1.8 microphone uplink.
+  - Triple Symmetrical Part: 100% identical WLCSP-99 footprint.
+- **I2S Audio DMA Receiver & Transmitter:** Ultra-low-latency streaming via ES8388 Audio Codec (`I2C 0x10`) and the Qualcomm QCC3086 transceivers ($f_s = 48\,\text{kHz}, 24\,\text{bit}$, double-buffer of 128 samples = $2.67\,\text{ms}$).
 - **Raised-Cosine Ducking Engine:** Click-free, continuously differentiable audio attenuation during intercom announcements or radar alerts.
 - **Dynamic AGC Volume Scaling:** Smooth automatic scaling of helmet output volume based on Front Node aerodynamic wind noise.
 - **Lookahead Brickwall Limiter:** Prevents digital clipping exceeding $0\,\text{dBFS}$.
@@ -72,7 +76,7 @@ enum UsbBackbonePktType : uint8_t {
 
     // --- Consolidated Telemetry (10 Hz Frame) & Peripherals ---
     USB_PKT_FRONT_TELEMETRY    = 0x04,  // Consolidated 10 Hz Frame: GNSS PVT + Wind-RMS + TMP117 + Lux + CAN
-    USB_PKT_WIRELESS_CP_AA_STAT= 0x05,  // COTS CarPlay / Android Auto Bridge Status, Current Draw, Auto-Café Timer
+    USB_PKT_POWER_DELIVERY_STAT= 0x05,  // Front Node 30W Fast-Charging Status, Current Draw, Qi Puck Telemetry
 
     // --- Control Commands & System Synchronization ---
     USB_CMD_POWER_CYCLE        = 0x10,  // Central Box -> Front Node / Pods: Cold Boot & Power Gating
@@ -152,7 +156,7 @@ During tours across mountainous terrain or dense forests, 2.4 GHz intercom conne
 | 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRY & TEXT              |
 |    * Range up to 15 km (LOS) or 3-5 km in mountains                         |
 |    * Automatically transmits GPS position, bearing, distance & arrow vector |
-|    * Displays "Group ahead: 2.4 km NW" on CarPlay / PWA Dashboard           |
+|    * Displays "Group ahead: 2.4 km NW" on Cockpit / PWA Dashboard           |
 +-----------------------------------------------------------------------------+
 |                                     v (Connection loss > 120 s)             |
 | 4. RESCUE LEVEL 3: PMR446 ANALOG VOICE FALLBACK (OPTIONAL)                  |
@@ -194,7 +198,7 @@ The overall system orchestrates specialized tasks across the two host microcontr
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | **`audio_dsp_task`** | Central Box (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Zero-latency I2S audio mix, SIMD AI noise filter, ducking & AGC. |
 | **`usb_backbone_task`**| Central Box (Core 0) | **22** | 6 KB | USB Host IRQ / Event | FreeRTOS StreamBuffer | 4-Wire Automotive USB 2.0 host engine for Front Node & Pods (< 0.2 ms). |
-| **`qcc3084_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| QCC3084 Supervisor: aptX HD Dual-A2DP, Auracast & HFP Call Handling. |
+| **`qcc3086_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| 3x QCC3086 Supervisor: Smartphone Link, Dual-Helmet Audio & HFP. |
 | **`lora_mesh_task`**  | Central Box (Core 0) | **20** | 4 KB | SX1262 IRQ / Timer  | FreeRTOS Queue        | 868 MHz LoRa mesh protocol, theft sentry & Group Split Rescue. |
 | **`gesture_engine_task`**| Front Node (Core 0)| **24** | 2 KB | GPIO Edge ISR       | USB TX Queue          | Processes mirror pod switches Left/Right, generates 5 gestures (< 0.15 ms). |
 | **`radar_task`**      | Central Box (Core 0) | **16** | 4 KB | CAN / UART DMA ISR  | FreeRTOS Queue        | 20 Hz Radar target vectors from Wheeltec MR20; TTC computation & Prio-1 ducking. |
@@ -206,7 +210,7 @@ The overall system orchestrates specialized tasks across the two host microcontr
 | **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / USB TX    | u-blox SAM-M10Q UBX-NAV-PVT parsing, TMP117 Temp & OPT3001 Lux. |
 | **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles I2S digital microphone A-weighting & RMS tracking via Xtensa DSP. |
 | **`front_can_task`**  | Front Node (Core 0)  | **16** | 4 KB | TWAI Interrupt      | CAN Message Queue     | Reads cockpit CAN (if J2 connected), CPC1017N auto-termination. |
-| **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Load Switch      | SW3526 USB-PD monitoring, TPS2051B cold restart (2.5s), auto-off. |
+| **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Load Switch      | SW3526 30W USB-PD monitoring for Qi puck & USB-C, auto-off. |
 
 ---
 
@@ -257,7 +261,7 @@ OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building bl
 | Configuration | Installed Components | System Behavior & Graceful Degradation |
 | :--- | :--- | :--- |
 | **Tier 1: Minimal Core** | Central Box only<br>*(No Front Node)* | * **Audio Bridge & Intercoms fully operational:** Pod 1 & 2 mix with zero latency via 4-wire bus.<br>* **LoRa 868 MHz Mesh active:** Direct UPS-buffered 24/7 theft sentry & tracking.<br>* **CAN-Bus active:** Speed, RPM & BCM telemetry via Cable 1 (DTM-6 pins 4/5) under seat.<br>* **IMU active:** Bosch BMI270 provides lean angle, pitch & vibration sensing.<br>* **ADR-EKF:** Operates in pure Dead Reckoning mode supported by IMU & wheel speed.<br>* **USB Host:** Passively monitors ports for hotplug events. |
-| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic 4-wire USB backbone (< 0.2 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ	ext{C}$) & TI OPT3001 ambient light sensor.<br>* 4-Port USB Hub & Dual 20W USB-PD fast charger in cockpit.<br>* Ottocast Watchdog & automatic ignition power-gating.<br>* Symmetrical Under-Perch Mirror Pods (< 0.15 ms) with 5-gesture engine and Knowles dynamic acoustic wind AGC. |
+| **Tier 2: Full System with Front Node** | Central Box + Front Node | * All Tier 1 features + deterministic 4-wire USB backbone (< 0.2 ms).<br>* u-blox SAM-M10Q Multi-GNSS with 10 Hz PVT fix & precision time synchronization.<br>* TI TMP117 black ice warning ($\pm 0.1\,^\circ\text{C}$) & TI OPT3001 ambient light sensor.<br>* FSC-BT802 Infotainment bridge for bike navigation voice capture.<br>* SW3526 30W fast charging for Qi puck (15W inductive) and USB-C.<br>* Symmetrical Under-Perch Mirror Pods (< 0.15 ms) with 5-gesture engine and Knowles dynamic acoustic wind AGC. |
 | **Tier 3: Rear Radar Option** | Central Box + Front Node + Radar | * All Tier 2 features + Wheeltec MR20 77 GHz (PCBA 08).<br>* 4-wire power & high-speed data from 16-Pin Periphery Header (Branch 4).<br>* Acoustic alert pings in helmet, optical alert wings & mirror BSD LEDs.<br>* Automatic action-cam bookmarks upon critical radar TTC (< 2.5 s). |
 
 ### 8.1 Protection Mechanisms Against Missing Data (Zero-Crash Policy)
@@ -268,12 +272,125 @@ OpenMotorBridge is designed as a **decoupled, fault-tolerant modular building bl
 
 ---
 
-## 9. Build, Flash & HIL Verification Guide
+## 9. Autonomous Group Lifecycle State Machine, Coffee Break Persistence & Telephony Management
+
+### 9.1 Hierarchical Zero-Touch Discovery: Micro-Cluster (Home Setup) & Macro-Merge at Meeting Point
+Coordinating group rides requires neither smartphone apps nor manual handlebar configuration. The system operates with a hierarchical two-tier architecture:
+1. **Tier 1: Distributed Start & Autonomous Micro-Cluster (Home Setup):**
+   * When closely connected riders (e.g. family, partners on two bikes, or close friends) start in close physical proximity ($d < 500\,\text{m}$, time window $\Delta t < 15\,\text{min}$), their OMB Central Boxes **immediately form an autonomous Micro-Cluster** via the Smart-Keyfob channel profile.
+   * During the ride to the main group meeting point, voice communications and routing remain private and zero-latency over this micro channel.
+2. **Tier 2: Macro-Merge at Group Rendezvous Point (Stationary Detection & Discovery):**
+   * At the common meeting point (e.g. highway rest stop, gas station), multiple micro-clusters and solo riders gather while stationary ($v = 0\,\text{km/h}$, $d < 40\,\text{m}$).
+   * The nodes detect the gathering and switch into `PRE_MERGE_DISCOVERY`. Over LoRa Channel 1, they exchange discrete discovery beacons.
+
+### 9.2 Staggered Rollout Buffer (Convoy Tolerance) & Multi-Route Sub-Groups
+1. **Staggered Rollout Buffer:**
+   * When a large group of 10 to 20 riders rolls out, motorcycles never depart at the exact same instant, stretching out over 60 to 120 seconds.
+   * The algorithm accommodates this staggered departure using an acceleration and heading filter.
+2. **Generating the Macro-Cluster Session Key:**
+   * Once the convoy aligns along the same travel axis ($\Delta\text{Heading} < 30^\circ$, $v > 25\,\text{km/h}$ for $90\,\text{s}$), a temporary master (lowest MAC address) generates a shared **AES-256 group session key** and distributes it encrypted to all members.
+   * **Dual-Layer Topology:** The large group uses the macro channel for convoy radio, hazard alerts, and DLE mesh routing. The underlying micro-cluster remains active as a memory sub-layer.
+3. **Multi-Route Departure:**
+   * If multiple groups with different itineraries gather at the same origin, firmware monitors directional vectors over the first 3 minutes (**Heading Learning Phase**).
+   * If vectors diverge, the system autonomously forks into two independent sub-groups without false alarms.
+
+### 9.3 The "Doubt-Timer" on Route Divergence (False Alarm Prevention)
+If a rider deviates from the shared route vector (e.g. missed highway exit or unexpected turn):
+* **Start of Doubt-Timer ($T_{\text{doubt}} = 15\dots 30\,\text{s}$):** The system flags the rider as temporarily in `DOUBT_SPLIT`.
+* **Scenario A (Missed Turn):** If the rider stops or slows down drastically after 10 seconds, local TTS in their helmet prompts: *"Possible course loss from group - please check route"*.
+* **Scenario B (Intentional Departure):** If the rider continues at high speed along the diverging route, the state machine declares a clean group departure (`GROUP_LEFT`) upon expiration of $T_{\text{doubt}}$.
+
+### 9.4 Coffee Break Protection & 30-Minute Deep Sleep Persistence
+During stops (gas stations, restaurant, café), the group must stay bonded without draining motorcycle batteries:
+1. **Stationary Cluster ($v = 0\,\text{km/h}$ & Radius $< 30\,\text{m}$):** When all bikes halt and switch off engines, the state machine transitions to `GROUP_PAUSED`.
+2. **UPS Run-On & Deep Sleep:** After 15 minutes of inactivity, the Central Box powers down peripherals (Pods, Front Node, Radar) and places the ESP32-S31 into low-power deep sleep ($< 150\,\mu\text{A}$ from 1S LiPo UPS).
+3. **Persisting Group State in NVS & RTC-RAM:** Before sleep, the firmware saves the following to non-volatile storage:
+   * 256-bit AES group session keys (macro & micro)
+   * Complete participant list (node UIDs, callsigns, roles)
+   * Active group channel and mesh sequence numbers
+   * Last known GNSS reference coordinate
+4. **Seamless Reconstitution after 30+ Minutes:** When riders turn ignition back ON after 30 or 60 minutes, firmware reloads the group state in $< 50\,\text{ms}$ from NVS. The group is **instantly ready without requiring re-discovery**.
+
+### 9.5 Spontaneous In-Flight Group Join (Proximity Flyby & Route Intercept)
+If a rider meets the group en route (e.g. joining at a pre-arranged highway interchange):
+* **Proximity Flyby Criterion:** If an OMB node approaches within $< 50\,\text{m}$ and rides for $\ge 30\,\text{s}$ on the same course vector ($\Delta v < 15\,\text{km/h}$, heading $\Delta \theta < 15^\circ$), the master issues a discrete invitation beacon.
+* **One-Click Confirmation:** In the headsets of the lead rider and joining rider, a voice prompt chimes: *"New rider in range - Join group?"*. A single click on the handlebar PTT confirms joining; session keys transfer in $< 200\,\text{ms}$.
+
+### 9.6 Staggered End-of-Trip Dispersion & Micro-Cluster Re-Activation
+At the end of a day tour, the large group separates cleanly and silently while preserving the micro-cluster:
+1. **End-of-Trip Standstill (`PRE_DISPERSE`):** At the final destination, all riders switch off engines ($v = 0\,\text{km/h}$, KL15 OFF). After 5 minutes, the state machine enters `PRE_DISPERSE`.
+2. **Silent Macro-Disperse:** When participants depart in different compass directions, the macro session terminates silently with zero false alarms.
+3. **Automatic Micro-Cluster Preservation for the Ride Home:**
+   * The underlying micro-cluster (family / riding buddies) **automatically re-engages as the primary communication channel**.
+   * The group speaks privately for the entire journey home without manual reconfiguration.
+
+### 9.7 Smartphone Call Detection (HFP 1.8 via Qualcomm QCC3086 U9) & Intelligent PTT Protection
+When an incoming phone call arrives on the paired smartphone, the dedicated **Qualcomm QCC3086 Transceiver (`U9`)** detects `RINGING` / `CALL_ACTIVE` via Hands-Free Profile (HFP 1.8) and notifies the ESP32-S31 over UART (`+HFP_STATUS`) in $< 1\,\text{ms}$:
+1. **Microphone Mute to Group:** The helmet microphone is instantly decoupled from intercom and mesh channels. The private phone conversation is never broadcast to the riding group.
+2. **PTT-Lock (Command Interception):** During an active phone call, handlebar PTT buttons are **strictly locked against secondary functions**:
+   * A click on PTT will not trigger action-cam tags, bookmarks, or PMR radio transmissions.
+   * Button events route transparently to the QCC3086 (`AT+ATA` to answer / `AT+ATH` to hang up).
+3. **Prio-1 Safety Overlay (Radar & SOS):** Critical radar collision warnings (Prio 1) and group emergency alerts remain active, injected clearly into the helmet with $-12\,\text{dB}$ ducking applied to phone audio.
+4. **Automatic Reconnect:** Once the call terminates (`CALL_TERMINATED`), the audio matrix returns to normal mixed intercom operation in $< 100\,\text{ms}$.
+
+### 9.8 Alarm Dispatch & Target Audience Routing: Discrete Signaling (Human-in-the-Loop)
+Guided by the principle *"Support the lead rider, do not replace them"* ([Chapter 01](01_system_architecture.md)) and the reality of mixed-manufacturer riding groups ([Chapter 04](04_mesh_lora_navigation.md)), firmware enforces strictly hierarchical and discrete alarm dispatching:
+
+```c
+typedef enum {
+    SCOPE_SELF_ONLY   = 0x01, // Sole rider (Radar blind spot, sensor fault, local uncertainty)
+    SCOPE_MICRO_BUDDY = 0x02, // Personal micro-cluster (family/close friends from home start)
+    SCOPE_LEAD_SWEEP  = 0x04, // Tactical OMB anchors (lead navigator and sweep rider)
+    SCOPE_ALL_MACRO   = 0x08  // Entire convoy (strictly Prio-1 SOS / crash emergency / wrong-way driver)
+} AlarmTargetScope;
+
+typedef struct __attribute__((packed)) {
+    uint8_t  pkt_type;        // LORA_PKT_ALARM (0x12)
+    uint32_t origin_node_id;  // UID of triggering node
+    uint8_t  alarm_severity;  // 1 = INFO, 2 = WARNING (Split/Doubt), 3 = CRITICAL (SOS/Crash)
+    uint8_t  target_scope;    // Bitmask of AlarmTargetScope
+    uint16_t reason_code;     // e.g. CONVOY_SPLIT_SUSPECTED, TIRE_PRESSURE_LOSS
+    int32_t  latitude;        // 1e-7 deg
+    int32_t  longitude;       // 1e-7 deg
+    uint16_t crc16;
+} LoRaAlarmPacket;
+```
+
+#### Local Actuator Cascade Instead of Robotic TTS
+When a node receives a `LoRaAlarmPacket` (or triggers an alert locally), the local actuator priority matrix engages:
+
+```
+[Alarm Event]
+      |
+      +---> 1. Smart-Keyfob (PCBA 07) : Haptic vibration pattern (LRA motor in jacket pocket)
+      +---> 2. Local Helmet Audio     : Subtle dual-tone chime (ONLY in rider's headset via BLE)
+      +---> 3. Mirror LEDs (PCBA 05)  : Brief double blink on rear-view mirror (peripheral field)
+      +---> 4. PWA Dashboard (BLE/WiFi): Visual warning banner with distance and bearing vector
+      |
+      X (BLOCKED): No automated robotic TTS injection into third-party meshes (Sena / Cardo)!
+```
+
+#### Rider Sovereignty & Operational Flow
+1. **Zero Disruption to Group Mesh:** The group voice channel (Sena/Cardo) remains completely free of automated synthetic voices.
+2. **Swift Self-Assessment:** The rider feels keyfob haptics, glances at the mirror or dashboard, and assesses:
+   * *Case A (Falling behind):* Rider recognizes gap -> accelerates or adjusts pace without bothering the group.
+   * *Case B (Convoy behind has split):* Rider notices in mirror or HUD that sweep bike is missing -> presses handlebar PTT and alerts the tour guide with their natural human voice (*"Hey lead, ease up briefly, someone is stuck at the switchback"*).
+3. **Alignment with Chapter 01:** Technology acts as a discreet digital co-pilot in the background, leaving leadership, social nuance, and tactical decision-making 100% in human hands.
+
+---
+
+## 10. Build, Flash & HIL Verification Guide (Developer Guide)
 
 For step-by-step ESP-IDF v5.5+ toolchain setup (`esp32s3`, `esp32p4`, `esp32c6`), building all six firmware targets (`main_controller`, `front_node`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), generating SPIFFS filesystem images (`build/storage.bin` @ `0x5E0000`), and **Central Bus-DFU flashing** via the `USB2517I`/`USB2514Bi` hub backbone, see [`firmware/README.md`](../../firmware/README.md):
 
+> [!TIP]
+> The complete step-by-step guide with all CLI commands, partition tables, and Central Bus-DFU workflows is documented in:  
+> [`firmware/README.md`](../../firmware/README.md)
+
+### 10.1 Quick Reference: Build & Simulation Commands
+
 ```bash
-# Build all 6 firmware targets with their verified SoC targets:
+# Build all 6 firmware targets with their verified SoC targets (esp32s3 / esp32p4 / esp32c6):
 ./firmware/build.sh all
 
 # Run the system-wide v10.0 Hardware-in-the-Loop (HIL) integration test:

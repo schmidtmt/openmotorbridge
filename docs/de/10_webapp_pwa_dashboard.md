@@ -52,20 +52,20 @@ Für Fahrer, die eine Installation über den Google Play Store, automatische Hin
 * **Fahrdynamik & Schräglage:** Animierte Neigungsanzeige des Motorrads (15-State EKF mit Bosch BMI270), 10 Hz Dead-Reckoning Status.
 * **Spannungs- & Thermomanagement:** Live-Anzeige von Bordnetz (KL15), USV-LiPo und Starterbatterie-Entladeschutz.
 * **Universal Front-Knoten Card:**
-  * Live CarPlay/AA Status (TPS2051B Spannung/Strom).
-  * 1-Klick Hard-Reset Button ($2{,}5\,\text{s}$ VBUS Kaltstart).
-  * Lenker-PTT Status (< 0.4 ms Latenzanzeige, Test-Button).
+  * Live 30W Fast-Charging Status (SW3526 Spannung/Strom, Qi-Puck & USB-C Telemetrie).
+  * Handschuhfach-Ladeüberwachung & Thermal-Throttling Status.
+  * Lenker-PTT Status (< 0.2 ms Latenzanzeige, Test-Button).
   * 4. Metrik-Kachel: Action-Cam BLE Bridge (REC-Toggle, HiLight Marker, Tankpausen-Filter, Pairing-Modal).
   * Live Fahrtwind-Lärmpegel VU-Meter (Knowles MEMS dB(A) & AGC-Boost).
   * **Status-Badge:** Live 4-Ader Automotive-Bus (`4-WIRE BUS (12V/PD & 480 Mbps)` / `OFFLINE`).
   * **4 Subsystem-Kacheln:**
-    1. **📱 Wireless CarPlay / Android Auto Bridge (COTS Universal):** Live-Spannung & Strom (`5.00 V · 380 mA`), Betriebsstatus (`AKTIV`, `REBOOT`, `STANDBY`). Herstellerunabhängige Unterstützung für COTS-Adapter (CarlinKit, AAWireless etc.).
-    2. **⚡ Symmetrische Spiegel-Pods (PCBA 05B):** Bereitschaftsstatus beider Taster (`< 0.2 ms Latenz`) mit 5-Gesten-Visualisierung (Short, Double, Triple, Long Press, Hold Gate) für PTT, Voice Assistant, Hazard Pin Drop und Cam-Marker.
+    1. **🔋 30W Fast-Charging & Qi-Puck:** Live-Spannung & Strom (`9.00 V · 2.2 A`), Betriebsstatus (`QI LÄDT`, `USB-C PD`, `STANDBY`).
+    2. **⚡ Symmetrische Under-Perch Lenkertaster (PCBA 05C):** Bereitschaftsstatus beider Taster (`< 0.2 ms Latenz`) mit 5-Gesten-Visualisierung (Short, Double, Triple, Long Press, Hold Gate) für PTT, Voice Assistant, Hazard Pin Drop und Cam-Marker.
     3. **🎙️ Cockpit-Lärm (Knowles MEMS):** Live-Schallpegel in $\text{dB(A)}$ und berechnete Lautstärkenachführung (`+0.0 dB` bis `+6.0 dB Boost`).
     4. **🎥 Action-Cam BLE Bridge (GoPro / Insta360 / DJI):** Kamera-Typ (`GoPro Hero 12` / `Insta360 X4`), Akkustand (%), verbleibende SD-Zeit, pulsierender roter REC-Status.
   * **Fahrtwind-Lärm VU-Meter:** Farbkodierter Balken ($35\,\text{dB(A)}$ Standgas bis $115\,\text{dB(A)}$ Höchstgeschwindigkeit).
   * **Interaktive Steuerungen:**
-    * **`⚡ CarPlay 1-Klick Kaltstart (2.5s)`:** Löst einen hardwareseitigen Power-Cycle am TI TPS2051B Lastschalter aus (2.5s Spannungsabschaltung mit Countdown-Animation auf dem Button).
+    * **`🔋 Ladeanschluss-Status`:** Zeigt Ladeleistung, Temperatur und ausgehandeltes PD-Profil (5V/9V/12V).
     * **`🔘 Lenker-PTT Testen`:** Simuliert den Lenkertaster mit haptischer und optischer Bestätigung.
     * **`🎥 Cam Start/Stopp & HiLight`:** Manuelle Touch-Auslösung und Lesezeichen-Setzung für Action-Cams.
     * **`Tankpausen-Filter (KL15)` Toggle:** Automatischer Aufnahmestopp bei Zündungsaus zur Vermeidung von Leerlauf-Aufnahmen.
@@ -129,7 +129,7 @@ Der Geräte-Manager ist in zwei klar voneinander getrennte Bereiche strukturiert
   * `[Buddy-Alarm]`: Checkbox zum automatischen Weiterleiten von Diebstahlalarmen ins Gruppen-Mesh.
 
 #### Teil 2: Motorrad & OpenMotorBridge Systemknoten
-* **Universal Front-Node (Cockpit-Hub * PCBA 05):** 4-Ader Automotive-Bus (Zero Tank-Heben!), Wi-Fi SoftAP Fallback Toggle, Proximity-Rescue Beacon und 5-Gesten-Konfigurationsmatrix für symmetrische Spiegel-Pods (PCBA 05B).
+* **Universal Front-Node (Cockpit-Hub * PCBA 05):** 4-Ader Automotive-Bus (Zero Tank-Heben!), Wi-Fi SoftAP Fallback Toggle, FSC-BT802 Headunit-Bridge, Proximity-Rescue Beacon und 5-Gesten-Konfigurationsmatrix für symmetrische Under-Perch Taster (PCBA 05C).
 * **Heck-Radar & Spiegel-Totwinkel-LEDs (BSD):** Master-Schalter für Radar-Power und Spiegel-Totwinkel-LEDs (Header `J9` via MOSFET `Q1`) mit 2-Sekunden-Testblitz.
 * **Sicherheits-Lichtmanagement:**
   * **ESS Notbremsblinken:** Master-Toggle für 4,5 Hz Stroboskop-Warnblinken (Garmin Varia UART2 & `RESERVE_GPIO_B`), konfigurierbare Verzögerungsschwelle ($-0{,}45\,\text{g}$, $-0{,}60\,\text{g}$, $-0{,}75\,\text{g}$) und Button `[Bremsblitz-Test]`.

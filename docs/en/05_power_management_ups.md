@@ -28,7 +28,7 @@ The energy storage inductance $L$ of the buck converters is dimensioned for cont
 $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
 
 * **Central Box (`PCBA 01`, `U1 LM5164-Q1`):** Shielded $47\,\mu\text{H} / 68\,\mu\text{H}$ power inductor ($I_{\text{sat}} \ge 1{,}8\,\text{A}$), feeding ultra-low-IQ LDO `U11 TPS7A0533` (for `VCC_3V3` logic, digital hub, and audio DSP).
-* **Front Node (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchronous buck, $3{,}0\,\text{A}$) for logic, `USB2514Bi` hub, and dual OLEDs, paired with an onboard **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** supplying the Glovebox Hub (`PCBA 05B`).
+* **Front Node (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchronous buck, $3{,}0\,\text{A}$) for logic, `USB2514Bi` hub, dual OLEDs, and FSC-BT802, paired with an onboard **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** supplying the glovebox charging bay (15W inductive magnetic Qi puck + companion USB-C PD fast-charge port).
 * **Input Capacitance:** Multi-stage 100V X7R multilayer ceramic capacitors (MLCC) and bulk capacitors reliably damp wiring harness inductances.
 
 ### 1.2 Laboratory Current Measurements (INA226 Precision Log @ 12.0 V Vehicle Net)
@@ -110,39 +110,44 @@ All peripheral connections from Central Box (`PCBA 01`) route through the **Two-
   * Each saddlebag pod incorporates dual mechatronic pushers (mini-solenoids on `012_universal_actuator_slide_bracket.scad`), switched via dual AO3400A MOSFETs on `PCBA 03`.
   * Upon ignition ON (KL15), the solenoids fire for 2.0 seconds (~4 N actuation force with Shore A50 silicone tips on Cardo or Sena power buttons) to cold-boot completely powered-off headsets from a zero-watt state; runtime control during riding then runs wear-free via BLE GATT / audio bus.
   * **Benefit:** Headsets remain 100% unpowered when parked (no marketing standby battery drain after 1-2 weeks!). Upon turning on the bike, they boot up reliably and connect immediately without opening the pod.
-* **5-Port Glovebox Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`, `55 × 25 × 15 mm`, outer envelope `55 × 25 × 17 mm`, PCB `50 × 20 mm`) & Harley Headset Emulation via USB:**
-  * Features **5× USB-C receptacles**: North edge with **`J2` (`FRONT`)** from Front Node (`PCBA 05`) and **`J1` (`HOST`)** to the Harley OEM glovebox media lead; South edge with **`J3` (`PHONE`, 15W/30W)**, **`J4` (`DONGLE`, 10W switched via `TPS2051B`)**, and **`J5` (`MEDIA`, USB 2.0 passthrough)**.
-  * **Harley Headset Emulation via USB:** Connects the Front Node directly to the head unit at `J1` (`HOST`); OpenMotorBridge emulates a digital MFi / USB Audio Class headset, unlocks Apple CarPlay natively, and transmits intercom/voice microphones digitally without ground loops.
-  * Adjustable current limit with overcurrent trip in $< 1\,\mu\text{s}$, automatic thermal shutdown ($150\,^\circ\text{C}$ junction clamp), and fault status reporting (`FLT`) to the `ESP32-S31`.
+* **Glovebox Fast-Charging Architecture (Replacement of PCBA 05B):**
+  * The legacy 5-port hub `PCBA 05B` and external wireless CarPlay/Android Auto dongles have been eliminated.
+  * Instead, the glove compartment (e.g. Harley Touring) is powered via a rugged 2-wire DC feed from Front Node `J7` with up to 30–36W USB-PD / QC 4.0.
+  * Installed in the compartment is a **magnetic Qi charging puck** (15W inductive Qi/Qi2 MagSafe, approx. 20–22W DC input power) plus a companion **USB-C PD fast-charge port** for full-speed wired charging (e.g. secondary phone or tablet).
+  * Features adjustable current limiting with overcurrent trip in $< 1\,\mu\text{s}$ under short circuit, automatic thermal shutdown ($150\,^\circ\text{C}$ junction clamp), and monitoring by the `SW3526` controller.
 * **Cockpit Power-Only Outputs (Directly on Front Node PCBA 05):**
   * **15W Motorcycle GPS (`J10`):** 12V/1.25A or 5V/3A DC power feed for Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Strictly Power-Only:** Completely devoid of USB host data lines (`D+`, `D-`) so the navigation unit immediately boots into active route guidance on ignition ON rather than entering computer mass storage mode.
   * **10W Action-Cam (`J8`):** Weather-sealed 5V/2A DC USB-C lead for GoPro Hero / Insta360 directly at the cockpit. **USB BC 1.2 DCP Specification:** `D+` and `D-` are shorted with $R < 200\,\Omega$ inside the plug with zero connection to the `USB2514B` host controller. The camera detects a dedicated wall/bike charger and never halts in a PC connection / webcam / MTP dialog. Direct cockpit connection avoids any cumbersome routing through the glove compartment.
 
 ---
 
-## 4. Universal Front Node VBUS Power Gate & Ottocast State Machine
+## 4. Glovebox Charging & Thermal Management (Qi Puck & USB-PD Fast-Charge)
 
-The Universal Front Node features intelligent power management for external wireless CarPlay / Android Auto dongles (*Ottocast / CarlinKit*):
+By eliminating the CarPlay/Android Auto video streaming stack (no Wi-Fi Direct, no persistent H.264/H.265 hardware video decoding), smartphone thermal generation inside the closed glove compartment drops dramatically:
 
 ```
-                   FRONT NODE OTTOCAST POWER-GATE
+               GLOVEBOX CHARGING & POWER GATEWAY (30W USB-PD)
 +----------------------------+              +----------------------------+
-| 12V Vehicle Net (KL15 IGN) |              | ESP32-S3 Firmware          |
-| * Headlight / Accessory Tap+------------->| * 1-Click Reboot Listener  |
-| * Reverse-Polarity & TVS   |              | * Auto-Café 60s Countdown  |
-+----------------------------+              +-------------+--------------+
-                                                          | GPIO 1 (PWR_EN)
-                                                          v
-+----------------------------+              +----------------------------+
-| Ottocast CarPlay Dongle    |  5V VBUS     | TI TPS2051B Load Switch    |
-| * Port J5 (Gated DONGLE)   |<-------------+ * 1.05A Fast Short Clamp   |
-| * 1-Click Hard Restart     | (max. 1.05A) | * 1.2 ms Soft-Start Ramp   |
-+----------------------------+              +----------------------------+
+| 12V Vehicle Net (KL15 IGN) |              | Front Node PCBA 05         |
+| * Headlight / Accessory Tap|              | * SW3526 PD Controller     |
++-------------+--------------+              | * I2C Telemetry & Protect  |
+              |                             +-------------+--------------+
+              v                                           |
++----------------------------+                            | 2-Wire DC Feed
+| SW3526 Buck-Boost (J7)     +----------------------------+ (Up to 36W PD 3.0)
+| * Up to 36W USB-PD / QC    |                            |
++----------------------------+                            v
+                                            +----------------------------+
+                                            | Glovebox Charging Bay      |
+                                            | * 15W Qi Puck (MagSafe)    |
+                                            | * Secondary USB-C PD Port  |
+                                            +----------------------------+
 ```
 
-### 4.1 Automated Power Modes
-1. **1-Click Hard Reboot:** If the CarPlay dongle freezes, clicking "⚡ CarPlay 1-Klick Kaltstart" in the WebApp triggers a 2.5-second VBUS disconnect via `TPS2051B` followed by a soft-start power-up ($1{,}2\,\text{ms}$).
-2. **Auto-Café Mode (60s Timer):** Upon ignition OFF, VBUS remains energized for 60 seconds. If the engine is restarted within 60s, CarPlay resumes instantly. If the ignition remains off, VBUS cuts completely, allowing the rider's iPhone to automatically connect to home or hotel Wi-Fi without manual Bluetooth toggling.
+### 4.1 Automatic Thermal Management & Overcurrent Protection
+* The `SW3526` PD controller on `PCBA 05` continuously monitors current, voltage, and die temperature over I2C.
+* In the event of excessive glovebox temperatures or smartphone misalignment on the Qi puck, the controller throttles charging current dynamically or performs a protective shutdown ($> 120\,^\circ\text{C}$).
+* Upon ignition OFF (`KL15`), the power management engine safely disables charging with a delayed turn-off to protect the motorcycle battery.
 
 ---
 

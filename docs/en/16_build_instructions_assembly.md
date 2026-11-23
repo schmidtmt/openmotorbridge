@@ -6,7 +6,7 @@ This document is the complete, hands-on step-by-step assembly manual for buildin
 
 ## 1. System Kit Overview (What is being built?)
 
-The v10.0 generation of OpenMotorBridge completely eliminates brittle short-range UWB wireless links, motorized cassettes, and servo actuators. Instead, it introduces the **Two-Cable Architecture of the Central Box**, a **ruggedized 4-wire Automotive USB-PD & USB 2.0 bus (`VBUS`, `GND`, `D+`, `D-`)** delivering up to 60 W to the Front Node and 30 W per saddlebag pod, paired with the **ESP32-S31** (Dual-Core 320 MHz RISC-V with 128-bit SIMD AI accelerator for on-device voice and audio classification), a dedicated **Qualcomm QCC3084** Bluetooth audio SoC, and **2 mechatronic cold-start pushers** per pod:
+The v10.0 generation of OpenMotorBridge completely eliminates brittle short-range UWB wireless links, motorized cassettes, and servo actuators. Instead, it introduces the **Two-Cable Architecture of the Central Box**, a **ruggedized 4-wire Automotive USB-PD & USB 2.0 bus (`VBUS`, `GND`, `D+`, `D-`)** delivering up to 60 W to the Front Node and 30 W per saddlebag pod, paired with the **ESP32-S31** (Dual-Core 320 MHz RISC-V with 128-bit SIMD AI accelerator for on-device voice and audio classification), the **3× Qualcomm QCC3086** Bluetooth audio transceivers (Phone Link `U9`, Rider Helmet `U13`, Pillion Helmet `U14`), and **2 mechatronic cold-start pushers** per pod:
 
 ```text
                       +-------------------------------------------------------------+
@@ -14,7 +14,7 @@ The v10.0 generation of OpenMotorBridge completely eliminates brittle short-rang
                       |            (Under seat / over battery bridge)               |
                       |    * Host MCU: ESP32-S31 (Dual-Core RISC-V @ 320 MHz,       |
                       |      128-bit SIMD AI Audio Engine, Native USB 2.0 480 Mbps) |
-                      |    * Audio SoC: Qualcomm QCC3084 (Dual-A2DP, aptX HD, HFP)  |
+                      |    * 3x QCC3086: Phone (U9), Rider (U13), Pillion (U14)     |
                       |    * Emergency SOS: SX1262 LoRa 868 MHz (Taoglas FXP895)    |
                       |    * UPS Backup: 2,200 mAh LiPo with Molex Micro-Fit 3.0    |
                       +--+---------------------------------------+------------------+
@@ -44,14 +44,14 @@ The v10.0 generation of OpenMotorBridge completely eliminates brittle short-rang
 |  Lid-Dock)        |   |  Lid-Dock)        |                           +---------------+               v
 | * 2x Cold-Start   |   | * 2x Cold-Start   |                           | 2x UNDER-PERCH|   +---------------+
 |   Pushers JF-0530B|   |   Pushers JF-0530B|                           | MIRROR PODS   |   | 1x GLOVE BOX  |
-|   (15-85mm Slide  |   |   (15-85mm Slide  |                           | (Left & Right)|   | 4-PORT HUB    |
-|    Bracket)       |   |    Bracket)       |                           | * Left: PTT   |   | (Touring)     |
-| * 30W Saddlebag   |   | * 30W Saddlebag   |                           | * Right: Cam  |   | * 30W Phone PD|
-|   USB Charging    |   |   USB Charging    |                           | * Bilateral   |   | * 10W Dongle  |
-| * PCBA 03 Smart   |   | * PCBA 03 Smart   |                           |   BSD LEDs    |   | * Free Media  |
-|   Gateway (Sena/  |   |   Gateway (Sena/  |                           +---------------+   | * USB Headset-|
-|   Cardo/OMM/Midl) |   |   Cardo/OMM/Midl) |                                               |   Emulation   |
-+-------------------+   +-------------------+                                           +---------------+
+|   (15-85mm Slide  |   |   (15-85mm Slide  |                           | (Left & Right)|   | CHARGING BAY  |
+|    Bracket)       |   |    Bracket)       |                           | * Left: PTT   |   | * 15W Qi Puck |
+| * 30W Saddlebag   |   | * 30W Saddlebag   |                           | * Right: Cam  |   | * 30W USB-C PD|
+|   USB Charging    |   |   USB Charging    |                           | * Bilateral   |   | * FSC-BT802   |
+| * PCBA 03 Smart   |   | * PCBA 03 Smart   |                           |   BSD LEDs    |   |   Audio Bridge|
+|   Gateway (Sena/  |   |   Gateway (Sena/  |                           +---------------+   | * Pure DC Feed|
+|   Cardo/OMM/Midl) |   |   Cardo/OMM/Midl) |                                               +---------------+
++-------------------+   +-------------------+
 ```
 
 ---
@@ -72,13 +72,13 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
   * **1x Front Node Riser Enclosure (v10 Monocoque):** Monocoque tub ([`001_front_node_monocoque_tub.stl`](../../hardware/cad/stl/04_front_node/001_front_node_monocoque_tub.stl)) with 4-in-1 mounting floor / riser clamp ([`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl)), L-Slide lid with 2x2 MIMO antenna clips and sensor-puck snap dock ([`020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl)), and TPU cable glands ([`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl)).
   * **1x Modular Snap-On Sensor Puck ($38 \times 38 \times 15\,\text{mm}$ enclosure with $\varnothing\,28 \times 14\,\text{mm}$ dome):** ([`sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl) / [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) & [`sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl)) tailored for `PCBA 05D` (34 x 34 mm, SAM-M10Q GNSS, TMP117, OPT3001).
   * **2x Symmetrical Under-Perch Mirror Pods (Left & Right):** Form-fitted brackets for mounting under both mirror perch nuts ([`under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl)) with button guides (`PCBA 05C`, Left: PTT; Right: Cam-Tag) and integrated amber LED light tunnels for bilateral blind-spot detection.
-  * **1x Glove Box 5-Port USB-C Hub Enclosure ($55 \times 25 \times 15\,\text{mm}$):** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), outer envelope $55 \times 25 \times 17\,\text{mm}$) for `PCBA 05B` (`50 × 20 mm`, 5x USB-C `J1..J5`) in right glove compartment of Harley Touring (`J2` FRONT downstream, `J1` HOST uplink, `J3` 15W/30W PHONE, `J4` 10W switched DONGLE, `J5` MEDIA/service).
+  * **(Historically archived) 1x Glove Box 5-Port USB-C Hub Enclosure ($55 \times 25 \times 15\,\text{mm}$):** ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl)) for `PCBA 05B` (replaced in v10.5+ by 15W Qi Puck and 30W USB-C PD fast-charge port).
   * **1x Rear Radar Mount:** MR20 radar housing ([`radar_mr20_housing.stl`](../../hardware/cad/stl/05_accessories/radar_mr20_housing.stl)) with Hirth-joint swivel/tilt cradle, license plate bracket, and integrated roost deflector.
 * [ ] **Fully Assembled PCBs (SMT Production, all 10 active PCBAs):**
-  * **1x PCBA 01 (Central Box):** Host board with **ESP32-S31-WROOM-1U**, **Qualcomm QCC3084**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertical SMD headers (Vehicle Power `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Periphery Bus `J6` Molex Picoflex 1.27mm 16P, UPS `J5` 4P, Status LED `J4` 3P, Spare `J7` 4P), Dual-Power Input (12V Main & 5V USB-C Service Port `J3` with LM66100 Ideal-Diode OR-ing), and DM3D MicroSD Slot `J2`. *(DW3110 UWB completely eliminated!)*
+  * **1x PCBA 01 (Central Box):** Host board with **ESP32-S31-WROOM-1U**, **3x Qualcomm QCC3086**, Microchip USB2517I Hub, SX1262 LoRa 868 MHz, vertical SMD headers (Vehicle Power `J1` Molex Micro-Lock Plus 1.25mm 6P, OMB Periphery Bus `J6` Molex Picoflex 1.27mm 16P, UPS `J5` 4P, Status LED `J4` 3P, Spare `J7` 4P), Dual-Power Input (12V Main & 5V USB-C Service Port `J3` with LM66100 Ideal-Diode OR-ing), and DM3D MicroSD Slot `J2`. *(DW3110 UWB completely eliminated!)*
   * **2x PCBA 03 (Saddlebag Pod Gateway):** Universal interface board with ESP32-C6-WROOM-1, 30W USB-PD sink/buck regulator, internal USB-C charging port, intercom audio routing (Sena / Cardo / OMM / Midland), PTT keying, and `J_ACT` header with AO3400A MOSFETs for 2.0 s cold-start actuation.
   * **1x PCBA 05 (Front Node Riser Hub):** 4-layer compact board ($82 \times 50\,\text{mm}$) with ESP32-S31-WROOM-1U + ESP32-E22 co-processor (480 Mbps High-Speed USB PHY, Wi-Fi 6E MIMO via SDIO 3.0), 60W USB-PD engine (TPS54302 + SW3526), `J_SENSOR_EXT` 8-Pin JST-GH port for the sensor puck, and accessory power (30W phone fast charge, 15W dedicated motorcycle GPS nav, 10W cam lead).
-  * **1x PCBA 05B (Glovebox 5-Port Media & Power-Injection Hub):** 4-layer board ($50 \times 20\,\text{mm}$) with FE1.1s hub, TPS2051B power switch, and 5x USB-C receptacles (`J1..J5` in $55 \times 25 \times 15\,\text{mm}$ housing).
+  * **(Historically archived) 1x PCBA 05B (Glovebox Hub):** 4-layer board ($50 \times 20\,\text{mm}$) (replaced in v10.5+ by 15W Qi puck and 30W USB-C PD fast-charge port).
   * **2x PCBA 05C (All-in-One Under-Perch Mirror Pod Board):** Identical 2-layer miniature boards ($18.25 \times 14.0\,\text{mm}$) for left and right mirror perches with micro-switch (Left: PTT; Right: Cam-Tag) and ultra-bright amber LED (BSD).
   * **1x PCBA 05D (Environmental Sensor Puck):** 4-layer board ($34 \times 34\,\text{mm}$) for SAM-M10Q GNSS, TMP117, OPT3001, and Bosch BMP390 altimeter (Knowles MEMS microphone `MK1` is positioned in the bottom of the Front Node).
   * **1x PCBA 07 (Smart-Keyfob & LoRa Pager):** 4-layer board ($46 \times 26\,\text{mm}$) with nRF52840, SX1262 LoRa, BQ51050B Qi receiver, and DRV2605L haptic driver.
@@ -116,7 +116,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 ### Step 1: Central Box (Main Box v10 Dual-Rail Monocoque) Assembly
 1. **Insert Hex Nuts:** Press 4x DIN 934 M2.5/M3 stainless nuts into the captive hexagonal pockets on the underside of the monocoque tub ([`000_monocoque_tub.stl`](../../hardware/cad/stl/01_main_box/000_monocoque_tub.stl)).
 2. **Install Main Board:**
-   * Place the fully populated `PCBA 01` (with ESP32-S31-WROOM-1U, Microchip USB2517I Hub, Qualcomm QCC3084, and Quad-eFuse) onto the integrated standoffs.
+   * Place the fully populated `PCBA 01` (with ESP32-S31-WROOM-1U, Microchip USB2517I Hub, 3x Qualcomm QCC3086, and Quad-eFuse) onto the integrated standoffs.
    * Secure board with 4x M2.5 $\times 6\,\text{mm}$ screws.
 3. **Pre-Route Harnesses & Slide In Intermediate Tray (Rail 1 at $Z = 18.0\,\text{mm}$):**
    * Connect internal silicone wire harnesses from front bulkhead to vertical PCB headers on `PCBA 01`: Vehicle Power/CAN into `J1` (Molex Micro-Lock Plus 6P) and 4-channel periphery bus into `J6` (Molex Picoflex 16P). Pre-route UPS harness to `J5`/`J7`.
@@ -209,7 +209,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 |   |  CENTRAL BOX  |================================================>|  FRONT NODE   |          |
 |   |  (PCBA 01)    |   (VBUS, GND, D+, D-)                            |  (PCBA 05)    |          |
 |   |  ESP32-S31    |                                                  +-------+-------+          |
-|   |  QCC3084 Audio|                                                          |                  |
+|   |  3x QCC3086   |                                                          |                  |
 |   |  4-Branch Bus |                                                          v                  |
 |   +-------+-------+                                             +-------------------------+     |
 |           |                                                     | 2x SYMMETRICAL MIRROR   |     |
@@ -301,16 +301,14 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
    * **0 cm visible cable, 0 screws removed from the outer fairing!**
 4. **Functionality:** Driven locally by the ESP32-S3 on `PCBA 05` via SPI/QSPI (left: rear radar proximity bar & blind spot warnings; right: turn-by-turn navigation arrows, TPMS pressures, intercom channel/talking state, and smartphone charge status).
 
-#### Step 5.1.4: Glove Box 5-Port USB-C Media & Power-Injection Hub (Harley Touring)
+#### Step 5.1.4: Glovebox Fast-Charging Bay with Qi Puck & USB-C (Harley Touring)
 1. Open the right glove box.
 2. Locate the OEM rubber grommet on the underside of the compartment floor for accessory wiring.
-3. Pass the link cable from the Front Node (combined power supply & High-Speed USB 2.0 data cable for Harley headset emulation) from *below* through the grommet into the compartment.
-4. Place the form-fit 5-Port USB-C Media & Power-Injection Hub ([`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl), $55 \times 25 \times 15\,\text{mm}$, outer envelope $55 \times 25 \times 17\,\text{mm}$ for `PCBA 05B` $50 \times 20\,\text{mm}$ with **5x USB-C receptacles `J1..J5`**) into the compartment:
-   * **`J2` (`FRONT`, North Edge, X = 13.68 mm):** Feed line from Front Node (`PCBA 05`, Header `J4` to USB-C) for headset emulation and power.
-   * **`J1` (`HOST`, North Edge, X = 27.18 mm):** Connects data lines directly to the factory USB-C input of the infotainment system (Boom! Box GTS / Skyline OS) with digital MFi headset emulation for native Apple CarPlay activation and digital helmet mic audio with zero ground loops.
-   * **`J3` (`PHONE`, South Edge, X = 7.82 mm):** 15W/30W USB-PD fast charging of rider smartphone while navigating (stays 100% inside pocket).
-   * **`J4` (`DONGLE`, South Edge, X = 19.82 mm):** 10W switched VBUS (`TPS2051B`) for wireless CarPlay / Android Auto dongle (Ottocast / Carlinkit) with remote cold-restart from WebUI.
-   * **`J5` (`MEDIA`, South Edge, X = 31.82 mm):** High-Speed USB 2.0 pass-through port for USB flash drives (FLAC/MP3) or diagnostics/service (stays inside pocket).
+3. Pass the 2-wire DC feed line from the Front Node (`PCBA 05` `J7`, up to 36W USB-PD / QC 4.0) from *below* through the grommet into the compartment.
+4. Place the magnetic Qi charging puck (15W inductive / MagSafe) and companion USB-C PD fast-charge port in the compartment:
+   * **Qi Charging Puck:** Magnetic alignment and wireless charging of the rider's smartphone (approx. 20–22W DC input).
+   * **Companion USB-C Port:** For high-speed wired charging of secondary devices or tablets.
+   * *(Note: The legacy 5-port hub `PCBA 05B` and external CarPlay dongles have been eliminated; motorcycle navigation audio links wirelessly via the FSC-BT802 headunit bridge on the Front Node).*
 5. All connected devices and cabling remain 100% inside the compartment. Zero external cable egress! The glove box door seals airtight with zero cable interference across weatherstripping!
 
 #### Step 5.1.5: Saddlebag Pods & 100% Zero-Drill Feedthrough (OEM Ø 19 mm)
@@ -386,7 +384,7 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 | CENTRAL "CAR SUPPORT CORE UNIT" (Compact under passenger seat or center console):        |
 | +------------------------------------+     +------------------------------------------+ |
 | |        FRONT NODE (PCBA 05)        |<===>|           CENTRAL BOX (PCBA 01)          | |
-| | * 4-Port USB Hub for Infotainment  | 10cm| * ESP32-S31 AI Host & QCC3084 Audio SoC  | |
+| | * 4-Port USB Hub for Infotainment  | 10cm| * ESP32-S31 AI Host & 3x QCC3086 Audio   | |
 | | * 20W USB-PD Charge Bypass Ottocast| Bus | * SX1262 LoRa Emergency & Theft Sentry  | |
 | +------------------------------------+     +--------------------+---------------------+ |
 +-----------------------------------------------------------------|-----------------------+

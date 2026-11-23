@@ -36,7 +36,7 @@ Dieses Dokument listet alle internationalen Industrie-, Automotive-, Funk- und P
 ## 3. Protokoll-, Bus- & Schnittstellen-Spezifikationen
 
 *(Qorvo DW3110 User Manual: Historische Referenz, in v10.0 durch native USB 2.0 Schnittstelle ersetzt).*
-* **USB Audio Class 2.0 (UAC2):** *Universal Serial Bus Device Class Definition for Audio Devices Release 2.0* (Digitales Audio-Streaming via Qualcomm QCC3084 Helm-Audio SoC zur Zentralbox und MFi/UAC Headset-Emulation via ESP32-S31 Front-Node zur Harley Headunit).
+* **USB Audio Class 2.0 (UAC2):** *Universal Serial Bus Device Class Definition for Audio Devices Release 2.0* (Digitales Audio-Streaming via Qualcomm QCC3086 Audio-Transceiver zur Zentralbox und FSC-BT802 Bluetooth-Bridge am Front-Node zur Harley Headunit).
 * **USB CDC-ACM:** *Universal Serial Bus Communication Device Class Abstract Control Model* (Virtuelle serielle Telemetrie- und Steuerverbindung über den 4-Draht-Bus).
 * **Bluetooth SIG:**
   * *Battery Service Specification v1.0* (GATT UUID `0x180F`, Battery Level Characteristic `0x2A19`).

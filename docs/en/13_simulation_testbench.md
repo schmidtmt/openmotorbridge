@@ -59,7 +59,7 @@ To exhaustively verify the interaction of hardware, acoustics, vehicle dynamics,
   4. **1-Wire Signal Integrity over 1.5m Harness:** Rise time $t_{\text{rise}} = 1{,}74\,\mu\text{s}$ across $167{,}9\,\text{pF}$ total capacitance ($65{,}3\,\%$ margin to $5{,}0\,\mu\text{s}$ spec).
   5. **PTT-to-LoRa End-to-End Latency:** Total path from handlebar PTT switch through optocoupler, Opus encoder, and UART bridge takes **$14{,}59\,\text{ms}$** ($< 25\,\text{ms}$ aviation standard).
   6. **Front Node DCDC & Hub:** LMR36015 buck converter delivers $91{,}8\,\%$ efficiency ($5{,}3\,\text{mV}$ ripple); USB2514B achieves $88{,}5\,\%$ eye opening with $18{,}5\,\text{ps}$ skew.
-  7. **Mirror Pod 5-Gesture Engine & PTT:** Glass-to-glass latency from under-perch mirror pod switch (PCBA 05B) over the 4-wire automotive USB bus to OptoMOS K1 keying is only **$< 0.20\,\text{ms}$** ($< 5.0\,\text{ms}$ requirement).
+  7. **Mirror Pod 5-Gesture Engine & PTT:** Glass-to-glass latency from under-perch mirror pod switch (PCBA 05C) over the 4-wire automotive USB bus to OptoMOS K1 keying is only **$< 0.20\,\text{ms}$** ($< 5.0\,\text{ms}$ requirement).
 
 ---
 
@@ -202,7 +202,7 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
          v                                                               v
  +----------------------------------------+            +----------------------------------------+
  |          MOTORCYCLE A (LEADER)         |            |          MOTORCYCLE B (CHASER)         |
- |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |            |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |
+ |  * PCBA 01 (ESP32-S31 + 3x QCC3086 + LoRa) |            |  * PCBA 01 (ESP32-S31 + 3x QCC3086 + LoRa) |
  |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |            |  * Pods 1 & 2 (Monocoque, 2-Wire DC)   |
  |  * PCBA 03 (Pods 1/2 Smart Cartridges) |            |  * PCBA 03 (Pods 1/2 Smart Cartridges) |
  |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
@@ -230,10 +230,10 @@ The **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Core Components & Test Features:
 1. **Core Active Modules per Motorcycle:**
-   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz transceiver.
+   * **PCBA 01 (Central Box):** 15-State ADR-EKF filtering, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, 3× Qualcomm QCC3086 BT 5.4 Audio Transceivers (U9, U13, U14) & Semtech SX1262 LoRa 868 MHz transceiver.
    * **Pods 1 & 2 (Monocoque Pod Enclosures):** Seamless 1-piece monocoque with slide-in lid, EPDM dry-flap, and direct 4-wire bus connection (PCBA 02 retired).
    * **PCBA 03 (Saddlebag Pods, 2x):** 4-wire bus interface with ESP32-C6 host MCU, ES8388 audio codec, up to 30W/60W USB-PD charging port, OptoMOS K1 PTT relay (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
-   * **PCBA 05 (Universal Front Node) & PCBA 05B (Mirror Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS acoustic sensing, 4-wire bus interface and symmetrical under-perch mirror pods with 5-gesture switches and BSD LEDs.
+   * **PCBA 05 (Universal Front Node) & PCBA 05C (Mirror Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS acoustic sensing, 4-wire bus interface and symmetrical under-perch mirror pods with 5-gesture switches and BSD LEDs.
 2. **Geodetic Track (`wil_wattwil_ricken.py`):**
    * 11,682 support points with realistic acceleration, lean angle ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ up to $42^\circ$), and elevation profile ($570\dots 795\,\text{m}$ ASL).
 3. **15-State ADR-EKF Tunnel Outage & Dead Reckoning:**

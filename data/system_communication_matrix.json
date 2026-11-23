@@ -142,7 +142,7 @@
     "BUS_A2DP_POD_MESH": "Drahtlose Classic Bluetooth A2DP Audio-Verbindung (Radar PCBA 08 2x QCC3086 U4/U5 -> OEM-Adapter Sena/Cardo im Koffer-Pod: Stereo A2DP Musikstream für natives Mesh-Music-Sharing in Stufe 2)",
     "BUS_FRONT_I2S": "4-Draht synchroner I2S Digital-Audiobus auf PCBA 05 (U1 ESP32-S31 <-> U2 FSC-BT802): BT_I2S_BCLK, BT_I2S_WS, BT_I2S_DOUT, BT_I2S_DIN für latenzfreie Audioübertragung zu SkylineOS / Bordlautsprechern und Mikrofon-Rückkanal",
     "BUS_BT_RF_FRONT": "2.45 GHz Bluetooth 5.1 RF Verbindung von U2 (FSC-BT802) über 50-Ohm Microstrip und Keramik-Chipantenne ANT3 (Johanson 2450AT18A100) zu SkylineOS / Helm / Smartphone",
-    "BUS_POWER_GLOVEBOX_J4": "Reine DC-Versorgung Handschuhfach (J4): 20W DC-Speisung für magnetischen Qi-Ladepuck (15W/20W MagSafe/Qi2) + integrierten USB-C PD Schnellladeanschluss für Zubehör"
+    "BUS_POWER_GLOVEBOX_J4": "6-Pin JST-GH Handschuhfach-Versorgung (J4): 30W USB-PD (SW3526 U5) + 5V/3A Dauerstrom (TPS54302 U3) für Qi-Lader und Zubehör"
   },
   "channels": [
     {
@@ -170,13 +170,13 @@
       "target": "NODE_CENTRAL_BOX",
       "bus": "BUS_USB_BACKBONE_CH1",
       "protocol": "USB Audio Class 2.0 (UAC2 In / Isochronous)",
-      "pkt_type": "UAC2 Audio Endpoint (16 kHz / 48 kHz 24-bit PCM)",
+      "pkt_type": "USB_PKT_KNOWLES_AUDIO_RAW (0x21) / UAC2 Iso In",
       "rate": "Kontinuierlicher Audio-Stream",
       "payload": [
         "Raw_Acoustic_Mic_PCM"
       ],
-      "purpose": "Einspeisung des Fahrtwindmikrofons in den zentralen Audio-DSP für spektrale Windgeräusch- und Staudruckanalyse",
-      "fw_status": "partial"
+      "purpose": "Einspeisung des Fahrtwindmikrofons (Knowles SPH0645LM4H-B) in den zentralen Audio-DSP für spektrale Windgeräusch-, Geschwindigkeits- und Staudruckanalyse zur adaptiven Lautstärke-/EQ-Regelung",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_03_HANDLEBAR_GESTURES",
@@ -317,7 +317,7 @@
       "target": "NODE_FRONT_CHIP1",
       "bus": "BUS_USB_BACKBONE_CH1",
       "protocol": "USB-CDC Command",
-      "pkt_type": "USB_CMD_WIFI_UPLOAD_START",
+      "pkt_type": "USB_PKT_WIFI_UPLOAD_TRIGGER (0x17)",
       "rate": "On-Demand (bei Heim-WLAN)",
       "payload": [
         "SSID",
@@ -325,8 +325,8 @@
         "Target_Folder",
         "Upload_Bitmask"
       ],
-      "purpose": "Aktiviert High-Speed Wi-Fi 6E (U9 ESP32-E22) zum automatischen Cloud-Sync / WebDAV-Upload bei Zündung AUS",
-      "fw_status": "partial"
+      "purpose": "Aktiviert High-Speed Wi-Fi zum automatischen Cloud-Sync / WebDAV-Upload von Telemetrie-, GPX- und Diagnose-Logs bei Zündung AUS im Heimnetzwerk",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_12_DFU_FIRMWARE_PUSH",
@@ -351,13 +351,13 @@
       "target": "NODE_FRONT_CHIP1",
       "bus": "BUS_USB_BACKBONE_CH1",
       "protocol": "USB Audio Class 2.0 (UAC2 Out / Isochronous)",
-      "pkt_type": "USB_PKT_AUDIO_STREAM_DOWN (0x24)",
+      "pkt_type": "USB_PKT_AUDIO_STREAM_DOWN (0x24) / UAC2 Iso Out",
       "rate": "48 kHz Stereo 16-bit PCM",
       "payload": [
         "Master_Mix_Audio (Musik, Navi, Radio)"
       ],
-      "purpose": "Streamt den fertigen Audio-Master-Mix zur Ausgabe über die Motorrad-Lautsprecher von SkylineOS an den Frontnode",
-      "fw_status": "missing"
+      "purpose": "Streamt den gemischten Audio-Master-Mix (Intercom, Musik, Radio) über USB an PCBA 05, welcher via I2S an U2 FSC-BT802 weitergeleitet und im Mode B (Source) drahtlos über die Motorrad-Bordlautsprecher (SkylineOS / Boom! Box) ausgegeben wird",
+      "fw_status": "implemented"
     },
     {
       "id": "COMM_14_INTERCHIP_I2S_AUDIO",
@@ -450,7 +450,7 @@
         "Navi_Voice_Audio",
         "Intercom_Mix_Audio"
       ],
-      "purpose": "Drahtlose Audio-Wiedergabe von Navi-Ansagen und Intercom über das Harley SkylineOS / Boom! Box Bord-Audiosystem",
+      "purpose": "Drahtlose Audio-Wiedergabe von OMB Master-Mix (Intercom, Musik, Radio) im Mode B (Source / Media Player) über das Harley SkylineOS / Boom! Box GTS Bord-Audiosystem und Verkleidungslautsprecher",
       "fw_status": "implemented"
     },
     {
@@ -465,7 +465,7 @@
         "Call_Audio",
         "Voice_Recognition_Trigger"
       ],
-      "purpose": "Bluetooth Headset-Kopplung mit SkylineOS für Telefonie, Sprachassistent und WHIM-Kompatibilität",
+      "purpose": "Bluetooth Headset-Emulation im Mode A (Headset / Sink): Kopplung mit SkylineOS / Boom! Box / BMW TFT zum Empfang von Werks-Navigationsansagen und Telefon-Audio mit latenzfreier I2S-Einspeisung in den OMB DSP",
       "fw_status": "implemented"
     },
     {
@@ -497,22 +497,22 @@
       "payload": [
         "Live_Traffic_Data_Packets"
       ],
-      "purpose": "Versorgt das Harley Werks-Navigationssystem über Smartphone-Tethering automatisch mit Live-Staudaten",
-      "fw_status": "partial"
+      "purpose": "Versorgt das Harley Werks-Navigationssystem über Smartphone-Tethering / SOCKS5-Proxy (bar.f0o.omb) automatisch mit Live-Verkehrsdaten",
+      "fw_status": "implemented"
     },
     {
-      "id": "COMM_23_AFTERMARKET_AA_DATAPATH",
+      "id": "COMM_23_GLOVEBOX_QI_FASTCHARGE",
       "source": "NODE_FRONT_CHIP1",
       "target": "NODE_AFTERMARKET_AA",
       "bus": "BUS_POWER_GLOVEBOX_J4",
-      "protocol": "30W USB Power Delivery (SW3526) & 5V/3A DC (TPS54302)",
-      "pkt_type": "USB-PD Negotiation & DC Power Feed",
+      "protocol": "30W USB Power Delivery (SW3526) & 15W Qi-Wireless Ladeschale",
+      "pkt_type": "USB_PKT_POWER_DELIVERY_STAT (0x05) & I2C Telemetrie",
       "rate": "Dauerhafte Speisung bis 30W",
       "payload": [
         "VBUS_PD (5V-20V)",
         "VCC_5V (Aux)"
       ],
-      "purpose": "Schnellladung und Stromversorgung für Handschuhfach-Geräte, Qi-Ladeschale oder Nachrüst-Displays an J4",
+      "purpose": "Intelligente Handschuhfach-Schnellladung via J4: Speisung des wasserdichten 15W/30W Qi-Lade-Pucks für das Smartphone und USB-C PD mit thermischer Überwachung und Nachlauf-Abschaltung",
       "fw_status": "implemented"
     },
     {
@@ -1129,6 +1129,22 @@
       ],
       "latency_target": "< 2.5 ms",
       "purpose": "Latenzfreie, verlustfreie digitale Audio-Verbindung zwischen Front-Node Haupt-MCU (S31) und Infotainment-Client (C3) für Wiedergabe über die Bordlautsprecher der Harley",
+      "fw_status": "implemented"
+    },
+    {
+      "id": "COMM_61_SMARTPHONE_SOCKS5_UPLINK",
+      "source": "NODE_CENTRAL_BOX",
+      "target": "NODE_SMARTPHONE",
+      "bus": "BUS_BLUETOOTH_CENTRAL",
+      "protocol": "Layer-5 SOCKS5 Proxy Relay (TCP 127.0.0.1:8080) über BLE/Wi-Fi",
+      "pkt_type": "SOCKS5 Encapsulated TCP Streams (AssistNow A-GPS, WebDAV, Weather)",
+      "rate": "On-Demand bei GNSS-Kaltstart oder Log-Upload",
+      "payload": [
+        "u-blox AssistNow MGA Online Ephemeriden",
+        "Blackbox GPX / Telemetrie WebDAV Upload",
+        "Live Wetterdaten & V2X Gefahrenmeldungen"
+      ],
+      "purpose": "Sichert den uneingeschränkten Internet-Uplink für OpenMotorBridge über das Mobilfunknetz des Smartphones (gebunden an TRANSPORT_CELLULAR in OmbCellularProxyServer.kt), ohne Root-Rechte oder Hotspot-Zwang",
       "fw_status": "implemented"
     }
   ]

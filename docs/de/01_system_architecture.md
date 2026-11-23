@@ -9,31 +9,34 @@ Dieses Dokument spezifiziert die übergeordnete Gesamtsystem-Architektur der **O
 Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 * **Inkompatible Mesh-Standards:** Sena Mesh 2.0/3.0, Cardo DMC Gen1/Gen2, Midland Wave Mesh und analoger PMR446-Funk können nicht direkt miteinander kommunizieren.
 * **HF-Übersteuerungen & De-Sensing:** Der gleichzeitige Betrieb mehrerer 2,4-GHz-Mesh-Transceiver an einem einzigen Montagepunkt (z. B. am selben Helm oder in einer gemeinsamen Box) führt zu massiver Empfänger-Desensibilisierung (*De-Sensing*), Intermodulation und Reichweiteneinbrüchen von bis zu $80\,\%$.
-* **Proprietäre Infotainment-Sperren:** Systeme wie Harley-Davidson Boom! Box GTS / Skyline OS oder BMW ConnectedRide verlangen teure, herstellereigene Schnittstellenmodule (z. B. HD WHIM), um Apple CarPlay oder Android Auto freizuschalten.
+* **Proprietäre Infotainment-Sperren & Überhitzung:** Systeme wie Harley-Davidson Boom! Box GTS / Skyline OS oder BMW ConnectedRide verlangen oft teure, herstellereigene Schnittstellenmodule (z. B. HD WHIM). Versuche, Video-Spiegelungen (Apple CarPlay / Android Auto) über externe Dongles im geschlossenen Handschuhfach zu erzwingen, führen bei Sommerhitze und gleichzeitiger Ladung reproduzierbar zu thermischen Notabschaltungen des Smartphones und instabilen Verbindungsabbrüchen.
 
-**OpenMotorBridge v10.0** löst diese Probleme durch eine modular entkoppelte **Satelliten-Topologie**, angebunden über einen **robusten 4-Draht Automotive USB-PD & USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)**, kombiniert mit dem **ESP32-S31** (Edge-AI Audio) und dem dedizierten **Qualcomm QCC3084** Bluetooth-Audio-SoC.
+**OpenMotorBridge v10.0** löst diese Probleme durch eine modular entkoppelte **Satelliten-Topologie**, angebunden über einen **robusten 4-Draht Automotive Systembus (`VBUS`, `GND`, `CAN_H`/`D+`, `CAN_L`/`D-`)**, kombiniert mit dem **ESP32-S31** (Edge-AI Audio DSP) und der **Qualcomm QCC3086 Triple-Module Architektur** (3x identische QCC3086 für Smartphone, Fahrerhelm und Soziushelm).
 
 > [!IMPORTANT]
-> **Verbindliche USB-Systemarchitektur & Grundprinzipien:**  
-> Für die verbindlichen Topologie-Vorgaben bezüglich USB-Master (ausschließlich Zentralbox S31), Front-Node Dual-Client mit Mode-Switch (SkylineOS vs. Nachrüst-AA) sowie Pod Single-Client-Identifikation mit Hybrid-Audio/PTT-Umschaltung siehe:  
-> **[OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md](../../OpenMotorBridge_USB_System_Architektur_Grundprinzipien.md)**.  
-> Jede Änderung an Schaltung, Routing oder Firmware muss zwingend gegen diese Grundprinzipien validiert werden.
+> **Verbindliche Systemarchitektur & Grundprinzipien:**  
+> 1. **Triple-QCC3086 Gleichteil-Architektur (PCBA 01):** `U9` (Smartphone A2DP Sink + HFP 1.8 Low-Latency Voice-Rückkanal), `U13` (Fahrerhelm A2DP Source + Mic In), `U14` (Soziushelm A2DP Source + Mic In) nutzen den identischen WLCSP-99 Footprint.  
+> 2. **Front Node (PCBA 05):** ESP32-S31 Node-Controller mit Feasycom FSC-BT802 (Qualcomm CSR8670) für die Infotainment- und Bike-Bridge (Abgriff von Werksnavi-Sprachansagen), Knowles MEMS und Lenkertaster.  
+> 3. **Modularer Radar-Knoten (PCBA 08):** Rein optionales Upgrade (Stufe 2). Beherbergt 24/77 GHz Radar sowie 2× QCC3086 (`U4`, `U5`) für drahtlose Nahfeld-Anbindung der Koffer-Pods und synchrones Hi-Fi Music-Sharing.  
+> 4. **Koffer-Pods (PCBA 03) Dual-Mode:** Mechatronik (KL15-Kaltstartimpuls, Cradles, Pogo-Pins) bleibt in allen Stufen 1:1 identisch. Stufe 1: kabelgebundene analoge AD/DA-Wandlung (ES8388) für Mic/Speaker. Stufe 2: drahtlos über Radar-QCC3086, Onboard-Codecs im Cold Standby.  
+> 5. **Handschuhfach & Entfall CarPlay/AA:** Handschuhfach-Hub (`PCBA 05B`) und anfälliges CarPlay/Android Auto Videostreaming entfallen vollständig. Ersatz durch einen automotiven 30W Fast-Charging-Regler mit magnetischem Qi-Ladepuck (15W induktiv) und separatem USB-C PD Schnellladeanschluss über eine reine 2-adrige DC-Speisung.
 
 ```
                                   GESAMTSYSTEM-TOPOLOGIE (v10.0)
 +---------------------------------------------------------------------------------------------+
 | 1. COCKPIT / LENKER & KEYFOB:                                                               |
-|    * Front-Node (PCBA 05): 60W USB-PD Engine, modularer Sensor-Puck ("Körbchen")             |
+|    * Front-Node (PCBA 05): ESP32-S31, FSC-BT802 (Bike-Bridge), modularer Sensor-Puck      |
 |    * Symmetrische Dual Under-Perch Spiegel-Pods (Links: PTT & BSD | Rechts: Cam-Tag & BSD)  |
-|    * 4-Port Handschuhfach Hub: 30W PD + 10W Dongle + Harley Headset-Emulation via USB        |
+|    * Handschuhfach: 30W Fast-Charging Qi-Puck (15W induktiv) + USB-C PD Zusatz-Ladeport    |
 |    * Smart-Keyfob (PCBA 07): 868 MHz LoRa Pager (24/7 Diebstahlalarm & Notfall-Beacon)      |
-|    * PWA Dashboard auf Smartphone / TFT via Web-Bluetooth (WebBLE)                          |
+|    * Natives Cockpit Dashboard (Telemetrie, Radar-Grafik, BLE-Pfeilnavigation via COMM_48)  |
 +---------------------------------------------------------------------------------------------+
 | 2. ZENTRALE STEUERBOX (Unter der Sitzbank auf Batteriebrücke, IP67):                        |
-|    * ESP32-S31 Dual-Core RISC-V (320 MHz, 128-bit SIMD AI Accelerator für Audio-Klassifiz.)|
-|    * Qualcomm QCC3084 Audio-SoC (Dual-A2DP, aptX HD, HFP 1.8, Auracast ohne Host-Jitter)    |
-|    * Semtech SX1262 LoRa (868 MHz) an USV-Schiene * Taoglas FXP895 Antenne in Akkubrücke    |
-|    * Multi-Port Automotive USB-PD Power-Engine & USB 2.0 High-Speed Hub                     |
+|    * ESP32-S31 Dual-Core RISC-V (320 MHz, zentraler Audio-DSP & Mischpult)                 |
+|    * Triple-Qualcomm QCC3086: U9 Smartphone (HFP 1.8 Rückkanal), U13 Helm 1, U14 Helm 2     |
+|    * Semtech SX1262 LoRa (868 MHz) an USV-Schiene * Taoglas FXP895 Antenne im Deckel (ANT1)  |
+|    * Taoglas FXP73 Deckelantenne (ANT2) für U9 Smartphone-Link mit maximalem Link-Budget     |
+|    * Multi-Port Automotive Power-Engine & USB 2.0 High-Speed Hub                             |
 |    * Dual-Power Input: 12V Bordnetz OR USB-PD Sink (5V-20V USB-C für Werkstatt-Desk)        |
 |    * LM5164-Q1 72V Step-Down * Dual Ideal-Diode OR-ing * BQ24075 USV & 2200mAh LiPo-Puffer   |
 |    * Zwei-Kabel-Architektur: 6-Pin DTM (Bordnetz/CAN) + 16-Pin Peripherie-Bus (4 Stränge)  |
@@ -41,20 +44,19 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
    |                                                                                       |
    v 16-Pin Automotive Peripherie-Bus (Verzweigt extern sauber in 4 autarke 4-Ader-Stränge) |
 +-----------------------------------------+-----------------------------------------------+
-| 3. SATELLITEN-POD 1 (Koffer Links, 30W):| 4. SATELLITEN-POD 2 (Koffer Rechts, 30W):     |
-| * Slide-in Deckel & FOB-Magnetriegel    | * Slide-in Deckel & FOB-Magnetriegel          |
-| * Zwischendeckel (Dry-Flap)             | * Zwischendeckel (Dry-Flap)                   |
-| * 2 mechatronische Drücker auf          | * 2 mechatronische Drücker auf                |
-|   Universal-Schiene ("One Size Fits All"|   Universal-Schiene ("One Size Fits All"      |
-|   2,0s Kaltstart-Impuls auf KL15)       |   2,0s Kaltstart-Impuls auf KL15)             |
-| * Koffer-USB-Ladedose (30W USB-PD)      | * Koffer-USB-Ladedose (30W USB-PD)            |
-| * Wetterfester Outdoor-USB-Port (GS/ST) | * Wetterfester Outdoor-USB-Port (GS/ST)       |
-| * 4-Pin Magnet-Abreißkupplung (IP68)    | * 4-Pin Magnet-Abreißkupplung (IP68)          |
+| 3. SATELLITEN-POD 1 (Koffer Links):     | 4. SATELLITEN-POD 2 (Koffer Rechts):          |
+| * Mechatronik (KL15, Cradles, Pogo-Pins)| * Mechatronik (KL15, Cradles, Pogo-Pins)      |
+|   1:1 identisch in allen Stufen!        |   1:1 identisch in allen Stufen!              |
+| * Stufe 1: Kabelgebundene AD/DA-Wandlg. | * Stufe 1: Kabelgebundene AD/DA-Wandlg.       |
+|   (ES8388 Codec für Mic & Speaker)      |   (ES8388 Codec für Mic & Speaker)            |
+| * Stufe 2 (mit Radar PCBA 08):          | * Stufe 2 (mit Radar PCBA 08):                |
+|   Drahtlose BT-Anbindung via QCC3086,   |   Drahtlose BT-Anbindung via QCC3086,         |
+|   ES8388 im Cold Standby                |   ES8388 im Cold Standby                      |
 +-----------------------------------------+-----------------------------------------------+
    |                                                                                       |
    +-> 5. BORDNETZ & CAN (Kabel 1): 6-Pin Deutsch DTM (KL30, KL15, GND, CAN_H, CAN_L, Schirm)
-   +-> 6. HECK-RADAR (Strang 4): 4-Draht 12V Power & High-Speed CAN / Serial               |
-   |      Wheeltec MR20 77-GHz mmWave (PCBA 08) * 36x Alert-LEDs * Drip-Loop & Roost-Defl. |
+   +-> 6. HECK-RADAR (Strang 4 - REIN OPTIONAL): 4-Draht 12V Power & CAN / USB              |
+   |      Wheeltec MR20 77-GHz Radar (PCBA 08) + 2x QCC3086 für Pod-Audio & Music-Sharing  |
    |                                                                                       |
    v Strang 1: 4-Draht Automotive Backbone (60W Power & High-Speed Bus durch Rahmentunnel) |
 +-----------------------------------------------------------------------------------------+
@@ -96,43 +98,54 @@ Klassische Telematik- und Assistenzsysteme neigen zum digitalen Paternalismus: S
 ## 2. Modulare Systemphilosophie & Montagefreiheit (Die standardisierten Funktionsknoten)
 
 OpenMotorBridge v10.0 definiert die Plattform über **standardisierte Funktionsknoten**:
-1. **Zentralbox (Main ECU * PCBA 01):** Zentraler Rechenkern (**ESP32-S31** Dual-Core RISC-V @ 320 MHz mit 128-bit SIMD AI-Beschleuniger für On-Device Audio-/Sprachverarbeitung), dedizierter **Qualcomm QCC3084** Bluetooth-Audio-SoC (Dual-A2DP, aptX HD, HFP 1.8, Auracast), Multi-Port Automotive USB-PD Power-Engine, 72V Automotive Step-Down (LM5164-Q1) und LiPo-USV (integrierter BQ24075 Lade- & Power-Path PMIC mit 2.200 mAh Flachzelle an J5: lädt automatisch im Fahrbetrieb und über 5V USB-C, puffert Startspannungseinbrüche beim Anlassen unterbrechungsfrei ab und versorgt Zentralbox & SX1262 LoRa beim sauberen Herunterfahren und im Standby). **Dual-Power Input:** Unterstützt neben dem 12V Bordnetz auch einen **USB-PD Sink Eingang (5V–20V)** über den nativen USB-C Port mit Ideal-Diode OR-ing – ermöglicht vollständiges Flashen, Testen und Kalibrieren auf der Werkbank mit jedem Smartphone-/Laptop-Netzteil ohne 12V-Labornetzgerät. **Zwei-Kabel-Architektur:** Kabel 1 (6-Pin Deutsch DTM) für Bordnetz & CAN; Kabel 2 (16-Pin Automotive Connector) für die 4 autarken Systemstränge (Front-Node 60W, Pod 1 30W, Pod 2 30W, Radar MR20 12V). Beherbergt den **Semtech SX1262 LoRa-Transceiver (868 MHz)** direkt an der USV-Schiene für 24/7 Diebstahl-Sentry und periodische Winter-Health-Bursts (LoRa-Alerts an HomeSphere / TTN / WLAN-Fallback zur lückenlosen Starter- & USV-Batterieüberwachung). *(Montage mittig unter der Sitzbank auf der Batteriebrücke).*
-2. **Satelliten-Pod 1 (Bucht Links, 30W Budget):** Universal-Koffer-Pod mit **Slide-in Deckel**, integrierter **FOB-Magnetverriegelung** (berührungsloses Öffnen mit dem Smart-Keyfob), innenliegendem **Zwischendeckel (Dry-Flap)** und **integrierter Koffer-USB-Ladedose (30W USB-PD)** sowie wetterfestem Outdoor-Port (IP68 Kappe & Dichtmanschette für Starkregen-Laden). Beherbergt die universelle Schnittstellenplatine `PCBA 03` (Sena SPIDER X, Cardo Packtalk Edge, UCS-Standard, OMM 2.4 GHz oder Midland PMR446). **Mechatronischer Kaltstart:** Zwei mechatronische Drücker (Mini-Hubmagnete) auf universeller Doppel-Schiebeschlitten-Schiene (`012_universal_actuator_slide_bracket.scad`) lösen bei Zündung-AN (KL15) einen simultanen 2,0s Einschaltimpuls aus ("One Size Fits All" – kein Standby-Batteriefraß, kein Garantieverlust durch Platinenlöten, kein Pod-Ausbau vor Touren). Anbindung über 4-Draht Bus mit 4-Pin Magnet-Abreißkupplung (IP68).
-3. **Satelliten-Pod 2 (Bucht Rechts, 30W Budget):** Baugleicher, vollkommen symmetrischer Universal-Koffer-Pod mit Slide-in Deckel, FOB-Magnetverriegelung, Zwischendeckel, interner 30W USB-Ladedose, Outdoor-Port und mechatronischem Doppel-Drücker (auch 2x die gleiche Intercom wie in Bucht 1, z. B. 2x Cardo oder 2x Sena in getrennten Gruppen).
-4. **Front-Node & Cockpit-Hub (PCBA 05 am Riser, 60W Power Budget):** Am Lenker-Riser / oberen Gabelbrücke montiert. **60W USB-PD Power-Engine** (Southchip SC8721/SC8102 Synchronous Buck-Boost) versorgt verlässlich Fahrer-Smartphone-Schnellladung (bis 27W), dediziertes Motorrad-Navi (15W für Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride), Action-Cam Dauerstrom (10W via wetterfestem USB-C Kabel), Dual Cockpit OLED-Displays (2W in Speaker Corner Pods) und Sensorik/Host-MCU/Hub (3,5W). **Modularer Sensor-Puck ("Körbchen"):** Integriert **u-blox SAM-M10Q Multi-GNSS**, **TI TMP117** Außenthermometer, **OPT3001** Umgebungslicht und **Knowles MEMS-Windmikrofon**; rastet am Bike oben auf den Front-Node ein und kann im Pkw/Van per 1,5m Kabel an die Windschutzscheibe geclipst werden. Direkte Schnittstelle zu den symmetrischen Dual Under-Perch Spiegel-Pods. Verbunden mit der Zentralbox über das 4-Draht Automotive Backbone-Kabel im Harley-Rahmentunnel (**ZERO Tank-Demontage!**).
-5. **Symmetrische Dual Under-Perch Spiegel-Pods (Links & Rechts):** Formschön und aerodynamisch jeweils unter die linke und rechte Spiegelschraube geklemmt.
-   * **Werksprofil (Default):**
-     * **Linker Spiegel-Pod:** Taktiler Daumen-PTT-Taster (Funk/Intercom & Sprachassistent) + linke bernsteinfarbene Totwinkel-Warn-LED (BSD) gerichtet auf das linke Spiegelglas.
-     * **Rechter Spiegel-Pod:** Taktiler Daumen-Taster für Action-Cam (Kurzdruck: Highlight-Tag / Bookmark für Insta360/GoPro/DJI via BLE; Langdruck: Video Start/Stopp / SOS) + rechte bernsteinfarbene Totwinkel-Warn-LED (BSD) gerichtet auf das rechte Spiegelglas.
-   * **100 % Software-Defined Button Mapping (Freie Tastenbelegung via PWA):** Physische Taster frei konfigurierbar (Kurzdruck, Doppelklick, Halten für PTT, Gefahren-Marker, Cam-Tags, Garagentor via BLE).
-   * **Sicherheitsgewinn:** Echte bilaterale Totwinkelüberwachung direkt im peripheren Sichtfeld beider Spiegel. 100 % symmetrische Ergonomie, baugleiche innere Z-Stacked-Platine (`PCBA 05C`, $18{,}25 \times 14{,}0\,\text{mm}$).
-6. **4-Port Handschuhfach Media & Power-Injection Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`):** Im rechten Medienfach der Touring-Verkleidung (Road Glide, Street Glide, CVO, CVO ST). Wird vom Front-Node (`PCBA 05`) über eine kombinierte High-Power & USB 2.0 Zuleitung versorgt (`J2 FRONT_NODE`). Tappt den werksseitigen Harley USB-C Port zur Head Unit (`J1 SKYLINE_HOST`) und speist auf der Südflanke geregelte **30W USB-PD** (`J3 PHONE_CHARGE`), **10W geschaltete Dongle-Power** (`J4 DONGLE`) sowie einen freien **Media USB 2.0 Port** (`J5 MEDIA`) ein. **Harley Headset-Emulation via USB:** Das High-Speed Datenpaar verbindet den Front-Node direkt mit der OEM-Headunit; OMB emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay nativ frei und leitet Helm-Mikrofonaudio digital ohne Massebrummen ein. Alle im Handschuhfach angeschlossenen Geräte verbleiben zu 100 % im Fach (Action-Cam & Navi werden direkt am Front-Node versorgt – kein Kabeldurchzug durch das Fach!).
-7. **Radar 2.0 Sub-MCU & Heck-Wings (PCBA 08 am Heck):** Autonomes 77-GHz Heck-Radar (Wheeltec MR20), versorgt über Strang 4 des 16-Pin Peripherie-Kabelbaums mit 4-Draht Power & High-Speed Bus; 36 Strobe-Warn-LEDs, Abtropfschlaufe (Drip-Loop) und integrierter Schmutzfänger (Roost-Deflector). Optionaler Under-Fender Mount für Cruiser/Bobber.
+1. **Zentralbox (Main ECU * PCBA 01):** Zentraler Rechenkern (**ESP32-S31** Dual-Core RISC-V @ 320 MHz, zentraler Audio-DSP und Mischpult mit deterministischem Raised-Cosine Ducking), **Triple-Qualcomm QCC3086 Bluetooth 5.4 Audio-Architektur** (drei identische WLCSP-99 Transceiver: `U9` für Smartphone-Link mit A2DP Sink und HFP 1.8 Low-Latency Voice-Rückkanal; `U13` für Fahrerhelm A2DP Source + Mic In; `U14` für Soziushelm A2DP Source + Mic In), Multi-Port Automotive Power-Engine, 72V Automotive Step-Down (`LM5164-Q1`) und LiPo-USV (integrierter `BQ24075` PMIC mit 2.200 mAh Flachzelle an `J5`: puffert Startspannungseinbrüche beim Anlassen ab und versorgt Zentralbox & SX1262 LoRa beim sauberen Herunterfahren und im Standby). **Dual-Power Input:** Unterstützt neben dem 12V Bordnetz auch einen **USB-PD Sink Eingang (5V–20V)** über den nativen USB-C Port mit Ideal-Diode OR-ing – ermöglicht vollständiges Flashen, Testen und Kalibrieren auf der Werkbank mit jedem USB-C-Netzteil. **Zwei-Kabel-Architektur:** Kabel 1 (6-Pin Deutsch DTM) für Bordnetz & CAN; Kabel 2 (16-Pin Automotive Connector) für die 4 autarken Systemstränge (Front-Node, Pod 1, Pod 2, Radar MR20). Beherbergt den **Semtech SX1262 LoRa-Transceiver (868 MHz)** direkt an der USV-Schiene an Taoglas FXP895 im Deckel (`ANT1`) für Diebstahlschutz und Keyfob-Pager, sowie die Taoglas FXP73 Deckelantenne (`ANT2`) für maximale Smartphone-Reichweite. *(Montage mittig unter der Sitzbank auf der Batteriebrücke).*
+2. **Satelliten-Pod 1 & 2 (Koffer Links & Rechts, PCBA 03):** Universal-Koffer-Pods mit Slide-in Deckel und wetterfester 4-Pin Magnet-Abreißkupplung (IP68). Beherbergt die Trägerplatine `PCBA 03` mit `ES8388` Audio-Codec (Kelvin-Masse) und nativer USB-Anbindung (CH554E).
+   * **Mechatronik (1:1 identisch in allen Stufen):** Zwei mechatronische Drücker (Mini-Hubmagnete) auf universeller Doppel-Schiebeschlitten-Schiene (`012_universal_actuator_slide_bracket.scad`) lösen bei Zündung-AN (KL15) einen automatischen Einschaltimpuls auf die Taster der OEM-Headsets (Sena / Cardo) aus ("One Size Fits All" – kein Standby-Batteriefraß, kein Garantieverlust, kein Pod-Ausbau). Cradles und Pogo-Pins bleiben 100 % unverändert.
+   * **Dual-Modus Betriebsstrategie:**
+     * **Stufe 1 (Basis ohne Radar): Kabelgebundener Betrieb:** Sena/Cardo Audio und Mikrofon werden über die analogen Onboard-`ES8388`-Codecs verarbeitet. OMM-Daten laufen über USB. Latenz $< 0{,}2\,\text{ms}$, 100 % autark.
+     * **Stufe 2 (Upgrade mit Radar PCBA 08): Drahtlose Bluetooth-Anbindung:** Die beiden QCC3086 des Radar-Nodes übernehmen die Audio-Strecke drahtlos via Bluetooth und speisen Hi-Fi Music-Sharing in die externe Mesh-Gruppe ein. Die Onboard-`ES8388`-Codecs der Pods gehen in den **Cold Standby** als hochverfügbare Redundanz.
+3. **Front-Node & Cockpit-Bedieneinheit (PCBA 05 am Lenker-Riser):** Am Lenker-Riser / oberen Gabelbrücke montiert. Ausgestattet mit **ESP32-S31** Node-Controller und **Feasycom FSC-BT802** (Qualcomm CSR8670, aptX Low Latency) als Bike- und Infotainment-Bridge (digitaler Abgriff von Navigationsansagen der Werks-Headunit wie Harley SkylineOS oder BMW Navigator). **Modularer Sensor-Puck ("Körbchen"):** Integriert u-blox SAM-M10Q Multi-GNSS, TI TMP117 Außenthermometer, OPT3001 Umgebungslicht und Knowles MEMS-Windmikrofon. Direkte Schnittstelle zu den symmetrischen Dual Under-Perch Spiegel-Pods und Lenkertastern.
+4. **Symmetrische Dual Under-Perch Spiegel-Pods (Links & Rechts, PCBA 05C):** Formschön jeweils unter die Spiegelschrauben geklemmt.
+   * **Linker Spiegel-Pod:** Taktiler Daumen-PTT-Taster (Funk/Intercom & Sprachassistent) + bernsteinfarbene Totwinkel-Warn-LEDs (BSD).
+   * **Rechter Spiegel-Pod:** Taktiler Daumen-Taster für Action-Cam (Highlight-Tag via BLE / Video Start/Stopp) + bernsteinfarbene Totwinkel-Warn-LEDs (BSD).
+5. **Handschuhfach Schnelllade-Einheit (Reines 30W Fast-Charging):** Im Medienfach der Touring-Verkleidung. Der historische USB-Hub (`PCBA 05B`) und fehleranfällige Display-Spiegelungs-Dongles entfallen vollständig.
+   * **Reine 2-Draht DC-Speisung:** Keine störanfälligen USB-Datenleitungen ins Fach, keine EMV-Einkopplung.
+   * **Echter Fast-Charger:** Automotive 30W–36W USB-PD 3.0 / QC 4.0 Buck-Engine.
+   * **Magnetischer Qi-Ladepuck (15W induktiv):** Qi2 / MagSafe kompatibler Lade-Puck, auf dem das Smartphone im Fach magnetisch arretiert lädt. Da kein CarPlay-Videostreaming läuft, bleibt das Telefon thermisch vollkommen stabil.
+   * **Zusatz-Ladeanschluss:** Parallele USB-C PD Buchse (bis 30 W) für Dashcam, Action-Cam, Powerbank oder Zweitgerät.
+6. **Heck-Radar 2.0 Sub-MCU & Audio-Upgrade (PCBA 08 am Heck – REIN OPTIONAL):** 
+   * **100 % Modulares Upgrade (Stufe 2):** Die Basis (Stufe 1) läuft autark ohne Radar.
+   * **Doppelfunktion bei Verbau:**
+     1. Autonomes 77-GHz Heck-Radar (Wheeltec MR20) mit 36 Strobe-Warn-LEDs und 5.9 GHz V2X C-ITS Modul.
+     2. **High-End Audio-Upgrade & Music-Sharing:** Beherbergt 2× Qualcomm QCC3086 (`U4`, `U5`), die als drahtlose Nahfeld-Transmitter (30 cm Funkstrecke) zu den Koffer-Pods L & R fungieren und synchrones Hi-Fi-Musik-Sharing in die Gruppenkommunikation ermöglichen.
 
 ```
                      DIE STANDARDISIERTEN FUNKTIONSKNOTEN (v10.0)
 +-----------------------------------------------------------------------------+
-| 1. FRONT-NODE (Am Lenker-Riser):  PCBA 05 (ESP32-S31 + E22) & PCBA 05D Puck  |
-|    (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind-MEMS, 30W USB-PD          |
+| 1. FRONT-NODE (Am Lenker-Riser):  PCBA 05 (ESP32-S31 + FSC-BT802 Bike-Bridge)|
+|    PCBA 05D Puck (SAM-M10Q GNSS, TMP117, OPT3001), Knowles Wind-MEMS        |
 +-----------------------------------------------------------------------------+
 | 2. SYMMETRISCHE DUAL UNDER-PERCH SPIEGEL-PODS (PCBA 05C Links & Rechts):    |
 |    * Links:  Taktile PTT-Taste, Linke Totwinkel-Warn-LEDs (2x BSD Amber)    |
 |    * Rechts: Taktile Action-Cam-Tag Taste, Rechte Totwinkel-LEDs (2x Amber) |
 +-----------------------------------------------------------------------------+
-| 3. HANDSCHUHFACH-HUB (PCBA 05B Rechts): 4-Port Hub mit 5x USB-C Dual-Edge   |
-|    (North: Front-Node & Skyline Host | South: 30W Phone, Dongle, Media)     |
+| 3. HANDSCHUHFACH (Reines 30W Fast-Charging): Keine USB-Datenleitungen!      |
+|    * Magnetischer Qi-Ladepuck (15W induktiv, Qi2/MagSafe)                   |
+|    * Echter USB-C PD 3.0 Zusatz-Schnellladeport (bis 30W für Zubehör)        |
 +-----------------------------------------------------------------------------+
-| 4. ZENTRALBOX (Unter Sitz/Akku): ESP32-S31 AI-Host, QCC3084 Audio-SoC,      |
-|    SX1262 LoRa 868MHz, Multi-Port USB-PD Engine, USV, Zwei-Kabel-Anschluss  |
+| 4. ZENTRALBOX (Unter Sitz/Akku): ESP32-S31 AI-Host & DSP-Mischpult,         |
+|    Triple-QCC3086 (U9 Phone mit HFP-Rückkanal, U13 Helm 1, U14 Helm 2),     |
+|    SX1262 LoRa 868MHz, Multi-Port Power Engine, USV, Zwei-Kabel-Anschluss   |
 |    Dual-Power Input: 12V Bordnetz OR USB-PD Sink (5V-20V für Werkbank/Desk) |
 +------------------------------+----------------------------------------------+
 | 5. POD 1 (Koffer Links):     | 6. POD 2 (Koffer Rechts):                    |
-| * Slide-in Deckel & FOB-Lock | * Slide-in Deckel & FOB-Lock                 |
-| * Zwischendeckel (Dry-Flap)  | * Zwischendeckel (Dry-Flap)                  |
-| * Koffer-USB-Ladedose        | * Koffer-USB-Ladedose                        |
-| * 4-Pin Magnet-Abreißkupplung| * 4-Pin Magnet-Abreißkupplung                |
+| * Mechatronik (KL15) 1:1     | * Mechatronik (KL15) 1:1                     |
+| * Stufe 1: Kabelgeb. AD/DA   | * Stufe 1: Kabelgeb. AD/DA                   |
+| * Stufe 2: Drahtlos via BT   | * Stufe 2: Drahtlos via BT                   |
+|   (Codec im Cold Standby)    |   (Codec im Cold Standby)                    |
 +------------------------------+----------------------------------------------+
-| 7. HECK-RADAR 2.0 (Kennzeichenträger): Wheeltec MR20 77-GHz, 36x LEDs       |
+| 7. HECK-RADAR (PCBA 08 am Heck - REIN OPTIONAL): 77 GHz Radar, 36x Strobe,   |
+|    2x QCC3086 für drahtlose Pod-Audio & synchrones Hi-Fi Music-Sharing       |
 +-----------------------------------------------------------------------------+
 ```
 
@@ -237,20 +250,19 @@ Führt 4 autarke Systemzweige (jeweils 4 Adern: `VCC`, `GND`, `D+`, `D-`) und ve
 
 | Strang / Peitsche | Anschlusstyp | Zielkomponente | Leistung & Übertragene Signale |
 | :--- | :--- | :--- | :--- |
-| **Strang 1 (Front-Backbone)** | 4-Pin Automotive Sealed | **Front-Node & Cockpit** (PCBA 05) | **60W USB-PD** (`VBUS_60W`, AWG18), `GND` (AWG18), `USB_D+` / `USB_D-` (AWG26 verdrillt) |
-| **Strang 2 (Koffer Links)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 1** (Sena / Cardo / OMM) | **30W USB-PD** (`POD1_VBUS`, AWG20), `POD1_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
-| **Strang 3 (Koffer Rechts)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 2** (Cardo / Sena / OMM) | **30W USB-PD** (`POD2_VBUS`, AWG20), `POD2_GND` (AWG20), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
-| **Strang 4 (Heck-Radar)** | Binder M5 4-Pin IP67 | **Heck-Radar MR20** (PCBA 08) | **12V geschaltet** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), `USB_D+` / `USB_D-` (AWG28 verdrillt) |
+| **Strang 1 (Front-Backbone)** | 4-Pin Automotive Sealed | **Front-Node & Cockpit** (PCBA 05) | **60W Power-Budget** (`VBUS_60W`, AWG18), `GND` (AWG18), `CAN_H` / `CAN_L` bzw. USB (AWG26 verdrillt) |
+| **Strang 2 (Koffer Links)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 1** (Sena / Cardo / OMM) | **30W Power** (`POD1_VBUS`, AWG20), `POD1_GND` (AWG20), USB-Daten (AWG28 verdrillt) |
+| **Strang 3 (Koffer Rechts)** | 4-Pin Magnet-Abreißkupplung IP68 | **Satelliten-Pod 2** (Cardo / Sena / OMM) | **30W Power** (`POD2_VBUS`, AWG20), `POD2_GND` (AWG20), USB-Daten (AWG28 verdrillt) |
+| **Strang 4 (Heck-Radar - OPTIONAL)** | Binder M5 4-Pin IP67 / JST-GH | **Heck-Radar MR20 & Audio** (PCBA 08) | **12V geschaltet** (`RADAR_12V`, AWG22), `RADAR_GND` (AWG22), CAN/USB Telemetrie |
 
 ### 4.2 Universal Front-Node (PCBA 05) Cockpit-Schnittstellen (60W Power Budget)
-Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und wird über Strang 1 des Backbone-Kabels mit bis zu **60W USB-PD** versorgt:
-* **Modularer Sensor-Puck ("Körbchen"):** Integriert u-blox SAM-M10Q Multi-GNSS (Zenitsicht), TI TMP117 NIST-Thermometer, OPT3001 Lichtsensor und Knowles I2S MEMS. Rastet werkzeuglos direkt oben auf den Front-Node ein; kann im Pkw/Van per 1,5m Verlängerungskabel an die Windschutzscheibe geclipst werden (`car_dashboard_wedge_dock.scad`).
-* **Cockpit-Displays & Anzeigen:** Speist die beiden Cockpit Speaker Corner Pods (`cockpit_speaker_corner_pod.scad`) mit Dual-OLED-Displays in den Rockford Fosgate Lautsprechergittern (2W für Radar-Balken, TPMS, Turn-by-Turn).
-* **Bedienelemente & Totwinkel-LEDs:** Direkte Anbindung an symmetrische Dual Under-Perch Spiegel-Pods (JST-GH).
-* **Dediziertes Motorrad-Navi (15W - Power-Only):** Speist Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride direkt am Front-Node über eine 12V/1.25A bzw. 5V/3A DC-Leitung. **Hardware-Regel:** Reine Stromversorgung ohne USB-Host-Datenleitungen, damit Garmin/Chigee sofort in den normalen Navigationsbetrieb starten und nicht in den PC-Massenspeicher-Modus verfallen!
-* **Smartphone-Schnellladung (bis 27W):** USB-PD Speisung für SP Connect / QuadLock Ladehalterung am Lenker oder über den 4-Port Handschuhfach-Hub.
-* **Action-Cam Dauerstrom (10W - Power-Only / BC 1.2 DCP):** Wetterfeste USB-C Zuleitung direkt am Front-Node (`PCBA 05`, `J8`) für GoPro Hero oder Insta360 X3/X4 am Lenker oder an der Verkleidung. **Hardware-Regel:** D+/D- sind physikalisch vom `USB2514B` USB-Host isoliert und im Kamerastecker nach USB BC 1.2 DCP ($R < 200\,\Omega$) gebrückt. Die Kamera erkennt ein reines Hochstrom-Ladegerät, startet bei Zündung-AN sofort die Schleifenaufnahme und blockiert niemals in einem "PC verbunden / Webcam / MTP"-Dialog! Die direkte Front-Node-Anbindung am Cockpit spart zudem den unlogischen Umweg über das Handschuhfach.
-* **4-Port Handschuhfach Media & Power-Injection Hub (`glovebox_power_injection_hub.scad`):** Wird über ein kombiniertes High-Power & USB 2.0 Kabel gespeist; liefert saubere 30W Schnellladeleistung sowie 10W geschaltete Dongle-Power, 1x freien Media-Port und führt die **Harley Headset-Emulation via USB** an Port 4 zur Headunit. Alle im Handschuhfach angeschlossenen Geräte verbleiben vollständig im Fach.
+Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und wird über Strang 1 des Backbone-Kabels mit bis zu **60W Leistung** versorgt:
+* **Modularer Sensor-Puck ("Körbchen"):** Integriert u-blox SAM-M10Q Multi-GNSS (Zenitsicht), TI TMP117 NIST-Thermometer, OPT3001 Lichtsensor und Knowles I2S MEMS. Rastet werkzeuglos direkt oben auf den Front-Node ein.
+* **Cockpit-Displays & Anzeigen:** Speist optionale Cockpit-Displays (Turn-by-Turn Pfeilnavigation via BLE GATT `COMM_48`, TPMS, Radar-Warnanzeige).
+* **Bedienelemente & Totwinkel-LEDs:** Direkte Anbindung an symmetrische Dual Under-Perch Spiegel-Pods (JST-GH) und diskrete Lenkertaster.
+* **Dediziertes Motorrad-Navi (15W - Power-Only):** Speist Garmin Zūmo XT2 / Tread / Chigee AIO-5 / Carpuride direkt am Front-Node über eine 12V/1.25A bzw. 5V/3A DC-Leitung (reine Stromversorgung ohne störenden USB-Massenspeicher-Modus).
+* **Action-Cam Dauerstrom (10W - Power-Only / BC 1.2 DCP):** Wetterfeste USB-C Zuleitung direkt am Front-Node (`PCBA 05`, `J8`) für GoPro Hero oder Insta360.
+* **Handschuhfach Schnellladung (30W Fast-Charging):** Reine 2-adrige DC-Speisung (ohne Datenleitungen) für den magnetischen Qi-Ladepuck (15W induktiv) und den USB-C PD 3.0 Zusatz-Schnellladeport. Der historische 5-Port-Hub (`PCBA 05B`) entfällt ersatzlos.
 
 ---
 
@@ -258,35 +270,23 @@ Der Front-Node bündelt sämtliche Front-, Cockpit- und Sensorschnittstellen und
 
 ### 5.1 Harley-Davidson Boom! Box GTS & Skyline OS
 
-#### 5.1.1 Harley Headset-Emulation via USB & Apple CarPlay / Android Auto Freischaltung
-* **Hintergrund & USB-Emulation:** Apple CarPlay setzt im Fahrzeug ein betriebsbereites Sprachmikrofon voraus. Harley-Davidson verriegelt CarPlay in der Boom! Box GTS und Skyline OS Firmware standardmäßig und verlangt entweder das kabelgebundene 7-Pin DIN-Headset oder das proprietäre Bluetooth-Funkmodul **HD-WHIM** (*Wireless Headset Interface Module*, $> 350\,\text{€}$).
-* **Digitale Headset-Emulation via USB:** OpenMotorBridge wickelt die Headset- und Mikrofonanbindung **vollständig digital über USB** ab! Über die USB 2.0 High-Speed Verbindung vom Front-Node (`PCBA 05`) über Port 4 des Handschuhfach-Hubs (`glovebox_power_injection_hub.scad`) an die OEM-Headunit meldet sich OpenMotorBridge als konformes Apple MFi-Headset bzw. USB Audio Class Device an.
-* **Ergebnis:** Die Boom! Box GTS / Skyline OS erkennt sofort ein aktives digitales Headset und schaltet Apple CarPlay sowie Android Auto im 6,5"- bzw. 12,3"-Touchscreen frei – **ohne teures WHIM-Modul**, ohne fehleranfällige analoge Brückenstecker und ohne teure Händler-Freischaltung (Digital Tech).
-* **Bidirektionale Audio-Integration:** Fahrer- und Beifahrer-Helmmikrofone werden digital direkt in den Freisprech- und Sprachsteuerungs-Kanal der Headunit geroutet (Siri, Anrufe, Adresssuche), während Navi-Ansagen und Medien verlustfrei und mit sanftem Ducking ($-12\,\text{dB}$) in die Intercom-Audiomatrix zurückgespeist werden – absolut immun gegen analoge Masseschleifen und Lichtmaschinen-Pfeifen.
+#### 5.1.1 Audio-Integration & Werks-Bordnavi (FSC-BT802 Bike-Bridge)
+* **Digitaler Sprachabgriff:** Die Frontnode (`PCBA 05`) nutzt das Feasycom FSC-BT802 Modul (Qualcomm CSR8670, aptX Low Latency), um sich per Bluetooth mit der Harley Boom! Box GTS oder Skyline OS zu koppeln.
+* **Bordnavi-Sprachführung:** Verwendet der Fahrer das in der Harley integrierte Werksnavi auf dem großen Bildschirm, werden die Navigationsansagen vom FSC-BT802 abgegriffen, digital an den ESP32-S31 DSP der Zentralbox übertragen und mit **-12 dB Raised-Cosine Musik-Ducking** glasklar in die Helme eingespielt.
+* **Cruise Mode (Lautsprecher-Umschaltung):** Bei aktiviertem Cruise Mode deaktiviert OMB das A2DP-Sink-Profil zur Headunit; die Harley schaltet die Musikwiedergabe automatisch auf die Verkleidungslautsprecher um, während Navi und Intercom privat im Helm verbleiben.
 
-#### 5.1.2 Universal Cockpit & Front Hub (PCBA 05): USB-Subsystem, Live-Traffic & PTT
-Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Cockpit-Knoten und eliminiert empfindliche Signalkabel über den mechanisch beanspruchten Lenkkopf:
-* **Nativer 4-Draht USB-Backbone zur Zentralbox:** Der Front-Node kommuniziert über den geschirmten **4-Draht Automotive USB 2.0 Bus (`VBUS`, `GND`, `D+`, `D-`)** mit $< 0{,}2\,\text{ms}$ Latenz mit der Zentralbox (Strang 1 des 16-Pin Peripheriebusses). Zero Funk-Jitter, unempfindlich gegen EMV-Einstrahlung von Zündkerzen oder LED-Scheinwerfern.
-* **Drahtgebundener Lenker-PTT (Optokoppler an `J3` / GPIO 0, $< 1{,}8\,\text{ms}$ Latenz):** Nur $30\dots 50\,\text{cm}$ kurzes, geschütztes Kabel am Lenker - kein bruchgefährdetes Signalkabel über den schwenkenden Lenkkopf nach hinten zur Zentralbox!
-* **Digitales I2S-MEMS Ambient-Mikrofon (Sipeed / Zilltek MSM261S4030H0R / Knowles SPH0645):** Berechnet Umgebungs- und Fahrtwindgeräusche (dB-A/RMS) direkt an der Front für automatische Helmlautstärke-Nachführung (AGC) via Xtensa Vektor-DSP. Standard-I2S mit hoher Bauteilverfügbarkeit.
-* **Automotive USB 2.0 Subsystem & Architektur (Daten-Master vs. Power-Master):**
-  * **Rollenverteilung (Daten-Master vs. Power-Master):**
-    * **Daten-Master (USB 2.0 Host):** Im Touring-Betrieb ist **Skyline OS** (die OEM-Headunit im Dash) der alleinige Host am Handschuhfach-Hub (`PCBA 05B`). Skyline OS steuert den Datenbus für CarPlay, Media-Stick und die digitale Headset-Emulation.
-    * **Power-Master:** Der **Universal Front-Node (`PCBA 05`)** stellt die 60W Power-Engine (SW3526 Buck-Boost & TPS54302 Buck) und regelt die Stromversorgung für Cockpit und Handschuhfach-Hub.
-  * **Szenario A: Touring (Skyline OS / GTS & 5-Port Handschuhfach-Hub `PCBA 05B`):**
-    * Der Wireless CarPlay/AA Dongle (`J4`), der Media-Stick (`J5`) und das Smartphone-Ladekabel (`J3`) sitzen zu 100 % im Handschuhfach am Hub `PCBA 05B`.
-    * Der Front-Node ist über Header `J4` (`HUB_EXT`) mit `J2 FRONT_NODE` des Hubs verbunden und meldet sich gegenüber Skyline OS als konformes digitales MFi-Headset / USB Audio Class Device an.
-    * Der fahrzeugseitige Lenker-Port `J5` (`DONGLE`) am Front-Node wird im Touring-Betrieb nicht benötigt und ist mit dem geprägten **TPU-Blindstopfen `DONGLE`** hermetisch (IP68) verschlossen.
-  * **Szenario B: Universal (BMW GS, Road King Special, Low Rider ST, Naked Bikes & Nachrüst-Displays):**
-    * Auf Motorrädern ohne Handschuhfach und ohne Skyline OS (oder bei Montage eines Nachrüst-CarPlay/Android Auto Displays wie Chigee AIO-5 oder Carpuride am Lenker) ist **`J5` (`J_DONGLE`) am Front-Node aktiv**!
-    * Der interne USB-Host des Front-Nodes und der Lastschalter `TI TPS2051B` versorgen und steuern diesen Port autark mit **softwaregesteuertem 2,5s-Kaltstart**, automatischem **Not-Power-Gating bei Überhitzung** und 0.0 µA Deep-Sleep.
-  * **Strikte Trennung von Navi (`J10`) & Action-Cam (`J8`):** Beide Geräte erhalten **ausschließlich reine Stromversorgungs-Leitungen (Power-Only / BC 1.2 DCP)** von den Schaltreglern und besitzen **keinerlei Datenverbindung zum USB-Bus**, wodurch PC-Verbindungs- und Webcam-Blockaden ausgeschlossen sind.
-* **USB-Media Proxy & Source-Aware CAN Gating:**
-  * Emuliert gegenüber Skyline OS ein MFi-iPod / USB Audio Class Gerät: Track-Titel, Interpret, Album und Spieldauer erscheinen nativ auf dem 12.3" Harley-Bildschirm, während das Audiosignal per LDAC/aptX direkt im Helm bleibt (kein WHIM-Zwang).
-  * **Kollisionsschutz:** Wertet `infotainment_source_active` (CAN `0x388`) und Hub-Port 3 aus, damit Wippen-Befehle nur an das Smartphone geleitet werden, wenn OMB/CarPlay/BT aktiv ist (kein versehentliches Streaming bei MP3-Stick oder Radio!).
-* **USB CDC-NCM Ethernet Tethering für das interne Werks-Navi:**
-  * Meldet sich am Port `J4` als virtueller Netzwerkadapter an und routet Internetdaten vom Smartphone an die Harley.
-  * **Vorteil:** Das interne Werks-Navi (HERE / TomTom) hat bei Zündung-AN **sofort Live-Traffic, Baustellen- und Stauwarnungen**, ohne dass der Fahrer manuell einen Smartphone-WLAN-Hotspot starten muss.
+#### 5.1.2 Bewusster Entfall von Apple CarPlay / Android Auto Display-Spiegelung
+* **Verlässlichkeit statt instabiler Hacks:** In früheren Konzepten wurde versucht, Apple CarPlay / Android Auto über USB-Dongles und Headset-Emulationen auf das Harley-Display zu erzwingen. Die Praxis zeigt jedoch: Diese Lösungen sind notorisch anfällig für Verbindungsabbrüche, scheitern an proprietären Firmware-Sperren und führen im geschlossenen Handschuhfach bei gleichzeitiger Ladung unweigerlich zur **thermischen Notabschaltung** des Smartphones.
+* **Konsequente Bereinigung:** Display-Spiegelung (CarPlay/AA) ist vollständig aus der Systemarchitektur gestrichen. 
+* **Ergonomie- & Display-Realität (Road Glide vs. BMW GS):**
+  * **BMW GS / Adventure:** Das Smartphone hängt sichtbar am Lenker (QuadLock/SP Connect) ➔ Die OMB Companion App (Live-Schräglage, TPMS, Radar) oder Kurviger/Calimoto sind direkt im Sichtfeld.
+  * **Harley Touring (Road Glide / Street Glide):** Am Lenker ist kaum Platz für eine Halterung, das Bike besitzt bereits ein großes Werksdisplay (6.5" bzw. 12.3"), und das Handy liegt unsichtbar im Handschuhfach auf dem Qi-Puck.
+  * **Der ehrliche Kompromiss:** Die OMB-App wird auf der Harley nicht auf den Bildschirm gespiegelt. Der Fahrer nutzt für die Sicht das **Harley-Werksnavi auf dem Screen**, während das Smartphone im Handschuhfach als robuster Medien- und Telefon-Server arbeitet (oder Kurviger als Audio-Tourenführung im Helm).
+
+#### 5.1.3 Werks-Lenkertasten-Bedienung (CAN-Bus Integration)
+* **Harley CAN-Bus (LHCM / RHCM):** Die Zentralbox liest über den automotiven CAN-Transceiver (`TCAN334G U6`) die Tastendrücke der originalen Harley-Lenkerarmaturen in Echtzeit mit:
+  * **Mediensteuerung:** Lautstärke (`Vol+` / `Vol-`), Track Vor / Zurück, Play / Pause werden direkt in **AVRCP 1.6** Befehle an den QCC3086 (`U9`) übersetzt.
+  * **Telefonie-Steuerung:** Eingehende Anrufe klingeln im Helm. Ein Druck auf die Werks-Taste am Lenker sendet `ATA` (Anruf annehmen). Langer Druck sendet `AT+CHUP` (Auflegen/Ablehnen). Das Gespräch wird dank HFP 1.8 mit Mikrofon-Rückkanal (< 20 ms Latenz) direkt über das Helm-Mikrofon geführt.
 * **Dedizierter Action-Cam BLE Shutter-Bridge:**
   * Steuert GoPro, Insta360 und DJI direkt über BLE in direkter Sichtlinie ($< 0{,}5\,\text{m}$) via Lenker-PTT Doppel-Klick.
 * **Intelligente Tankpausen-Automatik & KL15-Pufferkondensator (`C_BUF`):**
@@ -418,13 +418,12 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
   * *Gast-Gerät:* Neutrales Laden ohne Profilwechsel.
 * **Flankengetriggerter Wechsel & "Handy vergessen"-Alarm:**
   * Der automatische Wechsel in die Cockpit-Ansicht erfolgt **strikt einmalig auf der steigenden Flanke** des Ladebeginns. Manuelle Navigationen zu anderen Tabs werden respektiert (User Override Protection).
-* **Systemweite Hochfrequenz-Architektur (Die 5 Funkbänder der OpenMotorBridge):**
-  1. **Automotive 4-Draht USB-PD & USB 2.0 Backbone (Kabelgebunden):** Hochrobuster physischer Bus (`VBUS`, `GND`, `D+`, `D-`) zwischen Zentralbox, Front-Node und den Koffer-Pods. Ersetzt das frühere UWB-Funkbackbone vollständig: bis zu 60W USB-PD Ladeleistung, latenzfreie USB 2.0 Audio- und Steuerdaten, 100 % immun gegen Funkschatten durch Regenkombis, nasses Gepäck oder Alukoffer.
-  2. **Heck 5 GHz V2X & 77 GHz mmWave:** ESP32-C5 mit 5 GHz Raw-Packet-Injection (802.11p OCB) für fahrzeugübergreifende V2X-Warnmeldungen (CAM / DENM) plus Wheeltec MR20 mmWave Radar für 360°-Umfeldüberwachung und Notfall-Kollisionsstrobe.
-  3. **Front 5 GHz / 6 GHz Wi-Fi (C5 / E22):** Dedizierter High-Speed Funklink am Front-Knoten für drahtloses Apple CarPlay und Android Auto (10 cm Line-of-Sight zum Smartphone) sowie High-Speed Dashcam-Videosync. Vollständig befreit von BLE-Overhead.
-  4. **2.4 GHz Audio & Geometrischer BLE-Master:**
-     * *Zentralbox:* Dedizierter Qualcomm HD-Bluetooth Audio-SoC (QCC3084) mit Dual-A2DP und LE Audio / Auracast (synchroner Audio-Mix für Fahrer- und Sozius-Helm) samt HFP-Telephonie-Engine. Der **ESP32-S31 fungiert als zentraler geometrischer BLE-Master** mit externer Gehäuse-U.FL-Antenne und bündelt sämtliche Peripherie (OEM-Adapter in beiden Pods, Lenkertaster, Action-Cam, Keyfob, TPMS und PWA Dashboard). Das interne Wi-Fi des S31 ist im Fahrbetrieb deaktiviert, um jegliche HF-Interferenz mit dem QCC3084 zu verhindern.
-  5. **LoRa 868 MHz (Semtech SX1262):** 3-Kanal-Langstrecken-Backbone zwischen den Fahrzeugen (Public Announcement, Private Session Group, Micro-Cluster/FOB-Pager) mit kilometerweiter Reichweite direkt an der USV-Schiene.
+* **Systemweite Hochfrequenz-Architektur (Die Funkbänder der OpenMotorBridge):**
+  1. **Automotive 4-Draht Backbone (Kabelgebunden):** Hochrobuster physischer Bus (`VBUS`, `GND`, `CAN_H`/`D+`, `CAN_L`/`D-`) zwischen Zentralbox, Front-Node und den Koffer-Pods. Keine instabilen Funkstrecken für Kernfunktionen: zuverlässige Stromversorgung, latenzfreie Audio- und Steuerdaten, 100 % immun gegen Funkschatten durch Regenkombis, nasses Gepäck oder Alukoffer.
+  2. **Heck 5 GHz V2X & 77 GHz mmWave (Radar PCBA 08 - OPTIONAL):** ESP32-C5 mit 5 GHz Raw-Packet-Injection (802.11p OCB) für fahrzeugübergreifende V2X-Warnmeldungen (CAM / DENM) plus Wheeltec MR20 mmWave Radar für 360°-Umfeldüberwachung und Notfall-Kollisionsstrobe. Beherbergt 2× QCC3086 (`U4`, `U5`) für drahtlose Pod-Anbindung und Hi-Fi Music-Sharing.
+  3. **Front Bluetooth 5.1 (PCBA 05):** FSC-BT802 Modul (Qualcomm CSR8670) für die Infotainment-Bridge zur Werks-Headunit (Abgriff von SkylineOS / BMW Navigator Sprachansagen) und Kopplung lokaler Cockpit-Bedienelemente.
+  4. **2.4 GHz Audio & BLE-Master (Zentralbox PCBA 01):** Triple-Qualcomm QCC3086 Bluetooth 5.4 Audio-Architektur (`U9` Smartphone mit HFP 1.8 Voice-Rückkanal, `U13` Fahrerhelm, `U14` Soziushelm). Der **ESP32-S31 fungiert als zentraler Audio-DSP und BLE-Master** für Telemetrie (TPMS, IMU, Actioncam, Keyfob, BLE-Pfeilnavigation).
+  5. **LoRa 868 MHz (Semtech SX1262):** 3-Kanal-Langstrecken-Backbone zwischen den Fahrzeugen (Public Announcement, Private Session Group, Micro-Cluster/FOB-Pager) mit kilometerweiter Reichweite direkt an der USV-Schiene an Taoglas FXP895 im Deckel (`ANT1`).
 
 ### 5.12 Kognitive Cockpit-Entlastung & Stille Absicherung im Hintergrund
 * **Strikte Grenzziehung: Wann Automatisierung eingreift - und wann sie schweigt:**
@@ -449,7 +448,7 @@ Der Front-Knoten (PCBA 05) dient auf **allen Motorrädern** als universeller Coc
       - **Modus B (Reiner Pkw-/Camper-Konvoi & Rallye-Orga):** Pod 1 mit OMM 2.4 GHz Modul (OpenMotorMesh), Pod 2 mit Midland PMR446 Funkgerät für universellen Jedermannfunk.
       - **Modus C (Hybrid-Lead & OMM-Anchor):** Pod 1 mit OMM 2.4 GHz Modul (verbindet alle OMB-Bikes im Konvoi), Pod 2 wahlweise Sena oder Cardo für Gastfahrer.
     * **Audio-Integration im Pkw (Headset-frei & Freisprech-Komfort):**
-      - **Option 1 (Pkw-Freisprecheinrichtung via Qualcomm QCC3084):** Die Zentralbox unterm Sitz koppelt sich per Bluetooth (HFP 1.8 / A2DP) vollautomatisch als Mobiltelefon mit der Pkw-Freisprechanlage. Die Fahrzeuginsassen hören den Gruppenfunk glasklar über die Autolautsprecher und sprechen freihändig über das Pkw-Dachmikrofon!
+      - **Option 1 (Pkw-Freisprecheinrichtung via Qualcomm QCC3086):** Die Zentralbox unterm Sitz koppelt sich per Bluetooth (HFP 1.8 / A2DP) vollautomatisch als Mobiltelefon mit der Pkw-Freisprechanlage. Die Fahrzeuginsassen hören den Gruppenfunk glasklar über die Autolautsprecher und sprechen freihändig über das Pkw-Dachmikrofon!
       - **Option 2 (AAWireless / CarPlay Clean Power-Injection & OEM-Media-Passthrough):** Die werkseitigen USB-Media-Buchsen moderner und älterer Pkw liefern oft streng nach alter USB 2.0-Norm nur $500\,\text{mA}$ ($2{,}5\,\text{W}$) oder instabile Spannung. Beim Starten von Wireless Android Auto / Apple CarPlay (AAWireless, Ottocast, Carlinkit) erzeugt das 5-GHz-WLAN-Modem Stromspitzen von $1{,}2\dots 1{,}8\,\text{A}$, was am OEM-Port zu endlosen Bootloops, Hitze und Verbindungsabbrüchen führt. **Die OMB-Lösung:** Der AAWireless-Adapter wird direkt an den Front-Node / Core-Unit USB-Port von OpenMotorBridge angeschlossen und aus dem bordeigenen 12V-Schaltregler mit felsenfesten $5\,\text{V}\,/\,3\,\text{A}$ ($15\,\text{W}$) versorgt. Zum OEM-Media-USB-Port des Autos führt lediglich ein reines High-Speed Datenkabel (`D+`, `D-`, `GND` bei galvanisch getrenntem / blockiertem `VBUS`). Der Auto-Bildschirm empfängt saubere USB-Daten, liefert aber keinen Milliampere Strom – 100 % Stabilität, null Abstürze!
       - **Option 3 (Autarkes OMM-Handgerät / Tischmikrofon):** Ein autarkes OMM 2.4 GHz Modul mit Schwanenhals-Mikrofon oder PTT-Taste liegt griffbereit auf der Mittelkonsole für den Beifahrer / Tourguide (angeschlossen an Port `J6` des Cockpit-Satelliten).
   * **All-in-One Car Support Core Unit (Kompakt vereint & Thermoschutz):**
@@ -498,7 +497,7 @@ Auf Android-Geräten bietet die Companion-App (`bar.f0o.omb`) im Hintergrund mä
      - Die Rohdaten werden von PCBA 08 zu 100 % kabelgebunden über **Kabel 2 Strang 4 (Picoflex High-Speed USB 2.0 @ 480 Mbps)** zur Zentralbox (PCBA 01) übertragen.
      - Der **ESP32-S31** parst die Pakete latenzfrei im FreeRTOS-Task und routet sie:
        1. **Optisch:** An die Cockpit-Displays (Speaker Corner Pod OLEDs / PWA Dashboard).
-       2. **Akustisch via Qualcomm QCC3084:** Diskreter Audio-Chime im Helm 3 Sekunden vor Umschalten auf Grün (Startvorbereitung ohne starren Blick auf die Ampel) sowie akustische Vorwarnung bei Annäherung von Einsatzfahrzeugen.
+       2. **Akustisch via Qualcomm QCC3086:** Diskreter Audio-Chime im Helm 3 Sekunden vor Umschalten auf Grün (Startvorbereitung ohne starren Blick auf die Ampel) sowie akustische Vorwarnung bei Annäherung von Einsatzfahrzeugen.
        3. **Schwarm-Uplink:** Über BLE / USB an die Android Companion-App (`bar.f0o.omb`), welche die Daten analog zu `CITS-to-go` ins dezentrale OpenTrafficMap-Netzwerk einspeist und lokale Gefahren-Tiles (GeoJSON) nachlädt.
 3. **Waze "Auto-Klick" & Schwarm-Automatisierung:**
    * Um die Community-Warnungen von Waze während der Fahrt ohne gefährliche Touchscreen-Bedienung zu nutzen:
@@ -536,7 +535,7 @@ Zur Vermeidung von Redundanzen und zur Gewährleistung klarer Zuständigkeiten i
 | **Gehäuse, Mechanik & CAD (SSOT)**| **[Kapitel 08](08_enclosures_mechanics_cad.md)** | **Alle CAD-Modelle**, OpenSCAD Parameter, ECE-Normen, unverlierbare Muttern |
 | **Firmware-Architektur** | **[Kapitel 09](09_firmware_architecture.md)** | FreeRTOS Task-Matrix, 4-Draht USB-PD & USB 2.0 Protokoll, 5-Gesten-Engine |
 | **WebApp PWA Dashboard** | **[Kapitel 10](10_webapp_pwa_dashboard.md)** | Ride HUD, WebBLE Protokoll, Pod- & Profil-Konfiguration, Offline-OSM-Vektorkarten |
-| **CarPlay / Android Auto Bridge** | **[Kapitel 11](11_carplay_android_auto_bridge_architecture.md)**| Virtual WHIM, CP2AA Bridge, Multi-Path Wi-Fi/Cellular, Headless Dongle |
+| **Smartphone-Integration & Laden** | **[Kapitel 11](11_smartphone_integration_charging_navigation.md)**| QCC3086 Audio/HFP 1.8, 30W Fast-Charging Qi-Puck, Werks-Bordnavi, Lenkertasten |
 | **CAN-Bus Fahrzeugprofile** | **[Kapitel 12](12_can_bus_vehicle_profiles.md)** | BMW, KTM, Ducati, Harley CAN-Matrizen, LIN/K-Line Interfaces |
 | **Simulation & Testbench (HIL/SIL)**| **[Kapitel 13](13_simulation_testbench.md)** | Python Netlist Validator, FreeRTOS Timing-Verifikation, Signalintegrität |
 | **EMV & HF-Hardening** | **[Kapitel 14](14_emv_rf_hardening.md)** | CISPR 25 Class 5, 8-Band HF-Matrix, ESD-Schutznetzwerke, Koexistenz |

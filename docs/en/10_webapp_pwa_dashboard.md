@@ -51,17 +51,16 @@ For riders who prefer installation directly via the Google Play Store, automated
 * **Universal Front Node Dashboard Card:**
   * **Link Status:** Live 4-wire automotive bus badge (`4-WIRE BUS (12V/PD & 480 Mbps)` / `OFFLINE`).
   * **Subsystem Tiles:**
-    1. **📱 Wireless CarPlay / AA (Ottocast):** Live voltage & current (`5.00 V · 380 mA`), operating status (`ACTIVE`, `REBOOT`, `STANDBY`).
-    2. **⚡ Handlebar PTT (Zero-Latency):** Status indicator (`< 0.4 ms Latency`) with glowing pulse animation when keying (1x = radio, 2x = cam toggle, long = HiLight tag).
+    1. **🔋 30W Fast-Charging & Qi Puck:** Live voltage & current (`9.00 V · 2.2 A`), operating status (`QI CHARGING`, `USB-C PD`, `STANDBY`).
+    2. **⚡ Symmetrical Under-Perch Switches (PCBA 05C):** Readiness status of both switches (`< 0.2 ms Latency`) with 5-gesture visualization (Short, Double, Triple, Long Press, Hold Gate) for PTT, Voice Assistant, Hazard Pin Drop, and Cam Markers.
     3. **🎙️ Cockpit Noise (Knowles MEMS):** Real-time sound pressure level in $\text{dB(A)}$ and dynamic AGC helmet boost (`+0.0 dB` to `+6.0 dB Boost`).
     4. **🎥 Action Cam BLE Bridge (GoPro / Insta360 / DJI):** Camera model (`GoPro Hero 12` / `Insta360 X4`), battery level (%), remaining SD time, pulsing red REC badge.
   * **Wind Noise VU Meter:** Color-coded level bar ($35\,\text{dB(A)}$ idle to $115\,\text{dB(A)}$ highway).
   * **Interactive Controls:**
-    * **`⚡ CarPlay 1-Click Hard Reboot (2.5s)`:** Triggers a hardware power cycle on the TI TPS2051B switch (2.5s VBUS cutoff with countdown animation).
+    * **`🔋 Fast-Charge Port Status`:** Shows charging wattage, temperature, and negotiated PD profile (5V/9V/12V).
     * **`🔘 Test Handlebar PTT`:** Simulates mechanical button presses with tactile feedback.
     * **`🎥 Cam Start/Stop & HiLight`:** Manual touch shutter toggle and highlight tag button for action cameras.
     * **`Fuel-Stop Filter (KL15)` Toggle:** Automatically cuts recording upon ignition off to avoid empty parking/fuel stop footage.
-    * **`Auto-Café Mode (60s)` Toggle:** Automatically cuts VBUS after ignition OFF to release smartphone Wi-Fi for café/hotel networks.
 * **Rear Radar & Blind-Spot Assistant (BSD HUD Card):**
   * **Status Badges:** Real-time threat classification (`CLEAR`, `⚠️ VEHICLE CLOSING IN`, `🚨 COLLISION RISK!`) and hardware link (`GARMIN VARIA / 24 GHz M8`).
   * **Virtual Mirror Warning LEDs (BSD):** Left (`#bsd-mirror-left`) and right (`#bsd-mirror-right`) mirror indicators with live distance readout and pulsing animations (Amber / Red) when an approaching vehicle enters the close-range blind-spot zone ($d < 15\,\text{m}$).
@@ -109,7 +108,7 @@ For riders who prefer installation directly via the Google Play Store, automated
 The Device Manager is organized into two distinct sections:
 
 #### Part 1: Personal Devices (Rider & Pillion)
-* **Rider & Pillion Smartphones:** WebBLE connection status, signal strength (RSSI), 1-click cold restart of the CarPlay/AA dongle (TPS2051B VBUS power-cycle), and pillion audio sharing toggle.
+* **Rider & Pillion Smartphones:** WebBLE connection status, signal strength (RSSI), 30W Qi charging telemetry, and pillion audio sharing toggle.
 * **Dual-Headset Hub (Rider & Pillion):** Bluetooth audio manager for Schuberth/Sena, Cardo DMC, and generic BT headsets (LC3/aptX codecs, battery level, discovery scan).
 * **Dual Action Cam Hub:** Management for GoPro (Hero 11/12/13), Insta360 (X3/X4/Ace), and DJI cameras with auto-REC, fuel-stop pause filter, and PTT-triggered HiLight tagging.
 * **2-in-1 LoRa Smart-Keyfob (Alarm Pager & Pod Key):**
@@ -120,7 +119,7 @@ The Device Manager is organized into two distinct sections:
   * `[Buddy Alarm]`: Forwards theft alerts automatically over the decentralized LoRa group mesh.
 
 #### Part 2: Motorcycle & OpenMotorBridge System Nodes
-* **Universal Front Node (Cockpit Hub * PCBA 05):** 4-wire automotive bus (Zero tank lifting!), Wi-Fi SoftAP fallback toggle, proximity-rescue beacon, and 5-gesture mapping matrix for symmetrical mirror pods (PCBA 05B).
+* **Universal Front Node (Cockpit Hub * PCBA 05):** 4-wire automotive bus (Zero tank lifting!), Wi-Fi SoftAP fallback toggle, FSC-BT802 Headunit Bridge, proximity-rescue beacon, and 5-gesture mapping matrix for symmetrical under-perch switches (PCBA 05C).
 * **Rear Radar & Mirror Blind-Spot LEDs (BSD):** Master power switch and mirror indicator controls (Header `J9` via MOSFET `Q1`) with a 2-second diagnostic flash.
 * **Safety Lighting Management:**
   * **ESS Emergency Brake Strobing:** Master toggle for 4.5 Hz hazard flashing (Garmin Varia UART2 & `RESERVE_GPIO_B`), configurable deceleration threshold ($-0.45\,\text{g}$, $-0.60\,\text{g}$, $-0.75\,\text{g}$), and `[Brake Strobe Test]` button.

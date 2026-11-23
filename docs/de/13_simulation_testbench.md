@@ -68,7 +68,7 @@ Um das Zusammenspiel von Hardware, Akustik, Fahrdynamik, Thermik, Hochfrequenz-P
   6. **Universal Front Node DCDC & Hub (PCBA 05):** TPS54302 Synchrongleichrichter mit $92{,}4\,\%$ Wirkungsgrad ($9{,}6\,\text{mV}$ Ripple), USB2514B High-Speed Augendiagramm mit $88{,}5\,\%$ Öffnung, SAM-M10Q 10 Hz PVT & AssistNow A-GPS ($1{,}8\,\text{s}$ TTFF), TMP117 Kaltluftsensor ($\pm 0{,}1^\circ\text{C}$), OPT3001 Lux-Sensor.
   7. **Geschirmter 4-Draht-Automotive-Kabelbaum & JST-GH:** Spannungsabfall über Bordnetz $< 150\,\text{mV}$ (Front Node $130{,}6\,\text{mV}$, Radar $81{,}1\,\text{mV}$, Cartridge $7{,}5\,\text{mV}$).
   8. **4-Draht Automotive-USB-Bus Backbone:** Front Node ($< 0{,}20\,\text{ms}$), Pod ($< 0{,}15\,\text{ms}$), Radar UART ($< 0{,}25\,\text{ms}$) $\rightarrow$ Deterministische Gesamtlatenz $< 0{,}20\,\text{ms}$.
-  9. **Symmetrische Spiegel-Pods (PCBA 05B) 5-Gesten Engine:** Vom Tastendruck am Spiegel-Pod über den 4-Draht USB-Bus zum OptoMOS K1 in nur **$< 0{,}20\,\text{ms}$**.
+  9. **Symmetrische Under-Perch Taster (PCBA 05C) 5-Gesten Engine:** Vom Tastendruck am Spiegel-Pod über den 4-Draht USB-Bus zum OptoMOS K1 in nur **$< 0{,}20\,\text{ms}$**.
   10. **Ottocast Auto-Café VBUS-Abschaltung:** Automatischer $60\,\text{s}$ Countdown nach Zündung AUS zur Freigabe des Smartphone-WLANs sowie 1-Klick Hard-Reboot ($2{,}5\,\text{s}$ Power-Cut).
 
 ---
@@ -206,7 +206,7 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
          v                                                               v
  +----------------------------------------+            +----------------------------------------+
  |          MOTORRAD A (LEADER)           |            |          MOTORRAD B (CHASER)           |
- |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |            |  * PCBA 01 (ESP32-S31 + QCC3084 + LoRa)  |
+ |  * PCBA 01 (ESP32-S31 + 3x QCC3086 + LoRa) |            |  * PCBA 01 (ESP32-S31 + 3x QCC3086 + LoRa) |
  |  * PCBA 03 (Pods 1/2 4-Draht Bus Inlays)   |            |  * PCBA 03 (Pods 1/2 4-Draht Bus Inlays)   |
  |  * PCBA 05 (Universal Front Node)      |            |  * PCBA 05 (Universal Front Node)      |
  +-------------------+--------------------+            +-------------------+--------------------+
@@ -233,9 +233,9 @@ Der **Digital Twin Simulator** ([`openmotorbridge_digital_twin.py`](../../tools/
 
 ### Die Kernkomponenten & Test-Features:
 1. **Aktive Platinenklassen pro Motorrad:**
-   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, Qualcomm QCC3084 BT 5.4 Audio SoC & Semtech SX1262 LoRa 868 MHz Transceiver.
+   * **PCBA 01 (Zentralbox):** 15-State ADR-EKF Filterung, Power Supervisor (Dual-Power: 12V DTM & USB-PD Sink), ESP32-S31 AI DSP, 3× Qualcomm QCC3086 BT 5.4 Audio Transceiver (U9, U13, U14) & Semtech SX1262 LoRa 868 MHz Transceiver.
    * **PCBA 03 (Satelliten-Pods, 2x):** 4-Draht Bus Interface mit ESP32-C6 Host-MCU, ES8388 Audio-Codec, bis 30W/60W USB-PD Ladeport mit Dry-Flap, OptoMOS K1 PTT-Relais (`sena_spider`, `cardo_edge`, `omm_ucs`, `pmr446`).
-   * **PCBA 05 (Universal Front Node) & PCBA 05B (Spiegel-Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS Akustikmessung, 4-Draht Bus Interface und symmetrische Under-Perch Spiegel-Pods mit 5-Gesten Tastern und BSD LEDs.
+   * **PCBA 05 (Universal Front Node) & PCBA 05C (Spiegel-Pods, 2x):** u-blox SAM-M10Q Multi-GNSS via I2C, Knowles MEMS Akustikmessung, 4-Draht Bus Interface und symmetrische Under-Perch Spiegel-Pods mit 5-Gesten Tastern und BSD LEDs.
 2. **Geodätischer Track (`wil_wattwil_ricken.py`):**
    * $11\,682$ Stützpunkte mit realistischer Beschleunigung, Kurvenschräglage ($\theta_{\text{lean}} = \arctan(v \cdot \dot{\psi} / g)$ bis $42^\circ$) und Höhenprofil ($570\dots 795\,\text{m}$ ü. M.).
 3. **15-State ADR-EKF Tunnelausfall & Koppelnavigation:**
@@ -285,7 +285,7 @@ python3 tools/simulators/testbench_netlist_validator.py
 ### 13.1 Kern-Prüfungen der HIL/SIL Pipeline:
 1. **Automatischer KiCad S-Expression Netlist Parser:**
    * Liest `hardware/kicad_main_box/openmotorbridge_main.net` ein und verifiziert alle 72 Netze und Schlüsselbausteine:
-     - `U1` (TI LM5164-Q1 72V Buck), `U2` (ESP32-S31 AI RISC-V), `U3` (Everest Semi ES8388), `U6` (TI TCAN334G), `U7` (Semtech SX1262), `U8` (TI LM5050-Q1 Ideal-Diode), `U9` (Qualcomm QCC3084 BT 5.4), `U10` (TI TPS7A0533 LDO) und `ANT1` (Taoglas FXP895).
+     - `U1` (TI LM5164-Q1 72V Buck), `U2` (ESP32-S31 AI RISC-V), `U3` (Everest Semi ES8388), `U6` (TI TCAN334G), `U7` (Semtech SX1262), `U8` (TI LM5050-Q1 Ideal-Diode), `U9`/`U13`/`U14` (Qualcomm QCC3086 BT 5.4 Triple), `U10` (TI TPS7A0533 LDO) und `ANT1` (Taoglas FXP895).
 2. **Firmware-GPIO-Kollisionsprüfung:**
    * Parst `firmware/front_node/src/front_node_config.h` sowie die Zentralbox-Treiber.
    * Prüft alle 22 GPIO-Definitionen auf Mehrfachbelegungen, Floating-Pins und Pin-Multiplexing-Konflikte (0 Kollisionen zulässig).

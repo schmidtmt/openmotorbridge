@@ -42,7 +42,7 @@ void power_sequencer_trigger_boot(void) {
     // Hardware architecture note: U12 (TPS4H160-Q1) IN1..IN4 are hardware-tied to VCC_3V3 on PCBA 01.
     // The staggered delays below correspond to peripheral satellite node boot-up and enumeration windows.
 
-    // Stage 1 (T = 0 ms): Central Box (U2 + U8 USB2517I + U9 QCC3084) & Branch 1 (VBUS_FRONT 5.0A)
+    // Stage 1 (T = 0 ms): Central Box (U2 + U8 USB2517I + U9/U13/U14 QCC3086) & Branch 1 (VBUS_FRONT 5.0A)
     s_diag.stage = POWER_STAGE_CORE_BOOT;
     s_diag.branch1_front_enabled = true;
     ESP_LOGI(TAG, "  [T = 0 ms]   Stage 1: Central Box & Branch 1 (VBUS_FRONT 5.0A -> PCBA 05) ON.");

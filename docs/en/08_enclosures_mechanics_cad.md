@@ -67,7 +67,7 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 
 ![OpenMotorBridge Central Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Figure 8.2: 1:1:1 Euclidean CAD exploded view of the Central Box along the vertical Z-axis. Shown: Monocoque tub with integrated standoffs and front ports, populated PCBA 01 v10 (ESP32-S31 with on-board Johanson ceramic chip antenna ANT3, QCC3084 with ANT2 U.FL port, SX1262 LoRa with ANT1 U.FL port, U12 Quad Power Switch), slide-in intermediate tray with LiPo battery and Taoglas dual flex antennas (LoRa 868 MHz & Helmet Audio), and L-Slide Lid with Gore vent and integrated Heckwand.*
+*Figure 8.2: 1:1:1 Euclidean CAD exploded view of the Central Box along the vertical Z-axis. Shown: Monocoque tub with integrated standoffs and front ports, populated PCBA 01 v10 (ESP32-S31 with on-board Johanson ceramic chip antenna ANT3, 3x QCC3086 Bluetooth Audio Transceivers, SX1262 LoRa with ANT1 U.FL port, U12 Quad Power Switch), slide-in intermediate tray with LiPo battery and Taoglas dual flex antennas (LoRa 868 MHz & Helmet Audio), and L-Slide Lid with Gore vent and integrated Heckwand.*
 
 ### 1.3 3D X-Ray Assembly & Component Clearance
 
@@ -141,8 +141,8 @@ OpenMotorBridge implements a dual, fully integrated internal antenna concept eli
    * **Tool-Free Punch-Out:** For carbon fiber cowls or rally raid whip antennas, the $0.4\,\text{mm}$ membrane can be cleanly punched out with a small driver to install an IP67 SMA bulkhead socket with O-ring. Because the port resides in the stationary sill, the antenna remains undisturbed when sliding the L-lid open.
 4. **100% Solid Monocoque Floor (Removal of Legacy UWB Antenna Pocket):**
    * In v10.0, the bottom floor of `000_monocoque_tub.scad` is a continuous, homogeneous $2.5\,\text{mm}$ PA12 wall with all vehicle interconnects running over the shielded 4-wire automotive bus.
-5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
-   * Utilizes the onboard ceramic chip antenna with optimized copper keepout on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
+5. **Bluetooth 5.4 / LE Audio (3× Qualcomm QCC3086):**
+   * Utilize onboard 2.4 GHz ceramic chip antennas with optimized copper keepouts on `PCBA 01`, radiating cleanly through the RF-transparent PA12 mid-tray and lid.
 
 ---
 
@@ -305,7 +305,7 @@ In the following 4-variant inspection view (featuring an ergonomically cut-open 
 1. **Sena SPIDER X Slim (Reference Setup):**
    * The ultra-flat OEM communicator rests in a contoured EPDM pocket in the upper chamber.
    * The factory 3-wire Sena micro-cable whip (DC power, audio-out, mic-in) plugs directly into `PCBA 03`.
-   * **Cold-Boot via Mechatronic Impulse & Digital Runtime Control:** Just like the Cardo Packtalk Edge, the powered-off Sena SPIDER X Slim is booted upon ignition ON (`KL15`) via a 2.0 s pulse of the universal actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). Once booted, all runtime controls (Mesh toggle, channel cycling, volume, PTT) operate **100% digitally and wear-free** via the Qualcomm QCC3084 Bluetooth 5.4 LE Audio gateway on the Central Box or via the handlebar under-perch thumb switches!
+   * **Cold-Boot via Mechatronic Impulse & Digital Runtime Control:** Just like the Cardo Packtalk Edge, the powered-off Sena SPIDER X Slim is booted upon ignition ON (`KL15`) via a 2.0 s pulse of the universal actuator slide bracket (`012_universal_actuator_slide_bracket.scad`). Once booted, all runtime controls (Mesh toggle, channel cycling, volume, PTT) operate **100% digitally and wear-free** via the Qualcomm QCC3086 Bluetooth 5.4 gateway on the Central Box (or Radar Node in Stage 2) or via the handlebar under-perch thumb switches!
 
 2. **Cardo Packtalk Edge / Pro:**
    * The original **Cardo Air-Mount magnetic cradle** screws directly to the housing bed with 2x M3 screws.
@@ -497,7 +497,10 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 
 ---
 
-### 5.3 The Evolution from Satellite Blocks to the Integrated Glovebox Hub (PCBA 05B)
+### 5.3 The Evolution from Satellite Blocks to the Integrated Glovebox Charging System
+
+> [!NOTE]
+> **Architecture Status v10.5+ (Harmonization):** The former 5-port USB hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) and external CarPlay/AA dongles are completely retired and **historically archived**. In their place, the glove compartment receives a **magnetic Qi fast-charging puck (15W inductive / MagSafe)** plus a companion **USB-C PD 3.0 fast-charging port**, fed directly via a rugged 2-wire DC line from the 30W SW3526 controller on the Front Node (`PCBA 05`).
 
 In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks were envisioned: a "Cockpit Satellite" and a "Vehicle Satellite", connected via dovetail slide rails. **In Version 10.0, this concept has been fundamentally streamlined and modernized through the integrated multi-port architecture:**
 
@@ -643,7 +646,7 @@ Due to factory Showa inverted remote-reservoir shock absorbers with heavy hydrau
 |    * Zero tank removal, zero tank unbolting or lifting!                     |
 +-----------------------------------------------------------------------------+
 | 3. CENTER (Under Rider Seat):                                               |
-|    * Central Box centered on battery bridge (ESP32-S31 AI Host, QCC3084     |
+|    * Central Box centered on battery bridge (ESP32-S31 AI Host, 3x QCC3086   |
 |      Audio, SX1262 LoRa 868 MHz & Multi-Port Automotive USB-PD up to 60 W)  |
 |    * UPS buffering via 1S LiPo (2,200 mAh) for 24/7 theft sentry            |
 +-----------------------------------------------------------------------------+
@@ -810,7 +813,7 @@ For high-displacement dual-sport and overland adventure bikes featuring open tub
 +-----------------------------------------------------------------------------+
 | 3. CENTER (Under Rider Seat / Tool Bay):                                    |
 |    * Central Box splash-proof on 4x M4 vibration bobbins                    |
-|    * ESP32-S31 AI Host, QCC3084 Audio, SX1262 LoRa 868 MHz & USB-PD Engine  |
+|    * ESP32-S31 AI Host, 3x QCC3086 Audio, SX1262 LoRa 868 MHz & USB-PD Engine|
 |    * 12V power tapped directly from battery & OBD-2 diagnostic under seat   |
 +-----------------------------------------------------------------------------+
 | 4. FORWARD SUBFRAME / FLANKS (Saddlebag Pods 1 & 2):                        |
@@ -1121,7 +1124,7 @@ Since Ultra-Wideband (UWB) is replaced by the wired 4-wire Automotive USB-PD bus
 +---------------------------------------------------------------+-------------------------+
 | UNDER PASSENGER SEAT OR INSIDE CENTER CONSOLE:                                          |
 | [ UNIFIED CAR SUPPORT CORE UNIT (PCBA 01 + PCBA 05) ]                                   |
-| * Central Box (ESP32-S31 AI Host, QCC3084 Audio, SX1262 LoRa SOS, LiPo UPS)             |
+| * Central Box (ESP32-S31 AI Host, 3x QCC3086 Audio, SX1262 LoRa SOS, LiPo UPS)           |
 | * Front Node (Automotive USB Hub, 20W PD Ottocast Bypass, Cockpit Audio Routing)       |
 | * Internal 10 cm 4-Wire Bus (USB-PD / USB 2.0); unified 12V vehicle power feed          |
 | * SMA Output: 2.5 m RG-174 coaxial cable to rear 868 MHz magnetic roof antenna         |
@@ -1267,7 +1270,7 @@ Via the local **OMB PWA Dashboard**, each button (Left and Right completely inde
 | :--- | :--- | :--- | :--- |
 | **Intercom & Voice** | `INTERCOM_PTT_GATE` | Push-to-Talk active while held (Sena / Cardo / OMM / PMR446) | Left: `HOLD_GATE` |
 | | `INTERCOM_TOGGLE` | Click once = mic open, click again = mic closed | Alternative |
-| | `VOICE_ASSISTANT` | Triggers Siri / Google Assistant via Bluetooth HFP on QCC3084 | Left: `TRIPLE_CLICK` |
+| | `VOICE_ASSISTANT` | Triggers Siri / Google Assistant via Bluetooth HFP on QCC3086 (U9) | Left: `TRIPLE_CLICK` |
 | | `MIC_MUTE_TOGGLE` | Immediately mutes helmet microphone | User choice |
 | | `MESH_CHANNEL_NEXT` | Cycles Open Mesh group channels (Channels 1 to 9) | Left: `DOUBLE_CLICK` |
 | **Action-Cam & Media** | `CAM_HIGHLIGHT_TAG` | Sends BLE bookmark to Insta360, GoPro, or DJI (highlight tag in video) | Right: `SHORT_CLICK` |

@@ -7,7 +7,8 @@
 
 #include "front_node_config.h"
 #include "handlebar_ptt_handler.h"
-#include "ottocast_power_manager.h"
+#include "fast_charge_manager.h"
+#include "fsc_bt802_bridge.h"
 #include "knowles_mems_dsp.h"
 #include "cockpit_switches_manager.h"
 #include "cockpit_oled_display.h"
@@ -28,8 +29,8 @@ static const char* TAG = "FRONT_NODE_V10";
 static void handle_usb_command(UsbBackbonePktType pkt_type, const uint8_t* payload, size_t len) {
     switch (pkt_type) {
         case USB_CMD_POWER_CYCLE:
-            ESP_LOGW(TAG, "⚡ USB Command (0x10): 2.5s Hard-Reset of J_DONGLE (U4 TPS2051B) requested!");
-            OttocastPowerManager::instance().trigger_hard_reset();
+            ESP_LOGW(TAG, "⚡ USB Command (0x10): 2.5s Hard-Reset of Glovebox Fast Charger (SW3526) requested!");
+            FastChargeManager::instance().trigger_hard_reset();
             break;
 
         case USB_CMD_CONFIG:
@@ -37,7 +38,7 @@ static void handle_usb_command(UsbBackbonePktType pkt_type, const uint8_t* paylo
                 uint8_t sub_cmd = payload[0];
                 if (sub_cmd == 0x01) { // Ignition State Sync
                     bool ignition = (payload[1] != 0);
-                    OttocastPowerManager::instance().set_ignition(ignition);
+                    FastChargeManager::instance().set_ignition(ignition);
                     ESP_LOGI(TAG, "USB Command (0x11): Ignition state synced to %s", ignition ? "ON" : "OFF");
                 } else if (sub_cmd == 0x02) { // Aux Light Q2 TPS1H100 Mode
                     AuxLightMode mode = static_cast<AuxLightMode>(payload[1]);
@@ -46,7 +47,7 @@ static void handle_usb_command(UsbBackbonePktType pkt_type, const uint8_t* paylo
                 }
             } else if (len == 1) {
                 bool ignition = (payload[0] != 0);
-                OttocastPowerManager::instance().set_ignition(ignition);
+                FastChargeManager::instance().set_ignition(ignition);
             }
             break;
 
@@ -60,6 +61,21 @@ static void handle_usb_command(UsbBackbonePktType pkt_type, const uint8_t* paylo
                 ESP_LOGI(TAG, "Mirror BSD Trigger (Q1 DMN63D8 -> J_POD_L/R): L=%d (lvl %d), R=%d (lvl %d)",
                          left_act, (int)left_lvl, right_act, (int)right_lvl);
             }
+            break;
+
+        case USB_PKT_FRONT_BT_MODE_CMD:
+            if (len >= 1) {
+                FscBt802OperatingMode mode = static_cast<FscBt802OperatingMode>(payload[0]);
+                bool force = (len >= 2) ? (payload[1] != 0) : false;
+                fsc_bt802_bridge_set_mode(mode, force);
+                ESP_LOGI(TAG, "FSC-BT802 operating mode switched via USB: %s",
+                         (mode == BT802_MODE_HEADSET_SINK) ? "Mode A (Headset Sink)" : "Mode B (Speaker Source)");
+            }
+            break;
+
+        case USB_PKT_WIFI_UPLOAD_TRIGGER:
+            ESP_LOGI(TAG, "Wi-Fi Cloud Sync / WebDAV upload triggered upon ignition OFF.");
+            // Initiates background sync over Wi-Fi
             break;
 
         default:
@@ -173,7 +189,7 @@ static void audio_dsp_task(void* pvParameters) {
 // Task 3: System Supervisor, Sensor-Puck, Dual Cockpit OLEDs, TPS2051B & LED1
 // -----------------------------------------------------------------------------
 static void supervisor_task(void* pvParameters) {
-    OttocastPowerManager& ottocast = OttocastPowerManager::instance();
+    FastChargeManager& fast_charge = FastChargeManager::instance();
     CockpitSwitchesManager& switches = CockpitSwitchesManager::instance();
     CockpitOledDisplay& oleds = CockpitOledDisplay::instance();
     Ws2812bLedManager& rgb = Ws2812bLedManager::instance();
@@ -189,8 +205,8 @@ static void supervisor_task(void* pvParameters) {
         oleds.update_ambient_brightness(FrontSensorHub::instance().get_ambient_lux());
         oleds.refresh();
 
-        // 3. Advance U4 TPS2051B Power Manager (Overcurrent & Auto-Café timers)
-        ottocast.update();
+        // 3. Advance U5 SW3526 Fast Charge Manager (Qi wireless & USB-PD telemetry)
+        fast_charge.update();
 
         // 4. Advance Cockpit Switches (Q1 DMN63D8 8 Hz BSD & Q2 TPS1H100 4.5 Hz Aux Light Strobe)
         switches.update(100);
@@ -202,13 +218,23 @@ static void supervisor_task(void* pvParameters) {
                 5020,
                 FrontSensorHub::instance().get_temperature_c_100() / 10
             );
+
+            // Transmit Fast Charging / Qi Telemetry Frame (0x05)
+            UsbPowerDeliveryStatPkt pd_stat;
+            fast_charge.get_telemetry_packet(&pd_stat);
+            UsbVehicleBackbone::instance().send_generic_packet(
+                USB_PKT_POWER_DELIVERY_STAT,
+                (const uint8_t*)&pd_stat,
+                sizeof(pd_stat),
+                USB_NODE_CENTRAL_BOX
+            );
         }
 
         // 6. Update Onboard LED1 (WS2812B-2020) Status Mode
         bool usb_online = UsbVehicleBackbone::instance().is_peer_online(USB_NODE_CENTRAL_BOX);
         if (OtaServiceManager::instance().is_updating()) {
             rgb.set_mode(LED_MODE_FLASHING_BLUE);
-        } else if (ottocast.has_fault()) {
+        } else if (fast_charge.has_fault()) {
             rgb.set_mode(LED_MODE_FLASHING_RED);
         } else if (usb_online) {
             rgb.set_mode(LED_MODE_BREATHING_GREEN);
@@ -230,7 +256,8 @@ extern "C" void app_main(void) {
     ESP_LOGI(TAG, "==================================================================");
     ESP_LOGI(TAG, "   OPENMOTORBRIDGE v10.0 FRONT-NODE FIRMWARE (PCBA 05)            ");
     ESP_LOGI(TAG, "   Core: U1 ESP32-S31-WROOM-1U (0%% 2.4GHz) + U9 ESP32-E22 (Wi-Fi 6E) ");
-    ESP_LOGI(TAG, "   Hub:  U2 USB2514Bi 4-Port HS USB + U3 SW3526 30W USB-PD        ");
+    ESP_LOGI(TAG, "   Hub:  U2 USB2514Bi 4-Port HS USB + U5 SW3526 30W USB-PD / Qi   ");
+    ESP_LOGI(TAG, "   BT:   U2 FSC-BT802 Infotainment Bridge (Headset / Bike Speakers)");
     ESP_LOGI(TAG, "   HUD:  Dual Speaker-Corner OLEDs (J_DISP_L 0x3C / J_DISP_R 0x3D)");
     ESP_LOGI(TAG, "==================================================================");
 
@@ -251,7 +278,7 @@ extern "C" void app_main(void) {
     HandlebarPttHandler::instance().init();
     HandlebarPttHandler::instance().set_action_callback(on_ptt_action);
 
-    OttocastPowerManager::instance().init(); // U4 TPS2051B (Pad 38/39 -> J_DONGLE)
+    FastChargeManager::instance().init();   // U5 SW3526 30W USB-PD & 15W Qi-Puck at J4
     KnowlesMemsDsp::instance().init();       // MK1 SPH0645LM4H (Pad 6/7/12)
     FrontSensorHub::instance().init();       // J_SENSOR_EXT (Pad 17/18: SAM-M10Q, TMP117, OPT3001)
     CockpitOledDisplay::instance().init();   // J_DISP_L (0x3C) & J_DISP_R (0x3D)

@@ -19,7 +19,7 @@ In v10.0 ist das Gesamtsystem auf einen robusten, geschirmten **4-Draht Automoti
 | * Core 0: USB2517I 7-Port Host Engine, SX1262 LoRa   | * Core 0: USB-Backbone Client,  |
 |   868 MHz, Quad eFuse, BLE, Pod & Bus-DFU Dispatcher |   SAM-M10Q GNSS, CAN, SW3526 PD |
 | * Core 1: 48 kHz SIMD Audio-DSP, Raised-Cosine       | * Core 1: Knowles Wind-DSP,     |
-|   Ducking, AGC, Qualcomm QCC3084 BT 5.4 Hub          |   OLED-UI, 5.9 GHz V2X Co-Proc  |
+|   Ducking, AGC, 3x Qualcomm QCC3086 BT 5.4 Hub        |   OLED-UI, FSC-BT802 Headunit   |
 +------------------------------------------------------+---------------------------------+
 | 3. SATELLITEN-PODS (ESP32-C6-MINI-1U, PCBA 03)       | 4. HECK-RADAR (ESP32-C5-WROOM-1U, PCBA 08)|
 +------------------------------------------------------+---------------------------------+
@@ -46,10 +46,14 @@ In v10.0 ist das Gesamtsystem auf einen robusten, geschirmten **4-Draht Automoti
 - **SDIO Logging Task (`sdio_ring_buffer.cpp`):** 4-Bit High-Speed SD-Karten-Logger (`GPIO 33..39`) mit Ringpuffer (`esp_vfs_fat_info`), automatischem BGH-Datenschutz-Purge und SHA-256 Chain + Hardware-eFuse Signatur.
 - **ADR-EKF Filter (`adr_ekf_filter.cpp`):** 15-State Sensorfusion aus 10 Hz Multi-GNSS-Telemetrie (vom Front-Knoten via USB) und onboard Bosch BMI270 6-Achs IMU (`I2C 0x68`) für unterbrechungsfreie Navigation in Tunneln.
 
-#### CORE 1 (Echtzeit Edge-AI Audio-DSP & Qualcomm QCC3084 Hub @ Höchste Priorität):
+#### CORE 1 (Echtzeit Edge-AI Audio-DSP & Qualcomm QCC3086 Hub @ Höchste Priorität):
 - **128-bit SIMD Vektor-Beschleuniger:** Echtzeit-Filterung von Windgeräuschen, Transienten und Motorvibrationen sowie akustische Szenen-Klassifikation direkt auf dem Chip.
-- **Qualcomm QCC3084 Dual-Helm Audio Hub (`bluetooth_audio_manager.cpp`):** Steuert den dedizierten QCC3084 BT 5.4 Audio-SoC (`U9` auf `PCBA 01`) über UART (GAIA/AT) für hardware-beschleunigtes Dual-A2DP (aptX HD / Adaptive) an Fahrer- und Sozius-Helme, LE Audio Auracast und synchronen HFP 1.8 Wideband-Sprachkanal.
-- **I2S Audio DMA Receiver & Transmitter:** Latenzarmes Streaming über ES8388 Audio-Codec (`I2C 0x10`) und Qualcomm QCC3084 ($f_s = 48\,\text{kHz}, 24\,\text{Bit}$, Double-Buffer à 128 Samples = $2{,}67\,\text{ms}$).
+- **Qualcomm QCC3086 Triple-Audio Hub (`bluetooth_audio_manager.cpp`):** Steuert die 3 dedizierten QCC3086 BT 5.4 Transceiver (`U9`, `U13`, `U14` auf `PCBA 01`) über separate UART-Kanäle für:
+  - `U9`: Smartphone A2DP Sink, HFP 1.8 Low-Latency Voice-Rückkanal (< 20 ms für Anrufe/Siri) und AVRCP 1.6 Lenkersteuerung.
+  - `U13`: Fahrer-Helm A2DP Source (aptX Adaptive Low-Latency < 20 ms) und HFP 1.8 Mikrofon-Uplink.
+  - `U14`: Sozius-Helm A2DP Source (aptX / LC3) und HFP 1.8 Mikrofon-Uplink.
+  - Triple-Gleichteil: 100% identischer WLCSP-99 Footprint.
+- **I2S Audio DMA Receiver & Transmitter:** Latenzarmes Streaming über ES8388 Audio-Codec (`I2C 0x10`) und die Qualcomm QCC3086 Transceiver ($f_s = 48\,\text{kHz}, 24\,\text{Bit}$, Double-Buffer à 128 Samples = $2{,}67\,\text{ms}$).
 - **Raised-Cosine Ducking Engine:** Knackfreie, stetig differenzierbare Audio-Absenkung bei Durchsagen oder Radarwarnungen.
 - **Dynamische AGC-Lautstärkeregelung:** Gleitende Anhebung des Helm-Ausgangspegels basierend auf dem Front-Node Fahrtwindpegel.
 - **Lookahead Brickwall-Limiter:** Verhindert digitales Clipping über $0\,\text{dBFS}$.
@@ -72,7 +76,7 @@ enum UsbBackbonePktType : uint8_t {
 
     // --- Konsolidierte Telemetrie (10 Hz Frame) & Peripherie ---
     USB_PKT_FRONT_TELEMETRY    = 0x04,  // Konsolidierter 10 Hz Frame: GNSS PVT + Wind-RMS + TMP117 + Lux + CAN
-    USB_PKT_WIRELESS_CP_AA_STAT= 0x05,  // COTS CarPlay / Android Auto Bridge Status, Stromaufnahme, Auto-Café Timer
+    USB_PKT_POWER_DELIVERY_STAT= 0x05,  // Front-Node 30W Fast-Charging Status, Stromaufnahme, Qi-Puck Telemetrie
 
     // --- Steuerbefehle & System-Synchronisation ---
     USB_CMD_POWER_CYCLE        = 0x10,  // Zentralbox -> Front-Node / Pods: Kaltstart & Power-Gating
@@ -152,7 +156,7 @@ Bei Touren in Bergregionen oder dichtem Wald reißen 2.4 GHz Intercom-Verbindung
 | 3. RESCUE LEVEL 2: 868 MHz LoRa MESH (SX1262) TELEMETRIE & TEXT             |
 |    * Reichweite bis zu 15 km (LOS) bzw. 3-5 km im Gebirge                   |
 |    * Überträgt automatisch GPS-Position, Peilung, Entfernung & Distanzpfeil |
-|    * Zeigt "Gruppe voraus: 2,4 km Nord-West" auf CarPlay/PWA-Dashboard      |
+|    * Zeigt "Gruppe voraus: 2,4 km Nord-West" auf Cockpit/PWA-Dashboard      |
 +-----------------------------------------------------------------------------+
 |                                     v (Verbindungsverlust > 120 s)          |
 | 4. RESCUE LEVEL 3: PMR446 ANALOG-VOICE FALLBACK (OPTIONAL)                  |
@@ -206,7 +210,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über die beiden Hauptkontrol
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | **`audio_dsp_task`** | Central Box (Core 1) | **24** | 8 KB | 48 kHz DMA ISR | FreeRTOS StreamBuffer | Latenzfreier I2S Audio-Mix, SIMD AI Rauschfilter, Ducking & AGC. |
 | **`usb_backbone_task`**| Central Box (Core 0) | **22** | 6 KB | USB Host IRQ / Event | FreeRTOS StreamBuffer | 4-Draht Automotive USB 2.0 Host Engine für Front-Node & Pods (< 0.2 ms). |
-| **`qcc3084_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| QCC3084 Supervisor: aptX HD Dual-A2DP, Auracast & HFP Call Handling. |
+| **`qcc3086_hub_task`**| Central Box (Core 1) | **21** | 4 KB | UART DMA ISR / Queue | FreeRTOS Queue / UART1| 3x QCC3086 Supervisor: aptX Adaptive Hi-Fi, Auracast & HFP 1.8 Call Handling. |
 | **`lora_mesh_task`**  | Central Box (Core 0) | **20** | 4 KB | SX1262 IRQ / Timer  | FreeRTOS Queue        | 868 MHz LoRa Mesh Protokoll, Diebstahl-Sentry & Group Split Rescue. |
 | **`gesture_engine_task`**| Front Node (Core 0)| **24** | 2 KB | GPIO Edge ISR       | USB TX Queue          | Verarbeitet Mirror-Pod Taster Links/Rechts, generiert 5 Gesten (< 0.15 ms). |
 | **`radar_task`**      | Central Box (Core 0) | **16** | 4 KB | CAN / UART DMA ISR  | FreeRTOS Queue        | 20 Hz Radar-Zielvektoren von Wheeltec MR20; TTC-Berechnung & Prio-1 Ducking. |
@@ -218,7 +222,7 @@ Das Gesamtsystem orchestriert spezialisierte Tasks über die beiden Hauptkontrol
 | **`front_gnss_task`** | Front Node (Core 0)  | **20** | 4 KB | 10 Hz I2C DMA       | J12 Qwiic / USB TX    | u-blox SAM-M10Q UBX-NAV-PVT Parsing, TMP117 Temp & OPT3001 Lux. |
 | **`front_mems_task`** | Front Node (Core 1)  | **18** | 4 KB | 48 kHz DMA          | Vector-DSP Filter     | Knowles I2S Digitalmikrofon A-Weighting & RMS-Pegel via Xtensa DSP. |
 | **`front_can_task`**  | Front Node (Core 0)  | **16** | 4 KB | TWAI Interrupt      | CAN Message Queue     | Liest Cockpit-CAN (falls J2 verbunden), Auto-Terminierung CPC1017N. |
-| **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Lastschalter     | SW3526 USB-PD Überwachung, TPS2051B Kaltstart (2,5s), Auto-Off. |
+| **`front_pwr_task`**  | Front Node (Core 0)  | **10** | 2 KB | 10 Hz Timer         | GPIO Lastschalter     | SW3526 30W USB-PD Fast-Charge Überwachung für Qi-Puck & USB-C, Auto-Off. |
 
 ---
 
@@ -269,7 +273,7 @@ OpenMotorBridge ist als **losgelöstes, fehlertolerantes Baukastensystem** konzi
 | Konfiguration | Verbaute Komponenten | Systemverhalten & Graceful Degradation |
 | :--- | :--- | :--- |
 | **Tier 1: Minimal Core** | Nur Zentralbox<br>*(Kein Front Node)* | * **Audio-Bridge & Intercoms voll aktiv:** Bucht 1 & 2 mischen latenzfrei via 4-Draht Bus.<br>* **LoRa 868 MHz Mesh aktiv:** Direkte USV-gepufferte 24/7 Diebstahl-Sentry & Tracking.<br>* **CAN-Bus aktiv:** Tacho, Drehzahl & BCM-Telemetrie über Kabel 1 (DTM-6 Pins 4/5).<br>* **IMU aktiv:** Bosch BMI270 liefert Schräglage, Pitch & Erschütterung.<br>* **ADR-EKF:** Läuft im reinen Dead-Reckoning Modus gestützt auf IMU & Raddrehzahl.<br>* **USB-Host:** Wartet passiv auf Verbindungsaufbau an den USB-Ports. |
-| **Tier 2: Vollsystem mit Front Node** | Zentralbox + Front Node | * Alle Tier 1 Funktionen + deterministischer 4-Draht USB-Backbone (< 0,2 ms).<br>* u-blox SAM-M10Q Multi-GNSS mit 10 Hz PVT-Fix & Präzisions-Zeitsynchronisation.<br>* TI TMP117 Glatteis-Wächter ($\pm 0{,}1\,^\circ\text{C}$) & TI OPT3001 Helligkeitssensor.<br>* 4-Port USB-Hub & Dual 20W USB-PD Schnelllader im Cockpit.<br>* Ottocast Watchdog & automatische Zündungstrennung.<br>* Lenker-PTT (< 0,2 ms) und dynamische Fahrtwind-AGC über Knowles MEMS. |
+| **Tier 2: Vollsystem mit Front Node** | Zentralbox + Front Node | * Alle Tier 1 Funktionen + deterministischer 4-Draht USB-Backbone (< 0,2 ms).<br>* u-blox SAM-M10Q Multi-GNSS mit 10 Hz PVT-Fix & Präzisions-Zeitsynchronisation.<br>* TI TMP117 Glatteis-Wächter ($\pm 0{,}1\,^\circ\text{C}$) & TI OPT3001 Helligkeitssensor.<br>* FSC-BT802 Infotainment-Bridge zur Einbindung von Werks-Navigationsansagen.<br>* SW3526 30W Fast-Charging für Qi-Ladepuck (15W induktiv) und USB-C.<br>* Lenker-PTT (< 0,2 ms) und dynamische Fahrtwind-AGC über Knowles MEMS. |
 | **Tier 3: Heckradar-Option** | Zentralbox + Front Node + Radar | * Alle Tier 2 Funktionen + Wheeltec MR20 77 GHz oder Garmin Varia (PCBA 08).<br>* 2-Draht 12V DC-Power & Telemetrie vom 16-Pin Peripherie-Header (Strang 4).<br>* Akustische Warn-Pings im Helm, optische Warn-Flügel & Spiegel-LEDs (Port `J9`).<br>* Automatische Action-Cam Bookmarks bei kritischem Radar TTC (< 2,5 s). |
 
 ### 8.1 Schutzmechanismen gegen fehlende Daten (Zero-Crash Policy)
@@ -336,12 +340,12 @@ Am Ende der Tagestour erfolgt die saubere, lautlose Trennung der Großgruppe bei
    * Das unterliegende Micro-Cluster (Familie / Buddies) wird **automatisch wieder als primärer Kommunikationskanal geschaltet**.
    * Die Gruppe kann den gesamten Heimweg ohne erneutes Pairing oder manuelle Umschaltung miteinander sprechen, bis jeder zu Hause angekommen ist.
 
-### 9.7 Smartphone-Anruf-Erkennung (HFP 1.8 via Qualcomm QCC3084) & Intelligenter PTT-Schutz
-Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt der **Qualcomm QCC3084 Hardware-Audio-SoC (`U9`)** über das Hands-Free Profile (HFP 1.8) den Status `RINGING` bzw. `CALL_ACTIVE` und meldet ihn per UART (`+HFP_STATUS`) in $< 1\,\text{ms}$ an den ESP32-S31:
+### 9.7 Smartphone-Anruf-Erkennung (HFP 1.8 via Qualcomm QCC3086 U9) & Intelligenter PTT-Schutz
+Geht auf dem gekoppelten Smartphone ein Telefonat ein, erkennt der **Qualcomm QCC3086 Transceiver (`U9`)** über das Hands-Free Profile (HFP 1.8) den Status `RINGING` bzw. `CALL_ACTIVE` und meldet ihn per UART (`+HFP_STATUS`) in $< 1\,\text{ms}$ an den ESP32-S31:
 1. **Mikrofon-Mute zur Gruppe:** Das Helm-Mikrofon wird für die Intercom- und Mesh-Kanäle sofort stummgeschaltet. Das private Telefonat wird unter keinen Umständen in die Motorradgruppe übertragen.
 2. **PTT-Lock (Befehlssperre):** Während des Telefonats werden PTT-Tastendrücke am Lenker **vollständig für Sonderfunktionen gesperrt**:
    * Ein Klick auf PTT wird *nicht* als Start einer Action-Cam, kein HiLight-Tag und kein Durchruf auf Analogfunk/PMR interpretiert.
-   * Der Tastendruck wird transparent an den QCC3084 weitergeleitet (`AT+ATA` zum Abheben / `AT+ATH` zum Auflegen des Anrufs).
+   * Der Tastendruck wird transparent an den QCC3086 weitergeleitet (`AT+ATA` zum Abheben / `AT+ATH` zum Auflegen des Anrufs).
 3. **Prio-1 Sicherheits-Overlay (Radar & SOS):** Selbst während eines intensiven Telefonats bleiben lebenswichtige Radar-Kollisionswarnungen (Prio 1) und Gruppen-Notrufe aktiv. Sie werden mit $-12\,\text{dB}$ geducktem Telefon-Audio klar verständlich in den Helm eingespielt.
 4. **Automatischer Reconnect:** Sobald der Anruf beendet ist (`CALL_TERMINATED`), kehrt der Audio-Router in $< 100\,\text{ms}$ in den normalen gemischten Intercom-Betrieb zurück.
 

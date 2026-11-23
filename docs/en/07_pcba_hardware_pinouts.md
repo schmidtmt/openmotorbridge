@@ -15,11 +15,11 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 | Assy  | Name & Function               | PCB Outline   | Layers  | Key ICs / Components |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 01**| **Central Box Main Controller**| 85 x 55 mm    | 4 Layer | ESP32-S31-WROOM-1U, USB2517I,|
-|       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M2.5)| (ENIG)  | QCC3084 BT 5.4, LM5164-Q1,   |
-|       | Dual-Power: 12V & USB-C Service|               |         | LM66100 Ideal-Diode, Quad eFuse,|
-|       | Vertical SMD (Micro-Lock Plus)|               |         | SX1262 LoRa, ES8388, BMI270, CAN|
-|       | Triple-Antenna Topology        |               |         | ANT1 LoRa U.FL, ANT2 BT U.FL,  |
-|       |                                |               |         | ANT3 BLE Johanson 2450AT Chip  |
+|       | (Under-Seat, Audio/UPS/PD)    | (77x47 mm M2.5)| (ENIG)  | 3x QCC3086 BT 5.4 (U9/13/14), |
+|       | Dual-Power: 12V & USB-C Service|               |         | LM5164-Q1, LM66100 Ideal-Diode,|
+|       | Vertical SMD (Micro-Lock Plus)|               |         | Quad eFuse, SX1262 LoRa, ES8388|
+|       | Triple-QCC3086 Symmetrical ICs|               |         | BMI270 IMU, CAN-FD Transceiver |
+|       |                                |               |         | ANT1 LoRa U.FL, Onboard Ceramic|
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 03**| **Satellite Pod Interface**   | 42 x 48 mm    | 4 Layer | ESP32-C6, ES8388,    |
 |       | (Saddlebag Pod 1 & 2 Tub Floor| (36x42 mm M2.5| (ENIG)  | 4-Wire Bus, SW3516   |
@@ -29,9 +29,9 @@ OpenMotorBridge v10.0 replaces the legacy experimental UWB wireless backbone wit
 |       | (Cockpit Riser Hub, GNSS/Sens)| (4x M2.5)     | (ENIG)  | Wi-Fi 6E MIMO, Hub,  |
 |       | 4-Wire Bus (Zero Tank Lift!)  |               |         | 60W Power, Knowles   |
 +-------+-------------------------------+---------------+---------+----------------------+
-| **PCBA 05B**| **Glovebox Hub**              | 50 x 20 mm    | 2 Layer | Microchip USB2514Bi, |
-|       | (4-Port Media & Power-Inject) | (2x M2.5)     | (ENIG)  | 5x USB-C (2N / 3S),  |
-|       | Harley Skyline OS Upstream    | 2-Sided SMT   |         | 15W Phone Fast-Charge|
+| **PCBA 05B**| **Glovebox Hub (Archived)**   | 50 x 20 mm    | 2 Layer | *Historically archived* (rep-|
+|       | (4-Port Media & Power-Inject) | (2x M2.5)     | (ENIG)  | laced by 30W Qi puck & USB-C; |
+|       | Harley Skyline OS Upstream    | 2-Sided SMT   |         | eliminated in v10.5+)         |
 +-------+-------------------------------+---------------+---------+----------------------+
 | **PCBA 05C**| **Symmetrical Mirror Pod**    | 18.25 x 14 mm | 2 Layer | 2x Amber BSD LED,    |
 |       | (2x Identical for Left/Right  | (M8/M10 Stud) | (ENIG)  | IP67 Tactile Sw (B), |
@@ -111,7 +111,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 ## 3. PCBA 01: Central Box Main Controller (`openmotorbridge_central_box`)
 
 ![PCBA 01 Central Box Main Controller Top 3D](../images/pcba/pcba01_central_box_3d.png)
-*Figure 7.1a: KiCad 3D Render of Central Box Host PCB Top (PCBA 01, 85 x 55 mm, 4 Layers) featuring ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, Qualcomm QCC3084 BT 5.4 Audio SoC, LM5164-Q1 100V Buck, BQ24075 UPS Charger U4, Quad eFuse U12, SX1262 LoRa 868 MHz, and vertical SMD connectors (J1, J6, J5, J4, J7, J3) pointing UP.*
+*Figure 7.1a: KiCad 3D Render of Central Box Host PCB Top (PCBA 01, 85 x 55 mm, 4 Layers) featuring ESP32-S31-WROOM-1U, Microchip USB2517I 7-Port Hub, 3x Qualcomm QCC3086 BT 5.4 Audio SoCs (U9, U13, U14), LM5164-Q1 100V Buck, BQ24075 UPS Charger U4, Quad eFuse U12, SX1262 LoRa 868 MHz, and vertical SMD connectors (J1, J6, J5, J4, J7, J3) pointing UP.*
 
 ![PCBA 01 Central Box Main Controller Bottom 3D](../images/pcba/pcba01_central_box_bottom_3d.png)
 *Figure 7.1b: KiCad 3D Render of Central Box Host PCB Bottom featuring Hirose DM3D MicroSD Push-Pull Slot, TI LM66100 Ideal-Diode OR-ing Circuit for Dual-Power (12V vehicle power vs. USB-C 5V Service), BMI270 6-Axis IMU, ES8388 Audio Codec, and TCAN334G CAN-FD Transceiver.*
@@ -130,7 +130,7 @@ All 4-layer boards (`PCBA 01` and `PCBA 05`) utilize the identical, strictly imp
 * **Top-Layer Components (F.Cu):**
   * **Main Compute Hub (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz with 128-bit SIMD AI Engine for on-device voice/audio filtering, 16 MB Flash, 8 MB Octal-PSRAM, external U.FL RF connector) handling system management, FreeRTOS DSP audio mixing, central geometric BLE Master (handlebar controls, saddlebag OEM adapters, action cams, keyfob, TPMS), and CAN-FD management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ automotive rating) 7-Port High-Speed 480 Mbps Hub with 24.000 MHz crystal `Y2`. Interconnects Front Node, Pod 1, Pod 2, Radar, Helmet Audio, ESP32, and Service Port synchronously.
-  * **Dedicated Helmet Audio SoC (`U9`):** **Qualcomm QCC3084** Bluetooth 5.4 Audio SoC module ($13 \times 18\,\text{mm}$ with integrated ceramic chip antenna) for Dual-A2DP (aptX HD, Low Latency), LE Audio Auracast broadcast, HFP 1.8 Wideband Voice, and native USB Audio Class 2.0 link to Hub `U8`.
+  * **Dedicated Triple Bluetooth 5.4 Audio SoCs (`U9`, `U13`, `U14`):** **3x Qualcomm QCC3086** Bluetooth 5.4 Audio SoC modules ($100\%$ identical WLCSP-99 ICs) with onboard ceramic antennas for Smartphone A2DP Sink / HFP 1.8 voice return (`U9`), Rider Helmet Audio & Mic Uplink (`U13`), and Pillion Audio & Mic Uplink (`U14`).
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchronous 100V buck converter (delivers `VCC_5V` from 12V–72V vehicle supply).
   * **LiPo Charger & Power-Path PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) with Dynamic Power Path Management (DPPM). Automatically charges the internal 2,200 mAh flat LiPo cell (`J5`) from `VCC_5V` (LM5164-Q1 or USB-C `J3`) at 1.0 A (`R16`), monitors cell temperature via NTC (`J5` Pin 3) and buffers starter crank voltage dips (down to 6.5V) and ignition-off rundowns seamlessly in $< 10\,\mu\text{s}$ on `VCC_SYS` (feeding the 3.3V ultra-low-noise LDO `U11` `TPS7A0533`).
   * **System LDO (`U11`):** Texas Instruments `TPS7A0533` ultra-low-noise LDO (supplies `VCC_3V3` glitch-free from `VCC_SYS` for ESP32-S31, SX1262 LoRa, and sensors).
@@ -336,7 +336,7 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 
 ---
 
-### 3.3 Sub-Chips & Peripheral Components (USB2517I, QCC3084, SX1262, TCAN334G)
+### 3.3 Sub-Chips & Peripheral Components (USB2517I, QCC3086, SX1262, TCAN334G)
 
 <!-- AUTO_SUBCHIPS_START: PCBA_01 -->
 
@@ -453,7 +453,7 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 | Port 3   | Pin 32 / Pin 33    | BUS2_DM / BUS2_DP     | Header J6 (Pin 7/8) | Saddlebag Pod 1 PCBA 03 (Left)  |
 | Port 4   | Pin 40 / Pin 41    | BUS3_DM / BUS3_DP     | Header J6 (Pin 11/12)| Saddlebag Pod 2 PCBA 03 (Right) |
 | Port 5   | Pin 48 / Pin 49    | BUS4_DM / BUS4_DP     | Header J6 (Pin 15/16)| Rear Radar PCBA 08 (MR20 UART)  |
-| Port 6   | Pin 56 / Pin 57    | BT_USB_DM / BT_USB_DP | QCC3084 (Pin 13/14) | USB Audio Class 2.0 Helmet Audio|
+| Port 6   | Pin 56 / Pin 57    | BT_USB_DM / BT_USB_DP | QCC3086 (Pin 13/14) | USB Audio Class 2.0 Helmet Audio|
 | Port 7   | Pin 60 / Pin 61    | RES_USB_DM / RES_USB_DP| Header J7 (Pin 2/3) | Spare USB Port for Expansions   |
 +----------+--------------------+-----------------------+---------------------+---------------------------------+
 | Clock/RST| Pin 2: RESET_N (100k Pull-Up) | Pin 4/5: XTALIN/XTALOUT linked to 24.000 MHz Crystal Y2 (18pF Caps)       |
@@ -462,11 +462,16 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 
 ---
 
-### 3.4 Qualcomm QCC3084 Bluetooth 5.4 Audio SoC Module (`U9`)
+### 3.4 Qualcomm QCC3086 Bluetooth 5.4 Triple-Transceiver (`U9`, `U13`, `U14`)
+
+The **3× Qualcomm QCC3086** Bluetooth 5.4 transceivers placed on the Central Box are 100% identical WLCSP-99 components. They cleanly separate the wireless radio domains:
+* **`U9` (Smartphone Link):** A2DP Sink for high-resolution music, HFP 1.8 low-latency voice return (< 20 ms latency) for phone calls & Siri/Google Assistant, and AVRCP 1.6 handlebar controls.
+* **`U13` (Rider Helmet):** A2DP Source with aptX Adaptive Hi-Fi (< 20 ms latency) and HFP 1.8 helmet microphone uplink.
+* **`U14` (Pillion Helmet):** A2DP Source with aptX/LC3 secondary stream and HFP 1.8 helmet microphone uplink.
 
 ```
 +---------------------------------------------------------------------------------------------------------------+
-| QUALCOMM QCC3084 (15-PIN MODULE WITH DEDICATED U.FL RF PORT ANT2) - SYSTEM PINOUT                              |
+| QUALCOMM QCC3086 (BLUETOOTH 5.4 TRANSCEIVER U9 / U13 / U14) - SYSTEM PINOUT                                   |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
 | Pin | Signal Name    | Signal Type        | Connected to      | Function & Protocol                           |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
@@ -475,16 +480,16 @@ Provides 4-Bit High-Speed SDIO connection to the ESP32-S31 for uninterrupted tel
 |  3  | I2S_MCLK       | Digital In (Clock) | ESP32-S31 (Pin 12)| I2S Master Clock (12.288 MHz)                 |
 |  4  | I2S_BCLK       | Digital In (BitClk)| ESP32-S31 (Pin 30)| I2S Bit Clock (3.072 MHz)                     |
 |  5  | I2S_WS         | Digital In (LRCK)  | ESP32-S31 (Pin 32)| I2S Word Select / Frame Sync (48 kHz)         |
-|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S31 (Pin 15)| Stereo PCM Audio Stream to QCC3084            |
+|  6  | I2S_DOUT       | Digital In (Audio) | ESP32-S31 (Pin 15)| Stereo PCM Audio Stream to QCC3086            |
 |  7  | I2S_DIN        | Digital Out (Mic)  | ESP32-S31 (Pin 16)| HFP Microphone Stream to ESP32 DSP            |
 |  8  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF Shield Ground                              |
-|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S31 (Pin 11)| QCC3084 Telemetry and Status                  |
+|  9  | BT_UART_TX     | Digital Out (UART) | ESP32-S31 (Pin 11)| QCC3086 Telemetry and Status                  |
 | 10  | BT_UART_RX     | Digital In (UART)  | ESP32-S31 (Pin 10)| ESP32 AT Commands                             |
 | 11  | BT_EN          | Digital In (Reset) | ESP32-S31 (Pin 9) | Power-Down & Hardware Reset                   |
 | 12  | GND_PWR        | Ground (0V)        | GND_PWR Plane     | RF Shield Ground                              |
 | 13  | BT_USB_DM      | USB 2.0 D- (Data)  | USB2517I (Pin 56) | USB Audio Class 2.0 High-Res Stream Minus     |
 | 14  | BT_USB_DP      | USB 2.0 D+ (Data)  | USB2517I (Pin 57) | USB Audio Class 2.0 High-Res Stream Plus      |
-| 15  | BT_RF_AUDIO    | RF Out (50 Ohm)    | ANT2 (U.FL Header) | Dedicated 2.4 GHz RF Port to Helmet Audio Lid Dipole |
+| 15  | BT_RF_ANT      | RF Out (50 Ohm)    | Ceramic Antenna   | Onboard 2.4 GHz Ceramic Chip Antenna          |
 +-----+----------------+--------------------+-------------------+-----------------------------------------------+
 ```
 
@@ -526,10 +531,10 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 6 | `SPI_MISO` | GPIO 4 | `PIN_MAIN_LORA_MISO` | U10.18 | **SPI2_MISO** – LoRa Semtech SX1262 SPI Master In Slave Out |
 | 7 | `SPI_MOSI` | GPIO 5 | `PIN_MAIN_LORA_MOSI` | U10.19 | **SPI2_MOSI** – LoRa Semtech SX1262 SPI Master Out Slave In |
 | 8 | `A2DP_EN` | GPIO 43 | `PIN_MAIN_A2DP_EN` | U13.9 | **GPIO / Control** – ESP32-PICO A2DP Transmitter Hardware Enable / Reset |
-| 9 | `BT_EN` | GPIO 1 | `PIN_MAIN_BT_EN` | U9.11 | **Digital Out** – Qualcomm QCC3084 Enable / Reset Control |
-| 10 | `BT_UART_RX` | GPIO 2 | `PIN_MAIN_BT_UART_RX` | U9.10 | **UART1_RX** – Qualcomm QCC3084 Host Control Protocol RX |
-| 11 | `BT_UART_TX` | GPIO 3 | `PIN_MAIN_BT_UART_TX` | U9.9 | **UART1_TX** – Qualcomm QCC3084 Host Control Protocol TX |
-| 12 | `I2S_MCLK` | GPIO 35 | `PIN_MAIN_I2S_MCLK` | U3.1 / U9.1 | **I2S_MCLK** – Audio Master Clock (ES8388 Codec & QCC3084) |
+| 9 | `BT_EN` | GPIO 1 | `PIN_MAIN_BT_EN` | U9.11 | **Digital Out** – Qualcomm QCC3086 Enable / Reset Control |
+| 10 | `BT_UART_RX` | GPIO 2 | `PIN_MAIN_BT_UART_RX` | U9.10 | **UART1_RX** – Qualcomm QCC3086 Host Control Protocol RX |
+| 11 | `BT_UART_TX` | GPIO 3 | `PIN_MAIN_BT_UART_TX` | U9.9 | **UART1_TX** – Qualcomm QCC3086 Host Control Protocol TX |
+| 12 | `I2S_MCLK` | GPIO 35 | `PIN_MAIN_I2S_MCLK` | U3.1 / U9.1 | **I2S_MCLK** – Audio Master Clock (ES8388 Codec & QCC3086) |
 | 13 | `A2DP_UART_TX` | GPIO 33 | `PIN_MAIN_A2DP_UART_TX` | U13.41 | **UART2_TX** – ESP32-PICO A2DP Transmitter UART Data Receive (PICO TX -> S31 RX) |
 | 14 | `A2DP_UART_RX` | GPIO 34 | `PIN_MAIN_A2DP_UART_RX` | U13.40 | **UART2_RX** – ESP32-PICO A2DP Transmitter UART Command Transmit (S31 TX -> PICO RX) |
 | 15 | `I2S_DOUT` | GPIO 17 | `PIN_MAIN_I2S_DOUT` | U3.4 / U9.4 | **I2S_DOUT** – Audio Serial Data Out (Playback) |
@@ -546,7 +551,7 @@ The integrated 4-channel High-Side Smart Switch (TI TPS4H160-Q1 in HTSSOP-28 pac
 | 27 | `ESP_BOOT` | GPIO 0 | `PIN_MAIN_BOOT_PAIR_BTN` | SW1 | **Digital In** – Boot Mode Strapping Pin / Pairing Taster |
 | 28 | `RGB_LED_DATA` | GPIO 48 | `PIN_MAIN_RGB_LED_DATA` | D1.4 / J4.1 | **Digital Out** – Onboard Status-LED WS2812B-2020 Data |
 | 29 | `A2DP_BOOT` | GPIO 44 | `PIN_MAIN_A2DP_BOOT` | U13.23 | **GPIO / Strapping** – ESP32-PICO A2DP Transmitter Bootloader Strapping / Flash Mode |
-| 30 | `I2S_BCLK` | GPIO 16 | `PIN_MAIN_I2S_BCLK` | U3.2 / U9.2 | **I2S_BCLK** – Audio Bit Clock (ES8388 Codec & QCC3084) |
+| 30 | `I2S_BCLK` | GPIO 16 | `PIN_MAIN_I2S_BCLK` | U3.2 / U9.2 | **I2S_BCLK** – Audio Bit Clock (ES8388 Codec & QCC3086) |
 | 31 | `BAT_SENSE` | GPIO 1 | `PIN_MAIN_BAT_SENSE_ADC` | R12 / R13 | **ADC_IN** – USV LiPo Akkuspannungsmessung (Spannungsteiler) |
 | 32 | `I2S_WS` | GPIO 47 | `PIN_MAIN_I2S_WS` | U3.3 / U9.3 | **I2S_WS** – Audio Word Select / Frame Sync |
 | 33 | `SD_DAT1` | GPIO 33 | `PIN_MAIN_SD_DAT1` | J2.8 | **SDIO_D1** – MicroSD Blackbox Data Line 1 |
@@ -584,7 +589,7 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 |     [ POD 1 LEFT: 50 cm ]               [ CENTRAL BOX: GEOMETRIC CENTER OF MASS ]       [ POD 2 RIGHT: 50 cm ]|
 |  • OEM-Adapter (Sena Mesh)           • ESP32-S31 BLE-Master: Johanson Ceramic (ANT3) • OEM-Adapter (Cardo Edge)|
 |  • In-Bag Charging Electronics       • Aggregates BLE: Controls, Cams, Keyfob, TPMS  • In-Bag Charging         |
-|                                      • Qualcomm QCC3084: Dual-Helmet Audio (U.FL ANT2)                         |
+|                                      • 3x Qualcomm QCC3086: Symmetrical Audio ICs                              |
 |                                      • SX1262 LoRa: 868 MHz Swarm & SOS (U.FL ANT1)                            |
 |                                      • S31 Wi-Fi: DISABLED IN NORMAL RIDE (Zero Jam)                          |
 |                                                       ▲                                                       |
@@ -600,15 +605,15 @@ In OpenMotorBridge v10.0, wireless communication is strictly partitioned by **RF
 
 1. **Central Box (PCBA 01) as Geometric BLE Master & Triple-Antenna Architecture:**
    * **Symmetrical Proximity:** Positioned on the battery bridge under the seat, the Central Box maintains an identical short distance of ~ $50\,\text{cm}$ to both saddlebag pods, ~ $90\,\text{cm}$ to handlebar controls, and ~ $30\,\text{cm}$ to the rider.
-   * **Strict RF Isolation via Triple Antennas:**
+   * **Strict RF Isolation:**
      - **`ANT1` (U.FL, Taoglas FXP895, 868 MHz):** External monocoque lid antenna for the `SX1262` LoRa transceiver (theft sentry & convoy emergency recovery).
-     - **`ANT2` (U.FL, Taoglas BT Helmet Audio, 2.4 GHz):** External monocoque lid antenna for the Qualcomm `QCC3084`. Completely dedicated to helmet audio, eliminating aptX-HD / LE Audio Auracast audio dropouts from vehicle BLE polling.
-     - **`ANT3` (SMD Ceramic Chip, Johanson 2450AT18D0100, $3.2 \times 1.6\,\text{mm}$):** On-board at left PCB edge at $(X = 117.8\,\text{mm}, Y = 88.25\,\text{mm}, \text{rot} = 180^\circ)$ with feed pad facing inward and $>65\,\text{mm}$ separation from `ANT1`/`ANT2`. Driven by `ESP32-S31` BLE 5.4 for near-field vehicle controls without external pigtail clutter.
+     - **3x Onboard 2.4 GHz Ceramic Antennas:** Dedicated to the three Qualcomm `QCC3086` SoCs (`U9`, `U13`, `U14`), delivering physical channel isolation for phone and helmet links.
+     - **`ANT3` (SMD Ceramic Chip, Johanson 2450AT18D0100, $3.2 \times 1.6\,\text{mm}$):** On-board at left PCB edge at $(X = 117.8\,\text{mm}, Y = 88.25\,\text{mm}, \text{rot} = 180^\circ)$ with feed pad facing inward and $>65\,\text{mm}$ separation from `ANT1`. Driven by `ESP32-S31` BLE 5.4 for near-field vehicle controls without external pigtail clutter.
    * **Deterministic Event Parsing:** All control and sensor events (OEM adapter PTT signals from both pods, BMW WonderWheel / handlebar buttons, action cam triggers, smart keyfob proximity, and tire pressure TPMS) feed directly via BLE into the `ESP32-S31` state machine, eliminating USB bus forwarding latencies.
-   * **Wi-Fi Inactive in Ride Mode:** The internal 2.4 GHz Wi-Fi transceiver of the `ESP32-S31` remains disabled during ride mode, completely eliminating co-channel interference with the adjacent Qualcomm `QCC3084` helmet audio SoC.
-2. **Front Node (PCBA 05 v10) as Cockpit Wi-Fi Specialist:**
-   * **Strict Frequency Separation (5 GHz / 6 GHz):** The Front Node hosts the cockpit Wi-Fi network on 5 GHz (or 6 GHz Wi-Fi 6E via `ESP32-E22` / `ESP32-C5`). Because this frequency is physically isolated from the 2.4 GHz Central Box band, helmet Bluetooth audio and cockpit Wi-Fi coexist with zero packet collisions.
-   * **Line-of-Sight to Smartphone:** 10 to 20 cm distance to the docked smartphone enables gigabit throughput for dashcam downloads and stutter-free wireless CarPlay / Android Auto streaming.
+   * **Wi-Fi Inactive in Ride Mode:** The internal 2.4 GHz Wi-Fi transceiver of the `ESP32-S31` remains disabled during ride mode, completely eliminating co-channel interference with the adjacent Qualcomm `QCC3086` audio SoCs.
+2. **Front Node (PCBA 05 v10) as Cockpit Wi-Fi & Infotainment Specialist:**
+   * **Strict Frequency Separation (5 GHz / 6 GHz):** The Front Node hosts the cockpit Wi-Fi network on 5 GHz (or 6 GHz Wi-Fi 6E). Because this frequency is physically isolated from the 2.4 GHz Central Box band, helmet Bluetooth audio and cockpit Wi-Fi coexist with zero packet collisions.
+   * **Line-of-Sight to Smartphone:** Short distance to the docked smartphone enables fast ride and telemetry downloads, plus direct bike navigation audio capture via the FSC-BT802 transceiver.
    * **Zero BLE Contention:** The Front Node does not manage any BLE connections.
 3. **Radar Node (PCBA 08 v10) with 5.9 GHz C-ITS / V2X (ESP32-C5):**
    * The `ESP32-C5` runs in 802.11p OCB promiscuous mode (ETSI ITS-G5 on 5.9 GHz, channels 176/180) to capture unencrypted Car-to-X broadcasts (architecture analogous to *OpenTrafficMap* / *CITS-to-go*):
@@ -880,7 +885,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * High-performance Wi-Fi 6E transceiver operating on the 5 GHz and 6 GHz bands with 2x2 MIMO.
   * Dual U.FL coaxial RF connectors (`ANT1` Main, `ANT2` MIMO) on the top PCB surface for low-loss pigtails to external housing or riser antennas.
   * High-speed link to host MCU `ESP32-S31` via a 4-bit SDIO 3.0 bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
-  * **Strict 5/6 GHz Frequency Isolation:** Cockpit Wi-Fi and telemetry operate exclusively on 5/6 GHz, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3084 / S31 Bluetooth / BLE mesh.
+  * **Strict 5/6 GHz Frequency Isolation:** Cockpit Wi-Fi and telemetry operate exclusively on 5/6 GHz, guaranteeing zero co-channel interference with the Central Box Qualcomm QCC3086 / S31 Bluetooth / BLE mesh.
 * **USB Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
   * Upstream Port: Connected to `J1` Backbone (4-wire automotive harness to Central Box for bus-wide flashing, DFU, and telemetry).
   * Port 1 (`USB_DN1`): Glovebox / 30W USB-PD fast-charge controller (SW3526).
@@ -1174,7 +1179,10 @@ Connects the Universal Front Node (`PCBA 05`) directly to the Environmental & GN
 
 ---
 
-### 7.2 PCBA 05B: Glovebox Hub & Cockpit Breakout (`openmotorbridge_cockpit_breakout`)
+### 7.2 PCBA 05B: Glovebox Hub & Cockpit Breakout (Historically Archived)
+
+> [!NOTE]
+> **Architecture Status v10.5+:** The board `PCBA 05B` and external CarPlay/AA dongles are completely **historically archived and retired** in the current system state. Glovebox powering is handled via a dedicated 2-wire DC feed (30W PD) to a magnetic Qi charging puck (15W inductive) and a companion USB-C port. Documentation is retained for historical reference:
 
 ![PCBA 05B Glovebox Hub 3D](../images/pcba/pcba05b_cockpit_breakout_3d.png)
 *Figure 7.5c: KiCad 3D render of the compact Glovebox Hub (PCBA 05B, 50.0 x 20.0 mm). Active 4-port automotive USB 2.0 High-Speed hub (Microchip USB2514Bi) with opposing USB-C rows (2x North edge: FRONT / HOST, 3x South edge: PHONE 15W / DONGLE / MEDIA) and bottom-side CC termination logic for Harley-Davidson Skyline OS / Boom! Box GTS.*

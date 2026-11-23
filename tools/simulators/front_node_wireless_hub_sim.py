@@ -4,11 +4,11 @@ OpenMotorBridge - Universal Front Node (PCBA 05) Dedicated Simulator
 ====================================================================
 Multi-Domain Simulation of PCBA 05 & Firmware Components:
   1. USB 2.0 High-Speed (480 Mbps) Differential Signal Integrity & Eye Diagram
-     - Microchip USB2514B downstream routing to Ottocast and Glovebox ports
+     - Microchip USB2514B downstream routing to Smartphone and Glovebox ports
      - 90 Ohm differential microstrip impedance, intra-pair skew, jitter & ISI
-  2. TI TPS2051B VBUS Power Switch Dynamics & Fault Watchdog
-     - Soft-start inrush current profile with 100 uF capacitive load
-     - 1.05A current limiting, FAULT_N trip response (< 10 us), and 2.5s 1-click reboot pulse
+  2. SW3526 30W USB-PD / 15W Qi-Puck Load Controller & Fault Watchdog
+     - Synchronous buck soft-start inrush current profile with capacitive load
+     - Fast overcurrent / thermal protection (< 5 us trip), 60s Auto-Café grace & hard reboot pulse
   3. Knowles SPH0645LM4H Digital MEMS Audio DSP & A-Weighting Filter
      - 16 kHz 24-bit I2S DMA capture
      - Direct Form II Biquad A-Weighting IIR frequency response (IEC 61672-1 Class 1)
@@ -86,43 +86,42 @@ def sim_usb_signal_integrity() -> Dict[str, Any]:
     }
 
 # =============================================================================
-# 2. TI TPS2051B LOAD SWITCH DYNAMICS & FAULT TRIP
+# 2. SW3526 30W USB-PD / 15W QI-PUCK LOAD CONTROLLER & FAULT TRIP
 # =============================================================================
 
-def sim_tps2051b_power_switch() -> Dict[str, Any]:
-    """Simulates Ottocast VBUS soft-start inrush, fault trip, and 2.5s reboot pulse"""
-    v_in = 5.00
-    c_load = 100e-6 # 100 uF bulk cap on Ottocast dongle
-    r_on = 0.070 # 70 mOhm internal FET resistance
+def sim_sw3526_power_switch() -> Dict[str, Any]:
+    """Simulates SW3526 30W USB-PD and 15W Qi-Puck inrush, thermal throttling, and fault response"""
+    v_in = 12.0  # 12V motorcycle DC bus to SW3526 synchronous buck
+    c_load = 220e-6  # 220 uF bulk output capacitance
+    r_on = 0.025  # 25 mOhm integrated high-efficiency synchronous FETs
     
-    # Soft-start slew rate: TPS2051B controlled rise time ~ 1.2 ms
-    t_rise_s = 1.2e-3
-    i_inrush_peak = (c_load * v_in) / t_rise_s # ~0.417 A
+    # Soft-start slew rate: SW3526 controlled ramp ~ 2.0 ms
+    t_rise_s = 2.0e-3
+    i_inrush_peak = (c_load * 5.0) / t_rise_s  # ~0.55 A
     
-    # Normal active current
-    i_normal_a = 0.380
-    v_drop_normal_mv = i_normal_a * r_on * 1000.0 # 26.6 mV
-    v_out_normal = v_in - (v_drop_normal_mv / 1000.0) # 4.973 V
+    # Normal active operating current: 30W PD (20V @ 1.5A or 15V @ 2.0A) or 15W Qi (9V @ 1.67A)
+    p_out_w = 30.0
+    eta_sw3526 = 0.955
+    p_loss_w = p_out_w * (1.0 - eta_sw3526)  # ~1.35 W
     
-    # Overcurrent / Short-circuit trip test (fault simulated at 0.05 Ohm load)
-    r_fault = 0.05
-    i_fault_unlimited = v_in / (r_on + r_fault) # ~41.6 A
-    i_clamped_a = 1.05 # TPS2051B internal current limit
-    t_trip_us = 6.2 # FAULT_N deassertion delay
+    # Overcurrent / Thermal overload trip test
+    i_clamped_a = 3.60  # SW3526 hardware cycle-by-cycle current clamp
+    t_trip_us = 4.2  # FAULT_N fast pull-down
     
-    # 2.5s 1-Click Hard Reset Pulse
-    t_reboot_pulse_s = 2.50
-    v_reboot_rail = 0.00 # complete VBUS discharge to 0V
+    # 2.0s 1-Click Hard Reset Pulse & 60s Auto-Café Grace Period
+    t_reboot_pulse_s = 2.00
+    cafe_grace_s = 60.0
     
     return {
-        "vbus_nominal_v": v_in,
+        "vbus_nominal_v": 5.00,
         "soft_start_rise_ms": float(t_rise_s * 1000.0),
         "peak_inrush_a": float(i_inrush_peak),
-        "normal_operating_vbus_v": float(v_out_normal),
+        "normal_operating_vbus_v": 5.00,
         "current_limit_clamp_a": float(i_clamped_a),
         "fault_trip_time_us": float(t_trip_us),
         "hard_reset_pulse_s": float(t_reboot_pulse_s),
-        "passed": bool(i_inrush_peak < 1.0 and t_trip_us < 10.0)
+        "cafe_grace_s": cafe_grace_s,
+        "passed": bool(i_inrush_peak < 1.5 and t_trip_us < 10.0)
     }
 
 # =============================================================================
@@ -333,7 +332,7 @@ def sim_usb2514b_hub_and_pd_thermals() -> Dict[str, Any]:
     eta_sc8102 = 0.942              # 94.2% synchronous buck-boost efficiency
     p_loss_sc8102_w = p_port1_out_w * (1.0 - eta_sc8102) / eta_sc8102 # ~1.23 W
     
-    # Port 2: Ottocast CP2AA (5.0V @ 380mA = 1.90W output)
+    # Port 2: Glovebox 15W Qi-Puck / J4 Fast-Charge (9.0V @ 1.67A = 15.0W output)
     # Port 3: Jukebox MP3 Stick (5.0V @ 120mA = 0.60W output)
     # Port 4: Cockpit Aux (5.0V @ 500mA = 2.50W standby max)
     
@@ -477,15 +476,15 @@ def run_front_node_simulation():
     print(f"  * Eye Opening Height        : {usb['eye_height_rx_mv']:.1f} mV (Nominal: 400 mV)")
     print(f"  -> Status: {'✅ PASSED' if usb['passed'] else '❌ FAILED'}")
 
-    # 2. TPS2051B Load Switch
-    print(format_banner("2. TI TPS2051B VBUS LOAD SWITCH & OVERCURRENT WATCHDOG", "-"))
-    ps = sim_tps2051b_power_switch()
-    print(f"  * Soft-Start Rise Time      : {ps['soft_start_rise_ms']:.2f} ms")
-    print(f"  * Peak Inrush Current (100uF): {ps['peak_inrush_a']:.3f} A (Limit: < 1.00 A)")
-    print(f"  * Normal Operating VBUS     : {ps['normal_operating_vbus_v']:.3f} V (Drop = {(ps['vbus_nominal_v'] - ps['normal_operating_vbus_v'])*1000:.1f} mV)")
-    print(f"  * Short-Circuit Clamp Level : {ps['current_limit_clamp_a']:.2f} A")
+    # 2. SW3526 Fast Charge Load Controller & Watchdog
+    print(format_banner("2. SW3526 30W USB-PD / 15W QI-PUCK LOAD CONTROLLER & FAULT WATCHDOG", "-"))
+    ps = sim_sw3526_power_switch()
+    print(f"  * Soft-Start Ramp Time      : {ps['soft_start_rise_ms']:.2f} ms")
+    print(f"  * Peak Inrush Current       : {ps['peak_inrush_a']:.3f} A (Limit: < 1.50 A)")
+    print(f"  * Short-Circuit Clamp Level : {ps['current_limit_clamp_a']:.2f} A (Cycle-by-cycle limit)")
     print(f"  * Fast FAULT_N Trip Delay   : {ps['fault_trip_time_us']:.1f} µs (Instant Overcurrent Shutdown)")
-    print(f"  * 1-Click Hard Reset Pulse  : {ps['hard_reset_pulse_s']:.2f} s (Complete Cold-Start Cycle)")
+    print(f"  * 1-Click Hard Reset Pulse  : {ps['hard_reset_pulse_s']:.2f} s")
+    print(f"  * Auto-Café Grace Period    : {ps['cafe_grace_s']:.0f} s (Continuous Phone Charge on Fuel Stop)")
     print(f"  -> Status: {'✅ PASSED' if ps['passed'] else '❌ FAILED'}")
 
     # 3. Knowles MEMS Audio DSP

@@ -9,19 +9,28 @@ extern "C" {
 #endif
 
 // =============================================================================
-// OpenMotorBridge - Qualcomm QCC3084 Bluetooth 5.4 Audio Manager (Central Box)
+// OpenMotorBridge - Qualcomm QCC3086 Bluetooth 5.4 Audio Hub (Central Box)
 // =============================================================================
-// Manages dedicated hardware Qualcomm QCC3084 Bluetooth 5.4 Audio SoC (U9 on PCBA 01)
-// for dual high-definition wireless headset connections (Rider & Passenger),
-// Dual-A2DP (aptX HD / aptX Adaptive / Low-Latency < 20 ms), LE Audio Auracast broadcast,
-// HFP 1.8 Wideband Speech telephony offload, and direct I2S DMA link to ESP32-S3 DSP.
+// Manages dedicated hardware Qualcomm QCC3086 Bluetooth 5.4 Audio SoCs on PCBA 01:
+//   - U9:  Smartphone Link (A2DP Sink, HFP 1.8 voice return < 20 ms, AVRCP 1.6)
+//   - U13: Rider Helmet (A2DP Source, aptX Adaptive, HFP 1.8 voice mic)
+//   - U14: Pillion Helmet (A2DP Source, aptX / LC3, HFP 1.8 voice mic)
+// Dual-A2DP, LE Audio Auracast broadcast, HFP 1.8 Wideband Speech telephony offload,
+// and direct synchronous I2S DMA links to ESP32-S3 DSP.
 
 #include "main_box_config.h"
+#include "usb_backbone_types.h"
 
-#define QCC3084_UART_NUM        QCC3084_UART_PORT
-#define QCC3084_PIN_TX          PIN_MAIN_BT_UART_TX  // U2 Pad 11 -> U9 Pin 9 (GPIO 3)
-#define QCC3084_PIN_RX          PIN_MAIN_BT_UART_RX  // U2 Pad 10 -> U9 Pin 10 (GPIO 2)
-#define QCC3084_PIN_EN          PIN_MAIN_BT_EN       // U2 Pad 9  -> U9 Pin 11 (GPIO 1)
+#define QCC3086_UART_NUM        QCC3086_UART_PORT
+#define QCC3086_PIN_TX          PIN_MAIN_BT_UART_TX  // U2 Pad 11 -> QCC3086 Pin 9 (GPIO 3)
+#define QCC3086_PIN_RX          PIN_MAIN_BT_UART_RX  // U2 Pad 10 -> QCC3086 Pin 10 (GPIO 2)
+#define QCC3086_PIN_EN          PIN_MAIN_BT_EN       // U2 Pad 9  -> QCC3086 Pin 11 (GPIO 1)
+
+// Backward compatibility defines
+#define QCC3084_UART_NUM        QCC3086_UART_NUM
+#define QCC3084_PIN_TX          QCC3086_PIN_TX
+#define QCC3084_PIN_RX          QCC3086_PIN_RX
+#define QCC3084_PIN_EN          QCC3086_PIN_EN
 
 typedef enum {
     BT_ROLE_RIDER = 1,   // Primary Rider Helmet (Stream 1 / HFP Telephony)
@@ -67,7 +76,7 @@ typedef struct {
 } BtHeadsetInfo_t;
 
 /**
- * @brief Initialize Qualcomm QCC3084 UART driver, hardware enable pin, and NVS pairings
+ * @brief Initialize Qualcomm QCC3086 UART driver, hardware enable pin, and NVS pairings
  * @return ESP_OK on success
  */
 esp_err_t bluetooth_audio_manager_init(void);
@@ -124,12 +133,12 @@ void bt_audio_enable_auracast(bool enable, const char *broadcast_name);
 bool bt_audio_is_auracast_active(void);
 
 /**
- * @brief Answer an incoming telephone call via QCC3084 HFP 1.8 engine (ATA)
+ * @brief Answer an incoming telephone call via QCC3086 HFP 1.8 engine (ATA)
  */
 void bt_audio_hfp_answer(void);
 
 /**
- * @brief Reject or terminate an active telephone call via QCC3084 HFP 1.8 engine (ATH)
+ * @brief Reject or terminate an active telephone call via QCC3086 HFP 1.8 engine (ATH)
  */
 void bt_audio_hfp_hangup(void);
 
@@ -137,6 +146,12 @@ void bt_audio_hfp_hangup(void);
  * @brief Query current HFP telephony state
  */
 HfpCallState_t bt_audio_hfp_get_state(void);
+
+/**
+ * @brief Request Front-Node FSC-BT802 Mode Switch (Mode A Headset vs. Mode B Speaker Output)
+ * @param mode Target mode for Infotainment bridge
+ */
+void bt_audio_request_front_speaker_mode(FscBt802OperatingMode mode);
 
 /**
  * @brief Modal Lenker-PTT event interceptor during phone calls
@@ -158,9 +173,10 @@ size_t bt_audio_write_stream_samples(uint8_t role, const int16_t *samples, size_
 void bt_audio_update(uint32_t delta_ms);
 
 /**
- * @brief FreeRTOS background task handling UART telemetry from Qualcomm QCC3084
+ * @brief FreeRTOS background task handling UART telemetry from Qualcomm QCC3086
  */
-void task_qcc3084_hub(void *pvParameters);
+void task_qcc3086_hub(void *pvParameters);
+#define task_qcc3084_hub task_qcc3086_hub
 
 #ifdef __cplusplus
 }

@@ -1,10 +1,10 @@
 # 03 - Audio DSP, Acoustics & I2S MEMS Wind Tracking (MSM261S4030 / SPH0645)
 
-This document specifies the system-wide audio architecture of OpenMotorBridge v10.0 Standardized Node Architecture: the zero-ground-loop digital architecture via 4-wire automotive USB bus, the dedicated Bluetooth 5.4 helmet hub (Qualcomm QCC3084 Audio SoC on PCBA 01), the ESP32-S31 AI RISC-V DSP with 128-bit SIMD AI acceleration, the FreeRTOS Core 1 DSP pipeline with continuously differentiable Raised-Cosine Ducking, and dynamic **helmet volume tracking (AGC)** driven by the digital I2S MEMS cockpit wind noise sensor on the Front Node (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
+This document specifies the system-wide audio architecture of OpenMotorBridge v10.0 Standardized Node Architecture: the zero-ground-loop digital architecture via 4-wire automotive USB bus, the dedicated Bluetooth 5.4 Triple-Hub (3× Qualcomm QCC3086 Audio SoCs on PCBA 01 for phone link, rider, and pillion), the ESP32-S31 AI RISC-V DSP with 128-bit SIMD AI acceleration, the FreeRTOS Core 1 DSP pipeline with continuously differentiable Raised-Cosine Ducking, the Front Node infotainment bridge (FSC-BT802), and dynamic **helmet volume tracking (AGC)** driven by the digital I2S MEMS cockpit wind noise sensor on the Front Node (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
 
 ---
 
-## 1. Zero-Ground-Loop Digital Topology & Dual-Helmet Bluetooth Hub
+## 1. Zero-Ground-Loop Digital Topology & Bluetooth Triple-Hub
 
 In traditional motorcycle audio installations, ground loops, ignition interference, and alternator whine ($1.0\dots 2.5\,\text{kHz}$) over long wiring harnesses are a persistent issue. OpenMotorBridge v10.0 solves this fundamentally through **all-digital differential domain isolation**:
 
@@ -13,31 +13,36 @@ In traditional motorcycle audio installations, ground loops, ignition interferen
 |                      ZERO-GROUND-LOOP AUDIO TOPOLOGY (v10.0 ARCHITECTURE)               |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ RIDER HELMET ] <-------- Bluetooth 5.4 Dual-A2DP ------> [ CENTRAL BOX PCBA 01 ]      |
-|  [ PILLION HELMET ] <------ aptX HD / Auracast / HFP 1.8 -> [ Qualcomm QCC3084 SoC ]     |
-|                                                                 ^        ^              |
-|                                  I2S / PCM Digital Audio        |        |              |
-|                                                                 v        v              |
-|                                                     [ ESP32-S31 AI RISC-V DSP ]         |
-|                                                                 ^        ^              |
-|                           4-Wire USB-PD Bus (USB Audio UAC2)    |        |              |
-|                               (< 0.2 ms / up to 60W charge)     |        |              |
-|                      +------------------------------------------+        |              |
-|                      v                                                   v              |
-|           +----------------------+                           +----------------------+   |
-|           | POD 1 (GATEWAY A)    |                           | POD 2 (GATEWAY B)    |   |
-|           | Sena SPIDER X Slim   |                           | Cardo DMC / OMM 2.4G |   |
-|           | PCBA 03 Interface    |                           | PCBA 03 Interface    |   |
-|           +----------------------+                           +----------------------+   |
+|  [ RIDER HELMET ] <-------- aptX Adaptive / HFP 1.8 --------> [ QCC3086 U13 ]           |
+|  [ PILLION HELMET ] <------ aptX / LC3 / HFP 1.8 -----------> [ QCC3086 U14 ]           |
+|  [ SMARTPHONE   ] <-------- A2DP Sink / HFP 1.8 ------------> [ QCC3086 U9  ]           |
+|                                                                    ^   ^                |
+|                                     I2S / PCM Digital Audio        |   |                |
+|                                                                    v   v                |
+|                                                        [ ESP32-S31 AI RISC-V DSP ]      |
+|                                                                    ^   ^                |
+|       Stage 1 (Base): 4-Wire USB-PD Bus (USB Audio UAC2)           |   |                |
+|       Stage 2 (Opt. Radar): 2x QCC3086 Wireless BT Audio           |   |                |
+|                         +------------------------------------------+   |                |
+|                         v                                              v                |
+|              +----------------------+                      +----------------------+     |
+|              | POD 1 (GATEWAY A)    |                      | POD 2 (GATEWAY B)    |     |
+|              | Sena SPIDER X Slim   |                      | Cardo DMC / OMM 2.4G |     |
+|              | PCBA 03 Interface    |                      | PCBA 03 Interface    |     |
+|              +----------------------+                      +----------------------+     |
 +-----------------------------------------------------------------------------------------+
 ```
 
 1. **Complete Elimination of Analogue Bike Harness Lines:**
    * **Zero analogue audio lines** run through the chassis wiring.
-   * All audio and control interconnects between Central Box (`PCBA 01`) and the saddlebag pods (Pod 1 Left & Pod 2 Right) run over the rugged **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) with local conversion via the dedicated **Everest Semi ES8388 Codec** and synchronous USB-DFU/CDC telemetry ($< 0.2\,\text{ms}$ latency). (Central USB Audio Class 2.0 streaming is handled by the Qualcomm QCC3084 on the Central Box and the ESP32-S31 on the Front Node).
+   * All audio and control interconnects between Central Box (`PCBA 01`) and the saddlebag pods (Pod 1 Left & Pod 2 Right) run in Base configuration over the rugged **4-wire automotive bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) with local conversion via the dedicated **Everest Semi ES8388 Codec** and synchronous USB-DFU/CDC telemetry ($< 0.2\,\text{ms}$ latency).
+   * When the optional Radar Node (`PCBA 08`, Stage 2) is installed, bag pod audio links switch to wireless Bluetooth via the radar's dual QCC3086 transceivers (`U4`, `U5`), while the ES8388 codecs on `PCBA 03` switch into cold standby. Mechatronics remain 1:1 identical.
    * Due to digital differential USB signaling and star grounding (`PGND` vs. `AGND`) on `PCBA 03`, ground loops and alternator whine are physically eliminated.
-2. **Dual-Helmet Bluetooth Audio Hub (Qualcomm QCC3084):**
-   * Rider and pillion pair their helmets directly via Bluetooth 5.4 to the dedicated Qualcomm QCC3084 Audio SoC on the Central Box (`PCBA 01`).
+2. **Triple-Bluetooth Audio Hub (3× Qualcomm QCC3086 U9, U13, U14):**
+   * **`U9` (Smartphone Link):** A2DP Sink (music streaming), HFP 1.8 Low-Latency voice return channel (< 20 ms latency for calls and Siri/Google Assistant), and AVRCP 1.6 handlebar media control.
+   * **`U13` (Rider Helmet):** A2DP Source with aptX Adaptive Hi-Fi (< 20 ms latency) and HFP 1.8 helmet mic uplink.
+   * **`U14` (Passenger Helmet):** A2DP Source with synchronous secondary stream (aptX/LC3) and HFP 1.8 mic uplink.
+   * All three chips are **100% identical WLCSP-99 parts**.
    * Pod 1 and Pod 2 are universal docking bays for external mesh gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz, or Midland PMR446) with no fixed rider/pillion assignment.
 3. **Local Conversion at Saddlebag Pod (PCBA 03):**
    * Each pod board (`PCBA 03`) features an **ES8388 24-bit / 48 kHz stereo audio codec** directly at `J_AUDIO_PWR`.
@@ -152,9 +157,47 @@ The audio DSP engine runs on dedicated **Core 1** of the ESP32-S31 AI host MCU (
 
 ### 5.2 The 4 System Operating Modes
 1. **Mode 1 (Touring-Duo):** Rider and passenger communicate in full duplex. Navigation voice ducks at $-12\,\text{dB}$. Media ducks at $-15\,\text{dB}$ during intercom traffic.
-2. **Mode 2 (Highway-Solo):** Solo rider mode. Pod 2 is completely unpowered (`disabled.json`). Full DSP focus on telephone calls, CarPlay/Android Auto, and blind-spot radar acoustic alerts.
+2. **Mode 2 (Highway-Solo):** Solo rider mode. Pod 2 is completely unpowered (`disabled.json`). Full DSP focus on telephone calls, smartphone navigation/music, and blind-spot radar acoustic alerts.
 3. **Mode 3 (Group-Mesh Bridge):** Pod 1 (Sena) and Pod 2 (Cardo) operate in parallel. Symmetrical cross-mixing bridges both mesh ecosystems in real time.
 4. **Mode 4 (Emergency-Override):** LoRa distress beacon or collision alarm (TTC < 3.5s) immediately mutes all other sources to $-24\,\text{dB}$ and injects emergency audio with maximum headroom.
+
+### 5.3 Telephone & Call Management (Qualcomm QCC3086 U9 HFP 1.8 Wideband Voice)
+
+The Central Box (`PCBA 01`) integrates a dedicated **Qualcomm QCC3086 Bluetooth 5.4 Transceiver (`U9`)**, delivering the **Hands-Free Profile (HFP 1.8 / mSBC / aptX Voice, 16 kHz Wideband)** with $< 20\,\text{ms}$ voice latency. Telephony routing is seamlessly embedded into the DSP engine:
+
+```
++----------------------------------------------------------------------------------------+
+|               MODAL TELEPHONY & PTT ROUTING (QUALCOMM QCC3086 U9 HFP 1.8)              |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+| [ SMARTPHONE ] ---------> HFP 1.8 ------> [ QCC3086 U9 ] ------> [ ESP32-S3 CORE 1 ]   |
+|                                                                        |               |
+|                                            +---------------------------+-------------+ |
+|                                            v                                         v |
+|                                  [ PRIVATE MODE (Default) ]               [ CONFERENCE ]|
+|                                  * Rider helmet exclusive                 * PWA Toggle |
+|                                  * Pillion/mesh do NOT hear call          * Injected   |
+|                                  * Group audio ducked (-24 dB)              into mesh  |
++----------------------------------------------------------------------------------------+
+```
+
+#### Modal Handlebar PTT Button Interception (Safety Logic)
+During normal riding, handlebar buttons control radio PTT, voice assistants, or camera triggers. During incoming or active phone calls, button states are **strictly overridden**:
+1. **State `RINGING` (Incoming call signaled):**
+   * **Single click ($< 300\,\text{ms}$):** Accept call (`HFP ATA`).
+   * **Double click ($2\times < 250\,\text{ms}$):** Reject call (`HFP ATH`).
+   * **Safety isolation:** In this state, clicks are never forwarded to radio gateways (LoRa / PMR446) or actioncam triggers.
+2. **State `CALL_ACTIVE` (Call in progress):**
+   * **Long press ($> 1.5\,\text{s}$):** Terminate call / Hang up (`HFP ATH`).
+   * **Short click during call:** Temporarily mute microphone (Mute toggle).
+3. **State `IDLE`:** Standard PTT and button mapping per vehicle profile.
+
+#### Acoustic Privacy & Conference Bridge
+* **Default Mode (Private Isolation):** The phone call is routed exclusively to the rider's helmet. The rider's microphone is disconnected from intercom pods (Sena/Cardo/LoRa). Group intercom audio is ducked to $-24\,\text{dB}$, remaining subtly audible in the background.
+* **Group Conference Bridge (PWA Option "Feed call into group"):**
+  * When enabled, caller audio is mixed into the Link-State Intercom Matrix.
+  * Pillion and connected group riders can hear and participate in the call.
+  * Raised-cosine ducking lowers background music to $0\,\%$, while acoustic echo cancellation (AEC) prevents feedback loops.
 
 ---
 
@@ -172,11 +215,11 @@ To verify whether a docked OEM intercom has acknowledged switching commands (e.g
 
 ---
 
-## 7. Harley-Davidson Boom! Box WHIM Microphone Impedance Emulation
+## 7. Harley-Davidson Boom! Box Microphone Impedance Emulation & FSC-BT802 Headunit Bridge
 
-To enable Apple CarPlay and Android Auto on Boom! Box GTS head units without purchasing the proprietary HD-WHIM module ($> 350\,\text{€}$):
-* **Electrical Impedance Emulation:** OpenMotorBridge emulates the DC and AC impedance ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) of an active OEM microphone across the audio transformer network.
-* **Instant Activation:** Apple CarPlay unlocks on the bike's 6.5" / 12.3" infotainment screen immediately upon ignition.
+To unlock audio and navigation prompt output on Boom! Box GTS / 6.5GT head units without purchasing the proprietary HD-WHIM module ($> 350\,\text{€}$):
+* **Electrical Impedance Emulation:** OpenMotorBridge emulates the DC and AC impedance ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) of an active OEM microphone across the electronic resistor network on the Front Node (`PCBA 05`).
+* **Result:** The headunit detects an active headset, unlocks navigation voice and system audio output, and routes it to the FSC-BT802 Bluetooth transceiver on the Front Node, which feeds it with low latency into the OMB DSP pipeline.
 
 ---
 

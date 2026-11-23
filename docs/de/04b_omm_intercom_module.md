@@ -516,13 +516,13 @@ Sendet das SA818-DMR Modul mit $0{,}5\,\text{W}$ ERP im 446-MHz-Band, zieht die 
 
 ---
 
-## 9. Cockpit-Integration: CarPlay, Android Auto & PWA Funk-Dashboard
+## 9. Cockpit-Integration: OMB PWA Funk-Dashboard
 
 Im Pod-Betrieb am Motorrad entfällt die Notwendigkeit, das Modul manuell zu bedienen. Alle Parameter werden vom ESP32-S31 AI Core der Zentralbox über den 4-Draht USB-Bus digital gesteuert und im Dashboard visualisiert:
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  CARPLAY / PWA DASHBOARD: PMR446 & DMR KONTROLLZENTRALE                 |
+|                    OMB PWA DASHBOARD: PMR446 & DMR KONTROLLZENTRALE                     |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
 |   +---------------------------------------------------------------------------------+   |
@@ -588,13 +588,13 @@ flowchart TB
 
     subgraph Central["Zentralbox (PCBA 01) DSP Routing Matrix"]
         DSP["ESP32-S31 AI RISC-V DSP\n* 5 komprimierte Audio-Slots\n* Private Cabin Whisper (-12 dB)\n* Spatial Panning (70/30 L/R)\n* Raised-Cosine Ducking (-18 dB)\n* First-Receiver-Wins Arbitrierung"]
-        QCC["Qualcomm QCC3084 BT 5.4 SoC\n* Dual-A2DP Stereo\n* LE Audio Auracast / HFP 1.8"]
+        QCC["3x Qualcomm QCC3086 BT 5.4 SoCs\n* U9: Smartphone A2DP Sink / HFP 1.8\n* U13: Fahrer-Audio & Mic-Uplink\n* U14: Sozius-Audio & Mic-Uplink"]
         DSP <--> QCC
     end
 
     subgraph Helmets["100% Drahtlose Helme (Bluetooth 5.4)"]
-        H_RIDER["Fahrer-Helm (Direct BT 5.4)\n* Sitzt im Fahrtwind (70-85 dBA)\n* Lenker-PTT (J_POD_L)"] <-->|Bluetooth HD| QCC
-        H_PAX["Sozius-Helm (Direct BT 5.4)\n* Sitzt im Windschatten\n* Sozius-PTT Whisper-Modus"] <-->|Bluetooth HD| QCC
+        H_RIDER["Fahrer-Helm (Direct BT 5.4 an U13)\n* Sitzt im Fahrtwind (70-85 dBA)\n* Lenker-PTT (J_POD_L)"] <-->|Bluetooth HD| QCC
+        H_PAX["Sozius-Helm (Direct BT 5.4 an U14)\n* Sitzt im Windschatten\n* Sozius-PTT Whisper-Modus"] <-->|Bluetooth HD| QCC
     end
 
     subgraph Pod1["Koffer-Pod 1 (Gateway Links, PCBA 03)"]
@@ -613,18 +613,18 @@ flowchart TB
 Anstelle veralteter, unkomprimierter PCM-Streams, die den geteilten USB-Backbone überlasten würden, setzt OpenMotorBridge auf **reine komprimierte Audio-Codecs**:
 * **Codecs:** **Opus HD 24k** ($24\dots 32\,\text{kbps}$) für kristallklares Gruppen-Mesh und Musik-Downlink sowie **AMBE+2 / Codec2 / Opus Voice ($6\dots 8\,\text{kbps}$)** für 446-MHz PMR/DMR-Funkverkehr.
 * **5 deterministische Audio-Slots im Gesamtsystem:**
-  1. `Slot 1: Driver Voice Up` (Mikrofonsignal Fahrer via Bluetooth HFP 1.8 an Zentralbox)
-  2. `Slot 2: Pillion Voice Up` (Mikrofonsignal Sozius via Bluetooth HFP 1.8 an Zentralbox)
+  1. `Slot 1: Driver Voice Up` (Mikrofonsignal Fahrer via Bluetooth HFP 1.8 an QCC3086 U13)
+  2. `Slot 2: Pillion Voice Up` (Mikrofonsignal Sozius via Bluetooth HFP 1.8 an QCC3086 U14)
   3. `Slot 3: Pod 1 Gateway Audio Down/Up` (Sena Mesh 3.0 Stream über Strang 2)
   4. `Slot 4: Pod 2 Gateway Audio Down/Up` (OMM Tri-Band / Cardo DMC Stream über Strang 3)
-  5. `Slot 5: Media / Navigation Down` (Smartphone-Musik / CarPlay-Ansagen via QCC3084)
+  5. `Slot 5: Media / Navigation Down` (Smartphone-Musik & Navigation via QCC3086 U9)
 * **WCH CH554E USB-Host & UART-Brücke (`PCBA 03`):**
   Das im Koffer-Pod eingedockte OMM-Modul wird vom On-Board-Host `CH554E` (`U7`) per USB Full-Speed abgefragt. Die Audiodaten fließen über eine **$3{,}0\,\text{Mbps}$ UART-Brücke** (`CH554_UART_TX/RX` an GPIO 20/21) in den ESP32-C6 (`U1`), der sie in 10-ms-Backbone-Frames (`USB_PKT_AUDIO_STREAM_UP/DOWN`) verpackt.
 * **Bus-Auslastung:** Sämtliche 5 Audio-Streams belegen zusammen **unter $8\,\%$ der USB 2.0 Bandbreite**. Es gibt keinen Flaschenhals, null Jitter und eine Systemlatenz von $< 0{,}2\,\text{ms}$.
 
 ### 10.2 Fahrer- und Sozius-Dynamik: Wind-Asymmetrie & Private Cabin Whisper
 1. **Drahtlose Helmanbindung:**
-   Fahrer und Sozius koppeln ihre Helme zu $100\,\%$ drahtlos per Bluetooth 5.4 an den Qualcomm QCC3084 SoC auf der Zentralbox. Die Monocoque-Pods (Bucht 1 und 2) sind reine **Koffer-Gateways für das Gesamtfahrzeug** und haben **keinerlei feste Zuordnung zu Fahrer oder Sozius**.
+   Fahrer und Sozius koppeln ihre Helme zu $100\,\%$ drahtlos per Bluetooth 5.4 an die dedizierten Qualcomm QCC3086 Transceiver (`U13` und `U14`) auf der Zentralbox. Die Monocoque-Pods (Bucht 1 und 2) sind reine **Koffer-Gateways für das Gesamtfahrzeug** und haben **keinerlei feste Zuordnung zu Fahrer oder Sozius**.
 2. **Akustische Wind-Asymmetrie:**
    * Der **Fahrer** sitzt voll im laminaren Staudruck und turbulenten Abreißwirbeln des Windschilds ($\approx 70\dots 85\,\text{dBA}$). Der Zentralbox-DSP gleicht dies über den I2S MEMS-Akustiksensor am Front-Knoten (Knowles SPH0645) und adaptive Spektralfilterung aus.
    * Der **Sozius** sitzt geschützt im Windschatten des Fahrers (kaum Windgeräusche). Erfordert der DSP dieselbe Ansprechschwelle für beide, würde der Sozius übersteuert oder abgeschnitten. Die Zentralbox trennt beide Quellen über separate VAD-Instanzen (Voice Activity Detection).

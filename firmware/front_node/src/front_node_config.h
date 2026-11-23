@@ -53,33 +53,45 @@
 // --- 1. U1 (ESP32-S31-WROOM-1U) Exact KiCad Pad & GPIO Assignments on PCBA 05 ---
 #define PIN_BOOT_BUTTON         GPIO_NUM_0   // Boot / Service Mode Sense
 
-// U4 (TI TPS2051BDBVR) High-Side Power Switch for J_DONGLE (CarPlay / Android Auto)
-#define PIN_CP2AA_PWR_EN        GPIO_NUM_57  // U1 Pad 39 (GPIO57) -> U4 Pin 3 (CP2AA_PWR_EN)
-#define PIN_CP2AA_FAULT_N       GPIO_NUM_56  // U1 Pad 38 (GPIO56) -> U4 Pin 4 (CP2AA_FAULT_N, Active Low)
-#define PIN_OTTOCAST_PWR_EN     PIN_CP2AA_PWR_EN
-#define PIN_OTTOCAST_FAULT_N    PIN_CP2AA_FAULT_N
+// U5 (Southchip SW3526) 30W USB-PD & 15W Qi-Puck Fast Charger at J4 (Glovebox)
+#define PIN_FAST_CHARGE_EN      GPIO_NUM_15  // U1 GPIO15 -> SW3526 / J4 Enable
+#define PIN_FAST_CHARGE_FAULT_N GPIO_NUM_16  // U1 GPIO16 -> SW3526 Fault Interrupt (Active Low)
+#define PIN_CP2AA_PWR_EN        PIN_FAST_CHARGE_EN
+#define PIN_CP2AA_FAULT_N       PIN_FAST_CHARGE_FAULT_N
+#define PIN_OTTOCAST_PWR_EN     PIN_FAST_CHARGE_EN
+#define PIN_OTTOCAST_FAULT_N    PIN_FAST_CHARGE_FAULT_N
+#define SW3526_I2C_ADDR         0x3C         // SW3526 Fast Charge Controller I2C Address
 
 // MK1 (Knowles SPH0645LM4H-B) & J_SENSOR_EXT (6-Pin: 1=3V3, 2=GND, 3=SDA, 4=SCL, 5=MIC_DATA, 6=MIC_WS)
-#define PIN_MIC_I2S_WS          GPIO_NUM_4   // U1 Pad 6  (GPIO4)  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
-#define PIN_MIC_I2S_BCLK        GPIO_NUM_5   // U1 Pad 7  (GPIO5)  -> MK1 Pin 3 (MIC_I2S_BCLK)
-#define PIN_MIC_I2S_DATA        GPIO_NUM_35  // U1 Pad 12 (GPIO35) -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
+#define PIN_MIC_I2S_WS          GPIO_NUM_4   // U1 GPIO4  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
+#define PIN_MIC_I2S_BCLK        GPIO_NUM_5   // U1 GPIO5  -> MK1 Pin 3 (MIC_I2S_BCLK)
+#define PIN_MIC_I2S_DATA        GPIO_NUM_6   // U1 GPIO6  -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
 
 // J_POD_L & J_POD_R Wired Handlebar / Mirror Pod Buttons (Active Low)
-#define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 Pad 8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)
-#define PIN_BTN_SIG_R_N         GPIO_NUM_9   // U1 Pad 9  -> J_POD_R Pin 3 (BTN_SIG_R_N: Action-Cam / Mode)
+#define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 GPIO8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)
+#define PIN_BTN_SIG_R_N         GPIO_NUM_9   // U1 GPIO9  -> J_POD_R Pin 3 (BTN_SIG_R_N: Action-Cam / Mode)
 #define PIN_PTT_IN1_N           PIN_BTN_SIG_L_N
 #define PIN_PTT_IN2_N           PIN_BTN_SIG_R_N
-// Auxiliary MCU U10 (ESP32-C3FH4) Wired Audio / Harley SkylineOS Headset Bridge Control
-#define PIN_C3_EN               GPIO_NUM_15  // U1 Pad 15 (GPIO15) -> U10 Pin 7 (CHIP_EN)
-#define PIN_C3_BOOT             GPIO_NUM_16  // U1 Pad 16 (GPIO16) -> U10 Pin 15 (GPIO9_BOOT)
-#define PIN_C3_UART_RX          GPIO_NUM_33  // U1 Pad 13 (GPIO33) -> U10 Pin 21 (U0TXD)
-#define PIN_C3_UART_TX          GPIO_NUM_34  // U1 Pad 14 (GPIO34) -> U10 Pin 20 (U0RXD)
 
-// Digital I2S Audio Bus: S31 (U1) <-> C3 (U10) for Harley Speaker Streaming & Headset Emulation
-#define PIN_C3_I2S_BCLK         GPIO_NUM_7   // U1 Pad 23 (GPIO7)  -> U10 Pin 6 (GPIO2, I2S Bit Clock)
-#define PIN_C3_I2S_WS           GPIO_NUM_10  // U1 Pad 24 (GPIO10) -> U10 Pin 8 (GPIO3, I2S Word Select)
-#define PIN_C3_I2S_SDO          GPIO_NUM_15  // U1 Pad 25 (GPIO15) -> U10 Pin 9 (GPIO4, I2S Data Out to Speakers)
-#define PIN_C3_I2S_SDI          GPIO_NUM_48  // U1 Pad 28 (GPIO48) -> U10 Pin 10 (GPIO5, I2S Data In from Mic)
+// U2 Feasycom FSC-BT802 (CSR8670) Bluetooth 5.1 Infotainment Bridge & SkylineOS / Boom! Box Audio Mux
+#define PIN_FRONT_BT_EN         GPIO_NUM_57  // U1 Pad 39 (GPIO57) -> U2 Pin 3 (BT_EN / Power Enable)
+#define PIN_FRONT_BT_RST        GPIO_NUM_56  // U1 Pad 38 (GPIO56) -> U2 Pin 4 (BT_RST / Hardware Reset)
+#define PIN_FRONT_BT_UART_RX    GPIO_NUM_43  // U1 GPIO43 -> U2 TX (AT Command UART RX)
+#define PIN_FRONT_BT_UART_TX    GPIO_NUM_44  // U1 GPIO44 -> U2 RX (AT Command UART TX)
+#define PIN_FRONT_BT_I2S_BCLK   GPIO_NUM_10  // U1 GPIO10 -> U2 I2S Bit Clock
+#define PIN_FRONT_BT_I2S_WS     GPIO_NUM_11  // U1 GPIO11 -> U2 I2S Word Select
+#define PIN_FRONT_BT_I2S_DOUT   GPIO_NUM_12  // U1 GPIO12 -> U2 I2S Data In (Audio stream to bike speakers)
+#define PIN_FRONT_BT_I2S_DIN    GPIO_NUM_48  // U1 GPIO48 -> U2 I2S Data Out (Nav audio in from headunit)
+
+// Backward compatibility defines for legacy C3 bridge names
+#define PIN_C3_EN               PIN_FRONT_BT_EN
+#define PIN_C3_BOOT             PIN_FRONT_BT_RST
+#define PIN_C3_UART_RX          PIN_FRONT_BT_UART_RX
+#define PIN_C3_UART_TX          PIN_FRONT_BT_UART_TX
+#define PIN_C3_I2S_BCLK         PIN_FRONT_BT_I2S_BCLK
+#define PIN_C3_I2S_WS           PIN_FRONT_BT_I2S_WS
+#define PIN_C3_I2S_SDO          PIN_FRONT_BT_I2S_DOUT
+#define PIN_C3_I2S_SDI          PIN_FRONT_BT_I2S_DIN
 
 // Shared I2C Bus: J_SENSOR_EXT Pin 3/4 (SAM-M10Q 0x42, TMP117 0x48, OPT3001 0x44, BMP390 0x76) + Dual OLEDs (J_DISP_L 0x3C, J_DISP_R 0x3D)
 #define PIN_I2C_SDA             GPIO_NUM_22  // U1 Pad 17 (GPIO22) -> J_SENSOR_EXT Pin 3, J_DISP_L/R Pin 4 (I2C_SDA)
@@ -103,9 +115,9 @@
 #define PIN_E22_SDIO_CLK        GPIO_NUM_35  // U1 Pad 30 -> U9 Pin 10 (SDIO_CLK)
 #define PIN_E22_SDIO_CMD        GPIO_NUM_36  // U1 Pad 31 -> U9 Pin 11 (SDIO_CMD)
 #define PIN_E22_SDIO_D0         GPIO_NUM_37  // U1 Pad 32 -> U9 Pin 12 (SDIO_D0)
-#define PIN_E22_SDIO_D1         GPIO_NUM_33  // U1 Pad 33 -> U9 Pin 13 (SDIO_D1)
-#define PIN_E22_SDIO_D2         GPIO_NUM_34  // U1 Pad 34 -> U9 Pin 14 (SDIO_D2)
-#define PIN_E22_SDIO_D3         GPIO_NUM_38  // U1 Pad 35 -> U9 Pin 15 (SDIO_D3)
+#define PIN_E22_SDIO_D1         GPIO_NUM_38  // U1 Pad 33 -> U9 Pin 13 (SDIO_D1)
+#define PIN_E22_SDIO_D2         GPIO_NUM_39  // U1 Pad 34 -> U9 Pin 14 (SDIO_D2)
+#define PIN_E22_SDIO_D3         GPIO_NUM_40  // U1 Pad 35 -> U9 Pin 15 (SDIO_D3)
 #define PIN_E22_IRQ             GPIO_NUM_60  // U1 Pad 37 (GPIO60) -> U9 Pin 16 (E22_IRQ)
 #define PIN_E22_EN              GPIO_NUM_59  // U1 Pad 36 (GPIO59) -> U9 Pin 3 (E22_EN)
 

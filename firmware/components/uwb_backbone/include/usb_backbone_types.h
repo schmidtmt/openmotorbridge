@@ -29,9 +29,11 @@ typedef enum : uint8_t {
     USB_HUB_PORT_3_POD_BAY1    = 3, // J6 Pin 7/8 -> Branch 2: Satellite Pod 1 PCBA 03 ( + U4 TS5A3159 OMM Mux)
     USB_HUB_PORT_4_POD_BAY2    = 4, // J6 Pin 11/12 -> Branch 3: Satellite Pod 2 PCBA 03 ( + U4 TS5A3159 OMM Mux)
     USB_HUB_PORT_5_REAR_RADAR  = 5, // J6 Pin 15/16 -> Branch 4: Rear Radar & V2X PCBA 08 (ESP32-C5)
-    USB_HUB_PORT_6_QCC3084_BT  = 6, // U9 Qualcomm QCC3084 BT 5.4 Audio SoC (Pin 13/14)
+    USB_HUB_PORT_6_QCC3086_BT  = 6, // U9 Qualcomm QCC3086 BT 5.4 Audio SoC (Pin 13/14)
     USB_HUB_PORT_7_RESERVE     = 7  // J7 Internal Reserve USB Header
 } UsbHubPortId;
+
+#define USB_HUB_PORT_6_QCC3084_BT USB_HUB_PORT_6_QCC3086_BT
 
 // -----------------------------------------------------------------------------
 // Authorized Node Identifiers across the v10.0 Vehicle Topology
@@ -69,26 +71,30 @@ enum UsbBackbonePktType : uint8_t {
 
     // --- Konsolidierte Telemetrie (10 Hz Frame) & Cockpit-Peripherie ---
     USB_PKT_FRONT_TELEMETRY     = 0x04,  // Konsolidierter 10 Hz Frame: GNSS PVT + Wind-RMS + TMP117 + Lux
-    USB_PKT_WIRELESS_CP_AA_STAT = 0x05,  // CarPlay / Android Auto Bridge Status, Stromaufnahme, Auto-Café Timer
+    USB_PKT_POWER_DELIVERY_STAT = 0x05,  // 30W USB-PD & 15W Qi-Puck Ladestatus (SW3526 auf PCBA 05 J4)
     USB_PKT_CAN_TELEMETRY       = 0x06,  // Raw CAN Telemetrie Stream
     USB_PKT_BSD_TRIGGER         = 0x07,  // Zentralbox -> Front-Node: Mirror Radar BSD Warning LEDs Gate (Q1)
     USB_PKT_COCKPIT_HUD_STATE   = 0x08,  // Zentralbox -> Front-Node: Dual Cockpit Speaker-Corner OLED HUD Update
+    USB_PKT_KNOWLES_AUDIO_RAW   = 0x09,  // Front-Node -> Zentralbox: Knowles SPH0645LM4H Rohdaten / SPL zur Windgeräuschanalyse
 
     // --- Steuerbefehle & System-Synchronisation ---
     USB_CMD_POWER_CYCLE         = 0x10,  // Zentralbox -> Front-Node / Switch: 2.5s Kaltstart (TPS2051B / TPS4H160-Q1)
     USB_CMD_CONFIG              = 0x11,  // Zentralbox -> Satelliten: Zündungs-Sync, Aux-Light (Q2) & Sleep-State
     USB_PKT_PAIRING_REQUEST     = 0x12,  // Pairing-Ablauf nach SW1 Tasterdruck (60s Fenster)
     USB_PKT_PAIRING_CONFIRM     = 0x13,  // AES-128 Session-Key Austausch & NVS Speicherung
+    USB_PKT_WIFI_UPLOAD_TRIGGER = 0x17,  // Zentralbox -> Front-Node: Automatischer Wi-Fi Sync / WebDAV Upload bei Zündung AUS
 
     // --- Monocoque-Pod & Smart-Interface-Protokoll (Pod 1 & Pod 2, PCBA 03) ---
     USB_DESC_POD_ANNOUNCE       = 0x20,  // Handshake: Hardware-Klasse (Sena/Cardo/OMM), OMM_DETECT, UID, VCC
     USB_CMD_POD_CONTROL         = 0x21,  // Zentralbox -> Pod: Mechatronik-Trigger-Opcode (AO3400A ACT1..4)
     USB_PKT_POD_ACK             = 0x22,  // Pod -> Zentralbox: Ausführungsquittung & Taster-Status
 
-    // --- Digitales USB Audio Class 2.0 (UAC2) Backbone (48 kHz Bidirektional) ---
-    USB_PKT_AUDIO_STREAM_DOWN   = 0x24,  // Zentralbox -> Pods: Master-Mix an Headsets (Voice + Stereo Media)
+    // --- Digitales USB Audio Class 2.0 (UAC2) Backbone (48 kHz Bidirektional) & Infotainment ---
+    USB_PKT_AUDIO_STREAM_DOWN   = 0x24,  // Zentralbox -> Pods / Front-Node: Master-Mix an Headsets oder Motorrad-Bordlautsprecher
     USB_PKT_AUDIO_STREAM_UP     = 0x25,  // Pods -> Zentralbox: Intercom Spk-Out / OMM Voice zur Zentralbox
-    USB_PKT_AUDIO_MEDIA_UP      = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen (ESP32-S31/E22)
+    USB_PKT_AUDIO_MEDIA_UP      = 0x26,  // Front-Node -> Zentralbox: Musik / Navigations-Ansagen (FSC-BT802 Mode A / Smartphone)
+    USB_PKT_FRONT_BT_MODE_CMD   = 0x27,  // Zentralbox -> Front-Node: Modus-Umschaltung FSC-BT802 (Headset vs. Speaker-Stream)
+    USB_PKT_FRONT_BT_MODE_STAT  = 0x28,  // Front-Node -> Zentralbox: FSC-BT802 Verbindungs- & Audiostatus
 
     // --- Radar 2.0 & 5.9 GHz C-ITS V2X (PCBA 08, ESP32-C5-WROOM-1U) ---
     USB_PKT_RADAR_TARGETS       = 0x30,  // 20 Hz voroptimierte Zielliste (TTC, Distanz, Azimut) + URGENT-Flag
@@ -113,19 +119,24 @@ typedef UsbBackbonePktType UwbBackbonePktType;
 #define UWB_PKT_NODE_HEARTBEAT      USB_PKT_NODE_HEARTBEAT
 #define UWB_PKT_PTT_EVENT           USB_PKT_GESTURE_EVENT
 #define UWB_PKT_FRONT_TELEMETRY     USB_PKT_FRONT_TELEMETRY
-#define UWB_PKT_WIRELESS_CP_AA_STAT USB_PKT_WIRELESS_CP_AA_STAT
+#define USB_PKT_WIRELESS_CP_AA_STAT USB_PKT_POWER_DELIVERY_STAT
+#define UWB_PKT_WIRELESS_CP_AA_STAT USB_PKT_POWER_DELIVERY_STAT
+#define UWB_PKT_POWER_DELIVERY_STAT USB_PKT_POWER_DELIVERY_STAT
 #define UWB_PKT_CAN_TELEMETRY       USB_PKT_CAN_TELEMETRY
 #define UWB_PKT_BSD_TRIGGER         USB_PKT_BSD_TRIGGER
 #define UWB_PKT_CMD_POWER_CYCLE     USB_CMD_POWER_CYCLE
 #define UWB_PKT_CMD_CONFIG          USB_CMD_CONFIG
 #define UWB_PKT_PAIRING_REQUEST     USB_PKT_PAIRING_REQUEST
 #define UWB_PKT_PAIRING_CONFIRM     USB_PKT_PAIRING_CONFIRM
+#define UWB_PKT_WIFI_UPLOAD_TRIGGER USB_PKT_WIFI_UPLOAD_TRIGGER
 #define UWB_PKT_CARTRIDGE_ANNOUNCE  USB_DESC_POD_ANNOUNCE
 #define UWB_PKT_CARTRIDGE_OPCODE    USB_CMD_POD_CONTROL
 #define UWB_PKT_CARTRIDGE_ACK       USB_PKT_POD_ACK
 #define UWB_PKT_AUDIO_STREAM_DOWN   USB_PKT_AUDIO_STREAM_DOWN
 #define UWB_PKT_AUDIO_STREAM_UP     USB_PKT_AUDIO_STREAM_UP
 #define UWB_PKT_AUDIO_MEDIA_UP      USB_PKT_AUDIO_MEDIA_UP
+#define UWB_PKT_FRONT_BT_MODE_CMD   USB_PKT_FRONT_BT_MODE_CMD
+#define UWB_PKT_FRONT_BT_MODE_STAT  USB_PKT_FRONT_BT_MODE_STAT
 #define UWB_PKT_RADAR_TARGETS       USB_PKT_RADAR_TARGETS
 #define UWB_PKT_RADAR_LED_CMD       USB_PKT_RADAR_LED_CMD
 #define UWB_PKT_FW_UPDATE_PUSH      USB_PKT_FW_UPDATE_PUSH
@@ -224,12 +235,16 @@ typedef UsbPttEventPkt UwbPttEventPkt;
 // -----------------------------------------------------------------------------
 #define FRONT_STAT_KL15_ACTIVE       (1 << 0)
 #define FRONT_STAT_SENSOR_PUCK_OK    (1 << 1) // J_SENSOR_EXT (SAM-M10Q + TMP117 + OPT3001)
-#define FRONT_STAT_SW3526_PD_ACTIVE  (1 << 2) // U3 SW3526 30W USB-PD Active
-#define FRONT_STAT_CP2AA_PWR_ACTIVE  (1 << 3) // U4 TPS2051B J_DONGLE Power Active
-#define FRONT_STAT_CP2AA_FAULT       (1 << 4) // U4 TPS2051B Overcurrent Fault (Pad 38)
+#define FRONT_STAT_SW3526_PD_ACTIVE  (1 << 2) // U5 SW3526 30W USB-PD Active
+#define FRONT_STAT_QI_CHARGING_ACTIVE (1 << 3) // J4 15W Qi-Puck Active Charging
+#define FRONT_STAT_QI_FAULT          (1 << 4) // J4 Foreign Object / Over-Current Fault
 #define FRONT_STAT_E22_WIFI6E_OK     (1 << 5) // U9 ESP32-E22 SDIO 3.0 Wi-Fi 6E Bridge OK
 #define FRONT_STAT_DUAL_OLED_OK      (1 << 6) // J_DISP_L & J_DISP_R Cockpit Displays OK
 #define FRONT_STAT_AUX_LIGHT_ON      (1 << 7) // Q2 TPS1H100 Aux Light Active
+
+// Backward compatibility defines
+#define FRONT_STAT_CP2AA_PWR_ACTIVE  FRONT_STAT_QI_CHARGING_ACTIVE
+#define FRONT_STAT_CP2AA_FAULT       FRONT_STAT_QI_FAULT
 
 typedef struct __attribute__((packed)) {
     int32_t  latitude_1e7;    // u-blox SAM-M10Q: Latitude * 1e7 (WGS84)
@@ -264,6 +279,68 @@ typedef struct __attribute__((packed)) {
     uint8_t  brightness_pct;      // Auto-dimmed via OPT3001 Lux & Solar Elevation (5..100%)
     char     status_line[20];     // Short text for right OLED (e.g. "CH8 DMR | 4 Bikes")
 } UsbCockpitHudStatePkt;
+
+// -----------------------------------------------------------------------------
+// 3c. Handschuhfach 30W USB-PD & 15W Qi-Puck Telemetrie (SW3526 auf PCBA 05 J4)
+// -----------------------------------------------------------------------------
+typedef struct __attribute__((packed)) {
+    uint16_t vbus_mv;          // USB-PD / Qi VBUS in mV (5000..20000)
+    uint16_t current_ma;       // Charging current in mA (0..3000)
+    uint16_t power_mw;         // Output power in mW (0..30000 = 30W)
+    int16_t  temperature_c_10; // SW3526 / Puck temperature in 0.1 deg C
+    uint8_t  qi_state;         // 0=Idle/No Device, 1=Charging (5W), 2=Fast Charging (10W/15W), 3=Foreign Object Detected (FOD), 4=Over-Temp Protection
+    uint8_t  pd_profile;       // 0=5V/3A, 1=9V/3A, 2=12V/2.5A, 3=15V/2A, 4=20V/1.5A
+    uint8_t  kl15_grace_active;// 1 = 60s post-KL15 charging grace period active
+    uint8_t  fault_flags;      // Bit 0: Overcurrent, Bit 1: Overtemp, Bit 2: Undervoltage
+} UsbPowerDeliveryStatPkt;
+
+typedef UsbPowerDeliveryStatPkt UsbWirelessCpAaStatPkt; // Legacy alias
+
+// -----------------------------------------------------------------------------
+// 3d. Feasycom FSC-BT802 Mode-Switch & Infotainment Audio Bridge (PCBA 05 U2)
+// -----------------------------------------------------------------------------
+typedef enum : uint8_t {
+    BT802_MODE_STANDBY               = 0x00,
+    BT802_MODE_HEADSET_SINK          = 0x01, // Mode A: Headset Profile (Sink) connected to SkylineOS / Boom! Box / BMW TFT to receive navigation audio prompts
+    BT802_MODE_BIKE_SPEAKER_SOURCE   = 0x02  // Mode B: A2DP Source connected to SkylineOS / Boom! Box to stream OMB Master Mix over bike speakers
+} FscBt802OperatingMode;
+
+typedef struct __attribute__((packed)) {
+    uint8_t requested_mode; // FscBt802OperatingMode
+    uint8_t force_switch;   // 1 = Force immediate disconnect & reconnect in new mode
+    uint16_t reserved;
+} UsbFrontBtModeCmdPkt;
+
+typedef struct __attribute__((packed)) {
+    uint8_t current_mode;   // FscBt802OperatingMode
+    uint8_t connected;      // 0 = Disconnected, 1 = Connected to Head Unit
+    uint8_t a2dp_active;    // 1 = A2DP Stream active
+    uint8_t hfp_call_state; // 0 = Idle, 1 = Ringing, 2 = Call Active
+    int8_t  rssi_dbm;       // Bluetooth RSSI to bike headunit
+    uint8_t volume_pct;     // 0..100%
+} UsbFrontBtModeStatPkt;
+
+// -----------------------------------------------------------------------------
+// 3e. Knowles Acoustic Fahrtwind-Sensorik (COMM_02)
+// -----------------------------------------------------------------------------
+#define USB_KNOWLES_MIC_SAMPLES 32 // 32x int16_t = 64 Bytes PCM
+typedef struct __attribute__((packed)) {
+    uint16_t frame_seq;
+    uint8_t  sample_rate_khz; // 16 or 48 kHz
+    uint8_t  spl_dba;          // Calculated Sound Pressure Level in dB(A)
+    int16_t  samples[USB_KNOWLES_MIC_SAMPLES];
+} UsbKnowlesAudioRawPkt;
+
+// -----------------------------------------------------------------------------
+// 3f. Wi-Fi Upload Trigger (COMM_11)
+// -----------------------------------------------------------------------------
+typedef struct __attribute__((packed)) {
+    uint8_t  trigger_reason;   // 1 = KL15_OFF_HOME_SYNC, 2 = MANUAL_USER_REQUEST
+    uint8_t  upload_bitmask;   // Bit 0: Telemetry GPX, Bit 1: Blackbox Logs, Bit 2: Crash Dumps
+    uint16_t max_duration_sec; // Timeout in seconds (e.g. 180s before deep sleep)
+    char     target_ssid[32];  // Configured Home Wi-Fi SSID
+    char     auth_token[32];   // One-time session token for WebDAV/Cloud sync
+} UsbWifiUploadTriggerPkt;
 
 // -----------------------------------------------------------------------------
 // 4. Monocoque-Pod Interface & OMM Auto-Sense Protocol (PCBA 03 in Pod 1 & Pod 2)

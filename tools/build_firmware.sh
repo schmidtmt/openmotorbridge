@@ -63,7 +63,7 @@ fi
 case "$TARGET" in
     main|main_controller)
         TARGET_DIR="$FIRMWARE_DIR/main_controller"
-        TARGET_NAME="Main Controller v10.0 (PCBA 01: ESP32-S31 + QCC3084 + SX1262)"
+        TARGET_NAME="Main Controller v10.0 (PCBA 01: ESP32-S31 + Triple QCC3086 + SX1262)"
         ;;
     front|front_node)
         TARGET_DIR="$FIRMWARE_DIR/front_node"

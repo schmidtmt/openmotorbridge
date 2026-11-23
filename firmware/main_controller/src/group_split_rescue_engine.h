@@ -59,7 +59,7 @@ void group_split_update(float speed_kmh, double lat, double lon, float heading_d
 void group_split_report_intercom_contact(bool is_contact_ok);
 
 /**
- * @brief Meldet Anrufstatus vom Qualcomm QCC3084 HFP Profil (Mute & PTT-Lock)
+ * @brief Meldet Anrufstatus vom Qualcomm QCC3086 HFP Profil (Mute & PTT-Lock)
  */
 void group_split_set_hfp_call_state(bool is_call_active);
 

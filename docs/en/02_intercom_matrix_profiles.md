@@ -35,20 +35,20 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 |                                     | Synchronous I2S Digital Bus (48 kHz / 24-Bit PCM)|
 |                                     v                                                  |
 |       +------------------------------------------------------------+                   |
-|       |        QUALCOMM QCC3084 BLUETOOTH 5.4 AUDIO SOC (U9)       |                   |
-|       |  * Dual-A2DP Hardware Encoder (aptX HD & aptX Adaptive)    |                   |
-|       |  * LE Audio Auracast Broadcast Engine                      |                   |
-|       |  * HFP 1.8 Wideband Speech Telephony & Mic Uplink          |                   |
-|       |  * Onboard Ceramic Chip Antenna (Zero Coax Cable Overhead) |                   |
+|       |      3x QUALCOMM QCC3086 BLUETOOTH 5.4 TRANSCEIVERS        |                   |
+|       |  * U9 (Phone): A2DP Sink, HFP 1.8 Low-Latency Voice Return |                   |
+|       |  * U13 (Helmet 1): Rider Audio & Helmet Mic Uplink         |                   |
+|       |  * U14 (Helmet 2): Pillion Audio & Helmet Mic Uplink       |                   |
+|       |  * Triple-Gleichteil: 100% Identical WLCSP-99 Footprint    |                   |
 |       +-----------------------------+------------------------------+                   |
 |                                     |                                                  |
 |              +----------------------+----------------------+                           |
-|              | RF Stream 1 (aptX HD)                       | RF Stream 2 (aptX / LC3)  |
+|              | RF Stream 1 (aptX Adaptive)                 | RF Stream 2 (aptX / LC3)  |
 |              v                                             v                           |
 |   +----------------------------+              +----------------------------+           |
 |   | RIDER HELMET (Bluetooth)   |              | PASSENGER HELMET (BT)      |           |
-|   | * Sena/Cardo/OEM Headset   |              | * Sena/Cardo/OEM Headset   |           |
-|   | * aptX Adaptive (< 20 ms)  |              | * Synchronous Dual-A2DP Mix|           |
+|   | * QCC3086 U13 (< 20 ms)    |              | * QCC3086 U14 (< 20 ms)    |           |
+|   | * aptX Adaptive Hi-Fi      |              | * Synchronous A2DP Mix     |           |
 |   | * HFP 1.8 Microphone Uplink|              | * Independent AVRCP Volume |           |
 |   +----------------------------+              +----------------------------+           |
 +----------------------------------------------------------------------------------------+
@@ -78,22 +78,28 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 * **Threshold Detection:** When incoming GPS audio exceeds $-36\,\text{dBFS}$ for longer than $50\,\text{ms}$, the ducking engine executes smooth raised-cosine ducking ($-12\,\text{dB}$) across music and intercom channels.
 * **Hold & Release:** Following the prompt (signal $< -42\,\text{dBFS}$), ducking holds for $800\,\text{ms}$ before executing a smooth $250\,\text{ms}$ release ramp.
 
-### 1.5 Physical Dual-Helmet Connectivity via Qualcomm QCC3084 & aptX HD / Adaptive
+### 1.5 Physical Triple-Bluetooth Architecture via 3× Qualcomm QCC3086 (U9, U13, U14)
 
-Unlike compromised software-emulated A2DP stacks, OpenMotorBridge offloads helmet Bluetooth to a **dedicated Qualcomm QCC3084 Bluetooth 5.4 Audio SoC (`U9` on PCBA 01)** in dedicated hardware:
+Unlike compromised software-emulated A2DP stacks, OpenMotorBridge handles all wireless audio and telephony on the Central Box (`PCBA 01`) via **three dedicated Qualcomm QCC3086 Bluetooth 5.4 audio transceivers** in native hardware:
 
 1. **Complete RF & CPU Decoupling:**
    * The ESP32-S31 internal radio shares a single 2.4-GHz RF path between Wi-Fi (PWA Webserver, WebDAV uploads) and BLE (telemetry dashboard). Computing and streaming dual Hi-Res A2DP streams on the host MCU would lead to buffer under-runs, crackling, and latency spikes $> 150\,\text{ms}$.
-   * The Qualcomm QCC3084 operates autonomously on an independent dual-core 32-bit processor ($80\,\text{MHz}$) with a $240\,\text{MHz}$ Kalimba hardware audio DSP.
-2. **True Dual-A2DP & aptX HD / Adaptive:**
-   * **Rider Helmet (Stream 1):** Dynamic switching between **aptX HD** ($24\,\text{Bit} / 48\,\text{kHz}$, Studio-HiFi for media) and **aptX Adaptive Low-Latency Mode** ($< 20\,\text{ms}$ latency for lip-sync intercom clarity).
-   * **Passenger Helmet (Stream 2):** Phase-locked secondary A2DP stream (aptX / LC3) with independent AVRCP volume control.
-3. **LE Audio Auracast Broadcast:**
+   * By offloading to three separate Qualcomm QCC3086 chips, each Bluetooth link operates autonomously on an independent dual-core 32-bit processor ($80\,\text{MHz}$) with a $240\,\text{MHz}$ Kalimba hardware audio DSP.
+2. **Role Allocation of the 3× QCC3086 on PCBA 01 (100% Identical WLCSP-99 Footprint):**
+   * **`U9` (Smartphone Link):** A2DP Sink (lossless music streaming), HFP 1.8 Wideband Voice return channel (< 20 ms latency for phone calls and Siri/Google Assistant), and AVRCP 1.6 handlebar media control.
+   * **`U13` (Rider Helmet):** A2DP Source with aptX Adaptive Low-Latency (< 20 ms for lip-sync intercom conversation) and HFP 1.8 helmet mic uplink.
+   * **`U14` (Passenger Helmet):** A2DP Source with synchronous A2DP mix (aptX / LC3), independent AVRCP volume control, and HFP 1.8 mic uplink.
+3. **LE Audio Auracast Broadcast & Music Sharing:**
    * Enables sharing the entire vehicle mix (intercom, GPS, music) with unlimited Auracast-enabled companion devices without pairing limits.
-4. **HFP 1.8 Wideband Speech & Rider Microphone Uplink:**
-   * Decodes HFP 1.8 Wideband Speech ($16\,\text{kHz}$ mSBC / aptX Voice) and feeds the rider's voice into the host ESP32-S31 DSP pipeline over the synchronous `I2S_DIN` line.
-5. **Onboard Ceramic Chip Antenna (Zero Coaxial Cable Overhead):**
-   * The QCC3084 module integrates an omnidirectional $2.4\,\text{GHz}$ high-performance ceramic antenna directly on its $13 \times 18\,\text{mm}$ substrate, radiating cleanly through the enclosure toward rider and pillion.
+4. **HFP 1.8 Wideband Speech & Microphone Uplink:**
+   * The QCC3086 transceivers handle full Hands-Free Profile (HFP 1.8 with mSBC / aptX Voice, $16\,\text{kHz}$ wideband speech).
+   * Helmet microphone audio from rider and passenger is digitally decoded by `U13` and `U14` and fed jitter-free into the ESP32-S31 DSP pipeline over synchronous `I2S_DIN` lines.
+5. **Saddlebag Pod Audio: Base (AD/DA) vs. Radar Upgrade (Wireless BT):**
+   * **Stage 1 (Base without Radar):** Audio connections to Sena/Cardo in the saddlebags run wired via the bidirectional 24-bit/48-kHz ES8388 audio codec on `PCBA 03`. Mechatronics (KL15 pulse, pogo pins, cradle) remain 1:1 identical.
+   * **Stage 2 (with Modular Radar Node PCBA 08):** The optional Radar Node adds two additional QCC3086 (`U4`, `U5`) transceivers. Bag pod audio links switch to wireless Hi-Fi Bluetooth with synchronized music-sharing, placing the ES8388 codecs on `PCBA 03` into low-power cold standby.
+6. **Onboard Ceramic Chip Antennas (Zero Coaxial Overhead):**
+   * Each QCC3086 module integrates a miniaturized $2.4\,\text{GHz}$ high-performance ceramic antenna directly on its substrate.
+   * RF radiation passes through the PA12 enclosure directly toward rider and pillion helmets -- zero coaxial cable overhead or enclosure lid assembly!
 
 ---
 
@@ -178,7 +184,7 @@ In OpenMotorBridge v10.0, the legacy dual-wall cassette sliding system has been 
 
 ```
 +----------------------------------------------------------------------------------------+
-|        SYMMETRICAL UNDER-PERCH MIRROR POD GESTURE MATRIX (PCBA 05B)          |
+|        SYMMETRICAL UNDER-PERCH SWITCH GESTURE MATRIX (PCBA 05C)                |
 +----------------------+-----------------------+-----------------+-----------------------+
 | Function / Opcode    | Active Actuators      | Pulse / Timing  | Sena Reaction         |
 +----------------------+-----------------------+-----------------+-----------------------+

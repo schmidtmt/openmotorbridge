@@ -27,7 +27,7 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 |                              | (Automotive USB 2.0 / Latenz < 0.2 ms / Vollduplex)     |
 |                              v                                                         |
 |       +------------------------------------------------------------+                   |
-|       |     ESP32-S311 AI RISC-V DSP & ES8388 24-BIT / 48 kHz AUDIO  |                   |
+|       |     ESP32-S31 AI RISC-V DSP & ES8388 24-BIT / 48 kHz AUDIO |                   |
 |       |  * Raised-Cosine Ducking (Prio: Radar > Navi > Intercom)   |                   |
 |       |  * Symmetrischer Intercom-Cross-Mix (Bucht 1 <-> Bucht 2)  |                   |
 |       |  * Knowles MEMS Fahrtwind-Lautstärkenachführung (AGC)      |                   |
@@ -35,20 +35,20 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 |                                     | Synchroner I2S Digital-Bus (48 kHz / 24-Bit PCM) |
 |                                     v                                                  |
 |       +------------------------------------------------------------+                   |
-|       |        QUALCOMM QCC3084 BLUETOOTH 5.4 AUDIO-SOC (U9)       |                   |
-|       |  * Dual-A2DP Hardware-Encoder (aptX HD & aptX Adaptive)    |                   |
-|       |  * LE Audio Auracast Broadcast Engine                      |                   |
-|       |  * HFP 1.8 Wideband Speech Telefonie & Mikrofon-Uplink     |                   |
-|       |  * Onboard Keramik-Chipantenne (Null Koaxialkabel-Overhead)|                   |
+|       |      3x QUALCOMM QCC3086 BLUETOOTH 5.4 TRANSCEIVER         |                   |
+|       |  * U9 (Phone): A2DP Sink, HFP 1.8 Low-Latency Voice-Rückk. |                   |
+|       |  * U13 (Helm 1): Fahrer-Audio & Helmmikrofon-Uplink        |                   |
+|       |  * U14 (Helm 2): Sozius-Audio & Helmmikrofon-Uplink        |                   |
+|       |  * Triple-Gleichteil: 100% identischer WLCSP-99 Footprint  |                   |
 |       +-----------------------------+------------------------------+                   |
 |                                     |                                                  |
 |              +----------------------+----------------------+                           |
-|              | RF-Stream 1 (aptX HD)                       | RF-Stream 2 (aptX / LC3)  |
+|              | RF-Stream 1 (aptX Adaptive)                 | RF-Stream 2 (aptX / LC3)  |
 |              v                                             v                           |
 |   +----------------------------+              +----------------------------+           |
 |   | FAHRER-HELM (Bluetooth)    |              | SOZIUS-HELM (Bluetooth)    |           |
-|   | * Sena/Cardo/OEM Headset   |              | * Sena/Cardo/OEM Headset   |           |
-|   | * aptX Adaptive (< 20 ms)  |              | * Synchroner Dual-A2DP Mix |           |
+|   | * QCC3086 U13 (< 20 ms)    |              | * QCC3086 U14 (< 20 ms)    |           |
+|   | * aptX Adaptive Hi-Fi      |              | * Synchroner A2DP Mix      |           |
 |   | * HFP 1.8 Mikrofon-Uplink  |              | * Getrennte AVRCP-Lautst.  |           |
 |   +----------------------------+              +----------------------------+           |
 +----------------------------------------------------------------------------------------+
@@ -69,7 +69,7 @@ OpenMotorBridge arbeitet im gesamten Fahrzeugnetzwerk nicht mit unkomprimiertem 
   2. `Slot 2: Pillion Voice Up` (Sozius-Helm via Bluetooth 5.4 HFP 1.8 an Zentralbox)
   3. `Slot 3: Pod 1 Gateway Audio Down/Up` (Sena Mesh 3.0 / OMM 2.4G via USB-Backbone Strang 2)
   4. `Slot 4: Pod 2 Gateway Audio Down/Up` (Cardo DMC / 446 MHz PMR/DMR via USB-Backbone Strang 3)
-  5. `Slot 5: Media / Navigation Down` (Smartphone-Musik / CarPlay via QCC3084)
+  5. `Slot 5: Media / Navigation Down` (Smartphone-Musik & Navigation via QCC3086 U9)
 * **Bus-Performance:** Über die $3{,}0\,\text{Mbps}$ UART-Brücke zum WCH CH554E USB-Host auf `PCBA 03` belegen alle 5 Ströme zusammen **unter $8\,\%$ der USB-Bandbreite** ($< 0{,}2\,\text{ms}$ Latenz).
 * **Private Cabin Whisper (Sozius-Flüstermodus via PTT):**
   Drückt der Sozius seinen PTT-Taster, schaltet der Zentralbox-DSP blitzschnell in den vertraulichen Kabinenmodus: Die Sprache des Sozius wird **exklusiv und privat nur dem Fahrer ins Headset gemischt**. Die Übertragung in das externe Gruppen-Mesh (Sena/Cardo/OMM) wird **vollständig stummgeschaltet (Mute)**, während das Gruppen-Mesh im Fahrer-Headset mit **$-12\,\text{dB}$ geduckt** wird. Private Bemerkungen zwischen Fahrer und Sozius verlassen das Motorrad nicht!
@@ -94,24 +94,28 @@ OpenMotorBridge arbeitet im gesamten Fahrzeugnetzwerk nicht mit unkomprimiertem 
 * **Schwellenwert-Logik:** Überschreitet das eingehende Navigations-Audio $-36\,\text{dBFS}$ für länger als $50\,\text{ms}$, leitet die Ducking-Engine sofort ein weiches Raised-Cosine Ducking ($-12\,\text{dB}$) auf Musik und Intercom ein.
 * **Hold & Release:** Nach Ende der Ansage (Pegel $< -42\,\text{dBFS}$) verbleibt das Ducking für $800\,\text{ms}$ im Hold-Zustand und blendet dann mit $250\,\text{ms}$ sanft auf Vollpegel zurück.
 
-### 1.5 Physische Dual-Helm-Anbindung über Qualcomm QCC3084 & aptX HD / Adaptive
+### 1.5 Physische Dreifach-Bluetooth-Architektur über 3× Qualcomm QCC3086 (U9, U13, U14)
 
-Im Gegensatz zu vereinfachten ESP32-Software-A2DP-Lösungen wird die Bluetooth-Anbindung der Helme bei OpenMotorBridge von einem **dedizierten Qualcomm QCC3084 Bluetooth 5.4 Audio-SoC (`U9` auf PCBA 01)** in echter Hardware ausgeführt:
+Im Gegensatz zu vereinfachten ESP32-Software-A2DP-Lösungen wird die gesamte drahtlose Audio- und Telefonie-Anbindung bei OpenMotorBridge auf der Zentralbox (`PCBA 01`) von **drei dedizierten Qualcomm QCC3086 Bluetooth 5.4 Audio-Transceivern** in nativer Hardware abgewickelt:
 
 1. **Vollständige HF- und CPU-Entkopplung:**
-   * Der interne Funkcontroller des ESP32-S31 teilt sich eine einzige 2.4-GHz-HF-Endstufe zwischen Wi-Fi (PWA Webserver, WebDAV Touren-Upload) und Bluetooth Low Energy (PWA-Dashboard, BLE-Sensoren). Würde der ESP32 parallel zwei hochauflösende A2DP-Stereoströme berechnen und senden, käme es bei HF-Störungen oder hoher CPU-Last unweigerlich zu Audio-Aussetzern, Knacksern und Latenzen $> 150\,\text{ms}$.
-   * Durch die Auslagerung auf den Qualcomm QCC3084 läuft das Helm-Audio autark auf einem dedizierten Dual-Core 32-Bit Audioprozessor ($80\,\text{MHz}$) mit integriertem $240\,\text{MHz}$ Kalimba Hardware-Audio-DSP.
-2. **Echtes Dual-A2DP & aptX HD / Adaptive:**
-   * **Fahrer-Helm (Stream 1):** Dynamische Umschaltung zwischen **aptX HD** ($24\,\text{Bit} / 48\,\text{kHz}$, Studio-HiFi für Musik) und **aptX Adaptive Low-Latency Mode** ($< 20\,\text{ms}$ Audio-Latenz für vollkommen natürliche, lippensynchrone Gegensprechkommunikation).
-   * **Sozius-Helm (Stream 2):** Phasenstarr synchronisiertes Zweit-Streaming via A2DP (aptX / LC3). Lautstärke und Klangprofil lassen sich für den Sozius über AVRCP völlig unabhängig vom Fahrer einstellen.
-3. **LE Audio Auracast Broadcast:**
+   * Der interne Funkcontroller des ESP32-S31 teilt sich eine einzige 2.4-GHz-HF-Endstufe zwischen Wi-Fi (PWA Webserver, WebDAV Touren-Upload) und Bluetooth Low Energy (PWA-Dashboard, BLE-Sensoren). Würde der ESP32 parallel hochauflösende A2DP-Stereoströme berechnen und senden, käme es bei HF-Störungen oder hoher CPU-Last unweigerlich zu Audio-Aussetzern, Knacksern und Latenzen $> 150\,\text{ms}$.
+   * Durch die Auslagerung auf drei separate Qualcomm QCC3086 läuft jedes Bluetooth-Subsystem autark auf einem dedizierten Dual-Core 32-Bit Audioprozessor ($80\,\text{MHz}$) mit integriertem $240\,\text{MHz}$ Kalimba Hardware-Audio-DSP.
+2. **Die Rollenverteilung der 3× QCC3086 auf PCBA 01 (100% Gleichteile im WLCSP-99 Footprint):**
+   * **`U9` (Smartphone-Link):** A2DP Sink (Empfang von hochauflösendem Hi-Fi Musik-Streaming), HFP 1.8 Wideband Voice-Rückkanal (< 20 ms Latenz für Telefonate & Siri/Google Assistant) sowie AVRCP 1.6 Fernsteuerung über Lenkertasten.
+   * **`U13` (Fahrer-Helm):** A2DP Source mit aptX Adaptive Low-Latency (< 20 ms für lippensynchrone Gegensprechkommunikation) und HFP 1.8 Helmmikrofon-Uplink.
+   * **`U14` (Sozius-Helm):** A2DP Source mit synchronem A2DP-Mix (aptX / LC3), unabhängiger AVRCP-Lautstärkeregelung und HFP 1.8 Mikrofon-Uplink.
+3. **LE Audio Auracast Broadcast & Musik-Sharing:**
    * Ermöglicht das Teilen des gesamten Audio-Mixes (Intercom, Musik, Navi) mit beliebig vielen Auracast-fähigen Empfängern im Begleittross ohne Pairings-Limit.
-4. **HFP 1.8 Wideband Speech & Fahrermikrofon-Uplink:**
-   * Der QCC3084 übernimmt das vollständige Bluetooth Hands-Free Profile (HFP 1.8 mit mSBC / aptX Voice, $16\,\text{kHz}$ Wideband Speech).
-   * Das vom Helm-Headset aufgenommene Mikrofonsignal des Fahrers wird vom QCC3084 digital decodiert und über die synchrone Leitung `I2S_DIN` verlustfrei und jitterfrei in die DSP-Pipeline des ESP32-S31 zurückgespeist.
-5. **Onboard Keramik-Chipantenne (Null Koaxialkabel-Overhead):**
-   * Das QCC3084-Modul integriert eine miniaturisierte $2{,}4\,\text{GHz}$ Hochleistungs-Keramik-Chipantenne direkt auf dem Modulträger ($13 \times 18\,\text{mm}$).
-   * Die HF-Abstrahlung erfolgt direkt durch das ABS/PA12-Gehäuse der Zentralbox in Richtung Fahrer-/Sozius-Helm. Es wird **kein 4. Koaxialkabel, kein U.FL-Steckverbinder und kein Montageaufwand im Gehäusedeckel** benötigt!
+4. **HFP 1.8 Wideband Speech & Helmmikrofon-Uplink:**
+   * Die QCC3086 übernehmen das vollständige Bluetooth Hands-Free Profile (HFP 1.8 mit mSBC / aptX Voice, $16\,\text{kHz}$ Wideband Speech).
+   * Die von den Helm-Headsets aufgenommenen Mikrofonsignale von Fahrer und Sozius werden von `U13` und `U14` digital decodiert und über synchrone `I2S_DIN`-Leitungen verlustfrei und jitterfrei in die DSP-Pipeline des ESP32-S31 zurückgespeist.
+5. **Koffer-Pod Audio: Basis (AD/DA) vs. Radar-Upgrade (Wireless BT):**
+   * **Stufe 1 (Basis ohne Radar):** Die Audio-Anbindung der Sena-/Cardo-Headsets in den Koffer-Pods erfolgt leitungsgebunden über den bidirektionalen 24-Bit/48-kHz-Audio-Codec ES8388 auf `PCBA 03`. Die Mechatronik (KL15-Einschaltimpuls, Pogo-Pins, Halterung) bleibt 1:1 vorhanden.
+   * **Stufe 2 (mit Radar-Knoten PCBA 08):** Der modulare Radar-Knoten bringt zwei weitere QCC3086 (`U4`, `U5`) mit. Die Pod-Audioströme werden drahtlos via Hi-Fi Bluetooth angebunden, inklusive synchronem Musik-Sharing. Die ES8388 AD/DA-Wandler auf `PCBA 03` schalten dabei in den energiesparenden Cold Standby.
+6. **Onboard Keramik-Chipantennen (Null Koaxialkabel-Overhead):**
+   * Jedes QCC3086-Modul integriert eine miniaturisierte $2{,}4\,\text{GHz}$ Hochleistungs-Keramik-Chipantenne direkt auf dem Modulträger.
+   * Die HF-Abstrahlung erfolgt direkt durch das ABS/PA12-Gehäuse der Zentralbox in Richtung Fahrer-/Sozius-Helm. Es wird **kein Koaxialkabel-Overhead und kein Montageaufwand im Gehäusedeckel** benötigt!
 
 ### 1.6 Strategischer Leitfaden: Das „Bridge-the-Gap“-Prinzip & Helm-Akkuschonung
 
@@ -154,7 +158,7 @@ Klassische Bluetooth-Fernbedienungen am Lenker leiden unter hohen Latenzen ($80 
 ```
                LENKER-PTT SIGNALKETTE (GLAS-ZU-GLAS < 0,20 ms)
 +----------------------------------------------------------------------------------------+
-| 1. UNDER-PERCH TASTE (Am Spiegelfuß PCBA 05B verdrahtet):                              |
+| 1. UNDER-PERCH TASTE (Am Spiegelfuß / Lenker mit Front-Node PCBA 05 verdrahtet):      |
 |    * Taktiler Goldkontakt-Schalter unter dem Spiegelfuß (IP67, 100% batteriefrei)       |
 |    * Hardware-Schmitt-Trigger-Entprellung (12 µs Latenz)                               |
 |    * GPIO Pegel-Interrupt auf Front-Node PCBA 05 (5-Gesten Trigger Engine)             |
@@ -194,7 +198,7 @@ In OpenMotorBridge v10.0 wurde das veraltete Kassetten-Einschubsystem (mit Doppe
 
 ### 2.2 Symmetrische Dual Under-Perch Tastenbelegung & 5-Gesten-Engine
 
-Jeder Spiegel-Pod (`PCBA 05B`) verfügt über einen taktilen Taster, der softwaredefiniert in der WebApp (PWA) mit bis zu 5 Gesten frei konfiguriert werden kann:
+Jeder Under-Perch Taster am Lenker (über den Front-Knoten `PCBA 05` eingelesen) verfügt über eine programmierbare Tastenlogik, die softwaredefiniert in der WebApp (PWA) mit bis zu 5 Gesten frei konfiguriert werden kann:
 
 ```
 +----------------------------------------------------------------------------------------+
@@ -301,7 +305,7 @@ Da Pods im v10.0 System standardisierte Trägerbays darstellen, fungieren die Pr
 * **Klasse 3b (Digital DMR Tier I & OMM 446 `PCBA 10`):**
   * **OMM 446 ECE 22.06 UCS Modul:** Volldigitales DMR Tier I + Analog FM Kombimodul auf Basis des NiceRF SA818-DMR Transceivers.
   * Kompatibel zu modernen Digitalfunkgeräten wie dem **Midland D-10** (glasklare, rauschfreie Sprache ohne Knacken bis zur Reichweitengrenze).
-  * 100 % digital steuerbar via UART (Kanal, CTCSS, Squelch) über CarPlay / PWA Dashboard.
+  * 100 % digital steuerbar via UART (Kanal, CTCSS, Squelch) über OMB PWA Dashboard.
   * Formschlüssig integrierte 446-MHz-Helixantenne im Pod-Deckel.
 
 #### Klasse 4: OpenMotorMesh 2.4 GHz Universal-Modul (UCS) (`omm_2_4ghz.json`):

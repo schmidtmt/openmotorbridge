@@ -70,7 +70,7 @@ Das Gehäuse der Zentralbox ist als ultravibrationsfestes IP67/IP69K-Gehäuse au
 
 ![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Abbildung 8.2: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse. Sichtbar sind: Monocoque-Wanne mit integrierten Domen und Stirnwandports, bestückte PCBA 01 v10 (ESP32-S31 mit On-Board Johanson Keramikantenne ANT3, QCC3084 mit ANT2 U.FL Port, SX1262 LoRa mit ANT1 U.FL Port, U12 Quad Power Switch), einschiebbarer Zwischenboden mit LiPo-Akkubett und Taoglas Dual-Flexantennen (LoRa 868 MHz & Helmet Audio) sowie der L-Schiebedeckel mit Gore-Membran und integrierter Heckwand.*
+*Abbildung 8.2: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse. Sichtbar sind: Monocoque-Wanne mit integrierten Domen und Stirnwandports, bestückte PCBA 01 v10 (ESP32-S31 mit On-Board Johanson Keramikantenne ANT3, 3x QCC3086 Bluetooth Audio Transceiver, SX1262 LoRa mit ANT1 U.FL Port, U12 Quad Power Switch), einschiebbarer Zwischenboden mit LiPo-Akkubett und Taoglas Dual-Flexantennen (LoRa 868 MHz & Helmet Audio) sowie der L-Schiebedeckel mit Gore-Membran und integrierter Heckwand.*
 
 ### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
 
@@ -164,8 +164,8 @@ OpenMotorBridge nutzt ein duales, vollständig gehäuseintegriertes Antennenkonz
    * **Werkzeugloses Durchstoßen bei Bedarf:** Wird für Carbon-Heckverkleidungen oder Rallye-Einsätze eine externe Whip-Antenne benötigt, lässt sich die $0{,}4\,\text{mm}$ Membran mit einem kleinen Dorn/Schraubendreher sauber herausdrücken und eine IP67 SMA-Einbaubuchse mit O-Ring montieren. Da die Buchse in der festen Schwelle sitzt, bleibt die Antenne beim Abziehen des L-Deckels unberührt am Gehäuse.
 4. **100 % geschlossener Monocoque-Wannenboden (Entfall der historischen UWB-Antennentasche):**
    * Der Boden der Monocoque-Wanne (`000_monocoque_tub.scad`) ist in v10.0 als durchgehend homogene, $2{,}5\,\text{mm}$ starke PA12-Wandung ohne Aussparungen für das entfallene UWB-System ausgeführt. Sämtliche fahrzeuginterne Daten- und Audioverbindungen laufen über den geschirmten 4-Ader Automotive-Bus.
-5. **Bluetooth 5.4 / LE Audio (Qualcomm QCC3084):**
-   * Nutzt die onboard 2.4-GHz-Keramik-Chipantenne mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
+5. **Bluetooth 5.4 / LE Audio (3× Qualcomm QCC3086):**
+   * Nutzen onboard 2.4-GHz-Keramik-Chipantennen mit optimiertem Keepout-Bereich auf `PCBA 01`. Die Abstrahlung erfolgt verlustfrei durch die PA12-Wandungen und den Zwischenboden zu den Helm-Headsets und Smartphone-Docks.
 
 ---
 
@@ -546,7 +546,10 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 
 ---
 
-### 5.3 Die Evolution von den Satelliten-Blöcken zum integrierten Handschuhfach-Hub (PCBA 05B)
+### 5.3 Die Evolution von den Satelliten-Blöcken zum integrierten Handschuhfach-Ladesystem
+
+> [!NOTE]
+> **Architekturstand v10.5+ (Harmonisierung):** Der vormalige 5-Port USB-Hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) und externe CarPlay/AA-Dongles sind im aktuellen Systemstand vollständig entfallen und **historisch archiviert**. An ihre Stelle tritt im Handschuhfach ein **magnetischer Qi-Schnellladepuck (15W induktiv / MagSafe)** sowie eine companion **USB-C PD 3.0 Schnellladebuchse**, direkt versorgt über eine robuste 2-adrige DC-Leitung vom 30W SW3526-Controller des Front-Knotens (`PCBA 05`).
 
 In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satellitenblöcke vorgesehen: ein separater „Cockpit-Satellit“ und ein „Fahrzeug-Satellit“, die über Schwalbenschwanz-Führungen (Dovetail) gekoppelt werden konnten. **In Version 10.0 ist dieses Konzept durch die integrierte Multi-Port-Architektur grundlegend vereinfacht und professionalisiert worden:**
 
@@ -692,7 +695,7 @@ Aufgrund der werkseitigen Showa Inverted-Remote-Reservoir-Stoßdämpfer mit dick
 |    * Zero Tank-Demontage, Zero Tank-Anheben!                                |
 +-----------------------------------------------------------------------------+
 | 3. MITTE (Unter Sitzbank):                                                  |
-|    * Zentralbox mittig auf Batteriebrücke (ESP32-S31 AI-Host, QCC3084 Audio,|
+|    * Zentralbox mittig auf Batteriebrücke (ESP32-S31 AI-Host, 3x QCC3086 Audio,|
 |      SX1262 LoRa 868 MHz & Multi-Port Automotive USB-PD Engine bis 60 W)   |
 |    * USV-Pufferung via 1S LiPo (2.200 mAh) für 24/7 Diebstahl-Sentry        |
 +-----------------------------------------------------------------------------+
@@ -860,7 +863,7 @@ Für großvolumige Reiseenduros und Offroad-Tourer mit offenem Gitterrohr-Heckra
 +-----------------------------------------------------------------------------+
 | 3. MITTE (Unter Fahrersitz / Werkzeugfach):                                 |
 |    * Zentralbox spritzwassergeschützt auf 4x M4 Silentblöcken               |
-|    * ESP32-S31 AI-Host, QCC3084 Audio, SX1262 LoRa 868 MHz & USB-PD Engine  |
+|    * ESP32-S31 AI-Host, 3x QCC3086 Audio, SX1262 LoRa 868 MHz & USB-PD Engine|
 |    * 12V Speisung direkt von Batterie & OBD-2 Diagnosestecker unter Sitzbank|
 +-----------------------------------------------------------------------------+
 | 4. VORDERER HECKRAHMEN / SEITENBEREICH (Koffer-Pods 1 & 2):                 |
@@ -1276,7 +1279,7 @@ Da Ultra-Wideband (UWB) komplett durch den drahtgebundenen 4-Draht Automotive US
 +---------------------------------------------------------------+-------------------------+
 | UNTERM BEIFAHRERSITZ ODER IM MITTELTUNNEL:                                              |
 | [ GEMEINSAME CAR SUPPORT CORE UNIT (PCBA 01 + PCBA 05) ]                                |
-| * Zentralbox (ESP32-S31 AI-Host, QCC3084 Audio, SX1262 LoRa Notfunk, LiPo-USV)          |
+| * Zentralbox (ESP32-S31 AI-Host, 3x QCC3086 Audio, SX1262 LoRa Notfunk, LiPo-USV)       |
 | * Front-Node (Automotive USB-Hub, 20W PD Ottocast-Bypass, Cockpit-Audio-Routing)       |
 | * Interner 10 cm 4-Draht Bus (USB-PD / USB 2.0); gemeinsame 12V-Bordnetzeinspeisung     |
 | * SMA-Ausgang: 2,5 m RG-174 Koaxialkabel nach hinten zur 868-MHz-Magnetfuß-Dachantenne  |
@@ -1506,7 +1509,7 @@ Die Funktionen der beiden physischen Daumentaster sind **zu 100 % softwaredefini
 | :--- | :--- | :--- | :--- |
 | **Intercom & Voice** | `INTERCOM_PTT_GATE` | Push-to-Talk aktiv solange gedrückt (Sena / Cardo / OMM / PMR446) | Links: `HOLD_GATE` |
 | | `INTERCOM_TOGGLE` | Einmal drücken = Funkkanal offen, nochmal drücken = geschlossen | Alternativ |
-| | `VOICE_ASSISTANT` | Triggert Siri / Google Assistant via Bluetooth HFP am QCC3084 | Links: `TRIPLE_CLICK` |
+| | `VOICE_ASSISTANT` | Triggert Siri / Google Assistant via Bluetooth HFP am QCC3086 (U9) | Links: `TRIPLE_CLICK` |
 | | `MIC_MUTE_TOGGLE` | Helmmikrofon sofort stummschalten (Mute-Funktion) | Frei wählbar |
 | | `MESH_CHANNEL_NEXT` | Schaltet die Mesh-Gruppenkanäle durch (Open Mesh 1 bis 9) | Links: `DOUBLE_CLICK` |
 | **Action-Cam & Media** | `CAM_HIGHLIGHT_TAG` | Sendet BLE-Bookmark an Insta360, GoPro oder DJI (setzt Highlight-Tag im Video) | Rechts: `SHORT_CLICK` |
@@ -1670,7 +1673,7 @@ Die CAD-Dateistruktur von OpenMotorBridge (`hardware/cad/scad/` und `hardware/ca
 | **Front-Knoten (`PCBA 05`)** | L-Schiebedeckel mit Keilanzug, Slam-to-Shut Riegeln, 2x2 MIMO Antennen-Clips & Puck-Rastung | [`04_front_node/020_front_node_slide_lid.stl`](../../hardware/cad/stl/04_front_node/020_front_node_slide_lid.stl) (`front_node_upper_lid.stl`) | [`04_front_node/01_front_node_lid.scad`](../../hardware/cad/scad/04_front_node/01_front_node_lid.scad) |
 | **Front-Knoten (`PCBA 05`)** | EPDM/TPU Dichtkamm-Paar & TPU USB-C Staubschutzstopfen | [`04_front_node/front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl), [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | [`04_front_node/02_front_node_cable_glands.scad`](../../hardware/cad/scad/04_front_node/02_front_node_cable_glands.scad), [`03_front_node_usbc_plug.scad`](../../hardware/cad/scad/04_front_node/03_front_node_usbc_plug.scad) |
 | **Front-Knoten (`PCBA 05`)** | Verkleidungs-Rohrschelle (Ø 12–22 mm, AMPS: Druckplatte, Basis & Kappe) | [`04_front_node/front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl) (`_base.stl` / `_cap.stl`) | [`04_front_node/front_node_fairing_tube_clamp.scad`](../../hardware/cad/scad/04_front_node/front_node_fairing_tube_clamp.scad) |
-| **Handschuhfach-Hub (`PCBA 05B`)** | Formschlüssiges 5-Port USB-C Media- & Power-Injection Hub Gehäuse ($82 \times 54 \times 15\,\text{mm}$, `J1..J5`) | [`04_front_node/glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | [`04_front_node/glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad) |
+| **Handschuhfach-Hub (`PCBA 05B`)** | *(Historisch archiviert / Ersetzt durch 30W Qi-Puck)* 5-Port USB-C Media- & Power-Hub ($82 \times 54 \times 15\,\text{mm}$) | [`04_front_node/glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | [`04_front_node/glovebox_power_injection_hub.scad`](../../hardware/cad/scad/04_front_node/glovebox_power_injection_hub.scad) |
 | **Sensor-Puck (`PCBA 05D`)** | Modulares Snap-On Sensor-Puck Gehäuse ($38 \times 38 \times 15\,\text{mm}$ Basis passgenau für $34 \times 34\,\text{mm}$ PCBA 05D: Assembly, Unterteil & Lichtkappe) | [`04_front_node/sensor_puck_environmental.stl`](../../hardware/cad/stl/04_front_node/sensor_puck_environmental.stl), [`05_accessories/sensor_puck_bottom.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_bottom.stl), [`05_accessories/sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) | [`04_front_node/parts/sensor_puck_environmental.scad`](../../hardware/cad/scad/04_front_node/parts/sensor_puck_environmental.scad) |
 | **Smart-Keyfob (`PCBA 07`)** | 4-teiliges 2-in-1 LoRa Smart-Keyfob Gehäuse (Typ D: Unterschale, Oberschale, TPU-Rim, Silikon-Tastmatte) | [`05_accessories/smart_keyfob_lower_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_lower_shell.stl), [`smart_keyfob_upper_shell.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_upper_shell.stl), [`smart_keyfob_tpu_rim.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_tpu_rim.stl), [`smart_keyfob_silicone_keypad.stl`](../../hardware/cad/stl/05_accessories/smart_keyfob_silicone_keypad.stl) | [`05_accessories/smart_keyfob_pager.scad`](../../hardware/cad/scad/05_accessories/smart_keyfob_pager.scad) |
 | **Spiegel-Pod (`PCBA 05C`)** | 100 % symmetrisches 4-teiliges Under-Perch Spiegel-Pod Gehäuse (Basis, Deckel, 45°-Schaltwippe, abgeknicktes TIR-Prisma) | [`05_accessories/under_perch_mirror_pod.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod.stl), [`under_perch_mirror_pod_base.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod_base.stl), [`under_perch_mirror_pod_cover.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod_cover.stl), [`under_perch_mirror_pod_button.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod_button.stl), [`under_perch_mirror_pod_lens.stl`](../../hardware/cad/stl/05_accessories/under_perch_mirror_pod_lens.stl) | [`05_accessories/under_perch_mirror_pod.scad`](../../hardware/cad/scad/05_accessories/under_perch_mirror_pod.scad) |

@@ -18,7 +18,9 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **U5** | BMI270 | Bosch Sensortec | LGA-14 (B.Cu) | C2836813 | 6-Achsen IMU für Schräglagen- & Bewegungserkennung |
 | **U6** | TCAN334G | Texas Instruments | SOIC-8 (B.Cu) | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault Protection) |
 | **U8** | USB2517I-JZX | Microchip | QFN-64 | C136706 | Industrial 7-Port High-Speed USB 2.0 Hub Controller (-40°C...+85°C) |
-| **U9** | Qualcomm QCC3084 | Qualcomm | SMD Modul (13x18mm) | C-Qualcomm | Bluetooth 5.4 Audio SoC (Dual-A2DP, LE Audio Auracast, HFP 1.8 HD Voice) mit dediziertem HF-Port |
+| **U9** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Smartphone Link: A2DP Sink, HFP 1.8 Low-Latency Voice-Rückkanal, AVRCP 1.6) |
+| **U13** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Fahrer-Helm: aptX Adaptive Hi-Fi, HFP 1.8 Mikrofon-Uplink) |
+| **U14** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Sozius-Helm: aptX / LC3 Stream, HFP 1.8 Mikrofon-Uplink) |
 | **U10** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 USV-gepuffert) |
 | **U11** | TPS7A0533 | Texas Instruments | SOT-23-5 (B.Cu)| C2845350 | 3.3V Ultra-Low-Noise LDO für analoge Signal- & Audio-Speisung |
 | **U12** | TPS4H160BQPWPRQ1 | Texas Instruments | HTSSOP-28-1EP | C969241 | Automotive 40V Quad High-Side Smart Switch (AEC-Q100, getrennte Absicherung Front, Pod 1, Pod 2, Radar) |
@@ -34,7 +36,7 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **J3** | TYPE-C-31-M-12 | Korean HRO | USB-C 16-Pin SMD Receptacle | C2765186 | Front Service-, DFU-Flash- & Diagnose-Port (USB 2.0 High-Speed) |
 | **J2** | DM3D-SF | Hirose | SMD Push-Pull (B.Cu) | C266624 | 4-Bit High-Speed SDIO MicroSD-Kartenleser für Tour-Logging & Offline-Karten |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | LoRa 868 MHz U.FL Buchse zu Taoglas FXP895 im Deckel |
-| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | Helmaudio 2.4 GHz U.FL Buchse zu Taoglas BT-Antenne im Deckel (Qualcomm QCC3084) |
+| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD HF | C2834595 | Helmaudio 2.4 GHz U.FL Buchse zu Taoglas BT-Antenne im Deckel (Qualcomm QCC3086) |
 | **ANT3** | 2450AT18D0100 | Johanson Technology | SMD 3216 (3.2x1.6mm) | C983086 | Onboard 2.4 GHz Keramik-Chipantenne für ESP32-S31 BLE-Master (Pods, Cam, Keyfob, TPMS) |
 
 *(Hinweis: Alle Platinen-Steckverbinder J1, J6, J5, J4, J7 ragen vertikal nach oben [Pointing UP] in den Gehäuse-Kabelkanal, sodass keine seitlichen Biegeschleifen entstehen und der Slide-In Schlitten vibrationsfrei entnehmbar bleibt).*
@@ -101,11 +103,14 @@ Dieses Dokument ist die zentrale Referenz (Single Source of Truth) für die voll
 | **J_SENSOR_EXT**| SM08B-GHS-TB | JST | 8-Pin 1.25mm SMD | `C2897374` | Modulares Sensor-Puck Interface zu `PCBA 05D` (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TIMEPULSE`, `GNSS_TX`, `GNSS_RX`, `GNSS_RESET_N`) |
 | **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung linker Spiegel-Pod (`PCBA 05C`: BSD LED, PTT/Geste) |
 | **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Cockpit-Anbindung rechter Spiegel-Pod (`PCBA 05C`: BSD LED, Cam-Tag/Geste) |
-| **J7** | TYPE-C-31-M-12 | Korean HRO | SMD Hybrid IP67 | `C2765186` | USB-C Service-, Flash- & Downstream-Port zum Handschuhfach-Hub (`PCBA 05B`) |
+| **J7** | TYPE-C-31-M-12 | Korean HRO | SMD Hybrid IP67 | `C2765186` | USB-C Service- & 30W Fast-Charge Feed zum Handschuhfach (Qi-Puck & USB-C) |
 
 ---
 
-## 5.1 PCBA 05B: Handschuhfach Media- & Power-Injection Hub (`openmotorbridge_cockpit_breakout`, 2-Layer FR4 TG150, 50 x 20 mm, 2-seitig SMT)
+## 5.1 PCBA 05B: Handschuhfach Media- & Power-Injection Hub (Historisch archiviert)
+
+> [!NOTE]
+> **Architekturstand v10.5+:** `PCBA 05B` ist im aktuellen Architekturstand **historisch archiviert und ersatzlos entfallen**. Die Versorgung des Handschuhfachs erfolgt über eine reine 2-adrige DC-Speisung (30W PD) zu einem magnetischen Qi-Ladepuck (15W induktiv) und einer USB-C Buchse. Die Fertigungsdaten bleiben für Bestandsbauten dokumentiert:
 
 | Designator | Bauteil / MPN | Hersteller | Gehäuse | LCSC / JLCPCB Part # | Funktion |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -247,7 +252,7 @@ Alle Fertigungsdaten liegen im Repository unter `hardware/production_packages/` 
 | **PCBA 01: Zentralbox** | `01_main_box_pcba_gerbers_jlcpcb.zip` | `01_main_box_pcba_bom_jlcpcb.csv` | `01_main_box_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (LM5050-Q1 auf B.Cu) |
 | **PCBA 03: Universal-Pod**| `03_pod_cartridge_pcba_gerbers_jlcpcb.zip` | `03_pod_cartridge_pcba_bom_jlcpcb.csv` | `03_pod_cartridge_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, 1-seitig SMT (Top; 2x pro Fahrzeug bestellen) |
 | **PCBA 05: Front-Knoten** | `05_front_node_pcba_gerbers_jlcpcb.zip` | `05_front_node_pcba_bom_jlcpcb.csv` | `05_front_node_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG (Gold), 1.6 mm, TG150, SMT beidseitig (LM5050-Q1 auf B.Cu) |
-| **PCBA 05B: Handschuhfach-Hub** | `05b_cockpit_breakout_pcba_gerbers_jlcpcb.zip` | `05b_cockpit_breakout_pcba_bom_jlcpcb.csv` | `05b_cockpit_breakout_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG, 1.6 mm, TG150, 50 x 20 mm, SMT beidseitig (5x USB-C Dual-Edge + USB2514Bi) |
+| **PCBA 05B: Handschuhfach-Hub** | `05b_cockpit_breakout_pcba_gerbers_jlcpcb.zip` | `05b_cockpit_breakout_pcba_bom_jlcpcb.csv` | `05b_cockpit_breakout_pcba_cpl_jlcpcb.csv` | **2 Lagen** | *Historisch archiviert* (ersetzt durch 30W Qi-Schnellladepuck & USB-C Buchse) |
 | **PCBA 05C: Spiegel-Pod** | `05c_mirror_pod_pcba_gerbers_jlcpcb.zip` | `05c_mirror_pod_pcba_bom_jlcpcb.csv` | `05c_mirror_pod_pcba_cpl_jlcpcb.csv` | **2 Lagen** | ENIG, 1.6 mm, TG150, 18.25 x 14.0 mm, SMT beidseitig Z-Stacked (2x pro Bike, SW1 auf B.Cu) |
 | **PCBA 05D: Sensor-Puck** | `05d_sensor_puck_pcba_gerbers_jlcpcb.zip` | `05d_sensor_puck_pcba_bom_jlcpcb.csv` | `05d_sensor_puck_pcba_cpl_jlcpcb.csv` | **4 Lagen** | ENIG, 1.6 mm, TG150, 34 x 34 mm, SMT Top (SAM-M10Q, TMP117, OPT3001, SPH0645) |
 | **PCBA 06: MagSafe Dock** | - | - | - | - | *Ersatzlos gestrichen in v10.0* (ersetzt durch COTS 4-Pin IP67 Magnet-Abrissschnittstelle) |
@@ -278,7 +283,7 @@ Alle Hauptgehäuse (Zentralbox, Koffer-Pods, Front-Knoten) nutzen die **schraube
 | **Front-Knoten Dichtkämme** | [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Paar**| TPU 95A / 85A | Elastische Dichtkämme für Front-USB & Signale |
 | **Front-Knoten USB-C Kappe**| [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastische Staubschutzkappe mit Haltekollier für Service-Port |
 | **Modulares Sensor-Puck Gehäuse**| [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) | **1 Set** | MJF PA12 / ASA | 2-teiliges Gehäuse (`sensor_puck_top.stl` & `sensor_puck_bottom.stl`) für `PCBA 05D` ($34 \times 34\,\text{mm}$) |
-| **Handschuhfach 5-Port USB-C Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | Formschlüssiges Dual-Edge Hubgehäuse für `PCBA 05B` ($50 \times 20\,\text{mm}$, 5x USB-C `J1..J5`) |
+| **Handschuhfach 5-Port USB-C Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Archiviert* | MJF PA12 / ASA | *(Historisch archiviert / Ersetzt durch 30W Qi-Puck)* Formschlüssiges Hubgehäuse für `PCBA 05B` |
 | **Verkleidungs-Rohrschelle**| [`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl) | *Opt. (1)* | MJF PA12 / ASA | 2-teilige Rohrschelle (Ø 12–22 mm) für Verkleidungsgeweih & Streben unterm Fairing |
 
 ### 10.2 OMM UCS Gehäuse & Pod-Aufnahme (ECE 22.06 & Gateway-Betrieb)
@@ -377,11 +382,9 @@ Für alle Verbindungen zwischen dem hermetischen IP68 Front-Node, dem Handschuhf
 
 | Funktion / Baugruppe | Header auf Platine | Steckertyp & Raster | Gegenstück / Gehäuseauslass | Länge | Bezugsquelle / Typ |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Handschuhfach-Hub Zuleitung** | Front-Node `J7` / USB-Out | USB-C Stecker | Handschuhfach-Hub (`PCBA 05B`) Nord `J2` (`FRONT_NODE`) | 60 cm | Geschirmtes High-Speed USB-C 2.0 & 30W Power-Injection Kabel |
-| **OEM Upstream Host (Skyline OS)** | Handschuhfach-Hub Nord `J1` (`SKYLINE_HOST`) | USB-C Buchse | OEM Harley USB-C Port zu Boom! Box GTS / Skyline OS | 25 cm | COTS USB-C Patchkabel |
-| **Smartphone Ladekabel (Bagger)** | Handschuhfach-Hub Süd `J3` (`PHONE_CHARGE`) | USB-C Buchse | Smartphone im rechten Handschuhfach | 20 cm | COTS USB-C auf USB-C / Lightning Schnellladekabel (30W PD) |
-| **Dongle Port (Handschuhfach)** | Handschuhfach-Hub Süd `J4` (`DONGLE`) | USB-C Buchse | Wireless CP/AA Adapter im Handschuhfach | 15 cm | COTS USB-C auf USB-C/A Kabel (10W geschaltet) |
-| **Media USB Stick (Bagger)** | Handschuhfach-Hub Süd `J5` (`MEDIA`) | USB-C Buchse | FLAC/MP3 USB-Stick oder Werkstatt-Diagnose | Direkt | COTS USB-C Speicherstick |
+| **Handschuhfach 30W Fast-Charge Zuleitung** | Front-Node `J7` / USB-Out | USB-C Stecker | Handschuhfach Qi-Puck & USB-C Fast-Charge | 60 cm | Geschirmtes 30W USB-PD Ladekabel (reine 2-Ader DC-Versorgung) |
+| **Magnetischer Qi-Ladepuck** | Handschuhfach DC-Feed | USB-C Buchse | Induktives Laden (MagSafe) im rechten Handschuhfach | 15 cm | COTS 15W Qi/Qi2 Magnet-Ladepuck (ca. 20–22W DC-Eingang) |
+| **Zusatz USB-C Schnellladebuchse** | Handschuhfach DC-Feed | USB-C Buchse | Kabelgebundenes Laden (Zweithandy / Tablet) | Direkt | COTS USB-C PD 3.0 Einbaubuchse |
 | **Action-Cam Stromversorgung** | Front-Node `J8` (`CAM 5V`) | JST-PH 2-Pin (2.0 mm) | Action-Cam (GoPro / Insta360) am Lenker/Scheibe | 30–50 cm | COTS JST-PH auf USB-C Power-Only Ladekabel (10W) |
 | **Navi 12V Stromversorgung** | Front-Node `J_NAV` (`NAV 12V`) | JST-PH 2-Pin (2.0 mm) | Navigationsgerät (Garmin Zumo / TomTom Rider) | 30–50 cm | COTS JST-PH 2P Pigtail (geschaltete 12V) |
 | **Zusatzscheinwerfer (Aux Light)** | Front-Node `J_AUX_LIGHT` (`AUX 12V`)| JST-PH 2-Pin (2.0 mm) | Zusatzscheinwerfer / Nebelleuchten | 40 cm | COTS JST-PH 2P Pigtail (geschaltete 12V / 3.5A via TPS1H100) |
@@ -506,8 +509,8 @@ Für den Standalone-Einsatz der beiden Intercom-Module (**PCBA 09: OMM 2.4 GHz H
 | **M2 Halteplattenschraube (Senkkopf)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Fixierung der Aktuator-Niederhalteplatten (4x pro Gateway-Kassette) |
 | **M2 Kassetten-Platinenschraube** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 Stk. | Befestigung von PCBA 03 im Kassetten-Schlitten (4x pro Kassette; Schottwandschrauben entfallen) |
 | **M2 UCS Modul-Schraube** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 10 Stk. | Verschraubung OMM UCS Gehäuseschalen (4x pro Modul) sowie Zentraldom H1 der Under-Perch Spiegel-Pods (1x pro Pod) |
-| **M2.5 Edelstahlmutter (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 18 Stk. | Formschlüssig eingelegt in Sechskanttaschen (4x PCBA 01 Slide-Tray, 4x PCBA 05 Front-Node, 2x PCBA 05B Hub, 4x Aktuator-Schlittenbrücke) |
-| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 12 Stk. | Befestigung der Platinen & Klemmen (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B Handschuhfach-Hub, 2x OMM Helm-Klemmschelle) |
+| **M2.5 Edelstahlmutter (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 16 Stk. | Formschlüssig eingelegt in Sechskanttaschen (4x PCBA 01 Slide-Tray, 4x PCBA 05 Front-Node, 4x Aktuator-Schlittenbrücke) |
+| **M2.5 Platinenschraube** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 Stk. | Befestigung der Platinen & Klemmen (4x PCBA 01, 4x PCBA 05, 2x OMM Helm-Klemmschelle) |
 | **M4 Edelstahlmutter (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 10 Stk. | 4x Zentralbox M4-Silentblöcke, 4x Front-Node Wanne (AMPS-Taschen), 2x Radar 2.0 Gehäuserückwand |
 | **M4 Schraube (Radar-Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 Stk. | Verschraubung Adapterplatte radar_swivel_tilt_cradle an Radar 2.0 Gehäuse |
 | **M4 Silentblöcke / Gummipuffer** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 Stk. | Schwingungsentkoppelte 4-Punkt Zentralbox-Montage am Motorradrahmen (dämpft 10-100 Hz) |

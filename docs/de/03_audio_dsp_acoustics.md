@@ -1,19 +1,23 @@
 # 03 - Audio-DSP, Akustik & I2S MEMS Fahrtwind-Kompensation (MSM261S4030 / SPH0645)
 
-Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v10.0 Standardized Node Architecture: die Zero-Ground-Loop Digitalarchitektur via 4-Ader Automotive-USB-Bus, den dedizierten Bluetooth 5.4 Helm-Hub (Qualcomm QCC3084 Audio SoC auf PCBA 01), den ESP32-S31 AI RISC-V DSP mit 128-bit SIMD AI-Beschleuniger, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen I2S MEMS Fahrtwind-Akustiksensors am Front-Knoten (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
+Dieses Dokument spezifiziert die systemweite Audio-Signalverarbeitung der OpenMotorBridge v10.0 Standardized Node Architecture: die Zero-Ground-Loop Digitalarchitektur via 4-Ader Automotive-USB-Bus, den dedizierten Bluetooth 5.4 Triple-Hub (3× Qualcomm QCC3086 Audio SoCs auf PCBA 01 für Phone-Link, Fahrer- und Sozius-Helm), den ESP32-S31 AI RISC-V DSP mit 128-bit SIMD AI-Beschleuniger, die FreeRTOS Core 1 DSP-Pipeline mit stetig differenzierbarem Raised-Cosine-Ducking, die Front-Node Infotainment-Bridge (FSC-BT802) sowie die dynamische **Helm-Lautstärkenachführung (AGC)** auf Basis des digitalen I2S MEMS Fahrtwind-Akustiksensors am Front-Knoten (Sipeed/Zilltek MSM261S4030H0R / Knowles SPH0645).
 
 ---
 
-## 1. Zero-Ground-Loop Digital-Topologie & Dual-Helm Bluetooth Hub
+## 1. Zero-Ground-Loop Digital-Topologie & Bluetooth Triple-Hub
 
 In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Einstreuungen und hochfrequentes Lichtmaschinenpfeifen ($1{,}0\dots 2{,}5\,\text{kHz}$) über lange Kabelbäume ein permanentes Problem. OpenMotorBridge löst dies in v10.0 fundamental durch **physikalische Entkopplung**:
 
 1. **Vollständiger Entfall analoger Fahrzeugleitungen:**
    * Es verlaufen **keinerlei analoge Audioleitungen** durch den Fahrzeugkabelbaum.
-   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Koffer-Pods (Pod 1 Links & Pod 2 Rechts) laufen volldigital über den **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit lokaler Signalwandlung über den dedizierten **Everest Semi ES8388 Codec** und synchroner USB-DFU/CDC-Telemetrie ($< 0{,}2\,\text{ms}$ Latenz). (Zentrales USB Audio Class 2.0 Streaming erfolgt auf der Zentralbox über den Qualcomm QCC3084 bzw. am Front Node über den ESP32-S31).
-   * Durch die rein digitale, differenzielle USB-Signalübertragung existiert galvanisch **keine analoge Masseschleife** zwischen Zentralbox und Pod-Headsets.
-2. **Dual-Helm Bluetooth Audio Hub (Qualcomm QCC3084):**
-   * Fahrer und Sozius koppeln ihre Helme direkt per Bluetooth 5.4 an den dedizierten Qualcomm QCC3084 Audio SoC auf der Zentralbox (`PCBA 01`).
+   * Sämtliche Audio- und Steuer-Interconnects zwischen Zentralbox (`PCBA 01`) und den Koffer-Pods (Pod 1 Links & Pod 2 Rechts) laufen in der Basis-Konfiguration über den **4-Ader Automotive-USB-Bus** (`VCC_BUS` 12V/PD, `GND`, `USB_D-`, `USB_D+`) mit lokaler Signalwandlung über den dedizierten **Everest Semi ES8388 Codec** und synchroner USB-DFU/CDC-Telemetrie ($< 0{,}2\,\text{ms}$ Latenz).
+   * Bei installiertem optionalen Radar-Knoten (`PCBA 08`, Stufe 2) erfolgt die Koffer-Pod-Anbindung komplett drahtlos über die beiden QCC3086 (`U4`, `U5`) des Radarknotens; die ES8388-Codecs auf `PCBA 03` gehen in den Cold Standby. Die Mechatronik (KL15-Einschaltimpuls, Pogo-Pins) bleibt 1:1 unverändert erhalten.
+   * Durch die rein digitale, differenzielle Signalübertragung existiert galvanisch **keine analoge Masseschleife** zwischen Zentralbox und Pod-Headsets.
+2. **Triple-Bluetooth Audio Hub (3× Qualcomm QCC3086 U9, U13, U14):**
+   * **`U9` (Smartphone-Link):** A2DP Sink (Musik-Streaming), HFP 1.8 Low-Latency Voice-Rückkanal (< 20 ms Latenz für Telefonie und Sprachassistenten) sowie AVRCP 1.6 Lenkertasten-Steuerung.
+   * **`U13` (Fahrer-Helm):** A2DP Source mit aptX Adaptive Hi-Fi (< 20 ms Latenz) und HFP 1.8 Helmmikrofon-Uplink.
+   * **`U14` (Sozius-Helm):** A2DP Source mit synchronem Zweit-Stream (aptX/LC3) und HFP 1.8 Helmmikrofon-Uplink.
+   * Alle drei Chips sind **100% identische WLCSP-99 Gleichteile**.
    * Pod 1 und Pod 2 sind universelle Koffer-Dockingbuchten für externe Gruppen-Gateways (Sena Mesh, Cardo DMC, OMM 2.4 GHz oder Midland PMR446). Sie haben **keine feste Zuordnung zu Fahrer oder Sozius**.
 3. **Lokale Signalwandlung im Koffer-Pod (PCBA 03):**
    * Jede Pod-Platine (`PCBA 03`) besitzt einen eigenen **ES8388 24-Bit / 48 kHz Stereo-Audio-Codec** direkt am Intercom-Anschluss (`J_AUDIO_PWR`).
@@ -26,22 +30,23 @@ In klassischen Motorrad-Audio-Installationen sind Masseschleifen, Zündfunk-Eins
 |                      ZERO-GROUND-LOOP AUDIO-TOPOLOGIE (v10.0 ARCHITECTURE)               |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ FAHRER-HELM ] <-------- Bluetooth 5.4 Dual-A2DP ------> [ ZENTRALBOX PCBA 01 ]        |
-|  [ SOZIUS-HELM ] <-------- aptX HD / Auracast / HFP 1.8 -> [ Qualcomm QCC3084 SoC ]     |
-|                                                                 ^        ^              |
-|                                  I2S / PCM Digital Audio        |        |              |
-|                                                                 v        v              |
-|                                                     [ ESP32-S31 AI RISC-V DSP ]         |
-|                                                                 ^        ^              |
-|                           4-Ader USB-PD Bus (USB Audio UAC2)    |        |              |
-|                               (< 0.2 ms / bis zu 60W Laden)     |        |              |
-|                      +------------------------------------------+        |              |
-|                      v                                                   v              |
-|           +----------------------+                           +----------------------+   |
-|           | POD 1 (GATEWAY A)    |                           | POD 2 (GATEWAY B)    |   |
-|           | Sena SPIDER X Slim   |                           | Cardo DMC / OMM 2.4G |   |
-|           | PCBA 03 Interface    |                           | PCBA 03 Interface    |   |
-|           +----------------------+                           +----------------------+   |
+|  [ FAHRER-HELM ] <-------- aptX Adaptive / HFP 1.8 --------> [ QCC3086 U13 ]           |
+|  [ SOZIUS-HELM ] <-------- aptX / LC3 / HFP 1.8 -----------> [ QCC3086 U14 ]           |
+|  [ SMARTPHONE  ] <-------- A2DP Sink / HFP 1.8 ------------> [ QCC3086 U9  ]           |
+|                                                                    ^   ^                |
+|                                     I2S / PCM Digital Audio        |   |                |
+|                                                                    v   v                |
+|                                                        [ ESP32-S31 AI RISC-V DSP ]      |
+|                                                                    ^   ^                |
+|       Stufe 1 (Basis): 4-Ader USB-PD Bus (USB Audio UAC2)          |   |                |
+|       Stufe 2 (Opt. Radar): 2x QCC3086 Wireless BT Audio           |   |                |
+|                         +------------------------------------------+   |                |
+|                         v                                              v                |
+|              +----------------------+                      +----------------------+     |
+|              | POD 1 (GATEWAY A)    |                      | POD 2 (GATEWAY B)    |     |
+|              | Sena SPIDER X Slim   |                      | Cardo DMC / OMM 2.4G |     |
+|              | PCBA 03 Interface    |                      | PCBA 03 Interface    |     |
+|              +----------------------+                      +----------------------+     |
 +-----------------------------------------------------------------------------------------+
 ```
 
@@ -67,19 +72,19 @@ Die Zentralbox (`PCBA 01`) agiert als unumstößliche **Single Source of Truth**
 | Slot   | Bezeichnung & Quelle     | Codec & Bitrate     | Übertragungspfad  | Routing & Funktion  |
 +--------+--------------------------+---------------------+-------------------+---------------------+
 | **1**  | **Driver Voice Up**      | Opus HD 24k / HFP   | Bluetooth 5.4     | Fahrer-Sprache an   |
-|        | (Fahrer-Helm Mikrofon)   | (16-24 kbps)        | QCC3084 -> DSP    | Mesh/Funk-Gateways  |
+|        | (Fahrer-Helm Mikrofon)   | (16-24 kbps)        | QCC3086 U13 -> DSP| Mesh/Funk-Gateways  |
 +--------+--------------------------+---------------------+-------------------+---------------------+
 | **2**  | **Pillion Voice Up**     | Opus HD 24k / HFP   | Bluetooth 5.4     | Sozius-Sprache oder |
-|        | (Sozius-Helm Mikrofon)   | (16-24 kbps)        | QCC3084 -> DSP    | Private Cabin Mute  |
+|        | (Sozius-Helm Mikrofon)   | (16-24 kbps)        | QCC3086 U14 -> DSP| Private Cabin Mute  |
 +--------+--------------------------+---------------------+-------------------+---------------------+
-| **3**  | **Pod 1 Gateway Audio**  | Opus HD 24k         | 4-Ader USB-Bus    | Bucht 1 Stream      |
+| **3**  | **Pod 1 Gateway Audio**  | Opus HD 24k         | USB (St.1)/BT(St.2)| Bucht 1 Stream     |
 |        | (Sena Mesh 3.0 / OMM)    | (24-32 kbps)        | Strang 2 (PCBA 03)| (Up & Downlink)     |
 +--------+--------------------------+---------------------+-------------------+---------------------+
-| **4**  | **Pod 2 Gateway Audio**  | Vocoder / Opus 24k  | 4-Ader USB-Bus    | Bucht 2 Stream      |
+| **4**  | **Pod 2 Gateway Audio**  | Vocoder / Opus 24k  | USB (St.1)/BT(St.2)| Bucht 2 Stream     |
 |        | (Cardo DMC / PMR446)     | (6-8 bzw. 24 kbps)  | Strang 3 (PCBA 03)| (Up & Downlink)     |
 +--------+--------------------------+---------------------+-------------------+---------------------+
-| **5**  | **Media / Navigation**   | Opus HD 24k / A2DP  | USB / Bluetooth   | Kontinuierliche     |
-|        | (Smartphone Musik/Navi)  | (32 kbps)           | QCC3084 -> DSP    | Hintergrund-Quelle  |
+| **5**  | **Media / Navigation**   | Opus HD 24k / A2DP  | Bluetooth 5.4     | Kontinuierliche     |
+|        | (Smartphone Musik/Navi)  | (32 kbps)           | QCC3086 U9 -> DSP | Hintergrund-Quelle  |
 +--------+--------------------------+---------------------+-------------------+---------------------+
 ```
 
@@ -133,7 +138,7 @@ GAIN
 | Priorität | Signalquelle | Ducking-Dämpfung | Attack ($T_{\text{att}}$) | Hold ($T_{\text{hold}}$) | Release ($T_{\text{rel}}$) |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Prio 1** | **Radar-Ping / Notruf** | **$-18\,\text{dB}$** | $5\,\text{ms}$ | $800\,\text{ms}$ | $200\,\text{ms}$ |
-| **Prio 1.5** | **Telefonat aktiv / Klingeln** (QCC3084 HFP / CP/AA) | **$-24\,\text{dB}$** (auf Musik/Intercom) | $10\,\text{ms}$ | Permanent | $300\,\text{ms}$ |
+| **Prio 1.5** | **Telefonat aktiv / Klingeln** (QCC3086 U9 HFP 1.8) | **$-24\,\text{dB}$** (auf Musik/Intercom) | $10\,\text{ms}$ | Permanent | $300\,\text{ms}$ |
 | **Prio 2** | **Navigations-Ansagen** (Smartphone / GPS) | **$-12\,\text{dB}$** | $15\,\text{ms}$ | $600\,\text{ms}$ | $250\,\text{ms}$ |
 | **Prio 3** | **Intercom Bucht 1 & 2** (Sena / Cardo / LoRa) | **$-8\,\text{dB}$** | $25\,\text{ms}$ | $400\,\text{ms}$ | $200\,\text{ms}$ |
 | **Prio 4** | **Musik-Streaming** (Bluetooth A2DP) | **$0\,\text{dB}$** (Basis) | -- | -- | -- |
@@ -249,20 +254,20 @@ FAHRWIND-PEGEL          FAHRGESCHWINDIGKEIT    AGC LAUTSTÄRKE-BOOST    AKUSTIK-
 
 ### 4.3 Die 4 Betriebsmodi des Gesamtsystems
 1. **Modus 1 (Touring-Duo):** Fahrer und Sozius hören sich gegenseitig mit vollem Duplex. Navi blendet sich mit $-12\,\text{dB}$ Ducking ein. Musik wird bei Intercom-Aktivität auf $-15\,\text{dB}$ gesenkt.
-2. **Modus 2 (Highway-Solo):** Fahrer fährt allein. Pod 2 ist stromlos (`disabled.json`). Voller DSP-Fokus auf Telefonie, CarPlay/Android Auto und Radar-Akustik.
+2. **Modus 2 (Highway-Solo):** Fahrer fährt allein. Pod 2 ist stromlos (`disabled.json`). Voller DSP-Fokus auf Telefonie, Smartphone-Navigation/Musik und Radar-Akustik.
 3. **Modus 3 (Group-Mesh Bridge):** Pod 1 (Sena) und Pod 2 (Cardo) sind parallel aktiv. Cross-Mix verbindet beide Gruppen in Echtzeit.
 4. **Modus 4 (Emergency-Override):** LoRa-Notruffunk oder Radar-Kollisionsalarm (TTC < 3.5s) schalten alle anderen Audioquellen sofort auf $-24\,\text{dB}$ stumm und injizieren den Notruf bzw. Alarm-Doppelton mit maximalem Headroom.
 
-### 4.4 Telefonie- & Rufmanagement (Qualcomm QCC3084 HFP & CarPlay / Android Auto)
+### 4.4 Telefonie- & Rufmanagement (Qualcomm QCC3086 U9 HFP 1.8 Wideband Voice)
 
-Die Zentralbox (`PCBA 01`) integriert einen **Qualcomm QCC3084 Bluetooth 5.4 Audio-SoC**, der neben hochauflösendem Dual-A2DP (aptX HD / LE Audio Auracast) das **Hands-Free Profile (HFP 1.8 / mSBC / Wideband Speech)** bereitstellt. Das Telefonie-Routing ist nahtlos in den DSP eingebettet:
+Die Zentralbox (`PCBA 01`) integriert einen **Qualcomm QCC3086 Bluetooth 5.4 Transceiver (`U9`)**, der das **Hands-Free Profile (HFP 1.8 / mSBC / aptX Voice, 16 kHz Wideband)** mit einer Latenz $< 20\,\text{ms}$ bereitstellt. Das Telefonie-Routing ist nahtlos in den DSP eingebettet:
 
 ```
 +----------------------------------------------------------------------------------------+
-|               MODALES TELEFONIE- & PTT-ROUTING (QUALCOMM QCC3084 HFP)                  |
+|               MODALES TELEFONIE- & PTT-ROUTING (QUALCOMM QCC3086 U9 HFP 1.8)           |
 +----------------------------------------------------------------------------------------+
 |                                                                                        |
-| [ SMARTPHONE / CARPLAY ] --> HFP / AA --> [ QCC3084 BT 5.4 ] --> [ ESP32-S3 CORE 1 ]   |
+| [ SMARTPHONE ] ---------> HFP 1.8 ------> [ QCC3086 U9 ] ------> [ ESP32-S3 CORE 1 ]   |
 |                                                                        |               |
 |                                            +---------------------------+-------------+ |
 |                                            v                                         v |
@@ -307,11 +312,11 @@ Um zu überprüfen, ob ein angebundenes OEM-Headset Schaltbefehle tatsächlich a
 
 ---
 
-## 6. Harley-Davidson Boom! Box WHIM-Mikrofon-Impedanz-Emulation
+## 6. Harley-Davidson Boom! Box Mikrofon-Impedanz-Emulation & FSC-BT802 Headunit-Bridge
 
-Zur Freischaltung von Apple CarPlay in der Boom! Box GTS Infotainment-Headunit ohne das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$):
-* **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert über ein präzises elektronisches Widerstandsnetzwerk an den Audio-Schnittstellen die Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
-* **Ergebnis:** Apple CarPlay und Android Auto werden im Fahrzeugdisplay sofort freigeschaltet.
+Zur Freischaltung der Audio- und Navigationsansagen-Ausgabe in der Boom! Box GTS / 6.5GT Headunit ohne das proprietäre HD-WHIM-Modul ($> 350\,\text{€}$):
+* **Elektrische Impedanz-Emulation:** OpenMotorBridge emuliert über ein präzises elektronisches Widerstandsnetzwerk an den Schnittstellen des Front-Knotens (`PCBA 05`) die Gleich- und Wechselstrom-Impedanz ($1{,}0 \dots 2{,}2\,\text{k}\Omega$) eines aktiven OEM-Mikrofons.
+* **Ergebnis:** Die Headunit erkennt ein aktives Headset, schaltet den Audio-Ausgang für Navigationsansagen und System-Töne frei und leitet diese an den FSC-BT802 Bluetooth-Transceiver des Front-Knotens weiter, welcher sie latenzarm in den OMB-DSP einmischt.
 
 ---
 

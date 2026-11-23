@@ -1,5 +1,6 @@
 #include "bluetooth_audio_manager.h"
 #include "group_split_rescue_engine.h"
+#include "usb_vehicle_backbone.h"
 #include <string.h>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
@@ -11,7 +12,7 @@
 #include "nvs_flash.h"
 #include "nvs.h"
 
-static const char* TAG = "QCC3084_AUDIO";
+static const char* TAG = "QCC3086_AUDIO";
 
 #define NVS_NAMESPACE "bt_audio"
 #define UART_BUF_SIZE 1024
@@ -50,9 +51,9 @@ static QueueHandle_t s_uart_queue = NULL;
 
 static void qcc_send_cmd(const char *cmd) {
     if (!cmd) return;
-    ESP_LOGD(TAG, "QCC3084 TX: %s", cmd);
-    uart_write_bytes(QCC3084_UART_NUM, cmd, strlen(cmd));
-    uart_write_bytes(QCC3084_UART_NUM, "\r\n", 2);
+    ESP_LOGD(TAG, "QCC3086 TX: %s", cmd);
+    uart_write_bytes(QCC3086_UART_NUM, cmd, strlen(cmd));
+    uart_write_bytes(QCC3086_UART_NUM, "\r\n", 2);
 }
 
 static void parse_qcc_response(const char *line) {
@@ -61,7 +62,7 @@ static void parse_qcc_response(const char *line) {
         if (sscanf(line + 12, "%d", &state) == 1) {
             s_hfp_state = (HfpCallState_t)state;
             group_split_set_hfp_call_state(s_hfp_state != HFP_STATE_IDLE);
-            ESP_LOGI(TAG, "📞 QCC3084 HFP Call State updated: %d (%s)",
+            ESP_LOGI(TAG, "📞 QCC3086 HFP Call State updated: %d (%s)",
                      state, (state == HFP_STATE_RINGING) ? "RINGING" :
                             (state == HFP_STATE_CALL_ACTIVE) ? "CALL_ACTIVE" : "IDLE");
         }
@@ -90,30 +91,30 @@ static void parse_qcc_response(const char *line) {
         if (sscanf(line + 9, "%d", &role) == 1) {
             uint8_t idx = (role == BT_ROLE_PAX) ? 1 : 0;
             s_headsets[idx].state = BT_STATE_CONNECTED;
-            ESP_LOGI(TAG, "✅ QCC3084: Headset Role %d CONNECTED successfully.", role);
+            ESP_LOGI(TAG, "✅ QCC3086: Headset Role %d CONNECTED successfully.", role);
         }
     } else if (strncmp(line, "+DISCONNECT:", 12) == 0) {
         int role = 1;
         if (sscanf(line + 12, "%d", &role) == 1) {
             uint8_t idx = (role == BT_ROLE_PAX) ? 1 : 0;
             s_headsets[idx].state = BT_STATE_DISCONNECTED;
-            ESP_LOGW(TAG, "⚠️ QCC3084: Headset Role %d DISCONNECTED.", role);
+            ESP_LOGW(TAG, "⚠️ QCC3086: Headset Role %d DISCONNECTED.", role);
         }
     }
 }
 
-void task_qcc3084_hub(void *pvParameters) {
+void task_qcc3086_hub(void *pvParameters) {
     uart_event_t event;
     uint8_t dtmp[128];
     char line_buf[128];
     size_t line_idx = 0;
 
-    ESP_LOGI(TAG, "Qualcomm QCC3084 UART Supervisor Task started on Core 1.");
+    ESP_LOGI(TAG, "Qualcomm QCC3086 UART Supervisor Task started on Core 1.");
 
     while (1) {
         if (xQueueReceive(s_uart_queue, (void * )&event, portMAX_DELAY)) {
             if (event.type == UART_DATA) {
-                int len = uart_read_bytes(QCC3084_UART_NUM, dtmp, event.size, portMAX_DELAY);
+                int len = uart_read_bytes(QCC3086_UART_NUM, dtmp, event.size, portMAX_DELAY);
                 for (int i = 0; i < len; i++) {
                     char c = (char)dtmp[i];
                     if (c == '\r' || c == '\n') {
@@ -127,7 +128,7 @@ void task_qcc3084_hub(void *pvParameters) {
                     }
                 }
             } else if (event.type == UART_FIFO_OVF || event.type == UART_BUFFER_FULL) {
-                uart_flush_input(QCC3084_UART_NUM);
+                uart_flush_input(QCC3086_UART_NUM);
                 xQueueReset(s_uart_queue);
             }
         }
@@ -135,11 +136,11 @@ void task_qcc3084_hub(void *pvParameters) {
 }
 
 esp_err_t bluetooth_audio_manager_init(void) {
-    ESP_LOGI(TAG, "Initializing Qualcomm QCC3084 Bluetooth 5.4 Audio Hub (Dual-Helm aptX HD)...");
+    ESP_LOGI(TAG, "Initializing Qualcomm QCC3086 Bluetooth 5.4 Audio Hub (Dual-Helm aptX HD)...");
 
-    // 1. Hardware Reset / Enable Sequence via QCC3084_PIN_EN
+    // 1. Hardware Reset / Enable Sequence via QCC3086_PIN_EN
     gpio_config_t en_cfg = {
-        .pin_bit_mask = (1ULL << QCC3084_PIN_EN),
+        .pin_bit_mask = (1ULL << QCC3086_PIN_EN),
         .mode = GPIO_MODE_OUTPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_ENABLE,
@@ -148,12 +149,12 @@ esp_err_t bluetooth_audio_manager_init(void) {
     gpio_config(&en_cfg);
 
     // Assert reset (LOW), wait 50ms, then release (HIGH)
-    gpio_set_level(QCC3084_PIN_EN, 0);
+    gpio_set_level(QCC3086_PIN_EN, 0);
     vTaskDelay(pdMS_TO_TICKS(50));
-    gpio_set_level(QCC3084_PIN_EN, 1);
+    gpio_set_level(QCC3086_PIN_EN, 1);
     vTaskDelay(pdMS_TO_TICKS(100)); // Allow QCC boot ROM to initialize
 
-    // 2. Configure UART1 for QCC3084 AT/GAIA communication
+    // 2. Configure UART1 for QCC3086 AT/GAIA communication
     uart_config_t uart_config = {
         .baud_rate = 115200,
         .data_bits = UART_DATA_8_BITS,
@@ -162,10 +163,10 @@ esp_err_t bluetooth_audio_manager_init(void) {
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
         .source_clk = UART_SCLK_DEFAULT,
     };
-    ESP_ERROR_CHECK(uart_param_config(QCC3084_UART_NUM, &uart_config));
-    ESP_ERROR_CHECK(uart_set_pin(QCC3084_UART_NUM, QCC3084_PIN_TX, QCC3084_PIN_RX,
+    ESP_ERROR_CHECK(uart_param_config(QCC3086_UART_NUM, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(QCC3086_UART_NUM, QCC3086_PIN_TX, QCC3086_PIN_RX,
                                  UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
-    ESP_ERROR_CHECK(uart_driver_install(QCC3084_UART_NUM, UART_BUF_SIZE * 2,
+    ESP_ERROR_CHECK(uart_driver_install(QCC3086_UART_NUM, UART_BUF_SIZE * 2,
                                         UART_BUF_SIZE * 2, 20, &s_uart_queue, 0));
 
     // 3. Load persisted pairings from NVS
@@ -188,7 +189,7 @@ esp_err_t bluetooth_audio_manager_init(void) {
         nvs_close(nvs);
     }
 
-    // 4. Send Hardware Init Commands to QCC3084
+    // 4. Send Hardware Init Commands to QCC3086
     qcc_send_cmd("AT+INIT");
     qcc_send_cmd("AT+A2DP_DUAL=1");              // Enable simultaneous Dual-A2DP
     qcc_send_cmd("AT+APTX_MODE=ADAPTIVE_LL");    // Select low-latency aptX Adaptive (<20ms)
@@ -203,9 +204,9 @@ esp_err_t bluetooth_audio_manager_init(void) {
     qcc_send_cmd(cmd);
 
     // 5. Start UART Supervisor Task on Core 1
-    xTaskCreatePinnedToCore(task_qcc3084_hub, "qcc3084_hub_task", 4096, NULL, 21, NULL, 1);
+    xTaskCreatePinnedToCore(task_qcc3086_hub, "qcc3086_hub_task", 4096, NULL, 21, NULL, 1);
 
-    ESP_LOGI(TAG, "Qualcomm QCC3084 Hub initialized. Dual-A2DP aptX HD ready.");
+    ESP_LOGI(TAG, "Qualcomm QCC3086 Hub initialized. Triple-SoC Dual-A2DP aptX HD ready.");
     return ESP_OK;
 }
 
@@ -217,7 +218,7 @@ void bt_audio_start_scan(uint8_t role, uint32_t duration_s) {
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "AT+INQUIRY=%d,%lu", role, duration_s);
     qcc_send_cmd(cmd);
-    ESP_LOGI(TAG, "Sent QCC3084 Inquiry Scan for Role %d (Duration: %lu s)", role, duration_s);
+    ESP_LOGI(TAG, "Sent QCC3086 Inquiry Scan for Role %d (Duration: %lu s)", role, duration_s);
 }
 
 bool bt_audio_pair_device(uint8_t role, const uint8_t *mac) {
@@ -226,7 +227,7 @@ bool bt_audio_pair_device(uint8_t role, const uint8_t *mac) {
     memcpy(s_headsets[idx].mac, mac, 6);
     s_headsets[idx].state = BT_STATE_CONNECTING;
 
-    // Send QCC3084 Connect command
+    // Send QCC3086 Connect command
     char cmd[64];
     snprintf(cmd, sizeof(cmd), "AT+A2DP_CONNECT=%d,%02X%02X%02X%02X%02X%02X",
              role, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
@@ -251,7 +252,7 @@ void bt_audio_disconnect(uint8_t role) {
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "AT+A2DP_DISCONNECT=%d", role);
     qcc_send_cmd(cmd);
-    ESP_LOGI(TAG, "Sent QCC3084 Disconnect for Role %d.", role);
+    ESP_LOGI(TAG, "Sent QCC3086 Disconnect for Role %d.", role);
 }
 
 bool bt_audio_is_connected(uint8_t role) {
@@ -273,14 +274,14 @@ void bt_audio_set_volume(uint8_t role, uint8_t volume_pct) {
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "AT+AVRCP_VOL=%d,%d", role, volume_pct);
     qcc_send_cmd(cmd);
-    ESP_LOGI(TAG, "QCC3084: Role %d volume set to %d%% via AVRCP", role, volume_pct);
+    ESP_LOGI(TAG, "QCC3086: Role %d volume set to %d%% via AVRCP", role, volume_pct);
 }
 
 void bt_audio_set_aptx_mode(uint8_t role, bool low_latency) {
     char cmd[48];
     snprintf(cmd, sizeof(cmd), "AT+APTX_MODE=%d,%s", role, low_latency ? "ADAPTIVE_LL" : "HD_HIFI");
     qcc_send_cmd(cmd);
-    ESP_LOGI(TAG, "QCC3084: Role %d aptX mode configured: %s", role, low_latency ? "Low Latency (<20ms)" : "HD 24-bit/48kHz");
+    ESP_LOGI(TAG, "QCC3086: Role %d aptX mode configured: %s", role, low_latency ? "Low Latency (<20ms)" : "HD 24-bit/48kHz");
 }
 
 void bt_audio_enable_auracast(bool enable, const char *broadcast_name) {
@@ -292,22 +293,34 @@ void bt_audio_enable_auracast(bool enable, const char *broadcast_name) {
         snprintf(cmd, sizeof(cmd), "AT+AURACAST=0");
     }
     qcc_send_cmd(cmd);
-    ESP_LOGI(TAG, "QCC3084: LE Audio Auracast broadcast %s", enable ? "ENABLED" : "DISABLED");
+    ESP_LOGI(TAG, "QCC3086: LE Audio Auracast broadcast %s", enable ? "ENABLED" : "DISABLED");
 }
 
 bool bt_audio_is_auracast_active(void) {
     return s_auracast_enabled;
 }
 
+void bt_audio_request_front_speaker_mode(FscBt802OperatingMode mode) {
+    ESP_LOGI(TAG, "Requesting Front-Node Infotainment Bridge Mode: %s",
+             (mode == BT802_MODE_HEADSET_SINK) ? "Mode A (Headset Sink)" : "Mode B (Speaker Source)");
+    uint8_t payload[2] = { static_cast<uint8_t>(mode), 0x01 };
+    UsbVehicleBackbone::instance().send_generic_packet(
+        USB_PKT_FRONT_BT_MODE_CMD,
+        payload,
+        sizeof(payload),
+        USB_NODE_FRONT_NODE
+    );
+}
+
 void bt_audio_hfp_answer(void) {
-    ESP_LOGI(TAG, "📞 QCC3084 HFP: Answering incoming phone call (ATA)...");
+    ESP_LOGI(TAG, "📞 QCC3086 HFP: Answering incoming phone call (ATA)...");
     qcc_send_cmd("AT+ATA");
     s_hfp_state = HFP_STATE_CALL_ACTIVE;
     group_split_set_hfp_call_state(true);
 }
 
 void bt_audio_hfp_hangup(void) {
-    ESP_LOGI(TAG, "📞 QCC3084 HFP: Terminating / rejecting phone call (ATH)...");
+    ESP_LOGI(TAG, "📞 QCC3086 HFP: Terminating / rejecting phone call (ATH)...");
     qcc_send_cmd("AT+ATH");
     s_hfp_state = HFP_STATE_IDLE;
     group_split_set_hfp_call_state(false);
@@ -338,7 +351,7 @@ bool bt_audio_handle_ptt_event(uint8_t click_type) {
 }
 
 size_t bt_audio_write_stream_samples(uint8_t role, const int16_t *samples, size_t count) {
-    // Note: The primary audio pipeline feeds Qualcomm QCC3084 synchronously over hardware I2S.
+    // Note: The primary audio pipeline feeds Qualcomm QCC3086 synchronously over hardware I2S.
     // This helper allows injecting synthetic chime/alert streams directly if needed.
     if (!samples || count == 0) return 0;
     uint8_t idx = (role == BT_ROLE_PAX) ? 1 : 0;

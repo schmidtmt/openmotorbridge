@@ -112,11 +112,11 @@ void hw_inventory_scan_and_evaluate(void) {
         current |= HW_INV_RADAR;
     }
 
-    // Central Box Action-Cam BLE Master & Qualcomm QCC3084 BT 5.4
+    // Central Box Action-Cam BLE Master & Qualcomm QCC3086 BT 5.4 Hub
     if (action_cam_get_status().connected) {
         current |= HW_INV_ACTION_CAM;
     }
-    current |= HW_INV_QCC3084_BT;
+    current |= HW_INV_QCC3086_BT;
     current |= HW_INV_TPMS_FRONT;
     current |= HW_INV_TPMS_REAR;
     current |= HW_INV_CAN_BUS;
@@ -182,7 +182,7 @@ void hw_inventory_scan_and_evaluate(void) {
     eval_hw_node(HW_INV_LORA_SX1262, (current & HW_INV_LORA_SX1262), true,         &diag_pkt.led_states[14], &diag_pkt.led_states[15]);
     eval_hw_node(HW_INV_RADAR,       (current & HW_INV_RADAR),       true,         &diag_pkt.led_states[16], &diag_pkt.led_states[17]);
     eval_hw_node(HW_INV_POD2,        (current & HW_INV_POD2),        true,         &diag_pkt.led_states[18], &diag_pkt.led_states[19]);
-    eval_hw_node(HW_INV_QCC3084_BT,  (current & HW_INV_QCC3084_BT),  true,         &diag_pkt.led_states[20], &diag_pkt.led_states[21]);
+    eval_hw_node(HW_INV_QCC3086_BT,  (current & HW_INV_QCC3086_BT),  true,         &diag_pkt.led_states[20], &diag_pkt.led_states[21]);
     eval_hw_node(HW_INV_FRONT_NODE,  (current & HW_INV_FRONT_NODE),  true,         &diag_pkt.led_states[22], &diag_pkt.led_states[23]);
     eval_hw_node(HW_INV_TPMS_REAR,   (current & HW_INV_TPMS_REAR),   true,         &diag_pkt.led_states[24], &diag_pkt.led_states[25]);
     eval_hw_node(HW_INV_SENSOR_PUCK, (current & HW_INV_SENSOR_PUCK), true,         &diag_pkt.led_states[26], &diag_pkt.led_states[27]);

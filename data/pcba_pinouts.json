@@ -335,7 +335,7 @@
           "fw_define": "PIN_MAIN_BT_EN",
           "signal_type": "Digital Out",
           "target": "U9.11",
-          "description": "Qualcomm QCC3084 Enable / Reset Control"
+          "description": "Qualcomm QCC3086 Enable / Reset Control"
         },
         {
           "pad": "10",
@@ -344,7 +344,7 @@
           "fw_define": "PIN_MAIN_BT_UART_RX",
           "signal_type": "UART1_RX",
           "target": "U9.10",
-          "description": "Qualcomm QCC3084 Host Control Protocol RX"
+          "description": "Qualcomm QCC3086 Host Control Protocol RX"
         },
         {
           "pad": "11",
@@ -353,7 +353,7 @@
           "fw_define": "PIN_MAIN_BT_UART_TX",
           "signal_type": "UART1_TX",
           "target": "U9.9",
-          "description": "Qualcomm QCC3084 Host Control Protocol TX"
+          "description": "Qualcomm QCC3086 Host Control Protocol TX"
         },
         {
           "pad": "12",
@@ -362,7 +362,7 @@
           "fw_define": "PIN_MAIN_I2S_MCLK",
           "signal_type": "I2S_MCLK",
           "target": "U3.1 / U9.1",
-          "description": "Audio Master Clock (ES8388 Codec & QCC3084)"
+          "description": "Audio Master Clock (ES8388 Codec & QCC3086)"
         },
         {
           "pad": "13",
@@ -515,7 +515,7 @@
           "fw_define": "PIN_MAIN_I2S_BCLK",
           "signal_type": "I2S_BCLK",
           "target": "U3.2 / U9.2",
-          "description": "Audio Bit Clock (ES8388 Codec & QCC3084)"
+          "description": "Audio Bit Clock (ES8388 Codec & QCC3086)"
         },
         {
           "pad": "31",

@@ -491,13 +491,13 @@ During $0.5\,\text{W}$ transmissions, the SA818 RF power amplifier draws pulses 
 
 ---
 
-## 9. Cockpit & UI Integration: CarPlay, Android Auto & PWA Radio Dashboard
+## 9. Cockpit & UI Integration: OMB PWA Radio Dashboard
 
-When docked in the bike pod, all physical knobs are eliminated. Configuration is handled entirely from the handlebar buttons or CarPlay/Android Auto touchscreens:
+When docked in the bike pod, all physical knobs are eliminated. Configuration is handled entirely from the handlebar buttons or the OMB PWA dashboard:
 
 ```
 +-----------------------------------------------------------------------------------------+
-|                  CARPLAY / PWA DASHBOARD: PMR446 & DMR CONTROL CENTER                   |
+|                    OMB PWA DASHBOARD: PMR446 & DMR CONTROL CENTER                       |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
 |   +---------------------------------------------------------------------------------+   |
@@ -541,13 +541,13 @@ flowchart TB
 
     subgraph Central["Central Box (PCBA 01) DSP Routing Matrix"]
         DSP["ESP32-S31 AI RISC-V DSP\n* 5 Compressed Audio Slots\n* Private Cabin Whisper (-12 dB)\n* Spatial Panning (70/30 L/R)\n* Raised-Cosine Ducking (-18 dB)\n* First-Receiver-Wins Arbitration"]
-        QCC["Qualcomm QCC3084 BT 5.4 SoC\n* Dual-A2DP Stereo\n* LE Audio Auracast / HFP 1.8"]
+        QCC["3x Qualcomm QCC3086 BT 5.4 SoCs\n* U9: Smartphone A2DP Sink / HFP 1.8\n* U13: Rider Audio & Mic Uplink\n* U14: Pillion Audio & Mic Uplink"]
         DSP <--> QCC
     end
 
     subgraph Helmets["100% Wireless Helmets (Bluetooth 5.4)"]
-        H_RIDER["Rider Helmet (Direct BT 5.4)\n* Head-on wind (70-85 dBA)\n* Handlebar PTT (J_POD_L)"] <-->|Bluetooth HD| QCC
-        H_PAX["Pillion Helmet (Direct BT 5.4)\n* Draft / Slipstream sheltered\n* Pillion PTT Whisper Mode"] <-->|Bluetooth HD| QCC
+        H_RIDER["Rider Helmet (Direct BT 5.4 to U13)\n* Head-on wind (70-85 dBA)\n* Handlebar PTT (J_POD_L)"] <-->|Bluetooth HD| QCC
+        H_PAX["Pillion Helmet (Direct BT 5.4 to U14)\n* Draft / Slipstream sheltered\n* Pillion PTT Whisper Mode"] <-->|Bluetooth HD| QCC
     end
 
     subgraph Pod1["Luggage Pod 1 (Gateway Left, PCBA 03)"]
@@ -566,18 +566,18 @@ flowchart TB
 Rather than transmitting uncompressed raw PCM, OpenMotorBridge uses **pure compressed audio codecs**:
 * **Codecs:** **Opus HD 24k** ($24\dots 32\,\text{kbps}$) for crystal-clear group mesh and downlink music, and **AMBE+2 / Codec2 / Opus Voice ($6\dots 8\,\text{kbps}$)** for 446 MHz PMR/DMR radio traffic.
 * **5 Deterministic Audio Slots Across the System:**
-  1. `Slot 1: Driver Voice Up` (Rider helmet microphone via Bluetooth HFP 1.8 to Central Box)
-  2. `Slot 2: Pillion Voice Up` (Pillion helmet microphone via Bluetooth HFP 1.8 to Central Box)
+  1. `Slot 1: Driver Voice Up` (Rider helmet microphone via Bluetooth HFP 1.8 to QCC3086 U13)
+  2. `Slot 2: Pillion Voice Up` (Pillion helmet microphone via Bluetooth HFP 1.8 to QCC3086 U14)
   3. `Slot 3: Pod 1 Gateway Audio Down/Up` (Sena Mesh 3.0 stream over Branch 2)
   4. `Slot 4: Pod 2 Gateway Audio Down/Up` (OMM Tri-Band / Cardo DMC stream over Branch 3)
-  5. `Slot 5: Media / Navigation Down` (Smartphone music / CarPlay announcements via QCC3084)
+  5. `Slot 5: Media / Navigation Down` (Smartphone music & navigation via QCC3086 U9)
 * **WCH CH554E USB Host & UART Bridge (`PCBA 03`):**
   The docked OMM module is polled by the on-board `CH554E` host (`U7`) via USB Full-Speed. Audio flows over a **3.0 Mbps UART bridge** (`CH554_UART_TX/RX` on GPIO 20/21) into the ESP32-C6 (`U1`), which packs them into 10 ms backbone frames (`USB_PKT_AUDIO_STREAM_UP/DOWN`).
 * **Bus Utilization:** All 5 audio streams occupy **less than 8% of the USB 2.0 bandwidth**—zero bottlenecks, zero jitter, and $< 0.2\,\text{ms}$ transport latency.
 
 ### 10.2 Rider vs. Pillion Dynamics: Wind Asymmetry & Private Cabin Whisper
 1. **Wireless Helmet Topology:**
-   Rider and pillion helmets connect 100% wirelessly via Bluetooth 5.4 to the Qualcomm QCC3084 SoC on the Central Box. The saddlebag pods (Bays 1 & 2) are **general bike gateways** with **no static mapping to rider or pillion**.
+   Rider and pillion helmets connect 100% wirelessly via Bluetooth 5.4 to the dedicated Qualcomm QCC3086 transceivers (`U13` and `U14`) on the Central Box. The saddlebag pods (Bays 1 & 2) are **general bike gateways** with **no static mapping to rider or pillion**.
 2. **Acoustic Wind Asymmetry:**
    * The **rider** faces direct wind pressure and turbulence from the windscreen ($\approx 70\dots 85\,\text{dBA}$). The Central Box DSP compensates dynamically via the Knowles MEMS acoustic sensor on the Front Node and adaptive spectral filtering.
    * The **pillion** sits protected in the laminar slipstream of the rider with minimal wind noise. The Central Box maintains separate VAD (Voice Activity Detection) instances for each headset to prevent clipping or overdriving.

@@ -14,7 +14,9 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **U5** | BMI270 | Bosch Sensortec | LGA-14 (B.Cu) | C2836813 | 6-Axis IMU for Lean Angle & Dynamics |
 | **U6** | TCAN334G | Texas Instruments | SOIC-8 (B.Cu) | C842340 | 3.3V Automotive CAN-FD Transceiver (±58V Fault Protection) |
 | **U8** | USB2517I-JZX | Microchip | QFN-64 | C136706 | Industrial 7-Port High-Speed USB 2.0 Hub Controller (-40°C...+85°C) |
-| **U9** | Qualcomm QCC3084 | Qualcomm | SMD Module (13x18mm) | C-Qualcomm | Bluetooth 5.4 Audio SoC (Dual-A2DP, LE Audio Auracast, HFP 1.8 HD Voice) |
+| **U9** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Smartphone Link: A2DP Sink, HFP 1.8 Low-Latency Voice Return, AVRCP 1.6) |
+| **U13** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Rider Helmet: aptX Adaptive Hi-Fi, HFP 1.8 Microphone Uplink) |
+| **U14** | Qualcomm QCC3086 | Qualcomm | WLCSP-99 (SMD) | C-Qualcomm | Bluetooth 5.4 Transceiver (Pillion Helmet: aptX / LC3 Stream, HFP 1.8 Microphone Uplink) |
 | **U10** | SX1262IMLTRT | Semtech | QFN-24 | C190184 | Onboard 868 MHz LoRa Transceiver (+22 dBm, 24/7 UPS buffered) |
 | **U11** | TPS7A0533 | Texas Instruments | SOT-23-5 (B.Cu)| C2845350 | 3.3V Ultra-Low-Noise LDO for Analog & Audio Rails |
 | **U12** | TPS4H160BQPWPRQ1 | Texas Instruments | HTSSOP-28-1EP | C969241 | Automotive 40V Quad High-Side Smart Switch (AEC-Q100, Isolated Protection for Front, Pod 1, Pod 2, Radar) |
@@ -30,7 +32,7 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **J3** | TYPE-C-31-M-12 | Korean HRO | USB-C 16-Pin SMD Receptacle | C2765186 | Front Service, DFU Flash & Diagnostic Port (USB 2.0 High-Speed) |
 | **J2** | DM3D-SF | Hirose | SMD Push-Pull (B.Cu) | C266624 | 4-Bit High-Speed SDIO MicroSD Socket for Tour Logging & Offline Maps |
 | **ANT1** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | LoRa 868 MHz U.FL socket to Taoglas FXP895 in lid |
-| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | Helmet Audio 2.4 GHz U.FL socket to Taoglas BT antenna in lid (Qualcomm QCC3084) |
+| **ANT2** | U.FL-R-SMT-1 | Hirose / Murata | SMD RF | C2834595 | Helmet Audio 2.4 GHz U.FL socket to Taoglas BT antenna in lid (Qualcomm QCC3086) |
 | **ANT3** | 2450AT18D0100 | Johanson Technology | SMD 3216 (3.2x1.6mm) | C983086 | Onboard 2.4 GHz ceramic chip antenna for ESP32-S31 BLE Master (Pods, Cam, Keyfob, TPMS) |
 
 *(Note: All PCB headers J1, J6, J5, J4, J7 point vertically UP into the housing overhead wiring channel, eliminating sharp wire bends and allowing the slide-in sled to be removed vibration-free).*
@@ -97,11 +99,14 @@ This document serves as the master reference (Single Source of Truth) for the co
 | **J_SENSOR_EXT**| SM08B-GHS-TB | JST | 8-Pin 1.25mm SMD | `C2897374` | Modular Sensor Puck Interface to `PCBA 05D` (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TIMEPULSE`, `GNSS_TX`, `GNSS_RX`, `GNSS_RESET_N`) |
 | **J_POD_L** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Left Mirror Pod Interface (`PCBA 05C`: BSD LED, PTT / gesture switch) |
 | **J_POD_R** | SM04B-GHS-TB | JST | 4-Pin 1.25mm SMD | `C2897370` | Right Mirror Pod Interface (`PCBA 05C`: BSD LED, Hazard / Cam-Tag switch) |
-| **J7** | TYPE-C-31-M-12 | Korean HRO | SMD Hybrid IP67 | `C2765186` | USB-C Service, Flash & Downstream Port to Glovebox Hub (`PCBA 05B`) |
+| **J7** | TYPE-C-31-M-12 | Korean HRO | SMD Hybrid IP67 | `C2765186` | USB-C Service & 30W Fast-Charge Feed to Glovebox (Qi Puck & USB-C) |
 
 ---
 
-## 5.1 PCBA 05B: Glovebox Media & Power-Injection Hub (`openmotorbridge_cockpit_breakout`, 2-Layer FR4 TG150, 50 x 20 mm, 2-Sided SMT)
+## 5.1 PCBA 05B: Glovebox Media & Power-Injection Hub (Historically Archived)
+
+> [!NOTE]
+> **Architecture Status v10.5+:** `PCBA 05B` is in the current architecture completely **historically archived and retired**. The glove compartment is powered via a dedicated 2-wire DC feed (30W PD) to a magnetic Qi charging puck (15W inductive) and a USB-C port. Manufacturing data remains documented for legacy builds:
 
 | Designator | Component / MPN | Manufacturer | Package | LCSC / JLCPCB Part # | Function |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -274,7 +279,7 @@ All main enclosures (Central Box, Saddlebag Pods, Front Node) utilize the **scre
 | **Front Node Cable Glands**| [`front_node_cable_glands_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_cable_glands_tpu.stl) | **1 Pair**| TPU 95A / 85A | Flexible split sealing comb for front USB and signal wiring |
 | **Front Node USB-C Cap** | [`front_node_usbc_cap_tpu.stl`](../../hardware/cad/stl/04_front_node/front_node_usbc_cap_tpu.stl) | **1** | TPU 95A / 85A | Elastic dust cap with retention tether for service port |
 | **Modular Sensor Puck Enclosure**| [`sensor_puck_top.stl`](../../hardware/cad/stl/05_accessories/sensor_puck_top.stl) | **1 Set** | MJF PA12 / ASA | 2-piece enclosure (`sensor_puck_top.stl` & `sensor_puck_bottom.stl`) for `PCBA 05D` ($34 \times 34\,\text{mm}$) |
-| **Glovebox 5-Port USB-C Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | Form-fitting dual-edge hub enclosure for `PCBA 05B` ($50 \times 20\,\text{mm}$, 5x USB-C `J1..J5`) |
+| **Glovebox 5-Port USB-C Hub** | [`glovebox_power_injection_hub.stl`](../../hardware/cad/stl/04_front_node/glovebox_power_injection_hub.stl) | *Opt. (1)* | MJF PA12 / ASA | *(Historically archived / Replaced by 30W Qi Puck)* Form-fitting hub enclosure for `PCBA 05B` |
 | **Fairing Tube Clamp**| [`front_node_fairing_tube_clamp.stl`](../../hardware/cad/stl/04_front_node/front_node_fairing_tube_clamp.stl) | *Opt. (1)* | MJF PA12 / ASA | 2-piece tube clamp (Ø 12–22 mm) for fairing stay & subframe struts |
 
 ### 10.2 OMM UCS Enclosures & Pod Mounting (ECE 22.06 & Gateway Operation)
@@ -374,11 +379,9 @@ For all interconnections between the hermetic IP68 Front Node, the Glovebox Hub,
 
 | Function / Assembly | Header on PCB | Connector Type & Pitch | Mating End / Enclosure Outlet | Length | Sourcing / Model |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Glovebox Hub Feed Line** | Front Node `J7` / USB-Out | USB-C Plug | Glovebox Hub (`PCBA 05B`) North `J2` (`FRONT_NODE`) | 60 cm | Shielded High-Speed USB-C 2.0 & 30W power-injection cable |
-| **OEM Upstream Host (Skyline OS)** | Glovebox Hub North `J1` (`SKYLINE_HOST`) | USB-C Receptacle | OEM Harley USB-C port to Boom! Box GTS / Skyline OS | 25 cm | COTS USB-C patch cable |
-| **Smartphone Charge Cable (Bagger)**| Glovebox Hub South `J3` (`PHONE_CHARGE`) | USB-C Receptacle | Smartphone in right glove compartment | 20 cm | COTS USB-C to USB-C / Lightning fast-charge cable (30W PD) |
-| **Dongle Port (Glovebox)** | Glovebox Hub South `J4` (`DONGLE`) | USB-C Receptacle | Wireless CP/AA adapter in glovebox | 15 cm | COTS USB-C to USB-C/A cable (10W switched) |
-| **Media USB Stick (Bagger)** | Glovebox Hub South `J5` (`MEDIA`) | USB-C Receptacle | FLAC/MP3 USB thumb drive or service flashing | Direct | COTS USB-C flash drive |
+| **Glovebox 30W Fast-Charge Feed** | Front Node `J7` / USB-Out | USB-C Plug | Glovebox Qi Puck & USB-C Fast-Charge | 60 cm | Shielded 30W USB-PD charging cable (pure 2-wire DC feed) |
+| **Magnetic Qi Charging Puck** | Glovebox DC Feed | USB-C Receptacle | Inductive charging (MagSafe) in right glovebox | 15 cm | COTS 15W Qi/Qi2 magnetic puck (approx. 20–22W DC input) |
+| **Auxiliary USB-C Fast-Charge Port**| Glovebox DC Feed | USB-C Receptacle | Wired charging (secondary phone / tablet) | Direct | COTS USB-C PD 3.0 panel-mount port |
 | **Action Cam Power Supply** | Front Node `J8` (`CAM 5V`) | JST-PH 2-Pin (2.0 mm) | Action Cam (GoPro / Insta360) on handlebar/screen | 30–50 cm | COTS JST-PH to USB-C power-only charging cable (10W) |
 | **Navi 12V Power Supply** | Front Node `J_NAV` (`NAV 12V`) | JST-PH 2-Pin (2.0 mm) | GPS Navigator (Garmin Zumo / TomTom Rider) | 30–50 cm | COTS JST-PH 2P pigtail (switched 12V) |
 | **Auxiliary Light Output** | Front Node `J_AUX_LIGHT` (`AUX 12V`)| JST-PH 2-Pin (2.0 mm) | Auxiliary driving lights / fog lights | 40 cm | COTS JST-PH 2P pigtail (switched 12V / 3.5A via TPS1H100) |
@@ -386,7 +389,7 @@ For all interconnections between the hermetic IP68 Front Node, the Glovebox Hub,
 | **Right Mirror Pod (CAM & BSD)**| Front Node `J_POD_R` | JST-GH 4-Pin (1.25 mm Latch) | `PCBA 05C` in right Under-Perch Mirror Pod (`J1`) | 45 cm | COTS JST-GH 4P cable (Action cam tag button & 2x BSD LEDs) |
 | **Sensor Puck (GNSS / Climate / Light / Baro)** | Front Node `J_SENSOR_EXT` | JST-GH 8-Pin (1.25 mm Latch) | `PCBA 05D` in Sensor Puck enclosure (`J1`) | 15–30 cm | COTS JST-GH 8P cable (`3V3`, `GND`, `I2C_SDA`, `I2C_SCL`, `GNSS_TIMEPULSE`, `GNSS_TX`, `GNSS_RX`, `GNSS_RESET_N`) |
 | **MR20 Radar Interconnect** | Radar `PCBA 08` `J2` | JST-SH 4-Pin (1.0 mm) | 4-Pin JST-SH connector directly to Wheeltec MR20 module | 40–50 mm | COTS JST-SH 4P to JST-SH 4P |
-| **Central Box Service/CarPlay Port**| Central Box `PCBA 01` `J3` | USB-C SMD Receptacle | Waterproof USB-C receptacle (IP67) at front lid | Direct | Integrated in `020_slide_lid.stl` |
+| **Central Box Service Port**| Central Box `PCBA 01` `J3` | USB-C SMD Receptacle | Waterproof USB-C receptacle (IP67) at front lid | Direct | Integrated in `020_slide_lid.stl` |
 | **UPS LiPo Battery Plug** | Central Box `PCBA 01` `J5` | Micro-Lock Plus 4-Pin (1.25 mm) | Integrated harness with 10k NTC of 2,200 mAh LiPo pack | 8 cm | Pre-crimped on LiPo battery pouch |
 
 ### 11.5 Gateway Adapter Cables for OEM Intercoms (Header `J_AUDIO_PWR` / 8-Pin JST-SH)
@@ -503,8 +506,8 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **M2 Retainer Plate Screw (Countersunk)** | DIN 7991 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Retaining actuator clamping bridge plates (4x per gateway cartridge) |
 | **M2 Cartridge PCB Screw** | DIN 7985 / DIN 912 V4A M2 x 6 mm | Normteil / Amazon | 8 pcs | Securing PCBA 03 in cartridge sled (4x per cartridge; bulkhead screws eliminated) |
 | **M2 UCS Module Screw** | DIN 912 V4A M2 x 8 mm | Normteil / Amazon | 10 pcs | Fastening OMM UCS housing shells (4x per module) and central boss H1 of under-perch mirror pods (1x per pod) |
-| **M2.5 Stainless Nut (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 18 pcs | Captive in hex nut pockets (4x PCBA 01 slide tray, 4x PCBA 05 Front Node, 2x PCBA 05B hub, 4x actuator slide bracket) |
-| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 12 pcs | Fastening boards & clamps (4x PCBA 01, 4x PCBA 05, 2x PCBA 05B glovebox hub, 2x OMM helmet rim clamp) |
+| **M2.5 Stainless Nut (Captive)** | DIN 934 M2.5 V4A | Normteil / Amazon | 16 pcs | Captive in hex nut pockets (4x PCBA 01 slide tray, 4x PCBA 05 Front Node, 4x actuator slide bracket) |
+| **M2.5 PCB Mounting Screw** | DIN 912 V4A M2.5 x 6 mm | Normteil / Amazon | 10 pcs | Fastening boards & clamps (4x PCBA 01, 4x PCBA 05, 2x OMM helmet rim clamp) |
 | **M4 Stainless Nut (AMPS & Radar)** | DIN 934 M4 V4A | Normteil / Amazon | 10 pcs | 4x Central Box M4 silentblocks, 4x Front Node tub (AMPS pockets), 2x Radar 2.0 rear housing |
 | **M4 Screw (Radar Cradle)** | DIN 912 V4A M4 x 12 mm | Normteil / Amazon | 2 pcs | Securing adapter bracket radar_swivel_tilt_cradle to Radar 2.0 housing |
 | **M4 Anti-Vibration Silentblocks** | Typ A M4 Außen/Innen Ø 15 x 10 mm | Ganter / Normteil | 4 pcs | Vibration-decoupled 4-point mounting of Central Box on bike frame (damps 10-100 Hz) |
@@ -543,7 +546,7 @@ For standalone helmet operation of both intercom modules (**PCBA 09: OMM 2.4 GHz
 | **Sensor Puck 8-Pin JST-GH Link Cable** | 8-Pin JST-GH 1.25 mm (SM08B-GHS-TB) geschirmte Silikon-/PUR-Leitung, 25 cm | COTS Standard | 1 pcs | Direct 8-pin link from Front Node (J6) to external Sensor Puck PCBA 05D (3V3, GND, I2C_SDA, I2C_SCL, TIMEPULSE, GNSS_TXD, GNSS_RXD, GNSS_RESET_N) |
 | **Mirror Pod 4-Pin JST-GH Lead (PUR)** | 4-Pin JST-GH 1.25 mm (SM04B-GHS-TB) auf geschirmtes Ø 2.8 mm PUR-Rundkabel, 60 cm | COTS Standard | 2 pcs | Connects left and right under-perch mirror pods (PCBA 05C J1) to Front Node (J_POD_L / J_POD_R: VCC_3V3, LED_CTRL, BTN_SIG, GND) |
 | **Universal Pigtail Adapter Set (JST-JWPF to Open Wire Posi-Tap)** | JST-JWPF 2-Pin & 3-Pin mit verzinnten Aderenden (AWG20) und 4x Posi-Tap Zerstörungsfrei-Klemmen | Posi-Products / COTS | 1 Set | For bikes without pre-assembled plugs: Non-destructive wire tap via Posi-Tap connectors |
-| **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | CarPlay / firmware flashing port on Central Box flank |
+| **Central Box USB-C Flashing Pigtail** | IDC 10-Pin auf wasserdichte Panel-Mount USB-C Buchse IP67 | COTS Standard | 1 pcs | USB-C service & firmware flashing port on Central Box flank |
 | **Two-Cable Main Harness (6-Pin Power/CAN & 16-Pin Backbone)** | Molex Micro-Lock Plus 6-Pin (J1) + Molex Picoflex 16-Pin (J6) mit 4x 4-Ader Satellitensträngen | COTS / Deutsch | 1 pcs | Central v10 two-cable harness: J1 (bike power & CAN) and J6 (4x 4-wire star backbone to Front Node, Pod 1/2 & Radar) |
 
 <!-- AUTOGEN_BOM_TABLE_END -->

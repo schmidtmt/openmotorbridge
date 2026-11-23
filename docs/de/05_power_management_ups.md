@@ -28,7 +28,7 @@ Die Speicherinduktivität $L$ der Abwärtswandler ist für lückenlosen Betrieb 
 $$L = \frac{V_{\text{OUT}} \cdot (V_{\text{IN,max}} - V_{\text{OUT}})}{V_{\text{IN,max}} \cdot \Delta I_L \cdot f_{\text{sw}}}$$
 
 * **Zentralbox (`PCBA 01`, `U1 LM5164-Q1`):** Geschirmte $47\,\mu\text{H} / 68\,\mu\text{H}$ Power-Induktivität ($I_{\text{sat}} \ge 1{,}8\,\text{A}$), kombiniert mit dem rauscharmen Ultra-Low-IQ LDO `U11 TPS7A0533` (für `VCC_3V3` Digital/MCU/Hub und Audio-DSP).
-* **Front-Knoten (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchroner Buck, $3{,}0\,\text{A}$) für Logik, `USB2514Bi` Hub und Dual-OLEDs sowie ein dedizierter **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** für die USB-PD Fast-Charge Versorgung zum Handschuhfach-Hub (`PCBA 05B`).
+* **Front-Knoten (`PCBA 05`, `U1 TPS54302` & `U4 SW3526`):** `TPS54302` ($400\,\text{kHz}$ synchroner Buck, $3{,}0\,\text{A}$) für Logik, `USB2514Bi` Hub, Dual-OLEDs und FSC-BT802 sowie ein dedizierter **`SW3526` 65W Synchronous Buck-Boost PD-Source Controller (`U4`)** für die 30W USB-PD Fast-Charge Versorgung zum Handschuhfach (magnetischer Qi-Ladepuck 15W induktiv + companion USB-C PD Fast-Charge Buchse).
 * **Eingangskapazität:** Mehrstufige 100V X7R Vielschichtkeramik (MLCC) und Elektrolyt-Puffer dämpfen Leitungsinduktivitäten des Motorrad-Kabelbaums zuverlässig.
 
 ### 1.2 Labor-Messwerte des Systemstroms (INA226 Präzisionsmessung @ 12.0 V Bordnetz)
@@ -110,57 +110,44 @@ Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **
   * Jeder Koffer-Pod besitzt zwei mechatronische Drücker (Mini-Hubmagnete auf `012_universal_actuator_slide_bracket.scad`), die auf `PCBA 03` über duale AO3400A MOSFETs geschaltet werden.
   * Bei Zündung-AN (KL15) feuern die Magnete für exakt 2,0 Sekunden ($\sim 4\,\text{N}$ Betätigungskraft mit Shore A50 Silikon-Stößeln auf die Ein-/Ausschalttasten von Cardo oder Sena), um komplett ausgeschaltete Headsets aus dem Null-Watt-Zustand zu wecken; die laufende Steuerung im Fahrbetrieb erfolgt anschließend verschleißfrei digital per BLE GATT bzw. Audio-Bus.
   * **Vorteil:** Headsets bleiben nach Touren vollständig spannungsfrei (kein Marketing-Standby-Batteriefraß nach 1-2 Wochen Standzeit!). Beim Einschalten der Zündung booten sie verlässlich und sofort, ohne dass der Kofferpod geöffnet werden muss.
-* **5-Port Handschuhfach Hub (`PCBA 05B`, `glovebox_power_injection_hub.scad`, `55 × 25 × 15 mm`, Bauhülle `55 × 25 × 17 mm`, Platine `50 × 20 mm`) & Harley Headset-Emulation via USB:**
-  * Besitzt **5× USB-C Buchsen**: Nordseite mit **`J2` (`FRONT`)** vom Front-Node (`PCBA 05`) und **`J1` (`HOST`)** zum OEM-Medienfach-Port der Harley-Headunit (Skyline OS / Boom! Box GTS); Südseite mit **`J3` (`PHONE`, 15W/30W)**, **`J4` (`DONGLE`, 10W geschaltet via `TPS2051B`)** und **`J5` (`MEDIA`, USB 2.0 Passthrough)**.
-  * **Harley Headset-Emulation via USB:** Verbindet den Front-Node direkt mit der Headunit an `J1` (`HOST`); OpenMotorBridge emuliert ein digitales MFi / USB Audio Class Headset, schaltet Apple CarPlay frei und überträgt Intercom-/Sprachmikrofone verlustfrei ohne analoge Einstreuungen.
-  * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss, automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und Status-Rückmeldung jedes Zweigs (`FLT`) an den `ESP32-S31`.
+* **Handschuhfach Schnelllade-Architektur (Ersatz von PCBA 05B):**
+  * Das historische 5-Port Hub `PCBA 05B` und externe Wireless-CarPlay-Dongles sind ersatzlos entfallen.
+  * Stattdessen wird das Handschuhfach (z. B. Harley Touring) über eine robuste 2-Ader DC-Versorgung von Front-Knoten `J7` mit bis zu 30–36W USB-PD / QC 4.0 gespeist.
+  * Dort sitzt ein **magnetischer Qi-Ladepuck** (15W induktiv Qi/Qi2 MagSafe, ca. 20–22W DC-Eingangsleistung) plus eine zusätzliche **USB-C PD Fast-Charge Buchse** für kabelgebundenes Laden mit voller Geschwindigkeit (z. B. Zweithandy oder Tablet).
+  * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss, automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und Überwachung durch den `SW3526` Controller.
 * **Cockpit Power-Only Ausgänge (Direkt am Front-Node PCBA 05):**
   * **15W Motorrad-Navi (`J10`):** 12V/1.25A bzw. 5V/3A DC-Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Reine Stromversorgung (Power-Only):** Vollständig ohne USB-Host Datenleitungen (`D+`, `D-`), damit das Navigationssystem bei Zündung-AN sofort in die Routenführung startet und nicht in den PC-Massenspeicher-Modus schaltet.
   * **10W Action-Cam (`J8`):** Wetterfeste 5V/2A DC USB-C Zuleitung für GoPro Hero / Insta360 direkt am Cockpit. **USB BC 1.2 DCP Spezifikation:** `D+` und `D-` sind im Stecker mit $R < 200\,\Omega$ gebrückt und besitzen null Verbindung zum `USB2514B` Host-Controller. Die Action-Cam erkennt sofort ein dediziertes Bordnetz-Ladegerät und verharrt niemals in einem blockierenden PC-Verbindungs- oder Webcam-Modus. Die direkte Front-Node-Anbindung vermeidet unnötige Kabelführung durch das Handschuhfach.
 
 ---
 
-## 4. Front-Knoten VBUS Lastschalter & Headless CP/AA Bridge Power-Management
+## 4. Handschuhfach Lade- & Thermomanagement (Qi-Puck & USB-PD Fast-Charge)
 
-Der Universal Front-Knoten verfügt über ein intelligentes Energiemanagement für externe Wireless CarPlay / Android Auto Headless-Dongle:
+Durch den Entfall des CarPlay/Android Auto Video-Streaming-Stacks (kein WLAN-Direct, kein dauerhafter H.264/H.265 Hardware-Decoder) sinkt die thermische Last des Smartphones im geschlossenen Handschuhfach dramatisch ab:
 
 ```
-               FRONT-KNOTEN HEADLESS CP/AA POWER-GATE
+               HANDSCHUHACH LADE- & POWER-GATEWAY (30W USB-PD)
 +----------------------------+              +----------------------------+
-| 12V Bordnetz (KL15 Zündung)|              | ESP32-S3 Firmware          |
-| * Scheinwerfer / Zubehör   |              | * 1-Click Reboot Listener  |
-+-------------+--------------+              | * Auto-Café 60s Countdown  |
+| 12V Bordnetz (KL15 Zündung)|              | Front-Knoten PCBA 05       |
+| * Scheinwerfer / Zubehör   |              | * SW3526 PD-Controller     |
++-------------+--------------+              | * I2C Telemetrie & Protect |
               |                             +-------------+--------------+
-              v                                           | GPIO 1 (EN)
-+----------------------------+                            |
-| TI LMR36015 Buck (5.00V)   |                            v
-| * 91.8 % Wirkungsgrad      +------------->+----------------------------+
-| * 5.3 mVpp Restwelligkeit  |              | TI TPS2051B Load Switch    |
-+----------------------------+              | * 1.05A Current Clamp      |
-                                            | * 6.5 µs Fault Trip        |
-                                            | * 0.42A Soft-Start Inrush  |
-                                            +-------------+--------------+
-                                                          | 5.0V VBUS
-                                                          v
+              v                                           |
++----------------------------+                            | 2-Ader DC Speisung
+| SW3526 Buck-Boost (J7)     +----------------------------+ (bis zu 36W PD 3.0)
+| * Bis zu 36W USB-PD / QC   |                            |
++----------------------------+                            v
                                             +----------------------------+
-                                            | Headless CP/AA Adapter     |
-                                            | * USB-Hub Port 2 (Pigtail) |
+                                            | Handschuhfach Ladebucht    |
+                                            | * 15W Qi-Puck (MagSafe)    |
+                                            | * Zusatz USB-C PD Buchse   |
                                             +----------------------------+
 ```
 
-### 4.1 1-Klick Dongle Kaltstart (Hard Reset via PWA)
-Hängt sich der drahtlose CarPlay-Adapter auf, muss der Fahrer nicht mehr anhalten und den USB-Stecker ziehen:
-* Ein Klick auf den Button **"CarPlay 1-Klick Kaltstart"** im WebApp-Dashboard sendet den Befehl `PKT_TYPE_CMD_POWER_CYCLE` über UWB an den Front-Knoten.
-* Der ESP32-S3 zieht den Enable-Pin des TPS2051B für exakt $2{,}5\,\text{Sekunden}$ auf LOW.
-* Der Dongle wird vollständig spannungsfrei geschaltet ($0{,}00\,\text{V}$) und startet anschließend frisch durch.
-
-### 4.2 Auto-Café Modus: 60s WLAN-Freigabe bei Zündung AUS
-* **Problem:** Wireless-CarPlay-Dongles spannen ein 5-GHz-WLAN auf, mit dem das Smartphone dauerhaft gekoppelt bleibt. Schaltet der Fahrer die Zündung ab und betritt ein Café, versucht das Telefon weiterhin Daten über das Dongle-WLAN zu routen $\rightarrow$ kein Internetzugriff im Café!
-* **OpenMotorBridge Lösung:** 
-  * Erkennt der Controller das Abfallen von KL15 (Zündung AUS), startet ein interner $60\,\text{s}$ Countdown.
-  * Nach Ablauf trennt der TPS2051B die VBUS-Versorgung des Dongles komplett ab.
-  * Das Smartphone verbindet sich sofort reibungslos mit dem Café-WLAN oder Mobilfunknetz.
-  * Bei Wiedereinschalten der Zündung schaltet der Port in $< 10\,\text{ms}$ wieder ein.
+### 4.1 Automatisches Thermomanagement & Überstromschutz
+* Der `SW3526` PD-Controller auf `PCBA 05` überwacht Strom, Spannung und Die-Temperatur kontinuierlich per I2C.
+* Bei Überhitzung im Handschuhfach oder Fehlausrichtung des Smartphones auf dem Qi-Puck drosselt der Controller den Ladestrom dynamisch (Thermal Throttling) oder schaltet bei thermischer Überlastung ($> 120\,^\circ\text{C}$) sicher ab.
+* Sobald KL15 abfällt (Zündung AUS), trennt die Power-Management-Engine die Ladeversorgung verzögert ab, um die Starterbatterie des Motorrads zu schonen.
 
 ---
 

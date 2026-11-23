@@ -144,10 +144,10 @@ static void on_usb_ptt_event(const UsbPttEventPkt &pkt, UsbNodeType source) {
     if (pkt.event_type == USB_PTT_CLICK_DOUBLE) click_type = 2;
     else if (pkt.event_type == USB_PTT_CLICK_LONG) click_type = 3;
 
-    // 1. Priority 1: Modal Smartphone Call Protection (Qualcomm QCC3084 HFP 1.8)
+    // 1. Priority 1: Modal Smartphone Call Protection (Qualcomm QCC3086 HFP 1.8)
     // Intercepts PTT for AT+ATA / AT+ATH when a phone call is ringing or active!
     if (bt_audio_handle_ptt_event(click_type)) {
-        ESP_LOGI(TAG, "📞 PTT event consumed modally by QCC3084 HFP Call Protection.");
+        ESP_LOGI(TAG, "📞 PTT event consumed modally by QCC3086 HFP Call Protection.");
         return;
     }
 
@@ -313,7 +313,7 @@ void task_power_supervisor(void *pvParameters) {
 extern "C" void app_main(void) {
     ESP_LOGI(TAG, "============================================================");
     ESP_LOGI(TAG, "   OpenMotorBridge v10.0 - Unified 4-Wire USB 2.0 Backbone  ");
-    ESP_LOGI(TAG, "   Central Box (PCBA 01: ESP32-S31 + USB2517I + QCC3084)    ");
+    ESP_LOGI(TAG, "   Central Box (PCBA 01: ESP32-S31 + USB2517I + QCC3086)    ");
     ESP_LOGI(TAG, "============================================================");
 
     // 1. NVS Flash Initialization
@@ -340,7 +340,7 @@ extern "C" void app_main(void) {
     hw_inventory_init();
     sx1262_lora_init();             // U10 Semtech SX1262 868 MHz LoRa on PCBA 01
     action_cam_ble_manager_init();  // Central Box Geometric BLE Master (Action-Cam + Find-My)
-    audio_dsp_init();               // U3 ES8388 + U9 QCC3084 TDM/I2S DSP Pipeline
+    audio_dsp_init();               // U3 ES8388 + Triple QCC3086 TDM/I2S DSP Pipeline
     adr_ekf_init();                 // U5 Bosch BMI270 6-Axis IMU + GNSS Sensor Fusion
     sdio_storage_init();            // J2 4-Bit SDIO MicroSD Blackbox
     webdav_uploader_init();
@@ -352,7 +352,7 @@ extern "C" void app_main(void) {
     radar_processor_init();
     ble_server_init();
     tpms_ble_scanner_init();
-    bluetooth_audio_manager_init(); // U9 Qualcomm QCC3084 BT 5.4 (GPIO 1 / 2 / 3)
+    bluetooth_audio_manager_init(); // Qualcomm QCC3086 Triple BT 5.4 Hub
     baro_weather_init();
 
     // 4. Start Unified 4-Wire USB 2.0 Automotive Backbone (U8 USB2517I-JZX Port 1: GPIO 19/20)

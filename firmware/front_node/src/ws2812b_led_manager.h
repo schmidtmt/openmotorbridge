@@ -10,7 +10,7 @@ enum Ws2812bLedMode : uint8_t {
     LED_MODE_OFF = 0,
     LED_MODE_BREATHING_GREEN,  // Normal operation, linked to Central Box (1 Hz)
     LED_MODE_FLASHING_BLUE,    // BLE Pairing / Camera Scanning active (2 Hz)
-    LED_MODE_SOLID_YELLOW,     // CP2AA Wireless CarPlay/AA Dongle Booting
+    LED_MODE_SOLID_YELLOW,     // Fast Charging / Qi Wireless Active
     LED_MODE_FLASHING_RED,     // Hardware Fault / VBUS Overcurrent / Kaltstart (4 Hz)
     LED_MODE_SEARCHING_CYAN,   // Unpaired / Proximity Discovery mode (2 Hz)
     LED_MODE_ECALL_STROBE,     // Rapid Red / White Strobe for Emergency SOS

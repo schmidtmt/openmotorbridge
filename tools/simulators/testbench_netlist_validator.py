@@ -76,8 +76,8 @@ def validate_system():
         "U3": "Everest Semi ES8388 (24-Bit / 48 kHz Audio Codec)",
         "U6": "TI TCAN334G (CAN-FD Transceiver)",
         "U7": "Semtech SX1262 (868 MHz LoRa Transceiver)",
-        "U8": "Qorvo DW3110 (6.5 GHz UWB Backbone Transceiver)",
-        "U9": "Qualcomm QCC3084 (Dual-Bluetooth 5.4 Audio SoC)",
+        "U8": "Microchip USB2517I (Automotive 7-Port USB 2.0 Hub)",
+        "U9": "Qualcomm QCC3086 (Dual-Bluetooth 5.4 Audio SoC - Rider)",
         "ANT1": "Taoglas FXP895 (868 MHz LoRa Flex)",
         "ANT2": "Taoglas FXUWB10 (6.5 GHz UWB Flex)"
     }

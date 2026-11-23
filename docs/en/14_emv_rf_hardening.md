@@ -35,6 +35,22 @@ This document specifies the protection circuitry against vehicle electrical tran
   * **Cable 2 (OMB Periphery Bus):** 16-Pin Automotive Header with 4 autonomous branches of 4 conductors each (Front Node 60W, Pod 1 30W, Pod 2 30W, Rear Radar MR20 12V/Telemetry).
   * Continuous IP68/IP69K sealing with automotive latches and Raychem DR-25 heatshrink boots.
 
+### 2.2 System-Wide Antenna Matrix & Exact Placement
+
+To ensure maximum link budgets and reproducible EMC compliance, the following mandatory antenna specification applies across the system:
+
+| Assembly | Wireless Tech | Frequency | Antenna Type | Exact Placement & Mounting |
+| :--- | :--- | :--- | :--- | :--- |
+| **Central Box (`PCBA 01`)** | Semtech SX1262 LoRa | 868 MHz | Taoglas FXP895 Flex | Integrated on battery bridge (`ANT1`), U.FL (lid 100% cable-free) |
+| **Central Box (`PCBA 01`)** | 3x Qualcomm QCC3086 BT (U9, U13, U14) | 2.4 GHz | Ceramic Chip Antennas | Onboard on PCB surface (`F.Cu`), 0 mm coax |
+| **Central Box (`PCBA 01`)** | ESP32-S3 BLE/WiFi | 2.4 GHz | Taoglas FXP73 Flex | Integrated on battery bridge (`U2` U.FL coax on WROOM-1U) |
+| **Front Node (`PCBA 05`)** | u-blox SAM-M10Q GNSS | 1.575 / 1.602 GHz | Ceramic Patch Antenna | Onboard module top with unobstructed sky view |
+| **Front Node (`PCBA 05`)** | ESP32-S3 BLE/WiFi | 2.4 / 5 GHz | COTS Stub / Sharknose | U.FL socket on WROOM-1U module |
+| **OMM 2.4G UCS (`PCBA 09`)** | ESP32-C6 TDMA Mesh | 2.4 GHz ISM | Taoglas FXP73 Flex Dipole | Remote helmet shell antenna, U.FL socket (+3 dBi) |
+| **OMM 446 UCS (`PCBA 10`)** | NiceRF SA818-DMR | 446 MHz PMR | Tuned Helical Coil | Potted in lid labyrinth ($32\,\text{mm}$), opt. U.FL bike pigtail |
+| **Rear Radar (`PCBA 08`)** | ESP32-C5 V2X / ITS-G5 | 5.9 GHz (C-V2X) | Taoglas FXP524 Flex | U.FL socket `U.FL_5G9_V2X` (2.4G strictly disabled at rear) |
+| **Rear Radar (`PCBA 08`)** | Wheeltec MR20 Radar | 77 GHz mmWave | On-Chip Patch Array (AoP)| Radome lens in center of PCBA 08 (no RF coax line) |
+
 ---
 
 ## 3. Conformal Coating & Climatic Resistance (IPC-CC-830B)

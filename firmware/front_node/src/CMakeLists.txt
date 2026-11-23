@@ -1,7 +1,8 @@
 idf_component_register(
     SRCS
         "main.cpp"
-        "ottocast_power_manager.cpp"
+        "fast_charge_manager.cpp"
+        "fsc_bt802_bridge.cpp"
         "knowles_mems_dsp.cpp"
         "handlebar_ptt_handler.cpp"
         "cockpit_switches_manager.cpp"

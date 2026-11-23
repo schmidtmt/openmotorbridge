@@ -12,7 +12,7 @@
 
 static const char *TAG = "AUDIO_DSP";
 
-// I2S Pin-Definitionen (v10.0 PCBA 01 KiCad Pinout: U2 ESP32-S31 -> U3 ES8388 & U9 QCC3084)
+// I2S Pin-Definitionen (v10.0 PCBA 01 KiCad Pinout: U2 ESP32-S31 -> U3 ES8388 & U9/U13/U14 QCC3086)
 #define I2S_PIN_MCLK        PIN_MAIN_I2S_MCLK   // U2 Pad 12 (GPIO 0)
 #define I2S_PIN_BCLK        PIN_MAIN_I2S_BCLK   // U2 Pad 30 (GPIO 16)
 #define I2S_PIN_WS          PIN_MAIN_I2S_WS     // U2 Pad 32 (GPIO 47)

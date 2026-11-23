@@ -48,25 +48,26 @@
 #define I2C_ADDR_BMI270_IMU             0x68         // U5 Bosch BMI270 6-Axis IMU + Hardware Step/Shock Interrupt
 
 // -----------------------------------------------------------------------------
-// 5. Master TDM / I2S Audio Bus (Shared by U3 ES8388 & U9 Qualcomm QCC3084)
+// 5. Master TDM / I2S Audio Bus (Shared by U3 ES8388 & Triple Qualcomm QCC3086)
 // -----------------------------------------------------------------------------
-#define PIN_MAIN_I2S_MCLK               GPIO_NUM_35  // U2 Pad 12 (GPIO35) -> U3 Pin 1 / U9 Pin 1 (I2S_MCLK)
-#define PIN_MAIN_I2S_BCLK               GPIO_NUM_16  // U2 Pad 30 -> U3 Pin 2 / U9 Pin 2 (I2S_BCLK)
-#define PIN_MAIN_I2S_WS                 GPIO_NUM_47  // U2 Pad 32 -> U3 Pin 3 / U9 Pin 3 (I2S_WS)
-#define PIN_MAIN_I2S_DOUT               GPIO_NUM_17  // U2 Pad 15 -> U3 Pin 4 / U9 Pin 4 (I2S_DOUT)
-#define PIN_MAIN_I2S_DIN                GPIO_NUM_18  // U2 Pad 16 -> U3 Pin 5 / U9 Pin 5 (I2S_DIN)
+#define PIN_MAIN_I2S_MCLK               GPIO_NUM_35  // U2 Pad 12 (GPIO35) -> U3 Pin 1 / QCC3086 Pin 1 (I2S_MCLK)
+#define PIN_MAIN_I2S_BCLK               GPIO_NUM_16  // U2 Pad 30 -> U3 Pin 2 / QCC3086 Pin 2 (I2S_BCLK)
+#define PIN_MAIN_I2S_WS                 GPIO_NUM_47  // U2 Pad 32 -> U3 Pin 3 / QCC3086 Pin 3 (I2S_WS)
+#define PIN_MAIN_I2S_DOUT               GPIO_NUM_17  // U2 Pad 15 -> U3 Pin 4 / QCC3086 Pin 4 (I2S_DOUT)
+#define PIN_MAIN_I2S_DIN                GPIO_NUM_18  // U2 Pad 16 -> U3 Pin 5 / QCC3086 Pin 5 (I2S_DIN)
 
 // -----------------------------------------------------------------------------
-// 6. Qualcomm QCC3084 Bluetooth 5.4 Dual-Audio & Auracast SoC (U9)
-// Exclusively dedicated to Helmet Intercom & Audio (aptX-HD / LE Audio Auracast).
-// RF Output: Dedicated U.FL Coaxial Receptacle ANT2 (Taoglas_BT_Helmaudio_Lid)
-// at KiCad (X=184.00, Y=74.75) routed directly to external lid dipole.
-// Zero multiplexing with vehicle control / BLE scanning to prevent packet drops!
+// 6. Qualcomm QCC3086 Bluetooth 5.4 Triple-SoC Hub (PCBA 01)
+// - U9: Smartphone Link (A2DP Sink, HFP 1.8 voice return < 20ms, AVRCP 1.6)
+// - U13: Rider Helmet Link (A2DP Source, aptX Adaptive, HFP 1.8 voice mic)
+// - U14: Pillion Helmet Link (A2DP Source, aptX / LC3, HFP 1.8 voice mic)
+// RF Output: Taoglas BT Helmaudio Lid dipole via dedicated coaxial connection.
 // -----------------------------------------------------------------------------
-#define QCC3084_UART_PORT               UART_NUM_1
-#define PIN_MAIN_BT_EN                  GPIO_NUM_1   // U2 Pad 9  -> U9 Pin 11 (BT_EN)
-#define PIN_MAIN_BT_UART_RX             GPIO_NUM_2   // U2 Pad 10 -> U9 Pin 10 (BT_UART_RX)
-#define PIN_MAIN_BT_UART_TX             GPIO_NUM_3   // U2 Pad 11 -> U9 Pin 9  (BT_UART_TX)
+#define QCC3086_UART_PORT               UART_NUM_1
+#define QCC3084_UART_PORT               QCC3086_UART_PORT
+#define PIN_MAIN_BT_EN                  GPIO_NUM_1   // U2 Pad 9  -> QCC3086 Pin 11 (BT_EN)
+#define PIN_MAIN_BT_UART_RX             GPIO_NUM_2   // U2 Pad 10 -> QCC3086 Pin 10 (BT_UART_RX)
+#define PIN_MAIN_BT_UART_TX             GPIO_NUM_3   // U2 Pad 11 -> QCC3086 Pin 9  (BT_UART_TX)
 
 // -----------------------------------------------------------------------------
 // 7. Onboard Semtech SX1262IMLTRT 868 MHz LoRa Transceiver (U10, +22 dBm)
