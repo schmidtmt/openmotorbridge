@@ -4,9 +4,9 @@
 // File: hardware/cad/scad/04_front_node/parts/006_dummy_front_node_pcb.scad
 // Description: Exact 1:1 3D dummy of openmotorbridge_front_node.kicad_pcb
 //              (82.0 x 50.0 x 1.6 mm, 4-Layer FR4) reflecting the v10.0 routed
-//              board with ESP32-S31 + ESP32-C3, Dual Wi-Fi (ANT1 & ANT2 U.FL),
-//              Dual USB2514B Hubs (U2 & U10), SW3526 20W PD, Knowles MEMS,
-//              and all 11 horizontal JST GH connectors.
+//              board with ESP32-S31 + ESP32-E22, Feasycom FSC-BT802 (U2),
+//              Microchip USB2514Bi Hub (U4), SW3526 30W Fast-Charge, Knowles MEMS,
+//              and horizontal JST GH connectors.
 //
 // Axis convention:
 //   X: West (0 mm) -> East (82 mm)
@@ -58,19 +58,20 @@ module dummy_front_node_pcb() {
             cube(size=[18.0, 25.5, 3.2], center=false); // Shield can
     }
 
-    // 4. ESP32-C3-FN4 Sub-Controller (U9 at 9.00, 43.25)
-    color("darkslategray") {
-        translate([9.00 - 1.5, 43.25 - 1.5, FRONT_NODE_PCB_H])
-            cube(size=[3.0, 3.0, 0.9], center=false); // QFN-16
+    // 4. Feasycom FSC-BT802 Bluetooth 5.1 Infotainment Module (U2 at 30.16, 21.25)
+    // CSR8670 Dual-Mode Audio: 10.0 x 13.0 x 2.0 mm with shield can
+    color([0.15, 0.40, 0.55]) {
+        translate([30.16 - 5.0, 21.25 - 6.5, FRONT_NODE_PCB_H])
+            cube(size=[10.0, 13.0, 2.0], center=false);
     }
 
-    // 5. Microchip USB2514B Automotive 4-Port USB Hub #1 (U2 at 30.16, 21.25)
-    color("darkslategray") {
-        translate([30.16 - 3.0, 21.25 - 3.0, FRONT_NODE_PCB_H])
-            cube(size=[6.0, 6.0, 0.9], center=false); // QFN-36
+    // 5. ESP32-E22 High-Power Wi-Fi 6E Subsystem (U3 at 9.00, 43.25)
+    color("silver") {
+        translate([9.00 - 4.0, 43.25 - 4.0, FRONT_NODE_PCB_H])
+            cube(size=[8.0, 8.0, 1.8], center=false); // Shield can
     }
 
-    // 6. Microchip USB2514B Automotive 4-Port USB Hub #2 (U10 at 53.00, 22.00)
+    // 6. Microchip USB2514Bi Automotive 4-Port USB Hub (U4 at 53.00, 22.00)
     color("darkslategray") {
         translate([53.00 - 2.5, 22.00 - 2.5, FRONT_NODE_PCB_H])
             cube(size=[5.0, 5.0, 0.9], center=false); // QFN-32

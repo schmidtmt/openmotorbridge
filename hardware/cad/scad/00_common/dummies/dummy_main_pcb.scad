@@ -41,11 +41,26 @@ module dummy_main_pcb() {
         translate([37.28 - 9.0, 44.94 - 9.6, 1.6])
             cube(size=[18.0, 19.2, 3.2], center=false);
 
-    // 3. Dedicated Helmet Audio SoC: Qualcomm QCC3084 BT 5.4 (U9: 13.0 x 18.0 x 2.6 mm)
-    // KiCad: X = 66.48, Y_cad = 35.35 mm (Routes RF via Pin 15 to ANT2 U.FL)
+    // 3. Triple Qualcomm QCC3086 Bluetooth 5.4 SoCs (Gleichteil-Architektur: 13.0 x 18.0 x 2.6 mm)
+    // U9: Rider Headset BT 5.4 (KiCad: X = 66.48, Y_cad = 35.35 mm)
     color([0.15, 0.40, 0.55])
         translate([66.48 - 6.5, 35.35 - 9.0, 1.6])
             cube(size=[13.0, 18.0, 2.6], center=false);
+
+    // U13: Passenger Headset BT 5.4 (KiCad: X = 50.00, Y_cad = 35.35 mm)
+    color([0.15, 0.40, 0.55])
+        translate([50.00 - 6.5, 35.35 - 9.0, 1.6])
+            cube(size=[13.0, 18.0, 2.6], center=false);
+
+    // U14: Smartphone Phone Link BT 5.4 (KiCad: X = 33.50, Y_cad = 25.00 mm)
+    color([0.15, 0.40, 0.55])
+        translate([33.50 - 6.5, 25.00 - 9.0, 1.6])
+            cube(size=[13.0, 18.0, 2.6], center=false);
+
+    // 3b. Automotive 7-Port USB 2.0 Hub: Microchip USB2517I-JZX (U8: 9.0 x 9.0 x 1.0 mm QFN-64)
+    color("darkslategray")
+        translate([48.00 - 4.5, 18.00 - 4.5, 1.6])
+            cube(size=[9.0, 9.0, 1.0], center=false);
 
     // 4. Semtech SX1262 LoRa 868 MHz Transceiver (U10: 4.0 x 4.0 x 1.0 mm)
     // KiCad: X = 52.53, Y_cad = 52.11 mm

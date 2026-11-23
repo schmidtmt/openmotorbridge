@@ -66,11 +66,11 @@ Das Gehäuse der Zentralbox ist als ultravibrationsfestes IP67/IP69K-Gehäuse au
 +------------------------------------------------------------+  v
 ```
 
-### 1.2 3D-Explosionsdarstellung & Schichtaufbau (1:1:1 CAD Fitting)
+### 1.2 3D-Explosionsdarstellung & Schichtaufbau (CAD Fitting)
 
 ![OpenMotorBridge Zentralbox Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Abbildung 8.2: 1:1:1 euklidische CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse. Sichtbar sind: Monocoque-Wanne mit integrierten Domen und Stirnwandports, bestückte PCBA 01 v10 (ESP32-S31 mit On-Board Johanson Keramikantenne ANT3, 3x QCC3086 Bluetooth Audio Transceiver, SX1262 LoRa mit ANT1 U.FL Port, U12 Quad Power Switch), einschiebbarer Zwischenboden mit LiPo-Akkubett und Taoglas Dual-Flexantennen (LoRa 868 MHz & Helmet Audio) sowie der L-Schiebedeckel mit Gore-Membran und integrierter Heckwand.*
+*Abbildung 8.2: Maßstabsgetreue 3D-CAD-Explosionsdarstellung der Zentralbox entlang der vertikalen Z-Achse. Sichtbar sind: Monocoque-Wanne mit integrierten Domen und Stirnwandports, bestückte PCBA 01 v10 (ESP32-S31 mit On-Board Johanson Keramikantenne ANT3, Triple-QCC3086 Bluetooth Audio Transceiver für Fahrer, Sozius und Smartphone, USB2517I 7-Port Hub, SX1262 LoRa mit ANT1 U.FL Port, U12 Quad Power Switch), einschiebbarer Zwischenboden mit LiPo-Akkubett und Taoglas Dual-Flexantennen sowie der L-Schiebedeckel mit Gore-Membran und integrierter Heckwand.*
 
 ### 1.3 3D-Röntgenansicht & Zusammenbau-Fitting
 

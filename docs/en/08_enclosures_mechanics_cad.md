@@ -63,11 +63,11 @@ The Central Box enclosure is engineered in **PA12 (HP Multi Jet Fusion)** for ha
 +------------------------------------------------------------+  v
 ```
 
-### 1.2 3D Exploded View & Layer Architecture (1:1:1 CAD Fitting)
+### 1.2 3D Exploded View & Layer Architecture (CAD Fitting)
 
 ![OpenMotorBridge Central Box Exploded 3D CAD Fitting](../images/cad/main_box_full_assembly_exploded_3d.png)
 
-*Figure 8.2: 1:1:1 Euclidean CAD exploded view of the Central Box along the vertical Z-axis. Shown: Monocoque tub with integrated standoffs and front ports, populated PCBA 01 v10 (ESP32-S31 with on-board Johanson ceramic chip antenna ANT3, 3x QCC3086 Bluetooth Audio Transceivers, SX1262 LoRa with ANT1 U.FL port, U12 Quad Power Switch), slide-in intermediate tray with LiPo battery and Taoglas dual flex antennas (LoRa 868 MHz & Helmet Audio), and L-Slide Lid with Gore vent and integrated Heckwand.*
+*Figure 8.2: True-to-scale 3D CAD exploded view of the Central Box along the vertical Z-axis. Shown: Monocoque tub with integrated standoffs and front ports, populated PCBA 01 v10 (ESP32-S31 with on-board Johanson ceramic chip antenna ANT3, Triple-QCC3086 Bluetooth Audio Transceivers for driver, passenger and smartphone, USB2517I 7-Port Hub, SX1262 LoRa with ANT1 U.FL port, U12 Quad Power Switch), slide-in intermediate tray with LiPo battery and Taoglas dual flex antennas, and L-Slide Lid with Gore vent and integrated Heckwand.*
 
 ### 1.3 3D X-Ray Assembly & Component Clearance
 
