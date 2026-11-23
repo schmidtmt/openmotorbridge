@@ -44,13 +44,7 @@ BOARDS = [
             ("pcba03_pod_cartridge_top.png", ["--side", "top", "--quality", "high", "--zoom", "1.05"]),
             ("pcba03_pod_cartridge_bottom_3d.png", ["--side", "bottom", "--rotate", "45,0,-45", "--quality", "high", "--perspective", "--zoom", "1.15"]),
         ],
-        "aliases": [
-            ("pcba03_pod_cartridge_3d.png", "cartridge_3d_render_perspective.png"),
-            ("pcba03_pod_cartridge_3d.png", "kicad_3d_render.png"),
-            ("pcba03_pod_cartridge_top.png", "cartridge_3d_render_top.png"),
-            ("pcba03_pod_cartridge_bottom_3d.png", "cartridge_3d_render_bottom.png"),
-            ("pcba03_pod_cartridge_bottom_3d.png", "cartridge_3d_render_bottom_perspective.png"),
-        ]
+        "aliases": []
     },
     {
         "id": "pcba05",
