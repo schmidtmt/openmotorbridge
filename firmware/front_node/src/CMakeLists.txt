@@ -12,7 +12,6 @@ idf_component_register(
         "cockpit_wifi_fallback.cpp"
         "usb_ethernet_tethering.cpp"
         "front_sensor_hub.cpp"
-        "front_c3_bridge.cpp"
         "remote_sd_client.cpp"
     INCLUDE_DIRS
         "."
@@ -21,9 +20,15 @@ idf_component_register(
         esp_wifi
         esp_netif
         driver
+        esp_driver_gpio
+        esp_driver_i2c
+        esp_driver_uart
+        esp_driver_i2s
         nvs_flash
         app_update
         mbedtls
         uwb_backbone
     WHOLE_ARCHIVE
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)

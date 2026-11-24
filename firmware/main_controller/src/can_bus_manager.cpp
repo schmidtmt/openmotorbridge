@@ -5,7 +5,9 @@
 #include <math.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/twai.h"
+#include "freertos/queue.h"
+#include "esp_twai.h"
+#include "esp_twai_onchip.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "adr_ekf_filter.h"
@@ -16,6 +18,36 @@ static const char *TAG = "CAN_MGR";
 // GPIO Pin-Definitionen für TI TCAN334G Transceiver (v10.0 PCBA 01 KiCad Pinout: U2 Pad 21/22 -> U6 Pin 1/4)
 #define PIN_CAN_TX          PIN_MAIN_CAN_TX     // GPIO 5
 #define PIN_CAN_RX          PIN_MAIN_CAN_RX     // GPIO 6
+
+typedef struct {
+    uint32_t id;
+    uint8_t dlc;
+    uint8_t data[8];
+} CanRawMsg_t;
+
+static twai_node_handle_t s_twai_node = NULL;
+static QueueHandle_t s_twai_rx_queue = NULL;
+
+static bool on_twai_rx_done_isr(twai_node_handle_t handle, const twai_rx_done_event_data_t *edata, void *user_ctx) {
+    uint8_t data_buf[8];
+    twai_frame_t frame = {
+        .buffer = data_buf,
+        .buffer_len = sizeof(data_buf),
+    };
+    if (twai_node_receive_from_isr(handle, &frame) == ESP_OK) {
+        CanRawMsg_t msg;
+        msg.id = frame.header.id;
+        msg.dlc = (uint8_t)twaifd_dlc2len(frame.header.dlc);
+        if (msg.dlc > 8) msg.dlc = 8;
+        memcpy(msg.data, data_buf, msg.dlc);
+        BaseType_t high_task_wakeup = pdFALSE;
+        if (s_twai_rx_queue) {
+            xQueueSendFromISR(s_twai_rx_queue, &msg, &high_task_wakeup);
+        }
+        return (high_task_wakeup == pdTRUE);
+    }
+    return false;
+}
 
 static bool s_can_initialized = false;
 static bool s_can_traffic_active = false;
@@ -168,28 +200,43 @@ esp_err_t can_bus_manager_init(void) {
     // Initialisiere Standard-Profil
     load_builtin_profile(s_active_profile_id);
 
-    // 1. TWAI Konfiguration: 500 kbps (Motorrad-Standard)
-    twai_general_config_t g_config = TWAI_GENERAL_CONFIG_DEFAULT(
-        (gpio_num_t)PIN_CAN_TX,
-        (gpio_num_t)PIN_CAN_RX,
-        s_listen_only_mode ? TWAI_MODE_LISTEN_ONLY : TWAI_MODE_NORMAL
-    );
-    g_config.rx_queue_len = 64;
-    g_config.tx_queue_len = 8;
+    // 1. TWAI Konfiguration: 500 kbps (Motorrad-Standard) via esp_twai_onchip
+    twai_onchip_node_config_t node_cfg = {
+        .io_cfg = {
+            .tx = (gpio_num_t)PIN_CAN_TX,
+            .rx = (gpio_num_t)PIN_CAN_RX,
+            .quanta_clk_out = (gpio_num_t)-1,
+            .bus_off_indicator = (gpio_num_t)-1,
+        },
+        .clk_src = TWAI_CLK_SRC_DEFAULT,
+        .bit_timing = {
+            .bitrate = 500000, // 500 kbps (Motorrad-Standard)
+        },
+        .tx_queue_depth = 16,
+    };
+    if (s_listen_only_mode) {
+        node_cfg.flags.enable_listen_only = 1;
+    }
 
-    twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
-    twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
+    if (s_twai_rx_queue == NULL) {
+        s_twai_rx_queue = xQueueCreate(64, sizeof(CanRawMsg_t));
+    }
 
     // 2. Treiber installieren & starten
-    esp_err_t ret = twai_driver_install(&g_config, &t_config, &f_config);
+    esp_err_t ret = twai_new_node_onchip(&node_cfg, &s_twai_node);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to install TWAI driver: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Failed to create TWAI node: %s", esp_err_to_name(ret));
         return ret;
     }
 
-    ret = twai_start();
+    twai_event_callbacks_t cbs = {
+        .on_rx_done = on_twai_rx_done_isr,
+    };
+    twai_node_register_event_callbacks(s_twai_node, &cbs, NULL);
+
+    ret = twai_node_enable(s_twai_node);
     if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to start TWAI driver: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "Failed to enable TWAI node: %s", esp_err_to_name(ret));
         return ret;
     }
 
@@ -310,28 +357,28 @@ void can_bus_inject_remote_frame(uint32_t can_id, uint8_t dlc, const uint8_t *da
 void task_can_bus_manager(void *pvParameters) {
     ESP_LOGI(TAG, "CAN-Bus Manager Task running on Core 0.");
 
-    twai_message_t rx_msg;
+    CanRawMsg_t rx_msg;
     uint32_t last_fps_calc_ms = 0;
     uint32_t fps_frame_counter = 0;
 
     while (true) {
-        if (!s_can_initialized) {
+        if (!s_can_initialized || !s_twai_rx_queue) {
             vTaskDelay(pdMS_TO_TICKS(1000));
             continue;
         }
 
-        // CAN-Frame empfangen (50 ms Timeout)
-        esp_err_t ret = twai_receive(&rx_msg, pdMS_TO_TICKS(50));
+        // CAN-Frame empfangen (50 ms Timeout via Queue)
+        BaseType_t got = xQueueReceive(s_twai_rx_queue, &rx_msg, pdMS_TO_TICKS(50));
         uint32_t now_ms = (uint32_t)(esp_timer_get_time() / 1000ULL);
 
-        if (ret == ESP_OK) {
+        if (got == pdTRUE) {
             s_can_traffic_active = true;
             s_rx_msg_count++;
             fps_frame_counter++;
             s_last_local_rx_ms = now_ms;
             s_active_source = CAN_SOURCE_LOCAL_CENTRAL_BOX;
 
-            process_can_frame_payload(rx_msg.identifier, rx_msg.data_length_code, rx_msg.data, now_ms);
+            process_can_frame_payload(rx_msg.id, rx_msg.dlc, rx_msg.data, now_ms);
         }
 
         // FPS Berechnung jede Sekunde
@@ -375,18 +422,21 @@ void task_can_bus_manager(void *pvParameters) {
 }
 
 void can_bus_send_remote_battery_warning(uint8_t battery_pct) {
-    if (!s_can_initialized || s_listen_only_mode) return;
+    if (!s_can_initialized || s_listen_only_mode || !s_twai_node) return;
 
-    twai_message_t tx_msg = {};
-    tx_msg.identifier = 0x5F0;
-    tx_msg.extd = 0;
-    tx_msg.data_length_code = 4;
-    tx_msg.data[0] = 0x01; // Alert Type: Remote Battery Low
-    tx_msg.data[1] = battery_pct;
-    tx_msg.data[2] = 0x00;
-    tx_msg.data[3] = 0xAA;
+    uint8_t tx_buf[4] = { 0x01, battery_pct, 0x00, 0xAA };
+    twai_frame_t tx_frame = {
+        .header = {
+            .id = 0x5F0,
+            .dlc = 4,
+            .ide = 0,
+            .rtr = 0,
+        },
+        .buffer = tx_buf,
+        .buffer_len = sizeof(tx_buf),
+    };
 
-    esp_err_t ret = twai_transmit(&tx_msg, pdMS_TO_TICKS(50));
+    esp_err_t ret = twai_node_transmit(s_twai_node, &tx_frame, 50);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "Transmitted Handlebar Remote Low-Battery Warning (%d%%) to CAN-Bus.", battery_pct);
     }

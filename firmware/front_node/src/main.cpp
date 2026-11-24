@@ -3,6 +3,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 #include "driver/gpio.h"
 
 #include "front_node_config.h"
@@ -18,7 +19,6 @@
 #include "usb_ethernet_tethering.h"
 #include "usb_vehicle_backbone.h"
 #include "front_sensor_hub.h"
-#include "front_c3_bridge.h"
 #include "remote_sd_client.h"
 
 static const char* TAG = "FRONT_NODE_V10";
@@ -243,9 +243,9 @@ static void supervisor_task(void* pvParameters) {
         }
         rgb.update(100);
 
-        // 7. Update USB CDC-NCM Ethernet Tethering, Inter-Chip C3 Bridge & OTA Health Checks
+        // 7. Update USB CDC-NCM Ethernet Tethering, FSC-BT802 Infotainment Bridge & OTA Health Checks
         usb_ethernet_update(100);
-        front_c3_bridge_update_tick();
+        fsc_bt802_bridge_update_tick();
         OtaServiceManager::instance().update_health_check(100);
 
         vTaskDelay(pdMS_TO_TICKS(100));
@@ -312,8 +312,8 @@ extern "C" void app_main(void) {
     });
     UsbVehicleBackbone::instance().start_task(22, 0);
 
-    // 4b. Initialize Inter-Chip C3 Infotainment Bridge & Remote SD Client
-    front_c3_bridge_init();
+    // 4b. Initialize FSC-BT802 Infotainment Bridge & Remote SD Client
+    fsc_bt802_bridge_init();
     remote_sd_client_init();
 
     // 5. Spawn Real-Time FreeRTOS Tasks

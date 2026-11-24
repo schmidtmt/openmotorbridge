@@ -3,7 +3,6 @@
 #include "esp_timer.h"
 #include "esp_log.h"
 #include "driver/gpio.h"
-#include "driver/i2c.h"
 
 static const char* TAG = "FAST_CHARGE_MGR";
 

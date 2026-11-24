@@ -223,8 +223,8 @@
         "datasheet_title": "BQ51050B Highly Integrated Wireless Power Receiver and Battery Charger (Qi v1.2)",
         "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
         "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-        "table_ref": "Pin Functions (QFN-28)",
-        "package": "QFN-28 (4.5x3.5 mm)",
+        "table_ref": "Table 6-1: Pin Functions (RHL-20)",
+        "package": "VQFN-20 / RHL-20 (4.5x3.5 mm)",
         "core": "Wireless Power Consortium (WPC) Qi v1.2 Receiver & Li-Ion Charger",
         "used_in_boards": [
           "PCBA_07"
@@ -322,11 +322,11 @@
         {
           "pad": "8",
           "gpio": 43,
-          "net": "A2DP_EN",
-          "fw_define": "PIN_MAIN_A2DP_EN",
+          "net": "HELM1_EN",
+          "fw_define": "PIN_MAIN_HELM1_EN",
           "signal_type": "GPIO / Control",
           "target": "U13.9",
-          "description": "ESP32-PICO A2DP Transmitter Hardware Enable / Reset"
+          "description": "Qualcomm QCC3086 Helm 1 Transmitter Hardware Enable (Active High)"
         },
         {
           "pad": "9",
@@ -367,20 +367,20 @@
         {
           "pad": "13",
           "gpio": 33,
-          "net": "A2DP_UART_TX",
-          "fw_define": "PIN_MAIN_A2DP_UART_TX",
+          "net": "HELM1_UART_TX",
+          "fw_define": "PIN_MAIN_HELM1_UART_TX",
           "signal_type": "UART2_TX",
           "target": "U13.41",
-          "description": "ESP32-PICO A2DP Transmitter UART Data Receive (PICO TX -> S31 RX)"
+          "description": "Qualcomm QCC3086 Helm 1 UART Data Receive (QCC TX -> S31 RX)"
         },
         {
           "pad": "14",
           "gpio": 34,
-          "net": "A2DP_UART_RX",
-          "fw_define": "PIN_MAIN_A2DP_UART_RX",
+          "net": "HELM1_UART_RX",
+          "fw_define": "PIN_MAIN_HELM1_UART_RX",
           "signal_type": "UART2_RX",
           "target": "U13.40",
-          "description": "ESP32-PICO A2DP Transmitter UART Command Transmit (S31 TX -> PICO RX)"
+          "description": "Qualcomm QCC3086 Helm 1 UART Command Transmit (S31 TX -> QCC RX)"
         },
         {
           "pad": "15",
@@ -502,11 +502,11 @@
         {
           "pad": "29",
           "gpio": 44,
-          "net": "A2DP_BOOT",
-          "fw_define": "PIN_MAIN_A2DP_BOOT",
+          "net": "HELM2_EN",
+          "fw_define": "PIN_MAIN_HELM2_EN",
           "signal_type": "GPIO / Strapping",
-          "target": "U13.23",
-          "description": "ESP32-PICO A2DP Transmitter Bootloader Strapping / Flash Mode"
+          "target": "U14.9",
+          "description": "Qualcomm QCC3086 Helm 2 Transmitter Hardware Enable (Active High)"
         },
         {
           "pad": "30",
@@ -2011,7 +2011,7 @@
         },
         "J2": {
           "ref": "J2",
-          "name": "Under-Perch Spiegel-Pod Links (PCBA 05C)",
+          "name": "CKPT 1: Under-Perch Spiegel-Pod Links (PCBA 05C)",
           "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
           "mating": "JST GHR-04V-S (AWG28-30)",
           "pins": [
@@ -2049,7 +2049,7 @@
         },
         "J3": {
           "ref": "J3",
-          "name": "Under-Perch Spiegel-Pod Rechts (PCBA 05C)",
+          "name": "CKPT 2: Under-Perch Spiegel-Pod Rechts (PCBA 05C)",
           "type": "JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)",
           "mating": "JST GHR-04V-S (AWG28-30)",
           "pins": [
@@ -3322,43 +3322,179 @@
         "U4": {
           "ref": "U4",
           "chip_key": "BQ51050B",
-          "name": "TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger",
-          "package": "QFN-28 (4.5x3.5 mm)",
+          "name": "TI BQ51050BRHLR Qi Wireless Power Receiver & Li-Ion Charger",
+          "package": "VQFN-20 / RHL-20 (4.5x3.5 mm)",
           "datasheet_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf",
           "pin_description_url": "https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4",
-          "table_ref": "Pin Functions (QFN-28)",
+          "table_ref": "Table 6-1: Pin Functions (RHL-20)",
           "pins": [
             {
               "pad": "1",
-              "pin_name": "AC1",
-              "net": "QI_COIL_AC1",
-              "type": "AC In",
-              "target": "J3.1 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC1"
+              "pin_name": "PGND",
+              "net": "GND",
+              "type": "Power Ground",
+              "target": "GND Plane",
+              "spec": "Leistungsmasse"
             },
             {
               "pad": "2",
-              "pin_name": "AC2",
-              "net": "QI_COIL_AC2",
+              "pin_name": "AC1",
+              "net": "QI_AC1",
               "type": "AC In",
-              "target": "J3.2 (Qi Spule)",
-              "spec": "Drahtlose Qi-Empfangsspule AC2"
+              "target": "J3.1 (Qi Spule)",
+              "spec": "Resonanz-Empfangsspule AC1"
+            },
+            {
+              "pad": "3",
+              "pin_name": "BOOT1",
+              "net": "QI_BOOT1",
+              "type": "Bootstrap",
+              "target": "C5 (10nF zu AC1)",
+              "spec": "Bootstrap Kondensator 1"
+            },
+            {
+              "pad": "4",
+              "pin_name": "BAT",
+              "net": "VBAT",
+              "type": "Power Out",
+              "target": "J1.1 (LiPo Akku)",
+              "spec": "Li-Ion Ladeausgang (4.20V)"
+            },
+            {
+              "pad": "5",
+              "pin_name": "CLAMP1",
+              "net": "QI_CLAMP1",
+              "type": "Resonance",
+              "target": "C7 (470nF zu AC1)",
+              "spec": "Serienresonanz Clamp 1"
+            },
+            {
+              "pad": "6",
+              "pin_name": "COMM1",
+              "net": "QI_COMM1",
+              "type": "Communication",
+              "target": "C9 (47nF zu AC1)",
+              "spec": "Qi Modulationskapazität 1"
+            },
+            {
+              "pad": "7",
+              "pin_name": "/CHG",
+              "net": "CHG_STAT",
+              "type": "Open-Drain Out",
+              "target": "U1.28 (ESP32-C3)",
+              "spec": "Ladezustand Active-Low (10k Pullup)"
+            },
+            {
+              "pad": "8",
+              "pin_name": "AD_EN",
+              "net": "GND",
+              "type": "Control In",
+              "target": "GND Plane",
+              "spec": "Adapter Enable deaktiviert"
+            },
+            {
+              "pad": "9",
+              "pin_name": "AD",
+              "net": "GND",
+              "type": "Power In",
+              "target": "GND Plane",
+              "spec": "Kabel-Adaptereingang auf Masse"
+            },
+            {
+              "pad": "10",
+              "pin_name": "/EN1",
+              "net": "GND",
+              "type": "Control In",
+              "target": "GND Plane",
+              "spec": "Wireless Rx Freigabe 1"
+            },
+            {
+              "pad": "11",
+              "pin_name": "/EN2",
+              "net": "GND",
+              "type": "Control In",
+              "target": "GND Plane",
+              "spec": "Wireless Rx Freigabe 2"
             },
             {
               "pad": "12",
-              "pin_name": "BAT",
-              "net": "BAT_3V7",
-              "type": "Power Out",
-              "target": "J1.1 (LiPo Akku)",
-              "spec": "Geregelter 4.2V / 500mA Li-Ion Ladestrom"
+              "pin_name": "ILIM",
+              "net": "QI_ILIM",
+              "type": "Analog",
+              "target": "R3 (1.5k zu GND)",
+              "spec": "Ladestrom-Programmierung (~200mA)"
+            },
+            {
+              "pad": "13",
+              "pin_name": "TS/CTRL",
+              "net": "QI_TS",
+              "type": "Analog",
+              "target": "R4 (10k zu GND)",
+              "spec": "Temperatursinn / Normalbetrieb"
+            },
+            {
+              "pad": "14",
+              "pin_name": "FOD",
+              "net": "QI_FOD",
+              "type": "Analog",
+              "target": "R5 (200R zu GND)",
+              "spec": "Fremdkörpererkennungs-Kalibrierung"
             },
             {
               "pad": "15",
-              "pin_name": "CHG_STAT",
-              "net": "QI_CHG_STAT",
-              "type": "Digital Out",
-              "target": "U1 (ESP32-C3)",
-              "spec": "Qi Ladestatus (Active Low = lädt)"
+              "pin_name": "COMM2",
+              "net": "QI_COMM2",
+              "type": "Communication",
+              "target": "C10 (47nF zu AC2)",
+              "spec": "Qi Modulationskapazität 2"
+            },
+            {
+              "pad": "16",
+              "pin_name": "CLAMP2",
+              "net": "QI_CLAMP2",
+              "type": "Resonance",
+              "target": "C8 (470nF zu AC2)",
+              "spec": "Serienresonanz Clamp 2"
+            },
+            {
+              "pad": "17",
+              "pin_name": "BOOT2",
+              "net": "QI_BOOT2",
+              "type": "Bootstrap",
+              "target": "C6 (10nF zu AC2)",
+              "spec": "Bootstrap Kondensator 2"
+            },
+            {
+              "pad": "18",
+              "pin_name": "RECT",
+              "net": "QI_RECT",
+              "type": "Power Out",
+              "target": "C11 (4.7uF zu GND)",
+              "spec": "Gleichrichterausgang Filter"
+            },
+            {
+              "pad": "19",
+              "pin_name": "AC2",
+              "net": "QI_AC2",
+              "type": "AC In",
+              "target": "J3.2 (Qi Spule)",
+              "spec": "Resonanz-Empfangsspule AC2"
+            },
+            {
+              "pad": "20",
+              "pin_name": "PGND",
+              "net": "GND",
+              "type": "Power Ground",
+              "target": "GND Plane",
+              "spec": "Leistungsmasse"
+            },
+            {
+              "pad": "21",
+              "pin_name": "EPAD",
+              "net": "GND",
+              "type": "Power Ground",
+              "target": "GND Plane mit Thermal Vias",
+              "spec": "Thermisches Massepad (PGND)"
             }
           ]
         }
@@ -3372,15 +3508,21 @@
           "pins": [
             {
               "pin": "1",
-              "net": "BAT_3V7",
-              "type": "Power (+3.7V)",
-              "spec": "LiPo Akku Pluspol"
+              "net": "VBAT",
+              "type": "Power In (+3.7V)",
+              "spec": "LiPo Akku Pluspol (3.0V .. 4.2V)"
             },
             {
               "pin": "2",
               "net": "GND",
               "type": "Power Return",
               "spec": "LiPo Akku Masse"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
             }
           ]
         },
@@ -3392,15 +3534,21 @@
           "pins": [
             {
               "pin": "1",
-              "net": "QI_COIL_AC1",
+              "net": "QI_AC1",
               "type": "AC In",
               "spec": "Resonanz-Empfangsspule Anschluss 1"
             },
             {
               "pin": "2",
-              "net": "QI_COIL_AC2",
+              "net": "QI_AC2",
               "type": "AC In",
               "spec": "Resonanz-Empfangsspule Anschluss 2"
+            },
+            {
+              "pin": "MP",
+              "net": "GND",
+              "type": "Shield",
+              "spec": "Rastlaschen auf Masse"
             }
           ]
         }

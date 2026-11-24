@@ -53,11 +53,12 @@ esp_err_t sdio_purge_old_tracks_if_needed(void);
  */
 uint32_t sdio_get_free_space_mb(void);
 
+#include "usb_backbone_types.h"
+
 /**
  * @brief Bedient Remote-SD Sektor-Leseanfragen von Satellitenknoten (COMM_05 -> COMM_06)
  */
-struct UsbSdBlockReqPkt;
-esp_err_t sdio_serve_sector_request(const struct UsbSdBlockReqPkt *req, uint8_t target_node);
+esp_err_t sdio_serve_sector_request(const UsbSdBlockReqPkt *req, uint8_t target_node);
 
 #ifdef __cplusplus
 }

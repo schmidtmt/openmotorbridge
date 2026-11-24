@@ -60,7 +60,7 @@ OpenMotorBridge operates as an active audio crossbar and bridge gateway between 
 2. **Mode 1: Single Rider Mode (Focus Mode):**  
    Bay 2 is software-muted (`-96 dB`). Full DSP and routing focus shifts to the primary gateway (Bay 1), GPS navigation directions, and smartphone A2DP streaming.
 3. **Mode 2: Cruise Mode (Onboard Speaker Output):**  
-   Intercom signals are attenuated by $-6\,\text{dB}$ and routed to vehicle speakers (Harley-Davidson Boom! Box GTS / BMW Sound System).
+   Intercom signals are attenuated by $-6\,\text{dB}$ and routed together with smartphone music / GPS directions to the onboard speakers (Harley-Davidson Boom! Box GTS / SkylineOS / BMW sound system via `U10` ESP32-C3 UAC bridge on PCBA 05) (`speakers_active = true`). When Cruise Mode is inactive (Mode 0 / Mode 1), onboard speakers are completely muted (`speakers_active = false`), and audio playback remains strictly inside the helmets (Bluetooth 5.4 via QCC3086).
 
 ### 1.2 Cross-Intercom Bridge (Bay 1 ↔ Bay 2) with Anti-Feedback Loopback Gate
 * **Bidirectional Bridging:** Provides a seamless audio bridge between incompatible brands (e.g., Sena Spider X Slim Mesh 3.0 in Bay 1 and Cardo DMC Gen2 in Bay 2).

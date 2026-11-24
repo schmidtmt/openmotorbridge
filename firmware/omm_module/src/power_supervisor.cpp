@@ -38,6 +38,6 @@ void power_supervisor_poll(OmmPowerStatus_t *status) {
 
 void power_enter_deep_sleep(void) {
     ESP_LOGW(TAG, "Entering Deep Sleep (Wakeup via SW1 Power Button on GPIO %d)...", OMM_PIN_SW_POWER);
-    esp_deep_sleep_enable_gpio_wakeup((1ULL << OMM_PIN_SW_POWER), ESP_GPIO_WAKEUP_GPIO_LOW);
+    esp_sleep_enable_ext1_wakeup_io((1ULL << OMM_PIN_SW_POWER), ESP_EXT1_WAKEUP_ANY_LOW);
     esp_deep_sleep_start();
 }

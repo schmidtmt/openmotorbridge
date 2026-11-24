@@ -73,6 +73,9 @@ public:
      * @brief Universelles Senden eines beliebigen USB-Backbone-Pakets
      */
     esp_err_t send_packet(UsbNodeType target, UsbBackbonePktType type, const void *payload, size_t len);
+    esp_err_t send_generic_packet(UsbBackbonePktType type, const void *payload, size_t len, UsbNodeType target) {
+        return send_packet(target, type, payload, len);
+    }
 
     /**
      * @brief Einspeisen eines empfangenen Roh-Frames (für Loopback-Test oder USB-CDC/HID IRQ)

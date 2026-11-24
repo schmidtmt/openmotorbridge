@@ -4,7 +4,7 @@
 #include "esp_log.h"
 #include "driver/gpio.h"
 #include "driver/uart.h"
-#include "driver/i2s.h"
+#include "driver/i2s_std.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -14,6 +14,9 @@ static const char* TAG = "FSC_BT802";
 #define BT802_UART_BAUD      115200
 #define BT802_BUF_SIZE       512
 #define BT802_I2S_PORT       I2S_NUM_1
+
+static i2s_chan_handle_t s_i2s_tx_chan = NULL;
+static i2s_chan_handle_t s_i2s_rx_chan = NULL;
 
 static FscBt802Status_t s_status = {
     .mode = BT802_MODE_STANDBY,
@@ -68,28 +71,33 @@ esp_err_t fsc_bt802_bridge_init(void) {
     uart_driver_install(BT802_UART_PORT, BT802_BUF_SIZE * 2, 0, 0, NULL, 0);
 
     // 3. Configure I2S Bus for Synchronous Audio (48 kHz Stereo 16-bit)
-    i2s_config_t i2s_config = {
-        .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_RX),
-        .sample_rate = 48000,
-        .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-        .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
-        .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-        .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-        .dma_buf_count = 4,
-        .dma_buf_len = 128,
-        .use_apll = true,
-        .tx_desc_auto_clear = true
-    };
-
-    i2s_pin_config_t pin_config = {
-        .bck_io_num = PIN_FRONT_BT_I2S_BCLK,
-        .ws_io_num = PIN_FRONT_BT_I2S_WS,
-        .data_out_num = PIN_FRONT_BT_I2S_DOUT,
-        .data_in_num = PIN_FRONT_BT_I2S_DIN
-    };
-
-    i2s_driver_install(BT802_I2S_PORT, &i2s_config, 0, NULL);
-    i2s_set_pin(BT802_I2S_PORT, &pin_config);
+    i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(BT802_I2S_PORT, I2S_ROLE_MASTER);
+    chan_cfg.auto_clear_after_cb = true;
+    esp_err_t i2s_err = i2s_new_channel(&chan_cfg, &s_i2s_tx_chan, &s_i2s_rx_chan);
+    if (i2s_err == ESP_OK) {
+        i2s_std_config_t std_cfg = {
+            .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(48000),
+            .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_STEREO),
+            .gpio_cfg = {
+                .mclk = I2S_GPIO_UNUSED,
+                .bclk = (gpio_num_t)PIN_FRONT_BT_I2S_BCLK,
+                .ws = (gpio_num_t)PIN_FRONT_BT_I2S_WS,
+                .dout = (gpio_num_t)PIN_FRONT_BT_I2S_DOUT,
+                .din = (gpio_num_t)PIN_FRONT_BT_I2S_DIN,
+                .invert_flags = {
+                    .mclk_inv = false,
+                    .bclk_inv = false,
+                    .ws_inv = false,
+                },
+            },
+        };
+        i2s_channel_init_std_mode(s_i2s_tx_chan, &std_cfg);
+        i2s_channel_init_std_mode(s_i2s_rx_chan, &std_cfg);
+        i2s_channel_enable(s_i2s_tx_chan);
+        i2s_channel_enable(s_i2s_rx_chan);
+    } else {
+        ESP_LOGE(TAG, "Failed to allocate FSC-BT802 I2S channels: %s", esp_err_to_name(i2s_err));
+    }
 
     // Default boot mode: Mode A (Headset / Sink) to capture bike navigation voice
     fsc_bt802_bridge_set_mode(BT802_MODE_HEADSET_SINK, true);
@@ -152,19 +160,19 @@ esp_err_t fsc_bt802_bridge_send_media_key(uint8_t key_code) {
 }
 
 esp_err_t fsc_bt802_bridge_stream_audio_to_speakers(const int16_t *pcm_stereo, size_t sample_count) {
-    if (s_status.mode != BT802_MODE_BIKE_SPEAKER_SOURCE) {
+    if (s_status.mode != BT802_MODE_BIKE_SPEAKER_SOURCE || !s_i2s_tx_chan) {
         return ESP_ERR_INVALID_STATE;
     }
     size_t bytes_written = 0;
-    return i2s_write(BT802_I2S_PORT, pcm_stereo, sample_count * 2 * sizeof(int16_t), &bytes_written, portMAX_DELAY);
+    return i2s_channel_write(s_i2s_tx_chan, pcm_stereo, sample_count * 2 * sizeof(int16_t), &bytes_written, 1000);
 }
 
 esp_err_t fsc_bt802_bridge_read_nav_audio(int16_t *pcm_out, size_t max_samples, size_t *samples_read) {
-    if (s_status.mode != BT802_MODE_HEADSET_SINK) {
+    if (s_status.mode != BT802_MODE_HEADSET_SINK || !s_i2s_rx_chan) {
         return ESP_ERR_INVALID_STATE;
     }
     size_t bytes_read = 0;
-    esp_err_t ret = i2s_read(BT802_I2S_PORT, pcm_out, max_samples * sizeof(int16_t), &bytes_read, pdMS_TO_TICKS(10));
+    esp_err_t ret = i2s_channel_read(s_i2s_rx_chan, pcm_out, max_samples * sizeof(int16_t), &bytes_read, 10);
     if (samples_read) {
         *samples_read = bytes_read / sizeof(int16_t);
     }

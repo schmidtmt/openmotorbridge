@@ -398,7 +398,7 @@ Empfängt ein Node ein `LoRaAlarmPacket` (oder löst lokal einen Alarm aus), gre
 
 ## 10. Build-, Flash- & HIL-Verifikationsanleitung (Developer Guide)
 
-Für die schrittweise Einrichtung der ESP-IDF Toolchain (v5.5+ mit `esp32s3`, `esp32p4`, `esp32c6`), das Kompilieren der sechs Firmware-Ziele (`main_controller`, `front_node`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), das Erstellen der SPIFFS-Dateisystem-Images (`build/storage.bin` @ `0x5E0000`) sowie das **Central Bus-DFU Flashing** über den `USB2517I`/`USB2514Bi` Hub-Backbone verweist OpenMotorBridge auf den zentralen Entwickler-Leitfaden:
+Für die Einrichtung der ESP-IDF Toolchain (natives ESP32-S31 RISC-V Target erfordert ESP-IDF v6.1+ bzw. master; v5.x Fallback mit `esp32s3` für Devkits, sowie `esp32c6` / `esp32c3`), das Kompilieren der Firmware-Ziele (`main_controller`, `front_node`, `front_node_c3`, `pod_gateway`, `radar_submcu`, `omm_module`, `omm446_module`), das Erstellen der SPIFFS-Dateisystem-Images (`build/storage.bin` @ `0x5E0000`) sowie das **Central Bus-DFU Flashing** über den `USB2517I`/`USB2514Bi` Hub-Backbone verweist OpenMotorBridge auf den zentralen Entwickler-Leitfaden:
 
 > [!TIP]
 > Die vollständige Schritt-für-Schritt-Anleitung mit allen CLI-Befehlen, Partitionstabellen und Central Bus-DFU Abläufen ist dokumentiert in:  

@@ -19,6 +19,8 @@ import os
 import sys
 import json
 import re
+import tempfile
+import xml.etree.ElementTree as ET
 import subprocess
 import pcbnew
 
@@ -254,6 +256,70 @@ def run_erc(sch_path):
         "violations": violations
     }
 
+def run_schematic_parity(sch_path, board):
+    if not sch_path or not os.path.exists(sch_path):
+        return {"error": f"Schematic file not found: {sch_path}"}
+        
+    with tempfile.NamedTemporaryFile(suffix='.xml', delete=False) as tf:
+        xml_path = tf.name
+    try:
+        cmd = [KICAD_CLI, "sch", "export", "netlist", "--format", "kicadxml", "-o", xml_path, sch_path]
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if not os.path.exists(xml_path) or os.path.getsize(xml_path) == 0:
+            err_msg = res.stderr.strip() if res.stderr else f"Exit code {res.returncode}"
+            return {"error": f"Netlist export failed: {err_msg}"}
+            
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        
+        sch_fps = {}
+        comps = root.find("components")
+        if comps is not None:
+            for comp in comps.findall("comp"):
+                ref = comp.get("ref")
+                sch_fps[ref] = comp.findtext("footprint") or ""
+                
+        sch_nets = {}
+        nets = root.find("nets")
+        if nets is not None:
+            for net in nets.findall("net"):
+                net_name = net.get("name")
+                for node in net.findall("node"):
+                    sch_nets[(node.get("ref"), str(node.get("pin")))] = net_name
+                    
+        fp_mismatches = []
+        net_conflicts = []
+        
+        for fp in board.GetFootprints():
+            ref = fp.GetReference()
+            pcb_fpid = fp.GetFPIDAsString()
+            
+            if ref in sch_fps:
+                sch_fpid = sch_fps[ref]
+                if sch_fpid and pcb_fpid != sch_fpid:
+                    fp_mismatches.append(f"{ref}: Footprint mismatch - PCB '{pcb_fpid}' != Schematic '{sch_fpid}'")
+                    
+            for pad in fp.Pads():
+                p_num = str(pad.GetNumber())
+                pcb_net = pad.GetNetname()
+                if (ref, p_num) in sch_nets:
+                    sch_net = sch_nets[(ref, p_num)]
+                    if sch_net.startswith("unconnected-"):
+                        if pcb_net != "" and not pcb_net.startswith("unconnected-"):
+                            net_conflicts.append(f"{ref}.{p_num}: Pad net '{pcb_net}' in PCB, but pin is unconnected in schematic")
+                    elif sch_net != "":
+                        if pcb_net != sch_net and not (pcb_net == "" and sch_net.startswith("unconnected-")):
+                            net_conflicts.append(f"{ref}.{p_num}: Pad net '{pcb_net}' doesn't match net given by schematic ('{sch_net}')")
+
+        return {
+            "fp_mismatches": fp_mismatches,
+            "net_conflicts": net_conflicts,
+            "error_count": len(fp_mismatches) + len(net_conflicts)
+        }
+    finally:
+        if os.path.exists(xml_path):
+            os.remove(xml_path)
+
 def audit_board(board_id, cfg):
     print(f"\n{'='*80}")
     print(f"AUDITING: {board_id} - {cfg['name']}")
@@ -289,8 +355,37 @@ def audit_board(board_id, cfg):
         else:
             print(f"    ✅ DRC Errors: 0")
         
-    # 2. Ghost IC Footprints Check (placed ICs with 0 connected nets)
-    print(f"\n[2] IC Footprint Integrity & Ghost Component Audit:")
+    # 2. Schematic <-> PCB Netlist & Footprint Parity Audit
+    print(f"\n[2] Schematic <-> PCB Parity Audit:")
+    sch_path = cfg.get("sch")
+    if sch_path and os.path.exists(sch_path):
+        parity = run_schematic_parity(sch_path, board)
+        if "error" in parity:
+            print(f"    ⚠️  PARITY CHECK SKIPPED: {parity['error']}")
+        else:
+            fp_errs = parity.get("fp_mismatches", [])
+            net_errs = parity.get("net_conflicts", [])
+            if not fp_errs and not net_errs:
+                print(f"    ✅ Footprints & Netlist: 100% in sync with schematic.")
+            else:
+                if fp_errs:
+                    print(f"    ❌ Footprint Symbol Mismatches: {len(fp_errs)}")
+                    for m in fp_errs[:5]:
+                        print(f"       - {m}")
+                    if len(fp_errs) > 5:
+                        print(f"       ... and {len(fp_errs) - 5} more")
+                if net_errs:
+                    print(f"    ❌ Net Conflicts: {len(net_errs)}")
+                    for m in net_errs[:5]:
+                        print(f"       - {m}")
+                    if len(net_errs) > 5:
+                        print(f"       ... and {len(net_errs) - 5} more")
+                errors += parity.get("error_count", 0)
+    else:
+        print(f"    ⚠️  No schematic file defined/found for parity audit.")
+
+    # 3. Ghost IC Footprints Check (placed ICs with 0 connected nets)
+    print(f"\n[3] IC Footprint Integrity & Ghost Component Audit:")
     for fp in board.GetFootprints():
         ref = fp.GetReference()
         if ref.startswith("U"):
@@ -300,8 +395,8 @@ def audit_board(board_id, cfg):
                 print(f"    ❌ CRITICAL GHOST IC: {ref} ({fp.GetValue()}) has {len(pads)} pads but ZERO functional net connections!")
                 errors += 1
                 
-    # 3. MCU Pin Mapping & Strapping Pin Verification
-    print(f"\n[3] MCU Pinout & Strapping Pin Safety Audit:")
+    # 4. MCU Pin Mapping & Strapping Pin Verification
+    print(f"\n[4] MCU Pinout & Strapping Pin Safety Audit:")
     mcu = board.FindFootprintByReference(cfg["mcu_ref"])
     if not mcu:
         print(f"    ⚠️  MCU Footprint {cfg['mcu_ref']} not found on board!")
@@ -398,8 +493,8 @@ def audit_board(board_id, cfg):
         for pin in ["2", "3", "4", "8", "18", "19", "20"]:
             print(f"      Pad {pin:2s}: Net = '{mcu_pads.get(pin, '')}'")
 
-    # 4. I2C Bus Audit
-    print(f"\n[4] I2C Bus Devices & Address Conflict Audit:")
+    # 5. I2C Bus Audit
+    print(f"\n[5] I2C Bus Devices & Address Conflict Audit:")
     i2c_sda_nets = [net.GetNetname() for net in board.GetNetsByName().values() if "SDA" in net.GetNetname().upper()]
     i2c_scl_nets = [net.GetNetname() for net in board.GetNetsByName().values() if "SCL" in net.GetNetname().upper()]
     print(f"    Detected I2C SDA Nets: {i2c_sda_nets}")
@@ -415,8 +510,8 @@ def audit_board(board_id, cfg):
                     pads.append(f"{ref}.{p.GetNumber()}")
             print(f"    Devices on {sda}: {pads}")
 
-    # 5. SPI Chip Select Audit
-    print(f"\n[5] SPI Bus Chip Select Uniqueness Audit:")
+    # 6. SPI Chip Select Audit
+    print(f"\n[6] SPI Bus Chip Select Uniqueness Audit:")
     cs_nets = [net.GetNetname() for net in board.GetNetsByName().values() if any(k in net.GetNetname().upper() for k in ["_CS", "_NSS", "CS_"])]
     print(f"    Detected Chip Select Nets: {cs_nets}")
     if len(cs_nets) != len(set(cs_nets)):
@@ -425,7 +520,7 @@ def audit_board(board_id, cfg):
     else:
         print(f"    ✅ All {len(cs_nets)} SPI Chip Select lines are distinct.")
 
-    # 6. Single Source of Truth (SSOT) Pinout Matrix Cross-Audit
+    # 7. Single Source of Truth (SSOT) Pinout Matrix Cross-Audit
     ssot_key = board_id.replace(" ", "_")
     ssot_path = os.path.join(os.path.dirname(__file__), "..", "data", "pcba_pinouts.json")
     if os.path.exists(ssot_path):
@@ -433,7 +528,7 @@ def audit_board(board_id, cfg):
             ssot_data = json.load(f)
         b_ssot = ssot_data.get("boards", {}).get(ssot_key)
         if b_ssot:
-            print(f"\n[6] SSOT Pinout & Firmware Cross-Audit (data/pcba_pinouts.json):")
+            print(f"\n[7] SSOT Pinout & Firmware Cross-Audit (data/pcba_pinouts.json):")
             ds = b_ssot.get("datasheet", {})
             print(f"    Datasheet: {ds.get('title')} ({ds.get('table_ref')})")
             print(f"    URL:       {ds.get('url')}")

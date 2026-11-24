@@ -5,6 +5,8 @@ sdkconfig
 *.bin
 *.elf
 *.map
+managed_components/
+dependencies.lock
 
 # KiCad Backups & Lock-Dateien
 *.kicad_prl

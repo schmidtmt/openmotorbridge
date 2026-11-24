@@ -18,8 +18,10 @@ if [ -d "/usr/local/bin" ]; then
     export PATH="/usr/local/bin:$PATH"
 fi
 
-# 3. Python 3.14 framework (matches ~/.espressif/python_env/idf5.5_py3.14_env)
-if [ -d "/Library/Frameworks/Python.framework/Versions/3.14/bin" ]; then
+# 3. Python framework (matches ~/.espressif/python_env/idf6.1_py3.15_env or 3.14)
+if [ -d "/Library/Frameworks/Python.framework/Versions/3.15/bin" ]; then
+    export PATH="/Library/Frameworks/Python.framework/Versions/3.15/bin:$PATH"
+elif [ -d "/Library/Frameworks/Python.framework/Versions/3.14/bin" ]; then
     export PATH="/Library/Frameworks/Python.framework/Versions/3.14/bin:$PATH"
 fi
 

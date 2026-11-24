@@ -77,25 +77,6 @@ void fsc_bt802_bridge_update_tick(void);
  */
 FscBt802Status_t fsc_bt802_bridge_get_status(void);
 
-// -----------------------------------------------------------------------------
-// Legacy Aliases for Front C3 Bridge Compatibility
-// -----------------------------------------------------------------------------
-typedef FscBt802Status_t FrontC3BridgeStatus_t;
-typedef FscBt802StatusCallback FrontC3StatusCallback;
-
-#define front_c3_bridge_init() fsc_bt802_bridge_init()
-#define front_c3_bridge_set_status_callback(cb) fsc_bt802_bridge_set_status_callback(cb)
-#define front_c3_bridge_send_media_key(k) fsc_bt802_bridge_send_media_key(k)
-#define front_c3_bridge_stream_audio(pcm, count) fsc_bt802_bridge_stream_audio_to_speakers(pcm, count)
-#define front_c3_bridge_update_tick() fsc_bt802_bridge_update_tick()
-#define front_c3_bridge_get_status() fsc_bt802_bridge_get_status()
-static inline esp_err_t front_c3_bridge_set_speakers(bool active) {
-    return fsc_bt802_bridge_set_mode(active ? BT802_MODE_BIKE_SPEAKER_SOURCE : BT802_MODE_HEADSET_SINK, false);
-}
-static inline esp_err_t front_c3_bridge_select_mux(uint8_t target) {
-    return ESP_OK; // TS3USB221 managed or static
-}
-
 #ifdef __cplusplus
 }
 #endif

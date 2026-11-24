@@ -130,9 +130,9 @@ Für alle 4-Lagen-Platinen (`PCBA 01`, `PCBA 03`, `PCBA 05`, `PCBA 05D` und `PCB
 * **Kompakte Vertikal-Steckverbinder (Pointing UP):**
   * Sämtliche internen Anschlüsse sind als ultrakompakte, vertikal nach oben weisende SMT-Stecker ausgeführt. Dadurch werden Biegeschleifen an den Platinenkanten vollständig vermieden und die Kabelpeitschen laufen parallel nach oben in den Kabelkanal des Monocoque-Gehäuses ab.
 * **Bestückung Top-Layer (F.Cu):**
-  * **Hauptcontroller (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz mit 128-Bit SIMD AI Engine für On-Device Audio-Signalverarbeitung und Sprachfilterung, 16 MB Flash, 8 MB Octal-PSRAM, externe U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, zentralen geometrischen BLE-Master (Lenkertaster, OEM-Adapter, Action-Cam, Keyfob, TPMS) und CAN-FD Management.
+  * **Hauptcontroller (`U2`):** Espressif `ESP32-S31-WROOM-1U` (Dual-Core RISC-V @ 320 MHz mit 128-Bit SIMD AI Engine für On-Device Audio-Signalverarbeitung und Sprachfilterung, nativem Bluetooth Classic BR/EDR mit SCO/eSCO, Bluetooth 5.4 LE Audio, 16 MB Flash, 8 MB Octal-PSRAM, externe U.FL Buchse) für Systemsteuerung, FreeRTOS DSP-Pipeline, zentralen geometrischen BLE-Master (Lenkertaster, OEM-Adapter, Action-Cam, Keyfob, TPMS) und CAN-FD Management.
   * **Industrial USB 2.0 Hub Controller (`U8`):** Microchip `USB2517I-JZX` (QFN-64, $-40\,^\circ\text{C}\dots+85\,^\circ\text{C}$ Automotive-Grade) 7-Port High-Speed 480 Mbps Hub mit 24.000 MHz Quarz `Y2`. Bindet alle Peripherieknoten (Front, Pod 1, Pod 2, Radar, Helm-Audio, ESP32 und Service-Port) transparent und synchron an.
-  * **Dedizierte Bluetooth 5.4 Audio-Transceiver (`U9`, `U13`, `U14`):** **3× Qualcomm QCC3086** Bluetooth 5.4 Audio SoCs (100% Gleichteile im WLCSP-99 Footprint mit integrierter Keramik-Chipantenne) für Smartphone-Link (`U9`, A2DP Sink, HFP 1.8 Low-Latency Voice-Rückkanal, AVRCP 1.6), Fahrer-Helm (`U13`, aptX Adaptive Hi-Fi, HFP 1.8 Mic-Uplink) und Sozius-Helm (`U14`, A2DP aptX/LC3 Zweitstream, HFP 1.8 Mic-Uplink).
+  * **Dedizierte Bluetooth 5.4 Audio-Transceiver (`U9`, `U13`, `U14`):** **3× Qualcomm QCC3086** Bluetooth 5.4 Audio SoCs (100% Gleichteile im WLCSP-99 Footprint mit integrierter Keramik-Chipantenne) für Smartphone-Link (`U9`, A2DP Sink, HFP 1.8 Low-Latency Voice-Rückkanal, AVRCP 1.6), Fahrer-Helm (`U13`, aptX Adaptive Hi-Fi, HFP 1.8 Mic-Uplink) und Sozius-Helm (`U14`, A2DP aptX/LC3 Zweitstream, HFP 1.8 Mic-Uplink). Die Auslagerung auf drei separate Qualcomm-Chips garantiert drei vollständig unabhängige, parallele Hi-Fi Streams (aptX Adaptive / LDAC / Snapdragon Sound) ohne HF-TDM-Latenzen, die ein einzelnes Single-Antennen-Radio (wie das interne des S31) physikalisch nicht parallel bedienen kann.
   * **Automotive Power Stage (`U1`):** Texas Instruments `LM5164-Q1` synchroner 100V-Buck-Converter (erzeugt `VCC_5V` aus dem 12V–72V Bordnetz).
   * **LiPo-Lade- & Power-Path-PMIC (`U4`):** Texas Instruments `BQ24075RGTR` (VQFN-16 3x3mm) mit Dynamic Power Path Management (DPPM). Lädt den internen 2.200-mAh-Flach-LiPo (`J5`) automatisch aus `VCC_5V` (LM5164-Q1 oder USB-C `J3`) mit 1,0 A (`R16`), überwacht die Akkutemperatur per NTC (`J5` Pin 3) und puffert Startspannungseinbrüche beim Anlassen des Motors (Cold Crank bis 6,5V) sowie Zündungsabschaltungen unterbrechungsfrei in $< 10\,\mu\text{s}$ auf der Systemspannung `VCC_SYS` (speist den 3.3V Ultra-Low-Noise LDO `U11` `TPS7A0533`).
   * **System-LDO (`U11`):** Texas Instruments `TPS7A0533` Ultra-Low-Noise LDO (speist `VCC_3V3` unterbrechungsfrei aus `VCC_SYS` für ESP32-S31, SX1262 LoRa und Sensorik).
@@ -535,13 +535,13 @@ Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Geh�
 | 5 | `KL15_SENSE` | GPIO 3 | `PIN_MAIN_KL15_SENSE` | R3 / D4 / Q1 | **Digital In** – Zündungserkennung (KL15 Ignition Sense) |
 | 6 | `SPI_MISO` | GPIO 4 | `PIN_MAIN_LORA_MISO` | U10.18 | **SPI2_MISO** – LoRa Semtech SX1262 SPI Master In Slave Out |
 | 7 | `SPI_MOSI` | GPIO 5 | `PIN_MAIN_LORA_MOSI` | U10.19 | **SPI2_MOSI** – LoRa Semtech SX1262 SPI Master Out Slave In |
-| 8 | `A2DP_EN` | GPIO 43 | `PIN_MAIN_A2DP_EN` | U13.9 | **GPIO / Control** – ESP32-PICO A2DP Transmitter Hardware Enable / Reset |
+| 8 | `HELM1_EN` | GPIO 43 | `PIN_MAIN_HELM1_EN` | U13.9 | **GPIO / Control** – Qualcomm QCC3086 Helm 1 Transmitter Hardware Enable (Active High) |
 | 9 | `BT_EN` | GPIO 1 | `PIN_MAIN_BT_EN` | U9.11 | **Digital Out** – Qualcomm QCC3086 Enable / Reset Control |
 | 10 | `BT_UART_RX` | GPIO 2 | `PIN_MAIN_BT_UART_RX` | U9.10 | **UART1_RX** – Qualcomm QCC3086 Host Control Protocol RX |
 | 11 | `BT_UART_TX` | GPIO 3 | `PIN_MAIN_BT_UART_TX` | U9.9 | **UART1_TX** – Qualcomm QCC3086 Host Control Protocol TX |
 | 12 | `I2S_MCLK` | GPIO 35 | `PIN_MAIN_I2S_MCLK` | U3.1 / U9.1 | **I2S_MCLK** – Audio Master Clock (ES8388 Codec & QCC3086) |
-| 13 | `A2DP_UART_TX` | GPIO 33 | `PIN_MAIN_A2DP_UART_TX` | U13.41 | **UART2_TX** – ESP32-PICO A2DP Transmitter UART Data Receive (PICO TX -> S31 RX) |
-| 14 | `A2DP_UART_RX` | GPIO 34 | `PIN_MAIN_A2DP_UART_RX` | U13.40 | **UART2_RX** – ESP32-PICO A2DP Transmitter UART Command Transmit (S31 TX -> PICO RX) |
+| 13 | `HELM1_UART_TX` | GPIO 33 | `PIN_MAIN_HELM1_UART_TX` | U13.41 | **UART2_TX** – Qualcomm QCC3086 Helm 1 UART Data Receive (QCC TX -> S31 RX) |
+| 14 | `HELM1_UART_RX` | GPIO 34 | `PIN_MAIN_HELM1_UART_RX` | U13.40 | **UART2_RX** – Qualcomm QCC3086 Helm 1 UART Command Transmit (S31 TX -> QCC RX) |
 | 15 | `I2S_DOUT` | GPIO 17 | `PIN_MAIN_I2S_DOUT` | U3.4 / U9.4 | **I2S_DOUT** – Audio Serial Data Out (Playback) |
 | 16 | `I2S_DIN` | GPIO 18 | `PIN_MAIN_I2S_DIN` | U3.5 / U9.5 | **I2S_DIN** – Audio Serial Data In (Record / Mic) |
 | 17 | `I2C_SDA` | GPIO 22 | `PIN_MAIN_I2C_SDA` | U3.28 / U5.13 | **I2C_SDA** – On-Board I2C Bus Data (ES8388 0x10, BMI270 0x68) |
@@ -555,7 +555,7 @@ Der integrierte 4-Kanal High-Side Smart Switch (TI TPS4H160-Q1 im HTSSOP-28 Geh�
 | 25 | `BAT_NTC` | GPIO 15 | `PIN_MAIN_BAT_NTC_ADC` | J5.3 | **ADC_IN** – UPS 10k NTC Akkutemperaturüberwachung (JEITA) |
 | 27 | `ESP_BOOT` | GPIO 0 | `PIN_MAIN_BOOT_PAIR_BTN` | SW1 | **Digital In** – Boot Mode Strapping Pin / Pairing Taster |
 | 28 | `RGB_LED_DATA` | GPIO 48 | `PIN_MAIN_RGB_LED_DATA` | D1.4 / J4.1 | **Digital Out** – Onboard Status-LED WS2812B-2020 Data |
-| 29 | `A2DP_BOOT` | GPIO 44 | `PIN_MAIN_A2DP_BOOT` | U13.23 | **GPIO / Strapping** – ESP32-PICO A2DP Transmitter Bootloader Strapping / Flash Mode |
+| 29 | `HELM2_EN` | GPIO 44 | `PIN_MAIN_HELM2_EN` | U14.9 | **GPIO / Strapping** – Qualcomm QCC3086 Helm 2 Transmitter Hardware Enable (Active High) |
 | 30 | `I2S_BCLK` | GPIO 16 | `PIN_MAIN_I2S_BCLK` | U3.2 / U9.2 | **I2S_BCLK** – Audio Bit Clock (ES8388 Codec & QCC3086) |
 | 31 | `BAT_SENSE` | GPIO 1 | `PIN_MAIN_BAT_SENSE_ADC` | R12 / R13 | **ADC_IN** – USV LiPo Akkuspannungsmessung (Spannungsteiler) |
 | 32 | `I2S_WS` | GPIO 47 | `PIN_MAIN_I2S_WS` | U3.3 / U9.3 | **I2S_WS** – Audio Word Select / Frame Sync |
@@ -911,21 +911,20 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 * **Host Microcontroller (`U1`, ESP32-S31-WROOM-1U):**
   * Dual-Core RISC-V Prozessor mit bis zu 320 MHz, AI-SIMD-Pipeline und nativem High-Speed USB 2.0 PHY (480 Mbps).
   * **2.4 GHz Funk softwaremäßig deaktiviert:** Das interne 2.4-GHz-Funkteil wird in der Firmware (`front_node_config.h`) dauerhaft abgeschaltet, um den Lenkerbereich funktechnisch zu 100 % sauber zu halten und Interferenzen mit den benachbarten Systemen auszuschließen.
-  * Native 480 Mbps USB-Verbindung zu Downstream-Port 4 des `USB2514Bi` Hubs zur verzögerungsfreien Harley Headset-Emulation (MFi-Headset / USB Audio Class) und CDC-NCM Ethernet-Tethering über den Backbone zur Zentralbox.
+  * Native 480 Mbps USB-Verbindung direkt über Stecker `J1` (4-Draht Automotive-Backbone zur Zentralbox `PCBA 01`) für zentrales Bus-DFU, Telemetrie und CDC-NCM Ethernet-Tethering.
 * **Wireless Companion Radio (`U9`, ESP32-E22-WROOM-2X2):**
   * Hochperformanter Wi-Fi 6E Transceiver im 5 GHz und 6 GHz Band mit 2x2 MIMO.
   * Dual U.FL Antennenanschlüsse (`ANT1` Main, `ANT2` MIMO) direkt auf der Platinenoberseite für verlustarme Pigtails zu externen Gehäuse- oder Riser-Antennen.
   * Hochgeschwindigkeits-Anbindung an den Host-MCU `ESP32-S31` über einen 4-Bit SDIO 3.0 Bus (`SDIO_CLK`, `SDIO_CMD`, `SDIO_D0..D3`, `E22_IRQ`, `E22_EN`).
   * **Strikte 5/6 GHz Frequenztrennung:** Cockpit-WLAN und Telemetrie laufen exklusiv auf 5/6 GHz. Dadurch keinerlei Interferenz mit dem Qualcomm QCC3086 / S31 Bluetooth / BLE-Mesh der Zentralbox.
-* **USB-Subsystem (`U2`, Microchip USB2514Bi Industrial Hub):**
-  * Upstream-Port: Verbunden mit `J1` Backbone (4-Draht Automotive-Leitung zur Zentralbox für Bus-weites Flashen, DFU und Telemetrie).
-  * Port 1 (`USB_DN1`): Handschuhfach / 30W USB-PD Ladecontroller (SW3526).
-  * Port 2 (`USB_DN2`): JST-GH 4-Pin Buchse (`J_DONGLE` / `J5`) mit TPS2051B Power-Gating (`CP2AA_PWR_EN`) für kabellose CarPlay/Android-Auto Adapter (**Aktiv in Szenario B: Universal / Nachrüst-Display**; in Szenario A bei Bagger-Touring mit formschlüssigem TPU-Blindstopfen hermetisch verschlossen).
-  * Port 3 (`USB_DN3`): Handschuhfach-Erweiterung (`J4` Header zu `PCBA 05B` im Medienfach).
-  * Port 4 (`USB_HS`): Dedizierte 480 Mbps Punkt-zu-Punkt Verbindung zum `ESP32-S31` Native USB HS PHY (für digitale Headset-Emulation gegenüber Skyline OS bzw. CDC-NCM Ethernet-Tethering).
-  * Wartungs- & DFU-Architektur: Flashen erfolgt über das zentrale Bus-DFU (`0x50`/`0x51`) über den Backbone `J1` direkt von der Zentralbox aus.
+* **Infotainment Audio Bridge (`U2`, Feasycom FSC-BT802 / CSR8670):**
+  * Dediziertes Bluetooth 5.1 Dual-Mode Audio-Subsystem zur verzögerungsfreien drahtlosen Koppelung an die Motorrad-Headunit (Harley-Davidson SkylineOS / Boom! Box GTS).
+  * Digitale I2S-Audioverbindung (`BT_I2S_BCLK`, `BT_I2S_WS`, `BT_I2S_DOUT`, `BT_I2S_DIN`) direkt zum Host-MCU `ESP32-S31` (`U1`) für bidirektionales Streaming (Nav-Ansagen, Musik, Mikrofon).
+  * AT-Command UART-Steuerkanal (`BT_UART_TX`, `BT_UART_RX`) an GPIO 43/44 des `ESP32-S31` zur automatischen Profilumschaltung und Statusüberwachung.
+  * U.FL Antennenanschluss (`ANT4` / `BT_RF_ANT`) für verlustfreie HF-Abstrahlung aus dem Front-Node Gehäuse.
 * **Automotive-Backbone Anbindung (`J1`, Strang 1):** Geschirmtes 4-Ader-Kabel von der Zentralbox (12V-20V Bordnetz, GND, USB 2.0 D+/D-), verlegt durch den Harley-Kabelkanal unter der Tankkonsole (**ZERO Tank-Demontage!**).
 * **60W USB-PD Power-Engine (Power-Master):**
+  * Low-Dropout Verpolschutz (`Q3`, AO3401A P-Kanal MOSFET mit R19/R20 100k Gate-Widerständen): Ersetzt verlustbehaftete Schottky-Dioden und minimiert den Eingangsabfall auf < 5 mV ($R_{\text{DS(on)}} \le 25\,\text{m}\Omega$). Stellt im 5V-USB-Werkstattbetrieb (Zentraler USB-C Service-Port J3 an PCBA 01) sicher, dass die vollen ~4,95 V bis 5,00 V verlustfrei am TPS54302 anliegen und das Gesamtsystem stabil weit über der UVLO-Abschaltschwelle (typ. 4,30 V, max. 4,50 V) bootet. (Hinweis: Ein Netzteil oder Hub, das unter Last derart einbricht, dass keine 4,75 V mehr gehalten werden, ist elektrotechnisch defekt/ausschussreif und taugt auch zum Laden moderner Smartphones nicht; mit jedem normgerechten 5V-USB-Netzteil ist der Betrieb durch Q3 uneingeschränkt garantiert).
   * TPS54302 Synchronous Buck Converter (`U3`): Erzeugt stabile +5V (bis 3A) für Peripherie, Pods und WS2812B.
   * SW3526 Synchronous Buck-Boost Fast-Charge Controller (`U5`): Bis 30W USB-PD (PPS, QC4+, AFC, FCP) für Smartphone-Schnellladen am Lenker oder Handschuhfach-Hub (`PCBA 05B`).
   * TLV75533P Low-Noise LDO (`U7`): Liefert saubere +3.3V Systemspannung für ESP32-S31, ESP32-E22 und Sensoren.
@@ -1091,7 +1090,7 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 | **2** | `GND` | **Power Return** | Masse Leistungsrückstrom |
 | **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
-#### Stecker `J2`: Under-Perch Spiegel-Pod Links (PCBA 05C)
+#### Stecker `J2`: CKPT 1: Under-Perch Spiegel-Pod Links (PCBA 05C)
 > **Typ:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Gegenstecker:** `JST GHR-04V-S (AWG28-30)`  
 
 | Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |
@@ -1102,7 +1101,7 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 | **4** | `GND` | **Power Return** | Gemeinsame Schalter- und Signalmasse |
 | **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
-#### Stecker `J3`: Under-Perch Spiegel-Pod Rechts (PCBA 05C)
+#### Stecker `J3`: CKPT 2: Under-Perch Spiegel-Pod Rechts (PCBA 05C)
 > **Typ:** `JST-GH 4-Pin 1.25mm SMD Horizontal (SM04B-GHS-TB)` | **Gegenstecker:** `JST GHR-04V-S (AWG28-30)`  
 
 | Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |
@@ -1406,15 +1405,32 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 | 20 | `SCK` | `SPI_SCK` | **SPI CLK** | U1 (ESP32-C3) | SPI Clock |
 | 21 | `NSS` | `LORA_NSS` | **SPI CS** | U1 (ESP32-C3) | SPI Chip Select Active Low |
 
-#### Sub-Chip `U4`: TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger (QFN-28 (4.5x3.5 mm))
-> **Hersteller-Datenblatt:** [TI BQ51050B Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin-Definition:** [Pin Functions (QFN-28)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
+#### Sub-Chip `U4`: TI BQ51050BRHLR Qi Wireless Power Receiver & Li-Ion Charger (VQFN-20 / RHL-20 (4.5x3.5 mm))
+> **Hersteller-Datenblatt:** [TI BQ51050BRHLR Qi Wireless Power Receiver & Li-Ion Charger](https://www.ti.com/lit/ds/symlink/bq51050b.pdf) | **Pin-Definition:** [Table 6-1: Pin Functions (RHL-20)](https://www.ti.com/lit/ds/symlink/bq51050b.pdf#page=4)  
 
 | Pad | Pin-Name | Signal / KiCad Net | Signal-Typ | Ziel / Quelle | Funktion & Elektr. Spezifikation |
 | :---: | :--- | :--- | :---: | :--- | :--- |
-| 1 | `AC1` | `QI_COIL_AC1` | **AC In** | J3.1 (Qi Spule) | Drahtlose Qi-Empfangsspule AC1 |
-| 2 | `AC2` | `QI_COIL_AC2` | **AC In** | J3.2 (Qi Spule) | Drahtlose Qi-Empfangsspule AC2 |
-| 12 | `BAT` | `BAT_3V7` | **Power Out** | J1.1 (LiPo Akku) | Geregelter 4.2V / 500mA Li-Ion Ladestrom |
-| 15 | `CHG_STAT` | `QI_CHG_STAT` | **Digital Out** | U1 (ESP32-C3) | Qi Ladestatus (Active Low = lädt) |
+| 1 | `PGND` | `GND` | **Power Ground** | GND Plane | Leistungsmasse |
+| 2 | `AC1` | `QI_AC1` | **AC In** | J3.1 (Qi Spule) | Resonanz-Empfangsspule AC1 |
+| 3 | `BOOT1` | `QI_BOOT1` | **Bootstrap** | C5 (10nF zu AC1) | Bootstrap Kondensator 1 |
+| 4 | `BAT` | `VBAT` | **Power Out** | J1.1 (LiPo Akku) | Li-Ion Ladeausgang (4.20V) |
+| 5 | `CLAMP1` | `QI_CLAMP1` | **Resonance** | C7 (470nF zu AC1) | Serienresonanz Clamp 1 |
+| 6 | `COMM1` | `QI_COMM1` | **Communication** | C9 (47nF zu AC1) | Qi Modulationskapazität 1 |
+| 7 | `/CHG` | `CHG_STAT` | **Open-Drain Out** | U1.28 (ESP32-C3) | Ladezustand Active-Low (10k Pullup) |
+| 8 | `AD_EN` | `GND` | **Control In** | GND Plane | Adapter Enable deaktiviert |
+| 9 | `AD` | `GND` | **Power In** | GND Plane | Kabel-Adaptereingang auf Masse |
+| 10 | `/EN1` | `GND` | **Control In** | GND Plane | Wireless Rx Freigabe 1 |
+| 11 | `/EN2` | `GND` | **Control In** | GND Plane | Wireless Rx Freigabe 2 |
+| 12 | `ILIM` | `QI_ILIM` | **Analog** | R3 (1.5k zu GND) | Ladestrom-Programmierung (~200mA) |
+| 13 | `TS/CTRL` | `QI_TS` | **Analog** | R4 (10k zu GND) | Temperatursinn / Normalbetrieb |
+| 14 | `FOD` | `QI_FOD` | **Analog** | R5 (200R zu GND) | Fremdkörpererkennungs-Kalibrierung |
+| 15 | `COMM2` | `QI_COMM2` | **Communication** | C10 (47nF zu AC2) | Qi Modulationskapazität 2 |
+| 16 | `CLAMP2` | `QI_CLAMP2` | **Resonance** | C8 (470nF zu AC2) | Serienresonanz Clamp 2 |
+| 17 | `BOOT2` | `QI_BOOT2` | **Bootstrap** | C6 (10nF zu AC2) | Bootstrap Kondensator 2 |
+| 18 | `RECT` | `QI_RECT` | **Power Out** | C11 (4.7uF zu GND) | Gleichrichterausgang Filter |
+| 19 | `AC2` | `QI_AC2` | **AC In** | J3.2 (Qi Spule) | Resonanz-Empfangsspule AC2 |
+| 20 | `PGND` | `GND` | **Power Ground** | GND Plane | Leistungsmasse |
+| 21 | `EPAD` | `GND` | **Power Ground** | GND Plane mit Thermal Vias | Thermisches Massepad (PGND) |
 
 <!-- AUTO_SUBCHIPS_END: PCBA_07 -->
 
@@ -1427,16 +1443,18 @@ Die separate Platine `PCBA 06` ist in v10.0 **vollständig und ersatzlos entfall
 
 | Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |
 | :---: | :--- | :---: | :--- |
-| **1** | `BAT_3V7` | **Power (+3.7V)** | LiPo Akku Pluspol |
+| **1** | `VBAT` | **Power In (+3.7V)** | LiPo Akku Pluspol (3.0V .. 4.2V) |
 | **2** | `GND` | **Power Return** | LiPo Akku Masse |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
 #### Stecker `J3`: Qi Drahtlos-Ladespule Eingang
 > **Typ:** `JST-SH 2-Pin 1.0mm SMD Vertikal (BM02B-SRSS-TB)` | **Gegenstecker:** `JST SHR-02V-S-B (AWG28-30)`  
 
 | Pin | Signal / KiCad Net | Signal-Typ | Elektrische Spezifikation & Funktion |
 | :---: | :--- | :---: | :--- |
-| **1** | `QI_COIL_AC1` | **AC In** | Resonanz-Empfangsspule Anschluss 1 |
-| **2** | `QI_COIL_AC2` | **AC In** | Resonanz-Empfangsspule Anschluss 2 |
+| **1** | `QI_AC1` | **AC In** | Resonanz-Empfangsspule Anschluss 1 |
+| **2** | `QI_AC2` | **AC In** | Resonanz-Empfangsspule Anschluss 2 |
+| **MP** | `GND` | **Shield** | Rastlaschen auf Masse |
 
 <!-- AUTO_CONNECTORS_END: PCBA_07 -->
 

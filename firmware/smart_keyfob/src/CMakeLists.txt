@@ -11,11 +11,15 @@ idf_component_register(
     REQUIRES
         esp_timer
         driver
+        esp_driver_gpio
+        esp_driver_spi
+        esp_driver_ledc
         nvs_flash
         esp_adc
-        led_strip
         bt
         esp_pm
     WHOLE_ARCHIVE
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)
 

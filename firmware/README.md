@@ -1,4 +1,4 @@
-# OpenMotorBridge - Firmware Developer & Build Guide (v10.0 Architecture / ESP-IDF v5.5)
+# OpenMotorBridge - Firmware Developer & Build Guide (v10.0 Architecture / ESP-IDF v6.1.1)
 
 Dieses Dokument ist die verbindliche Referenz für Software-Entwickler zum Einrichten der Build-Umgebung, Kompilieren, Partitionieren und zentralen Flashen (Zero-Disassembly Bus-DFU) aller Firmware-Ziele der **OpenMotorBridge v10.0 Hardware-Architektur**.
 
@@ -6,12 +6,13 @@ Dieses Dokument ist die verbindliche Referenz für Software-Entwickler zum Einri
 
 ## 1. Übersicht der Firmware-Ziele & Verbindliche Target-Matrix
 
-In OpenMotorBridge v10.0 sind alle Knoten im Fahrzeug über den **geschirmten 4-Draht USB 2.0 + 12V/5V Automotive-Backbone** (`USB2517I-JZX` 7-Port Hub auf `PCBA 01` und `USB2514Bi-AEZG` 4-Port Hub auf `PCBA 05`) miteinander vernetzt. Das frühere 6.5-GHz-UWB-Backbone (`DW3110`) sowie alle dedizierten UART-Flash-Header (`J_PROG`) auf den Satelliten-Platinen sind in v10.0 vollständig entfallen.
+In OpenMotorBridge v10.0 sind alle Knoten im Fahrzeug über den **geschirmten 4-Draht USB 2.0 + 12V/5V Automotive-Backbone** (`USB2517I-JZX` 7-Port Hub auf `PCBA 01`) miteinander vernetzt. Das frühere 6.5-GHz-UWB-Backbone (`DW3110`) sowie alle dedizierten UART-Flash-Header (`J_PROG`) auf den Satelliten-Platinen sind in v10.0 vollständig entfallen.
 
 | Target-Verzeichnis | Physischer SoC / Modul (KiCad / BOM) | ESP-IDF Build-Target (`CONFIG_IDF_TARGET`) | Hardware-Baugruppe | Flash / RAM | Hauptaufgaben in v10.0 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| [`main_controller`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller) | `ESP32-S31-WROOM-1U` (Pinkompatibles Footprint zu S3-WROOM-1U) | `esp32s3` | Zentralbox (`PCBA 01`) | 8/16 MB Flash, 8 MB Octal PSRAM | USB-Backbone Root-Host (`USB2517I`), Quad-eFuse Power-Sequencer (`GPIO 13..16`), Zentraler Bus-DFU-Flasher (`0x50`/`0x51`), Audio-DSP (`ES8388` + 3x `QCC3086`), `SX1262` LoRa (`GPIO 9..12`), CAN-FD (`SN65HVD230`), Action-Cam BLE-Client, 4-Bit SDIO Blackbox (`GPIO 33..39`) |
-| [`front_node`](file:///Users/schmidtm/openMotorBridge/firmware/front_node) | `ESP32-S31-WROOM-1U` + `ESP32-E22` (Wi-Fi 6E Companion via SDIO 3.0) | `esp32s3` | Universal Front-Node (`PCBA 05` + `05C`/`05D`) | 8/16 MB Flash, 8 MB Octal PSRAM | 480 Mbps USB-Backbone Node (`USB2514Bi`), Dual Under-Perch Cockpit OLEDs (`SSD1306` 128×32 via I2C `0x3C`), 6× Lenkertaster (`PCBA 05C`), Sensor-Puck (`PCBA 05D`: `SAM-M10Q` GNSS, `TMP117`, `OPT3001`, `SPH0645` I2S), `FSC-BT802` Infotainment Bridge, Handschuhfach-Schnelllader (`SW3526` 30W USB-PD & 15W Qi-Puck) |
+| [`main_controller`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller) | `ESP32-S31-WROOM-1U` (320 MHz Dual-Core RISC-V, BT Classic + BLE 5.4) | `esp32s31` | Zentralbox (`PCBA 01`) | 8/16 MB Flash, 8 MB Octal PSRAM | USB-Backbone Root-Host (`USB2517I`), Quad-eFuse Power-Sequencer (`GPIO 13..16`), Zentraler Bus-DFU-Flasher (`0x50`/`0x51`), Audio-DSP (`ES8388` + 3x `QCC3086`), `SX1262` LoRa (`GPIO 9..12`), CAN-FD (`SN65HVD230`), Action-Cam BLE-Client, 4-Bit SDIO Blackbox (`GPIO 33..39`) |
+| [`front_node`](file:///Users/schmidtm/openMotorBridge/firmware/front_node) | `ESP32-S31-WROOM-1U` + `ESP32-E22` (Wi-Fi 6E Companion via SDIO 3.0) | `esp32s31` | Universal Front-Node (`PCBA 05` + `05C`/`05D`) | 8/16 MB Flash, 8 MB Octal PSRAM | 480 Mbps nativer USB-Backbone Node, Dual Under-Perch Cockpit OLEDs (`SSD1306` 128×32 via I2C `0x3C`), 6× Lenkertaster (`PCBA 05C`), Sensor-Puck (`PCBA 05D`: `SAM-M10Q` GNSS, `TMP117`, `OPT3001`, `SPH0645` I2S), `FSC-BT802` Infotainment Bridge, Handschuhfach-Schnelllader (`SW3526` 30W USB-PD & 15W Qi-Puck) |
+| [`front_node_c3`](file:///Users/schmidtm/openMotorBridge/firmware/front_node_c3) | `ESP32-C3FH4` (RISC-V) | `esp32c3` | Infotainment Audio Bridge (`PCBA 05` `U10`) | 4 MB Flash, 400 KB SRAM | USB Audio Class (UAC) Headunit-Device für Boom! Box / SkylineOS, WHIM-Emulation, I2S Audio Bridge zu U1, Mux-Umschaltung |
 | [`smart_cartridge`](file:///Users/schmidtm/openMotorBridge/firmware/smart_cartridge) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | Satelliten-Pod Interface (`PCBA 03`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 12/13`), `ES8388` Audio-Codec, `OMM_DETECT` Auto-Sense (`GPIO 14` -> `TS5A3159DBVR` `GPIO 15`), 4× `AO3400A` Kaltstart-Aktuatortreiber (`GPIO 4/5/6/7`), `SW3516` 30W USB-PD |
 | [`radar_submcu`](file:///Users/schmidtm/openMotorBridge/firmware/radar_submcu) | `ESP32-C5-WROOM-1U` (Dual-Band 2.4 & 5 GHz RISC-V) | `esp32c5` | Heck-Radar & V2X Node (`PCBA 08`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 18/19`), 77 GHz MR20 mmWave UART-Parser (`GPIO 3/4`), 5.9 GHz ETSI ITS-G5 802.11p OCB V2X C-ITS Parser (`0x32`), 36× `WS2812B` Halo-Wings (`GPIO 8`) |
 | [`omm_module`](file:///Users/schmidtm/openMotorBridge/firmware/omm_module) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | OMM 2.4 GHz / Unified UCS (`PCBA 09/10`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Audio/CDC Node (`GPIO 12/13`), `SX1262` 868 MHz LoRa + `SA868S` UHF + 2.4 GHz Mesh, `ES8388` 48 kHz Audio (`GPIO 6/7`, I2S `GPIO 4/5/8/9`) |
@@ -25,21 +26,23 @@ In OpenMotorBridge v10.0 sind alle Knoten im Fahrzeug über den **geschirmten 4-
 
 ## 2. Voraussetzungen & Automatisierter Build
 
-### 2.1 One-Command Komplett-Build (Alle 6 ESP-IDF Targets)
+### 2.1 One-Command Komplett-Build (Alle 8 ESP-IDF Targets)
 
-Das Repository enthält ein vollautomatisches Build-Skript ([`tools/build_firmware.sh`](file:///Users/schmidtm/openMotorBridge/tools/build_firmware.sh) bzw. [`firmware/build.sh`](file:///Users/schmidtm/openMotorBridge/firmware/build.sh)), das via [`tools/esp_env.sh`](file:///Users/schmidtm/openMotorBridge/tools/esp_env.sh) automatisch ESP-IDF (`~/esp-idf/export.sh`), CMake und Ninja lädt und das korrekte `IDF_TARGET` (`esp32s3` bzw. `esp32c6`) für jedes Verzeichnis setzt:
+Das Repository enthält ein vollautomatisches Build-Skript ([`tools/build_firmware.sh`](file:///Users/schmidtm/openMotorBridge/tools/build_firmware.sh) bzw. [`firmware/build.sh`](file:///Users/schmidtm/openMotorBridge/firmware/build.sh)), das via [`tools/esp_env.sh`](file:///Users/schmidtm/openMotorBridge/tools/esp_env.sh) automatisch ESP-IDF (`~/esp-idf/export.sh`), CMake und Ninja lädt und das korrekte `IDF_TARGET` (`esp32s31`, `esp32c6`, `esp32c5`, `esp32c3`) für jedes Verzeichnis setzt:
 
 ```bash
-# Alle 6 ESP-IDF Targets nacheinander kompilieren und verifizieren:
+# Alle 8 ESP-IDF Targets nacheinander kompilieren und verifizieren:
 ./firmware/build.sh all
 
 # Einzelnes Target kompilieren:
 ./firmware/build.sh main_controller
 ./firmware/build.sh front_node
+./firmware/build.sh front_node_c3
 ./firmware/build.sh smart_cartridge
 ./firmware/build.sh radar_submcu
 ./firmware/build.sh omm_module
 ./firmware/build.sh omm446_module
+./firmware/build.sh smart_keyfob
 ```
 
 ---

@@ -88,6 +88,7 @@ static void init_adc(void) {
     ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, PIN_ADC_VIGN, &chan_config));
     ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, PIN_ADC_NTC_SENSE, &chan_config));
 
+#if ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
     adc_cali_curve_fitting_config_t cali_config = {
         .unit_id = ADC_UNIT_1,
         .chan = PIN_ADC_VIGN,
@@ -95,6 +96,14 @@ static void init_adc(void) {
         .bitwidth = ADC_BITWIDTH_DEFAULT,
     };
     adc_cali_create_scheme_curve_fitting(&cali_config, &adc1_cali_handle);
+#elif ADC_CALI_SCHEME_LINE_FITTING_SUPPORTED
+    adc_cali_line_fitting_config_t cali_config = {
+        .unit_id = ADC_UNIT_1,
+        .atten = ADC_ATTEN_DB_12,
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+    };
+    adc_cali_create_scheme_line_fitting(&cali_config, &adc1_cali_handle);
+#endif
 }
 
 static float read_voltage_vign(void) {
@@ -271,7 +280,11 @@ void task_power_supervisor(void *pvParameters) {
             if (ignition_off_timer_sec >= RUN_DOWN_TIMEOUT_SEC || s_v_bat < VOLTAGE_UPS_LOW_V) {
                 ESP_LOGW(TAG, "Entering Tier-2 Park Sentry Deep Sleep (BMI270 + SX1262 LoRa + Find-My active)...");
                 sx1262_lora_enter_sentry_mode();
+#if SOC_PM_SUPPORT_EXT0_WAKEUP
                 esp_sleep_enable_ext0_wakeup(PIN_MAIN_KL15_SENSE, 1);
+#elif SOC_PM_SUPPORT_EXT1_WAKEUP
+                esp_sleep_enable_ext1_wakeup(1ULL << PIN_MAIN_KL15_SENSE, ESP_EXT1_WAKEUP_ANY_HIGH);
+#endif
                 esp_deep_sleep_start();
             }
         }

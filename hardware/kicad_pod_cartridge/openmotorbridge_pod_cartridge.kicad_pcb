@@ -9917,7 +9917,7 @@
 			)
 		)
 	)
-	(footprint "C_0603_1608Metric"
+	(footprint "Capacitor_SMD:C_0603_1608Metric"
 		(layer "B.Cu")
 		(uuid "1f20b706-f26f-4557-8ad7-1b8212c67c28")
 		(at 124.5 99.5 180)
@@ -10962,7 +10962,7 @@
 			)
 		)
 	)
-	(footprint "MSOP-10_3x3mm_P0.5mm"
+	(footprint "Package_SO:MSOP-10_3x3mm_P0.5mm"
 		(layer "B.Cu")
 		(uuid "92ae845f-b130-4ae5-adfa-cc5efa4641dc")
 		(at 124.5 96)
@@ -11338,7 +11338,7 @@
 			)
 		)
 	)
-	(footprint "MSOP-10_3x3mm_P0.5mm"
+	(footprint "Package_SO:MSOP-10_3x3mm_P0.5mm"
 		(layer "B.Cu")
 		(uuid "bf87e763-ecc9-4f53-a4d2-1970eda693a7")
 		(at 130.5 94.5 -90)

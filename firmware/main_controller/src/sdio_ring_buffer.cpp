@@ -9,8 +9,7 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 #include "driver/sdmmc_host.h"
-#include "mbedtls/sha256.h"
-#include "mbedtls/md.h"
+#include "psa/crypto.h"
 #include "esp_mac.h"
 #include "nvs.h"
 #include "esp_log.h"
@@ -28,14 +27,14 @@ static bool s_current_locked = false;
 static bool s_current_favorite = false;
 static uint32_t s_trackpoint_counter = 0;
 static sdmmc_card_t *s_card = NULL;
-static mbedtls_sha256_context s_sha_ctx;
+static psa_hash_operation_t s_hash_op;
 static uint8_t s_prev_chain_hash[32] = {0};
 
 static void write_and_hash(const char *str) {
     if (!s_current_gpx_file || !str) return;
     size_t len = strlen(str);
     fwrite(str, 1, len, s_current_gpx_file);
-    mbedtls_sha256_update(&s_sha_ctx, (const unsigned char *)str, len);
+    psa_hash_update(&s_hash_op, (const uint8_t *)str, len);
 }
 
 esp_err_t sdio_storage_init(void) {
@@ -96,10 +95,11 @@ esp_err_t sdio_track_start_new(void) {
     s_current_locked = false;
     s_current_favorite = false;
     s_trackpoint_counter = 0;
-    mbedtls_sha256_init(&s_sha_ctx);
-    mbedtls_sha256_starts(&s_sha_ctx, 0);
+    psa_crypto_init();
+    s_hash_op = psa_hash_operation_init();
+    psa_hash_setup(&s_hash_op, PSA_ALG_SHA_256);
     // Include previous segment hash in chain (blockchain-style continuity)
-    mbedtls_sha256_update(&s_sha_ctx, s_prev_chain_hash, sizeof(s_prev_chain_hash));
+    psa_hash_update(&s_hash_op, s_prev_chain_hash, sizeof(s_prev_chain_hash));
 
     ESP_LOGI(TAG, "Starting new GPX 2.0 Tour Log: %s", s_current_filepath);
     write_and_hash("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -185,8 +185,8 @@ esp_err_t sdio_track_finalize(void) {
     write_and_hash("    </trkseg>\n  </trk>\n");
 
     uint8_t digest[32];
-    mbedtls_sha256_finish(&s_sha_ctx, digest);
-    mbedtls_sha256_free(&s_sha_ctx);
+    size_t digest_len = 0;
+    psa_hash_finish(&s_hash_op, digest, sizeof(digest), &digest_len);
 
     // Retrieve hardware-backed secret key:
     // First attempt to load a provisioned 256-bit secret from secure NVS ("sec_storage" / "hmac_key").
@@ -210,11 +210,17 @@ esp_err_t sdio_track_finalize(void) {
         }
     }
 
-    uint8_t sig_bytes[32];
-    mbedtls_md_hmac(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
-                    hw_key, sizeof(hw_key),
-                    digest, sizeof(digest),
-                    sig_bytes);
+    uint8_t sig_bytes[32] = {0};
+    psa_key_attributes_t key_attr = psa_key_attributes_init();
+    psa_set_key_usage_flags(&key_attr, PSA_KEY_USAGE_SIGN_MESSAGE);
+    psa_set_key_algorithm(&key_attr, PSA_ALG_HMAC(PSA_ALG_SHA_256));
+    psa_set_key_type(&key_attr, PSA_KEY_TYPE_HMAC);
+    psa_key_id_t key_id = 0;
+    size_t sig_len = 0;
+    if (psa_import_key(&key_attr, hw_key, sizeof(hw_key), &key_id) == PSA_SUCCESS) {
+        psa_mac_compute(key_id, PSA_ALG_HMAC(PSA_ALG_SHA_256), digest, sizeof(digest), sig_bytes, sizeof(sig_bytes), &sig_len);
+        psa_destroy_key(key_id);
+    }
 
     char digest_hex[65];
     char prev_hex[65];

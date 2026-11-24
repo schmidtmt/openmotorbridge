@@ -1,6 +1,6 @@
 #include "knowles_mems_dsp.h"
 #include "front_node_config.h"
-#include "driver/i2s.h"
+#include "driver/i2s_std.h"
 #include "esp_log.h"
 #include <math.h>
 
@@ -20,42 +20,48 @@ KnowlesMemsDsp::KnowlesMemsDsp()
     , m_w2(0.0f)
     , m_latest_dba(45) // Default ambient background
     , m_raw_rms(0)
+    , m_rx_chan(NULL)
 {
 }
 
 bool KnowlesMemsDsp::init() {
     // 1. Configure I2S driver for MSM261S4030H0R (compatible with Knowles SPH0645LM4H)
     // The MSM261S4030H0R outputs standard Philips I2S 24-bit data in a 32-bit slot, MSB first.
-    i2s_config_t i2s_config = {
-        .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
-        .sample_rate = SAMPLE_RATE_HZ,
-        .bits_per_sample = I2S_BITS_PER_SAMPLE_32BIT,
-        .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT, // Left channel (LR tied to GND)
-        .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-        .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-        .dma_buf_count = 4,
-        .dma_buf_len = SAMPLES_PER_FRAME,
-        .use_apll = false,
-        .tx_desc_auto_clear = false,
-        .fixed_mclk = 0
-    };
-
-    i2s_pin_config_t pin_config = {
-        .bck_io_num = PIN_MIC_I2S_BCLK,
-        .ws_io_num = PIN_MIC_I2S_WS,
-        .data_out_num = I2S_PIN_NO_CHANGE,
-        .data_in_num = PIN_MIC_I2S_DATA
-    };
-
-    esp_err_t err = i2s_driver_install(I2S_PORT, &i2s_config, 0, NULL);
+    i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_PORT, I2S_ROLE_MASTER);
+    i2s_chan_handle_t rx_handle = NULL;
+    esp_err_t err = i2s_new_channel(&chan_cfg, NULL, &rx_handle);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "i2s_driver_install failed: %s", esp_err_to_name(err));
+        ESP_LOGE(TAG, "i2s_new_channel failed: %s", esp_err_to_name(err));
+        return false;
+    }
+    m_rx_chan = (void*)rx_handle;
+
+    i2s_std_config_t std_cfg = {
+        .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(SAMPLE_RATE_HZ),
+        .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(I2S_DATA_BIT_WIDTH_32BIT, I2S_SLOT_MODE_MONO),
+        .gpio_cfg = {
+            .mclk = I2S_GPIO_UNUSED,
+            .bclk = (gpio_num_t)PIN_MIC_I2S_BCLK,
+            .ws = (gpio_num_t)PIN_MIC_I2S_WS,
+            .dout = I2S_GPIO_UNUSED,
+            .din = (gpio_num_t)PIN_MIC_I2S_DATA,
+            .invert_flags = {
+                .mclk_inv = false,
+                .bclk_inv = false,
+                .ws_inv = false,
+            },
+        },
+    };
+
+    err = i2s_channel_init_std_mode((i2s_chan_handle_t)m_rx_chan, &std_cfg);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "i2s_channel_init_std_mode failed: %s", esp_err_to_name(err));
         return false;
     }
 
-    err = i2s_set_pin(I2S_PORT, &pin_config);
+    err = i2s_channel_enable((i2s_chan_handle_t)m_rx_chan);
     if (err != ESP_OK) {
-        ESP_LOGE(TAG, "i2s_set_pin failed: %s", esp_err_to_name(err));
+        ESP_LOGE(TAG, "i2s_channel_enable failed: %s", esp_err_to_name(err));
         return false;
     }
 
@@ -65,10 +71,11 @@ bool KnowlesMemsDsp::init() {
 }
 
 void KnowlesMemsDsp::process_audio() {
+    if (!m_rx_chan) return;
     int32_t raw_samples[SAMPLES_PER_FRAME];
     size_t bytes_read = 0;
 
-    esp_err_t res = i2s_read(I2S_PORT, raw_samples, sizeof(raw_samples), &bytes_read, pdMS_TO_TICKS(50));
+    esp_err_t res = i2s_channel_read((i2s_chan_handle_t)m_rx_chan, raw_samples, sizeof(raw_samples), &bytes_read, 50);
     if (res != ESP_OK || bytes_read == 0) {
         return;
     }

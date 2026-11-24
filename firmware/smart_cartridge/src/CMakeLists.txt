@@ -9,6 +9,10 @@ idf_component_register(
     REQUIRES
         esp_timer
         driver
+        esp_driver_gpio
+        esp_driver_i2c
+        esp_driver_i2s
+        esp_driver_uart
         nvs_flash
         app_update
         mbedtls
@@ -16,3 +20,5 @@ idf_component_register(
         uwb_backbone
     WHOLE_ARCHIVE
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)

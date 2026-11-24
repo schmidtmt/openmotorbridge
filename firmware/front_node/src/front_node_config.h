@@ -65,7 +65,7 @@
 // MK1 (Knowles SPH0645LM4H-B) & J_SENSOR_EXT (6-Pin: 1=3V3, 2=GND, 3=SDA, 4=SCL, 5=MIC_DATA, 6=MIC_WS)
 #define PIN_MIC_I2S_WS          GPIO_NUM_4   // U1 GPIO4  -> MK1 Pin 2 & J_SENSOR_EXT Pin 6 (MIC_I2S_WS)
 #define PIN_MIC_I2S_BCLK        GPIO_NUM_5   // U1 GPIO5  -> MK1 Pin 3 (MIC_I2S_BCLK)
-#define PIN_MIC_I2S_DATA        GPIO_NUM_6   // U1 GPIO6  -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
+#define PIN_MIC_I2S_DATA        GPIO_NUM_35  // U1 Pad 12 (GPIO35) -> MK1 Pin 1 & J_SENSOR_EXT Pin 5 (MIC_I2S_DATA)
 
 // J_POD_L & J_POD_R Wired Handlebar / Mirror Pod Buttons (Active Low)
 #define PIN_BTN_SIG_L_N         GPIO_NUM_8   // U1 GPIO8  -> J_POD_L Pin 3 (BTN_SIG_L_N: Intercom PTT / HFP)

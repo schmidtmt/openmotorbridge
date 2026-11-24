@@ -15,9 +15,15 @@ idf_component_register(
         esp_wifi
         nvs_flash
         driver
+        esp_driver_gpio
+        esp_driver_i2c
+        esp_driver_i2s
+        esp_driver_uart
         esp_adc
         esp_pm
         freertos
         log
     WHOLE_ARCHIVE
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)

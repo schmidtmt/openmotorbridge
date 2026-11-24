@@ -60,7 +60,7 @@ Die OpenMotorBridge fungiert als aktive Audio-Kreuzschiene und Brückengateway z
 2. **Modus 1: Single Rider Mode (Fokus-Modus):**  
    Bucht 2 wird softwareseitig stummgeschaltet (`-96 dB`). Der volle DSP- und Routing-Fokus liegt auf dem Primär-Gateway (Bucht 1), Navigationsdurchsagen und Smartphone-A2DP-Musik.
 3. **Modus 2: Cruise Mode (Bordlautsprecher-Ausgabe):**  
-   Intercom-Signale werden um $-6\,\text{dB}$ bedämpft und auf die Bordlautsprecher (Harley-Davidson Boom! Box GTS / BMW Soundanlage) geroutet.
+   Intercom-Signale werden um $-6\,\text{dB}$ bedämpft und gemeinsam mit Smartphone-Musik / Navigation auf die Bordlautsprecher (Harley-Davidson Boom! Box GTS / SkylineOS / BMW Soundanlage via `U10` ESP32-C3 UAC-Bridge auf PCBA 05) geroutet (`speakers_active = true`). Ist der Cruise Mode inaktiv (Modus 0 / Modus 1), sind die Bordlautsprecher komplett stummgeschaltet (`speakers_active = false`), und die Audiowiedergabe verbleibt exklusiv in den Helmen (Bluetooth 5.4 via QCC3086).
 
 ### 1.1b Die 5 komprimierten Audio-Slots, Private Cabin Whisper & Spatial Panning
 OpenMotorBridge arbeitet im gesamten Fahrzeugnetzwerk nicht mit unkomprimiertem Roh-Audio, sondern mit **fünf dedizierten, komprimierten Audio-Slots** (Opus HD 24k für Mesh/Musik sowie AMBE+2 / Codec2 / Opus Voice für PMR/DMR-Funk):
@@ -98,9 +98,10 @@ OpenMotorBridge arbeitet im gesamten Fahrzeugnetzwerk nicht mit unkomprimiertem 
 
 Im Gegensatz zu vereinfachten ESP32-Software-A2DP-Lösungen wird die gesamte drahtlose Audio- und Telefonie-Anbindung bei OpenMotorBridge auf der Zentralbox (`PCBA 01`) von **drei dedizierten Qualcomm QCC3086 Bluetooth 5.4 Audio-Transceivern** in nativer Hardware abgewickelt:
 
-1. **Vollständige HF- und CPU-Entkopplung:**
-   * Der interne Funkcontroller des ESP32-S31 teilt sich eine einzige 2.4-GHz-HF-Endstufe zwischen Wi-Fi (PWA Webserver, WebDAV Touren-Upload) und Bluetooth Low Energy (PWA-Dashboard, BLE-Sensoren). Würde der ESP32 parallel hochauflösende A2DP-Stereoströme berechnen und senden, käme es bei HF-Störungen oder hoher CPU-Last unweigerlich zu Audio-Aussetzern, Knacksern und Latenzen $> 150\,\text{ms}$.
-   * Durch die Auslagerung auf drei separate Qualcomm QCC3086 läuft jedes Bluetooth-Subsystem autark auf einem dedizierten Dual-Core 32-Bit Audioprozessor ($80\,\text{MHz}$) mit integriertem $240\,\text{MHz}$ Kalimba Hardware-Audio-DSP.
+1. **Vollständige HF- und CPU-Entkopplung (Warum 3× QCC3086 trotz nativem S31 BT-Classic Support?):**
+   * Obwohl der `ESP32-S31` im Silizium nativ sowohl Bluetooth Classic (BR/EDR mit SCO/eSCO Sprachkanälen) als auch Bluetooth 5.4 LE Audio beherrscht, besitzt er wie jedes Single-Chip-SoC nur eine einzige 2.4-GHz-HF-Endstufe und einen gemeinsamen Antennenpfad.
+   * Drei unabhängige, parallele High-End-Audiokanäle (1. Hi-Fi aptX-Empfang vom Smartphone, 2. aptX-Adaptive-Stream zum Fahrerhelm mit < 20 ms Latenz, 3. separater A2DP/LC3-Zweitstream zum Soziushelm samt Rückkanälen) lassen sich auf einer einzelnen HF-Endstufe unmöglich zeitgleich ohne massive TDM-Paketkollisionen, Latenzsprünge (> 150 ms) oder Koexistenzkonflikte mit dem 2.4-GHz-WLAN betreiben.
+   * Durch die Auslagerung auf drei separate Qualcomm QCC3086 Transceiver mit eigenen Antennen läuft jedes Bluetooth-Subsystem vollkommen autark auf einem dedizierten Dual-Core 32-Bit Audioprozessor ($80\,\text{MHz}$) mit integriertem $240\,\text{MHz}$ Kalimba Hardware-Audio-DSP. Der ESP32-S31 bleibt als Master-DSP, EKF-Filter und Systemcontroller vollkommen jitter- und lastfrei.
 2. **Die Rollenverteilung der 3× QCC3086 auf PCBA 01 (100% Gleichteile im WLCSP-99 Footprint):**
    * **`U9` (Smartphone-Link):** A2DP Sink (Empfang von hochauflösendem Hi-Fi Musik-Streaming), HFP 1.8 Wideband Voice-Rückkanal (< 20 ms Latenz für Telefonate & Siri/Google Assistant) sowie AVRCP 1.6 Fernsteuerung über Lenkertasten.
    * **`U13` (Fahrer-Helm):** A2DP Source mit aptX Adaptive Low-Latency (< 20 ms für lippensynchrone Gegensprechkommunikation) und HFP 1.8 Helmmikrofon-Uplink.

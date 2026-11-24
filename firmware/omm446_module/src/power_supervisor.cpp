@@ -35,6 +35,6 @@ void power_enter_deep_sleep(void) {
     ESP_LOGI(TAG, "Entering ultra-low power deep sleep (Wakeup via SW1 PTT)...");
 
     // Configure SW1 (GPIO 2) as wakeup source
-    esp_deep_sleep_enable_gpio_wakeup((1ULL << OMM446_PIN_SW_PTT), ESP_GPIO_WAKEUP_GPIO_LOW);
+    esp_sleep_enable_ext1_wakeup_io((1ULL << OMM446_PIN_SW_PTT), ESP_EXT1_WAKEUP_ANY_LOW);
     esp_deep_sleep_start();
 }

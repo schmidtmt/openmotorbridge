@@ -97,7 +97,7 @@ case "$TARGET" in
         echo "========================================================================"
         echo "🏍️  OpenMotorBridge - Building ALL Firmware Targets"
         echo "========================================================================"
-        TARGETS=(main_controller front_node front_node_c3 smart_cartridge radar_submcu omm_module omm446_module smart_keyfob)
+        TARGETS=(main_controller front_node smart_cartridge radar_submcu omm_module omm446_module smart_keyfob)
         FAILED=0
         for t in "${TARGETS[@]}"; do
             echo ""

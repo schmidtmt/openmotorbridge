@@ -8,8 +8,13 @@ idf_component_register(
         "."
     REQUIRES
         driver
+        esp_driver_gpio
+        esp_driver_uart
+        esp_driver_i2s
         esp_timer
         freertos
         ringbuf
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)
 

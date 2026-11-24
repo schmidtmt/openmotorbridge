@@ -30,13 +30,22 @@ idf_component_register(
         esp_wifi 
         esp_http_client 
         driver 
+        esp_driver_gpio
+        esp_driver_uart
+        esp_driver_i2c
+        esp_driver_spi
+        esp_driver_i2s
+        esp_driver_sdmmc
+        esp_driver_twai
+        esp_driver_gptimer
         esp_adc
         fatfs 
         sdmmc
         mbedtls
         esp_hw_support
-        json
         bt
         uwb_backbone
     WHOLE_ARCHIVE
 )
+
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-missing-field-initializers -Wno-error=cpp)

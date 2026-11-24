@@ -2,7 +2,7 @@
 
 #include "driver/gpio.h"
 #include "driver/spi_master.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 #include "driver/uart.h"
 
 // =============================================================================
@@ -113,16 +113,20 @@
 #define PIN_MAIN_SD_CD                  GPIO_NUM_39  // U2 Pad 39 -> J2 Pin 9 (SD_CD Card Detect)
 
 // -----------------------------------------------------------------------------
-// 10. ESP32-PICO-V3-02 Classic A2DP Music Sharing Transmitter (U13)
-// Dedicated A2DP transmitter feeding Pod OEM Intercoms (Sena/Cardo) for Mesh sharing.
-// Driven via I2S DOUT/BCLK/WS, controlled via UART and HW Enable / Boot strapping.
-// RF Output: Dedicated SMD Ceramic Chip Antenna ANT4 (Johanson 2450AT18x100) at South edge.
+// 10. Triple-QCC3086 Bluetooth Audio Engine (U9 Phone Link, U13 Helm 1, U14 Helm 2)
+// Independent QCC3086 transceivers for phone audio and dual helmet intercom/music links.
 // -----------------------------------------------------------------------------
-#define A2DP_PICO_UART_PORT             UART_NUM_2
-#define PIN_MAIN_A2DP_UART_TX           GPIO_NUM_33  // U2 Pad 13 (GPIO33) -> U13 Pin 41 (A2DP_UART_TX)
-#define PIN_MAIN_A2DP_UART_RX           GPIO_NUM_34  // U2 Pad 14 (GPIO34) -> U13 Pin 40 (A2DP_UART_RX)
-#define PIN_MAIN_A2DP_EN                GPIO_NUM_43  // U2 Pad 8  (GPIO43) -> U13 Pin 9  (A2DP_EN)
-#define PIN_MAIN_A2DP_BOOT              GPIO_NUM_44  // U2 Pad 29 (GPIO44) -> U13 Pin 23 (A2DP_BOOT)
+#define QCC_HELM1_UART_PORT             UART_NUM_2
+#define PIN_MAIN_HELM1_UART_TX          GPIO_NUM_33  // U2 Pad 13 (GPIO33) -> U13 Pin 41 (HELM1_UART_TX)
+#define PIN_MAIN_HELM1_UART_RX          GPIO_NUM_34  // U2 Pad 14 (GPIO34) -> U13 Pin 40 (HELM1_UART_RX)
+#define PIN_MAIN_HELM1_EN               GPIO_NUM_43  // U2 Pad 8  (GPIO43) -> U13 Pin 9  (HELM1_EN)
+#define PIN_MAIN_HELM2_EN               GPIO_NUM_44  // U2 Pad 29 (GPIO44) -> U14 Pin 9  (HELM2_EN)
+
+// Backwards compatibility aliases
+#define PIN_MAIN_A2DP_UART_TX           PIN_MAIN_HELM1_UART_TX
+#define PIN_MAIN_A2DP_UART_RX           PIN_MAIN_HELM1_UART_RX
+#define PIN_MAIN_A2DP_EN                PIN_MAIN_HELM1_EN
+#define PIN_MAIN_A2DP_BOOT              PIN_MAIN_HELM2_EN
 
 // -----------------------------------------------------------------------------
 // 10. Quad Automotive High-Side Switch Smart Power Distribution (U12 TI TPS4H160-Q1 -> J6)

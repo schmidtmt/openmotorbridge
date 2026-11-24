@@ -577,7 +577,7 @@ typedef struct __attribute__((packed)) {
 // -----------------------------------------------------------------------------
 // 5b. Remote SD-Card Block Access & Asset Transfer (COMM_05 / COMM_06)
 // -----------------------------------------------------------------------------
-typedef struct __attribute__((packed)) {
+typedef struct __attribute__((packed)) UsbSdBlockReqPkt {
     uint32_t sector_num;      // LBA 512-Byte Sektoradresse
     uint16_t req_tag;         // Eindeutige Request-ID für Antwort-Matching
     uint8_t  chunk_index;     // Chunk 0..3 (für 4x 128B = 512B Block)

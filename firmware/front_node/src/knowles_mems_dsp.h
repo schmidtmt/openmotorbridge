@@ -20,4 +20,5 @@ private:
     float m_w1, m_w2;
     uint8_t m_latest_dba;
     uint32_t m_raw_rms;
+    void* m_rx_chan;
 };
