@@ -69,7 +69,7 @@ For firmware development, configuration, and desk diagnostics of the Central Box
       * Central Box (`PCBA 01`): $\approx 1.6\,\text{W}$ ($320\,\text{mA}$)
       * Front Node & Sensor Puck (`PCBA 05` + `05D`): $\approx 1.4\,\text{W}$ ($280\,\text{mA}$)
       * Rear Radar (`PCBA 08` incl. MR20 Standby): $\approx 2.1\,\text{W}$ ($420\,\text{mA}$)
-      * 2x Saddlebag Pods (`PCBA 02` + `03` incl. both OEM communicators in standby audio mode): $\approx 2.2\,\text{W}$ ($440\,\text{mA}$)
+      * 2x Saddlebag Pods (`PCBA 03` incl. both OEM communicators in standby audio mode): $\approx 2.2\,\text{W}$ ($440\,\text{mA}$)
       * Harness and switching losses: $\approx 0.3\,\text{W}$
       * **Total Workshop Full Operation Power:** **$\approx 7.6\,\text{W}$ ($5.0\,\text{V} / 1.52\,\text{A}$)**.
       * *(Pure MCU flash/programming mode with radar RF idle and intercoms inactive: only $\approx 4.5\,\text{W}$ or $0.9\,\text{A}$, fully compliant with standard legacy USB 3.0).*
@@ -110,10 +110,12 @@ All peripheral connections from Central Box (`PCBA 01`) route through the **Two-
   * Each saddlebag pod incorporates dual mechatronic pushers (mini-solenoids on `012_universal_actuator_slide_bracket.scad`), switched via dual AO3400A MOSFETs on `PCBA 03`.
   * Upon ignition ON (KL15), the solenoids fire for 2.0 seconds (~4 N actuation force with Shore A50 silicone tips on Cardo or Sena power buttons) to cold-boot completely powered-off headsets from a zero-watt state; runtime control during riding then runs wear-free via BLE GATT / audio bus.
   * **Benefit:** Headsets remain 100% unpowered when parked (no marketing standby battery drain after 1-2 weeks!). Upon turning on the bike, they boot up reliably and connect immediately without opening the pod.
-* **Glovebox Fast-Charging Architecture (Replacement of PCBA 05B):**
+* **Universal Cockpit & Glovebox Charging Architecture (Replacement of PCBA 05B):**
   * The legacy 5-port hub `PCBA 05B` and external wireless CarPlay/Android Auto dongles have been eliminated.
-  * Instead, the glove compartment (e.g. Harley Touring) is powered via a rugged 2-wire DC feed from Front Node `J7` with up to 30–36W USB-PD / QC 4.0.
-  * Installed in the compartment is a **magnetic Qi charging puck** (15W inductive Qi/Qi2 MagSafe, approx. 20–22W DC input power) plus a companion **USB-C PD fast-charge port** for full-speed wired charging (e.g. secondary phone or tablet).
+  * Instead, the charging zone (glove compartment on Harley Touring or handlebar on BMW GS) is powered via a pre-regulated charging line from Front Node `J4` directly from the onboard **`SW3526` (`U5`)** delivering up to 30–36W.
+  * **Dual-Mode Protocol Support (USB-PD 3.0 vs. Standard 5V BC1.2):** The controller dynamically negotiates **USB-PD / QC 4.0** (5V/9V/12V/15V) for smartphones and wireless heads, while automatically **falling back to standard 5V BC1.2 DCP** when legacy accessories without PD are connected.
+  * **Why 5V Standard Charging is Vital:** Many essential touring accessories (helmet lamps, wireless remotes, older intercoms, powerbanks, tire gauges) lack USB-PD controllers. A port strictly requiring PD negotiation would leave these devices unpowered. This also applies to luggage cases, where the **`SW3516` on `PCBA 03`** supports both modes identically.
+  * **Modular 1:1 Usage (Qi vs. Wired):** The cable either terminates at a **magnetic Qi charging puck** (15W inductive Qi/Qi2 MagSafe, approx. 20–22W DC input) or waterproof **QuadLock Wireless Head**—or can be directly plugged into devices without wireless charging.
   * Features adjustable current limiting with overcurrent trip in $< 1\,\mu\text{s}$ under short circuit, automatic thermal shutdown ($150\,^\circ\text{C}$ junction clamp), and monitoring by the `SW3526` controller.
 * **Cockpit Power-Only Outputs (Directly on Front Node PCBA 05):**
   * **15W Motorcycle GPS (`J10`):** 12V/1.25A or 5V/3A DC power feed for Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Strictly Power-Only:** Completely devoid of USB host data lines (`D+`, `D-`) so the navigation unit immediately boots into active route guidance on ignition ON rather than entering computer mass storage mode.
@@ -126,21 +128,23 @@ All peripheral connections from Central Box (`PCBA 01`) route through the **Two-
 By eliminating the CarPlay/Android Auto video streaming stack (no Wi-Fi Direct, no persistent H.264/H.265 hardware video decoding), smartphone thermal generation inside the closed glove compartment drops dramatically:
 
 ```
-               GLOVEBOX CHARGING & POWER GATEWAY (30W USB-PD)
+               COCKPIT & GLOVEBOX CHARGING & POWER GATEWAY (30W DUAL-MODE)
 +----------------------------+              +----------------------------+
 | 12V Vehicle Net (KL15 IGN) |              | Front Node PCBA 05         |
-| * Headlight / Accessory Tap|              | * SW3526 PD Controller     |
+| * Central Box Feed         |              | * SW3526 PD/BC1.2 Reg.     |
 +-------------+--------------+              | * I2C Telemetry & Protect  |
               |                             +-------------+--------------+
               v                                           |
-+----------------------------+                            | 2-Wire DC Feed
-| SW3526 Buck-Boost (J7)     +----------------------------+ (Up to 36W PD 3.0)
-| * Up to 36W USB-PD / QC    |                            |
++----------------------------+                            | Regulated USB Charge Line
+| SW3526 Controller (J4)     +----------------------------+ (Up to 36W PD / 5V BC1.2)
+| * USB-PD / QC / 5V Normal  |                            |
 +----------------------------+                            v
                                             +----------------------------+
-                                            | Glovebox Charging Bay      |
-                                            | * 15W Qi Puck (MagSafe)    |
-                                            | * Secondary USB-C PD Port  |
+                                            | Modular Charging Endpoint  |
+                                            | * Mode A: 15W Qi Puck      |
+                                            |   (MagSafe / QuadLock Head)|
+                                            | * Mode B: Direct USB-C     |
+                                            |   Cable Charging (PD / 5V) |
                                             +----------------------------+
 ```
 

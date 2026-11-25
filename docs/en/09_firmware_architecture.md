@@ -183,8 +183,8 @@ To flexibly interface modern OEM communicators without brittle mechatronic solen
 | **`0x0401`** | Class D | **Midland PMR446 (G9 Pro)** | 2-Pin dual jack pigtail | OptoMOS PTT keying (`CPC1017N`), galvanically isolated |
 | **`0x0000`** | Class 0 | **Dry-Box / Luggage Bay** | Zero audio peripherals | Pure 30W/60W USB-PD charge port for phone/powerbank |
 
-### 5.2 Symmetrical Dual Under-Perch Mirror Pods & 5-Gesture Engine (`PCBA 05B`)
-The two identical mirror pods (`PCBA 05B`) mounted under the mirror perches provide tactile thumb control and bilateral Blind Spot Detection (BSD):
+### 5.2 Symmetrical Dual Under-Perch Mirror Pods & 5-Gesture Engine (`PCBA 05C`)
+The two identical mirror pods ([`PCBA 05C`](07_pcba_hardware_pinouts.md#73-pcba-05c-symmetrical-under-perch-mirror-pod)) mounted under the mirror perches provide tactile thumb control and bilateral Blind Spot Detection (BSD):
 * **5 Gesture Triggers:** Each switch autonomously detects `SHORT_CLICK`, `DOUBLE_CLICK`, `TRIPLE_CLICK`, `LONG_PRESS`, and `HOLD_GATE`.
 * **100% Free Button Mapping:** Via the PWA dashboard, each gesture is freely assignable to any action in the OMB Action Catalog (e.g. Push-to-Talk, Voice Assistant Siri/Google, Waze 1-Click Hazard Pin, Action-Cam Tags for Insta360/GoPro/DJI, Radar Mute, Garage Door via BLE).
 

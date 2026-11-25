@@ -948,7 +948,7 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
   * **Nordflanke / Fahrzeug- & Zubehör-Wand (nach vorne / unten, Y = 73,35 mm in KiCad / Y = 68 mm im Gehäuse):**
     * **`MAIN` (Gehäuse-Mitte $X = 34{,}30\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):**
       * `J1` (JST-GH 4P, $X_{\text{rel}} = 19{,}73\,\text{mm}$, Gehäuse $X = 27{,}73\,\text{mm}$): 4-Ader Automotive-Backbone (12V Bordnetz, GND, USB 2.0 D+/D- zur Zentralbox).
-      * `J4` (JST-GH 8P, $X_{\text{rel}} = 32{,}85\,\text{mm}$, Gehäuse $X = 40{,}85\,\text{mm}$): Handschuhfach-Hub ([`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) Verbindung (30W PD, CC1/CC2, 5V, USB DN3).
+      * `J4` (JST-GH 6P, $X_{\text{rel}} = 32{,}85\,\text{mm}$, Gehäuse $X = 40{,}85\,\text{mm}$): Universal Cockpit- & Handschuhfach-Schnellladeleitung (30W USB-PD via SW3526, CC1/CC2, 5V Hilfsspannung).
     * **`DONGLE` (Gehäuse-Mitte $X = 54{,}00\,\text{mm}$, Oval-Port $11{,}0 \times 5{,}5\,\text{mm}$):**
       * `J5` (JST-GH 4P, $X_{\text{rel}} = 45{,}98\,\text{mm}$, Gehäuse $X = 53{,}98\,\text{mm}$): USB-Downstream 2 mit fernsteuerbarem Kaltstart-Reset (`TPS2051B`).
     * **`AUX 12V` (Gehäuse-Mitte $X = 63{,}35\,\text{mm}$, Mini-Port $6{,}5 \times 4{,}5\,\text{mm}$):**
@@ -970,8 +970,8 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 | **Cockpit Links** | `J9` | JST-GH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 2` | **Aktiv:** Speaker Corner Display Links | **Blindstopfen** (keine Verkleidungs-Lautsprecher) |
 | **Cockpit Links** | `J2` | JST-GH 4P (5V, BSD LED, Taster, GND) | `CKPT 2` | **Aktiv:** Linker Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) | **Aktiv:** Linker Spiegel-Pod ([`PCBA 05C`](#73-pcba-05c-symmetrischer-under-perch-spiegel-pod)) |
 | **Fahrzeug West** | `J1` | JST-GH 4P (12V-20V, GND, USB HS D+/D-)| `MAIN` | **IMMER Aktiv:** 4-Draht Lifeline von Zentralbox [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) | **IMMER Aktiv:** 4-Draht Lifeline von Zentralbox [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) |
-| **Fahrzeug West** | `J4` | JST-GH 8P (30W PD, CC1/CC2, 5V, USB DN3)| `MAIN` | **Aktiv:** Dual-Rail Lifeline zu Handschuhfach-Hub ([`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) | **Optional:** Lenker-USB-C Lader oder **Blindstopfen** |
-| **Fahrzeug Mitte** | `J5` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blindstopfen:** CarPlay-Dongle sitzt im Handschuhfach an [`PCBA 05B`](#72-pcba-05b-handschuhfach-hub--cockpit-breakout-openmotorbridge_cockpit_breakout) | **NUR aktiv** bei Nachrüst-CP/AA Display; sonst **Blindstopfen** |
+| **Fahrzeug West** | `J4` | JST-GH 6P (30W PD, CC1/CC2, 5V Aux)| `MAIN` | **Aktiv:** Schnellladeleitung zu Handschuhfach-Qi-Puck / USB-C | **Aktiv:** Schnellladeleitung zu Lenker QuadLock Wireless Head / USB-C |
+| **Fahrzeug Mitte** | `J5` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blindstopfen** | **NUR aktiv** bei Nachrüst-Display; sonst **Blindstopfen** |
 | **Fahrzeug Ost 1** | `J7` | JST-GH 2P (12V switched, max 2.5A) | `AUX 12V`| **Optional:** Zusatzscheinwerfer oder **Mini-Blindstopfen** | **Optional:** Zusatzscheinwerfer oder **Mini-Blindstopfen** |
 | **Fahrzeug Ost 2** | `J10` | JST-GH 2P (12V dauerhaft, max 1.5A) | `NAV 12V`| **Mini-Blindstopfen:** Werks-Display (Skyline OS / GTS) aktiv | **Aktiv:** 12V Speisung für Garmin Zūmo XT2 / Chigee AIO-5 |
 | **Fahrzeug Ost 3** | `J8` | JST-GH 2P (5V BC1.2 DCP, max 2.0A) | `CAM 5V` | **Mini-Blindstopfen:** Bei Action-Cam Fahrt mit Mini-Kabelstopfen | **Mini-Blindstopfen:** Bei Action-Cam Fahrt mit Mini-Kabelstopfen |
@@ -1177,19 +1177,17 @@ Die Heckplatine `PCBA 04` und das zugehörige Heckgehäuse Pod 3 sind vollständ
 
 <!-- AUTO_SUBCHIPS_END: PCBA_05 -->
 
-#### 7.1.6 Detail-Pinbelegung Header J4: Handschuhfach-Hub Lifeline (JST-GH 1.25mm 8-Pin Horizontal)
-Verbindet den Universal Front-Knoten (`PCBA 05`) über ein 8-adriges geschirmtes Spezialkabel direkt mit dem Handschuhfach-Breakout-Hub (`PCBA 05B`):
+#### 7.1.6 Detail-Pinbelegung Header J4: Handschuhfach Qi-Ladung & Aux Power (JST-GH 1.25mm 6-Pin Horizontal)
+Verbindet den Universal Front-Knoten (`PCBA 05`) über ein 6-adriges geschirmtes Kabel mit dem Handschuhfach bzw. Lenker (modularer Anschluss für magnetischen Qi-/QuadLock-Ladepuck oder kabelgebundenes USB-C Laden):
 
 | Pin | Signalname | Typ | Pegel / Strom | Funktion & Beschreibung |
 | :-: | :--- | :---: | :---: | :--- |
-| **1** | `VBUS_PD1_OUT` | Power Out | 5V / 9V / 12V / 15V (bis 30W) | Dedizierte USB-PD Schnelllade-Leistung vom SW3526 (`U5`), direkt durchgeleitet zu `J3` Phone |
-| **2** | `GND` | Power | 0 V / Rückleiter | Leistungsmasse für USB-PD Schnellladepfad |
-| **3** | `USB_DN1_CC1` | Analog/Dig | $0\,\text{V} - 5{,}5\,\text{V}$ | Configuration Channel 1 für native USB-PD Aushandlung zwischen Smartphone und SW3526 |
-| **4** | `USB_DN1_CC2` | Analog/Dig | $0\,\text{V} - 5{,}5\,\text{V}$ | Configuration Channel 2 für native USB-PD Aushandlung zwischen Smartphone und SW3526 |
-| **5** | `VCC_5V` | Power Out | $5{,}0\,\text{V} \pm 2\,\%$ (max. 3.0A) | Stabile 5V-Systemspannung vom TPS54302 (`U3`) für Dongle, Media und Hub-Controller |
-| **6** | `GND` | Power | 0 V / Systemmasse | Systemmasse für 5V-Logik und USB 2.0 Datenbus |
-| **7** | `USB_DN3_DP` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Plus (Downstream 3 von USB2514Bi zum Upstream des Hubs `PCBA 05B`) |
-| **8** | `USB_DN3_DM` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Minus (Downstream 3 von USB2514Bi zum Upstream des Hubs `PCBA 05B`) |
+| **1** | `VBUS_PD1_OUT` | Power Out | 5V / 9V / 12V / 15V / 20V (bis 30W) | USB Power Delivery & BC1.2 Schnellladeleistung vom SW3526 (`U5`) |
+| **2** | `GND` | Power | 0 V / Rückleiter | Masse Leistungsrückstrom für USB-PD Schnellladepfad |
+| **3** | `USB_DN1_CC1` | Analog/Dig | $0\,\text{V} - 5{,}5\,\text{V}$ | Configuration Channel 1 für native USB-PD / BC1.2 Aushandlung zwischen Endgerät und SW3526 |
+| **4** | `USB_DN1_CC2` | Analog/Dig | $0\,\text{V} - 5{,}5\,\text{V}$ | Configuration Channel 2 für native USB-PD / BC1.2 Aushandlung zwischen Endgerät und SW3526 |
+| **5** | `VCC_5V` | Power Out | $5{,}0\,\text{V} \pm 2\,\%$ (max. 3.0A) | Stabile 5V-Hilfsspannung vom TPS54302 (`U3`) für Zubehör ohne USB-PD (Legacy 5V) |
+| **6** | `GND` | Power | 0 V / Systemmasse | Gemeinsame Signal- und Lastmasse |
 | **MP**| `SHIELD` | Shield | Gehäusemasse / PE | 360°-Kabelschirmung & Zugentlastung (SMD-Lötlaschen) |
 
 #### 7.1.4 Pinbelegung Header J6: Sensor-Puck Lifeline (`J_SENSOR_EXT`, JST-GH 1.25mm 8-Pin Horizontal)

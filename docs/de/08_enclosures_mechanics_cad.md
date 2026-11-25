@@ -549,7 +549,7 @@ Die Schnittstellenarchitektur von PCBA 05 ($82 \times 50\,\text{mm}$, [`openmoto
 ### 5.3 Die Evolution von den Satelliten-Blöcken zum integrierten Handschuhfach-Ladesystem
 
 > [!NOTE]
-> **Architekturstand v10.5+ (Harmonisierung):** Der vormalige 5-Port USB-Hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) und externe CarPlay/AA-Dongles sind im aktuellen Systemstand vollständig entfallen und **historisch archiviert**. An ihre Stelle tritt im Handschuhfach ein **magnetischer Qi-Schnellladepuck (15W induktiv / MagSafe)** sowie eine companion **USB-C PD 3.0 Schnellladebuchse**, direkt versorgt über eine robuste 2-adrige DC-Leitung vom 30W SW3526-Controller des Front-Knotens (`PCBA 05`).
+> **Architekturstand v10.5+ (Harmonisierung):** Der vormalige 5-Port USB-Hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) und externe CarPlay/AA-Dongles sind im aktuellen Systemstand vollständig entfallen und **historisch archiviert**. An ihre Stelle tritt eine universelle, fertig ausgeregelte Schnellladeleitung von Port `J4` der Front Node (`PCBA 05`, SW3526 30W Dual-Mode: USB-PD 3.0 / 5V BC1.2), die wahlweise modular einen **magnetischen Qi-Schnellladepuck (15W induktiv / MagSafe / QuadLock)** speist oder direkt für kabelgebundenes Schnellladen bzw. 5V-Legacy-Zubehör genutzt wird.
 
 In früheren Entwicklungsständen von OpenMotorBridge waren zwei externe Satellitenblöcke vorgesehen: ein separater „Cockpit-Satellit“ und ein „Fahrzeug-Satellit“, die über Schwalbenschwanz-Führungen (Dovetail) gekoppelt werden konnten. **In Version 10.0 ist dieses Konzept durch die integrierte Multi-Port-Architektur grundlegend vereinfacht und professionalisiert worden:**
 

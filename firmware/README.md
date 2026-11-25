@@ -12,32 +12,31 @@ In OpenMotorBridge v10.0 sind alle Knoten im Fahrzeug über den **geschirmten 4-
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | [`main_controller`](file:///Users/schmidtm/openMotorBridge/firmware/main_controller) | `ESP32-S31-WROOM-1U` (320 MHz Dual-Core RISC-V, BT Classic + BLE 5.4) | `esp32s31` | Zentralbox (`PCBA 01`) | 8/16 MB Flash, 8 MB Octal PSRAM | USB-Backbone Root-Host (`USB2517I`), Quad-eFuse Power-Sequencer (`GPIO 13..16`), Zentraler Bus-DFU-Flasher (`0x50`/`0x51`), Audio-DSP (`ES8388` + 3x `QCC3086`), `SX1262` LoRa (`GPIO 9..12`), CAN-FD (`SN65HVD230`), Action-Cam BLE-Client, 4-Bit SDIO Blackbox (`GPIO 33..39`) |
 | [`front_node`](file:///Users/schmidtm/openMotorBridge/firmware/front_node) | `ESP32-S31-WROOM-1U` + `ESP32-E22` (Wi-Fi 6E Companion via SDIO 3.0) | `esp32s31` | Universal Front-Node (`PCBA 05` + `05C`/`05D`) | 8/16 MB Flash, 8 MB Octal PSRAM | 480 Mbps nativer USB-Backbone Node, Dual Under-Perch Cockpit OLEDs (`SSD1306` 128×32 via I2C `0x3C`), 6× Lenkertaster (`PCBA 05C`), Sensor-Puck (`PCBA 05D`: `SAM-M10Q` GNSS, `TMP117`, `OPT3001`, `SPH0645` I2S), `FSC-BT802` Infotainment Bridge, Handschuhfach-Schnelllader (`SW3526` 30W USB-PD & 15W Qi-Puck) |
-| [`front_node_c3`](file:///Users/schmidtm/openMotorBridge/firmware/front_node_c3) | `ESP32-C3FH4` (RISC-V) | `esp32c3` | Infotainment Audio Bridge (`PCBA 05` `U10`) | 4 MB Flash, 400 KB SRAM | USB Audio Class (UAC) Headunit-Device für Boom! Box / SkylineOS, WHIM-Emulation, I2S Audio Bridge zu U1, Mux-Umschaltung |
 | [`smart_cartridge`](file:///Users/schmidtm/openMotorBridge/firmware/smart_cartridge) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | Satelliten-Pod Interface (`PCBA 03`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 12/13`), `ES8388` Audio-Codec, `OMM_DETECT` Auto-Sense (`GPIO 14` -> `TS5A3159DBVR` `GPIO 15`), 4× `AO3400A` Kaltstart-Aktuatortreiber (`GPIO 4/5/6/7`), `SW3516` 30W USB-PD |
 | [`radar_submcu`](file:///Users/schmidtm/openMotorBridge/firmware/radar_submcu) | `ESP32-C5-WROOM-1U` (Dual-Band 2.4 & 5 GHz RISC-V) | `esp32c5` | Heck-Radar & V2X Node (`PCBA 08`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Bus-Node (`GPIO 18/19`), 77 GHz MR20 mmWave UART-Parser (`GPIO 3/4`), 5.9 GHz ETSI ITS-G5 802.11p OCB V2X C-ITS Parser (`0x32`), 36× `WS2812B` Halo-Wings (`GPIO 8`) |
 | [`omm_module`](file:///Users/schmidtm/openMotorBridge/firmware/omm_module) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | OMM 2.4 GHz / Unified UCS (`PCBA 09/10`) | 4 MB Flash, 512 KB SRAM | Nativer USB 2.0 Audio/CDC Node (`GPIO 12/13`), `SX1262` 868 MHz LoRa + `SA868S` UHF + 2.4 GHz Mesh, `ES8388` 48 kHz Audio (`GPIO 6/7`, I2S `GPIO 4/5/8/9`) |
 | [`omm446_module`](file:///Users/schmidtm/openMotorBridge/firmware/omm446_module) | `ESP32-C6-MINI-1U` (RISC-V) | `esp32c6` | OMM 446 MHz PMR/DMR Profil (`PCBA 10`) | 4 MB Flash, 512 KB SRAM | Dediziertes PMR446 / DMR Tier I/II Profil für die Unified Tri-Band UCS Hardware (`PCBA 10`) mit `SA868S`/`SA818` UART-Steuerung (`GPIO 20/21`, PTT `GPIO 10`, PD `GPIO 11`) |
-| [`smart_keyfob`](file:///Users/schmidtm/openMotorBridge/firmware/smart_keyfob) | `ESP32-C6` / Nordic `nRF52840` | Zephyr / C6 | 2-in-1 LoRa Smart-Keyfob (`PCBA 07`) | 4 MB / 1 MB Flash | BLE 5.4 Proximity Key, `SX1262` 868 MHz Bi-Direktionaler Alarm-Pager, Piezo/LRA Haptik, `BQ25120A` Qi-Lademanagement |
+| [`smart_keyfob`](file:///Users/schmidtm/openMotorBridge/firmware/smart_keyfob) | `ESP32-C3FH4` (Single-Core 160 MHz RISC-V) | `esp32c3` | 2-in-1 LoRa Smart-Keyfob (`PCBA 07`) | 4 MB Flash, 400 KB SRAM | BLE 5.0 Proximity Key, `SX1262` 868 MHz Bi-Direktionaler Alarm-Pager, LRA Haptik, `BQ51050B` Qi-Lademanagement & `BAT_SENSE` |
+| *`front_node_c3`* | *`ESP32-C3FH4` (Archiviert)* | *`esp32c3`* | *Legacy Prototyp-Target* | *4 MB Flash* | *(Historisch archiviert: Auf Produktions-Hardware `PCBA 05` v10.5+ vollständig durch FSC-BT802 CSR8670 ersetzt)* |
 
 > [!NOTE]
-> **Front-Node Target-Architektur:** Die Produktions-Hardware (`PCBA 05`) setzt auf den `ESP32-S31-WROOM-1U` (Dual-Core 320 MHz RISC-V SoC mit nativem 480 Mbps High-Speed USB PHY) mit externem `ESP32-E22` Wi-Fi 6E (5/6 GHz 2x2 MIMO via 4-Bit SDIO 3.0). Das interne 2.4 GHz Funkteil des S31 ist per Software (`front_node_config.h`) deaktiviert, um den Lenkerbereich funktechnisch zu entlasten und Kollisionen mit dem 5/6-GHz-Stream des E22 zu verhindern.
+> **Front-Node Target-Architektur:** Die Produktions-Hardware (`PCBA 05`) setzt auf den `ESP32-S31-WROOM-1U` (Dual-Core 320 MHz RISC-V SoC mit nativem 480 Mbps High-Speed USB PHY) mit externem `ESP32-E22` Wi-Fi 6E (5/6 GHz 2x2 MIMO via 4-Bit SDIO 3.0) und Feasycom `FSC-BT802` CSR8670 Bluetooth Audio Bridge. Das interne 2.4 GHz Funkteil des S31 ist per Software (`front_node_config.h`) deaktiviert, um den Lenkerbereich funktechnisch zu entlasten und Kollisionen mit dem 5/6-GHz-Stream des E22 zu verhindern.
 
 ---
 
 ## 2. Voraussetzungen & Automatisierter Build
 
-### 2.1 One-Command Komplett-Build (Alle 8 ESP-IDF Targets)
+### 2.1 One-Command Komplett-Build (Alle 7 offiziellen ESP-IDF Targets)
 
 Das Repository enthält ein vollautomatisches Build-Skript ([`tools/build_firmware.sh`](file:///Users/schmidtm/openMotorBridge/tools/build_firmware.sh) bzw. [`firmware/build.sh`](file:///Users/schmidtm/openMotorBridge/firmware/build.sh)), das via [`tools/esp_env.sh`](file:///Users/schmidtm/openMotorBridge/tools/esp_env.sh) automatisch ESP-IDF (`~/esp-idf/export.sh`), CMake und Ninja lädt und das korrekte `IDF_TARGET` (`esp32s31`, `esp32c6`, `esp32c5`, `esp32c3`) für jedes Verzeichnis setzt:
 
 ```bash
-# Alle 8 ESP-IDF Targets nacheinander kompilieren und verifizieren:
+# Alle 7 offiziellen ESP-IDF Targets nacheinander kompilieren und verifizieren:
 ./firmware/build.sh all
 
 # Einzelnes Target kompilieren:
 ./firmware/build.sh main_controller
 ./firmware/build.sh front_node
-./firmware/build.sh front_node_c3
 ./firmware/build.sh smart_cartridge
 ./firmware/build.sh radar_submcu
 ./firmware/build.sh omm_module

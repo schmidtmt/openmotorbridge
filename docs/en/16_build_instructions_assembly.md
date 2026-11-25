@@ -304,10 +304,10 @@ All discrete components, PCB ordering files, and COTS sourcing lists are documen
 #### Step 5.1.4: Glovebox Fast-Charging Bay with Qi Puck & USB-C (Harley Touring)
 1. Open the right glove box.
 2. Locate the OEM rubber grommet on the underside of the compartment floor for accessory wiring.
-3. Pass the 2-wire DC feed line from the Front Node (`PCBA 05` `J7`, up to 36W USB-PD / QC 4.0) from *below* through the grommet into the compartment.
-4. Place the magnetic Qi charging puck (15W inductive / MagSafe) and companion USB-C PD fast-charge port in the compartment:
-   * **Qi Charging Puck:** Magnetic alignment and wireless charging of the rider's smartphone (approx. 20–22W DC input).
-   * **Companion USB-C Port:** For high-speed wired charging of secondary devices or tablets.
+3. Route the pre-regulated charging line from the Front Node (`PCBA 05` `J4`, SW3526 30W USB-PD / 5V BC1.2 Dual-Mode) up into the compartment (or up to the handlebar/QuadLock on adventure bikes).
+4. Connect the modular charging cable as needed:
+   * **Mode A (Wireless Qi Charging):** Connect the USB-C cable to the flat COTS Qi/MagSafe puck (in the glovebox) or the waterproof QuadLock Wireless Charging Head (on the handlebar).
+   * **Mode B (Direct Cable Charging):** For accessories without Qi (helmet lamps, remotes, powerbanks) or when maximum charging speed without thermal throttling is required, plug the cable directly into the mobile device. The SW3526 automatically detects whether USB-PD is negotiated or falls back to standard 5V BC1.2.
    * *(Note: The legacy 5-port hub `PCBA 05B` and external CarPlay dongles have been eliminated; motorcycle navigation audio links wirelessly via the FSC-BT802 headunit bridge on the Front Node).*
 5. All connected devices and cabling remain 100% inside the compartment. Zero external cable egress! The glove box door seals airtight with zero cable interference across weatherstripping!
 

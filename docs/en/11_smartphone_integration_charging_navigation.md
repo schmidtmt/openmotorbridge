@@ -69,23 +69,28 @@ All smartphone interaction is handled natively by the dedicated Bluetooth 5.4 au
 
 ---
 
-## 3. Glovebox Charging Infrastructure (Genuine 30W Fast Charger)
+## 3. Charging Infrastructure (Universal Dual-Mode: Normal 5V BC1.2 vs. USB-PD 3.0)
 
-The fairing glovebox (e.g. right media compartment on Harley Touring) is engineered as a **pure high-performance charging bay**:
+The cockpit and glovebox charging infrastructure is powered centrally by the Front Node (`PCBA 05`). All regulation electronics and heat dissipation remain on the PCB inside the airflow-cooled riser housing, eliminating the need for bulky 12V automotive adapters at the handlebar or inside sealed gloveboxes:
 
-### 3.1 Electrical Feed & Fast-Charging Regulator
-* **Pure 2-Wire DC Feed:** Protected DC supply from Front Node `J7` / Central Box.
-* **Automotive Buck-Boost Controller:** Southchip `SC8721` / `SW3526` delivering up to **30–36 W total power**.
-* **Authentic Fast Charging:** Supports **USB Power Delivery 3.0 (PD)** and **QuickCharge 4.0** with 5V / 9V / 12V negotiation. Not a sluggish standard 5V charger!
+### 3.1 Universal Multi-Protocol Controller (SW3526 on Front Node `PCBA 05`)
+* **Dedicated Regulated Line from Front Node (`J4`):** The onboard **`SW3526` (`U5`)** delivers a pre-regulated charging line directly to the designated charging zone (handlebar mount or glovebox).
+* **Dual-Mode Protocol Support (Normal vs. Fast-Charging):**
+  * **USB Power Delivery 3.0 (PD) / QuickCharge 4.0:** Dynamic voltage negotiation (5V / 9V / 12V / 15V) with up to **30–36 W output power**.
+  * **USB BC1.2 DCP Standard (5V / up to 2.4A):** Native fallback to standard unregulated 5V charging.
+* **Why Dual-Mode Support (Normal + PD) is Crucial:**
+  Many essential touring accessories—such as action cameras, helmet lamps, wireless remotes, legacy headset units, tire pressure gauges, or compact powerbanks—**do not feature USB-PD controllers** and cannot negotiate higher voltages. If a port strictly enforced PD negotiation, these 5V legacy devices would refuse to charge (this also applies to accessories charged in the side panniers via the `SW3516` ports on `PCBA 03`). Automatic protocol detection ensures that any device charges reliably without manual configuration.
 
-### 3.2 Magnetic Qi Charging Puck (Qi2 / MagSafe Compatible)
-* **Inductive Output:** Negotiates 9V/12V PD and delivers the **standardized 15W inductive fast-charging limit** to the phone.
-* **DC Input Consumption:** At ~70% inductive transfer efficiency, the puck draws approximately 20–22 W on the DC feed.
-* **Mechanical Hold:** An integrated N52 magnet ring securely locks the smartphone in position even over severe bumps.
-* **Thermal Equilibrium:** Because the phone does not run intensive video streaming, battery temperatures remain safe ($< 42\,^\circ\text{C}$).
+### 3.2 Modular Usage: Wireless (Qi) OR Wired Direct Connection
+Because a single dedicated charging line runs from Front Node `J4`, it is designed as a **modular 1:1 connection** (not an artificial dual-port hub on the same cable):
 
-### 3.3 Secondary USB-C PD Fast-Charge Port
-* In addition to the Qi puck, a standard **USB-C PD port (up to 30W)** is available for wired charging of companion devices (tablets, action cams, powerbanks).
+* **Mode A: Wireless (Qi / MagSafe / QuadLock):**
+  * **Handlebar (BMW GS / Adventure):** The line from `J4` connects directly to the weatherproof **Quad Lock Waterproof Wireless Charging Head**. The head negotiates 9V/12V PD and charges the phone wirelessly at up to 15W.
+  * **Glovebox (Harley Touring):** The cable connects to a flat COTS Qi / MagSafe puck (e.g. QuadLock MAG compatible) on which the smartphone rests securely.
+* **Mode B: Wired Direct Connection (USB-C):**
+  * When maximum charging speed is required, when high ambient temperatures cause phone wireless charging throttling ($> 40\,^\circ\text{C}$), or when charging accessories without Qi: simply unplug the cable from the charging head / puck and insert it directly into the mobile device.
+* **Action Cameras & Auxiliary Cockpit Devices:**
+  * Action cameras (GoPro, Insta360) mounted to handlebars or windscreens do not need to share the phone's charging line. The Front Node provides a dedicated, separate port **`J8` (`CAM 5V` / 2.0A)** with its own cable.
 
 ---
 

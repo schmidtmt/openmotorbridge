@@ -70,24 +70,28 @@ Alle Interaktionen mit dem Smartphone laufen über den dedizierten Bluetooth 5.4
 
 ---
 
-## 3. Lade-Architektur im Handschuhfach (Echter 30W Fast-Charger)
+## 3. Lade-Architektur (Universal Dual-Mode: Normal 5V BC1.2 vs. USB-PD 3.0)
 
-Das Handschuhfach (z. B. der rechten Verkleidungsseite bei Harley-Davidson Touring) ist als **reine Hochleistungs-Ladezone** konzipiert:
+Die Ladeinfrastruktur im Cockpit und Handschuhfach wird zentral von der Front Node (`PCBA 05`) gespeist. Sämtliche Wandlungselektronik und Abwärme verbleibt auf der Platine im fahrtwindgekühlten Riser-Gehäuse, sodass weder am Lenker noch im geschlossenen Verkleidungsfach ein zusätzlicher 12V-Wandler nötig ist:
 
-### 3.1 Elektrische Speisung & Fast-Charging-Regler
-* **Reine 2-Draht DC-Versorgung:** Vom Power-Management der Zentralbox führt eine abgesicherte DC-Leitung zum Handschuhfach.
-* **Automotiver Buck-Controller:** Ein integrierter Schnellladeregler (z. B. Southchip SC8721 / SW3526 / MPQ4228) liefert bis zu **30–36 W Gesamt-Ladeleistung**.
-* **Echter Fast-Charger:** Unterstützt **USB Power Delivery 3.0 (PD)** und **QuickCharge 4.0** mit dynamischer 5V / 9V / 12V Spannungsverhandlung. Kein träger 5V-Standardlader!
+### 3.1 Universeller Multi-Protokoll Regler (SW3526 auf Front Node `PCBA 05`)
+* **Reine USB-Ladeleitung ab Front Node (`J4`):** Vom integrierten Schnellladeregler **`SW3526` (`U5`)** auf `PCBA 05` führt eine robuste, fertig ausgeregelte Ladeleitung direkt zum gewünschten Ladeort (Lenker-Halterung oder Handschuhfach).
+* **Dual-Mode Protokoll-Unterstützung (Normal vs. Fast-Charging):**
+  * **USB Power Delivery 3.0 (PD) / QuickCharge 4.0:** Dynamische Spannungsverhandlung (5V / 9V / 12V / 15V) mit bis zu **30–36 W Ladeleistung**.
+  * **USB BC1.2 DCP Standard (5V / bis 2.4A):** Nativer Fallback auf klassisches, ungeregeltes 5V-Laden.
+* **Warum die Dual-Mode-Unterstützung (Normal + PD) unverzichtbar ist:**
+  Viele motorradspezifische Zubehörteile auf Tour – wie Action-Cams, Helmlampen, Funk-Fernbedienungen, ältere Helm-Headsets, Reifendruck-Prüfgeräte oder USB-Akkupacks – besitzen **keinen USB-PD Controller** und können keine höheren Spannungen aushandeln. Würde ein Anschluss reine PD-Verhandlung erzwingen, blieben diese 5V-Legacy-Geräte schlichtweg ungeladen (dies gilt analog auch für Zubehör, das unterwegs in den Koffern an den `SW3516`-Ports von `PCBA 03` geladen wird). Der `SW3526` erkennt automatisch, was angeschlossen ist, und liefert für jedes Gerät das passende Ladeschema.
 
-### 3.2 Magnetischer Qi-Ladepuck (Qi2 / MagSafe kompatibel)
-* **Induktive Leistung:** Verhandelt per USB-PD 9V/12V und liefert die **nach WPC-Standard maximal genormten 15 Watt induktive Ladeleistung** an das Smartphone.
-* **Wirkungsgrad & Eingangsleistung:** Aufgrund des physikalischen Wirkungsgrads induktiver Kopplung ($\approx 70\,\%$) nimmt der Puck ca. 20–22 W auf der DC-Seite auf.
-* **Mechanischer Halt:** Durch den magnetischen N52-Ring (MagSafe/Qi2) schnappt das Telefon beim Hineinlegen formschlüssig ein und verrutscht auch bei harten Fahrbahnstößen nicht.
-* **Thermisches Gleichgewicht:** Da das Smartphone im Fach kein Video-Streaming betreiben muss, bleibt die Akkutemperatur im unkritischen Bereich ($< 42\,^\circ\text{C}$).
+### 3.2 Modulare Nutzung: Entweder kabellos (Qi) ODER kabelgebunden
+Da vom Front Node genau ein dedizierter Schnelllade-Kabelstrang abgeht, ist dieser als **modulare 1:1-Verbindung** ausgelegt (keine erfundene parallele „Doppel-Buchse“ an demselben Kabel):
 
-### 3.3 Zusatz-Ladeanschluss (USB-C PD)
-* Neben dem Qi-Puck steht eine vollwertige **USB-C PD Buchse (bis 30 W)** zur Verfügung.
-* Dient zum gleichzeitigen Schnellladen von Zubehör (Dashcam, Action-Cam, Powerbank oder Zweitgerät).
+* **Modus A: Kabellos (Qi / MagSafe / QuadLock):**
+  * **Am Lenker (BMW GS / Enduro):** Das Kabel von `J4` wird direkt in den wetterfesten **Quad Lock Waterproof Wireless Charging Head** gesteckt. Der Kopf verhandelt mit dem `SW3526` per PD seine 9V/12V und lädt das eingeklinkte Smartphone vibrationsentkoppelt mit bis zu 15 W.
+  * **Im Handschuhfach (Harley Touring):** Das Kabel führt zu einem flachen COTS-Qi-/MagSafe-Puck (z. B. QuadLock MAG kompatibel), auf dem das Telefon magnetisch haftet und mit 15 W induktiv lädt.
+* **Modus B: Kabelgebunden (USB-C Direktanschluss):**
+  * Steht maximaler Ladestrom im Fokus, wird das Smartphone bei sommerlicher Hitze für Induktionsladung zu warm ($> 40\,^\circ\text{C}$), oder soll Zubehör ohne Qi geladen werden: Das Kabel wird einfach an der Rückseite des Ladekopfes / Pucks abgezogen und direkt in das Endgerät gesteckt.
+* **Action-Cams & Cockpit-Zubehör:**
+  * Für Action-Cams (GoPro, Insta360) an Scheibe oder Lenker muss nicht das Smartphone-Ladekabel zweckentfremdet werden. Hierfür stellt die Front Node den separaten Port **`J8` (`CAM 5V` / 2.0A)** mit eigenem Kabel bereit.
 
 ---
 

@@ -500,7 +500,7 @@ In Version 10.0, the interface architecture of PCBA 05 ($82 \times 50\,\text{mm}
 ### 5.3 The Evolution from Satellite Blocks to the Integrated Glovebox Charging System
 
 > [!NOTE]
-> **Architecture Status v10.5+ (Harmonization):** The former 5-port USB hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) and external CarPlay/AA dongles are completely retired and **historically archived**. In their place, the glove compartment receives a **magnetic Qi fast-charging puck (15W inductive / MagSafe)** plus a companion **USB-C PD 3.0 fast-charging port**, fed directly via a rugged 2-wire DC line from the 30W SW3526 controller on the Front Node (`PCBA 05`).
+> **Architecture Status v10.5+ (Harmonization):** The former 5-port USB hub (`PCBA 05B` / `glovebox_power_injection_hub.scad`) and external CarPlay/AA dongles are completely retired and **historically archived**. In their place, a universal pre-regulated fast-charging line from Front Node `J4` (`PCBA 05`, SW3526 30W Dual-Mode: USB-PD 3.0 / 5V BC1.2) powers either a **magnetic Qi fast-charging puck (15W inductive / MagSafe / QuadLock)** or provides direct wired charging for mobile devices and 5V legacy accessories.
 
 In earlier iterations of OpenMotorBridge, two separate satellite breakout blocks were envisioned: a "Cockpit Satellite" and a "Vehicle Satellite", connected via dovetail slide rails. **In Version 10.0, this concept has been fundamentally streamlined and modernized through the integrated multi-port architecture:**
 

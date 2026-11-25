@@ -118,7 +118,7 @@ case "$TARGET" in
         ;;
     *)
         echo "❌ Unknown target: $TARGET" >&2
-        echo "Supported targets: main_controller, front_node, smart_cartridge, radar_submcu, omm_module, omm446_module, all" >&2
+        echo "Supported targets: main_controller, front_node, smart_cartridge, radar_submcu, omm_module, omm446_module, smart_keyfob, all" >&2
         exit 1
         ;;
 esac

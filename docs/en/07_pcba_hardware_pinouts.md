@@ -917,7 +917,7 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
   * **North Flank / Vehicle & Accessory Wall (facing forward / downward, Y = 73.35 mm in KiCad / Y = 68 mm in enclosure):**
     * **`MAIN` (Enclosure center $X = 34.30\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):**
       * `J1` (JST-GH 4P, $X_{\text{rel}} = 19.73\,\text{mm}$, enclosure $X = 27.73\,\text{mm}$): 4-wire automotive backbone (12V vehicle power, GND, USB 2.0 D+/D- to Central Box).
-      * `J4` (JST-GH 8P, $X_{\text{rel}} = 32.85\,\text{mm}$, enclosure $X = 40.85\,\text{mm}$): Glovebox Hub ([`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) interconnect (30W PD, CC1/CC2, 5V, USB DN3).
+      * `J4` (JST-GH 6P, $X_{\text{rel}} = 32.85\,\text{mm}$, enclosure $X = 40.85\,\text{mm}$): Universal Cockpit & Glovebox fast-charging line (30W USB-PD via SW3526, CC1/CC2, 5V aux).
     * **`DONGLE` (Enclosure center $X = 54.00\,\text{mm}$, Oval Port $11.0 \times 5.5\,\text{mm}$):**
       * `J5` (JST-GH 4P, $X_{\text{rel}} = 45.98\,\text{mm}$, enclosure $X = 53.98\,\text{mm}$): USB Downstream 2 with remote cold-boot reset (`TPS2051B`).
     * **`AUX 12V` (Enclosure center $X = 63.35\,\text{mm}$, Mini Port $6.5 \times 4.5\,\text{mm}$):**
@@ -939,8 +939,8 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 | **Cockpit Left** | `J9` | JST-GH 4P (3.3V, GND, I2C SCL/SDA) | `CKPT 2` | **Active:** Speaker Corner Display Left | **Blanking Plug** (no fairing speakers) |
 | **Cockpit Left** | `J2` | JST-GH 4P (5V, BSD LED, Switch, GND) | `CKPT 2` | **Active:** Left Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) | **Active:** Left Mirror Pod ([`PCBA 05C`](#73-pcba-05c-ultra-compact-bilateral-symmetric-under-perch-mirror-pod-board-openmotorbridge_mirror_pod)) |
 | **Vehicle West** | `J1` | JST-GH 4P (12V-20V, GND, USB HS D+/D-)| `MAIN` | **ALWAYS Active:** 4-wire lifeline from Central Box [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) | **ALWAYS Active:** 4-wire lifeline from Central Box [`PCBA 01`](#1-pcba-01-zentralbox-main-controller) |
-| **Vehicle West** | `J4` | JST-GH 8P (30W PD, CC1/CC2, 5V, USB DN3)| `MAIN` | **Active:** Dual-Rail Lifeline to Glovebox Hub ([`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout)) | **Optional:** Handlebar USB-C charger or **Blanking Plug** |
-| **Vehicle Center**| `J5` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blanking Plug:** CarPlay dongle resides in glovebox at [`PCBA 05B`](#72-pcba-05b-glovebox-hub--cockpit-breakout-openmotorbridge_cockpit_breakout) | **ONLY active** with aftermarket CP/AA display; else **Blanking Plug** |
+| **Vehicle West** | `J4` | JST-GH 6P (30W PD, CC1/CC2, 5V Aux)| `MAIN` | **Active:** Fast-charging line to glovebox Qi puck / USB-C | **Active:** Fast-charging line to handlebar QuadLock Wireless Head / USB-C |
+| **Vehicle Center**| `J5` | JST-GH 4P (5V gated, USB DN2 D+/D-) | `DONGLE` | **Blanking Plug** | **ONLY active** with aftermarket display; else **Blanking Plug** |
 | **Vehicle East 1**| `J7` | JST-GH 2P (12V switched, max 2.5A) | `AUX 12V`| **Optional:** Auxiliary lights or **Mini Blanking Plug** | **Optional:** Auxiliary lights or **Mini Blanking Plug** |
 | **Vehicle East 2**| `J10` | JST-GH 2P (12V continuous, max 1.5A)| `NAV 12V`| **Mini Blanking Plug:** Factory display (Skyline OS / GTS) active | **Active:** 12V power for Garmin Zūmo XT2 / Chigee AIO-5 |
 | **Vehicle East 3**| `J8` | JST-GH 2P (5V BC1.2 DCP, max 2.0A) | `CAM 5V` | **Mini Blanking Plug:** On action-cam ride plugged with mini cable seal | **Mini Blanking Plug:** On action-cam ride plugged with mini cable seal |
@@ -1146,19 +1146,17 @@ The rear transceiver board `PCBA 04` and its enclosure are completely eliminated
 > **Architecture Upgrade to Single-Chip Bluetooth Transceiver:**  
 > The legacy auxiliary MCU `U10` (ESP32-C3FH4) and USB hub `U2` (`USB2514Bi`) were completely removed and consolidated on `PCBA 05`. Infotainment, headset, and speaker audio streaming to Harley-Davidson SkylineOS / Boom! Box is now handled directly and wirelessly via the **Feasycom FSC-BT802** (Qualcomm CSR8670 dual-mode BT 5.1 audio transceiver, `U2`) paired with onboard ceramic chip antenna `ANT3` (`Johanson 2450AT18A100`).
 
-#### 7.1.3 Header J4 Pinout: Glovebox Hub Lifeline (JST-GH 1.25mm 8-Pin Horizontal)
-Connects the Universal Front Node (`PCBA 05`) directly to the Glovebox Breakout Hub (`PCBA 05B`) over an 8-conductor shielded automotive harness:
+#### 7.1.3 Header J4 Pinout: Glovebox Qi Charging & Aux Power (JST-GH 1.25mm 6-Pin Horizontal)
+Connects the Universal Front Node (`PCBA 05`) to the glovebox / handlebar via a 6-conductor shielded automotive harness (modular connector for magnetic Qi / QuadLock puck or direct wired USB-C charging):
 
 | Pin | Signal Name | Type | Level / Current | Function & Description |
 | :-: | :--- | :---: | :---: | :--- |
-| **1** | `VBUS_PD1_OUT` | Power Out | 5V / 9V / 12V / 15V (up to 30W) | Dedicated USB-PD fast-charge power from SW3526 (`U5`), passed straight through to `J3` Phone |
+| **1** | `VBUS_PD1_OUT` | Power Out | 5V / 9V / 12V / 15V / 20V (up to 30W) | USB Power Delivery & BC1.2 fast-charge rail from SW3526 (`U5`) |
 | **2** | `GND` | Power | 0 V / Return | Power ground for USB-PD fast charging path |
-| **3** | `USB_DN1_CC1` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 1 for native USB-PD contract negotiation between smartphone and SW3526 |
-| **4** | `USB_DN1_CC2` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 2 for native USB-PD contract negotiation between smartphone and SW3526 |
-| **5** | `VCC_5V` | Power Out | $5.0\,\text{V} \pm 2\,\%$ (max. 3.0A) | Clean 5V system rail from TPS54302 (`U3`) for Dongle, Media thumbdrive, and Hub controller |
-| **6** | `GND` | Power | 0 V / Logic GND | System ground for 5V peripherals and USB 2.0 data bus |
-| **7** | `USB_DN3_DP` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Plus (Downstream 3 from USB2514Bi to upstream of `PCBA 05B` hub) |
-| **8** | `USB_DN3_DM` | USB Diff | $90\,\Omega \text{ diff}, 480\,\text{Mbps}$ | USB 2.0 High-Speed Data Minus (Downstream 3 from USB2514Bi to upstream of `PCBA 05B` hub) |
+| **3** | `USB_DN1_CC1` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 1 for native USB-PD / BC1.2 contract negotiation |
+| **4** | `USB_DN1_CC2` | Analog/Dig | $0\,\text{V} - 5.5\,\text{V}$ | Configuration Channel 2 for native USB-PD / BC1.2 contract negotiation |
+| **5** | `VCC_5V` | Power Out | $5.0\,\text{V} \pm 2\,\%$ (max. 3.0A) | Clean 5V system rail from TPS54302 (`U3`) for non-PD legacy accessories |
+| **6** | `GND` | Power | 0 V / Logic GND | Common signal and return ground |
 | **MP**| `SHIELD` | Shield | Chassis GND / PE | 360° braided shield termination & strain relief (SMD retention solder tabs) |
 
 #### 7.1.4 Header J6 Pinout: Sensor Puck Lifeline (`J_SENSOR_EXT`, JST-GH 1.25mm 8-Pin Horizontal)

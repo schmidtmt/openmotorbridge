@@ -17,7 +17,7 @@ Classic motorcycle communication systems are historically fragmented:
 > 2. **Universal Front Node (PCBA 05):** Integrated FSC-BT802 (Qualcomm CSR8670) Bluetooth bridge for seamless factory infotainment/headunit navigation audio capture, Knowles MEMS wind noise tracking, and discrete/CAN handlebar controls.
 > 3. **Radar Node (PCBA 08) is 100% OPTIONAL (Stage 2):** Modular rear upgrade providing 24/77 GHz radar plus 2× Qualcomm QCC3086 (`U4`, `U5`) for wireless bag pod audio and Hi-Fi Bluetooth music sharing.
 > 4. **Dual-Mode Bag Pods (PCBA 03):** Pod mechatronics (KL15 solenoid cold-start pulse, cradles, pogo pins) remain 100% identical. Operates via wired analog AD/DA conversion (ES8388) in Base mode (Stage 1); upgrades to wireless BT audio with AD/DA in cold standby when Radar Node (Stage 2) is installed.
-> 5. **Glovebox Hub Replacement & Removal of CP/AA:** The 5-port hub (`PCBA 05B`) and fragile wireless CarPlay/Android Auto video streaming stacks have been removed. Replaced by an automotive 30W fast-charger driving a magnetic Qi puck (15W inductive) and companion USB-C PD fast-charge port over a pure 2-wire DC feed.
+> 5. **Cockpit/Glovebox Charging Infrastructure & Removal of CP/AA:** The 5-port hub (`PCBA 05B`) and fragile wireless CarPlay/Android Auto video streaming stacks have been removed. Replaced by an automotive 30W dual-mode fast-charger (`SW3526` on Front Node `PCBA 05`) driving either modular wireless Qi charging (15W QuadLock / MagSafe) or direct wired fast-charging and 5V legacy accessories.
 
 **OpenMotorBridge v10.0** resolves these bottlenecks via a modular, decoupled **Satellite Topology**, interconnected via a **ruggedized 4-wire Automotive USB-PD & USB 2.0 bus (`VBUS`, `GND`, `D+`, `D-`)**, combined with the **ESP32-S31** (Edge-AI Audio) and **3× Qualcomm QCC3086** Bluetooth audio transceivers:
 
@@ -27,7 +27,7 @@ Classic motorcycle communication systems are historically fragmented:
 | 1. COCKPIT / HANDLEBAR & KEYFOB:                                                            |
 |    * Front Node (PCBA 05): 60W USB-PD Engine, FSC-BT802 Headunit Bridge, Sensor-Puck       |
 |    * Symmetrical Dual Under-Perch Switches (Left: PTT & BSD | Right: Cam-Tag & BSD)        |
-|    * Glovebox Fast-Charging: 15W Magnetic Qi-Puck (MagSafe) + 30W USB-C PD Fast-Charge Port|
+|    * Cockpit/Glovebox: 30W Dual-Mode Charging Port (Modular 15W Qi Puck or Direct USB-PD/5V)|
 |    * Smart Keyfob (PCBA 07): 868 MHz LoRa Pager (24/7 Anti-Theft Sentry & Emergency Beacon) |
 |    * PWA Dashboard on Smartphone / TFT display via Web Bluetooth (WebBLE)                   |
 +---------------------------------------------------------------------------------------------+

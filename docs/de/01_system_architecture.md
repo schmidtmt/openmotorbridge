@@ -19,7 +19,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 > 2. **Front Node (PCBA 05):** ESP32-S31 Node-Controller mit Feasycom FSC-BT802 (Qualcomm CSR8670) für die Infotainment- und Bike-Bridge (Abgriff von Werksnavi-Sprachansagen), Knowles MEMS und Lenkertaster.  
 > 3. **Modularer Radar-Knoten (PCBA 08):** Rein optionales Upgrade (Stufe 2). Beherbergt 24/77 GHz Radar sowie 2× QCC3086 (`U4`, `U5`) für drahtlose Nahfeld-Anbindung der Koffer-Pods und synchrones Hi-Fi Music-Sharing.  
 > 4. **Koffer-Pods (PCBA 03) Dual-Mode:** Mechatronik (KL15-Kaltstartimpuls, Cradles, Pogo-Pins) bleibt in allen Stufen 1:1 identisch. Stufe 1: kabelgebundene analoge AD/DA-Wandlung (ES8388) für Mic/Speaker. Stufe 2: drahtlos über Radar-QCC3086, Onboard-Codecs im Cold Standby.  
-> 5. **Handschuhfach & Entfall CarPlay/AA:** Handschuhfach-Hub (`PCBA 05B`) und anfälliges CarPlay/Android Auto Videostreaming entfallen vollständig. Ersatz durch einen automotiven 30W Fast-Charging-Regler mit magnetischem Qi-Ladepuck (15W induktiv) und separatem USB-C PD Schnellladeanschluss über eine reine 2-adrige DC-Speisung.
+> 5. **Cockpit-/Handschuhfach-Ladeinfrastruktur & Entfall CarPlay/AA:** Handschuhfach-Hub (`PCBA 05B`) und anfälliges CarPlay/Android Auto Videostreaming entfallen vollständig. Ersatz durch einen automotiven 30W Dual-Mode Schnellladeregler (`SW3526` auf Front Node `PCBA 05`), der wahlweise modular drahtloses Qi-Laden (15W QuadLock / MagSafe) oder kabelgebundenes Schnellladen bzw. 5V-Legacy-Zubehör unterstützt.
 
 ```
                                   GESAMTSYSTEM-TOPOLOGIE (v10.0)
@@ -27,7 +27,7 @@ Klassische Motorrad-Kommunikationssysteme sind historisch stark fragmentiert:
 | 1. COCKPIT / LENKER & KEYFOB:                                                               |
 |    * Front-Node (PCBA 05): ESP32-S31, FSC-BT802 (Bike-Bridge), modularer Sensor-Puck      |
 |    * Symmetrische Dual Under-Perch Spiegel-Pods (Links: PTT & BSD | Rechts: Cam-Tag & BSD)  |
-|    * Handschuhfach: 30W Fast-Charging Qi-Puck (15W induktiv) + USB-C PD Zusatz-Ladeport    |
+|    * Cockpit/Handschuhfach: 30W Dual-Mode Ladeport (wahlweise 15W Qi-Puck oder USB-PD/5V)   |
 |    * Smart-Keyfob (PCBA 07): 868 MHz LoRa Pager (24/7 Diebstahlalarm & Notfall-Beacon)      |
 |    * Natives Cockpit Dashboard (Telemetrie, Radar-Grafik, BLE-Pfeilnavigation via COMM_48)  |
 +---------------------------------------------------------------------------------------------+

@@ -69,7 +69,7 @@ Für Firmware-Entwicklung, Konfiguration und Diagnose der Zentralbox (`PCBA 01`)
       * Zentralbox (`PCBA 01`): $\approx 1{,}6\,\text{W}$ ($320\,\text{mA}$)
       * Front-Node & Sensor-Puck (`PCBA 05` + `05D`): $\approx 1{,}4\,\text{W}$ ($280\,\text{mA}$)
       * Heck-Radar (`PCBA 08` inkl. MR20 Standby): $\approx 2{,}1\,\text{W}$ ($420\,\text{mA}$)
-      * 2x Koffer-Pods (`PCBA 02` + `03` inkl. beider OEM-Intercoms im Standby-Audiobetrieb): $\approx 2{,}2\,\text{W}$ ($440\,\text{mA}$)
+      * 2x Koffer-Pods (`PCBA 03` inkl. beider OEM-Intercoms im Standby-Audiobetrieb): $\approx 2{,}2\,\text{W}$ ($440\,\text{mA}$)
       * Leitungs- und Schaltverluste: $\approx 0{,}3\,\text{W}$
       * **Gesamtleistungsaufnahme im Werkstatt-Vollbetrieb:** **$\approx 7{,}6\,\text{W}$ ($5{,}0\,\text{V} / 1{,}52\,\text{A}$)**.
       * *(Reiner Flash-/Programmierbetrieb bei ruhender Radar-HF und inaktiven Intercoms: nur $\approx 4{,}5\,\text{W}$ bzw. $0{,}9\,\text{A}$, voll kompatibel zu Standard USB 3.0).*
@@ -110,10 +110,12 @@ Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **
   * Jeder Koffer-Pod besitzt zwei mechatronische Drücker (Mini-Hubmagnete auf `012_universal_actuator_slide_bracket.scad`), die auf `PCBA 03` über duale AO3400A MOSFETs geschaltet werden.
   * Bei Zündung-AN (KL15) feuern die Magnete für exakt 2,0 Sekunden ($\sim 4\,\text{N}$ Betätigungskraft mit Shore A50 Silikon-Stößeln auf die Ein-/Ausschalttasten von Cardo oder Sena), um komplett ausgeschaltete Headsets aus dem Null-Watt-Zustand zu wecken; die laufende Steuerung im Fahrbetrieb erfolgt anschließend verschleißfrei digital per BLE GATT bzw. Audio-Bus.
   * **Vorteil:** Headsets bleiben nach Touren vollständig spannungsfrei (kein Marketing-Standby-Batteriefraß nach 1-2 Wochen Standzeit!). Beim Einschalten der Zündung booten sie verlässlich und sofort, ohne dass der Kofferpod geöffnet werden muss.
-* **Handschuhfach Schnelllade-Architektur (Ersatz von PCBA 05B):**
+* **Universelle Cockpit- & Handschuhfach-Schnelllade-Architektur (Ersatz von PCBA 05B):**
   * Das historische 5-Port Hub `PCBA 05B` und externe Wireless-CarPlay-Dongles sind ersatzlos entfallen.
-  * Stattdessen wird das Handschuhfach (z. B. Harley Touring) über eine robuste 2-Ader DC-Versorgung von Front-Knoten `J7` mit bis zu 30–36W USB-PD / QC 4.0 gespeist.
-  * Dort sitzt ein **magnetischer Qi-Ladepuck** (15W induktiv Qi/Qi2 MagSafe, ca. 20–22W DC-Eingangsleistung) plus eine zusätzliche **USB-C PD Fast-Charge Buchse** für kabelgebundenes Laden mit voller Geschwindigkeit (z. B. Zweithandy oder Tablet).
+  * Stattdessen wird die Ladezone (Handschuhfach bei Harley Touring bzw. Lenker bei BMW GS) über eine fertig ausgeregelte Ladeleitung vom Front-Knoten `J4` direkt vom onboard **`SW3526` (`U5`)** mit bis zu 30–36W gespeist.
+  * **Dual-Mode Protokollunterstützung (USB-PD 3.0 vs. Normal 5V BC1.2):** Der Controller verhandelt dynamisch **USB-PD / QC 4.0** (5V/9V/12V/15V) für moderne Smartphones und Qi-Ladeköpfe, schaltet bei angeschlossenem Zubehör ohne PD-Chip jedoch **automatisch auf Standard 5V BC1.2 DCP** zurück.
+  * **Warum die 5V-Normal-Ladefunktion essenziell ist:** Viele praxisrelevante Motorrad-Zubehörteile (Helmlampen, Funkfernbedienungen, ältere Intercoms, Powerbanks oder Reifendruckprüfer) verfügen über keinen USB-PD-Controller. Würde ein Port reines PD erzwingen, blieben diese Geräte stromlos. Das gilt analog auch für die Seitenkoffer, wo der **`SW3516` auf `PCBA 03`** ebenfalls beide Modi unterstützt.
+  * **Modulare 1:1-Nutzung (Qi vs. Kabel):** Am Ladeort hängt das Kabel entweder modular an einem **magnetischen Qi-Ladepuck** (15W induktiv Qi/Qi2 MagSafe, ca. 20–22W DC-Eingang) bzw. wetterfesten **QuadLock Wireless Head** – oder es wird bei Geräten ohne Qi / bei Hitze direkt kabelgebunden in das Endgerät gesteckt.
   * Einstellbare Strombegrenzung mit Überstromabschaltung in $< 1\,\mu\text{s}$ bei Kurzschluss, automatischer Thermoschutz ($150\,^\circ\text{C}$ Junction Shutdown) und Überwachung durch den `SW3526` Controller.
 * **Cockpit Power-Only Ausgänge (Direkt am Front-Node PCBA 05):**
   * **15W Motorrad-Navi (`J10`):** 12V/1.25A bzw. 5V/3A DC-Speisung für Garmin Zūmo XT2 / Tread / Chigee AIO-5. **Reine Stromversorgung (Power-Only):** Vollständig ohne USB-Host Datenleitungen (`D+`, `D-`), damit das Navigationssystem bei Zündung-AN sofort in die Routenführung startet und nicht in den PC-Massenspeicher-Modus schaltet.
@@ -126,21 +128,23 @@ Sämtliche Peripherie-Anbindungen der Zentralbox (`PCBA 01`) werden über die **
 Durch den Entfall des CarPlay/Android Auto Video-Streaming-Stacks (kein WLAN-Direct, kein dauerhafter H.264/H.265 Hardware-Decoder) sinkt die thermische Last des Smartphones im geschlossenen Handschuhfach dramatisch ab:
 
 ```
-               HANDSCHUHACH LADE- & POWER-GATEWAY (30W USB-PD)
+               COCKPIT- & HANDSCHUHFACH LADE- & POWER-GATEWAY (30W DUAL-MODE)
 +----------------------------+              +----------------------------+
 | 12V Bordnetz (KL15 Zündung)|              | Front-Knoten PCBA 05       |
-| * Scheinwerfer / Zubehör   |              | * SW3526 PD-Controller     |
+| * Zentralbox Speisung      |              | * SW3526 PD/BC1.2 Regler   |
 +-------------+--------------+              | * I2C Telemetrie & Protect |
               |                             +-------------+--------------+
               v                                           |
-+----------------------------+                            | 2-Ader DC Speisung
-| SW3526 Buck-Boost (J7)     +----------------------------+ (bis zu 36W PD 3.0)
-| * Bis zu 36W USB-PD / QC   |                            |
++----------------------------+                            | Fertige USB-Ladeleitung
+| SW3526 Controller (J4)     +----------------------------+ (bis zu 36W PD / 5V BC1.2)
+| * USB-PD / QC / 5V Normal  |                            |
 +----------------------------+                            v
                                             +----------------------------+
-                                            | Handschuhfach Ladebucht    |
-                                            | * 15W Qi-Puck (MagSafe)    |
-                                            | * Zusatz USB-C PD Buchse   |
+                                            | Modularer Lade-Endpunkt    |
+                                            | * Modus A: 15W Qi-Puck     |
+                                            |   (MagSafe / QuadLock Head)|
+                                            | * Modus B: Direktes USB-C  |
+                                            |   Kabel-Laden (PD / 5V)    |
                                             +----------------------------+
 ```
 
